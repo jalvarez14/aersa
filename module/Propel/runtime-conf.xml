@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <propel>
+        <datasources default="aersa">
+            <datasource id="aersa">
+                <adapter>mysql</adapter> <!-- sqlite, mysql, myssql, oracle, or pgsql -->
+                <connection>
+                    <dsn>mysql:host=127.0.0.1;dbname=aersa_system</dsn>
+                    <user>aersa_admin</user>
+                    <password>2Wu75TqdtVA5V9nt</password>
+                </connection>
+            </datasource>
+        </datasources>
+    </propel>
+</config>
