@@ -77,6 +77,36 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+                                   'changepassword' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/changepassword[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'changepassword',
+                                            ),
+                                        ),
+                                    ),
                                ),
                             ),
                            'proveedor' => array(

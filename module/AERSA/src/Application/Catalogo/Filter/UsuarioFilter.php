@@ -8,70 +8,74 @@ namespace Application\Catalogo\Filter;
  use Zend\InputFilter\InputFilterInterface;
 
 
-class UsuarioForm extends Form
+class UsuarioFilter implements InputFilterAwareInterface
 {
-    public function __construct()
-    {
-        // we want to ignore the name passed
-        parent::__construct('usuario_form');
-        $this->setAttribute('method', 'post');
+    
+    protected $inputFilter;
+    
+    public function getInputFilter() {
         
-        $this->add(array(
-            'name' => 'idusuario',
-            'type' => 'Hidden',
-        ));
-        
-        $this->add(array(
-            'name' => 'usuario_nombre',
-            'type' => 'Text',
-            'options' => array(
-                'label' => 'Nombre *',
-            ),
-            'attributes' => array(
-                'required' => true,
-                'class' => 'form-control',
-            ),
-        ));
-        
-        $this->add(array(
-            'name' => 'idrol',
-            'type' => 'Select',
-            'options' => array(
-                'label' => 'Rol *',
-                'empty_option' => 'Sin especificar',
-                'value_options' => array(
-                    1 => 'Administrador',
-                    2 => 'Auditor'
+        if (!$this->inputFilter) {
+            
+            $inputFilter = new InputFilter();
+            
+            $inputFilter->add(array(
+                'name' => 'idusuario',
+                'required' => false,
+                'filters' => array(
+                    array('name' => 'Int'),
                 ),
-            ),
-            'attributes' => array(
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'idrol',
                 'required' => true,
-                'class' => 'form-control',
-            ),
-        ));
+                'filters' => array(
+                    array('name' => 'Int'),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'usuario_nombre',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'usuario_username',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+            ));
+            
+            $inputFilter->add(array(
+                'name' => 'usuario_password',
+                'required' => true,
+                'filters' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'StringTrim'),
+                ),
+            ));
+            
+            $this->inputFilter = $inputFilter;
+
+  
+        }
         
-        $this->add(array(
-            'name' => 'usuario_username',
-            'type' => 'Text',
-            'options' => array(
-                'label' => 'Nombre de usuario *',
-            ),
-            'attributes' => array(
-                'required' => true,
-                'class' => 'form-control',
-            ),
-        ));
+        return $this->inputFilter;
         
-        $this->add(array(
-            'name' => 'usuario_password',
-            'type' => 'Password',
-            'options' => array(
-                'label' => 'Contraseña *',
-            ),
-            'attributes' => array(
-                'required' => true,
-                'class' => 'form-control',
-            ),
-        ));
     }
+
+    
+    public function setInputFilter(InputFilterInterface $inputFilter)
+     {
+         throw new \Exception("Not used");
+     }
+
+
 }

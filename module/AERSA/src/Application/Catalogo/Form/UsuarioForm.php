@@ -47,6 +47,23 @@ class UsuarioForm extends Form
         ));
         
         $this->add(array(
+            'name' => 'usuario_estatus',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Estatus *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                    1 => 'Activo',
+                    0 => 'Inactivo'
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        $this->add(array(
             'name' => 'usuario_username',
             'type' => 'Text',
             'options' => array(

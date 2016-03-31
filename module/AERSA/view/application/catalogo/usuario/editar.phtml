@@ -1,4 +1,4 @@
-<h3 class="page-title">Registro usuario</h3>
+<h3 class="page-title"><?php echo $form->get('usuario_nombre')->getValue()?></h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -6,7 +6,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <span>Registro</span>
+            <span><?php echo $form->get('usuario_nombre')->getValue()?></span>
         </li>
     </ul>
 </div>
@@ -19,7 +19,7 @@
     </div>
 <?php endforeach;?>
 <?php
-    $form->setAttribute('action', '/catalogo/usuario/nuevo');
+    $form->setAttribute('action', '/catalogo/usuario/editar/'.$form->get('idusuario')->getValue());
     echo $this->form()->openTag($form);
 ?>
 <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
@@ -46,6 +46,38 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <div >
+                        <?php echo $this->formLabel($form->get('usuario_estatus')) ?>  
+                        <?php echo $this->formSelect($form->get('usuario_estatus')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>
+<?php  echo $this->form()->closeTag(); ?>
+
+<?php
+    $form->setAttribute('action', '/catalogo/usuario/changepassword/'.$form->get('idusuario')->getValue());
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Cambiar contraseña</h3>
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('usuario_password')) ?>  
                         <?php echo $this->formPassword($form->get('usuario_password')) ?>
@@ -66,3 +98,4 @@
         </div>
     </div>
 </div>
+<?php  echo $this->form()->closeTag(); ?>
