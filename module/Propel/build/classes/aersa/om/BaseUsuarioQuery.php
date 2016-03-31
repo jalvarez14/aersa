@@ -7,15 +7,15 @@
  *
  *
  * @method UsuarioQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
- * @method UsuarioQuery orderByUsuarioNombre($order = Criteria::ASC) Order by the usuario_nombre column
  * @method UsuarioQuery orderByIdrol($order = Criteria::ASC) Order by the idrol column
+ * @method UsuarioQuery orderByUsuarioNombre($order = Criteria::ASC) Order by the usuario_nombre column
  * @method UsuarioQuery orderByUsuarioEstatus($order = Criteria::ASC) Order by the usuario_estatus column
  * @method UsuarioQuery orderByUsuarioUsername($order = Criteria::ASC) Order by the usuario_username column
  * @method UsuarioQuery orderByUsuarioPassword($order = Criteria::ASC) Order by the usuario_password column
  *
  * @method UsuarioQuery groupByIdusuario() Group by the idusuario column
- * @method UsuarioQuery groupByUsuarioNombre() Group by the usuario_nombre column
  * @method UsuarioQuery groupByIdrol() Group by the idrol column
+ * @method UsuarioQuery groupByUsuarioNombre() Group by the usuario_nombre column
  * @method UsuarioQuery groupByUsuarioEstatus() Group by the usuario_estatus column
  * @method UsuarioQuery groupByUsuarioUsername() Group by the usuario_username column
  * @method UsuarioQuery groupByUsuarioPassword() Group by the usuario_password column
@@ -28,26 +28,26 @@
  * @method UsuarioQuery rightJoinRol($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rol relation
  * @method UsuarioQuery innerJoinRol($relationAlias = null) Adds a INNER JOIN clause to the query using the Rol relation
  *
- * @method UsuarioQuery leftJoinUsuarioalmacen($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuarioalmacen relation
- * @method UsuarioQuery rightJoinUsuarioalmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuarioalmacen relation
- * @method UsuarioQuery innerJoinUsuarioalmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Usuarioalmacen relation
- *
  * @method UsuarioQuery leftJoinUsuarioempresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuarioempresa relation
  * @method UsuarioQuery rightJoinUsuarioempresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuarioempresa relation
  * @method UsuarioQuery innerJoinUsuarioempresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Usuarioempresa relation
  *
+ * @method UsuarioQuery leftJoinUsuariosucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuariosucursal relation
+ * @method UsuarioQuery rightJoinUsuariosucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuariosucursal relation
+ * @method UsuarioQuery innerJoinUsuariosucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Usuariosucursal relation
+ *
  * @method Usuario findOne(PropelPDO $con = null) Return the first Usuario matching the query
  * @method Usuario findOneOrCreate(PropelPDO $con = null) Return the first Usuario matching the query, or a new Usuario object populated from the query conditions when no match is found
  *
- * @method Usuario findOneByUsuarioNombre(string $usuario_nombre) Return the first Usuario filtered by the usuario_nombre column
  * @method Usuario findOneByIdrol(int $idrol) Return the first Usuario filtered by the idrol column
+ * @method Usuario findOneByUsuarioNombre(string $usuario_nombre) Return the first Usuario filtered by the usuario_nombre column
  * @method Usuario findOneByUsuarioEstatus(boolean $usuario_estatus) Return the first Usuario filtered by the usuario_estatus column
  * @method Usuario findOneByUsuarioUsername(string $usuario_username) Return the first Usuario filtered by the usuario_username column
  * @method Usuario findOneByUsuarioPassword(string $usuario_password) Return the first Usuario filtered by the usuario_password column
  *
  * @method array findByIdusuario(int $idusuario) Return Usuario objects filtered by the idusuario column
- * @method array findByUsuarioNombre(string $usuario_nombre) Return Usuario objects filtered by the usuario_nombre column
  * @method array findByIdrol(int $idrol) Return Usuario objects filtered by the idrol column
+ * @method array findByUsuarioNombre(string $usuario_nombre) Return Usuario objects filtered by the usuario_nombre column
  * @method array findByUsuarioEstatus(boolean $usuario_estatus) Return Usuario objects filtered by the usuario_estatus column
  * @method array findByUsuarioUsername(string $usuario_username) Return Usuario objects filtered by the usuario_username column
  * @method array findByUsuarioPassword(string $usuario_password) Return Usuario objects filtered by the usuario_password column
@@ -158,7 +158,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idusuario`, `usuario_nombre`, `idrol`, `usuario_estatus`, `usuario_username`, `usuario_password` FROM `usuario` WHERE `idusuario` = :p0';
+        $sql = 'SELECT `idusuario`, `idrol`, `usuario_nombre`, `usuario_estatus`, `usuario_username`, `usuario_password` FROM `usuario` WHERE `idusuario` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -290,35 +290,6 @@ abstract class BaseUsuarioQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the usuario_nombre column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByUsuarioNombre('fooValue');   // WHERE usuario_nombre = 'fooValue'
-     * $query->filterByUsuarioNombre('%fooValue%'); // WHERE usuario_nombre LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $usuarioNombre The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return UsuarioQuery The current query, for fluid interface
-     */
-    public function filterByUsuarioNombre($usuarioNombre = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($usuarioNombre)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $usuarioNombre)) {
-                $usuarioNombre = str_replace('*', '%', $usuarioNombre);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(UsuarioPeer::USUARIO_NOMBRE, $usuarioNombre, $comparison);
-    }
-
-    /**
      * Filter the query on the idrol column
      *
      * Example usage:
@@ -360,6 +331,35 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UsuarioPeer::IDROL, $idrol, $comparison);
+    }
+
+    /**
+     * Filter the query on the usuario_nombre column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByUsuarioNombre('fooValue');   // WHERE usuario_nombre = 'fooValue'
+     * $query->filterByUsuarioNombre('%fooValue%'); // WHERE usuario_nombre LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $usuarioNombre The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function filterByUsuarioNombre($usuarioNombre = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($usuarioNombre)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $usuarioNombre)) {
+                $usuarioNombre = str_replace('*', '%', $usuarioNombre);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(UsuarioPeer::USUARIO_NOMBRE, $usuarioNombre, $comparison);
     }
 
     /**
@@ -524,80 +524,6 @@ abstract class BaseUsuarioQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related Usuarioalmacen object
-     *
-     * @param   Usuarioalmacen|PropelObjectCollection $usuarioalmacen  the related object to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 UsuarioQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByUsuarioalmacen($usuarioalmacen, $comparison = null)
-    {
-        if ($usuarioalmacen instanceof Usuarioalmacen) {
-            return $this
-                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $usuarioalmacen->getIdusuario(), $comparison);
-        } elseif ($usuarioalmacen instanceof PropelObjectCollection) {
-            return $this
-                ->useUsuarioalmacenQuery()
-                ->filterByPrimaryKeys($usuarioalmacen->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByUsuarioalmacen() only accepts arguments of type Usuarioalmacen or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Usuarioalmacen relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return UsuarioQuery The current query, for fluid interface
-     */
-    public function joinUsuarioalmacen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Usuarioalmacen');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Usuarioalmacen');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Usuarioalmacen relation Usuarioalmacen object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   UsuarioalmacenQuery A secondary query class using the current class as primary query
-     */
-    public function useUsuarioalmacenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinUsuarioalmacen($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Usuarioalmacen', 'UsuarioalmacenQuery');
-    }
-
-    /**
      * Filter the query by a related Usuarioempresa object
      *
      * @param   Usuarioempresa|PropelObjectCollection $usuarioempresa  the related object to use as filter
@@ -669,6 +595,80 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinUsuarioempresa($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Usuarioempresa', 'UsuarioempresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Usuariosucursal object
+     *
+     * @param   Usuariosucursal|PropelObjectCollection $usuariosucursal  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUsuariosucursal($usuariosucursal, $comparison = null)
+    {
+        if ($usuariosucursal instanceof Usuariosucursal) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $usuariosucursal->getIdusuario(), $comparison);
+        } elseif ($usuariosucursal instanceof PropelObjectCollection) {
+            return $this
+                ->useUsuariosucursalQuery()
+                ->filterByPrimaryKeys($usuariosucursal->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByUsuariosucursal() only accepts arguments of type Usuariosucursal or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Usuariosucursal relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinUsuariosucursal($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Usuariosucursal');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Usuariosucursal');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Usuariosucursal relation Usuariosucursal object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   UsuariosucursalQuery A secondary query class using the current class as primary query
+     */
+    public function useUsuariosucursalQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUsuariosucursal($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Usuariosucursal', 'UsuariosucursalQuery');
     }
 
     /**

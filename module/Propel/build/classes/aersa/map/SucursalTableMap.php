@@ -50,8 +50,8 @@ class SucursalTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Almacen', 'Almacen', RelationMap::ONE_TO_ONE, array('idsucursal' => 'idalmacen', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Usuarioalmacen', 'Usuarioalmacen', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Usuarioalmacens');
+        $this->addRelation('Almacen', 'Almacen', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Almacens');
+        $this->addRelation('Usuariosucursal', 'Usuariosucursal', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Usuariosucursals');
     } // buildRelations()
 
 } // SucursalTableMap

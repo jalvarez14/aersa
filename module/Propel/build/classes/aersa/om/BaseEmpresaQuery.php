@@ -9,14 +9,10 @@
  * @method EmpresaQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method EmpresaQuery orderByEmpresaNombrecomercial($order = Criteria::ASC) Order by the empresa_nombrecomercial column
  * @method EmpresaQuery orderByEmpresaRazonsocial($order = Criteria::ASC) Order by the empresa_razonsocial column
- * @method EmpresaQuery orderByEmpresaEstatus($order = Criteria::ASC) Order by the empresa_estatus column
- * @method EmpresaQuery orderByIdadministrador($order = Criteria::ASC) Order by the idadministrador column
  *
  * @method EmpresaQuery groupByIdempresa() Group by the idempresa column
  * @method EmpresaQuery groupByEmpresaNombrecomercial() Group by the empresa_nombrecomercial column
  * @method EmpresaQuery groupByEmpresaRazonsocial() Group by the empresa_razonsocial column
- * @method EmpresaQuery groupByEmpresaEstatus() Group by the empresa_estatus column
- * @method EmpresaQuery groupByIdadministrador() Group by the idadministrador column
  *
  * @method EmpresaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method EmpresaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -39,14 +35,10 @@
  *
  * @method Empresa findOneByEmpresaNombrecomercial(string $empresa_nombrecomercial) Return the first Empresa filtered by the empresa_nombrecomercial column
  * @method Empresa findOneByEmpresaRazonsocial(string $empresa_razonsocial) Return the first Empresa filtered by the empresa_razonsocial column
- * @method Empresa findOneByEmpresaEstatus(boolean $empresa_estatus) Return the first Empresa filtered by the empresa_estatus column
- * @method Empresa findOneByIdadministrador(string $idadministrador) Return the first Empresa filtered by the idadministrador column
  *
  * @method array findByIdempresa(int $idempresa) Return Empresa objects filtered by the idempresa column
  * @method array findByEmpresaNombrecomercial(string $empresa_nombrecomercial) Return Empresa objects filtered by the empresa_nombrecomercial column
  * @method array findByEmpresaRazonsocial(string $empresa_razonsocial) Return Empresa objects filtered by the empresa_razonsocial column
- * @method array findByEmpresaEstatus(boolean $empresa_estatus) Return Empresa objects filtered by the empresa_estatus column
- * @method array findByIdadministrador(string $idadministrador) Return Empresa objects filtered by the idadministrador column
  *
  * @package    propel.generator.aersa.om
  */
@@ -154,7 +146,7 @@ abstract class BaseEmpresaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial`, `empresa_estatus`, `idadministrador` FROM `empresa` WHERE `idempresa` = :p0';
+        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial` FROM `empresa` WHERE `idempresa` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -341,62 +333,6 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EmpresaPeer::EMPRESA_RAZONSOCIAL, $empresaRazonsocial, $comparison);
-    }
-
-    /**
-     * Filter the query on the empresa_estatus column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByEmpresaEstatus(true); // WHERE empresa_estatus = true
-     * $query->filterByEmpresaEstatus('yes'); // WHERE empresa_estatus = true
-     * </code>
-     *
-     * @param     boolean|string $empresaEstatus The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return EmpresaQuery The current query, for fluid interface
-     */
-    public function filterByEmpresaEstatus($empresaEstatus = null, $comparison = null)
-    {
-        if (is_string($empresaEstatus)) {
-            $empresaEstatus = in_array(strtolower($empresaEstatus), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(EmpresaPeer::EMPRESA_ESTATUS, $empresaEstatus, $comparison);
-    }
-
-    /**
-     * Filter the query on the idadministrador column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIdadministrador('fooValue');   // WHERE idadministrador = 'fooValue'
-     * $query->filterByIdadministrador('%fooValue%'); // WHERE idadministrador LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $idadministrador The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return EmpresaQuery The current query, for fluid interface
-     */
-    public function filterByIdadministrador($idadministrador = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($idadministrador)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $idadministrador)) {
-                $idadministrador = str_replace('*', '%', $idadministrador);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(EmpresaPeer::IDADMINISTRADOR, $idadministrador, $comparison);
     }
 
     /**

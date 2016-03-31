@@ -12,14 +12,14 @@ DROP TABLE IF EXISTS `almacen`;
 CREATE TABLE `almacen`
 (
     `idalmacen` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER NOT NULL,
     `almacen_nombre` VARCHAR(255) NOT NULL,
     `almacen_encargado` VARCHAR(45) NOT NULL,
-    `idsucursal` INTEGER NOT NULL,
     `almacen_estatus` TINYINT(1) NOT NULL,
     PRIMARY KEY (`idalmacen`),
     INDEX `idsucursal` (`idsucursal`),
     CONSTRAINT `idsucursal_almacen`
-        FOREIGN KEY (`idalmacen`)
+        FOREIGN KEY (`idsucursal`)
         REFERENCES `sucursal` (`idsucursal`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
@@ -85,8 +85,6 @@ CREATE TABLE `empresa`
     `idempresa` INTEGER NOT NULL AUTO_INCREMENT,
     `empresa_nombrecomercial` VARCHAR(255) NOT NULL,
     `empresa_razonsocial` VARCHAR(255) NOT NULL,
-    `empresa_estatus` TINYINT(1) NOT NULL,
-    `idadministrador` VARCHAR(45),
     PRIMARY KEY (`idempresa`)
 ) ENGINE=InnoDB;
 
@@ -241,8 +239,8 @@ DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE `usuario`
 (
     `idusuario` INTEGER NOT NULL AUTO_INCREMENT,
-    `usuario_nombre` VARCHAR(255) NOT NULL,
     `idrol` INTEGER NOT NULL,
+    `usuario_nombre` VARCHAR(255) NOT NULL,
     `usuario_estatus` TINYINT(1) NOT NULL,
     `usuario_username` VARCHAR(45) NOT NULL,
     `usuario_password` VARCHAR(45) NOT NULL,
@@ -251,32 +249,6 @@ CREATE TABLE `usuario`
     CONSTRAINT `idrol_usuario`
         FOREIGN KEY (`idrol`)
         REFERENCES `rol` (`idrol`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
--- usuarioalmacen
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `usuarioalmacen`;
-
-CREATE TABLE `usuarioalmacen`
-(
-    `idusuarioalmacen` INTEGER NOT NULL AUTO_INCREMENT,
-    `idusuario` INTEGER NOT NULL,
-    `idsucursal` INTEGER,
-    PRIMARY KEY (`idusuarioalmacen`),
-    INDEX `idusuario` (`idusuario`),
-    INDEX `idsucursal` (`idsucursal`),
-    CONSTRAINT `idsucursal_usuarioalmacen`
-        FOREIGN KEY (`idsucursal`)
-        REFERENCES `sucursal` (`idsucursal`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT `idusuario_usuarioalmacen`
-        FOREIGN KEY (`idusuario`)
-        REFERENCES `usuario` (`idusuario`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -301,6 +273,32 @@ CREATE TABLE `usuarioempresa`
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT `idusuario_usuarioempresa`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- usuariosucursal
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `usuariosucursal`;
+
+CREATE TABLE `usuariosucursal`
+(
+    `idusuariosucursal` INTEGER NOT NULL AUTO_INCREMENT,
+    `idusuario` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    PRIMARY KEY (`idusuariosucursal`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idsucursal_usuariosucursal`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_usuariosucursal`
         FOREIGN KEY (`idusuario`)
         REFERENCES `usuario` (`idusuario`)
         ON UPDATE CASCADE

@@ -48,18 +48,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $empresa_razonsocial;
 
     /**
-     * The value for the empresa_estatus field.
-     * @var        boolean
-     */
-    protected $empresa_estatus;
-
-    /**
-     * The value for the idadministrador field.
-     * @var        string
-     */
-    protected $idadministrador;
-
-    /**
      * @var        PropelObjectCollection|Proveedor[] Collection to store aggregation of Proveedor objects.
      */
     protected $collProveedors;
@@ -149,28 +137,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [empresa_estatus] column value.
-     *
-     * @return boolean
-     */
-    public function getEmpresaEstatus()
-    {
-
-        return $this->empresa_estatus;
-    }
-
-    /**
-     * Get the [idadministrador] column value.
-     *
-     * @return string
-     */
-    public function getIdadministrador()
-    {
-
-        return $this->idadministrador;
-    }
-
-    /**
      * Set the value of [idempresa] column.
      *
      * @param  int $v new value
@@ -234,56 +200,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     } // setEmpresaRazonsocial()
 
     /**
-     * Sets the value of the [empresa_estatus] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param boolean|integer|string $v The new value
-     * @return Empresa The current object (for fluent API support)
-     */
-    public function setEmpresaEstatus($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->empresa_estatus !== $v) {
-            $this->empresa_estatus = $v;
-            $this->modifiedColumns[] = EmpresaPeer::EMPRESA_ESTATUS;
-        }
-
-
-        return $this;
-    } // setEmpresaEstatus()
-
-    /**
-     * Set the value of [idadministrador] column.
-     *
-     * @param  string $v new value
-     * @return Empresa The current object (for fluent API support)
-     */
-    public function setIdadministrador($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->idadministrador !== $v) {
-            $this->idadministrador = $v;
-            $this->modifiedColumns[] = EmpresaPeer::IDADMINISTRADOR;
-        }
-
-
-        return $this;
-    } // setIdadministrador()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -318,8 +234,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->idempresa = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->empresa_nombrecomercial = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->empresa_razonsocial = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->empresa_estatus = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
-            $this->idadministrador = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -329,7 +243,7 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 3; // 3 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Empresa object", $e);
@@ -607,12 +521,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_RAZONSOCIAL)) {
             $modifiedColumns[':p' . $index++]  = '`empresa_razonsocial`';
         }
-        if ($this->isColumnModified(EmpresaPeer::EMPRESA_ESTATUS)) {
-            $modifiedColumns[':p' . $index++]  = '`empresa_estatus`';
-        }
-        if ($this->isColumnModified(EmpresaPeer::IDADMINISTRADOR)) {
-            $modifiedColumns[':p' . $index++]  = '`idadministrador`';
-        }
 
         $sql = sprintf(
             'INSERT INTO `empresa` (%s) VALUES (%s)',
@@ -632,12 +540,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                         break;
                     case '`empresa_razonsocial`':
                         $stmt->bindValue($identifier, $this->empresa_razonsocial, PDO::PARAM_STR);
-                        break;
-                    case '`empresa_estatus`':
-                        $stmt->bindValue($identifier, (int) $this->empresa_estatus, PDO::PARAM_INT);
-                        break;
-                    case '`idadministrador`':
-                        $stmt->bindValue($identifier, $this->idadministrador, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -806,12 +708,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 2:
                 return $this->getEmpresaRazonsocial();
                 break;
-            case 3:
-                return $this->getEmpresaEstatus();
-                break;
-            case 4:
-                return $this->getIdadministrador();
-                break;
             default:
                 return null;
                 break;
@@ -844,8 +740,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $keys[0] => $this->getIdempresa(),
             $keys[1] => $this->getEmpresaNombrecomercial(),
             $keys[2] => $this->getEmpresaRazonsocial(),
-            $keys[3] => $this->getEmpresaEstatus(),
-            $keys[4] => $this->getIdadministrador(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -905,12 +799,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 2:
                 $this->setEmpresaRazonsocial($value);
                 break;
-            case 3:
-                $this->setEmpresaEstatus($value);
-                break;
-            case 4:
-                $this->setIdadministrador($value);
-                break;
         } // switch()
     }
 
@@ -938,8 +826,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setIdempresa($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setEmpresaNombrecomercial($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setEmpresaRazonsocial($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setEmpresaEstatus($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIdadministrador($arr[$keys[4]]);
     }
 
     /**
@@ -954,8 +840,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::IDEMPRESA)) $criteria->add(EmpresaPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_NOMBRECOMERCIAL)) $criteria->add(EmpresaPeer::EMPRESA_NOMBRECOMERCIAL, $this->empresa_nombrecomercial);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_RAZONSOCIAL)) $criteria->add(EmpresaPeer::EMPRESA_RAZONSOCIAL, $this->empresa_razonsocial);
-        if ($this->isColumnModified(EmpresaPeer::EMPRESA_ESTATUS)) $criteria->add(EmpresaPeer::EMPRESA_ESTATUS, $this->empresa_estatus);
-        if ($this->isColumnModified(EmpresaPeer::IDADMINISTRADOR)) $criteria->add(EmpresaPeer::IDADMINISTRADOR, $this->idadministrador);
 
         return $criteria;
     }
@@ -1021,8 +905,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     {
         $copyObj->setEmpresaNombrecomercial($this->getEmpresaNombrecomercial());
         $copyObj->setEmpresaRazonsocial($this->getEmpresaRazonsocial());
-        $copyObj->setEmpresaEstatus($this->getEmpresaEstatus());
-        $copyObj->setIdadministrador($this->getIdadministrador());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1829,8 +1711,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $this->idempresa = null;
         $this->empresa_nombrecomercial = null;
         $this->empresa_razonsocial = null;
-        $this->empresa_estatus = null;
-        $this->idadministrador = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

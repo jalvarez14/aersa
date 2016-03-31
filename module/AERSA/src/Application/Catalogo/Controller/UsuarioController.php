@@ -27,9 +27,24 @@ class UsuarioController extends AbstractActionController
     
     public function nuevoAction()
     {
+        $request = $this->getRequest();
         
+        if($request->isPost()){
+            
+            $post_data = $request->getPost();
+            
+            
+            echo '<pre>';var_dump($post_data);echo '</pre>';exit();
+        }
+        
+        //INTANCIAMOS NUESTRO FORMULARIO
+        $form = new \Application\Catalogo\Form\UsuarioForm();
+
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form' => $form,
+        ));
         $view_model->setTemplate('/application/catalogo/usuario/nuevo');
         return $view_model;
 

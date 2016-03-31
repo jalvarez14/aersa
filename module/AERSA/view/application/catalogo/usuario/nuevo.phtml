@@ -1,0 +1,62 @@
+<h3 class="page-title">Registro usuario</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/usuario">Usuarios</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Registro</span>
+        </li>
+    </ul>
+</div>
+<?php
+
+    $form->setAttribute('action', '/catalogo/usuario/nuevo');
+//    $form->setAttribute('novalidate', true);
+
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('usuario_nombre')) ?>  
+                        <?php echo $this->formText($form->get('usuario_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idrol')) ?>  
+                        <?php echo $this->formSelect($form->get('idrol')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('usuario_username')) ?>  
+                        <?php echo $this->formText($form->get('usuario_username')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('usuario_password')) ?>  
+                        <?php echo $this->formPassword($form->get('usuario_password')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>

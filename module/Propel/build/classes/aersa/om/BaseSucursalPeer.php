@@ -368,9 +368,9 @@ abstract class BaseSucursalPeer
         // Invalidate objects in AlmacenPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AlmacenPeer::clearInstancePool();
-        // Invalidate objects in UsuarioalmacenPeer instance pool,
+        // Invalidate objects in UsuariosucursalPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        UsuarioalmacenPeer::clearInstancePool();
+        UsuariosucursalPeer::clearInstancePool();
     }
 
     /**
@@ -946,14 +946,14 @@ abstract class BaseSucursalPeer
             // delete related Almacen objects
             $criteria = new Criteria(AlmacenPeer::DATABASE_NAME);
 
-            $criteria->add(AlmacenPeer::IDALMACEN, $obj->getIdsucursal());
+            $criteria->add(AlmacenPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += AlmacenPeer::doDelete($criteria, $con);
 
-            // delete related Usuarioalmacen objects
-            $criteria = new Criteria(UsuarioalmacenPeer::DATABASE_NAME);
+            // delete related Usuariosucursal objects
+            $criteria = new Criteria(UsuariosucursalPeer::DATABASE_NAME);
 
-            $criteria->add(UsuarioalmacenPeer::IDSUCURSAL, $obj->getIdsucursal());
-            $affectedRows += UsuarioalmacenPeer::doDelete($criteria, $con);
+            $criteria->add(UsuariosucursalPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += UsuariosucursalPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

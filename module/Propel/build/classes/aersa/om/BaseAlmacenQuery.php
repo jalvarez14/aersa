@@ -7,15 +7,15 @@
  *
  *
  * @method AlmacenQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
+ * @method AlmacenQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
  * @method AlmacenQuery orderByAlmacenNombre($order = Criteria::ASC) Order by the almacen_nombre column
  * @method AlmacenQuery orderByAlmacenEncargado($order = Criteria::ASC) Order by the almacen_encargado column
- * @method AlmacenQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
  * @method AlmacenQuery orderByAlmacenEstatus($order = Criteria::ASC) Order by the almacen_estatus column
  *
  * @method AlmacenQuery groupByIdalmacen() Group by the idalmacen column
+ * @method AlmacenQuery groupByIdsucursal() Group by the idsucursal column
  * @method AlmacenQuery groupByAlmacenNombre() Group by the almacen_nombre column
  * @method AlmacenQuery groupByAlmacenEncargado() Group by the almacen_encargado column
- * @method AlmacenQuery groupByIdsucursal() Group by the idsucursal column
  * @method AlmacenQuery groupByAlmacenEstatus() Group by the almacen_estatus column
  *
  * @method AlmacenQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -29,15 +29,15 @@
  * @method Almacen findOne(PropelPDO $con = null) Return the first Almacen matching the query
  * @method Almacen findOneOrCreate(PropelPDO $con = null) Return the first Almacen matching the query, or a new Almacen object populated from the query conditions when no match is found
  *
+ * @method Almacen findOneByIdsucursal(int $idsucursal) Return the first Almacen filtered by the idsucursal column
  * @method Almacen findOneByAlmacenNombre(string $almacen_nombre) Return the first Almacen filtered by the almacen_nombre column
  * @method Almacen findOneByAlmacenEncargado(string $almacen_encargado) Return the first Almacen filtered by the almacen_encargado column
- * @method Almacen findOneByIdsucursal(int $idsucursal) Return the first Almacen filtered by the idsucursal column
  * @method Almacen findOneByAlmacenEstatus(boolean $almacen_estatus) Return the first Almacen filtered by the almacen_estatus column
  *
  * @method array findByIdalmacen(int $idalmacen) Return Almacen objects filtered by the idalmacen column
+ * @method array findByIdsucursal(int $idsucursal) Return Almacen objects filtered by the idsucursal column
  * @method array findByAlmacenNombre(string $almacen_nombre) Return Almacen objects filtered by the almacen_nombre column
  * @method array findByAlmacenEncargado(string $almacen_encargado) Return Almacen objects filtered by the almacen_encargado column
- * @method array findByIdsucursal(int $idsucursal) Return Almacen objects filtered by the idsucursal column
  * @method array findByAlmacenEstatus(boolean $almacen_estatus) Return Almacen objects filtered by the almacen_estatus column
  *
  * @package    propel.generator.aersa.om
@@ -146,7 +146,7 @@ abstract class BaseAlmacenQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idalmacen`, `almacen_nombre`, `almacen_encargado`, `idsucursal`, `almacen_estatus` FROM `almacen` WHERE `idalmacen` = :p0';
+        $sql = 'SELECT `idalmacen`, `idsucursal`, `almacen_nombre`, `almacen_encargado`, `almacen_estatus` FROM `almacen` WHERE `idalmacen` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -246,8 +246,6 @@ abstract class BaseAlmacenQuery extends ModelCriteria
      * $query->filterByIdalmacen(array('max' => 12)); // WHERE idalmacen <= 12
      * </code>
      *
-     * @see       filterBySucursal()
-     *
      * @param     mixed $idalmacen The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -277,6 +275,50 @@ abstract class BaseAlmacenQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(AlmacenPeer::IDALMACEN, $idalmacen, $comparison);
+    }
+
+    /**
+     * Filter the query on the idsucursal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
+     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
+     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
+     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
+     * </code>
+     *
+     * @see       filterBySucursal()
+     *
+     * @param     mixed $idsucursal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function filterByIdsucursal($idsucursal = null, $comparison = null)
+    {
+        if (is_array($idsucursal)) {
+            $useMinMax = false;
+            if (isset($idsucursal['min'])) {
+                $this->addUsingAlias(AlmacenPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idsucursal['max'])) {
+                $this->addUsingAlias(AlmacenPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(AlmacenPeer::IDSUCURSAL, $idsucursal, $comparison);
     }
 
     /**
@@ -338,48 +380,6 @@ abstract class BaseAlmacenQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the idsucursal column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
-     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
-     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
-     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
-     * </code>
-     *
-     * @param     mixed $idsucursal The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return AlmacenQuery The current query, for fluid interface
-     */
-    public function filterByIdsucursal($idsucursal = null, $comparison = null)
-    {
-        if (is_array($idsucursal)) {
-            $useMinMax = false;
-            if (isset($idsucursal['min'])) {
-                $this->addUsingAlias(AlmacenPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idsucursal['max'])) {
-                $this->addUsingAlias(AlmacenPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(AlmacenPeer::IDSUCURSAL, $idsucursal, $comparison);
-    }
-
-    /**
      * Filter the query on the almacen_estatus column
      *
      * Example usage:
@@ -419,14 +419,14 @@ abstract class BaseAlmacenQuery extends ModelCriteria
     {
         if ($sucursal instanceof Sucursal) {
             return $this
-                ->addUsingAlias(AlmacenPeer::IDALMACEN, $sucursal->getIdsucursal(), $comparison);
+                ->addUsingAlias(AlmacenPeer::IDSUCURSAL, $sucursal->getIdsucursal(), $comparison);
         } elseif ($sucursal instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(AlmacenPeer::IDALMACEN, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
+                ->addUsingAlias(AlmacenPeer::IDSUCURSAL, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
         } else {
             throw new PropelException('filterBySucursal() only accepts arguments of type Sucursal or PropelCollection');
         }

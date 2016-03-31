@@ -39,8 +39,8 @@ class UsuarioTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idusuario', 'Idusuario', 'INTEGER', true, null, null);
-        $this->addColumn('usuario_nombre', 'UsuarioNombre', 'VARCHAR', true, 255, null);
         $this->addForeignKey('idrol', 'Idrol', 'INTEGER', 'rol', 'idrol', true, null, null);
+        $this->addColumn('usuario_nombre', 'UsuarioNombre', 'VARCHAR', true, 255, null);
         $this->addColumn('usuario_estatus', 'UsuarioEstatus', 'BOOLEAN', true, 1, null);
         $this->addColumn('usuario_username', 'UsuarioUsername', 'VARCHAR', true, 45, null);
         $this->addColumn('usuario_password', 'UsuarioPassword', 'VARCHAR', true, 45, null);
@@ -53,8 +53,8 @@ class UsuarioTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Rol', 'Rol', RelationMap::MANY_TO_ONE, array('idrol' => 'idrol', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Usuarioalmacen', 'Usuarioalmacen', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Usuarioalmacens');
         $this->addRelation('Usuarioempresa', 'Usuarioempresa', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Usuarioempresas');
+        $this->addRelation('Usuariosucursal', 'Usuariosucursal', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Usuariosucursals');
     } // buildRelations()
 
 } // UsuarioTableMap

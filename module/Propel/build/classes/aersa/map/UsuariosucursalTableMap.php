@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'almacen' table.
+ * This class defines the structure of the 'usuariosucursal' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.aersa.map
  */
-class AlmacenTableMap extends TableMap
+class UsuariosucursalTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'aersa.map.AlmacenTableMap';
+    const CLASS_NAME = 'aersa.map.UsuariosucursalTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,17 +32,15 @@ class AlmacenTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('almacen');
-        $this->setPhpName('Almacen');
-        $this->setClassname('Almacen');
+        $this->setName('usuariosucursal');
+        $this->setPhpName('Usuariosucursal');
+        $this->setClassname('Usuariosucursal');
         $this->setPackage('aersa');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('idalmacen', 'Idalmacen', 'INTEGER', true, null, null);
+        $this->addPrimaryKey('idusuariosucursal', 'Idusuariosucursal', 'INTEGER', true, null, null);
+        $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
-        $this->addColumn('almacen_nombre', 'AlmacenNombre', 'VARCHAR', true, 255, null);
-        $this->addColumn('almacen_encargado', 'AlmacenEncargado', 'VARCHAR', true, 45, null);
-        $this->addColumn('almacen_estatus', 'AlmacenEstatus', 'BOOLEAN', true, 1, null);
         // validators
     } // initialize()
 
@@ -52,6 +50,7 @@ class AlmacenTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Usuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
-} // AlmacenTableMap
+} // UsuariosucursalTableMap

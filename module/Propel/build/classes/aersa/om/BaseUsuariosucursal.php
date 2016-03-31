@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'almacen' table.
+ * Base class that represents a row from the 'usuariosucursal' table.
  *
  *
  *
  * @package    propel.generator.aersa.om
  */
-abstract class BaseAlmacen extends BaseObject implements Persistent
+abstract class BaseUsuariosucursal extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'AlmacenPeer';
+    const PEER = 'UsuariosucursalPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        AlmacenPeer
+     * @var        UsuariosucursalPeer
      */
     protected static $peer;
 
@@ -30,10 +30,16 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the idalmacen field.
+     * The value for the idusuariosucursal field.
      * @var        int
      */
-    protected $idalmacen;
+    protected $idusuariosucursal;
+
+    /**
+     * The value for the idusuario field.
+     * @var        int
+     */
+    protected $idusuario;
 
     /**
      * The value for the idsucursal field.
@@ -42,27 +48,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $idsucursal;
 
     /**
-     * The value for the almacen_nombre field.
-     * @var        string
-     */
-    protected $almacen_nombre;
-
-    /**
-     * The value for the almacen_encargado field.
-     * @var        string
-     */
-    protected $almacen_encargado;
-
-    /**
-     * The value for the almacen_estatus field.
-     * @var        boolean
-     */
-    protected $almacen_estatus;
-
-    /**
      * @var        Sucursal
      */
     protected $aSucursal;
+
+    /**
+     * @var        Usuario
+     */
+    protected $aUsuario;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -85,14 +78,25 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [idalmacen] column value.
+     * Get the [idusuariosucursal] column value.
      *
      * @return int
      */
-    public function getIdalmacen()
+    public function getIdusuariosucursal()
     {
 
-        return $this->idalmacen;
+        return $this->idusuariosucursal;
+    }
+
+    /**
+     * Get the [idusuario] column value.
+     *
+     * @return int
+     */
+    public function getIdusuario()
+    {
+
+        return $this->idusuario;
     }
 
     /**
@@ -107,64 +111,56 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [almacen_nombre] column value.
-     *
-     * @return string
-     */
-    public function getAlmacenNombre()
-    {
-
-        return $this->almacen_nombre;
-    }
-
-    /**
-     * Get the [almacen_encargado] column value.
-     *
-     * @return string
-     */
-    public function getAlmacenEncargado()
-    {
-
-        return $this->almacen_encargado;
-    }
-
-    /**
-     * Get the [almacen_estatus] column value.
-     *
-     * @return boolean
-     */
-    public function getAlmacenEstatus()
-    {
-
-        return $this->almacen_estatus;
-    }
-
-    /**
-     * Set the value of [idalmacen] column.
+     * Set the value of [idusuariosucursal] column.
      *
      * @param  int $v new value
-     * @return Almacen The current object (for fluent API support)
+     * @return Usuariosucursal The current object (for fluent API support)
      */
-    public function setIdalmacen($v)
+    public function setIdusuariosucursal($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idalmacen !== $v) {
-            $this->idalmacen = $v;
-            $this->modifiedColumns[] = AlmacenPeer::IDALMACEN;
+        if ($this->idusuariosucursal !== $v) {
+            $this->idusuariosucursal = $v;
+            $this->modifiedColumns[] = UsuariosucursalPeer::IDUSUARIOSUCURSAL;
         }
 
 
         return $this;
-    } // setIdalmacen()
+    } // setIdusuariosucursal()
+
+    /**
+     * Set the value of [idusuario] column.
+     *
+     * @param  int $v new value
+     * @return Usuariosucursal The current object (for fluent API support)
+     */
+    public function setIdusuario($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idusuario !== $v) {
+            $this->idusuario = $v;
+            $this->modifiedColumns[] = UsuariosucursalPeer::IDUSUARIO;
+        }
+
+        if ($this->aUsuario !== null && $this->aUsuario->getIdusuario() !== $v) {
+            $this->aUsuario = null;
+        }
+
+
+        return $this;
+    } // setIdusuario()
 
     /**
      * Set the value of [idsucursal] column.
      *
      * @param  int $v new value
-     * @return Almacen The current object (for fluent API support)
+     * @return Usuariosucursal The current object (for fluent API support)
      */
     public function setIdsucursal($v)
     {
@@ -174,7 +170,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
         if ($this->idsucursal !== $v) {
             $this->idsucursal = $v;
-            $this->modifiedColumns[] = AlmacenPeer::IDSUCURSAL;
+            $this->modifiedColumns[] = UsuariosucursalPeer::IDSUCURSAL;
         }
 
         if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
@@ -184,77 +180,6 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
         return $this;
     } // setIdsucursal()
-
-    /**
-     * Set the value of [almacen_nombre] column.
-     *
-     * @param  string $v new value
-     * @return Almacen The current object (for fluent API support)
-     */
-    public function setAlmacenNombre($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->almacen_nombre !== $v) {
-            $this->almacen_nombre = $v;
-            $this->modifiedColumns[] = AlmacenPeer::ALMACEN_NOMBRE;
-        }
-
-
-        return $this;
-    } // setAlmacenNombre()
-
-    /**
-     * Set the value of [almacen_encargado] column.
-     *
-     * @param  string $v new value
-     * @return Almacen The current object (for fluent API support)
-     */
-    public function setAlmacenEncargado($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->almacen_encargado !== $v) {
-            $this->almacen_encargado = $v;
-            $this->modifiedColumns[] = AlmacenPeer::ALMACEN_ENCARGADO;
-        }
-
-
-        return $this;
-    } // setAlmacenEncargado()
-
-    /**
-     * Sets the value of the [almacen_estatus] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param boolean|integer|string $v The new value
-     * @return Almacen The current object (for fluent API support)
-     */
-    public function setAlmacenEstatus($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->almacen_estatus !== $v) {
-            $this->almacen_estatus = $v;
-            $this->modifiedColumns[] = AlmacenPeer::ALMACEN_ESTATUS;
-        }
-
-
-        return $this;
-    } // setAlmacenEstatus()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -288,11 +213,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     {
         try {
 
-            $this->idalmacen = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idsucursal = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->almacen_nombre = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-            $this->almacen_encargado = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->almacen_estatus = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
+            $this->idusuariosucursal = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idusuario = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -302,10 +225,10 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = AlmacenPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 3; // 3 = UsuariosucursalPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Almacen object", $e);
+            throw new PropelException("Error populating Usuariosucursal object", $e);
         }
     }
 
@@ -325,6 +248,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aUsuario !== null && $this->idusuario !== $this->aUsuario->getIdusuario()) {
+            $this->aUsuario = null;
+        }
         if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
             $this->aSucursal = null;
         }
@@ -351,13 +277,13 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(AlmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(UsuariosucursalPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = AlmacenPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = UsuariosucursalPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -368,6 +294,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aSucursal = null;
+            $this->aUsuario = null;
         } // if (deep)
     }
 
@@ -388,12 +315,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(AlmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(UsuariosucursalPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = AlmacenQuery::create()
+            $deleteQuery = UsuariosucursalQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -431,7 +358,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(AlmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(UsuariosucursalPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -451,7 +378,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                AlmacenPeer::addInstanceToPool($this);
+                UsuariosucursalPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -493,6 +420,13 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 $this->setSucursal($this->aSucursal);
             }
 
+            if ($this->aUsuario !== null) {
+                if ($this->aUsuario->isModified() || $this->aUsuario->isNew()) {
+                    $affectedRows += $this->aUsuario->save($con);
+                }
+                $this->setUsuario($this->aUsuario);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -524,30 +458,24 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = AlmacenPeer::IDALMACEN;
-        if (null !== $this->idalmacen) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . AlmacenPeer::IDALMACEN . ')');
+        $this->modifiedColumns[] = UsuariosucursalPeer::IDUSUARIOSUCURSAL;
+        if (null !== $this->idusuariosucursal) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . UsuariosucursalPeer::IDUSUARIOSUCURSAL . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(AlmacenPeer::IDALMACEN)) {
-            $modifiedColumns[':p' . $index++]  = '`idalmacen`';
+        if ($this->isColumnModified(UsuariosucursalPeer::IDUSUARIOSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idusuariosucursal`';
         }
-        if ($this->isColumnModified(AlmacenPeer::IDSUCURSAL)) {
+        if ($this->isColumnModified(UsuariosucursalPeer::IDUSUARIO)) {
+            $modifiedColumns[':p' . $index++]  = '`idusuario`';
+        }
+        if ($this->isColumnModified(UsuariosucursalPeer::IDSUCURSAL)) {
             $modifiedColumns[':p' . $index++]  = '`idsucursal`';
-        }
-        if ($this->isColumnModified(AlmacenPeer::ALMACEN_NOMBRE)) {
-            $modifiedColumns[':p' . $index++]  = '`almacen_nombre`';
-        }
-        if ($this->isColumnModified(AlmacenPeer::ALMACEN_ENCARGADO)) {
-            $modifiedColumns[':p' . $index++]  = '`almacen_encargado`';
-        }
-        if ($this->isColumnModified(AlmacenPeer::ALMACEN_ESTATUS)) {
-            $modifiedColumns[':p' . $index++]  = '`almacen_estatus`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `almacen` (%s) VALUES (%s)',
+            'INSERT INTO `usuariosucursal` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -556,20 +484,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`idalmacen`':
-                        $stmt->bindValue($identifier, $this->idalmacen, PDO::PARAM_INT);
+                    case '`idusuariosucursal`':
+                        $stmt->bindValue($identifier, $this->idusuariosucursal, PDO::PARAM_INT);
+                        break;
+                    case '`idusuario`':
+                        $stmt->bindValue($identifier, $this->idusuario, PDO::PARAM_INT);
                         break;
                     case '`idsucursal`':
                         $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
-                        break;
-                    case '`almacen_nombre`':
-                        $stmt->bindValue($identifier, $this->almacen_nombre, PDO::PARAM_STR);
-                        break;
-                    case '`almacen_encargado`':
-                        $stmt->bindValue($identifier, $this->almacen_encargado, PDO::PARAM_STR);
-                        break;
-                    case '`almacen_estatus`':
-                        $stmt->bindValue($identifier, (int) $this->almacen_estatus, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -584,7 +506,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdalmacen($pk);
+        $this->setIdusuariosucursal($pk);
 
         $this->setNew(false);
     }
@@ -676,8 +598,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aUsuario !== null) {
+                if (!$this->aUsuario->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aUsuario->getValidationFailures());
+                }
+            }
 
-            if (($retval = AlmacenPeer::doValidate($this, $columns)) !== true) {
+
+            if (($retval = UsuariosucursalPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -701,7 +629,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = AlmacenPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = UsuariosucursalPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -718,19 +646,13 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdalmacen();
+                return $this->getIdusuariosucursal();
                 break;
             case 1:
-                return $this->getIdsucursal();
+                return $this->getIdusuario();
                 break;
             case 2:
-                return $this->getAlmacenNombre();
-                break;
-            case 3:
-                return $this->getAlmacenEncargado();
-                break;
-            case 4:
-                return $this->getAlmacenEstatus();
+                return $this->getIdsucursal();
                 break;
             default:
                 return null;
@@ -755,17 +677,15 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Almacen'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Usuariosucursal'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Almacen'][$this->getPrimaryKey()] = true;
-        $keys = AlmacenPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Usuariosucursal'][$this->getPrimaryKey()] = true;
+        $keys = UsuariosucursalPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdalmacen(),
-            $keys[1] => $this->getIdsucursal(),
-            $keys[2] => $this->getAlmacenNombre(),
-            $keys[3] => $this->getAlmacenEncargado(),
-            $keys[4] => $this->getAlmacenEstatus(),
+            $keys[0] => $this->getIdusuariosucursal(),
+            $keys[1] => $this->getIdusuario(),
+            $keys[2] => $this->getIdsucursal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -775,6 +695,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aSucursal) {
                 $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUsuario) {
+                $result['Usuario'] = $this->aUsuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -794,7 +717,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = AlmacenPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = UsuariosucursalPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -811,19 +734,13 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdalmacen($value);
+                $this->setIdusuariosucursal($value);
                 break;
             case 1:
-                $this->setIdsucursal($value);
+                $this->setIdusuario($value);
                 break;
             case 2:
-                $this->setAlmacenNombre($value);
-                break;
-            case 3:
-                $this->setAlmacenEncargado($value);
-                break;
-            case 4:
-                $this->setAlmacenEstatus($value);
+                $this->setIdsucursal($value);
                 break;
         } // switch()
     }
@@ -847,13 +764,11 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = AlmacenPeer::getFieldNames($keyType);
+        $keys = UsuariosucursalPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdalmacen($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdsucursal($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setAlmacenNombre($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setAlmacenEncargado($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setAlmacenEstatus($arr[$keys[4]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdusuariosucursal($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdusuario($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
     }
 
     /**
@@ -863,13 +778,11 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(AlmacenPeer::DATABASE_NAME);
+        $criteria = new Criteria(UsuariosucursalPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(AlmacenPeer::IDALMACEN)) $criteria->add(AlmacenPeer::IDALMACEN, $this->idalmacen);
-        if ($this->isColumnModified(AlmacenPeer::IDSUCURSAL)) $criteria->add(AlmacenPeer::IDSUCURSAL, $this->idsucursal);
-        if ($this->isColumnModified(AlmacenPeer::ALMACEN_NOMBRE)) $criteria->add(AlmacenPeer::ALMACEN_NOMBRE, $this->almacen_nombre);
-        if ($this->isColumnModified(AlmacenPeer::ALMACEN_ENCARGADO)) $criteria->add(AlmacenPeer::ALMACEN_ENCARGADO, $this->almacen_encargado);
-        if ($this->isColumnModified(AlmacenPeer::ALMACEN_ESTATUS)) $criteria->add(AlmacenPeer::ALMACEN_ESTATUS, $this->almacen_estatus);
+        if ($this->isColumnModified(UsuariosucursalPeer::IDUSUARIOSUCURSAL)) $criteria->add(UsuariosucursalPeer::IDUSUARIOSUCURSAL, $this->idusuariosucursal);
+        if ($this->isColumnModified(UsuariosucursalPeer::IDUSUARIO)) $criteria->add(UsuariosucursalPeer::IDUSUARIO, $this->idusuario);
+        if ($this->isColumnModified(UsuariosucursalPeer::IDSUCURSAL)) $criteria->add(UsuariosucursalPeer::IDSUCURSAL, $this->idsucursal);
 
         return $criteria;
     }
@@ -884,8 +797,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(AlmacenPeer::DATABASE_NAME);
-        $criteria->add(AlmacenPeer::IDALMACEN, $this->idalmacen);
+        $criteria = new Criteria(UsuariosucursalPeer::DATABASE_NAME);
+        $criteria->add(UsuariosucursalPeer::IDUSUARIOSUCURSAL, $this->idusuariosucursal);
 
         return $criteria;
     }
@@ -896,18 +809,18 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdalmacen();
+        return $this->getIdusuariosucursal();
     }
 
     /**
-     * Generic method to set the primary key (idalmacen column).
+     * Generic method to set the primary key (idusuariosucursal column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdalmacen($key);
+        $this->setIdusuariosucursal($key);
     }
 
     /**
@@ -917,7 +830,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdalmacen();
+        return null === $this->getIdusuariosucursal();
     }
 
     /**
@@ -926,17 +839,15 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Almacen (or compatible) type.
+     * @param object $copyObj An object of Usuariosucursal (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdsucursal($this->getIdsucursal());
-        $copyObj->setAlmacenNombre($this->getAlmacenNombre());
-        $copyObj->setAlmacenEncargado($this->getAlmacenEncargado());
-        $copyObj->setAlmacenEstatus($this->getAlmacenEstatus());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -951,7 +862,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdalmacen(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdusuariosucursal(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -964,7 +875,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Almacen Clone of current object.
+     * @return Usuariosucursal Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -984,12 +895,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return AlmacenPeer
+     * @return UsuariosucursalPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new AlmacenPeer();
+            self::$peer = new UsuariosucursalPeer();
         }
 
         return self::$peer;
@@ -999,7 +910,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * Declares an association between this object and a Sucursal object.
      *
      * @param                  Sucursal $v
-     * @return Almacen The current object (for fluent API support)
+     * @return Usuariosucursal The current object (for fluent API support)
      * @throws PropelException
      */
     public function setSucursal(Sucursal $v = null)
@@ -1015,7 +926,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the Sucursal object, it will not be re-added.
         if ($v !== null) {
-            $v->addAlmacen($this);
+            $v->addUsuariosucursal($this);
         }
 
 
@@ -1040,7 +951,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aSucursal->addAlmacens($this);
+                $this->aSucursal->addUsuariosucursals($this);
              */
         }
 
@@ -1048,15 +959,65 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Usuario object.
+     *
+     * @param                  Usuario $v
+     * @return Usuariosucursal The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setUsuario(Usuario $v = null)
+    {
+        if ($v === null) {
+            $this->setIdusuario(NULL);
+        } else {
+            $this->setIdusuario($v->getIdusuario());
+        }
+
+        $this->aUsuario = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Usuario object, it will not be re-added.
+        if ($v !== null) {
+            $v->addUsuariosucursal($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Usuario object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Usuario The associated Usuario object.
+     * @throws PropelException
+     */
+    public function getUsuario(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aUsuario === null && ($this->idusuario !== null) && $doQuery) {
+            $this->aUsuario = UsuarioQuery::create()->findPk($this->idusuario, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUsuario->addUsuariosucursals($this);
+             */
+        }
+
+        return $this->aUsuario;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
-        $this->idalmacen = null;
+        $this->idusuariosucursal = null;
+        $this->idusuario = null;
         $this->idsucursal = null;
-        $this->almacen_nombre = null;
-        $this->almacen_encargado = null;
-        $this->almacen_estatus = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1082,11 +1043,15 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             if ($this->aSucursal instanceof Persistent) {
               $this->aSucursal->clearAllReferences($deep);
             }
+            if ($this->aUsuario instanceof Persistent) {
+              $this->aUsuario->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
         $this->aSucursal = null;
+        $this->aUsuario = null;
     }
 
     /**
@@ -1096,7 +1061,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(AlmacenPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(UsuariosucursalPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**

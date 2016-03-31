@@ -3,12 +3,12 @@
 <database name="aersa" defaultIdMethod="native">
   <table name="almacen" phpName="Almacen" idMethod="native">
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="almacen_nombre" phpName="AlmacenNombre" type="VARCHAR" size="255" required="true"/>
     <column name="almacen_encargado" phpName="AlmacenEncargado" type="VARCHAR" size="45" required="true"/>
-    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="almacen_estatus" phpName="AlmacenEstatus" type="BOOLEAN" size="1" required="true"/>
     <foreign-key foreignTable="sucursal" name="idsucursal_almacen" onDelete="CASCADE" onUpdate="CASCADE">
-      <reference local="idalmacen" foreign="idsucursal"/>
+      <reference local="idsucursal" foreign="idsucursal"/>
     </foreign-key>
     <index name="idsucursal">
       <index-column name="idsucursal"/>
@@ -52,8 +52,6 @@
     <column name="idempresa" phpName="Idempresa" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="empresa_nombrecomercial" phpName="EmpresaNombrecomercial" type="VARCHAR" size="255" required="true"/>
     <column name="empresa_razonsocial" phpName="EmpresaRazonsocial" type="VARCHAR" size="255" required="true"/>
-    <column name="empresa_estatus" phpName="EmpresaEstatus" type="BOOLEAN" size="1" required="true"/>
-    <column name="idadministrador" phpName="Idadministrador" type="VARCHAR" size="45" required="false"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -160,8 +158,8 @@
   </table>
   <table name="usuario" phpName="Usuario" idMethod="native">
     <column name="idusuario" phpName="Idusuario" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="usuario_nombre" phpName="UsuarioNombre" type="VARCHAR" size="255" required="true"/>
     <column name="idrol" phpName="Idrol" type="INTEGER" required="true"/>
+    <column name="usuario_nombre" phpName="UsuarioNombre" type="VARCHAR" size="255" required="true"/>
     <column name="usuario_estatus" phpName="UsuarioEstatus" type="BOOLEAN" size="1" required="true"/>
     <column name="usuario_username" phpName="UsuarioUsername" type="VARCHAR" size="45" required="true"/>
     <column name="usuario_password" phpName="UsuarioPassword" type="VARCHAR" size="45" required="true"/>
@@ -170,26 +168,6 @@
     </foreign-key>
     <index name="idrol">
       <index-column name="idrol"/>
-    </index>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="usuarioalmacen" phpName="Usuarioalmacen" idMethod="native">
-    <column name="idusuarioalmacen" phpName="Idusuarioalmacen" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="false"/>
-    <foreign-key foreignTable="sucursal" name="idsucursal_usuarioalmacen" onDelete="CASCADE" onUpdate="CASCADE">
-      <reference local="idsucursal" foreign="idsucursal"/>
-    </foreign-key>
-    <foreign-key foreignTable="usuario" name="idusuario_usuarioalmacen" onDelete="CASCADE" onUpdate="CASCADE">
-      <reference local="idusuario" foreign="idusuario"/>
-    </foreign-key>
-    <index name="idusuario">
-      <index-column name="idusuario"/>
-    </index>
-    <index name="idsucursal">
-      <index-column name="idsucursal"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -210,6 +188,26 @@
     </index>
     <index name="idempresa">
       <index-column name="idempresa"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="usuariosucursal" phpName="Usuariosucursal" idMethod="native">
+    <column name="idusuariosucursal" phpName="Idusuariosucursal" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="sucursal" name="idsucursal_usuariosucursal" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_usuariosucursal" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <index name="idusuario">
+      <index-column name="idusuario"/>
+    </index>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

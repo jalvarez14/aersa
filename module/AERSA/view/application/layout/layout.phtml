@@ -54,6 +54,11 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- END HEAD -->
 
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-md">
+        <?php 
+        
+            $session = new Shared\Session\AouthSession(); 
+            $session = $session->getData();
+        ?>
         <!-- BEGIN HEADER -->
         <div class="page-header navbar navbar-fixed-top">
             <!-- BEGIN HEADER INNER -->
@@ -61,7 +66,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 <!-- BEGIN LOGO -->
                 <div class="page-logo">
                     <a href="index.html">
-                        <img src="/application/layout2/img/aersa_logo.png" alt="logo" class="logo-default" /> </a>
+                        <img class="logo-default" alt="logo" src="/application/layout2/img/aersa_logo.png" style="width: 135px;"> </a>
                     <div class="menu-toggler sidebar-toggler">
                         <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
                     </div>
@@ -418,8 +423,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-user">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <img alt="" class="img-circle" src="/application/layout2/img/avatar3_small.jpg" />
-                                    <span class="username username-hide-on-mobile"> Nick </span>
+                                    <span class="username username-hide-on-mobile"> <?php echo $session['usuario_nombre']?> </span>
                                     <i class="fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
@@ -459,7 +463,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-extended quick-sidebar-toggler">
                                 <span class="sr-only">Toggle Quick Sidebar</span>
-                                <i class="icon-logout"></i>
+                                <a href="/login/out" style="padding: 0px; color: #C0CDDC; font-size: 18px"><i class="icon-logout"></i></a>
                             </li>
                             <!-- END QUICK SIDEBAR TOGGLER -->
                         </ul>

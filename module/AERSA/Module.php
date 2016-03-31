@@ -24,6 +24,9 @@ class Module
         //Llamada al Listener de Templetes
         $themeListener   = new \Shared\CustomListener\TemplateMapListener();
         $themeListener->attach($eventManager);
+        
+        $authListener = new \Shared\CustomListener\AuthListener();
+        $authListener->attach($eventManager);
     }
 
     public function getConfig()

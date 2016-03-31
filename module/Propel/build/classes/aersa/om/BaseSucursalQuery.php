@@ -26,9 +26,9 @@
  * @method SucursalQuery rightJoinAlmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Almacen relation
  * @method SucursalQuery innerJoinAlmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Almacen relation
  *
- * @method SucursalQuery leftJoinUsuarioalmacen($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuarioalmacen relation
- * @method SucursalQuery rightJoinUsuarioalmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuarioalmacen relation
- * @method SucursalQuery innerJoinUsuarioalmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Usuarioalmacen relation
+ * @method SucursalQuery leftJoinUsuariosucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuariosucursal relation
+ * @method SucursalQuery rightJoinUsuariosucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuariosucursal relation
+ * @method SucursalQuery innerJoinUsuariosucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Usuariosucursal relation
  *
  * @method Sucursal findOne(PropelPDO $con = null) Return the first Sucursal matching the query
  * @method Sucursal findOneOrCreate(PropelPDO $con = null) Return the first Sucursal matching the query, or a new Sucursal object populated from the query conditions when no match is found
@@ -439,7 +439,7 @@ abstract class BaseSucursalQuery extends ModelCriteria
     {
         if ($almacen instanceof Almacen) {
             return $this
-                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $almacen->getIdalmacen(), $comparison);
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $almacen->getIdsucursal(), $comparison);
         } elseif ($almacen instanceof PropelObjectCollection) {
             return $this
                 ->useAlmacenQuery()
@@ -501,41 +501,41 @@ abstract class BaseSucursalQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related Usuarioalmacen object
+     * Filter the query by a related Usuariosucursal object
      *
-     * @param   Usuarioalmacen|PropelObjectCollection $usuarioalmacen  the related object to use as filter
+     * @param   Usuariosucursal|PropelObjectCollection $usuariosucursal  the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return                 SucursalQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByUsuarioalmacen($usuarioalmacen, $comparison = null)
+    public function filterByUsuariosucursal($usuariosucursal, $comparison = null)
     {
-        if ($usuarioalmacen instanceof Usuarioalmacen) {
+        if ($usuariosucursal instanceof Usuariosucursal) {
             return $this
-                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $usuarioalmacen->getIdsucursal(), $comparison);
-        } elseif ($usuarioalmacen instanceof PropelObjectCollection) {
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $usuariosucursal->getIdsucursal(), $comparison);
+        } elseif ($usuariosucursal instanceof PropelObjectCollection) {
             return $this
-                ->useUsuarioalmacenQuery()
-                ->filterByPrimaryKeys($usuarioalmacen->getPrimaryKeys())
+                ->useUsuariosucursalQuery()
+                ->filterByPrimaryKeys($usuariosucursal->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUsuarioalmacen() only accepts arguments of type Usuarioalmacen or PropelCollection');
+            throw new PropelException('filterByUsuariosucursal() only accepts arguments of type Usuariosucursal or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Usuarioalmacen relation
+     * Adds a JOIN clause to the query using the Usuariosucursal relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return SucursalQuery The current query, for fluid interface
      */
-    public function joinUsuarioalmacen($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUsuariosucursal($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Usuarioalmacen');
+        $relationMap = $tableMap->getRelation('Usuariosucursal');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -550,14 +550,14 @@ abstract class BaseSucursalQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Usuarioalmacen');
+            $this->addJoinObject($join, 'Usuariosucursal');
         }
 
         return $this;
     }
 
     /**
-     * Use the Usuarioalmacen relation Usuarioalmacen object
+     * Use the Usuariosucursal relation Usuariosucursal object
      *
      * @see       useQuery()
      *
@@ -565,13 +565,13 @@ abstract class BaseSucursalQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return   UsuarioalmacenQuery A secondary query class using the current class as primary query
+     * @return   UsuariosucursalQuery A secondary query class using the current class as primary query
      */
-    public function useUsuarioalmacenQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUsuariosucursalQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinUsuarioalmacen($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Usuarioalmacen', 'UsuarioalmacenQuery');
+            ->joinUsuariosucursal($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Usuariosucursal', 'UsuariosucursalQuery');
     }
 
     /**

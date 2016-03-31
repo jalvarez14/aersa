@@ -35,11 +35,11 @@ abstract class BaseUsuarioPeer
     /** the column name for the idusuario field */
     const IDUSUARIO = 'usuario.idusuario';
 
-    /** the column name for the usuario_nombre field */
-    const USUARIO_NOMBRE = 'usuario.usuario_nombre';
-
     /** the column name for the idrol field */
     const IDROL = 'usuario.idrol';
+
+    /** the column name for the usuario_nombre field */
+    const USUARIO_NOMBRE = 'usuario.usuario_nombre';
 
     /** the column name for the usuario_estatus field */
     const USUARIO_ESTATUS = 'usuario.usuario_estatus';
@@ -69,11 +69,11 @@ abstract class BaseUsuarioPeer
      * e.g. UsuarioPeer::$fieldNames[UsuarioPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idusuario', 'UsuarioNombre', 'Idrol', 'UsuarioEstatus', 'UsuarioUsername', 'UsuarioPassword', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idusuario', 'usuarioNombre', 'idrol', 'usuarioEstatus', 'usuarioUsername', 'usuarioPassword', ),
-        BasePeer::TYPE_COLNAME => array (UsuarioPeer::IDUSUARIO, UsuarioPeer::USUARIO_NOMBRE, UsuarioPeer::IDROL, UsuarioPeer::USUARIO_ESTATUS, UsuarioPeer::USUARIO_USERNAME, UsuarioPeer::USUARIO_PASSWORD, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDUSUARIO', 'USUARIO_NOMBRE', 'IDROL', 'USUARIO_ESTATUS', 'USUARIO_USERNAME', 'USUARIO_PASSWORD', ),
-        BasePeer::TYPE_FIELDNAME => array ('idusuario', 'usuario_nombre', 'idrol', 'usuario_estatus', 'usuario_username', 'usuario_password', ),
+        BasePeer::TYPE_PHPNAME => array ('Idusuario', 'Idrol', 'UsuarioNombre', 'UsuarioEstatus', 'UsuarioUsername', 'UsuarioPassword', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idusuario', 'idrol', 'usuarioNombre', 'usuarioEstatus', 'usuarioUsername', 'usuarioPassword', ),
+        BasePeer::TYPE_COLNAME => array (UsuarioPeer::IDUSUARIO, UsuarioPeer::IDROL, UsuarioPeer::USUARIO_NOMBRE, UsuarioPeer::USUARIO_ESTATUS, UsuarioPeer::USUARIO_USERNAME, UsuarioPeer::USUARIO_PASSWORD, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDUSUARIO', 'IDROL', 'USUARIO_NOMBRE', 'USUARIO_ESTATUS', 'USUARIO_USERNAME', 'USUARIO_PASSWORD', ),
+        BasePeer::TYPE_FIELDNAME => array ('idusuario', 'idrol', 'usuario_nombre', 'usuario_estatus', 'usuario_username', 'usuario_password', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
@@ -84,11 +84,11 @@ abstract class BaseUsuarioPeer
      * e.g. UsuarioPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idusuario' => 0, 'UsuarioNombre' => 1, 'Idrol' => 2, 'UsuarioEstatus' => 3, 'UsuarioUsername' => 4, 'UsuarioPassword' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idusuario' => 0, 'usuarioNombre' => 1, 'idrol' => 2, 'usuarioEstatus' => 3, 'usuarioUsername' => 4, 'usuarioPassword' => 5, ),
-        BasePeer::TYPE_COLNAME => array (UsuarioPeer::IDUSUARIO => 0, UsuarioPeer::USUARIO_NOMBRE => 1, UsuarioPeer::IDROL => 2, UsuarioPeer::USUARIO_ESTATUS => 3, UsuarioPeer::USUARIO_USERNAME => 4, UsuarioPeer::USUARIO_PASSWORD => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDUSUARIO' => 0, 'USUARIO_NOMBRE' => 1, 'IDROL' => 2, 'USUARIO_ESTATUS' => 3, 'USUARIO_USERNAME' => 4, 'USUARIO_PASSWORD' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('idusuario' => 0, 'usuario_nombre' => 1, 'idrol' => 2, 'usuario_estatus' => 3, 'usuario_username' => 4, 'usuario_password' => 5, ),
+        BasePeer::TYPE_PHPNAME => array ('Idusuario' => 0, 'Idrol' => 1, 'UsuarioNombre' => 2, 'UsuarioEstatus' => 3, 'UsuarioUsername' => 4, 'UsuarioPassword' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idusuario' => 0, 'idrol' => 1, 'usuarioNombre' => 2, 'usuarioEstatus' => 3, 'usuarioUsername' => 4, 'usuarioPassword' => 5, ),
+        BasePeer::TYPE_COLNAME => array (UsuarioPeer::IDUSUARIO => 0, UsuarioPeer::IDROL => 1, UsuarioPeer::USUARIO_NOMBRE => 2, UsuarioPeer::USUARIO_ESTATUS => 3, UsuarioPeer::USUARIO_USERNAME => 4, UsuarioPeer::USUARIO_PASSWORD => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDUSUARIO' => 0, 'IDROL' => 1, 'USUARIO_NOMBRE' => 2, 'USUARIO_ESTATUS' => 3, 'USUARIO_USERNAME' => 4, 'USUARIO_PASSWORD' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('idusuario' => 0, 'idrol' => 1, 'usuario_nombre' => 2, 'usuario_estatus' => 3, 'usuario_username' => 4, 'usuario_password' => 5, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
@@ -164,15 +164,15 @@ abstract class BaseUsuarioPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(UsuarioPeer::IDUSUARIO);
-            $criteria->addSelectColumn(UsuarioPeer::USUARIO_NOMBRE);
             $criteria->addSelectColumn(UsuarioPeer::IDROL);
+            $criteria->addSelectColumn(UsuarioPeer::USUARIO_NOMBRE);
             $criteria->addSelectColumn(UsuarioPeer::USUARIO_ESTATUS);
             $criteria->addSelectColumn(UsuarioPeer::USUARIO_USERNAME);
             $criteria->addSelectColumn(UsuarioPeer::USUARIO_PASSWORD);
         } else {
             $criteria->addSelectColumn($alias . '.idusuario');
-            $criteria->addSelectColumn($alias . '.usuario_nombre');
             $criteria->addSelectColumn($alias . '.idrol');
+            $criteria->addSelectColumn($alias . '.usuario_nombre');
             $criteria->addSelectColumn($alias . '.usuario_estatus');
             $criteria->addSelectColumn($alias . '.usuario_username');
             $criteria->addSelectColumn($alias . '.usuario_password');
@@ -380,12 +380,12 @@ abstract class BaseUsuarioPeer
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in UsuarioalmacenPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        UsuarioalmacenPeer::clearInstancePool();
         // Invalidate objects in UsuarioempresaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UsuarioempresaPeer::clearInstancePool();
+        // Invalidate objects in UsuariosucursalPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        UsuariosucursalPeer::clearInstancePool();
     }
 
     /**
@@ -958,17 +958,17 @@ abstract class BaseUsuarioPeer
         foreach ($objects as $obj) {
 
 
-            // delete related Usuarioalmacen objects
-            $criteria = new Criteria(UsuarioalmacenPeer::DATABASE_NAME);
-
-            $criteria->add(UsuarioalmacenPeer::IDUSUARIO, $obj->getIdusuario());
-            $affectedRows += UsuarioalmacenPeer::doDelete($criteria, $con);
-
             // delete related Usuarioempresa objects
             $criteria = new Criteria(UsuarioempresaPeer::DATABASE_NAME);
 
             $criteria->add(UsuarioempresaPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += UsuarioempresaPeer::doDelete($criteria, $con);
+
+            // delete related Usuariosucursal objects
+            $criteria = new Criteria(UsuariosucursalPeer::DATABASE_NAME);
+
+            $criteria->add(UsuariosucursalPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += UsuariosucursalPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

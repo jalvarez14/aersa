@@ -39,7 +39,7 @@ return array(
                     'login' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/login',
+                            'route'    => '/login[/:action]',
                             'defaults' => array(
                                 'controller'    => 'Application\Login\Controller\Login',
                                 'action'        => 'in',

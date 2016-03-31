@@ -53,15 +53,16 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $aEmpresa;
 
     /**
-     * @var        Almacen one-to-one related Almacen object
+     * @var        PropelObjectCollection|Almacen[] Collection to store aggregation of Almacen objects.
      */
-    protected $singleAlmacen;
+    protected $collAlmacens;
+    protected $collAlmacensPartial;
 
     /**
-     * @var        PropelObjectCollection|Usuarioalmacen[] Collection to store aggregation of Usuarioalmacen objects.
+     * @var        PropelObjectCollection|Usuariosucursal[] Collection to store aggregation of Usuariosucursal objects.
      */
-    protected $collUsuarioalmacens;
-    protected $collUsuarioalmacensPartial;
+    protected $collUsuariosucursals;
+    protected $collUsuariosucursalsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -87,7 +88,13 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
-    protected $usuarioalmacensScheduledForDeletion = null;
+    protected $almacensScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $usuariosucursalsScheduledForDeletion = null;
 
     /**
      * Get the [idsucursal] column value.
@@ -299,9 +306,9 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aEmpresa = null;
-            $this->singleAlmacen = null;
+            $this->collAlmacens = null;
 
-            $this->collUsuarioalmacens = null;
+            $this->collUsuariosucursals = null;
 
         } // if (deep)
     }
@@ -439,23 +446,34 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
-            if ($this->singleAlmacen !== null) {
-                if (!$this->singleAlmacen->isDeleted() && ($this->singleAlmacen->isNew() || $this->singleAlmacen->isModified())) {
-                        $affectedRows += $this->singleAlmacen->save($con);
-                }
-            }
-
-            if ($this->usuarioalmacensScheduledForDeletion !== null) {
-                if (!$this->usuarioalmacensScheduledForDeletion->isEmpty()) {
-                    UsuarioalmacenQuery::create()
-                        ->filterByPrimaryKeys($this->usuarioalmacensScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->almacensScheduledForDeletion !== null) {
+                if (!$this->almacensScheduledForDeletion->isEmpty()) {
+                    AlmacenQuery::create()
+                        ->filterByPrimaryKeys($this->almacensScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->usuarioalmacensScheduledForDeletion = null;
+                    $this->almacensScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collUsuarioalmacens !== null) {
-                foreach ($this->collUsuarioalmacens as $referrerFK) {
+            if ($this->collAlmacens !== null) {
+                foreach ($this->collAlmacens as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->usuariosucursalsScheduledForDeletion !== null) {
+                if (!$this->usuariosucursalsScheduledForDeletion->isEmpty()) {
+                    UsuariosucursalQuery::create()
+                        ->filterByPrimaryKeys($this->usuariosucursalsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->usuariosucursalsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collUsuariosucursals !== null) {
+                foreach ($this->collUsuariosucursals as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -628,14 +646,16 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             }
 
 
-                if ($this->singleAlmacen !== null) {
-                    if (!$this->singleAlmacen->validate($columns)) {
-                        $failureMap = array_merge($failureMap, $this->singleAlmacen->getValidationFailures());
+                if ($this->collAlmacens !== null) {
+                    foreach ($this->collAlmacens as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
                     }
                 }
 
-                if ($this->collUsuarioalmacens !== null) {
-                    foreach ($this->collUsuarioalmacens as $referrerFK) {
+                if ($this->collUsuariosucursals !== null) {
+                    foreach ($this->collUsuariosucursals as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -728,11 +748,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             if (null !== $this->aEmpresa) {
                 $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->singleAlmacen) {
-                $result['Almacen'] = $this->singleAlmacen->toArray($keyType, $includeLazyLoadColumns, $alreadyDumpedObjects, true);
+            if (null !== $this->collAlmacens) {
+                $result['Almacens'] = $this->collAlmacens->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collUsuarioalmacens) {
-                $result['Usuarioalmacens'] = $this->collUsuarioalmacens->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            if (null !== $this->collUsuariosucursals) {
+                $result['Usuariosucursals'] = $this->collUsuariosucursals->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -891,14 +911,15 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
-            $relObj = $this->getAlmacen();
-            if ($relObj) {
-                $copyObj->setAlmacen($relObj->copy($deepCopy));
+            foreach ($this->getAlmacens() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAlmacen($relObj->copy($deepCopy));
+                }
             }
 
-            foreach ($this->getUsuarioalmacens() as $relObj) {
+            foreach ($this->getUsuariosucursals() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addUsuarioalmacen($relObj->copy($deepCopy));
+                    $copyObj->addUsuariosucursal($relObj->copy($deepCopy));
                 }
             }
 
@@ -1015,78 +1036,45 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
-        if ('Usuarioalmacen' == $relationName) {
-            $this->initUsuarioalmacens();
+        if ('Almacen' == $relationName) {
+            $this->initAlmacens();
+        }
+        if ('Usuariosucursal' == $relationName) {
+            $this->initUsuariosucursals();
         }
     }
 
     /**
-     * Gets a single Almacen object, which is related to this object by a one-to-one relationship.
-     *
-     * @param PropelPDO $con optional connection object
-     * @return Almacen
-     * @throws PropelException
-     */
-    public function getAlmacen(PropelPDO $con = null)
-    {
-
-        if ($this->singleAlmacen === null && !$this->isNew()) {
-            $this->singleAlmacen = AlmacenQuery::create()->findPk($this->getPrimaryKey(), $con);
-        }
-
-        return $this->singleAlmacen;
-    }
-
-    /**
-     * Sets a single Almacen object as related to this object by a one-to-one relationship.
-     *
-     * @param                  Almacen $v Almacen
-     * @return Sucursal The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setAlmacen(Almacen $v = null)
-    {
-        $this->singleAlmacen = $v;
-
-        // Make sure that that the passed-in Almacen isn't already associated with this object
-        if ($v !== null && $v->getSucursal(null, false) === null) {
-            $v->setSucursal($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Clears out the collUsuarioalmacens collection
+     * Clears out the collAlmacens collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return Sucursal The current object (for fluent API support)
-     * @see        addUsuarioalmacens()
+     * @see        addAlmacens()
      */
-    public function clearUsuarioalmacens()
+    public function clearAlmacens()
     {
-        $this->collUsuarioalmacens = null; // important to set this to null since that means it is uninitialized
-        $this->collUsuarioalmacensPartial = null;
+        $this->collAlmacens = null; // important to set this to null since that means it is uninitialized
+        $this->collAlmacensPartial = null;
 
         return $this;
     }
 
     /**
-     * reset is the collUsuarioalmacens collection loaded partially
+     * reset is the collAlmacens collection loaded partially
      *
      * @return void
      */
-    public function resetPartialUsuarioalmacens($v = true)
+    public function resetPartialAlmacens($v = true)
     {
-        $this->collUsuarioalmacensPartial = $v;
+        $this->collAlmacensPartial = $v;
     }
 
     /**
-     * Initializes the collUsuarioalmacens collection.
+     * Initializes the collAlmacens collection.
      *
-     * By default this just sets the collUsuarioalmacens collection to an empty array (like clearcollUsuarioalmacens());
+     * By default this just sets the collAlmacens collection to an empty array (like clearcollAlmacens());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1095,17 +1083,17 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      *
      * @return void
      */
-    public function initUsuarioalmacens($overrideExisting = true)
+    public function initAlmacens($overrideExisting = true)
     {
-        if (null !== $this->collUsuarioalmacens && !$overrideExisting) {
+        if (null !== $this->collAlmacens && !$overrideExisting) {
             return;
         }
-        $this->collUsuarioalmacens = new PropelObjectCollection();
-        $this->collUsuarioalmacens->setModel('Usuarioalmacen');
+        $this->collAlmacens = new PropelObjectCollection();
+        $this->collAlmacens->setModel('Almacen');
     }
 
     /**
-     * Gets an array of Usuarioalmacen objects which contain a foreign key that references this object.
+     * Gets an array of Almacen objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1115,107 +1103,107 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Usuarioalmacen[] List of Usuarioalmacen objects
+     * @return PropelObjectCollection|Almacen[] List of Almacen objects
      * @throws PropelException
      */
-    public function getUsuarioalmacens($criteria = null, PropelPDO $con = null)
+    public function getAlmacens($criteria = null, PropelPDO $con = null)
     {
-        $partial = $this->collUsuarioalmacensPartial && !$this->isNew();
-        if (null === $this->collUsuarioalmacens || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collUsuarioalmacens) {
+        $partial = $this->collAlmacensPartial && !$this->isNew();
+        if (null === $this->collAlmacens || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAlmacens) {
                 // return empty collection
-                $this->initUsuarioalmacens();
+                $this->initAlmacens();
             } else {
-                $collUsuarioalmacens = UsuarioalmacenQuery::create(null, $criteria)
+                $collAlmacens = AlmacenQuery::create(null, $criteria)
                     ->filterBySucursal($this)
                     ->find($con);
                 if (null !== $criteria) {
-                    if (false !== $this->collUsuarioalmacensPartial && count($collUsuarioalmacens)) {
-                      $this->initUsuarioalmacens(false);
+                    if (false !== $this->collAlmacensPartial && count($collAlmacens)) {
+                      $this->initAlmacens(false);
 
-                      foreach ($collUsuarioalmacens as $obj) {
-                        if (false == $this->collUsuarioalmacens->contains($obj)) {
-                          $this->collUsuarioalmacens->append($obj);
+                      foreach ($collAlmacens as $obj) {
+                        if (false == $this->collAlmacens->contains($obj)) {
+                          $this->collAlmacens->append($obj);
                         }
                       }
 
-                      $this->collUsuarioalmacensPartial = true;
+                      $this->collAlmacensPartial = true;
                     }
 
-                    $collUsuarioalmacens->getInternalIterator()->rewind();
+                    $collAlmacens->getInternalIterator()->rewind();
 
-                    return $collUsuarioalmacens;
+                    return $collAlmacens;
                 }
 
-                if ($partial && $this->collUsuarioalmacens) {
-                    foreach ($this->collUsuarioalmacens as $obj) {
+                if ($partial && $this->collAlmacens) {
+                    foreach ($this->collAlmacens as $obj) {
                         if ($obj->isNew()) {
-                            $collUsuarioalmacens[] = $obj;
+                            $collAlmacens[] = $obj;
                         }
                     }
                 }
 
-                $this->collUsuarioalmacens = $collUsuarioalmacens;
-                $this->collUsuarioalmacensPartial = false;
+                $this->collAlmacens = $collAlmacens;
+                $this->collAlmacensPartial = false;
             }
         }
 
-        return $this->collUsuarioalmacens;
+        return $this->collAlmacens;
     }
 
     /**
-     * Sets a collection of Usuarioalmacen objects related by a one-to-many relationship
+     * Sets a collection of Almacen objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param PropelCollection $usuarioalmacens A Propel collection.
+     * @param PropelCollection $almacens A Propel collection.
      * @param PropelPDO $con Optional connection object
      * @return Sucursal The current object (for fluent API support)
      */
-    public function setUsuarioalmacens(PropelCollection $usuarioalmacens, PropelPDO $con = null)
+    public function setAlmacens(PropelCollection $almacens, PropelPDO $con = null)
     {
-        $usuarioalmacensToDelete = $this->getUsuarioalmacens(new Criteria(), $con)->diff($usuarioalmacens);
+        $almacensToDelete = $this->getAlmacens(new Criteria(), $con)->diff($almacens);
 
 
-        $this->usuarioalmacensScheduledForDeletion = $usuarioalmacensToDelete;
+        $this->almacensScheduledForDeletion = $almacensToDelete;
 
-        foreach ($usuarioalmacensToDelete as $usuarioalmacenRemoved) {
-            $usuarioalmacenRemoved->setSucursal(null);
+        foreach ($almacensToDelete as $almacenRemoved) {
+            $almacenRemoved->setSucursal(null);
         }
 
-        $this->collUsuarioalmacens = null;
-        foreach ($usuarioalmacens as $usuarioalmacen) {
-            $this->addUsuarioalmacen($usuarioalmacen);
+        $this->collAlmacens = null;
+        foreach ($almacens as $almacen) {
+            $this->addAlmacen($almacen);
         }
 
-        $this->collUsuarioalmacens = $usuarioalmacens;
-        $this->collUsuarioalmacensPartial = false;
+        $this->collAlmacens = $almacens;
+        $this->collAlmacensPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Usuarioalmacen objects.
+     * Returns the number of related Almacen objects.
      *
      * @param Criteria $criteria
      * @param boolean $distinct
      * @param PropelPDO $con
-     * @return int             Count of related Usuarioalmacen objects.
+     * @return int             Count of related Almacen objects.
      * @throws PropelException
      */
-    public function countUsuarioalmacens(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    public function countAlmacens(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
     {
-        $partial = $this->collUsuarioalmacensPartial && !$this->isNew();
-        if (null === $this->collUsuarioalmacens || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collUsuarioalmacens) {
+        $partial = $this->collAlmacensPartial && !$this->isNew();
+        if (null === $this->collAlmacens || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAlmacens) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getUsuarioalmacens());
+                return count($this->getAlmacens());
             }
-            $query = UsuarioalmacenQuery::create(null, $criteria);
+            $query = AlmacenQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1225,28 +1213,28 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 ->count($con);
         }
 
-        return count($this->collUsuarioalmacens);
+        return count($this->collAlmacens);
     }
 
     /**
-     * Method called to associate a Usuarioalmacen object to this object
-     * through the Usuarioalmacen foreign key attribute.
+     * Method called to associate a Almacen object to this object
+     * through the Almacen foreign key attribute.
      *
-     * @param    Usuarioalmacen $l Usuarioalmacen
+     * @param    Almacen $l Almacen
      * @return Sucursal The current object (for fluent API support)
      */
-    public function addUsuarioalmacen(Usuarioalmacen $l)
+    public function addAlmacen(Almacen $l)
     {
-        if ($this->collUsuarioalmacens === null) {
-            $this->initUsuarioalmacens();
-            $this->collUsuarioalmacensPartial = true;
+        if ($this->collAlmacens === null) {
+            $this->initAlmacens();
+            $this->collAlmacensPartial = true;
         }
 
-        if (!in_array($l, $this->collUsuarioalmacens->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddUsuarioalmacen($l);
+        if (!in_array($l, $this->collAlmacens->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAlmacen($l);
 
-            if ($this->usuarioalmacensScheduledForDeletion and $this->usuarioalmacensScheduledForDeletion->contains($l)) {
-                $this->usuarioalmacensScheduledForDeletion->remove($this->usuarioalmacensScheduledForDeletion->search($l));
+            if ($this->almacensScheduledForDeletion and $this->almacensScheduledForDeletion->contains($l)) {
+                $this->almacensScheduledForDeletion->remove($this->almacensScheduledForDeletion->search($l));
             }
         }
 
@@ -1254,28 +1242,253 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     }
 
     /**
-     * @param	Usuarioalmacen $usuarioalmacen The usuarioalmacen object to add.
+     * @param	Almacen $almacen The almacen object to add.
      */
-    protected function doAddUsuarioalmacen($usuarioalmacen)
+    protected function doAddAlmacen($almacen)
     {
-        $this->collUsuarioalmacens[]= $usuarioalmacen;
-        $usuarioalmacen->setSucursal($this);
+        $this->collAlmacens[]= $almacen;
+        $almacen->setSucursal($this);
     }
 
     /**
-     * @param	Usuarioalmacen $usuarioalmacen The usuarioalmacen object to remove.
+     * @param	Almacen $almacen The almacen object to remove.
      * @return Sucursal The current object (for fluent API support)
      */
-    public function removeUsuarioalmacen($usuarioalmacen)
+    public function removeAlmacen($almacen)
     {
-        if ($this->getUsuarioalmacens()->contains($usuarioalmacen)) {
-            $this->collUsuarioalmacens->remove($this->collUsuarioalmacens->search($usuarioalmacen));
-            if (null === $this->usuarioalmacensScheduledForDeletion) {
-                $this->usuarioalmacensScheduledForDeletion = clone $this->collUsuarioalmacens;
-                $this->usuarioalmacensScheduledForDeletion->clear();
+        if ($this->getAlmacens()->contains($almacen)) {
+            $this->collAlmacens->remove($this->collAlmacens->search($almacen));
+            if (null === $this->almacensScheduledForDeletion) {
+                $this->almacensScheduledForDeletion = clone $this->collAlmacens;
+                $this->almacensScheduledForDeletion->clear();
             }
-            $this->usuarioalmacensScheduledForDeletion[]= $usuarioalmacen;
-            $usuarioalmacen->setSucursal(null);
+            $this->almacensScheduledForDeletion[]= clone $almacen;
+            $almacen->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collUsuariosucursals collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addUsuariosucursals()
+     */
+    public function clearUsuariosucursals()
+    {
+        $this->collUsuariosucursals = null; // important to set this to null since that means it is uninitialized
+        $this->collUsuariosucursalsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collUsuariosucursals collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialUsuariosucursals($v = true)
+    {
+        $this->collUsuariosucursalsPartial = $v;
+    }
+
+    /**
+     * Initializes the collUsuariosucursals collection.
+     *
+     * By default this just sets the collUsuariosucursals collection to an empty array (like clearcollUsuariosucursals());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initUsuariosucursals($overrideExisting = true)
+    {
+        if (null !== $this->collUsuariosucursals && !$overrideExisting) {
+            return;
+        }
+        $this->collUsuariosucursals = new PropelObjectCollection();
+        $this->collUsuariosucursals->setModel('Usuariosucursal');
+    }
+
+    /**
+     * Gets an array of Usuariosucursal objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Usuariosucursal[] List of Usuariosucursal objects
+     * @throws PropelException
+     */
+    public function getUsuariosucursals($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collUsuariosucursalsPartial && !$this->isNew();
+        if (null === $this->collUsuariosucursals || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collUsuariosucursals) {
+                // return empty collection
+                $this->initUsuariosucursals();
+            } else {
+                $collUsuariosucursals = UsuariosucursalQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collUsuariosucursalsPartial && count($collUsuariosucursals)) {
+                      $this->initUsuariosucursals(false);
+
+                      foreach ($collUsuariosucursals as $obj) {
+                        if (false == $this->collUsuariosucursals->contains($obj)) {
+                          $this->collUsuariosucursals->append($obj);
+                        }
+                      }
+
+                      $this->collUsuariosucursalsPartial = true;
+                    }
+
+                    $collUsuariosucursals->getInternalIterator()->rewind();
+
+                    return $collUsuariosucursals;
+                }
+
+                if ($partial && $this->collUsuariosucursals) {
+                    foreach ($this->collUsuariosucursals as $obj) {
+                        if ($obj->isNew()) {
+                            $collUsuariosucursals[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collUsuariosucursals = $collUsuariosucursals;
+                $this->collUsuariosucursalsPartial = false;
+            }
+        }
+
+        return $this->collUsuariosucursals;
+    }
+
+    /**
+     * Sets a collection of Usuariosucursal objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $usuariosucursals A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setUsuariosucursals(PropelCollection $usuariosucursals, PropelPDO $con = null)
+    {
+        $usuariosucursalsToDelete = $this->getUsuariosucursals(new Criteria(), $con)->diff($usuariosucursals);
+
+
+        $this->usuariosucursalsScheduledForDeletion = $usuariosucursalsToDelete;
+
+        foreach ($usuariosucursalsToDelete as $usuariosucursalRemoved) {
+            $usuariosucursalRemoved->setSucursal(null);
+        }
+
+        $this->collUsuariosucursals = null;
+        foreach ($usuariosucursals as $usuariosucursal) {
+            $this->addUsuariosucursal($usuariosucursal);
+        }
+
+        $this->collUsuariosucursals = $usuariosucursals;
+        $this->collUsuariosucursalsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Usuariosucursal objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Usuariosucursal objects.
+     * @throws PropelException
+     */
+    public function countUsuariosucursals(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collUsuariosucursalsPartial && !$this->isNew();
+        if (null === $this->collUsuariosucursals || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collUsuariosucursals) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getUsuariosucursals());
+            }
+            $query = UsuariosucursalQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collUsuariosucursals);
+    }
+
+    /**
+     * Method called to associate a Usuariosucursal object to this object
+     * through the Usuariosucursal foreign key attribute.
+     *
+     * @param    Usuariosucursal $l Usuariosucursal
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addUsuariosucursal(Usuariosucursal $l)
+    {
+        if ($this->collUsuariosucursals === null) {
+            $this->initUsuariosucursals();
+            $this->collUsuariosucursalsPartial = true;
+        }
+
+        if (!in_array($l, $this->collUsuariosucursals->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddUsuariosucursal($l);
+
+            if ($this->usuariosucursalsScheduledForDeletion and $this->usuariosucursalsScheduledForDeletion->contains($l)) {
+                $this->usuariosucursalsScheduledForDeletion->remove($this->usuariosucursalsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Usuariosucursal $usuariosucursal The usuariosucursal object to add.
+     */
+    protected function doAddUsuariosucursal($usuariosucursal)
+    {
+        $this->collUsuariosucursals[]= $usuariosucursal;
+        $usuariosucursal->setSucursal($this);
+    }
+
+    /**
+     * @param	Usuariosucursal $usuariosucursal The usuariosucursal object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeUsuariosucursal($usuariosucursal)
+    {
+        if ($this->getUsuariosucursals()->contains($usuariosucursal)) {
+            $this->collUsuariosucursals->remove($this->collUsuariosucursals->search($usuariosucursal));
+            if (null === $this->usuariosucursalsScheduledForDeletion) {
+                $this->usuariosucursalsScheduledForDeletion = clone $this->collUsuariosucursals;
+                $this->usuariosucursalsScheduledForDeletion->clear();
+            }
+            $this->usuariosucursalsScheduledForDeletion[]= clone $usuariosucursal;
+            $usuariosucursal->setSucursal(null);
         }
 
         return $this;
@@ -1287,7 +1500,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Sucursal is new, it will return
      * an empty collection; or if this Sucursal has previously
-     * been saved, it will retrieve related Usuarioalmacens from storage.
+     * been saved, it will retrieve related Usuariosucursals from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -1296,14 +1509,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Usuarioalmacen[] List of Usuarioalmacen objects
+     * @return PropelObjectCollection|Usuariosucursal[] List of Usuariosucursal objects
      */
-    public function getUsuarioalmacensJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getUsuariosucursalsJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
-        $query = UsuarioalmacenQuery::create(null, $criteria);
+        $query = UsuariosucursalQuery::create(null, $criteria);
         $query->joinWith('Usuario', $join_behavior);
 
-        return $this->getUsuarioalmacens($query, $con);
+        return $this->getUsuariosucursals($query, $con);
     }
 
     /**
@@ -1336,11 +1549,13 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->singleAlmacen) {
-                $this->singleAlmacen->clearAllReferences($deep);
+            if ($this->collAlmacens) {
+                foreach ($this->collAlmacens as $o) {
+                    $o->clearAllReferences($deep);
+                }
             }
-            if ($this->collUsuarioalmacens) {
-                foreach ($this->collUsuarioalmacens as $o) {
+            if ($this->collUsuariosucursals) {
+                foreach ($this->collUsuariosucursals as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -1351,14 +1566,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        if ($this->singleAlmacen instanceof PropelCollection) {
-            $this->singleAlmacen->clearIterator();
+        if ($this->collAlmacens instanceof PropelCollection) {
+            $this->collAlmacens->clearIterator();
         }
-        $this->singleAlmacen = null;
-        if ($this->collUsuarioalmacens instanceof PropelCollection) {
-            $this->collUsuarioalmacens->clearIterator();
+        $this->collAlmacens = null;
+        if ($this->collUsuariosucursals instanceof PropelCollection) {
+            $this->collUsuariosucursals->clearIterator();
         }
-        $this->collUsuarioalmacens = null;
+        $this->collUsuariosucursals = null;
         $this->aEmpresa = null;
     }
 

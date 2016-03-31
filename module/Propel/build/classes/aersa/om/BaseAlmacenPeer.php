@@ -35,14 +35,14 @@ abstract class BaseAlmacenPeer
     /** the column name for the idalmacen field */
     const IDALMACEN = 'almacen.idalmacen';
 
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'almacen.idsucursal';
+
     /** the column name for the almacen_nombre field */
     const ALMACEN_NOMBRE = 'almacen.almacen_nombre';
 
     /** the column name for the almacen_encargado field */
     const ALMACEN_ENCARGADO = 'almacen.almacen_encargado';
-
-    /** the column name for the idsucursal field */
-    const IDSUCURSAL = 'almacen.idsucursal';
 
     /** the column name for the almacen_estatus field */
     const ALMACEN_ESTATUS = 'almacen.almacen_estatus';
@@ -66,11 +66,11 @@ abstract class BaseAlmacenPeer
      * e.g. AlmacenPeer::$fieldNames[AlmacenPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idalmacen', 'AlmacenNombre', 'AlmacenEncargado', 'Idsucursal', 'AlmacenEstatus', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idalmacen', 'almacenNombre', 'almacenEncargado', 'idsucursal', 'almacenEstatus', ),
-        BasePeer::TYPE_COLNAME => array (AlmacenPeer::IDALMACEN, AlmacenPeer::ALMACEN_NOMBRE, AlmacenPeer::ALMACEN_ENCARGADO, AlmacenPeer::IDSUCURSAL, AlmacenPeer::ALMACEN_ESTATUS, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDALMACEN', 'ALMACEN_NOMBRE', 'ALMACEN_ENCARGADO', 'IDSUCURSAL', 'ALMACEN_ESTATUS', ),
-        BasePeer::TYPE_FIELDNAME => array ('idalmacen', 'almacen_nombre', 'almacen_encargado', 'idsucursal', 'almacen_estatus', ),
+        BasePeer::TYPE_PHPNAME => array ('Idalmacen', 'Idsucursal', 'AlmacenNombre', 'AlmacenEncargado', 'AlmacenEstatus', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idalmacen', 'idsucursal', 'almacenNombre', 'almacenEncargado', 'almacenEstatus', ),
+        BasePeer::TYPE_COLNAME => array (AlmacenPeer::IDALMACEN, AlmacenPeer::IDSUCURSAL, AlmacenPeer::ALMACEN_NOMBRE, AlmacenPeer::ALMACEN_ENCARGADO, AlmacenPeer::ALMACEN_ESTATUS, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDALMACEN', 'IDSUCURSAL', 'ALMACEN_NOMBRE', 'ALMACEN_ENCARGADO', 'ALMACEN_ESTATUS', ),
+        BasePeer::TYPE_FIELDNAME => array ('idalmacen', 'idsucursal', 'almacen_nombre', 'almacen_encargado', 'almacen_estatus', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -81,11 +81,11 @@ abstract class BaseAlmacenPeer
      * e.g. AlmacenPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idalmacen' => 0, 'AlmacenNombre' => 1, 'AlmacenEncargado' => 2, 'Idsucursal' => 3, 'AlmacenEstatus' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idalmacen' => 0, 'almacenNombre' => 1, 'almacenEncargado' => 2, 'idsucursal' => 3, 'almacenEstatus' => 4, ),
-        BasePeer::TYPE_COLNAME => array (AlmacenPeer::IDALMACEN => 0, AlmacenPeer::ALMACEN_NOMBRE => 1, AlmacenPeer::ALMACEN_ENCARGADO => 2, AlmacenPeer::IDSUCURSAL => 3, AlmacenPeer::ALMACEN_ESTATUS => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDALMACEN' => 0, 'ALMACEN_NOMBRE' => 1, 'ALMACEN_ENCARGADO' => 2, 'IDSUCURSAL' => 3, 'ALMACEN_ESTATUS' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('idalmacen' => 0, 'almacen_nombre' => 1, 'almacen_encargado' => 2, 'idsucursal' => 3, 'almacen_estatus' => 4, ),
+        BasePeer::TYPE_PHPNAME => array ('Idalmacen' => 0, 'Idsucursal' => 1, 'AlmacenNombre' => 2, 'AlmacenEncargado' => 3, 'AlmacenEstatus' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idalmacen' => 0, 'idsucursal' => 1, 'almacenNombre' => 2, 'almacenEncargado' => 3, 'almacenEstatus' => 4, ),
+        BasePeer::TYPE_COLNAME => array (AlmacenPeer::IDALMACEN => 0, AlmacenPeer::IDSUCURSAL => 1, AlmacenPeer::ALMACEN_NOMBRE => 2, AlmacenPeer::ALMACEN_ENCARGADO => 3, AlmacenPeer::ALMACEN_ESTATUS => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDALMACEN' => 0, 'IDSUCURSAL' => 1, 'ALMACEN_NOMBRE' => 2, 'ALMACEN_ENCARGADO' => 3, 'ALMACEN_ESTATUS' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idalmacen' => 0, 'idsucursal' => 1, 'almacen_nombre' => 2, 'almacen_encargado' => 3, 'almacen_estatus' => 4, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -161,15 +161,15 @@ abstract class BaseAlmacenPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(AlmacenPeer::IDALMACEN);
+            $criteria->addSelectColumn(AlmacenPeer::IDSUCURSAL);
             $criteria->addSelectColumn(AlmacenPeer::ALMACEN_NOMBRE);
             $criteria->addSelectColumn(AlmacenPeer::ALMACEN_ENCARGADO);
-            $criteria->addSelectColumn(AlmacenPeer::IDSUCURSAL);
             $criteria->addSelectColumn(AlmacenPeer::ALMACEN_ESTATUS);
         } else {
             $criteria->addSelectColumn($alias . '.idalmacen');
+            $criteria->addSelectColumn($alias . '.idsucursal');
             $criteria->addSelectColumn($alias . '.almacen_nombre');
             $criteria->addSelectColumn($alias . '.almacen_encargado');
-            $criteria->addSelectColumn($alias . '.idsucursal');
             $criteria->addSelectColumn($alias . '.almacen_estatus');
         }
     }
@@ -508,7 +508,7 @@ abstract class BaseAlmacenPeer
             $con = Propel::getConnection(AlmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(AlmacenPeer::IDALMACEN, SucursalPeer::IDSUCURSAL, $join_behavior);
+        $criteria->addJoin(AlmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -545,7 +545,7 @@ abstract class BaseAlmacenPeer
         $startcol = AlmacenPeer::NUM_HYDRATE_COLUMNS;
         SucursalPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(AlmacenPeer::IDALMACEN, SucursalPeer::IDSUCURSAL, $join_behavior);
+        $criteria->addJoin(AlmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
@@ -578,8 +578,7 @@ abstract class BaseAlmacenPeer
                 } // if obj2 already loaded
 
                 // Add the $obj1 (Almacen) to $obj2 (Sucursal)
-                // one to one relationship
-                $obj1->setSucursal($obj2);
+                $obj2->addAlmacen($obj1);
 
             } // if joined row was not null
 
@@ -627,7 +626,7 @@ abstract class BaseAlmacenPeer
             $con = Propel::getConnection(AlmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(AlmacenPeer::IDALMACEN, SucursalPeer::IDSUCURSAL, $join_behavior);
+        $criteria->addJoin(AlmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -666,7 +665,7 @@ abstract class BaseAlmacenPeer
         SucursalPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(AlmacenPeer::IDALMACEN, SucursalPeer::IDSUCURSAL, $join_behavior);
+        $criteria->addJoin(AlmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
@@ -700,7 +699,7 @@ abstract class BaseAlmacenPeer
                 } // if obj2 loaded
 
                 // Add the $obj1 (Almacen) to the collection in $obj2 (Sucursal)
-                $obj1->setSucursal($obj2);
+                $obj2->addAlmacen($obj1);
             } // if joined row not null
 
             $results[] = $obj1;

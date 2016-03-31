@@ -17,27 +17,54 @@ class LoginController extends AbstractActionController
 {
     public function inAction()
     {
-        
+
         //REMPLAZAMOS EL LAYOUT
         $this->layout('application/layout/loign_layout');
         
-        
         $request = $this->getRequest();
         
+        //SI SE TRATA DE UNA PETICION POST
         if($request->isPost()){
         
             $post_data = $request->getPost();
-            echo '<pre>';var_dump($post_data); echo '</pre>';exit();
+            
+            //VALIDAMOS SI LOS DATOS DE ACCESO SON CORRECTOS Y SI SE ENCUENTRA ACTIVO
+            $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->exists();
+            
+            if($exist){
+                
+                $usuario = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->findOne();
+                
+                //CREAMOS NUESTRA SESSION
+                $session = new \Shared\Session\AouthSession();
+                $session->Create(array(
+                    "idusuario"         => $usuario->getIdusuario(),
+                    "idrol"             => $usuario->getIdrol(),
+                    "usuario_nombre"    => $usuario->getUsuarioNombre(),
+                    "usuario_username"  => $usuario->getUsuarioUsername(),
+                ));
+                
+                return $this->redirect()->toUrl('/');
+               
+            }else{
+                return $this->redirect()->toUrl('/login');
+            }
+ 
         }
-        
-        
-        
-        
-        
+
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         return $view_model;
 
     }
+    
+    public function outAction()
+    {
+        $session = new \Shared\Session\AouthSession();
+        $session->Close();
+        return $this->redirect()->toUrl('/login');
+
+    }
+    
 
 }

@@ -41,8 +41,6 @@ class EmpresaTableMap extends TableMap
         $this->addPrimaryKey('idempresa', 'Idempresa', 'INTEGER', true, null, null);
         $this->addColumn('empresa_nombrecomercial', 'EmpresaNombrecomercial', 'VARCHAR', true, 255, null);
         $this->addColumn('empresa_razonsocial', 'EmpresaRazonsocial', 'VARCHAR', true, 255, null);
-        $this->addColumn('empresa_estatus', 'EmpresaEstatus', 'BOOLEAN', true, 1, null);
-        $this->addColumn('idadministrador', 'Idadministrador', 'VARCHAR', false, 45, null);
         // validators
     } // initialize()
 
