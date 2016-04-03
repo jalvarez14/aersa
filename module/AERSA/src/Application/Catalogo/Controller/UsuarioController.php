@@ -51,13 +51,14 @@ class UsuarioController extends AbstractActionController
             $post_data = $request->getPost();
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $post_data['usuario_estatus'] = 1;
             $form->setData($post_data);
             
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->exists();
             
             if(!$exist){
-               
+                
                 //CREAMOS NUESTRA ENTIDAD VACIA
                 $entity = new \Usuario();
                 
@@ -65,7 +66,6 @@ class UsuarioController extends AbstractActionController
                 $filter = new \Application\Catalogo\Filter\UsuarioFilter();
             
                 //LE PONEMOS EL FILTRO A NUESTRO FORMULARIO
-                
                 $form->setInputFilter($filter->getInputFilter());
                 
                 //VERIFICAMOS QUE SEA VALIDO
@@ -86,6 +86,9 @@ class UsuarioController extends AbstractActionController
                     
                     return $this->redirect()->toUrl('/catalogo/usuario');
 
+                }else{
+                
+                    
                 }
                 
             }else{
@@ -124,16 +127,18 @@ class UsuarioController extends AbstractActionController
 
             //INTANCIAMOS NUESTRO FORMULARIO
             $form = new \Application\Catalogo\Form\UsuarioForm();
+            $form->get('usuario_estatus')->setAttribute('required', true);
             
             //SI NOS ENVIAN UNA PETICION POST
             if($request->isPost()){
                 
                 $post_data = $request->getPost();
+                
                 $filter = new \Application\Catalogo\Filter\UsuarioFilter();
                 
                 //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-                $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByIdusuario($id,  \Criteria::NOT_EQUAL)->exists();
-                
+                $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioUsername($entity->getUsuarioUsername(), \Criteria::NOT_EQUAL)->exists();
+               
                 if(!$exist){
 
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
@@ -143,19 +148,17 @@ class UsuarioController extends AbstractActionController
 
                     //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
                     $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
-
+                    
                     //VALIDAMOS SI ES UN FORMULARIO VALIDO
                     $form->setInputFilter($filter->getInputFilter());
 
-                    if($form->isValid()){
 
-                        $entity->save();
+                    $entity->save();
 
-                        $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
 
-                        return $this->redirect()->toUrl('/catalogo/usuario');
+                    return $this->redirect()->toUrl('/catalogo/usuario');
 
-                    }
                     
                 }else{
                     $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');

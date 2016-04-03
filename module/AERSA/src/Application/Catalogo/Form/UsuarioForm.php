@@ -58,7 +58,7 @@ class UsuarioForm extends Form
                 ),
             ),
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
             ),
         ));
