@@ -25,8 +25,8 @@ class Module
         $themeListener   = new \Shared\CustomListener\TemplateMapListener();
         $themeListener->attach($eventManager);
         
-        //$authListener = new \Shared\CustomListener\AuthListener();
-        //$authListener->attach($eventManager);
+        $authListener = new \Shared\CustomListener\AuthListener();
+        $authListener->attach($eventManager);
     }
 
     public function getConfig()
