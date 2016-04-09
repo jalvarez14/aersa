@@ -13,7 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class UsuarioController extends AbstractActionController
+class CategoriaController extends AbstractActionController
 {
     public function indexAction()
     {
@@ -25,20 +25,19 @@ class UsuarioController extends AbstractActionController
         
         //SI SE TRATA DE UN ADMIN DE AERSA
         if($session['idrol'] == 1){
-            $collection = \UsuarioQuery::create()->filterByIdrol(array(1,2))->filterByIdusuario($session['idusuario'],  \Criteria::NOT_EQUAL)->orderByIdusuario(\Criteria::DESC)->find();
+            $collection = \CategoriaQuery::create()->orderByIdcategoria(\Criteria::DESC)->find();
         }
 
 
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/catalogo/usuario/index');
+        $view_model->setTemplate('/application/catalogo/categoria/index');
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
         ));
         return $view_model;
-
     }
     
     public function nuevoAction()
@@ -46,7 +45,9 @@ class UsuarioController extends AbstractActionController
         $request = $this->getRequest();
         
         //INTANCIAMOS NUESTRO FORMULARIO
-        $form = new \Application\Catalogo\Form\UsuarioForm();
+        //$padres = \CategoriaQuery::create()->orderByIdcategoria(\Criteria::ASC)->find();
+
+        $form = new \Application\Catalogo\Form\CategoriasForm();
         
         if($request->isPost()){
             
@@ -54,7 +55,7 @@ class UsuarioController extends AbstractActionController
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $post_data['usuario_estatus'] = 1;
-            $form->setData($post_data);
+            //$form->setData($post_data);
             
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->exists();
@@ -95,18 +96,20 @@ class UsuarioController extends AbstractActionController
                 
             }else{
                 $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');
-            }
-            
-           
+            }  
         }
 
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
-        $view_model->setVariables(array(
-            'form' => $form,
-            'messages' => $this->flashMessenger(),
+        $view_model->setVariables(array
+        (
+
+            'form'      => $form,
+            'padres'    => $padres,
+            'messages'  => $this->flashMessenger(),
         ));
-        $view_model->setTemplate('/application/catalogo/usuario/nuevo');
+
+        $view_model->setTemplate('/application/catalogo/categoria/nuevo');
         return $view_model;
 
     }
