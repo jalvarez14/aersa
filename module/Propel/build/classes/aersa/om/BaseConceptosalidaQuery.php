@@ -16,6 +16,10 @@
  * @method ConceptosalidaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method ConceptosalidaQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method ConceptosalidaQuery leftJoinRequisicion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Requisicion relation
+ * @method ConceptosalidaQuery rightJoinRequisicion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Requisicion relation
+ * @method ConceptosalidaQuery innerJoinRequisicion($relationAlias = null) Adds a INNER JOIN clause to the query using the Requisicion relation
+ *
  * @method Conceptosalida findOne(PropelPDO $con = null) Return the first Conceptosalida matching the query
  * @method Conceptosalida findOneOrCreate(PropelPDO $con = null) Return the first Conceptosalida matching the query, or a new Conceptosalida object populated from the query conditions when no match is found
  *
@@ -288,6 +292,80 @@ abstract class BaseConceptosalidaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE, $conceptosalidaNombre, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Requisicion object
+     *
+     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ConceptosalidaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicion($requisicion, $comparison = null)
+    {
+        if ($requisicion instanceof Requisicion) {
+            return $this
+                ->addUsingAlias(ConceptosalidaPeer::IDCONCEPTOSALIDA, $requisicion->getIdconceptosalida(), $comparison);
+        } elseif ($requisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionQuery()
+                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicion() only accepts arguments of type Requisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Requisicion relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ConceptosalidaQuery The current query, for fluid interface
+     */
+    public function joinRequisicion($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Requisicion');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Requisicion');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Requisicion relation Requisicion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisicionQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisicionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRequisicion($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Requisicion', 'RequisicionQuery');
     }
 
     /**

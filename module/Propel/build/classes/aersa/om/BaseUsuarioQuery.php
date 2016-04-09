@@ -28,6 +28,26 @@
  * @method UsuarioQuery rightJoinRol($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rol relation
  * @method UsuarioQuery innerJoinRol($relationAlias = null) Adds a INNER JOIN clause to the query using the Rol relation
  *
+ * @method UsuarioQuery leftJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the InventariomesRelatedByIdauditor relation
+ * @method UsuarioQuery rightJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InventariomesRelatedByIdauditor relation
+ * @method UsuarioQuery innerJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the InventariomesRelatedByIdauditor relation
+ *
+ * @method UsuarioQuery leftJoinInventariomesRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the InventariomesRelatedByIdusuario relation
+ * @method UsuarioQuery rightJoinInventariomesRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InventariomesRelatedByIdusuario relation
+ * @method UsuarioQuery innerJoinInventariomesRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the InventariomesRelatedByIdusuario relation
+ *
+ * @method UsuarioQuery leftJoinInventariomesdetallenota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Inventariomesdetallenota relation
+ * @method UsuarioQuery rightJoinInventariomesdetallenota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Inventariomesdetallenota relation
+ * @method UsuarioQuery innerJoinInventariomesdetallenota($relationAlias = null) Adds a INNER JOIN clause to the query using the Inventariomesdetallenota relation
+ *
+ * @method UsuarioQuery leftJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
+ * @method UsuarioQuery rightJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
+ * @method UsuarioQuery innerJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdauditor relation
+ *
+ * @method UsuarioQuery leftJoinRequisicionRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdusuario relation
+ * @method UsuarioQuery rightJoinRequisicionRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdusuario relation
+ * @method UsuarioQuery innerJoinRequisicionRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdusuario relation
+ *
  * @method UsuarioQuery leftJoinUsuarioempresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuarioempresa relation
  * @method UsuarioQuery rightJoinUsuarioempresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuarioempresa relation
  * @method UsuarioQuery innerJoinUsuarioempresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Usuarioempresa relation
@@ -521,6 +541,376 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinRol($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Rol', 'RolQuery');
+    }
+
+    /**
+     * Filter the query by a related Inventariomes object
+     *
+     * @param   Inventariomes|PropelObjectCollection $inventariomes  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByInventariomesRelatedByIdauditor($inventariomes, $comparison = null)
+    {
+        if ($inventariomes instanceof Inventariomes) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $inventariomes->getIdauditor(), $comparison);
+        } elseif ($inventariomes instanceof PropelObjectCollection) {
+            return $this
+                ->useInventariomesRelatedByIdauditorQuery()
+                ->filterByPrimaryKeys($inventariomes->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInventariomesRelatedByIdauditor() only accepts arguments of type Inventariomes or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the InventariomesRelatedByIdauditor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinInventariomesRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('InventariomesRelatedByIdauditor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'InventariomesRelatedByIdauditor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the InventariomesRelatedByIdauditor relation Inventariomes object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   InventariomesQuery A secondary query class using the current class as primary query
+     */
+    public function useInventariomesRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinInventariomesRelatedByIdauditor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'InventariomesRelatedByIdauditor', 'InventariomesQuery');
+    }
+
+    /**
+     * Filter the query by a related Inventariomes object
+     *
+     * @param   Inventariomes|PropelObjectCollection $inventariomes  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByInventariomesRelatedByIdusuario($inventariomes, $comparison = null)
+    {
+        if ($inventariomes instanceof Inventariomes) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $inventariomes->getIdusuario(), $comparison);
+        } elseif ($inventariomes instanceof PropelObjectCollection) {
+            return $this
+                ->useInventariomesRelatedByIdusuarioQuery()
+                ->filterByPrimaryKeys($inventariomes->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInventariomesRelatedByIdusuario() only accepts arguments of type Inventariomes or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the InventariomesRelatedByIdusuario relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinInventariomesRelatedByIdusuario($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('InventariomesRelatedByIdusuario');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'InventariomesRelatedByIdusuario');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the InventariomesRelatedByIdusuario relation Inventariomes object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   InventariomesQuery A secondary query class using the current class as primary query
+     */
+    public function useInventariomesRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinInventariomesRelatedByIdusuario($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'InventariomesRelatedByIdusuario', 'InventariomesQuery');
+    }
+
+    /**
+     * Filter the query by a related Inventariomesdetallenota object
+     *
+     * @param   Inventariomesdetallenota|PropelObjectCollection $inventariomesdetallenota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByInventariomesdetallenota($inventariomesdetallenota, $comparison = null)
+    {
+        if ($inventariomesdetallenota instanceof Inventariomesdetallenota) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $inventariomesdetallenota->getIdusuario(), $comparison);
+        } elseif ($inventariomesdetallenota instanceof PropelObjectCollection) {
+            return $this
+                ->useInventariomesdetallenotaQuery()
+                ->filterByPrimaryKeys($inventariomesdetallenota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInventariomesdetallenota() only accepts arguments of type Inventariomesdetallenota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Inventariomesdetallenota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinInventariomesdetallenota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Inventariomesdetallenota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Inventariomesdetallenota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Inventariomesdetallenota relation Inventariomesdetallenota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   InventariomesdetallenotaQuery A secondary query class using the current class as primary query
+     */
+    public function useInventariomesdetallenotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinInventariomesdetallenota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Inventariomesdetallenota', 'InventariomesdetallenotaQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisicion object
+     *
+     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicionRelatedByIdauditor($requisicion, $comparison = null)
+    {
+        if ($requisicion instanceof Requisicion) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $requisicion->getIdauditor(), $comparison);
+        } elseif ($requisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionRelatedByIdauditorQuery()
+                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicionRelatedByIdauditor() only accepts arguments of type Requisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisicionRelatedByIdauditor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinRequisicionRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisicionRelatedByIdauditor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisicionRelatedByIdauditor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisicionRelatedByIdauditor relation Requisicion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisicionQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisicionRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRequisicionRelatedByIdauditor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdauditor', 'RequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisicion object
+     *
+     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicionRelatedByIdusuario($requisicion, $comparison = null)
+    {
+        if ($requisicion instanceof Requisicion) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $requisicion->getIdusuario(), $comparison);
+        } elseif ($requisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionRelatedByIdusuarioQuery()
+                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicionRelatedByIdusuario() only accepts arguments of type Requisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisicionRelatedByIdusuario relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinRequisicionRelatedByIdusuario($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisicionRelatedByIdusuario');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisicionRelatedByIdusuario');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisicionRelatedByIdusuario relation Requisicion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisicionQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisicionRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRequisicionRelatedByIdusuario($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdusuario', 'RequisicionQuery');
     }
 
     /**

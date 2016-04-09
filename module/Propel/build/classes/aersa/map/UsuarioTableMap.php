@@ -53,6 +53,11 @@ class UsuarioTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Rol', 'Rol', RelationMap::MANY_TO_ONE, array('idrol' => 'idrol', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('InventariomesRelatedByIdauditor', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), null, null, 'InventariomessRelatedByIdauditor');
+        $this->addRelation('InventariomesRelatedByIdusuario', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), null, null, 'InventariomessRelatedByIdusuario');
+        $this->addRelation('Inventariomesdetallenota', 'Inventariomesdetallenota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Inventariomesdetallenotas');
+        $this->addRelation('RequisicionRelatedByIdauditor', 'Requisicion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdauditor');
+        $this->addRelation('RequisicionRelatedByIdusuario', 'Requisicion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdusuario');
         $this->addRelation('Usuarioempresa', 'Usuarioempresa', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Usuarioempresas');
         $this->addRelation('Usuariosucursal', 'Usuariosucursal', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Usuariosucursals');
     } // buildRelations()

@@ -462,12 +462,18 @@ abstract class BaseProductoPeer
         // Invalidate objects in CodigobarrasPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CodigobarrasPeer::clearInstancePool();
+        // Invalidate objects in CompradetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompradetallePeer::clearInstancePool();
         // Invalidate objects in RecetaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RecetaPeer::clearInstancePool();
         // Invalidate objects in RecetaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RecetaPeer::clearInstancePool();
+        // Invalidate objects in RequisiciondetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisiciondetallePeer::clearInstancePool();
     }
 
     /**
@@ -1046,6 +1052,12 @@ abstract class BaseProductoPeer
             $criteria->add(CodigobarrasPeer::IDPRODUCTO, $obj->getIdproducto());
             $affectedRows += CodigobarrasPeer::doDelete($criteria, $con);
 
+            // delete related Compradetalle objects
+            $criteria = new Criteria(CompradetallePeer::DATABASE_NAME);
+
+            $criteria->add(CompradetallePeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += CompradetallePeer::doDelete($criteria, $con);
+
             // delete related Receta objects
             $criteria = new Criteria(RecetaPeer::DATABASE_NAME);
 
@@ -1057,6 +1069,12 @@ abstract class BaseProductoPeer
 
             $criteria->add(RecetaPeer::IDPRODUCTORECETA, $obj->getIdproducto());
             $affectedRows += RecetaPeer::doDelete($criteria, $con);
+
+            // delete related Requisiciondetalle objects
+            $criteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
+
+            $criteria->add(RequisiciondetallePeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += RequisiciondetallePeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

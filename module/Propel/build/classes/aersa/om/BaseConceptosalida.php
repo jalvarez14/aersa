@@ -42,6 +42,12 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     protected $conceptosalida_nombre;
 
     /**
+     * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
+     */
+    protected $collRequisicions;
+    protected $collRequisicionsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -60,6 +66,12 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $requisicionsScheduledForDeletion = null;
 
     /**
      * Get the [idconceptosalida] column value.
@@ -230,6 +242,8 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->collRequisicions = null;
+
         } // if (deep)
     }
 
@@ -352,6 +366,23 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->requisicionsScheduledForDeletion !== null) {
+                if (!$this->requisicionsScheduledForDeletion->isEmpty()) {
+                    RequisicionQuery::create()
+                        ->filterByPrimaryKeys($this->requisicionsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->requisicionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRequisicions !== null) {
+                foreach ($this->collRequisicions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -502,6 +533,14 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
             }
 
 
+                if ($this->collRequisicions !== null) {
+                    foreach ($this->collRequisicions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -560,10 +599,11 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Conceptosalida'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -579,6 +619,11 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->collRequisicions) {
+                $result['Requisicions'] = $this->collRequisicions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -721,6 +766,24 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setConceptosalidaNombre($this->getConceptosalidaNombre());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getRequisicions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRequisicion($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdconceptosalida(NULL); // this is a auto-increment column, so set to default value
@@ -767,6 +830,347 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
         return self::$peer;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Requisicion' == $relationName) {
+            $this->initRequisicions();
+        }
+    }
+
+    /**
+     * Clears out the collRequisicions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Conceptosalida The current object (for fluent API support)
+     * @see        addRequisicions()
+     */
+    public function clearRequisicions()
+    {
+        $this->collRequisicions = null; // important to set this to null since that means it is uninitialized
+        $this->collRequisicionsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRequisicions collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRequisicions($v = true)
+    {
+        $this->collRequisicionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collRequisicions collection.
+     *
+     * By default this just sets the collRequisicions collection to an empty array (like clearcollRequisicions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRequisicions($overrideExisting = true)
+    {
+        if (null !== $this->collRequisicions && !$overrideExisting) {
+            return;
+        }
+        $this->collRequisicions = new PropelObjectCollection();
+        $this->collRequisicions->setModel('Requisicion');
+    }
+
+    /**
+     * Gets an array of Requisicion objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Conceptosalida is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     * @throws PropelException
+     */
+    public function getRequisicions($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionsPartial && !$this->isNew();
+        if (null === $this->collRequisicions || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRequisicions) {
+                // return empty collection
+                $this->initRequisicions();
+            } else {
+                $collRequisicions = RequisicionQuery::create(null, $criteria)
+                    ->filterByConceptosalida($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collRequisicionsPartial && count($collRequisicions)) {
+                      $this->initRequisicions(false);
+
+                      foreach ($collRequisicions as $obj) {
+                        if (false == $this->collRequisicions->contains($obj)) {
+                          $this->collRequisicions->append($obj);
+                        }
+                      }
+
+                      $this->collRequisicionsPartial = true;
+                    }
+
+                    $collRequisicions->getInternalIterator()->rewind();
+
+                    return $collRequisicions;
+                }
+
+                if ($partial && $this->collRequisicions) {
+                    foreach ($this->collRequisicions as $obj) {
+                        if ($obj->isNew()) {
+                            $collRequisicions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRequisicions = $collRequisicions;
+                $this->collRequisicionsPartial = false;
+            }
+        }
+
+        return $this->collRequisicions;
+    }
+
+    /**
+     * Sets a collection of Requisicion objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $requisicions A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Conceptosalida The current object (for fluent API support)
+     */
+    public function setRequisicions(PropelCollection $requisicions, PropelPDO $con = null)
+    {
+        $requisicionsToDelete = $this->getRequisicions(new Criteria(), $con)->diff($requisicions);
+
+
+        $this->requisicionsScheduledForDeletion = $requisicionsToDelete;
+
+        foreach ($requisicionsToDelete as $requisicionRemoved) {
+            $requisicionRemoved->setConceptosalida(null);
+        }
+
+        $this->collRequisicions = null;
+        foreach ($requisicions as $requisicion) {
+            $this->addRequisicion($requisicion);
+        }
+
+        $this->collRequisicions = $requisicions;
+        $this->collRequisicionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Requisicion objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Requisicion objects.
+     * @throws PropelException
+     */
+    public function countRequisicions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionsPartial && !$this->isNew();
+        if (null === $this->collRequisicions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRequisicions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRequisicions());
+            }
+            $query = RequisicionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByConceptosalida($this)
+                ->count($con);
+        }
+
+        return count($this->collRequisicions);
+    }
+
+    /**
+     * Method called to associate a Requisicion object to this object
+     * through the Requisicion foreign key attribute.
+     *
+     * @param    Requisicion $l Requisicion
+     * @return Conceptosalida The current object (for fluent API support)
+     */
+    public function addRequisicion(Requisicion $l)
+    {
+        if ($this->collRequisicions === null) {
+            $this->initRequisicions();
+            $this->collRequisicionsPartial = true;
+        }
+
+        if (!in_array($l, $this->collRequisicions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRequisicion($l);
+
+            if ($this->requisicionsScheduledForDeletion and $this->requisicionsScheduledForDeletion->contains($l)) {
+                $this->requisicionsScheduledForDeletion->remove($this->requisicionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Requisicion $requisicion The requisicion object to add.
+     */
+    protected function doAddRequisicion($requisicion)
+    {
+        $this->collRequisicions[]= $requisicion;
+        $requisicion->setConceptosalida($this);
+    }
+
+    /**
+     * @param	Requisicion $requisicion The requisicion object to remove.
+     * @return Conceptosalida The current object (for fluent API support)
+     */
+    public function removeRequisicion($requisicion)
+    {
+        if ($this->getRequisicions()->contains($requisicion)) {
+            $this->collRequisicions->remove($this->collRequisicions->search($requisicion));
+            if (null === $this->requisicionsScheduledForDeletion) {
+                $this->requisicionsScheduledForDeletion = clone $this->collRequisicions;
+                $this->requisicionsScheduledForDeletion->clear();
+            }
+            $this->requisicionsScheduledForDeletion[]= clone $requisicion;
+            $requisicion->setConceptosalida(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Conceptosalida is new, it will return
+     * an empty collection; or if this Conceptosalida has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Conceptosalida.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Conceptosalida is new, it will return
+     * an empty collection; or if this Conceptosalida has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Conceptosalida.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Conceptosalida is new, it will return
+     * an empty collection; or if this Conceptosalida has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Conceptosalida.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Conceptosalida is new, it will return
+     * an empty collection; or if this Conceptosalida has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Conceptosalida.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -796,10 +1200,19 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collRequisicions) {
+                foreach ($this->collRequisicions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collRequisicions instanceof PropelCollection) {
+            $this->collRequisicions->clearIterator();
+        }
+        $this->collRequisicions = null;
     }
 
     /**

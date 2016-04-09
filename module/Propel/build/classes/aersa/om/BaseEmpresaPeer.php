@@ -368,9 +368,15 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in ProveedorPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ProveedorPeer::clearInstancePool();
+        // Invalidate objects in RequisicionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionPeer::clearInstancePool();
         // Invalidate objects in SucursalPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         SucursalPeer::clearInstancePool();
+        // Invalidate objects in TrabajadorpromedioPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TrabajadorpromedioPeer::clearInstancePool();
         // Invalidate objects in UsuarioempresaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UsuarioempresaPeer::clearInstancePool();
@@ -714,11 +720,23 @@ abstract class BaseEmpresaPeer
             $criteria->add(ProveedorPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += ProveedorPeer::doDelete($criteria, $con);
 
+            // delete related Requisicion objects
+            $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += RequisicionPeer::doDelete($criteria, $con);
+
             // delete related Sucursal objects
             $criteria = new Criteria(SucursalPeer::DATABASE_NAME);
 
             $criteria->add(SucursalPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += SucursalPeer::doDelete($criteria, $con);
+
+            // delete related Trabajadorpromedio objects
+            $criteria = new Criteria(TrabajadorpromedioPeer::DATABASE_NAME);
+
+            $criteria->add(TrabajadorpromedioPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += TrabajadorpromedioPeer::doDelete($criteria, $con);
 
             // delete related Usuarioempresa objects
             $criteria = new Criteria(UsuarioempresaPeer::DATABASE_NAME);

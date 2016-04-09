@@ -63,8 +63,10 @@ class ProductoTableMap extends TableMap
     {
         $this->addRelation('Unidadmedida', 'Unidadmedida', RelationMap::MANY_TO_ONE, array('idunidadmedida' => 'idunidadmedida', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Codigobarras', 'Codigobarras', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Codigobarrass');
+        $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Compradetalles');
         $this->addRelation('RecetaRelatedByIdproducto', 'Receta', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'RecetasRelatedByIdproducto');
         $this->addRelation('RecetaRelatedByIdproductoreceta', 'Receta', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproductoreceta', ), 'CASCADE', 'CASCADE', 'RecetasRelatedByIdproductoreceta');
+        $this->addRelation('Requisiciondetalle', 'Requisiciondetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Requisiciondetalles');
     } // buildRelations()
 
 } // ProductoTableMap

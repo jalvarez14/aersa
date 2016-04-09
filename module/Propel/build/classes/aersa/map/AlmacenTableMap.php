@@ -52,6 +52,7 @@ class AlmacenTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Compradetalles');
     } // buildRelations()
 
 } // AlmacenTableMap

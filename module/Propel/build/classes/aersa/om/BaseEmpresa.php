@@ -54,10 +54,22 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collProveedorsPartial;
 
     /**
+     * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
+     */
+    protected $collRequisicions;
+    protected $collRequisicionsPartial;
+
+    /**
      * @var        PropelObjectCollection|Sucursal[] Collection to store aggregation of Sucursal objects.
      */
     protected $collSucursals;
     protected $collSucursalsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Trabajadorpromedio[] Collection to store aggregation of Trabajadorpromedio objects.
+     */
+    protected $collTrabajadorpromedios;
+    protected $collTrabajadorpromediosPartial;
 
     /**
      * @var        PropelObjectCollection|Usuarioempresa[] Collection to store aggregation of Usuarioempresa objects.
@@ -95,7 +107,19 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $requisicionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $sucursalsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $trabajadorpromediosScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -307,7 +331,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             $this->collProveedors = null;
 
+            $this->collRequisicions = null;
+
             $this->collSucursals = null;
+
+            $this->collTrabajadorpromedios = null;
 
             $this->collUsuarioempresas = null;
 
@@ -452,6 +480,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->requisicionsScheduledForDeletion !== null) {
+                if (!$this->requisicionsScheduledForDeletion->isEmpty()) {
+                    RequisicionQuery::create()
+                        ->filterByPrimaryKeys($this->requisicionsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->requisicionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRequisicions !== null) {
+                foreach ($this->collRequisicions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->sucursalsScheduledForDeletion !== null) {
                 if (!$this->sucursalsScheduledForDeletion->isEmpty()) {
                     SucursalQuery::create()
@@ -463,6 +508,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collSucursals !== null) {
                 foreach ($this->collSucursals as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->trabajadorpromediosScheduledForDeletion !== null) {
+                if (!$this->trabajadorpromediosScheduledForDeletion->isEmpty()) {
+                    TrabajadorpromedioQuery::create()
+                        ->filterByPrimaryKeys($this->trabajadorpromediosScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->trabajadorpromediosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collTrabajadorpromedios !== null) {
+                foreach ($this->collTrabajadorpromedios as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -648,8 +710,24 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collRequisicions !== null) {
+                    foreach ($this->collRequisicions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collSucursals !== null) {
                     foreach ($this->collSucursals as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collTrabajadorpromedios !== null) {
+                    foreach ($this->collTrabajadorpromedios as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -750,8 +828,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             if (null !== $this->collProveedors) {
                 $result['Proveedors'] = $this->collProveedors->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collRequisicions) {
+                $result['Requisicions'] = $this->collRequisicions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collSucursals) {
                 $result['Sucursals'] = $this->collSucursals->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collTrabajadorpromedios) {
+                $result['Trabajadorpromedios'] = $this->collTrabajadorpromedios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUsuarioempresas) {
                 $result['Usuarioempresas'] = $this->collUsuarioempresas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -919,9 +1003,21 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getRequisicions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRequisicion($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getSucursals() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addSucursal($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getTrabajadorpromedios() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addTrabajadorpromedio($relObj->copy($deepCopy));
                 }
             }
 
@@ -995,8 +1091,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ('Proveedor' == $relationName) {
             $this->initProveedors();
         }
+        if ('Requisicion' == $relationName) {
+            $this->initRequisicions();
+        }
         if ('Sucursal' == $relationName) {
             $this->initSucursals();
+        }
+        if ('Trabajadorpromedio' == $relationName) {
+            $this->initTrabajadorpromedios();
         }
         if ('Usuarioempresa' == $relationName) {
             $this->initUsuarioempresas();
@@ -1229,6 +1331,331 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collRequisicions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addRequisicions()
+     */
+    public function clearRequisicions()
+    {
+        $this->collRequisicions = null; // important to set this to null since that means it is uninitialized
+        $this->collRequisicionsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRequisicions collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRequisicions($v = true)
+    {
+        $this->collRequisicionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collRequisicions collection.
+     *
+     * By default this just sets the collRequisicions collection to an empty array (like clearcollRequisicions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRequisicions($overrideExisting = true)
+    {
+        if (null !== $this->collRequisicions && !$overrideExisting) {
+            return;
+        }
+        $this->collRequisicions = new PropelObjectCollection();
+        $this->collRequisicions->setModel('Requisicion');
+    }
+
+    /**
+     * Gets an array of Requisicion objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     * @throws PropelException
+     */
+    public function getRequisicions($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionsPartial && !$this->isNew();
+        if (null === $this->collRequisicions || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRequisicions) {
+                // return empty collection
+                $this->initRequisicions();
+            } else {
+                $collRequisicions = RequisicionQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collRequisicionsPartial && count($collRequisicions)) {
+                      $this->initRequisicions(false);
+
+                      foreach ($collRequisicions as $obj) {
+                        if (false == $this->collRequisicions->contains($obj)) {
+                          $this->collRequisicions->append($obj);
+                        }
+                      }
+
+                      $this->collRequisicionsPartial = true;
+                    }
+
+                    $collRequisicions->getInternalIterator()->rewind();
+
+                    return $collRequisicions;
+                }
+
+                if ($partial && $this->collRequisicions) {
+                    foreach ($this->collRequisicions as $obj) {
+                        if ($obj->isNew()) {
+                            $collRequisicions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRequisicions = $collRequisicions;
+                $this->collRequisicionsPartial = false;
+            }
+        }
+
+        return $this->collRequisicions;
+    }
+
+    /**
+     * Sets a collection of Requisicion objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $requisicions A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setRequisicions(PropelCollection $requisicions, PropelPDO $con = null)
+    {
+        $requisicionsToDelete = $this->getRequisicions(new Criteria(), $con)->diff($requisicions);
+
+
+        $this->requisicionsScheduledForDeletion = $requisicionsToDelete;
+
+        foreach ($requisicionsToDelete as $requisicionRemoved) {
+            $requisicionRemoved->setEmpresa(null);
+        }
+
+        $this->collRequisicions = null;
+        foreach ($requisicions as $requisicion) {
+            $this->addRequisicion($requisicion);
+        }
+
+        $this->collRequisicions = $requisicions;
+        $this->collRequisicionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Requisicion objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Requisicion objects.
+     * @throws PropelException
+     */
+    public function countRequisicions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionsPartial && !$this->isNew();
+        if (null === $this->collRequisicions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRequisicions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRequisicions());
+            }
+            $query = RequisicionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collRequisicions);
+    }
+
+    /**
+     * Method called to associate a Requisicion object to this object
+     * through the Requisicion foreign key attribute.
+     *
+     * @param    Requisicion $l Requisicion
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addRequisicion(Requisicion $l)
+    {
+        if ($this->collRequisicions === null) {
+            $this->initRequisicions();
+            $this->collRequisicionsPartial = true;
+        }
+
+        if (!in_array($l, $this->collRequisicions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRequisicion($l);
+
+            if ($this->requisicionsScheduledForDeletion and $this->requisicionsScheduledForDeletion->contains($l)) {
+                $this->requisicionsScheduledForDeletion->remove($this->requisicionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Requisicion $requisicion The requisicion object to add.
+     */
+    protected function doAddRequisicion($requisicion)
+    {
+        $this->collRequisicions[]= $requisicion;
+        $requisicion->setEmpresa($this);
+    }
+
+    /**
+     * @param	Requisicion $requisicion The requisicion object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeRequisicion($requisicion)
+    {
+        if ($this->getRequisicions()->contains($requisicion)) {
+            $this->collRequisicions->remove($this->collRequisicions->search($requisicion));
+            if (null === $this->requisicionsScheduledForDeletion) {
+                $this->requisicionsScheduledForDeletion = clone $this->collRequisicions;
+                $this->requisicionsScheduledForDeletion->clear();
+            }
+            $this->requisicionsScheduledForDeletion[]= clone $requisicion;
+            $requisicion->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinConceptosalida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('Conceptosalida', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+    /**
      * Clears out the collSucursals collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -1451,6 +1878,256 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
 
         return $this;
+    }
+
+    /**
+     * Clears out the collTrabajadorpromedios collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addTrabajadorpromedios()
+     */
+    public function clearTrabajadorpromedios()
+    {
+        $this->collTrabajadorpromedios = null; // important to set this to null since that means it is uninitialized
+        $this->collTrabajadorpromediosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collTrabajadorpromedios collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialTrabajadorpromedios($v = true)
+    {
+        $this->collTrabajadorpromediosPartial = $v;
+    }
+
+    /**
+     * Initializes the collTrabajadorpromedios collection.
+     *
+     * By default this just sets the collTrabajadorpromedios collection to an empty array (like clearcollTrabajadorpromedios());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initTrabajadorpromedios($overrideExisting = true)
+    {
+        if (null !== $this->collTrabajadorpromedios && !$overrideExisting) {
+            return;
+        }
+        $this->collTrabajadorpromedios = new PropelObjectCollection();
+        $this->collTrabajadorpromedios->setModel('Trabajadorpromedio');
+    }
+
+    /**
+     * Gets an array of Trabajadorpromedio objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Trabajadorpromedio[] List of Trabajadorpromedio objects
+     * @throws PropelException
+     */
+    public function getTrabajadorpromedios($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collTrabajadorpromediosPartial && !$this->isNew();
+        if (null === $this->collTrabajadorpromedios || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTrabajadorpromedios) {
+                // return empty collection
+                $this->initTrabajadorpromedios();
+            } else {
+                $collTrabajadorpromedios = TrabajadorpromedioQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collTrabajadorpromediosPartial && count($collTrabajadorpromedios)) {
+                      $this->initTrabajadorpromedios(false);
+
+                      foreach ($collTrabajadorpromedios as $obj) {
+                        if (false == $this->collTrabajadorpromedios->contains($obj)) {
+                          $this->collTrabajadorpromedios->append($obj);
+                        }
+                      }
+
+                      $this->collTrabajadorpromediosPartial = true;
+                    }
+
+                    $collTrabajadorpromedios->getInternalIterator()->rewind();
+
+                    return $collTrabajadorpromedios;
+                }
+
+                if ($partial && $this->collTrabajadorpromedios) {
+                    foreach ($this->collTrabajadorpromedios as $obj) {
+                        if ($obj->isNew()) {
+                            $collTrabajadorpromedios[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTrabajadorpromedios = $collTrabajadorpromedios;
+                $this->collTrabajadorpromediosPartial = false;
+            }
+        }
+
+        return $this->collTrabajadorpromedios;
+    }
+
+    /**
+     * Sets a collection of Trabajadorpromedio objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $trabajadorpromedios A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setTrabajadorpromedios(PropelCollection $trabajadorpromedios, PropelPDO $con = null)
+    {
+        $trabajadorpromediosToDelete = $this->getTrabajadorpromedios(new Criteria(), $con)->diff($trabajadorpromedios);
+
+
+        $this->trabajadorpromediosScheduledForDeletion = $trabajadorpromediosToDelete;
+
+        foreach ($trabajadorpromediosToDelete as $trabajadorpromedioRemoved) {
+            $trabajadorpromedioRemoved->setEmpresa(null);
+        }
+
+        $this->collTrabajadorpromedios = null;
+        foreach ($trabajadorpromedios as $trabajadorpromedio) {
+            $this->addTrabajadorpromedio($trabajadorpromedio);
+        }
+
+        $this->collTrabajadorpromedios = $trabajadorpromedios;
+        $this->collTrabajadorpromediosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Trabajadorpromedio objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Trabajadorpromedio objects.
+     * @throws PropelException
+     */
+    public function countTrabajadorpromedios(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collTrabajadorpromediosPartial && !$this->isNew();
+        if (null === $this->collTrabajadorpromedios || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTrabajadorpromedios) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getTrabajadorpromedios());
+            }
+            $query = TrabajadorpromedioQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collTrabajadorpromedios);
+    }
+
+    /**
+     * Method called to associate a Trabajadorpromedio object to this object
+     * through the Trabajadorpromedio foreign key attribute.
+     *
+     * @param    Trabajadorpromedio $l Trabajadorpromedio
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addTrabajadorpromedio(Trabajadorpromedio $l)
+    {
+        if ($this->collTrabajadorpromedios === null) {
+            $this->initTrabajadorpromedios();
+            $this->collTrabajadorpromediosPartial = true;
+        }
+
+        if (!in_array($l, $this->collTrabajadorpromedios->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddTrabajadorpromedio($l);
+
+            if ($this->trabajadorpromediosScheduledForDeletion and $this->trabajadorpromediosScheduledForDeletion->contains($l)) {
+                $this->trabajadorpromediosScheduledForDeletion->remove($this->trabajadorpromediosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Trabajadorpromedio $trabajadorpromedio The trabajadorpromedio object to add.
+     */
+    protected function doAddTrabajadorpromedio($trabajadorpromedio)
+    {
+        $this->collTrabajadorpromedios[]= $trabajadorpromedio;
+        $trabajadorpromedio->setEmpresa($this);
+    }
+
+    /**
+     * @param	Trabajadorpromedio $trabajadorpromedio The trabajadorpromedio object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeTrabajadorpromedio($trabajadorpromedio)
+    {
+        if ($this->getTrabajadorpromedios()->contains($trabajadorpromedio)) {
+            $this->collTrabajadorpromedios->remove($this->collTrabajadorpromedios->search($trabajadorpromedio));
+            if (null === $this->trabajadorpromediosScheduledForDeletion) {
+                $this->trabajadorpromediosScheduledForDeletion = clone $this->collTrabajadorpromedios;
+                $this->trabajadorpromediosScheduledForDeletion->clear();
+            }
+            $this->trabajadorpromediosScheduledForDeletion[]= clone $trabajadorpromedio;
+            $trabajadorpromedio->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Trabajadorpromedios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Trabajadorpromedio[] List of Trabajadorpromedio objects
+     */
+    public function getTrabajadorpromediosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = TrabajadorpromedioQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getTrabajadorpromedios($query, $con);
     }
 
     /**
@@ -1738,8 +2415,18 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collRequisicions) {
+                foreach ($this->collRequisicions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collSucursals) {
                 foreach ($this->collSucursals as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collTrabajadorpromedios) {
+                foreach ($this->collTrabajadorpromedios as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -1756,10 +2443,18 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collProveedors->clearIterator();
         }
         $this->collProveedors = null;
+        if ($this->collRequisicions instanceof PropelCollection) {
+            $this->collRequisicions->clearIterator();
+        }
+        $this->collRequisicions = null;
         if ($this->collSucursals instanceof PropelCollection) {
             $this->collSucursals->clearIterator();
         }
         $this->collSucursals = null;
+        if ($this->collTrabajadorpromedios instanceof PropelCollection) {
+            $this->collTrabajadorpromedios->clearIterator();
+        }
+        $this->collTrabajadorpromedios = null;
         if ($this->collUsuarioempresas instanceof PropelCollection) {
             $this->collUsuarioempresas->clearIterator();
         }

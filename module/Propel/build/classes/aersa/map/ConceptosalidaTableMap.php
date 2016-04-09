@@ -48,6 +48,7 @@ class ConceptosalidaTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Requisicion', 'Requisicion', RelationMap::ONE_TO_MANY, array('idconceptosalida' => 'idconceptosalida', ), 'CASCADE', 'CASCADE', 'Requisicions');
     } // buildRelations()
 
 } // ConceptosalidaTableMap

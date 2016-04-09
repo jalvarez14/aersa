@@ -62,6 +62,65 @@ CREATE TABLE `codigobarras`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- compra
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `compra`;
+
+CREATE TABLE `compra`
+(
+    `idcompra` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER NOT NULL,
+    `idusuario` INTEGER,
+    `idauditor` INTEGER,
+    `idalmacen` INTEGER,
+    `compra_folio` VARCHAR(45) NOT NULL,
+    `compra_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    `compra_factura` TEXT,
+    `compra_fechacreacion` DATETIME,
+    `compra_fechaentrega` VARCHAR(45),
+    `compra_ieps` DECIMAL(10,5),
+    `compra_iva` DECIMAL(10,5),
+    `compra_total` DECIMAL(10,5),
+    PRIMARY KEY (`idcompra`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- compradetalle
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `compradetalle`;
+
+CREATE TABLE `compradetalle`
+(
+    `idcompradetalle` INTEGER NOT NULL AUTO_INCREMENT,
+    `idcompra` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `idalmacen` INTEGER NOT NULL,
+    `compradetalle_cantidad` FLOAT NOT NULL,
+    `compradetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    PRIMARY KEY (`idcompradetalle`),
+    INDEX `idcompra` (`idcompra`),
+    INDEX `idalmacen` (`idalmacen`),
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idalmacen_compradetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idcompra_compradetalle`
+        FOREIGN KEY (`idcompra`)
+        REFERENCES `compra` (`idcompra`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_compradetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- conceptosalida
 -- ---------------------------------------------------------------------
 
@@ -86,6 +145,93 @@ CREATE TABLE `empresa`
     `empresa_nombrecomercial` VARCHAR(255) NOT NULL,
     `empresa_razonsocial` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`idempresa`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- inventariomes
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `inventariomes`;
+
+CREATE TABLE `inventariomes`
+(
+    `idinventariomes` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempleadoempresa` FLOAT NOT NULL,
+    `idauditor` INTEGER NOT NULL,
+    `inventariomes_fecha` DATE NOT NULL,
+    `inventariomes_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    `idempresa` INTEGER,
+    `idsucursal` INTEGER,
+    `idusuario` INTEGER,
+    PRIMARY KEY (`idinventariomes`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idauditor` (`idauditor`),
+    CONSTRAINT `idauditor_inventariomes`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`),
+    CONSTRAINT `idusuario_inventariomes`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- inventariomesdetalle
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `inventariomesdetalle`;
+
+CREATE TABLE `inventariomesdetalle`
+(
+    `idinventariomesdetalle` INTEGER NOT NULL AUTO_INCREMENT,
+    `idinventariomes` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `inventariomesdetalle_stockinicial` FLOAT NOT NULL,
+    `inventariomesdetalle_stockteorico` FLOAT NOT NULL,
+    `inventariomesdetalle_stockfisico` FLOAT NOT NULL,
+    `inventariomesdetalle_diferencia` FLOAT,
+    `inventariomesdetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    `inventariomesdetalle_ingresocompra` FLOAT NOT NULL,
+    `inventariomesdetalle_ingresorequisicion` FLOAT NOT NULL,
+    `inventariomesdetalle_egresorequisicion` FLOAT NOT NULL,
+    `inventariomesdetalle_egresoventa` FLOAT NOT NULL,
+    `inventariomesdetalle_ingresoordentablajeria` FLOAT NOT NULL,
+    `inventariomesdetalle_egresoordentablajeria` FLOAT NOT NULL,
+    `inventariomesdetalle_egresodevolucion` FLOAT NOT NULL,
+    PRIMARY KEY (`idinventariomesdetalle`),
+    INDEX `idinventariomes` (`idinventariomes`),
+    CONSTRAINT `idinventariomes_inventariomesdetalle`
+        FOREIGN KEY (`idinventariomes`)
+        REFERENCES `inventariomes` (`idinventariomes`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- inventariomesdetallenota
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `inventariomesdetallenota`;
+
+CREATE TABLE `inventariomesdetallenota`
+(
+    `idinventariomesdetallenota` INTEGER NOT NULL AUTO_INCREMENT,
+    `idusuario` INTEGER NOT NULL,
+    `idinventariomesdetalle` INTEGER NOT NULL,
+    `inventariomesdetallenota_nota` TEXT NOT NULL,
+    `inventariomesdetallenota_fecha` DATETIME NOT NULL,
+    PRIMARY KEY (`idinventariomesdetallenota`),
+    INDEX `idinventariomesdetalle` (`idinventariomesdetalle`),
+    INDEX `idusuario_inventariomesdetallenota_idx` (`idusuario`),
+    CONSTRAINT `idinventariomesdetalle_inventariomesdetallenota`
+        FOREIGN KEY (`idinventariomesdetalle`)
+        REFERENCES `inventariomesdetalle` (`idinventariomesdetalle`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_inventariomesdetallenota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -172,6 +318,85 @@ CREATE TABLE `receta`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- requisicion
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `requisicion`;
+
+CREATE TABLE `requisicion`
+(
+    `idrequisicion` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `idusuario` INTEGER NOT NULL,
+    `idauditor` INTEGER NOT NULL,
+    `idconceptosalida` INTEGER NOT NULL,
+    `requisicion_fecha` DATETIME NOT NULL,
+    `requisicion_revisada` TINYINT(1) NOT NULL,
+    PRIMARY KEY (`idrequisicion`),
+    INDEX `idconceptosalida` (`idconceptosalida`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idauditor` (`idauditor`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idauditor_requisicion`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idconceptosalida_requisicion`
+        FOREIGN KEY (`idconceptosalida`)
+        REFERENCES `conceptosalida` (`idconceptosalida`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_requisicion`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_requisicion`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_requisicion`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- requisiciondetalle
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `requisiciondetalle`;
+
+CREATE TABLE `requisiciondetalle`
+(
+    `idrequisiciondetalle` INTEGER NOT NULL AUTO_INCREMENT,
+    `idrequisicion` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `requisiciondetalle_cantidad` FLOAT NOT NULL,
+    `requisiciondetalle_revisada` TINYINT(1) NOT NULL,
+    `idalmacenorigen` INTEGER NOT NULL,
+    `idalmacendestino` INTEGER NOT NULL,
+    PRIMARY KEY (`idrequisiciondetalle`),
+    INDEX `idrequisicion` (`idrequisicion`),
+    INDEX `idproducto_requisiciondetalle_idx` (`idproducto`),
+    CONSTRAINT `idproducto_requisiciondetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idrequisicion_requisiciondetalle`
+        FOREIGN KEY (`idrequisicion`)
+        REFERENCES `requisicion` (`idrequisicion`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- rol
 -- ---------------------------------------------------------------------
 
@@ -215,6 +440,35 @@ CREATE TABLE `tasaiva`
     `idtasaiva` INTEGER NOT NULL AUTO_INCREMENT,
     `tasaiva_valor` FLOAT NOT NULL,
     PRIMARY KEY (`idtasaiva`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- trabajadorpromedio
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `trabajadorpromedio`;
+
+CREATE TABLE `trabajadorpromedio`
+(
+    `idtrabajadorpromedio` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `trabajadorpromedio_anio` INTEGER NOT NULL,
+    `trabajadorpromedio_mes` INTEGER NOT NULL,
+    `trabajadorpromedio_empleados` FLOAT NOT NULL,
+    PRIMARY KEY (`idtrabajadorpromedio`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_trabajadorpromedio`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_trabajadorpromedio`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

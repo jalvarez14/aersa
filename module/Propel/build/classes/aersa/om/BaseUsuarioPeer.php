@@ -380,6 +380,15 @@ abstract class BaseUsuarioPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in InventariomesdetallenotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        InventariomesdetallenotaPeer::clearInstancePool();
+        // Invalidate objects in RequisicionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionPeer::clearInstancePool();
+        // Invalidate objects in RequisicionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionPeer::clearInstancePool();
         // Invalidate objects in UsuarioempresaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UsuarioempresaPeer::clearInstancePool();
@@ -957,6 +966,24 @@ abstract class BaseUsuarioPeer
         $objects = UsuarioPeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+
+            // delete related Inventariomesdetallenota objects
+            $criteria = new Criteria(InventariomesdetallenotaPeer::DATABASE_NAME);
+
+            $criteria->add(InventariomesdetallenotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += InventariomesdetallenotaPeer::doDelete($criteria, $con);
+
+            // delete related Requisicion objects
+            $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionPeer::IDAUDITOR, $obj->getIdusuario());
+            $affectedRows += RequisicionPeer::doDelete($criteria, $con);
+
+            // delete related Requisicion objects
+            $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += RequisicionPeer::doDelete($criteria, $con);
 
             // delete related Usuarioempresa objects
             $criteria = new Criteria(UsuarioempresaPeer::DATABASE_NAME);
