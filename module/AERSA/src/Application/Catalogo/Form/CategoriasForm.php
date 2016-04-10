@@ -6,7 +6,7 @@ use Zend\Form\Form;
 
 class CategoriasForm extends Form
 {
-    public function __construct()
+    public function __construct($padres)
     {
         // we want to ignore the name passed
         parent::__construct('categoria_form');
@@ -34,9 +34,11 @@ class CategoriasForm extends Form
             'options' => array(
                 'label' => 'Padre *',
                 'empty_option' => 'Sin especificar',
+                    
+                'value_options' => $padres,
             ),
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
             ),
         ));
@@ -45,13 +47,13 @@ class CategoriasForm extends Form
             'name' => 'categoria_almacenable',
             'type' => 'Checkbox',
             'options' => array(
-                'label' => 'Almacenable *',
-                'checked_value' => 'good',
-                'unchecked_value' => 'bad'
+                'label' => 'Almacenable',
+                'checked_value' => 1,
+                'unchecked_value' => 0
 
             ),
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
             ),
         ));

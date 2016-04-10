@@ -13,8 +13,14 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
+
+
+    
+    
 class CategoriaController extends AbstractActionController
 {
+    
+    
     public function indexAction()
     {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
@@ -44,59 +50,51 @@ class CategoriaController extends AbstractActionController
     {
         $request = $this->getRequest();
         
-        //INTANCIAMOS NUESTRO FORMULARIO
-        //$padres = \CategoriaQuery::create()->orderByIdcategoria(\Criteria::ASC)->find();
-
-        $form = new \Application\Catalogo\Form\CategoriasForm();
+        //Obtenemos los nombres de las categorias definidas como padre
+        $dataForm = getPadres();
         
-        if($request->isPost()){
+        //Instanciamos el form y le mandamos las categorias padre
+        $form = new \Application\Catalogo\Form\CategoriasForm($dataForm);
+        
+        if($request->isPost())
+        {
             
             $post_data = $request->getPost();
             
-            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-            $post_data['usuario_estatus'] = 1;
-            //$form->setData($post_data);
-            
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-            $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->exists();
+            $exist = \CategoriaQuery::create()->filterByCategoriaNombre(($post_data['categoria_nombre']))->exists();
             
-            if(!$exist){
+            if(!$exist)
+            {
                 
                 //CREAMOS NUESTRA ENTIDAD VACIA
-                $entity = new \Usuario();
-                
-                //INTANCIAMOS NUESTRO FILTRO
-                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
-            
-                //LE PONEMOS EL FILTRO A NUESTRO FORMULARIO
-                $form->setInputFilter($filter->getInputFilter());
-                
+                $entity = new \Categoria();
+                                
                 //VERIFICAMOS QUE SEA VALIDO
-                if($form->isValid()){
-                    
+                if( !($post_data['categoria_padre'] == 0 && $post_data['categoria_almacenable'] == 1) )
+                {
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                    foreach ($post_data as $key => $value){
+                    foreach ($post_data as $key => $value)
                         $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                    }
-                    
-                    //SETEAMOS EL STATUS Y EL PASSWORD
-                    $entity->setUsuarioEstatus(1);
-                    $entity->setUsuarioPassword(md5($post_data['usuario_passoword']));
                     
                     $entity->save();
 
-                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                    $this->flashMessenger()->addSuccessMessage('Categoria guardada satisfactoriamente!');
                     
-                    return $this->redirect()->toUrl('/catalogo/usuario');
-
-                }else{
-                
-                    
+                    return $this->redirect()->toUrl('/catalogo/categoria');
+                }
+                else
+                {
+                    $this->flashMessenger()->addErrorMessage('No se le puede asignar almacenable a una categoria principal');
+                    return $this->redirect()->toUrl('/catalogo/categoria/nuevo');
                 }
                 
-            }else{
-                $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');
-            }  
+            }
+            else
+            {
+                $this->flashMessenger()->addErrorMessage('Ya se ingreso una categoria con este nombre anteriormente');
+                return $this->redirect()->toUrl('/catalogo/categoria');
+            }
         }
 
         //INTANCIAMOS NUESTRA VISTA
@@ -105,13 +103,12 @@ class CategoriaController extends AbstractActionController
         (
 
             'form'      => $form,
-            'padres'    => $padres,
+            'padres'    => $dataForm,
             'messages'  => $this->flashMessenger(),
         ));
 
         $view_model->setTemplate('/application/catalogo/categoria/nuevo');
         return $view_model;
-
     }
     
     public function editarAction()
@@ -123,50 +120,43 @@ class CategoriaController extends AbstractActionController
         $id = $this->params()->fromRoute('id');
         
         //VERIFICAMOS SI EXISTE
-        $exist = \UsuarioQuery::create()->filterByIdusuario($id)->exists();
+        $exist = \CategoriaQuery::create()->filterByIdcategoria($id)->exists();
         
-        if($exist){
-            
+        if($exist)
+        {
             //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \UsuarioQuery::create()->findPk($id);
+            $entity = \CategoriaQuery::create()->findPk($id);
 
             //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Catalogo\Form\UsuarioForm();
-            $form->get('usuario_estatus')->setAttribute('required', true);
+            $form = new \Application\Catalogo\Form\CategoriasForm(getPadres());
             
             //SI NOS ENVIAN UNA PETICION POST
-            if($request->isPost()){
+            if($request->isPost())
+            {
                 
                 $post_data = $request->getPost();
                 
-                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
                 
-                //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-                $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioUsername($entity->getUsuarioUsername(), \Criteria::NOT_EQUAL)->exists();
-               
-                if(!$exist){
-
+                //VERIFICAMOS QUE NO EXISTA UN NOMBRE DE CATEGORIA IGUAL, EN CASO QUE EL NOMBRE SEA DIFERENTE AL ORIGINAL
+                $exist = \CategoriaQuery::create()->filterByCategoriaNombre($post_data['categoria_nombre'])->exists();
+                
+                if($entity->getCategoriaNombre() == $post_data['categoria_nombre'] || !($exist) )
+                {
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
                     foreach ($post_data as $key => $value){
                         $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                     }
 
-                    //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-                    $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
-                    
-                    //VALIDAMOS SI ES UN FORMULARIO VALIDO
-                    $form->setInputFilter($filter->getInputFilter());
-
-
                     $entity->save();
 
-                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-
-                    return $this->redirect()->toUrl('/catalogo/usuario');
-
+                    $this->flashMessenger()->addSuccessMessage('Categoria guardada satisfactoriamente!');
+                    return $this->redirect()->toUrl('/catalogo/categoria');
                     
-                }else{
-                    $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');
+                }
+                else
+                {
+                    $this->flashMessenger()->addErrorMessage('El nombre de la categoria ya existe, por favor utilice otro nombre');
+                    return $this->redirect()->toUrl('/catalogo/categoria/editar/'.$id);
                 }
                 
             }
@@ -174,13 +164,11 @@ class CategoriaController extends AbstractActionController
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
             
-            //CAMBIAMOS ALGUNOS VALORES
-            $form->get('usuario_password')->setLabel('Nueva contraseña');
-            $form->get('usuario_password')->setValue('');
-            
            
-        }else{
-            return $this->redirect()->toUrl('/catalogo/usuario');
+        }
+        else
+        {
+            return $this->redirect()->toUrl('/catalogo/categoria/editar/'.$id);
         }
         
         //INTANCIAMOS NUESTRA VISTA
@@ -189,7 +177,8 @@ class CategoriaController extends AbstractActionController
             'form' => $form,
             'messages' => $this->flashMessenger(),
         ));
-        $view_model->setTemplate('/application/catalogo/usuario/editar');
+        
+        $view_model->setTemplate('/application/catalogo/categoria/editar');
         return $view_model;
 
     }
@@ -246,23 +235,43 @@ class CategoriaController extends AbstractActionController
   
     }
     
-    public function eliminarAction(){
-        
+    public function eliminarAction()
+    {
         $request = $this->getRequest();
-        
-        if($request->isPost()){
-            
+        if($request->isPost())
+        {
             $id = $this->params()->fromRoute('id');
             
-            $entity = \UsuarioQuery::create()->findPk($id);
+            $entity = \CategoriaQuery::create()->findPk($id);
             $entity->delete();
             
             $this->flashMessenger()->addSuccessMessage('Registro eliminado satisfactoriamente!');
 
-            return $this->redirect()->toUrl('/catalogo/usuario');
+            return $this->redirect()->toUrl('/catalogo/categoria');
             
         }
         
     }
+    
+    
+}
 
+function getPadres()
+{
+    $padres = \CategoriaQuery::create()->filterByCategoriaPadre(0)->find();
+        /*
+        $nombres = array();
+        foreach ($padres as $item) 
+        {
+            $id = $item->getIdCategoria();
+            $nombres[$id] = $item->getCategoriaPadre();
+        }
+        $nombres = \CategoriaQuery::create()->filterByIdCategoria($nombres)->find();
+
+        $dataForm = array();
+        */
+    foreach ($padres as $item ) 
+        $dataForm[$item->getIdCategoria()] = $item->getCategoriaNombre();
+
+    return $dataForm;
 }

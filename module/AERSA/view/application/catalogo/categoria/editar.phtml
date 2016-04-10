@@ -1,12 +1,20 @@
-<h3 class="page-title"><?php echo $form->get('usuario_nombre')->getValue()?></h3>
+<?php //echo '<pre>';var_dump($messages->getErrorMessages());echo'</pre>'; ?>
+
+
+
+<?php //foreach ($padres as $item): ?>
+    <?php //echo $item->getCategoriaNombre() ?>
+<?php //endforeach ?>
+
+<h3 class="page-title">Registro categoria</h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
-            <a href="/catalogo/usuario">Usuarios</a>
+            <a href="/catalogo/categoria">Categorias</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <span><?php echo $form->get('usuario_nombre')->getValue()?></span>
+            <span>Registro</span>
         </li>
     </ul>
 </div>
@@ -19,7 +27,7 @@
     </div>
 <?php endforeach;?>
 <?php
-    $form->setAttribute('action', '/catalogo/usuario/editar/'.$form->get('idusuario')->getValue());
+    $form->setAttribute('action', '/catalogo/categoria/editar/'.$form->get('idcategoria')->getValue());
     echo $this->form()->openTag($form);
 ?>
 <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
@@ -29,26 +37,20 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('usuario_nombre')) ?>  
-                        <?php echo $this->formText($form->get('usuario_nombre')) ?>
+                        <?php echo $this->formLabel($form->get('categoria_nombre')) ?>  
+                        <?php echo $this->formText($form->get('categoria_nombre')) ?>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('idrol')) ?>  
-                        <?php echo $this->formSelect($form->get('idrol')) ?>
+                        <?php echo $this->formLabel($form->get('categoria_padre')) ?>  
+                        <?php echo $this->formSelect($form->get('categoria_padre')) ?>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <?php echo $this->formLabel($form->get('usuario_username')) ?>  
-                        <?php echo $this->formText($form->get('usuario_username')) ?>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div >
-                        <?php echo $this->formLabel($form->get('usuario_estatus')) ?>  
-                        <?php echo $this->formSelect($form->get('usuario_estatus')) ?>
+                <div class="col-md-6 col-md-offset-6">
+                    <div class="form-group pull-right">
+                        <?php echo $this->formLabel($form->get('categoria_almacenable')) ?>  
+                        <?php echo $this->formCheckbox($form->get('categoria_almacenable')) ?>
                     </div>
                 </div>
             </div>
@@ -66,36 +68,3 @@
         </div>
     </div>
 </div>
-<?php  echo $this->form()->closeTag(); ?>
-
-<?php
-    $form->setAttribute('action', '/catalogo/usuario/changepassword/'.$form->get('idusuario')->getValue());
-    echo $this->form()->openTag($form);
-?>
-<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
-    <div class="portlet-body form">
-        <div class="form-body">
-            <h3 class="form-section">Cambiar contraseña</h3>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <?php echo $this->formLabel($form->get('usuario_password')) ?>  
-                        <?php echo $this->formPassword($form->get('usuario_password')) ?>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p>(*)Campos obligatorios</p>
-                </div>
-            </div>
-        </div>
-        <div class="form-actions right">
-            <button class="btn blue" type="submit">
-                <i class="fa fa-check"></i>
-                Guardar
-            </button>
-        </div>
-    </div>
-</div>
-<?php  echo $this->form()->closeTag(); ?>
