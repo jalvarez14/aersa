@@ -28,6 +28,14 @@
  * @method UsuarioQuery rightJoinRol($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Rol relation
  * @method UsuarioQuery innerJoinRol($relationAlias = null) Adds a INNER JOIN clause to the query using the Rol relation
  *
+ * @method UsuarioQuery leftJoinDevolucionRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the DevolucionRelatedByIdauditor relation
+ * @method UsuarioQuery rightJoinDevolucionRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DevolucionRelatedByIdauditor relation
+ * @method UsuarioQuery innerJoinDevolucionRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the DevolucionRelatedByIdauditor relation
+ *
+ * @method UsuarioQuery leftJoinDevolucionRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the DevolucionRelatedByIdusuario relation
+ * @method UsuarioQuery rightJoinDevolucionRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DevolucionRelatedByIdusuario relation
+ * @method UsuarioQuery innerJoinDevolucionRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the DevolucionRelatedByIdusuario relation
+ *
  * @method UsuarioQuery leftJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the InventariomesRelatedByIdauditor relation
  * @method UsuarioQuery rightJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InventariomesRelatedByIdauditor relation
  * @method UsuarioQuery innerJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the InventariomesRelatedByIdauditor relation
@@ -39,6 +47,14 @@
  * @method UsuarioQuery leftJoinInventariomesdetallenota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Inventariomesdetallenota relation
  * @method UsuarioQuery rightJoinInventariomesdetallenota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Inventariomesdetallenota relation
  * @method UsuarioQuery innerJoinInventariomesdetallenota($relationAlias = null) Adds a INNER JOIN clause to the query using the Inventariomesdetallenota relation
+ *
+ * @method UsuarioQuery leftJoinNotacreditoRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the NotacreditoRelatedByIdauditor relation
+ * @method UsuarioQuery rightJoinNotacreditoRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the NotacreditoRelatedByIdauditor relation
+ * @method UsuarioQuery innerJoinNotacreditoRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the NotacreditoRelatedByIdauditor relation
+ *
+ * @method UsuarioQuery leftJoinNotacreditoRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the NotacreditoRelatedByIdusuario relation
+ * @method UsuarioQuery rightJoinNotacreditoRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the NotacreditoRelatedByIdusuario relation
+ * @method UsuarioQuery innerJoinNotacreditoRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the NotacreditoRelatedByIdusuario relation
  *
  * @method UsuarioQuery leftJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
  * @method UsuarioQuery rightJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
@@ -544,6 +560,154 @@ abstract class BaseUsuarioQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Devolucion object
+     *
+     * @param   Devolucion|PropelObjectCollection $devolucion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDevolucionRelatedByIdauditor($devolucion, $comparison = null)
+    {
+        if ($devolucion instanceof Devolucion) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $devolucion->getIdauditor(), $comparison);
+        } elseif ($devolucion instanceof PropelObjectCollection) {
+            return $this
+                ->useDevolucionRelatedByIdauditorQuery()
+                ->filterByPrimaryKeys($devolucion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDevolucionRelatedByIdauditor() only accepts arguments of type Devolucion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DevolucionRelatedByIdauditor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinDevolucionRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DevolucionRelatedByIdauditor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DevolucionRelatedByIdauditor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DevolucionRelatedByIdauditor relation Devolucion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   DevolucionQuery A secondary query class using the current class as primary query
+     */
+    public function useDevolucionRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDevolucionRelatedByIdauditor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DevolucionRelatedByIdauditor', 'DevolucionQuery');
+    }
+
+    /**
+     * Filter the query by a related Devolucion object
+     *
+     * @param   Devolucion|PropelObjectCollection $devolucion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDevolucionRelatedByIdusuario($devolucion, $comparison = null)
+    {
+        if ($devolucion instanceof Devolucion) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $devolucion->getIdusuario(), $comparison);
+        } elseif ($devolucion instanceof PropelObjectCollection) {
+            return $this
+                ->useDevolucionRelatedByIdusuarioQuery()
+                ->filterByPrimaryKeys($devolucion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDevolucionRelatedByIdusuario() only accepts arguments of type Devolucion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DevolucionRelatedByIdusuario relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinDevolucionRelatedByIdusuario($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DevolucionRelatedByIdusuario');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DevolucionRelatedByIdusuario');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DevolucionRelatedByIdusuario relation Devolucion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   DevolucionQuery A secondary query class using the current class as primary query
+     */
+    public function useDevolucionRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDevolucionRelatedByIdusuario($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DevolucionRelatedByIdusuario', 'DevolucionQuery');
+    }
+
+    /**
      * Filter the query by a related Inventariomes object
      *
      * @param   Inventariomes|PropelObjectCollection $inventariomes  the related object to use as filter
@@ -763,6 +927,154 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinInventariomesdetallenota($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Inventariomesdetallenota', 'InventariomesdetallenotaQuery');
+    }
+
+    /**
+     * Filter the query by a related Notacredito object
+     *
+     * @param   Notacredito|PropelObjectCollection $notacredito  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByNotacreditoRelatedByIdauditor($notacredito, $comparison = null)
+    {
+        if ($notacredito instanceof Notacredito) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $notacredito->getIdauditor(), $comparison);
+        } elseif ($notacredito instanceof PropelObjectCollection) {
+            return $this
+                ->useNotacreditoRelatedByIdauditorQuery()
+                ->filterByPrimaryKeys($notacredito->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNotacreditoRelatedByIdauditor() only accepts arguments of type Notacredito or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the NotacreditoRelatedByIdauditor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinNotacreditoRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('NotacreditoRelatedByIdauditor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'NotacreditoRelatedByIdauditor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the NotacreditoRelatedByIdauditor relation Notacredito object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   NotacreditoQuery A secondary query class using the current class as primary query
+     */
+    public function useNotacreditoRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinNotacreditoRelatedByIdauditor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'NotacreditoRelatedByIdauditor', 'NotacreditoQuery');
+    }
+
+    /**
+     * Filter the query by a related Notacredito object
+     *
+     * @param   Notacredito|PropelObjectCollection $notacredito  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByNotacreditoRelatedByIdusuario($notacredito, $comparison = null)
+    {
+        if ($notacredito instanceof Notacredito) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $notacredito->getIdusuario(), $comparison);
+        } elseif ($notacredito instanceof PropelObjectCollection) {
+            return $this
+                ->useNotacreditoRelatedByIdusuarioQuery()
+                ->filterByPrimaryKeys($notacredito->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNotacreditoRelatedByIdusuario() only accepts arguments of type Notacredito or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the NotacreditoRelatedByIdusuario relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinNotacreditoRelatedByIdusuario($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('NotacreditoRelatedByIdusuario');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'NotacreditoRelatedByIdusuario');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the NotacreditoRelatedByIdusuario relation Notacredito object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   NotacreditoQuery A secondary query class using the current class as primary query
+     */
+    public function useNotacreditoRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinNotacreditoRelatedByIdusuario($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'NotacreditoRelatedByIdusuario', 'NotacreditoQuery');
     }
 
     /**

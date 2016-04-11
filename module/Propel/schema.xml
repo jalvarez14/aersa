@@ -95,6 +95,77 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="devolucion" phpName="Devolucion" idMethod="native">
+    <column name="iddevolucion" phpName="Iddevolucion" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
+    <column name="devolucion_folio" phpName="DevolucionFolio" type="VARCHAR" size="45" required="true"/>
+    <column name="devolucion_revisada" phpName="DevolucionRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <column name="devolucion_factura" phpName="DevolucionFactura" type="LONGVARCHAR" required="false"/>
+    <column name="devolucion_fechacreacion" phpName="DevolucionFechacreacion" type="TIMESTAMP" required="false"/>
+    <column name="devolucion_fechaentrega" phpName="DevolucionFechaentrega" type="VARCHAR" size="45" required="false"/>
+    <column name="devolucion_ieps" phpName="DevolucionIeps" type="DECIMAL" size="10" scale="5" required="false"/>
+    <column name="devolucion_iva" phpName="DevolucionIva" type="DECIMAL" size="10" scale="5" required="false"/>
+    <column name="devolucion_total" phpName="DevolucionTotal" type="DECIMAL" size="10" scale="5" required="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
+    </index>
+    <index name="idusuario">
+      <index-column name="idusuario"/>
+    </index>
+    <index name="idauditor">
+      <index-column name="idauditor"/>
+    </index>
+    <index name="idalmacen">
+      <index-column name="idalmacen"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="devoluciondetalle" phpName="Devoluciondetalle" idMethod="native">
+    <column name="iddevoluciondetalle" phpName="Iddevoluciondetalle" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="iddevolucion" phpName="Iddevolucion" type="INTEGER" required="true"/>
+    <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
+    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
+    <column name="devoluciondetalle_cantidad" phpName="DevoluciondetalleCantidad" type="FLOAT" required="true"/>
+    <column name="devoluciondetalle_revisada" phpName="DevoluciondetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_devoluciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="devolucion" name="iddevolucion_devoluciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="iddevolucion" foreign="iddevolucion"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_devoluciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <index name="iddevolucion">
+      <index-column name="iddevolucion"/>
+    </index>
+    <index name="idproducto">
+      <index-column name="idproducto"/>
+    </index>
+    <index name="idalmacen">
+      <index-column name="idalmacen"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="empresa" phpName="Empresa" idMethod="native">
     <column name="idempresa" phpName="Idempresa" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="empresa_nombrecomercial" phpName="EmpresaNombrecomercial" type="VARCHAR" size="255" required="true"/>
@@ -171,6 +242,77 @@
     </index>
     <index name="idusuario_inventariomesdetallenota_idx">
       <index-column name="idusuario"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="notacredito" phpName="Notacredito" idMethod="native">
+    <column name="idnotacredito" phpName="Idnotacredito" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
+    <column name="notacredito_folio" phpName="NotacreditoFolio" type="VARCHAR" size="45" required="true"/>
+    <column name="notacredito_revisada" phpName="NotacreditoRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <column name="notacredito_factura" phpName="NotacreditoFactura" type="LONGVARCHAR" required="false"/>
+    <column name="notacredito_fechacreacion" phpName="NotacreditoFechacreacion" type="TIMESTAMP" required="true"/>
+    <column name="notacredito_fechaentrega" phpName="NotacreditoFechaentrega" type="VARCHAR" size="45" required="false"/>
+    <column name="notacredito_ieps" phpName="NotacreditoIeps" type="DECIMAL" size="10" scale="5" required="false"/>
+    <column name="notacredito_iva" phpName="NotacreditoIva" type="DECIMAL" size="10" scale="5" required="false"/>
+    <column name="notacredito_total" phpName="NotacreditoTotal" type="DECIMAL" size="10" scale="5" required="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
+    </index>
+    <index name="idusuario">
+      <index-column name="idusuario"/>
+    </index>
+    <index name="idauditor">
+      <index-column name="idauditor"/>
+    </index>
+    <index name="idalmacen">
+      <index-column name="idalmacen"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="notacreditodetalle" phpName="Notacreditodetalle" idMethod="native">
+    <column name="idnotacreditodetalle" phpName="Idnotacreditodetalle" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idnotacredito" phpName="Idnotacredito" type="INTEGER" required="true"/>
+    <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
+    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
+    <column name="notacreditodetalle_cantidad" phpName="NotacreditodetalleCantidad" type="FLOAT" required="true"/>
+    <column name="notacreditodetalle_revisada" phpName="NotacreditodetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_notacreditodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="notacredito" name="idnotacredito_notacreditodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idnotacredito" foreign="idnotacredito"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_notacreditodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <index name="idnotacredito">
+      <index-column name="idnotacredito"/>
+    </index>
+    <index name="idproducto">
+      <index-column name="idproducto"/>
+    </index>
+    <index name="idalmacen">
+      <index-column name="idalmacen"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

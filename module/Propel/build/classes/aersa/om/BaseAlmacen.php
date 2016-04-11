@@ -71,6 +71,30 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $collCompradetallesPartial;
 
     /**
+     * @var        PropelObjectCollection|Devolucion[] Collection to store aggregation of Devolucion objects.
+     */
+    protected $collDevolucions;
+    protected $collDevolucionsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Devoluciondetalle[] Collection to store aggregation of Devoluciondetalle objects.
+     */
+    protected $collDevoluciondetalles;
+    protected $collDevoluciondetallesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Notacredito[] Collection to store aggregation of Notacredito objects.
+     */
+    protected $collNotacreditos;
+    protected $collNotacreditosPartial;
+
+    /**
+     * @var        PropelObjectCollection|Notacreditodetalle[] Collection to store aggregation of Notacreditodetalle objects.
+     */
+    protected $collNotacreditodetalles;
+    protected $collNotacreditodetallesPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -95,6 +119,30 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $compradetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $devolucionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $devoluciondetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $notacreditosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $notacreditodetallesScheduledForDeletion = null;
 
     /**
      * Get the [idalmacen] column value.
@@ -382,6 +430,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $this->aSucursal = null;
             $this->collCompradetalles = null;
 
+            $this->collDevolucions = null;
+
+            $this->collDevoluciondetalles = null;
+
+            $this->collNotacreditos = null;
+
+            $this->collNotacreditodetalles = null;
+
         } // if (deep)
     }
 
@@ -529,6 +585,74 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             if ($this->collCompradetalles !== null) {
                 foreach ($this->collCompradetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->devolucionsScheduledForDeletion !== null) {
+                if (!$this->devolucionsScheduledForDeletion->isEmpty()) {
+                    DevolucionQuery::create()
+                        ->filterByPrimaryKeys($this->devolucionsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->devolucionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDevolucions !== null) {
+                foreach ($this->collDevolucions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->devoluciondetallesScheduledForDeletion !== null) {
+                if (!$this->devoluciondetallesScheduledForDeletion->isEmpty()) {
+                    DevoluciondetalleQuery::create()
+                        ->filterByPrimaryKeys($this->devoluciondetallesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->devoluciondetallesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDevoluciondetalles !== null) {
+                foreach ($this->collDevoluciondetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->notacreditosScheduledForDeletion !== null) {
+                if (!$this->notacreditosScheduledForDeletion->isEmpty()) {
+                    NotacreditoQuery::create()
+                        ->filterByPrimaryKeys($this->notacreditosScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->notacreditosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collNotacreditos !== null) {
+                foreach ($this->collNotacreditos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->notacreditodetallesScheduledForDeletion !== null) {
+                if (!$this->notacreditodetallesScheduledForDeletion->isEmpty()) {
+                    NotacreditodetalleQuery::create()
+                        ->filterByPrimaryKeys($this->notacreditodetallesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->notacreditodetallesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collNotacreditodetalles !== null) {
+                foreach ($this->collNotacreditodetalles as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -721,6 +845,38 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collDevolucions !== null) {
+                    foreach ($this->collDevolucions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collDevoluciondetalles !== null) {
+                    foreach ($this->collDevoluciondetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collNotacreditos !== null) {
+                    foreach ($this->collNotacreditos as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collNotacreditodetalles !== null) {
+                    foreach ($this->collNotacreditodetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -817,6 +973,18 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             }
             if (null !== $this->collCompradetalles) {
                 $result['Compradetalles'] = $this->collCompradetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDevolucions) {
+                $result['Devolucions'] = $this->collDevolucions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDevoluciondetalles) {
+                $result['Devoluciondetalles'] = $this->collDevoluciondetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collNotacreditos) {
+                $result['Notacreditos'] = $this->collNotacreditos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collNotacreditodetalles) {
+                $result['Notacreditodetalles'] = $this->collNotacreditodetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -993,6 +1161,30 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getDevolucions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDevolucion($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getDevoluciondetalles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDevoluciondetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getNotacreditos() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addNotacredito($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getNotacreditodetalles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addNotacreditodetalle($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
@@ -1108,6 +1300,18 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     {
         if ('Compradetalle' == $relationName) {
             $this->initCompradetalles();
+        }
+        if ('Devolucion' == $relationName) {
+            $this->initDevolucions();
+        }
+        if ('Devoluciondetalle' == $relationName) {
+            $this->initDevoluciondetalles();
+        }
+        if ('Notacredito' == $relationName) {
+            $this->initNotacreditos();
+        }
+        if ('Notacreditodetalle' == $relationName) {
+            $this->initNotacreditodetalles();
         }
     }
 
@@ -1387,6 +1591,1156 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collDevolucions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addDevolucions()
+     */
+    public function clearDevolucions()
+    {
+        $this->collDevolucions = null; // important to set this to null since that means it is uninitialized
+        $this->collDevolucionsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDevolucions collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDevolucions($v = true)
+    {
+        $this->collDevolucionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collDevolucions collection.
+     *
+     * By default this just sets the collDevolucions collection to an empty array (like clearcollDevolucions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDevolucions($overrideExisting = true)
+    {
+        if (null !== $this->collDevolucions && !$overrideExisting) {
+            return;
+        }
+        $this->collDevolucions = new PropelObjectCollection();
+        $this->collDevolucions->setModel('Devolucion');
+    }
+
+    /**
+     * Gets an array of Devolucion objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     * @throws PropelException
+     */
+    public function getDevolucions($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDevolucionsPartial && !$this->isNew();
+        if (null === $this->collDevolucions || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDevolucions) {
+                // return empty collection
+                $this->initDevolucions();
+            } else {
+                $collDevolucions = DevolucionQuery::create(null, $criteria)
+                    ->filterByAlmacen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDevolucionsPartial && count($collDevolucions)) {
+                      $this->initDevolucions(false);
+
+                      foreach ($collDevolucions as $obj) {
+                        if (false == $this->collDevolucions->contains($obj)) {
+                          $this->collDevolucions->append($obj);
+                        }
+                      }
+
+                      $this->collDevolucionsPartial = true;
+                    }
+
+                    $collDevolucions->getInternalIterator()->rewind();
+
+                    return $collDevolucions;
+                }
+
+                if ($partial && $this->collDevolucions) {
+                    foreach ($this->collDevolucions as $obj) {
+                        if ($obj->isNew()) {
+                            $collDevolucions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDevolucions = $collDevolucions;
+                $this->collDevolucionsPartial = false;
+            }
+        }
+
+        return $this->collDevolucions;
+    }
+
+    /**
+     * Sets a collection of Devolucion objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $devolucions A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setDevolucions(PropelCollection $devolucions, PropelPDO $con = null)
+    {
+        $devolucionsToDelete = $this->getDevolucions(new Criteria(), $con)->diff($devolucions);
+
+
+        $this->devolucionsScheduledForDeletion = $devolucionsToDelete;
+
+        foreach ($devolucionsToDelete as $devolucionRemoved) {
+            $devolucionRemoved->setAlmacen(null);
+        }
+
+        $this->collDevolucions = null;
+        foreach ($devolucions as $devolucion) {
+            $this->addDevolucion($devolucion);
+        }
+
+        $this->collDevolucions = $devolucions;
+        $this->collDevolucionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Devolucion objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Devolucion objects.
+     * @throws PropelException
+     */
+    public function countDevolucions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDevolucionsPartial && !$this->isNew();
+        if (null === $this->collDevolucions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDevolucions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDevolucions());
+            }
+            $query = DevolucionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacen($this)
+                ->count($con);
+        }
+
+        return count($this->collDevolucions);
+    }
+
+    /**
+     * Method called to associate a Devolucion object to this object
+     * through the Devolucion foreign key attribute.
+     *
+     * @param    Devolucion $l Devolucion
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addDevolucion(Devolucion $l)
+    {
+        if ($this->collDevolucions === null) {
+            $this->initDevolucions();
+            $this->collDevolucionsPartial = true;
+        }
+
+        if (!in_array($l, $this->collDevolucions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDevolucion($l);
+
+            if ($this->devolucionsScheduledForDeletion and $this->devolucionsScheduledForDeletion->contains($l)) {
+                $this->devolucionsScheduledForDeletion->remove($this->devolucionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Devolucion $devolucion The devolucion object to add.
+     */
+    protected function doAddDevolucion($devolucion)
+    {
+        $this->collDevolucions[]= $devolucion;
+        $devolucion->setAlmacen($this);
+    }
+
+    /**
+     * @param	Devolucion $devolucion The devolucion object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeDevolucion($devolucion)
+    {
+        if ($this->getDevolucions()->contains($devolucion)) {
+            $this->collDevolucions->remove($this->collDevolucions->search($devolucion));
+            if (null === $this->devolucionsScheduledForDeletion) {
+                $this->devolucionsScheduledForDeletion = clone $this->collDevolucions;
+                $this->devolucionsScheduledForDeletion->clear();
+            }
+            $this->devolucionsScheduledForDeletion[]= clone $devolucion;
+            $devolucion->setAlmacen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Devolucions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
+    public function getDevolucionsJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getDevolucions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Devolucions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
+    public function getDevolucionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getDevolucions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Devolucions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
+    public function getDevolucionsJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getDevolucions($query, $con);
+    }
+
+    /**
+     * Clears out the collDevoluciondetalles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addDevoluciondetalles()
+     */
+    public function clearDevoluciondetalles()
+    {
+        $this->collDevoluciondetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collDevoluciondetallesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collDevoluciondetalles collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialDevoluciondetalles($v = true)
+    {
+        $this->collDevoluciondetallesPartial = $v;
+    }
+
+    /**
+     * Initializes the collDevoluciondetalles collection.
+     *
+     * By default this just sets the collDevoluciondetalles collection to an empty array (like clearcollDevoluciondetalles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDevoluciondetalles($overrideExisting = true)
+    {
+        if (null !== $this->collDevoluciondetalles && !$overrideExisting) {
+            return;
+        }
+        $this->collDevoluciondetalles = new PropelObjectCollection();
+        $this->collDevoluciondetalles->setModel('Devoluciondetalle');
+    }
+
+    /**
+     * Gets an array of Devoluciondetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Devoluciondetalle[] List of Devoluciondetalle objects
+     * @throws PropelException
+     */
+    public function getDevoluciondetalles($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collDevoluciondetallesPartial && !$this->isNew();
+        if (null === $this->collDevoluciondetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDevoluciondetalles) {
+                // return empty collection
+                $this->initDevoluciondetalles();
+            } else {
+                $collDevoluciondetalles = DevoluciondetalleQuery::create(null, $criteria)
+                    ->filterByAlmacen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collDevoluciondetallesPartial && count($collDevoluciondetalles)) {
+                      $this->initDevoluciondetalles(false);
+
+                      foreach ($collDevoluciondetalles as $obj) {
+                        if (false == $this->collDevoluciondetalles->contains($obj)) {
+                          $this->collDevoluciondetalles->append($obj);
+                        }
+                      }
+
+                      $this->collDevoluciondetallesPartial = true;
+                    }
+
+                    $collDevoluciondetalles->getInternalIterator()->rewind();
+
+                    return $collDevoluciondetalles;
+                }
+
+                if ($partial && $this->collDevoluciondetalles) {
+                    foreach ($this->collDevoluciondetalles as $obj) {
+                        if ($obj->isNew()) {
+                            $collDevoluciondetalles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDevoluciondetalles = $collDevoluciondetalles;
+                $this->collDevoluciondetallesPartial = false;
+            }
+        }
+
+        return $this->collDevoluciondetalles;
+    }
+
+    /**
+     * Sets a collection of Devoluciondetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $devoluciondetalles A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setDevoluciondetalles(PropelCollection $devoluciondetalles, PropelPDO $con = null)
+    {
+        $devoluciondetallesToDelete = $this->getDevoluciondetalles(new Criteria(), $con)->diff($devoluciondetalles);
+
+
+        $this->devoluciondetallesScheduledForDeletion = $devoluciondetallesToDelete;
+
+        foreach ($devoluciondetallesToDelete as $devoluciondetalleRemoved) {
+            $devoluciondetalleRemoved->setAlmacen(null);
+        }
+
+        $this->collDevoluciondetalles = null;
+        foreach ($devoluciondetalles as $devoluciondetalle) {
+            $this->addDevoluciondetalle($devoluciondetalle);
+        }
+
+        $this->collDevoluciondetalles = $devoluciondetalles;
+        $this->collDevoluciondetallesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Devoluciondetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Devoluciondetalle objects.
+     * @throws PropelException
+     */
+    public function countDevoluciondetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collDevoluciondetallesPartial && !$this->isNew();
+        if (null === $this->collDevoluciondetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDevoluciondetalles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDevoluciondetalles());
+            }
+            $query = DevoluciondetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacen($this)
+                ->count($con);
+        }
+
+        return count($this->collDevoluciondetalles);
+    }
+
+    /**
+     * Method called to associate a Devoluciondetalle object to this object
+     * through the Devoluciondetalle foreign key attribute.
+     *
+     * @param    Devoluciondetalle $l Devoluciondetalle
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addDevoluciondetalle(Devoluciondetalle $l)
+    {
+        if ($this->collDevoluciondetalles === null) {
+            $this->initDevoluciondetalles();
+            $this->collDevoluciondetallesPartial = true;
+        }
+
+        if (!in_array($l, $this->collDevoluciondetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddDevoluciondetalle($l);
+
+            if ($this->devoluciondetallesScheduledForDeletion and $this->devoluciondetallesScheduledForDeletion->contains($l)) {
+                $this->devoluciondetallesScheduledForDeletion->remove($this->devoluciondetallesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Devoluciondetalle $devoluciondetalle The devoluciondetalle object to add.
+     */
+    protected function doAddDevoluciondetalle($devoluciondetalle)
+    {
+        $this->collDevoluciondetalles[]= $devoluciondetalle;
+        $devoluciondetalle->setAlmacen($this);
+    }
+
+    /**
+     * @param	Devoluciondetalle $devoluciondetalle The devoluciondetalle object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeDevoluciondetalle($devoluciondetalle)
+    {
+        if ($this->getDevoluciondetalles()->contains($devoluciondetalle)) {
+            $this->collDevoluciondetalles->remove($this->collDevoluciondetalles->search($devoluciondetalle));
+            if (null === $this->devoluciondetallesScheduledForDeletion) {
+                $this->devoluciondetallesScheduledForDeletion = clone $this->collDevoluciondetalles;
+                $this->devoluciondetallesScheduledForDeletion->clear();
+            }
+            $this->devoluciondetallesScheduledForDeletion[]= clone $devoluciondetalle;
+            $devoluciondetalle->setAlmacen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Devoluciondetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devoluciondetalle[] List of Devoluciondetalle objects
+     */
+    public function getDevoluciondetallesJoinDevolucion($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevoluciondetalleQuery::create(null, $criteria);
+        $query->joinWith('Devolucion', $join_behavior);
+
+        return $this->getDevoluciondetalles($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Devoluciondetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devoluciondetalle[] List of Devoluciondetalle objects
+     */
+    public function getDevoluciondetallesJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevoluciondetalleQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getDevoluciondetalles($query, $con);
+    }
+
+    /**
+     * Clears out the collNotacreditos collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addNotacreditos()
+     */
+    public function clearNotacreditos()
+    {
+        $this->collNotacreditos = null; // important to set this to null since that means it is uninitialized
+        $this->collNotacreditosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collNotacreditos collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialNotacreditos($v = true)
+    {
+        $this->collNotacreditosPartial = $v;
+    }
+
+    /**
+     * Initializes the collNotacreditos collection.
+     *
+     * By default this just sets the collNotacreditos collection to an empty array (like clearcollNotacreditos());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initNotacreditos($overrideExisting = true)
+    {
+        if (null !== $this->collNotacreditos && !$overrideExisting) {
+            return;
+        }
+        $this->collNotacreditos = new PropelObjectCollection();
+        $this->collNotacreditos->setModel('Notacredito');
+    }
+
+    /**
+     * Gets an array of Notacredito objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     * @throws PropelException
+     */
+    public function getNotacreditos($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collNotacreditosPartial && !$this->isNew();
+        if (null === $this->collNotacreditos || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collNotacreditos) {
+                // return empty collection
+                $this->initNotacreditos();
+            } else {
+                $collNotacreditos = NotacreditoQuery::create(null, $criteria)
+                    ->filterByAlmacen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collNotacreditosPartial && count($collNotacreditos)) {
+                      $this->initNotacreditos(false);
+
+                      foreach ($collNotacreditos as $obj) {
+                        if (false == $this->collNotacreditos->contains($obj)) {
+                          $this->collNotacreditos->append($obj);
+                        }
+                      }
+
+                      $this->collNotacreditosPartial = true;
+                    }
+
+                    $collNotacreditos->getInternalIterator()->rewind();
+
+                    return $collNotacreditos;
+                }
+
+                if ($partial && $this->collNotacreditos) {
+                    foreach ($this->collNotacreditos as $obj) {
+                        if ($obj->isNew()) {
+                            $collNotacreditos[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collNotacreditos = $collNotacreditos;
+                $this->collNotacreditosPartial = false;
+            }
+        }
+
+        return $this->collNotacreditos;
+    }
+
+    /**
+     * Sets a collection of Notacredito objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $notacreditos A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setNotacreditos(PropelCollection $notacreditos, PropelPDO $con = null)
+    {
+        $notacreditosToDelete = $this->getNotacreditos(new Criteria(), $con)->diff($notacreditos);
+
+
+        $this->notacreditosScheduledForDeletion = $notacreditosToDelete;
+
+        foreach ($notacreditosToDelete as $notacreditoRemoved) {
+            $notacreditoRemoved->setAlmacen(null);
+        }
+
+        $this->collNotacreditos = null;
+        foreach ($notacreditos as $notacredito) {
+            $this->addNotacredito($notacredito);
+        }
+
+        $this->collNotacreditos = $notacreditos;
+        $this->collNotacreditosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Notacredito objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Notacredito objects.
+     * @throws PropelException
+     */
+    public function countNotacreditos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collNotacreditosPartial && !$this->isNew();
+        if (null === $this->collNotacreditos || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collNotacreditos) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getNotacreditos());
+            }
+            $query = NotacreditoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacen($this)
+                ->count($con);
+        }
+
+        return count($this->collNotacreditos);
+    }
+
+    /**
+     * Method called to associate a Notacredito object to this object
+     * through the Notacredito foreign key attribute.
+     *
+     * @param    Notacredito $l Notacredito
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addNotacredito(Notacredito $l)
+    {
+        if ($this->collNotacreditos === null) {
+            $this->initNotacreditos();
+            $this->collNotacreditosPartial = true;
+        }
+
+        if (!in_array($l, $this->collNotacreditos->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddNotacredito($l);
+
+            if ($this->notacreditosScheduledForDeletion and $this->notacreditosScheduledForDeletion->contains($l)) {
+                $this->notacreditosScheduledForDeletion->remove($this->notacreditosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Notacredito $notacredito The notacredito object to add.
+     */
+    protected function doAddNotacredito($notacredito)
+    {
+        $this->collNotacreditos[]= $notacredito;
+        $notacredito->setAlmacen($this);
+    }
+
+    /**
+     * @param	Notacredito $notacredito The notacredito object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeNotacredito($notacredito)
+    {
+        if ($this->getNotacreditos()->contains($notacredito)) {
+            $this->collNotacreditos->remove($this->collNotacreditos->search($notacredito));
+            if (null === $this->notacreditosScheduledForDeletion) {
+                $this->notacreditosScheduledForDeletion = clone $this->collNotacreditos;
+                $this->notacreditosScheduledForDeletion->clear();
+            }
+            $this->notacreditosScheduledForDeletion[]= clone $notacredito;
+            $notacredito->setAlmacen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Notacreditos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
+    public function getNotacreditosJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getNotacreditos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Notacreditos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
+    public function getNotacreditosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getNotacreditos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Notacreditos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
+    public function getNotacreditosJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getNotacreditos($query, $con);
+    }
+
+    /**
+     * Clears out the collNotacreditodetalles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addNotacreditodetalles()
+     */
+    public function clearNotacreditodetalles()
+    {
+        $this->collNotacreditodetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collNotacreditodetallesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collNotacreditodetalles collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialNotacreditodetalles($v = true)
+    {
+        $this->collNotacreditodetallesPartial = $v;
+    }
+
+    /**
+     * Initializes the collNotacreditodetalles collection.
+     *
+     * By default this just sets the collNotacreditodetalles collection to an empty array (like clearcollNotacreditodetalles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initNotacreditodetalles($overrideExisting = true)
+    {
+        if (null !== $this->collNotacreditodetalles && !$overrideExisting) {
+            return;
+        }
+        $this->collNotacreditodetalles = new PropelObjectCollection();
+        $this->collNotacreditodetalles->setModel('Notacreditodetalle');
+    }
+
+    /**
+     * Gets an array of Notacreditodetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Notacreditodetalle[] List of Notacreditodetalle objects
+     * @throws PropelException
+     */
+    public function getNotacreditodetalles($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collNotacreditodetallesPartial && !$this->isNew();
+        if (null === $this->collNotacreditodetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collNotacreditodetalles) {
+                // return empty collection
+                $this->initNotacreditodetalles();
+            } else {
+                $collNotacreditodetalles = NotacreditodetalleQuery::create(null, $criteria)
+                    ->filterByAlmacen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collNotacreditodetallesPartial && count($collNotacreditodetalles)) {
+                      $this->initNotacreditodetalles(false);
+
+                      foreach ($collNotacreditodetalles as $obj) {
+                        if (false == $this->collNotacreditodetalles->contains($obj)) {
+                          $this->collNotacreditodetalles->append($obj);
+                        }
+                      }
+
+                      $this->collNotacreditodetallesPartial = true;
+                    }
+
+                    $collNotacreditodetalles->getInternalIterator()->rewind();
+
+                    return $collNotacreditodetalles;
+                }
+
+                if ($partial && $this->collNotacreditodetalles) {
+                    foreach ($this->collNotacreditodetalles as $obj) {
+                        if ($obj->isNew()) {
+                            $collNotacreditodetalles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collNotacreditodetalles = $collNotacreditodetalles;
+                $this->collNotacreditodetallesPartial = false;
+            }
+        }
+
+        return $this->collNotacreditodetalles;
+    }
+
+    /**
+     * Sets a collection of Notacreditodetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $notacreditodetalles A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setNotacreditodetalles(PropelCollection $notacreditodetalles, PropelPDO $con = null)
+    {
+        $notacreditodetallesToDelete = $this->getNotacreditodetalles(new Criteria(), $con)->diff($notacreditodetalles);
+
+
+        $this->notacreditodetallesScheduledForDeletion = $notacreditodetallesToDelete;
+
+        foreach ($notacreditodetallesToDelete as $notacreditodetalleRemoved) {
+            $notacreditodetalleRemoved->setAlmacen(null);
+        }
+
+        $this->collNotacreditodetalles = null;
+        foreach ($notacreditodetalles as $notacreditodetalle) {
+            $this->addNotacreditodetalle($notacreditodetalle);
+        }
+
+        $this->collNotacreditodetalles = $notacreditodetalles;
+        $this->collNotacreditodetallesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Notacreditodetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Notacreditodetalle objects.
+     * @throws PropelException
+     */
+    public function countNotacreditodetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collNotacreditodetallesPartial && !$this->isNew();
+        if (null === $this->collNotacreditodetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collNotacreditodetalles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getNotacreditodetalles());
+            }
+            $query = NotacreditodetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacen($this)
+                ->count($con);
+        }
+
+        return count($this->collNotacreditodetalles);
+    }
+
+    /**
+     * Method called to associate a Notacreditodetalle object to this object
+     * through the Notacreditodetalle foreign key attribute.
+     *
+     * @param    Notacreditodetalle $l Notacreditodetalle
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addNotacreditodetalle(Notacreditodetalle $l)
+    {
+        if ($this->collNotacreditodetalles === null) {
+            $this->initNotacreditodetalles();
+            $this->collNotacreditodetallesPartial = true;
+        }
+
+        if (!in_array($l, $this->collNotacreditodetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddNotacreditodetalle($l);
+
+            if ($this->notacreditodetallesScheduledForDeletion and $this->notacreditodetallesScheduledForDeletion->contains($l)) {
+                $this->notacreditodetallesScheduledForDeletion->remove($this->notacreditodetallesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Notacreditodetalle $notacreditodetalle The notacreditodetalle object to add.
+     */
+    protected function doAddNotacreditodetalle($notacreditodetalle)
+    {
+        $this->collNotacreditodetalles[]= $notacreditodetalle;
+        $notacreditodetalle->setAlmacen($this);
+    }
+
+    /**
+     * @param	Notacreditodetalle $notacreditodetalle The notacreditodetalle object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeNotacreditodetalle($notacreditodetalle)
+    {
+        if ($this->getNotacreditodetalles()->contains($notacreditodetalle)) {
+            $this->collNotacreditodetalles->remove($this->collNotacreditodetalles->search($notacreditodetalle));
+            if (null === $this->notacreditodetallesScheduledForDeletion) {
+                $this->notacreditodetallesScheduledForDeletion = clone $this->collNotacreditodetalles;
+                $this->notacreditodetallesScheduledForDeletion->clear();
+            }
+            $this->notacreditodetallesScheduledForDeletion[]= clone $notacreditodetalle;
+            $notacreditodetalle->setAlmacen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Notacreditodetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacreditodetalle[] List of Notacreditodetalle objects
+     */
+    public function getNotacreditodetallesJoinNotacredito($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditodetalleQuery::create(null, $criteria);
+        $query->joinWith('Notacredito', $join_behavior);
+
+        return $this->getNotacreditodetalles($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Notacreditodetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacreditodetalle[] List of Notacreditodetalle objects
+     */
+    public function getNotacreditodetallesJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditodetalleQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getNotacreditodetalles($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1423,6 +2777,26 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collDevolucions) {
+                foreach ($this->collDevolucions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collDevoluciondetalles) {
+                foreach ($this->collDevoluciondetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collNotacreditos) {
+                foreach ($this->collNotacreditos as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collNotacreditodetalles) {
+                foreach ($this->collNotacreditodetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aSucursal instanceof Persistent) {
               $this->aSucursal->clearAllReferences($deep);
             }
@@ -1434,6 +2808,22 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $this->collCompradetalles->clearIterator();
         }
         $this->collCompradetalles = null;
+        if ($this->collDevolucions instanceof PropelCollection) {
+            $this->collDevolucions->clearIterator();
+        }
+        $this->collDevolucions = null;
+        if ($this->collDevoluciondetalles instanceof PropelCollection) {
+            $this->collDevoluciondetalles->clearIterator();
+        }
+        $this->collDevoluciondetalles = null;
+        if ($this->collNotacreditos instanceof PropelCollection) {
+            $this->collNotacreditos->clearIterator();
+        }
+        $this->collNotacreditos = null;
+        if ($this->collNotacreditodetalles instanceof PropelCollection) {
+            $this->collNotacreditodetalles->clearIterator();
+        }
+        $this->collNotacreditodetalles = null;
         $this->aSucursal = null;
     }
 

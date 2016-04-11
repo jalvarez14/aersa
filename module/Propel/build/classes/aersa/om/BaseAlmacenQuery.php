@@ -30,6 +30,22 @@
  * @method AlmacenQuery rightJoinCompradetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compradetalle relation
  * @method AlmacenQuery innerJoinCompradetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Compradetalle relation
  *
+ * @method AlmacenQuery leftJoinDevolucion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devolucion relation
+ * @method AlmacenQuery rightJoinDevolucion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucion relation
+ * @method AlmacenQuery innerJoinDevolucion($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucion relation
+ *
+ * @method AlmacenQuery leftJoinDevoluciondetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devoluciondetalle relation
+ * @method AlmacenQuery rightJoinDevoluciondetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devoluciondetalle relation
+ * @method AlmacenQuery innerJoinDevoluciondetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Devoluciondetalle relation
+ *
+ * @method AlmacenQuery leftJoinNotacredito($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notacredito relation
+ * @method AlmacenQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
+ * @method AlmacenQuery innerJoinNotacredito($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacredito relation
+ *
+ * @method AlmacenQuery leftJoinNotacreditodetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notacreditodetalle relation
+ * @method AlmacenQuery rightJoinNotacreditodetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacreditodetalle relation
+ * @method AlmacenQuery innerJoinNotacreditodetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacreditodetalle relation
+ *
  * @method Almacen findOne(PropelPDO $con = null) Return the first Almacen matching the query
  * @method Almacen findOneOrCreate(PropelPDO $con = null) Return the first Almacen matching the query, or a new Almacen object populated from the query conditions when no match is found
  *
@@ -558,6 +574,302 @@ abstract class BaseAlmacenQuery extends ModelCriteria
         return $this
             ->joinCompradetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Compradetalle', 'CompradetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Devolucion object
+     *
+     * @param   Devolucion|PropelObjectCollection $devolucion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDevolucion($devolucion, $comparison = null)
+    {
+        if ($devolucion instanceof Devolucion) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $devolucion->getIdalmacen(), $comparison);
+        } elseif ($devolucion instanceof PropelObjectCollection) {
+            return $this
+                ->useDevolucionQuery()
+                ->filterByPrimaryKeys($devolucion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDevolucion() only accepts arguments of type Devolucion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Devolucion relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinDevolucion($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Devolucion');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Devolucion');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Devolucion relation Devolucion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   DevolucionQuery A secondary query class using the current class as primary query
+     */
+    public function useDevolucionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDevolucion($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Devolucion', 'DevolucionQuery');
+    }
+
+    /**
+     * Filter the query by a related Devoluciondetalle object
+     *
+     * @param   Devoluciondetalle|PropelObjectCollection $devoluciondetalle  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDevoluciondetalle($devoluciondetalle, $comparison = null)
+    {
+        if ($devoluciondetalle instanceof Devoluciondetalle) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $devoluciondetalle->getIdalmacen(), $comparison);
+        } elseif ($devoluciondetalle instanceof PropelObjectCollection) {
+            return $this
+                ->useDevoluciondetalleQuery()
+                ->filterByPrimaryKeys($devoluciondetalle->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDevoluciondetalle() only accepts arguments of type Devoluciondetalle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Devoluciondetalle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinDevoluciondetalle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Devoluciondetalle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Devoluciondetalle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Devoluciondetalle relation Devoluciondetalle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   DevoluciondetalleQuery A secondary query class using the current class as primary query
+     */
+    public function useDevoluciondetalleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDevoluciondetalle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Devoluciondetalle', 'DevoluciondetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Notacredito object
+     *
+     * @param   Notacredito|PropelObjectCollection $notacredito  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByNotacredito($notacredito, $comparison = null)
+    {
+        if ($notacredito instanceof Notacredito) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $notacredito->getIdalmacen(), $comparison);
+        } elseif ($notacredito instanceof PropelObjectCollection) {
+            return $this
+                ->useNotacreditoQuery()
+                ->filterByPrimaryKeys($notacredito->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNotacredito() only accepts arguments of type Notacredito or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Notacredito relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinNotacredito($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Notacredito');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Notacredito');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Notacredito relation Notacredito object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   NotacreditoQuery A secondary query class using the current class as primary query
+     */
+    public function useNotacreditoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinNotacredito($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Notacredito', 'NotacreditoQuery');
+    }
+
+    /**
+     * Filter the query by a related Notacreditodetalle object
+     *
+     * @param   Notacreditodetalle|PropelObjectCollection $notacreditodetalle  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByNotacreditodetalle($notacreditodetalle, $comparison = null)
+    {
+        if ($notacreditodetalle instanceof Notacreditodetalle) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $notacreditodetalle->getIdalmacen(), $comparison);
+        } elseif ($notacreditodetalle instanceof PropelObjectCollection) {
+            return $this
+                ->useNotacreditodetalleQuery()
+                ->filterByPrimaryKeys($notacreditodetalle->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNotacreditodetalle() only accepts arguments of type Notacreditodetalle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Notacreditodetalle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinNotacreditodetalle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Notacreditodetalle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Notacreditodetalle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Notacreditodetalle relation Notacreditodetalle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   NotacreditodetalleQuery A secondary query class using the current class as primary query
+     */
+    public function useNotacreditodetalleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinNotacreditodetalle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Notacreditodetalle', 'NotacreditodetalleQuery');
     }
 
     /**

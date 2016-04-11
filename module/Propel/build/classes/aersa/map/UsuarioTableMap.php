@@ -53,9 +53,13 @@ class UsuarioTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Rol', 'Rol', RelationMap::MANY_TO_ONE, array('idrol' => 'idrol', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('DevolucionRelatedByIdauditor', 'Devolucion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'DevolucionsRelatedByIdauditor');
+        $this->addRelation('DevolucionRelatedByIdusuario', 'Devolucion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'DevolucionsRelatedByIdusuario');
         $this->addRelation('InventariomesRelatedByIdauditor', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), null, null, 'InventariomessRelatedByIdauditor');
         $this->addRelation('InventariomesRelatedByIdusuario', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), null, null, 'InventariomessRelatedByIdusuario');
         $this->addRelation('Inventariomesdetallenota', 'Inventariomesdetallenota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Inventariomesdetallenotas');
+        $this->addRelation('NotacreditoRelatedByIdauditor', 'Notacredito', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'NotacreditosRelatedByIdauditor');
+        $this->addRelation('NotacreditoRelatedByIdusuario', 'Notacredito', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'NotacreditosRelatedByIdusuario');
         $this->addRelation('RequisicionRelatedByIdauditor', 'Requisicion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdauditor');
         $this->addRelation('RequisicionRelatedByIdusuario', 'Requisicion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdusuario');
         $this->addRelation('Usuarioempresa', 'Usuarioempresa', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Usuarioempresas');

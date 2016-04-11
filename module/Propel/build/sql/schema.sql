@@ -134,6 +134,89 @@ CREATE TABLE `conceptosalida`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- devolucion
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `devolucion`;
+
+CREATE TABLE `devolucion`
+(
+    `iddevolucion` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER NOT NULL,
+    `idusuario` INTEGER NOT NULL,
+    `idauditor` INTEGER NOT NULL,
+    `idalmacen` INTEGER NOT NULL,
+    `devolucion_folio` VARCHAR(45) NOT NULL,
+    `devolucion_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    `devolucion_factura` TEXT,
+    `devolucion_fechacreacion` DATETIME,
+    `devolucion_fechaentrega` VARCHAR(45),
+    `devolucion_ieps` DECIMAL(10,5),
+    `devolucion_iva` DECIMAL(10,5),
+    `devolucion_total` DECIMAL(10,5),
+    PRIMARY KEY (`iddevolucion`),
+    INDEX `idsucursal` (`idsucursal`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idauditor` (`idauditor`),
+    INDEX `idalmacen` (`idalmacen`),
+    CONSTRAINT `idalmacen_devolucion`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_devolucion`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_devolucion`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_devolucion`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- devoluciondetalle
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `devoluciondetalle`;
+
+CREATE TABLE `devoluciondetalle`
+(
+    `iddevoluciondetalle` INTEGER NOT NULL AUTO_INCREMENT,
+    `iddevolucion` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `idalmacen` INTEGER NOT NULL,
+    `devoluciondetalle_cantidad` FLOAT NOT NULL,
+    `devoluciondetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    PRIMARY KEY (`iddevoluciondetalle`),
+    INDEX `iddevolucion` (`iddevolucion`),
+    INDEX `idproducto` (`idproducto`),
+    INDEX `idalmacen` (`idalmacen`),
+    CONSTRAINT `idalmacen_devoluciondetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `iddevolucion_devoluciondetalle`
+        FOREIGN KEY (`iddevolucion`)
+        REFERENCES `devolucion` (`iddevolucion`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_devoluciondetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- empresa
 -- ---------------------------------------------------------------------
 
@@ -230,6 +313,89 @@ CREATE TABLE `inventariomesdetallenota`
     CONSTRAINT `idusuario_inventariomesdetallenota`
         FOREIGN KEY (`idusuario`)
         REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- notacredito
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `notacredito`;
+
+CREATE TABLE `notacredito`
+(
+    `idnotacredito` INTEGER NOT NULL AUTO_INCREMENT,
+    `idsucursal` INTEGER NOT NULL,
+    `idusuario` INTEGER NOT NULL,
+    `idauditor` INTEGER NOT NULL,
+    `idalmacen` INTEGER NOT NULL,
+    `notacredito_folio` VARCHAR(45) NOT NULL,
+    `notacredito_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    `notacredito_factura` TEXT,
+    `notacredito_fechacreacion` DATETIME NOT NULL,
+    `notacredito_fechaentrega` VARCHAR(45),
+    `notacredito_ieps` DECIMAL(10,5),
+    `notacredito_iva` DECIMAL(10,5),
+    `notacredito_total` DECIMAL(10,5),
+    PRIMARY KEY (`idnotacredito`),
+    INDEX `idsucursal` (`idsucursal`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idauditor` (`idauditor`),
+    INDEX `idalmacen` (`idalmacen`),
+    CONSTRAINT `idalmacen_notacredito`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_notacredito`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_notacredito`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_notacredito`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- notacreditodetalle
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `notacreditodetalle`;
+
+CREATE TABLE `notacreditodetalle`
+(
+    `idnotacreditodetalle` INTEGER NOT NULL AUTO_INCREMENT,
+    `idnotacredito` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `idalmacen` INTEGER NOT NULL,
+    `notacreditodetalle_cantidad` FLOAT NOT NULL,
+    `notacreditodetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    PRIMARY KEY (`idnotacreditodetalle`),
+    INDEX `idnotacredito` (`idnotacredito`),
+    INDEX `idproducto` (`idproducto`),
+    INDEX `idalmacen` (`idalmacen`),
+    CONSTRAINT `idalmacen_notacreditodetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idnotacredito_notacreditodetalle`
+        FOREIGN KEY (`idnotacredito`)
+        REFERENCES `notacredito` (`idnotacredito`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_notacreditodetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
