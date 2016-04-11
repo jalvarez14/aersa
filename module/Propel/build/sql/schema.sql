@@ -35,7 +35,7 @@ CREATE TABLE `categoria`
 (
     `idcategoria` INTEGER NOT NULL AUTO_INCREMENT,
     `categoria_nombre` VARCHAR(255) NOT NULL,
-    `idcategoriapadre` INTEGER NOT NULL,
+    `idcategoriapadre` INTEGER,
     `categoria_almacenable` TINYINT(1),
     PRIMARY KEY (`idcategoria`),
     INDEX `idcategoriapadre` (`idcategoriapadre`),

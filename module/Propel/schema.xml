@@ -20,7 +20,7 @@
   <table name="categoria" phpName="Categoria" idMethod="native">
     <column name="idcategoria" phpName="Idcategoria" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="categoria_nombre" phpName="CategoriaNombre" type="VARCHAR" size="255" required="true"/>
-    <column name="idcategoriapadre" phpName="Idcategoriapadre" type="INTEGER" required="true"/>
+    <column name="idcategoriapadre" phpName="Idcategoriapadre" type="INTEGER" required="false"/>
     <column name="categoria_almacenable" phpName="CategoriaAlmacenable" type="BOOLEAN" size="1" required="false"/>
     <foreign-key foreignTable="categoria" name="idcategoriapadre_categoria" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idcategoriapadre" foreign="idcategoria"/>

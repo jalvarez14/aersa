@@ -411,7 +411,7 @@ abstract class BaseCategoriaQuery extends ModelCriteria
      *
      * @return CategoriaQuery The current query, for fluid interface
      */
-    public function joinCategoriaRelatedByIdcategoriapadre($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCategoriaRelatedByIdcategoriapadre($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('CategoriaRelatedByIdcategoriapadre');
@@ -446,7 +446,7 @@ abstract class BaseCategoriaQuery extends ModelCriteria
      *
      * @return   CategoriaQuery A secondary query class using the current class as primary query
      */
-    public function useCategoriaRelatedByIdcategoriapadreQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCategoriaRelatedByIdcategoriapadreQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinCategoriaRelatedByIdcategoriapadre($relationAlias, $joinType)
@@ -485,7 +485,7 @@ abstract class BaseCategoriaQuery extends ModelCriteria
      *
      * @return CategoriaQuery The current query, for fluid interface
      */
-    public function joinCategoriaRelatedByIdcategoria($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCategoriaRelatedByIdcategoria($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('CategoriaRelatedByIdcategoria');
@@ -520,7 +520,7 @@ abstract class BaseCategoriaQuery extends ModelCriteria
      *
      * @return   CategoriaQuery A secondary query class using the current class as primary query
      */
-    public function useCategoriaRelatedByIdcategoriaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCategoriaRelatedByIdcategoriaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinCategoriaRelatedByIdcategoria($relationAlias, $joinType)
