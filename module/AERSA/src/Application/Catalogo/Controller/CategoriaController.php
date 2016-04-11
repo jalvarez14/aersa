@@ -31,7 +31,7 @@ class CategoriaController extends AbstractActionController
         
         //SI SE TRATA DE UN ADMIN DE AERSA
         if($session['idrol'] == 1){
-            $collection = \CategoriaQuery::create()->orderByIdcategoria(\Criteria::DESC)->find();
+            $collection = \CategoriaQuery::create()->find();
         }
 
 
@@ -66,17 +66,15 @@ class CategoriaController extends AbstractActionController
             
             if(!$exist)
             {
-                
-                //CREAMOS NUESTRA ENTIDAD VACIA
-                $entity = new \Categoria();
+
                                 
                 //VERIFICAMOS QUE SEA VALIDO
-                if( !($post_data['categoria_padre'] == 0 && $post_data['categoria_almacenable'] == 1) )
+                if( !($post_data['idcategoriapadre'] == 0 && $post_data['categoria_almacenable'] == 1) )
                 {
-                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                    foreach ($post_data as $key => $value)
-                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    //Le ponemos la información a la entidad
+                    $entity = setCategoriaData($post_data);
                     
+                    //Guardamos la entidad
                     $entity->save();
 
                     $this->flashMessenger()->addSuccessMessage('Categoria guardada satisfactoriamente!');
@@ -183,57 +181,6 @@ class CategoriaController extends AbstractActionController
 
     }
     
-    public function changepasswordAction(){
-        
-        $request = $this->getRequest();
-        
-        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
-        $id = $this->params()->fromRoute('id');
-        
-        //VERIFICAMOS SI EXISTE
-        $exist = \UsuarioQuery::create()->filterByIdusuario($id)->exists();
-        
-        if($exist){
-            
-            //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \UsuarioQuery::create()->findPk($id);
-            
-            //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Catalogo\Form\UsuarioForm();
-            
-            //SI NOS ENVIAN UNA PETICION POST
-            if($request->isPost()){
-                
-                $post_data = $request->getPost();
-                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
-                
-                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                foreach ($post_data as $key => $value){
-                    $entity->setByName($key, md5($value), \BasePeer::TYPE_FIELDNAME);
-                }
-                
-                 //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-                $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
-                
-                //VALIDAMOS SI ES UN FORMULARIO VALIDO
-                $form->setInputFilter($filter->getInputFilter());
-
-                if($form->isValid()){
-
-                    $entity->save();
-
-                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-
-                    return $this->redirect()->toUrl('/catalogo/usuario');
-
-                }
-            }
-            
-        }else{
-            return $this->redirect()->toUrl('/catalogo/usuario');
-        }
-  
-    }
     
     public function eliminarAction()
     {
@@ -256,9 +203,21 @@ class CategoriaController extends AbstractActionController
     
 }
 
+function setCategoriaData ($data)
+{
+    $entity = new \Categoria();
+    
+    $entity->setCategoriaNombre($data['categoria_nombre']);
+    $entity->setCategoriaAlmacenable($data['categoria_almacenable']);
+    
+    if($data['idcategoriapadre'] >= 1)
+        $entity->setIdcategoriapadre($data['idcategoriapadre']);
+    
+    return $entity;
+}
 function getPadres()
 {
-    $padres = \CategoriaQuery::create()->filterByCategoriaPadre(0)->find();
+    $padres = \CategoriaQuery::create()->filterByIdcategoriapadre()->find();
         /*
         $nombres = array();
         foreach ($padres as $item) 

@@ -241,6 +241,60 @@ return array(
 
                                ),
                             ),
+                           'empresa' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/empresa',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Empresa',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Literal',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                   'nuevo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+
+                               ),
+                            ),
                         ),
                     ),
                 ),
@@ -295,6 +349,7 @@ return array(
             'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
             'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
             'Application\Catalogo\Controller\Categoria '    => 'Application\Catalogo\Controller\CategoriaController',
+            'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
             
             /*
              * WEBSITE

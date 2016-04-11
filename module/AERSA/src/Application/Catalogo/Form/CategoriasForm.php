@@ -29,7 +29,7 @@ class CategoriasForm extends Form
             ),
         ));
         $this->add(array(
-            'name' => 'categoria_padre',
+            'name' => 'idcategoriapadre',
             'type' => 'select',
             'options' => array(
                 'label' => 'Padre *',

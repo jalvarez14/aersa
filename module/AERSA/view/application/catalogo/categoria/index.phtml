@@ -34,7 +34,7 @@
                     <tbody class="text-center">
                         <?php foreach ($collection as $entity) : ?>
                             
-                            <?php if ($entity->getCategoriaPadre() == 0): ?>
+                            <?php if ($entity->getIdcategoriapadre() == 0): ?>
 
                         
                                 <tr id="<?php echo $entity->getIdcategoria() ?>">
@@ -91,7 +91,7 @@
                     <tbody class="text-center">
                         <?php foreach ($collection as $entity) : ?>
                             
-                            <?php if ($entity->getCategoriaPadre() != 0): ?>
+                            <?php if ($entity->getIdcategoriapadre() != 0): ?>
 
                         
                                 <tr id="<?php echo $entity->getIdcategoria() ?>">
@@ -103,7 +103,7 @@
                                         <span class="label label-sm label-danger">No almacenable</span>
                                     <?php endif ?>
                                 </td>
-                                <td><?php echo $entity->getCategoriaPadre() ?></td>
+                                <td><?php echo $entity->getIdcategoriapadre() ?></td>
                                 
                                 <td>
                                     <a href="/catalogo/categoria/editar/<?php echo $entity->getIdcategoria()?>">
