@@ -40,7 +40,7 @@ class CategoriaTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idcategoria', 'Idcategoria', 'INTEGER', true, null, null);
         $this->addColumn('categoria_nombre', 'CategoriaNombre', 'VARCHAR', true, 255, null);
-        $this->addForeignKey('idcategoriapadre', 'Idcategoriapadre', 'INTEGER', 'categoria', 'idcategoria', true, null, null);
+        $this->addForeignKey('idcategoriapadre', 'Idcategoriapadre', 'INTEGER', 'categoria', 'idcategoria', false, null, null);
         $this->addColumn('categoria_almacenable', 'CategoriaAlmacenable', 'BOOLEAN', false, 1, null);
         // validators
     } // initialize()

@@ -1274,7 +1274,7 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                 $this->categoriasRelatedByIdcategoriaScheduledForDeletion = clone $this->collCategoriasRelatedByIdcategoria;
                 $this->categoriasRelatedByIdcategoriaScheduledForDeletion->clear();
             }
-            $this->categoriasRelatedByIdcategoriaScheduledForDeletion[]= clone $categoriaRelatedByIdcategoria;
+            $this->categoriasRelatedByIdcategoriaScheduledForDeletion[]= $categoriaRelatedByIdcategoria;
             $categoriaRelatedByIdcategoria->setCategoriaRelatedByIdcategoriapadre(null);
         }
 
