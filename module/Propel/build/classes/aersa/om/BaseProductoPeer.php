@@ -465,6 +465,12 @@ abstract class BaseProductoPeer
         // Invalidate objects in CompradetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompradetallePeer::clearInstancePool();
+        // Invalidate objects in DevoluciondetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DevoluciondetallePeer::clearInstancePool();
+        // Invalidate objects in NotacreditodetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NotacreditodetallePeer::clearInstancePool();
         // Invalidate objects in RecetaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RecetaPeer::clearInstancePool();
@@ -1057,6 +1063,18 @@ abstract class BaseProductoPeer
 
             $criteria->add(CompradetallePeer::IDPRODUCTO, $obj->getIdproducto());
             $affectedRows += CompradetallePeer::doDelete($criteria, $con);
+
+            // delete related Devoluciondetalle objects
+            $criteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
+
+            $criteria->add(DevoluciondetallePeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += DevoluciondetallePeer::doDelete($criteria, $con);
+
+            // delete related Notacreditodetalle objects
+            $criteria = new Criteria(NotacreditodetallePeer::DATABASE_NAME);
+
+            $criteria->add(NotacreditodetallePeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += NotacreditodetallePeer::doDelete($criteria, $con);
 
             // delete related Receta objects
             $criteria = new Criteria(RecetaPeer::DATABASE_NAME);

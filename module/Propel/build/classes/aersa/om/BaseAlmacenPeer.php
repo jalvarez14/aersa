@@ -378,6 +378,18 @@ abstract class BaseAlmacenPeer
         // Invalidate objects in CompradetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompradetallePeer::clearInstancePool();
+        // Invalidate objects in DevolucionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DevolucionPeer::clearInstancePool();
+        // Invalidate objects in DevoluciondetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DevoluciondetallePeer::clearInstancePool();
+        // Invalidate objects in NotacreditoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NotacreditoPeer::clearInstancePool();
+        // Invalidate objects in NotacreditodetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NotacreditodetallePeer::clearInstancePool();
     }
 
     /**
@@ -955,6 +967,30 @@ abstract class BaseAlmacenPeer
 
             $criteria->add(CompradetallePeer::IDALMACEN, $obj->getIdalmacen());
             $affectedRows += CompradetallePeer::doDelete($criteria, $con);
+
+            // delete related Devolucion objects
+            $criteria = new Criteria(DevolucionPeer::DATABASE_NAME);
+
+            $criteria->add(DevolucionPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Devoluciondetalle objects
+            $criteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
+
+            $criteria->add(DevoluciondetallePeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += DevoluciondetallePeer::doDelete($criteria, $con);
+
+            // delete related Notacredito objects
+            $criteria = new Criteria(NotacreditoPeer::DATABASE_NAME);
+
+            $criteria->add(NotacreditoPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
+
+            // delete related Notacreditodetalle objects
+            $criteria = new Criteria(NotacreditodetallePeer::DATABASE_NAME);
+
+            $criteria->add(NotacreditodetallePeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += NotacreditodetallePeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

@@ -368,6 +368,12 @@ abstract class BaseSucursalPeer
         // Invalidate objects in AlmacenPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AlmacenPeer::clearInstancePool();
+        // Invalidate objects in DevolucionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DevolucionPeer::clearInstancePool();
+        // Invalidate objects in NotacreditoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NotacreditoPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -954,6 +960,18 @@ abstract class BaseSucursalPeer
 
             $criteria->add(AlmacenPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += AlmacenPeer::doDelete($criteria, $con);
+
+            // delete related Devolucion objects
+            $criteria = new Criteria(DevolucionPeer::DATABASE_NAME);
+
+            $criteria->add(DevolucionPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Notacredito objects
+            $criteria = new Criteria(NotacreditoPeer::DATABASE_NAME);
+
+            $criteria->add(NotacreditoPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
 
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);

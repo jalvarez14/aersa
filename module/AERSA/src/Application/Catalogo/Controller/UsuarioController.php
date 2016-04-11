@@ -16,7 +16,7 @@ use Zend\Console\Request as ConsoleRequest;
 class UsuarioController extends AbstractActionController
 {
     public function indexAction()
-    {
+    {   
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
