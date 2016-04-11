@@ -20,8 +20,14 @@
   <table name="categoria" phpName="Categoria" idMethod="native">
     <column name="idcategoria" phpName="Idcategoria" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="categoria_nombre" phpName="CategoriaNombre" type="VARCHAR" size="255" required="true"/>
-    <column name="categoria_padre" phpName="CategoriaPadre" type="INTEGER" required="false"/>
+    <column name="idcategoriapadre" phpName="Idcategoriapadre" type="INTEGER" required="true"/>
     <column name="categoria_almacenable" phpName="CategoriaAlmacenable" type="BOOLEAN" size="1" required="false"/>
+    <foreign-key foreignTable="categoria" name="idcategoriapadre_categoria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcategoriapadre" foreign="idcategoria"/>
+    </foreign-key>
+    <index name="idcategoriapadre">
+      <index-column name="idcategoriapadre"/>
+    </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -170,6 +176,8 @@
     <column name="idempresa" phpName="Idempresa" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="empresa_nombrecomercial" phpName="EmpresaNombrecomercial" type="VARCHAR" size="255" required="true"/>
     <column name="empresa_razonsocial" phpName="EmpresaRazonsocial" type="VARCHAR" size="255" required="true"/>
+    <column name="empresa_estatus" phpName="EmpresaEstatus" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="empresa_administracion" phpName="EmpresaAdministracion" type="BOOLEAN" size="1" required="false"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -320,6 +328,7 @@
   </table>
   <table name="producto" phpName="Producto" idMethod="native">
     <column name="idproducto" phpName="Idproducto" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="producto_nombre" phpName="ProductoNombre" type="LONGVARCHAR" required="true"/>
     <column name="idcategoria" phpName="Idcategoria" type="INTEGER" required="false"/>
     <column name="idsubcategoria" phpName="Idsubcategoria" type="INTEGER" required="false"/>
@@ -329,11 +338,18 @@
     <column name="producto_baja" phpName="ProductoBaja" type="BOOLEAN" size="1" required="true"/>
     <column name="producto_tipo" phpName="ProductoTipo" type="CHAR" sqlType="enum('simple','subreceta','plu')" required="true"/>
     <column name="producto_costo" phpName="ProductoCosto" type="FLOAT" required="false"/>
+    <column name="producto_iva" phpName="ProductoIva" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_producto" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
     <foreign-key foreignTable="unidadmedida" name="idunidadmedida_producto" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idunidadmedida" foreign="idunidadmedida"/>
     </foreign-key>
     <index name="idunidadmedida">
       <index-column name="idunidadmedida"/>
+    </index>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -452,15 +468,20 @@
   </table>
   <table name="rol" phpName="Rol" idMethod="native">
     <column name="idrol" phpName="Idrol" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="rol_nombre" phpName="RolNombre" type="VARCHAR" size="45" required="true"/>
+    <column name="rol_nombre" phpName="RolNombre" type="VARCHAR" size="255" required="true"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
   <table name="sucursal" phpName="Sucursal" idMethod="native">
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="sucursal_nombre" phpName="SucursalNombre" type="VARCHAR" size="45" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <column name="sucursal_nombre" phpName="SucursalNombre" type="VARCHAR" size="45" required="true"/>
+    <column name="sucursal_habilitarproductos" phpName="SucursalHabilitarproductos" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
+    <column name="sucursal_habilitarrecetas" phpName="SucursalHabilitarrecetas" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
+    <column name="sucursal_estatus" phpName="SucursalEstatus" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
+    <column name="sucursal_anioactivo" phpName="SucursalAnioactivo" type="INTEGER" required="true"/>
+    <column name="sucursal_mesactivo" phpName="SucursalMesactivo" type="INTEGER" required="true"/>
     <foreign-key foreignTable="empresa" name="idempresa_sucursal" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idempresa" foreign="idempresa"/>
     </foreign-key>

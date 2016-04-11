@@ -35,9 +35,15 @@ CREATE TABLE `categoria`
 (
     `idcategoria` INTEGER NOT NULL AUTO_INCREMENT,
     `categoria_nombre` VARCHAR(255) NOT NULL,
-    `categoria_padre` INTEGER,
+    `idcategoriapadre` INTEGER NOT NULL,
     `categoria_almacenable` TINYINT(1),
-    PRIMARY KEY (`idcategoria`)
+    PRIMARY KEY (`idcategoria`),
+    INDEX `idcategoriapadre` (`idcategoriapadre`),
+    CONSTRAINT `idcategoriapadre_categoria`
+        FOREIGN KEY (`idcategoriapadre`)
+        REFERENCES `categoria` (`idcategoria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -227,6 +233,8 @@ CREATE TABLE `empresa`
     `idempresa` INTEGER NOT NULL AUTO_INCREMENT,
     `empresa_nombrecomercial` VARCHAR(255) NOT NULL,
     `empresa_razonsocial` VARCHAR(255) NOT NULL,
+    `empresa_estatus` TINYINT(1) DEFAULT 1,
+    `empresa_administracion` TINYINT(1),
     PRIMARY KEY (`idempresa`)
 ) ENGINE=InnoDB;
 
@@ -409,6 +417,7 @@ DROP TABLE IF EXISTS `producto`;
 CREATE TABLE `producto`
 (
     `idproducto` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
     `producto_nombre` TEXT NOT NULL,
     `idcategoria` INTEGER,
     `idsubcategoria` INTEGER,
@@ -418,8 +427,15 @@ CREATE TABLE `producto`
     `producto_baja` TINYINT(1) NOT NULL,
     `producto_tipo` enum('simple','subreceta','plu') NOT NULL,
     `producto_costo` FLOAT,
+    `producto_iva` TINYINT(1) NOT NULL,
     PRIMARY KEY (`idproducto`),
     INDEX `idunidadmedida` (`idunidadmedida`),
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_producto`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT `idunidadmedida_producto`
         FOREIGN KEY (`idunidadmedida`)
         REFERENCES `unidadmedida` (`idunidadmedida`)
@@ -571,7 +587,7 @@ DROP TABLE IF EXISTS `rol`;
 CREATE TABLE `rol`
 (
     `idrol` INTEGER NOT NULL AUTO_INCREMENT,
-    `rol_nombre` VARCHAR(45) NOT NULL,
+    `rol_nombre` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`idrol`)
 ) ENGINE=InnoDB;
 
@@ -584,8 +600,13 @@ DROP TABLE IF EXISTS `sucursal`;
 CREATE TABLE `sucursal`
 (
     `idsucursal` INTEGER NOT NULL AUTO_INCREMENT,
-    `sucursal_nombre` VARCHAR(45) NOT NULL,
     `idempresa` INTEGER NOT NULL,
+    `sucursal_nombre` VARCHAR(45) NOT NULL,
+    `sucursal_habilitarproductos` TINYINT(1) DEFAULT 1 NOT NULL,
+    `sucursal_habilitarrecetas` TINYINT(1) DEFAULT 1 NOT NULL,
+    `sucursal_estatus` TINYINT(1) DEFAULT 1 NOT NULL,
+    `sucursal_anioactivo` INTEGER NOT NULL,
+    `sucursal_mesactivo` INTEGER NOT NULL,
     PRIMARY KEY (`idsucursal`),
     INDEX `idempresa` (`idempresa`),
     CONSTRAINT `idempresa_sucursal`

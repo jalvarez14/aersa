@@ -42,16 +42,27 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     protected $categoria_nombre;
 
     /**
-     * The value for the categoria_padre field.
+     * The value for the idcategoriapadre field.
      * @var        int
      */
-    protected $categoria_padre;
+    protected $idcategoriapadre;
 
     /**
      * The value for the categoria_almacenable field.
      * @var        boolean
      */
     protected $categoria_almacenable;
+
+    /**
+     * @var        Categoria
+     */
+    protected $aCategoriaRelatedByIdcategoriapadre;
+
+    /**
+     * @var        PropelObjectCollection|Categoria[] Collection to store aggregation of Categoria objects.
+     */
+    protected $collCategoriasRelatedByIdcategoria;
+    protected $collCategoriasRelatedByIdcategoriaPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -72,6 +83,12 @@ abstract class BaseCategoria extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $categoriasRelatedByIdcategoriaScheduledForDeletion = null;
 
     /**
      * Get the [idcategoria] column value.
@@ -96,14 +113,14 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [categoria_padre] column value.
+     * Get the [idcategoriapadre] column value.
      *
      * @return int
      */
-    public function getCategoriaPadre()
+    public function getIdcategoriapadre()
     {
 
-        return $this->categoria_padre;
+        return $this->idcategoriapadre;
     }
 
     /**
@@ -160,25 +177,29 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     } // setCategoriaNombre()
 
     /**
-     * Set the value of [categoria_padre] column.
+     * Set the value of [idcategoriapadre] column.
      *
      * @param  int $v new value
      * @return Categoria The current object (for fluent API support)
      */
-    public function setCategoriaPadre($v)
+    public function setIdcategoriapadre($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->categoria_padre !== $v) {
-            $this->categoria_padre = $v;
-            $this->modifiedColumns[] = CategoriaPeer::CATEGORIA_PADRE;
+        if ($this->idcategoriapadre !== $v) {
+            $this->idcategoriapadre = $v;
+            $this->modifiedColumns[] = CategoriaPeer::IDCATEGORIAPADRE;
+        }
+
+        if ($this->aCategoriaRelatedByIdcategoriapadre !== null && $this->aCategoriaRelatedByIdcategoriapadre->getIdcategoria() !== $v) {
+            $this->aCategoriaRelatedByIdcategoriapadre = null;
         }
 
 
         return $this;
-    } // setCategoriaPadre()
+    } // setIdcategoriapadre()
 
     /**
      * Sets the value of the [categoria_almacenable] column.
@@ -243,7 +264,7 @@ abstract class BaseCategoria extends BaseObject implements Persistent
 
             $this->idcategoria = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->categoria_nombre = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->categoria_padre = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idcategoriapadre = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->categoria_almacenable = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
             $this->resetModified();
 
@@ -277,6 +298,9 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aCategoriaRelatedByIdcategoriapadre !== null && $this->idcategoriapadre !== $this->aCategoriaRelatedByIdcategoriapadre->getIdcategoria()) {
+            $this->aCategoriaRelatedByIdcategoriapadre = null;
+        }
     } // ensureConsistency
 
     /**
@@ -315,6 +339,9 @@ abstract class BaseCategoria extends BaseObject implements Persistent
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->aCategoriaRelatedByIdcategoriapadre = null;
+            $this->collCategoriasRelatedByIdcategoria = null;
 
         } // if (deep)
     }
@@ -429,6 +456,18 @@ abstract class BaseCategoria extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aCategoriaRelatedByIdcategoriapadre !== null) {
+                if ($this->aCategoriaRelatedByIdcategoriapadre->isModified() || $this->aCategoriaRelatedByIdcategoriapadre->isNew()) {
+                    $affectedRows += $this->aCategoriaRelatedByIdcategoriapadre->save($con);
+                }
+                $this->setCategoriaRelatedByIdcategoriapadre($this->aCategoriaRelatedByIdcategoriapadre);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -438,6 +477,23 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->categoriasRelatedByIdcategoriaScheduledForDeletion !== null) {
+                if (!$this->categoriasRelatedByIdcategoriaScheduledForDeletion->isEmpty()) {
+                    CategoriaQuery::create()
+                        ->filterByPrimaryKeys($this->categoriasRelatedByIdcategoriaScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->categoriasRelatedByIdcategoriaScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCategoriasRelatedByIdcategoria !== null) {
+                foreach ($this->collCategoriasRelatedByIdcategoria as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -472,8 +528,8 @@ abstract class BaseCategoria extends BaseObject implements Persistent
         if ($this->isColumnModified(CategoriaPeer::CATEGORIA_NOMBRE)) {
             $modifiedColumns[':p' . $index++]  = '`categoria_nombre`';
         }
-        if ($this->isColumnModified(CategoriaPeer::CATEGORIA_PADRE)) {
-            $modifiedColumns[':p' . $index++]  = '`categoria_padre`';
+        if ($this->isColumnModified(CategoriaPeer::IDCATEGORIAPADRE)) {
+            $modifiedColumns[':p' . $index++]  = '`idcategoriapadre`';
         }
         if ($this->isColumnModified(CategoriaPeer::CATEGORIA_ALMACENABLE)) {
             $modifiedColumns[':p' . $index++]  = '`categoria_almacenable`';
@@ -495,8 +551,8 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                     case '`categoria_nombre`':
                         $stmt->bindValue($identifier, $this->categoria_nombre, PDO::PARAM_STR);
                         break;
-                    case '`categoria_padre`':
-                        $stmt->bindValue($identifier, $this->categoria_padre, PDO::PARAM_INT);
+                    case '`idcategoriapadre`':
+                        $stmt->bindValue($identifier, $this->idcategoriapadre, PDO::PARAM_INT);
                         break;
                     case '`categoria_almacenable`':
                         $stmt->bindValue($identifier, (int) $this->categoria_almacenable, PDO::PARAM_INT);
@@ -595,10 +651,30 @@ abstract class BaseCategoria extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aCategoriaRelatedByIdcategoriapadre !== null) {
+                if (!$this->aCategoriaRelatedByIdcategoriapadre->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aCategoriaRelatedByIdcategoriapadre->getValidationFailures());
+                }
+            }
+
+
             if (($retval = CategoriaPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collCategoriasRelatedByIdcategoria !== null) {
+                    foreach ($this->collCategoriasRelatedByIdcategoria as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -642,7 +718,7 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                 return $this->getCategoriaNombre();
                 break;
             case 2:
-                return $this->getCategoriaPadre();
+                return $this->getIdcategoriapadre();
                 break;
             case 3:
                 return $this->getCategoriaAlmacenable();
@@ -664,10 +740,11 @@ abstract class BaseCategoria extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Categoria'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -677,7 +754,7 @@ abstract class BaseCategoria extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getIdcategoria(),
             $keys[1] => $this->getCategoriaNombre(),
-            $keys[2] => $this->getCategoriaPadre(),
+            $keys[2] => $this->getIdcategoriapadre(),
             $keys[3] => $this->getCategoriaAlmacenable(),
         );
         $virtualColumns = $this->virtualColumns;
@@ -685,6 +762,14 @@ abstract class BaseCategoria extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aCategoriaRelatedByIdcategoriapadre) {
+                $result['CategoriaRelatedByIdcategoriapadre'] = $this->aCategoriaRelatedByIdcategoriapadre->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCategoriasRelatedByIdcategoria) {
+                $result['CategoriasRelatedByIdcategoria'] = $this->collCategoriasRelatedByIdcategoria->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -725,7 +810,7 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                 $this->setCategoriaNombre($value);
                 break;
             case 2:
-                $this->setCategoriaPadre($value);
+                $this->setIdcategoriapadre($value);
                 break;
             case 3:
                 $this->setCategoriaAlmacenable($value);
@@ -756,7 +841,7 @@ abstract class BaseCategoria extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setIdcategoria($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setCategoriaNombre($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setCategoriaPadre($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdcategoriapadre($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setCategoriaAlmacenable($arr[$keys[3]]);
     }
 
@@ -771,7 +856,7 @@ abstract class BaseCategoria extends BaseObject implements Persistent
 
         if ($this->isColumnModified(CategoriaPeer::IDCATEGORIA)) $criteria->add(CategoriaPeer::IDCATEGORIA, $this->idcategoria);
         if ($this->isColumnModified(CategoriaPeer::CATEGORIA_NOMBRE)) $criteria->add(CategoriaPeer::CATEGORIA_NOMBRE, $this->categoria_nombre);
-        if ($this->isColumnModified(CategoriaPeer::CATEGORIA_PADRE)) $criteria->add(CategoriaPeer::CATEGORIA_PADRE, $this->categoria_padre);
+        if ($this->isColumnModified(CategoriaPeer::IDCATEGORIAPADRE)) $criteria->add(CategoriaPeer::IDCATEGORIAPADRE, $this->idcategoriapadre);
         if ($this->isColumnModified(CategoriaPeer::CATEGORIA_ALMACENABLE)) $criteria->add(CategoriaPeer::CATEGORIA_ALMACENABLE, $this->categoria_almacenable);
 
         return $criteria;
@@ -837,8 +922,26 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setCategoriaNombre($this->getCategoriaNombre());
-        $copyObj->setCategoriaPadre($this->getCategoriaPadre());
+        $copyObj->setIdcategoriapadre($this->getIdcategoriapadre());
         $copyObj->setCategoriaAlmacenable($this->getCategoriaAlmacenable());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getCategoriasRelatedByIdcategoria() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCategoriaRelatedByIdcategoria($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdcategoria(NULL); // this is a auto-increment column, so set to default value
@@ -886,13 +989,306 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Categoria object.
+     *
+     * @param                  Categoria $v
+     * @return Categoria The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setCategoriaRelatedByIdcategoriapadre(Categoria $v = null)
+    {
+        if ($v === null) {
+            $this->setIdcategoriapadre(NULL);
+        } else {
+            $this->setIdcategoriapadre($v->getIdcategoria());
+        }
+
+        $this->aCategoriaRelatedByIdcategoriapadre = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Categoria object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCategoriaRelatedByIdcategoria($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Categoria object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Categoria The associated Categoria object.
+     * @throws PropelException
+     */
+    public function getCategoriaRelatedByIdcategoriapadre(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aCategoriaRelatedByIdcategoriapadre === null && ($this->idcategoriapadre !== null) && $doQuery) {
+            $this->aCategoriaRelatedByIdcategoriapadre = CategoriaQuery::create()->findPk($this->idcategoriapadre, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aCategoriaRelatedByIdcategoriapadre->addCategoriasRelatedByIdcategoria($this);
+             */
+        }
+
+        return $this->aCategoriaRelatedByIdcategoriapadre;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('CategoriaRelatedByIdcategoria' == $relationName) {
+            $this->initCategoriasRelatedByIdcategoria();
+        }
+    }
+
+    /**
+     * Clears out the collCategoriasRelatedByIdcategoria collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Categoria The current object (for fluent API support)
+     * @see        addCategoriasRelatedByIdcategoria()
+     */
+    public function clearCategoriasRelatedByIdcategoria()
+    {
+        $this->collCategoriasRelatedByIdcategoria = null; // important to set this to null since that means it is uninitialized
+        $this->collCategoriasRelatedByIdcategoriaPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCategoriasRelatedByIdcategoria collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCategoriasRelatedByIdcategoria($v = true)
+    {
+        $this->collCategoriasRelatedByIdcategoriaPartial = $v;
+    }
+
+    /**
+     * Initializes the collCategoriasRelatedByIdcategoria collection.
+     *
+     * By default this just sets the collCategoriasRelatedByIdcategoria collection to an empty array (like clearcollCategoriasRelatedByIdcategoria());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCategoriasRelatedByIdcategoria($overrideExisting = true)
+    {
+        if (null !== $this->collCategoriasRelatedByIdcategoria && !$overrideExisting) {
+            return;
+        }
+        $this->collCategoriasRelatedByIdcategoria = new PropelObjectCollection();
+        $this->collCategoriasRelatedByIdcategoria->setModel('Categoria');
+    }
+
+    /**
+     * Gets an array of Categoria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Categoria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Categoria[] List of Categoria objects
+     * @throws PropelException
+     */
+    public function getCategoriasRelatedByIdcategoria($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCategoriasRelatedByIdcategoriaPartial && !$this->isNew();
+        if (null === $this->collCategoriasRelatedByIdcategoria || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCategoriasRelatedByIdcategoria) {
+                // return empty collection
+                $this->initCategoriasRelatedByIdcategoria();
+            } else {
+                $collCategoriasRelatedByIdcategoria = CategoriaQuery::create(null, $criteria)
+                    ->filterByCategoriaRelatedByIdcategoriapadre($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCategoriasRelatedByIdcategoriaPartial && count($collCategoriasRelatedByIdcategoria)) {
+                      $this->initCategoriasRelatedByIdcategoria(false);
+
+                      foreach ($collCategoriasRelatedByIdcategoria as $obj) {
+                        if (false == $this->collCategoriasRelatedByIdcategoria->contains($obj)) {
+                          $this->collCategoriasRelatedByIdcategoria->append($obj);
+                        }
+                      }
+
+                      $this->collCategoriasRelatedByIdcategoriaPartial = true;
+                    }
+
+                    $collCategoriasRelatedByIdcategoria->getInternalIterator()->rewind();
+
+                    return $collCategoriasRelatedByIdcategoria;
+                }
+
+                if ($partial && $this->collCategoriasRelatedByIdcategoria) {
+                    foreach ($this->collCategoriasRelatedByIdcategoria as $obj) {
+                        if ($obj->isNew()) {
+                            $collCategoriasRelatedByIdcategoria[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCategoriasRelatedByIdcategoria = $collCategoriasRelatedByIdcategoria;
+                $this->collCategoriasRelatedByIdcategoriaPartial = false;
+            }
+        }
+
+        return $this->collCategoriasRelatedByIdcategoria;
+    }
+
+    /**
+     * Sets a collection of CategoriaRelatedByIdcategoria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $categoriasRelatedByIdcategoria A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function setCategoriasRelatedByIdcategoria(PropelCollection $categoriasRelatedByIdcategoria, PropelPDO $con = null)
+    {
+        $categoriasRelatedByIdcategoriaToDelete = $this->getCategoriasRelatedByIdcategoria(new Criteria(), $con)->diff($categoriasRelatedByIdcategoria);
+
+
+        $this->categoriasRelatedByIdcategoriaScheduledForDeletion = $categoriasRelatedByIdcategoriaToDelete;
+
+        foreach ($categoriasRelatedByIdcategoriaToDelete as $categoriaRelatedByIdcategoriaRemoved) {
+            $categoriaRelatedByIdcategoriaRemoved->setCategoriaRelatedByIdcategoriapadre(null);
+        }
+
+        $this->collCategoriasRelatedByIdcategoria = null;
+        foreach ($categoriasRelatedByIdcategoria as $categoriaRelatedByIdcategoria) {
+            $this->addCategoriaRelatedByIdcategoria($categoriaRelatedByIdcategoria);
+        }
+
+        $this->collCategoriasRelatedByIdcategoria = $categoriasRelatedByIdcategoria;
+        $this->collCategoriasRelatedByIdcategoriaPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Categoria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Categoria objects.
+     * @throws PropelException
+     */
+    public function countCategoriasRelatedByIdcategoria(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCategoriasRelatedByIdcategoriaPartial && !$this->isNew();
+        if (null === $this->collCategoriasRelatedByIdcategoria || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCategoriasRelatedByIdcategoria) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCategoriasRelatedByIdcategoria());
+            }
+            $query = CategoriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCategoriaRelatedByIdcategoriapadre($this)
+                ->count($con);
+        }
+
+        return count($this->collCategoriasRelatedByIdcategoria);
+    }
+
+    /**
+     * Method called to associate a Categoria object to this object
+     * through the Categoria foreign key attribute.
+     *
+     * @param    Categoria $l Categoria
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function addCategoriaRelatedByIdcategoria(Categoria $l)
+    {
+        if ($this->collCategoriasRelatedByIdcategoria === null) {
+            $this->initCategoriasRelatedByIdcategoria();
+            $this->collCategoriasRelatedByIdcategoriaPartial = true;
+        }
+
+        if (!in_array($l, $this->collCategoriasRelatedByIdcategoria->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCategoriaRelatedByIdcategoria($l);
+
+            if ($this->categoriasRelatedByIdcategoriaScheduledForDeletion and $this->categoriasRelatedByIdcategoriaScheduledForDeletion->contains($l)) {
+                $this->categoriasRelatedByIdcategoriaScheduledForDeletion->remove($this->categoriasRelatedByIdcategoriaScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	CategoriaRelatedByIdcategoria $categoriaRelatedByIdcategoria The categoriaRelatedByIdcategoria object to add.
+     */
+    protected function doAddCategoriaRelatedByIdcategoria($categoriaRelatedByIdcategoria)
+    {
+        $this->collCategoriasRelatedByIdcategoria[]= $categoriaRelatedByIdcategoria;
+        $categoriaRelatedByIdcategoria->setCategoriaRelatedByIdcategoriapadre($this);
+    }
+
+    /**
+     * @param	CategoriaRelatedByIdcategoria $categoriaRelatedByIdcategoria The categoriaRelatedByIdcategoria object to remove.
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function removeCategoriaRelatedByIdcategoria($categoriaRelatedByIdcategoria)
+    {
+        if ($this->getCategoriasRelatedByIdcategoria()->contains($categoriaRelatedByIdcategoria)) {
+            $this->collCategoriasRelatedByIdcategoria->remove($this->collCategoriasRelatedByIdcategoria->search($categoriaRelatedByIdcategoria));
+            if (null === $this->categoriasRelatedByIdcategoriaScheduledForDeletion) {
+                $this->categoriasRelatedByIdcategoriaScheduledForDeletion = clone $this->collCategoriasRelatedByIdcategoria;
+                $this->categoriasRelatedByIdcategoriaScheduledForDeletion->clear();
+            }
+            $this->categoriasRelatedByIdcategoriaScheduledForDeletion[]= clone $categoriaRelatedByIdcategoria;
+            $categoriaRelatedByIdcategoria->setCategoriaRelatedByIdcategoriapadre(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->idcategoria = null;
         $this->categoria_nombre = null;
-        $this->categoria_padre = null;
+        $this->idcategoriapadre = null;
         $this->categoria_almacenable = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
@@ -916,10 +1312,23 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCategoriasRelatedByIdcategoria) {
+                foreach ($this->collCategoriasRelatedByIdcategoria as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aCategoriaRelatedByIdcategoriapadre instanceof Persistent) {
+              $this->aCategoriaRelatedByIdcategoriapadre->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCategoriasRelatedByIdcategoria instanceof PropelCollection) {
+            $this->collCategoriasRelatedByIdcategoria->clearIterator();
+        }
+        $this->collCategoriasRelatedByIdcategoria = null;
+        $this->aCategoriaRelatedByIdcategoriapadre = null;
     }
 
     /**

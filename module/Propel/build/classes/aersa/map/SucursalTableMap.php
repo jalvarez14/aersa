@@ -39,8 +39,13 @@ class SucursalTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idsucursal', 'Idsucursal', 'INTEGER', true, null, null);
-        $this->addColumn('sucursal_nombre', 'SucursalNombre', 'VARCHAR', true, 45, null);
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
+        $this->addColumn('sucursal_nombre', 'SucursalNombre', 'VARCHAR', true, 45, null);
+        $this->addColumn('sucursal_habilitarproductos', 'SucursalHabilitarproductos', 'BOOLEAN', true, 1, true);
+        $this->addColumn('sucursal_habilitarrecetas', 'SucursalHabilitarrecetas', 'BOOLEAN', true, 1, true);
+        $this->addColumn('sucursal_estatus', 'SucursalEstatus', 'BOOLEAN', true, 1, true);
+        $this->addColumn('sucursal_anioactivo', 'SucursalAnioactivo', 'INTEGER', true, null, null);
+        $this->addColumn('sucursal_mesactivo', 'SucursalMesactivo', 'INTEGER', true, null, null);
         // validators
     } // initialize()
 

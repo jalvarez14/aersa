@@ -8,28 +8,36 @@
  *
  * @method CategoriaQuery orderByIdcategoria($order = Criteria::ASC) Order by the idcategoria column
  * @method CategoriaQuery orderByCategoriaNombre($order = Criteria::ASC) Order by the categoria_nombre column
- * @method CategoriaQuery orderByCategoriaPadre($order = Criteria::ASC) Order by the categoria_padre column
+ * @method CategoriaQuery orderByIdcategoriapadre($order = Criteria::ASC) Order by the idcategoriapadre column
  * @method CategoriaQuery orderByCategoriaAlmacenable($order = Criteria::ASC) Order by the categoria_almacenable column
  *
  * @method CategoriaQuery groupByIdcategoria() Group by the idcategoria column
  * @method CategoriaQuery groupByCategoriaNombre() Group by the categoria_nombre column
- * @method CategoriaQuery groupByCategoriaPadre() Group by the categoria_padre column
+ * @method CategoriaQuery groupByIdcategoriapadre() Group by the idcategoriapadre column
  * @method CategoriaQuery groupByCategoriaAlmacenable() Group by the categoria_almacenable column
  *
  * @method CategoriaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CategoriaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method CategoriaQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method CategoriaQuery leftJoinCategoriaRelatedByIdcategoriapadre($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoriaRelatedByIdcategoriapadre relation
+ * @method CategoriaQuery rightJoinCategoriaRelatedByIdcategoriapadre($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoriaRelatedByIdcategoriapadre relation
+ * @method CategoriaQuery innerJoinCategoriaRelatedByIdcategoriapadre($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoriaRelatedByIdcategoriapadre relation
+ *
+ * @method CategoriaQuery leftJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+ * @method CategoriaQuery rightJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+ * @method CategoriaQuery innerJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+ *
  * @method Categoria findOne(PropelPDO $con = null) Return the first Categoria matching the query
  * @method Categoria findOneOrCreate(PropelPDO $con = null) Return the first Categoria matching the query, or a new Categoria object populated from the query conditions when no match is found
  *
  * @method Categoria findOneByCategoriaNombre(string $categoria_nombre) Return the first Categoria filtered by the categoria_nombre column
- * @method Categoria findOneByCategoriaPadre(int $categoria_padre) Return the first Categoria filtered by the categoria_padre column
+ * @method Categoria findOneByIdcategoriapadre(int $idcategoriapadre) Return the first Categoria filtered by the idcategoriapadre column
  * @method Categoria findOneByCategoriaAlmacenable(boolean $categoria_almacenable) Return the first Categoria filtered by the categoria_almacenable column
  *
  * @method array findByIdcategoria(int $idcategoria) Return Categoria objects filtered by the idcategoria column
  * @method array findByCategoriaNombre(string $categoria_nombre) Return Categoria objects filtered by the categoria_nombre column
- * @method array findByCategoriaPadre(int $categoria_padre) Return Categoria objects filtered by the categoria_padre column
+ * @method array findByIdcategoriapadre(int $idcategoriapadre) Return Categoria objects filtered by the idcategoriapadre column
  * @method array findByCategoriaAlmacenable(boolean $categoria_almacenable) Return Categoria objects filtered by the categoria_almacenable column
  *
  * @package    propel.generator.aersa.om
@@ -138,7 +146,7 @@ abstract class BaseCategoriaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcategoria`, `categoria_nombre`, `categoria_padre`, `categoria_almacenable` FROM `categoria` WHERE `idcategoria` = :p0';
+        $sql = 'SELECT `idcategoria`, `categoria_nombre`, `idcategoriapadre`, `categoria_almacenable` FROM `categoria` WHERE `idcategoria` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -299,17 +307,19 @@ abstract class BaseCategoriaQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the categoria_padre column
+     * Filter the query on the idcategoriapadre column
      *
      * Example usage:
      * <code>
-     * $query->filterByCategoriaPadre(1234); // WHERE categoria_padre = 1234
-     * $query->filterByCategoriaPadre(array(12, 34)); // WHERE categoria_padre IN (12, 34)
-     * $query->filterByCategoriaPadre(array('min' => 12)); // WHERE categoria_padre >= 12
-     * $query->filterByCategoriaPadre(array('max' => 12)); // WHERE categoria_padre <= 12
+     * $query->filterByIdcategoriapadre(1234); // WHERE idcategoriapadre = 1234
+     * $query->filterByIdcategoriapadre(array(12, 34)); // WHERE idcategoriapadre IN (12, 34)
+     * $query->filterByIdcategoriapadre(array('min' => 12)); // WHERE idcategoriapadre >= 12
+     * $query->filterByIdcategoriapadre(array('max' => 12)); // WHERE idcategoriapadre <= 12
      * </code>
      *
-     * @param     mixed $categoriaPadre The value to use as filter.
+     * @see       filterByCategoriaRelatedByIdcategoriapadre()
+     *
+     * @param     mixed $idcategoriapadre The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -317,16 +327,16 @@ abstract class BaseCategoriaQuery extends ModelCriteria
      *
      * @return CategoriaQuery The current query, for fluid interface
      */
-    public function filterByCategoriaPadre($categoriaPadre = null, $comparison = null)
+    public function filterByIdcategoriapadre($idcategoriapadre = null, $comparison = null)
     {
-        if (is_array($categoriaPadre)) {
+        if (is_array($idcategoriapadre)) {
             $useMinMax = false;
-            if (isset($categoriaPadre['min'])) {
-                $this->addUsingAlias(CategoriaPeer::CATEGORIA_PADRE, $categoriaPadre['min'], Criteria::GREATER_EQUAL);
+            if (isset($idcategoriapadre['min'])) {
+                $this->addUsingAlias(CategoriaPeer::IDCATEGORIAPADRE, $idcategoriapadre['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($categoriaPadre['max'])) {
-                $this->addUsingAlias(CategoriaPeer::CATEGORIA_PADRE, $categoriaPadre['max'], Criteria::LESS_EQUAL);
+            if (isset($idcategoriapadre['max'])) {
+                $this->addUsingAlias(CategoriaPeer::IDCATEGORIAPADRE, $idcategoriapadre['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -337,7 +347,7 @@ abstract class BaseCategoriaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CategoriaPeer::CATEGORIA_PADRE, $categoriaPadre, $comparison);
+        return $this->addUsingAlias(CategoriaPeer::IDCATEGORIAPADRE, $idcategoriapadre, $comparison);
     }
 
     /**
@@ -365,6 +375,156 @@ abstract class BaseCategoriaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CategoriaPeer::CATEGORIA_ALMACENABLE, $categoriaAlmacenable, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Categoria object
+     *
+     * @param   Categoria|PropelObjectCollection $categoria The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CategoriaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCategoriaRelatedByIdcategoriapadre($categoria, $comparison = null)
+    {
+        if ($categoria instanceof Categoria) {
+            return $this
+                ->addUsingAlias(CategoriaPeer::IDCATEGORIAPADRE, $categoria->getIdcategoria(), $comparison);
+        } elseif ($categoria instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CategoriaPeer::IDCATEGORIAPADRE, $categoria->toKeyValue('PrimaryKey', 'Idcategoria'), $comparison);
+        } else {
+            throw new PropelException('filterByCategoriaRelatedByIdcategoriapadre() only accepts arguments of type Categoria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CategoriaRelatedByIdcategoriapadre relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CategoriaQuery The current query, for fluid interface
+     */
+    public function joinCategoriaRelatedByIdcategoriapadre($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CategoriaRelatedByIdcategoriapadre');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CategoriaRelatedByIdcategoriapadre');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CategoriaRelatedByIdcategoriapadre relation Categoria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CategoriaQuery A secondary query class using the current class as primary query
+     */
+    public function useCategoriaRelatedByIdcategoriapadreQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCategoriaRelatedByIdcategoriapadre($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CategoriaRelatedByIdcategoriapadre', 'CategoriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Categoria object
+     *
+     * @param   Categoria|PropelObjectCollection $categoria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CategoriaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCategoriaRelatedByIdcategoria($categoria, $comparison = null)
+    {
+        if ($categoria instanceof Categoria) {
+            return $this
+                ->addUsingAlias(CategoriaPeer::IDCATEGORIA, $categoria->getIdcategoriapadre(), $comparison);
+        } elseif ($categoria instanceof PropelObjectCollection) {
+            return $this
+                ->useCategoriaRelatedByIdcategoriaQuery()
+                ->filterByPrimaryKeys($categoria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCategoriaRelatedByIdcategoria() only accepts arguments of type Categoria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CategoriaQuery The current query, for fluid interface
+     */
+    public function joinCategoriaRelatedByIdcategoria($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CategoriaRelatedByIdcategoria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CategoriaRelatedByIdcategoria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CategoriaRelatedByIdcategoria relation Categoria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CategoriaQuery A secondary query class using the current class as primary query
+     */
+    public function useCategoriaRelatedByIdcategoriaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCategoriaRelatedByIdcategoria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CategoriaRelatedByIdcategoria', 'CategoriaQuery');
     }
 
     /**

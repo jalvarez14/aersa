@@ -39,7 +39,7 @@ class RolTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idrol', 'Idrol', 'INTEGER', true, null, null);
-        $this->addColumn('rol_nombre', 'RolNombre', 'VARCHAR', true, 45, null);
+        $this->addColumn('rol_nombre', 'RolNombre', 'VARCHAR', true, 255, null);
         // validators
     } // initialize()
 

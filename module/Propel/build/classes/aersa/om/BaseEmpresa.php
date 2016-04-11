@@ -48,6 +48,25 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $empresa_razonsocial;
 
     /**
+     * The value for the empresa_estatus field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $empresa_estatus;
+
+    /**
+     * The value for the empresa_administracion field.
+     * @var        boolean
+     */
+    protected $empresa_administracion;
+
+    /**
+     * @var        PropelObjectCollection|Producto[] Collection to store aggregation of Producto objects.
+     */
+    protected $collProductos;
+    protected $collProductosPartial;
+
+    /**
      * @var        PropelObjectCollection|Proveedor[] Collection to store aggregation of Proveedor objects.
      */
     protected $collProveedors;
@@ -101,6 +120,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $productosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $proveedorsScheduledForDeletion = null;
 
     /**
@@ -126,6 +151,27 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $usuarioempresasScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->empresa_estatus = true;
+    }
+
+    /**
+     * Initializes internal state of BaseEmpresa object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idempresa] column value.
@@ -158,6 +204,28 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     {
 
         return $this->empresa_razonsocial;
+    }
+
+    /**
+     * Get the [empresa_estatus] column value.
+     *
+     * @return boolean
+     */
+    public function getEmpresaEstatus()
+    {
+
+        return $this->empresa_estatus;
+    }
+
+    /**
+     * Get the [empresa_administracion] column value.
+     *
+     * @return boolean
+     */
+    public function getEmpresaAdministracion()
+    {
+
+        return $this->empresa_administracion;
     }
 
     /**
@@ -224,6 +292,64 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     } // setEmpresaRazonsocial()
 
     /**
+     * Sets the value of the [empresa_estatus] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setEmpresaEstatus($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->empresa_estatus !== $v) {
+            $this->empresa_estatus = $v;
+            $this->modifiedColumns[] = EmpresaPeer::EMPRESA_ESTATUS;
+        }
+
+
+        return $this;
+    } // setEmpresaEstatus()
+
+    /**
+     * Sets the value of the [empresa_administracion] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setEmpresaAdministracion($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->empresa_administracion !== $v) {
+            $this->empresa_administracion = $v;
+            $this->modifiedColumns[] = EmpresaPeer::EMPRESA_ADMINISTRACION;
+        }
+
+
+        return $this;
+    } // setEmpresaAdministracion()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -233,6 +359,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->empresa_estatus !== true) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -258,6 +388,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->idempresa = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->empresa_nombrecomercial = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
             $this->empresa_razonsocial = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->empresa_estatus = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
+            $this->empresa_administracion = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -267,7 +399,7 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Empresa object", $e);
@@ -328,6 +460,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->collProductos = null;
 
             $this->collProveedors = null;
 
@@ -463,6 +597,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->productosScheduledForDeletion !== null) {
+                if (!$this->productosScheduledForDeletion->isEmpty()) {
+                    ProductoQuery::create()
+                        ->filterByPrimaryKeys($this->productosScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->productosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProductos !== null) {
+                foreach ($this->collProductos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->proveedorsScheduledForDeletion !== null) {
                 if (!$this->proveedorsScheduledForDeletion->isEmpty()) {
                     ProveedorQuery::create()
@@ -583,6 +734,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_RAZONSOCIAL)) {
             $modifiedColumns[':p' . $index++]  = '`empresa_razonsocial`';
         }
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_ESTATUS)) {
+            $modifiedColumns[':p' . $index++]  = '`empresa_estatus`';
+        }
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_ADMINISTRACION)) {
+            $modifiedColumns[':p' . $index++]  = '`empresa_administracion`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `empresa` (%s) VALUES (%s)',
@@ -602,6 +759,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                         break;
                     case '`empresa_razonsocial`':
                         $stmt->bindValue($identifier, $this->empresa_razonsocial, PDO::PARAM_STR);
+                        break;
+                    case '`empresa_estatus`':
+                        $stmt->bindValue($identifier, (int) $this->empresa_estatus, PDO::PARAM_INT);
+                        break;
+                    case '`empresa_administracion`':
+                        $stmt->bindValue($identifier, (int) $this->empresa_administracion, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -702,6 +865,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
 
 
+                if ($this->collProductos !== null) {
+                    foreach ($this->collProductos as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collProveedors !== null) {
                     foreach ($this->collProveedors as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -786,6 +957,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 2:
                 return $this->getEmpresaRazonsocial();
                 break;
+            case 3:
+                return $this->getEmpresaEstatus();
+                break;
+            case 4:
+                return $this->getEmpresaAdministracion();
+                break;
             default:
                 return null;
                 break;
@@ -818,6 +995,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $keys[0] => $this->getIdempresa(),
             $keys[1] => $this->getEmpresaNombrecomercial(),
             $keys[2] => $this->getEmpresaRazonsocial(),
+            $keys[3] => $this->getEmpresaEstatus(),
+            $keys[4] => $this->getEmpresaAdministracion(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -825,6 +1004,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->collProductos) {
+                $result['Productos'] = $this->collProductos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collProveedors) {
                 $result['Proveedors'] = $this->collProveedors->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -883,6 +1065,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 2:
                 $this->setEmpresaRazonsocial($value);
                 break;
+            case 3:
+                $this->setEmpresaEstatus($value);
+                break;
+            case 4:
+                $this->setEmpresaAdministracion($value);
+                break;
         } // switch()
     }
 
@@ -910,6 +1098,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setIdempresa($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setEmpresaNombrecomercial($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setEmpresaRazonsocial($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setEmpresaEstatus($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setEmpresaAdministracion($arr[$keys[4]]);
     }
 
     /**
@@ -924,6 +1114,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::IDEMPRESA)) $criteria->add(EmpresaPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_NOMBRECOMERCIAL)) $criteria->add(EmpresaPeer::EMPRESA_NOMBRECOMERCIAL, $this->empresa_nombrecomercial);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_RAZONSOCIAL)) $criteria->add(EmpresaPeer::EMPRESA_RAZONSOCIAL, $this->empresa_razonsocial);
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_ESTATUS)) $criteria->add(EmpresaPeer::EMPRESA_ESTATUS, $this->empresa_estatus);
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_ADMINISTRACION)) $criteria->add(EmpresaPeer::EMPRESA_ADMINISTRACION, $this->empresa_administracion);
 
         return $criteria;
     }
@@ -989,6 +1181,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     {
         $copyObj->setEmpresaNombrecomercial($this->getEmpresaNombrecomercial());
         $copyObj->setEmpresaRazonsocial($this->getEmpresaRazonsocial());
+        $copyObj->setEmpresaEstatus($this->getEmpresaEstatus());
+        $copyObj->setEmpresaAdministracion($this->getEmpresaAdministracion());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -996,6 +1190,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getProductos() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProducto($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getProveedors() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1088,6 +1288,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('Producto' == $relationName) {
+            $this->initProductos();
+        }
         if ('Proveedor' == $relationName) {
             $this->initProveedors();
         }
@@ -1103,6 +1306,256 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ('Usuarioempresa' == $relationName) {
             $this->initUsuarioempresas();
         }
+    }
+
+    /**
+     * Clears out the collProductos collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addProductos()
+     */
+    public function clearProductos()
+    {
+        $this->collProductos = null; // important to set this to null since that means it is uninitialized
+        $this->collProductosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProductos collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProductos($v = true)
+    {
+        $this->collProductosPartial = $v;
+    }
+
+    /**
+     * Initializes the collProductos collection.
+     *
+     * By default this just sets the collProductos collection to an empty array (like clearcollProductos());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProductos($overrideExisting = true)
+    {
+        if (null !== $this->collProductos && !$overrideExisting) {
+            return;
+        }
+        $this->collProductos = new PropelObjectCollection();
+        $this->collProductos->setModel('Producto');
+    }
+
+    /**
+     * Gets an array of Producto objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     * @throws PropelException
+     */
+    public function getProductos($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosPartial && !$this->isNew();
+        if (null === $this->collProductos || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProductos) {
+                // return empty collection
+                $this->initProductos();
+            } else {
+                $collProductos = ProductoQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProductosPartial && count($collProductos)) {
+                      $this->initProductos(false);
+
+                      foreach ($collProductos as $obj) {
+                        if (false == $this->collProductos->contains($obj)) {
+                          $this->collProductos->append($obj);
+                        }
+                      }
+
+                      $this->collProductosPartial = true;
+                    }
+
+                    $collProductos->getInternalIterator()->rewind();
+
+                    return $collProductos;
+                }
+
+                if ($partial && $this->collProductos) {
+                    foreach ($this->collProductos as $obj) {
+                        if ($obj->isNew()) {
+                            $collProductos[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProductos = $collProductos;
+                $this->collProductosPartial = false;
+            }
+        }
+
+        return $this->collProductos;
+    }
+
+    /**
+     * Sets a collection of Producto objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $productos A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setProductos(PropelCollection $productos, PropelPDO $con = null)
+    {
+        $productosToDelete = $this->getProductos(new Criteria(), $con)->diff($productos);
+
+
+        $this->productosScheduledForDeletion = $productosToDelete;
+
+        foreach ($productosToDelete as $productoRemoved) {
+            $productoRemoved->setEmpresa(null);
+        }
+
+        $this->collProductos = null;
+        foreach ($productos as $producto) {
+            $this->addProducto($producto);
+        }
+
+        $this->collProductos = $productos;
+        $this->collProductosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Producto objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Producto objects.
+     * @throws PropelException
+     */
+    public function countProductos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosPartial && !$this->isNew();
+        if (null === $this->collProductos || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProductos) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProductos());
+            }
+            $query = ProductoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collProductos);
+    }
+
+    /**
+     * Method called to associate a Producto object to this object
+     * through the Producto foreign key attribute.
+     *
+     * @param    Producto $l Producto
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addProducto(Producto $l)
+    {
+        if ($this->collProductos === null) {
+            $this->initProductos();
+            $this->collProductosPartial = true;
+        }
+
+        if (!in_array($l, $this->collProductos->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProducto($l);
+
+            if ($this->productosScheduledForDeletion and $this->productosScheduledForDeletion->contains($l)) {
+                $this->productosScheduledForDeletion->remove($this->productosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Producto $producto The producto object to add.
+     */
+    protected function doAddProducto($producto)
+    {
+        $this->collProductos[]= $producto;
+        $producto->setEmpresa($this);
+    }
+
+    /**
+     * @param	Producto $producto The producto object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeProducto($producto)
+    {
+        if ($this->getProductos()->contains($producto)) {
+            $this->collProductos->remove($this->collProductos->search($producto));
+            if (null === $this->productosScheduledForDeletion) {
+                $this->productosScheduledForDeletion = clone $this->collProductos;
+                $this->productosScheduledForDeletion->clear();
+            }
+            $this->productosScheduledForDeletion[]= clone $producto;
+            $producto->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Productos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     */
+    public function getProductosJoinUnidadmedida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductoQuery::create(null, $criteria);
+        $query->joinWith('Unidadmedida', $join_behavior);
+
+        return $this->getProductos($query, $con);
     }
 
     /**
@@ -2388,10 +2841,13 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $this->idempresa = null;
         $this->empresa_nombrecomercial = null;
         $this->empresa_razonsocial = null;
+        $this->empresa_estatus = null;
+        $this->empresa_administracion = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -2410,6 +2866,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collProductos) {
+                foreach ($this->collProductos as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collProveedors) {
                 foreach ($this->collProveedors as $o) {
                     $o->clearAllReferences($deep);
@@ -2439,6 +2900,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collProductos instanceof PropelCollection) {
+            $this->collProductos->clearIterator();
+        }
+        $this->collProductos = null;
         if ($this->collProveedors instanceof PropelCollection) {
             $this->collProveedors->clearIterator();
         }
