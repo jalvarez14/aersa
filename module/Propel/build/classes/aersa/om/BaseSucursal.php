@@ -36,16 +36,49 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $idsucursal;
 
     /**
+     * The value for the idempresa field.
+     * @var        int
+     */
+    protected $idempresa;
+
+    /**
      * The value for the sucursal_nombre field.
      * @var        string
      */
     protected $sucursal_nombre;
 
     /**
-     * The value for the idempresa field.
+     * The value for the sucursal_habilitarproductos field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $sucursal_habilitarproductos;
+
+    /**
+     * The value for the sucursal_habilitarrecetas field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $sucursal_habilitarrecetas;
+
+    /**
+     * The value for the sucursal_estatus field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $sucursal_estatus;
+
+    /**
+     * The value for the sucursal_anioactivo field.
      * @var        int
      */
-    protected $idempresa;
+    protected $sucursal_anioactivo;
+
+    /**
+     * The value for the sucursal_mesactivo field.
+     * @var        int
+     */
+    protected $sucursal_mesactivo;
 
     /**
      * @var        Empresa
@@ -145,6 +178,29 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $usuariosucursalsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->sucursal_habilitarproductos = true;
+        $this->sucursal_habilitarrecetas = true;
+        $this->sucursal_estatus = true;
+    }
+
+    /**
+     * Initializes internal state of BaseSucursal object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
+
+    /**
      * Get the [idsucursal] column value.
      *
      * @return int
@@ -153,6 +209,17 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     {
 
         return $this->idsucursal;
+    }
+
+    /**
+     * Get the [idempresa] column value.
+     *
+     * @return int
+     */
+    public function getIdempresa()
+    {
+
+        return $this->idempresa;
     }
 
     /**
@@ -167,14 +234,58 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [idempresa] column value.
+     * Get the [sucursal_habilitarproductos] column value.
+     *
+     * @return boolean
+     */
+    public function getSucursalHabilitarproductos()
+    {
+
+        return $this->sucursal_habilitarproductos;
+    }
+
+    /**
+     * Get the [sucursal_habilitarrecetas] column value.
+     *
+     * @return boolean
+     */
+    public function getSucursalHabilitarrecetas()
+    {
+
+        return $this->sucursal_habilitarrecetas;
+    }
+
+    /**
+     * Get the [sucursal_estatus] column value.
+     *
+     * @return boolean
+     */
+    public function getSucursalEstatus()
+    {
+
+        return $this->sucursal_estatus;
+    }
+
+    /**
+     * Get the [sucursal_anioactivo] column value.
      *
      * @return int
      */
-    public function getIdempresa()
+    public function getSucursalAnioactivo()
     {
 
-        return $this->idempresa;
+        return $this->sucursal_anioactivo;
+    }
+
+    /**
+     * Get the [sucursal_mesactivo] column value.
+     *
+     * @return int
+     */
+    public function getSucursalMesactivo()
+    {
+
+        return $this->sucursal_mesactivo;
     }
 
     /**
@@ -197,27 +308,6 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
         return $this;
     } // setIdsucursal()
-
-    /**
-     * Set the value of [sucursal_nombre] column.
-     *
-     * @param  string $v new value
-     * @return Sucursal The current object (for fluent API support)
-     */
-    public function setSucursalNombre($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->sucursal_nombre !== $v) {
-            $this->sucursal_nombre = $v;
-            $this->modifiedColumns[] = SucursalPeer::SUCURSAL_NOMBRE;
-        }
-
-
-        return $this;
-    } // setSucursalNombre()
 
     /**
      * Set the value of [idempresa] column.
@@ -245,6 +335,156 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     } // setIdempresa()
 
     /**
+     * Set the value of [sucursal_nombre] column.
+     *
+     * @param  string $v new value
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setSucursalNombre($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->sucursal_nombre !== $v) {
+            $this->sucursal_nombre = $v;
+            $this->modifiedColumns[] = SucursalPeer::SUCURSAL_NOMBRE;
+        }
+
+
+        return $this;
+    } // setSucursalNombre()
+
+    /**
+     * Sets the value of the [sucursal_habilitarproductos] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setSucursalHabilitarproductos($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->sucursal_habilitarproductos !== $v) {
+            $this->sucursal_habilitarproductos = $v;
+            $this->modifiedColumns[] = SucursalPeer::SUCURSAL_HABILITARPRODUCTOS;
+        }
+
+
+        return $this;
+    } // setSucursalHabilitarproductos()
+
+    /**
+     * Sets the value of the [sucursal_habilitarrecetas] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setSucursalHabilitarrecetas($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->sucursal_habilitarrecetas !== $v) {
+            $this->sucursal_habilitarrecetas = $v;
+            $this->modifiedColumns[] = SucursalPeer::SUCURSAL_HABILITARRECETAS;
+        }
+
+
+        return $this;
+    } // setSucursalHabilitarrecetas()
+
+    /**
+     * Sets the value of the [sucursal_estatus] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setSucursalEstatus($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->sucursal_estatus !== $v) {
+            $this->sucursal_estatus = $v;
+            $this->modifiedColumns[] = SucursalPeer::SUCURSAL_ESTATUS;
+        }
+
+
+        return $this;
+    } // setSucursalEstatus()
+
+    /**
+     * Set the value of [sucursal_anioactivo] column.
+     *
+     * @param  int $v new value
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setSucursalAnioactivo($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->sucursal_anioactivo !== $v) {
+            $this->sucursal_anioactivo = $v;
+            $this->modifiedColumns[] = SucursalPeer::SUCURSAL_ANIOACTIVO;
+        }
+
+
+        return $this;
+    } // setSucursalAnioactivo()
+
+    /**
+     * Set the value of [sucursal_mesactivo] column.
+     *
+     * @param  int $v new value
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setSucursalMesactivo($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->sucursal_mesactivo !== $v) {
+            $this->sucursal_mesactivo = $v;
+            $this->modifiedColumns[] = SucursalPeer::SUCURSAL_MESACTIVO;
+        }
+
+
+        return $this;
+    } // setSucursalMesactivo()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -254,6 +494,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->sucursal_habilitarproductos !== true) {
+                return false;
+            }
+
+            if ($this->sucursal_habilitarrecetas !== true) {
+                return false;
+            }
+
+            if ($this->sucursal_estatus !== true) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -277,8 +529,13 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         try {
 
             $this->idsucursal = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->sucursal_nombre = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->idempresa = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->sucursal_nombre = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->sucursal_habilitarproductos = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
+            $this->sucursal_habilitarrecetas = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
+            $this->sucursal_estatus = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+            $this->sucursal_anioactivo = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->sucursal_mesactivo = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -288,7 +545,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 3; // 3 = SucursalPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = SucursalPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Sucursal object", $e);
@@ -633,11 +890,26 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         if ($this->isColumnModified(SucursalPeer::IDSUCURSAL)) {
             $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
+        if ($this->isColumnModified(SucursalPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
+        }
         if ($this->isColumnModified(SucursalPeer::SUCURSAL_NOMBRE)) {
             $modifiedColumns[':p' . $index++]  = '`sucursal_nombre`';
         }
-        if ($this->isColumnModified(SucursalPeer::IDEMPRESA)) {
-            $modifiedColumns[':p' . $index++]  = '`idempresa`';
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_HABILITARPRODUCTOS)) {
+            $modifiedColumns[':p' . $index++]  = '`sucursal_habilitarproductos`';
+        }
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_HABILITARRECETAS)) {
+            $modifiedColumns[':p' . $index++]  = '`sucursal_habilitarrecetas`';
+        }
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_ESTATUS)) {
+            $modifiedColumns[':p' . $index++]  = '`sucursal_estatus`';
+        }
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_ANIOACTIVO)) {
+            $modifiedColumns[':p' . $index++]  = '`sucursal_anioactivo`';
+        }
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_MESACTIVO)) {
+            $modifiedColumns[':p' . $index++]  = '`sucursal_mesactivo`';
         }
 
         $sql = sprintf(
@@ -653,11 +925,26 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     case '`idsucursal`':
                         $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
                         break;
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
+                        break;
                     case '`sucursal_nombre`':
                         $stmt->bindValue($identifier, $this->sucursal_nombre, PDO::PARAM_STR);
                         break;
-                    case '`idempresa`':
-                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
+                    case '`sucursal_habilitarproductos`':
+                        $stmt->bindValue($identifier, (int) $this->sucursal_habilitarproductos, PDO::PARAM_INT);
+                        break;
+                    case '`sucursal_habilitarrecetas`':
+                        $stmt->bindValue($identifier, (int) $this->sucursal_habilitarrecetas, PDO::PARAM_INT);
+                        break;
+                    case '`sucursal_estatus`':
+                        $stmt->bindValue($identifier, (int) $this->sucursal_estatus, PDO::PARAM_INT);
+                        break;
+                    case '`sucursal_anioactivo`':
+                        $stmt->bindValue($identifier, $this->sucursal_anioactivo, PDO::PARAM_INT);
+                        break;
+                    case '`sucursal_mesactivo`':
+                        $stmt->bindValue($identifier, $this->sucursal_mesactivo, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -857,10 +1144,25 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 return $this->getIdsucursal();
                 break;
             case 1:
-                return $this->getSucursalNombre();
+                return $this->getIdempresa();
                 break;
             case 2:
-                return $this->getIdempresa();
+                return $this->getSucursalNombre();
+                break;
+            case 3:
+                return $this->getSucursalHabilitarproductos();
+                break;
+            case 4:
+                return $this->getSucursalHabilitarrecetas();
+                break;
+            case 5:
+                return $this->getSucursalEstatus();
+                break;
+            case 6:
+                return $this->getSucursalAnioactivo();
+                break;
+            case 7:
+                return $this->getSucursalMesactivo();
                 break;
             default:
                 return null;
@@ -892,8 +1194,13 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         $keys = SucursalPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getIdsucursal(),
-            $keys[1] => $this->getSucursalNombre(),
-            $keys[2] => $this->getIdempresa(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getSucursalNombre(),
+            $keys[3] => $this->getSucursalHabilitarproductos(),
+            $keys[4] => $this->getSucursalHabilitarrecetas(),
+            $keys[5] => $this->getSucursalEstatus(),
+            $keys[6] => $this->getSucursalAnioactivo(),
+            $keys[7] => $this->getSucursalMesactivo(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -960,10 +1267,25 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 $this->setIdsucursal($value);
                 break;
             case 1:
-                $this->setSucursalNombre($value);
+                $this->setIdempresa($value);
                 break;
             case 2:
-                $this->setIdempresa($value);
+                $this->setSucursalNombre($value);
+                break;
+            case 3:
+                $this->setSucursalHabilitarproductos($value);
+                break;
+            case 4:
+                $this->setSucursalHabilitarrecetas($value);
+                break;
+            case 5:
+                $this->setSucursalEstatus($value);
+                break;
+            case 6:
+                $this->setSucursalAnioactivo($value);
+                break;
+            case 7:
+                $this->setSucursalMesactivo($value);
                 break;
         } // switch()
     }
@@ -990,8 +1312,13 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         $keys = SucursalPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setIdsucursal($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setSucursalNombre($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdempresa($arr[$keys[2]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setSucursalNombre($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setSucursalHabilitarproductos($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setSucursalHabilitarrecetas($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setSucursalEstatus($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setSucursalAnioactivo($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setSucursalMesactivo($arr[$keys[7]]);
     }
 
     /**
@@ -1004,8 +1331,13 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         $criteria = new Criteria(SucursalPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(SucursalPeer::IDSUCURSAL)) $criteria->add(SucursalPeer::IDSUCURSAL, $this->idsucursal);
-        if ($this->isColumnModified(SucursalPeer::SUCURSAL_NOMBRE)) $criteria->add(SucursalPeer::SUCURSAL_NOMBRE, $this->sucursal_nombre);
         if ($this->isColumnModified(SucursalPeer::IDEMPRESA)) $criteria->add(SucursalPeer::IDEMPRESA, $this->idempresa);
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_NOMBRE)) $criteria->add(SucursalPeer::SUCURSAL_NOMBRE, $this->sucursal_nombre);
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_HABILITARPRODUCTOS)) $criteria->add(SucursalPeer::SUCURSAL_HABILITARPRODUCTOS, $this->sucursal_habilitarproductos);
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_HABILITARRECETAS)) $criteria->add(SucursalPeer::SUCURSAL_HABILITARRECETAS, $this->sucursal_habilitarrecetas);
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_ESTATUS)) $criteria->add(SucursalPeer::SUCURSAL_ESTATUS, $this->sucursal_estatus);
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_ANIOACTIVO)) $criteria->add(SucursalPeer::SUCURSAL_ANIOACTIVO, $this->sucursal_anioactivo);
+        if ($this->isColumnModified(SucursalPeer::SUCURSAL_MESACTIVO)) $criteria->add(SucursalPeer::SUCURSAL_MESACTIVO, $this->sucursal_mesactivo);
 
         return $criteria;
     }
@@ -1069,8 +1401,13 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setSucursalNombre($this->getSucursalNombre());
         $copyObj->setIdempresa($this->getIdempresa());
+        $copyObj->setSucursalNombre($this->getSucursalNombre());
+        $copyObj->setSucursalHabilitarproductos($this->getSucursalHabilitarproductos());
+        $copyObj->setSucursalHabilitarrecetas($this->getSucursalHabilitarrecetas());
+        $copyObj->setSucursalEstatus($this->getSucursalEstatus());
+        $copyObj->setSucursalAnioactivo($this->getSucursalAnioactivo());
+        $copyObj->setSucursalMesactivo($this->getSucursalMesactivo());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2904,12 +3241,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     public function clear()
     {
         $this->idsucursal = null;
-        $this->sucursal_nombre = null;
         $this->idempresa = null;
+        $this->sucursal_nombre = null;
+        $this->sucursal_habilitarproductos = null;
+        $this->sucursal_habilitarrecetas = null;
+        $this->sucursal_estatus = null;
+        $this->sucursal_anioactivo = null;
+        $this->sucursal_mesactivo = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

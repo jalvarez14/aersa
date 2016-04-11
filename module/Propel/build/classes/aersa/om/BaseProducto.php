@@ -36,6 +36,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
     protected $idproducto;
 
     /**
+     * The value for the idempresa field.
+     * @var        int
+     */
+    protected $idempresa;
+
+    /**
      * The value for the producto_nombre field.
      * @var        string
      */
@@ -88,6 +94,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
      * @var        double
      */
     protected $producto_costo;
+
+    /**
+     * The value for the producto_iva field.
+     * @var        boolean
+     */
+    protected $producto_iva;
+
+    /**
+     * @var        Empresa
+     */
+    protected $aEmpresa;
 
     /**
      * @var        Unidadmedida
@@ -210,6 +227,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [idempresa] column value.
+     *
+     * @return int
+     */
+    public function getIdempresa()
+    {
+
+        return $this->idempresa;
+    }
+
+    /**
      * Get the [producto_nombre] column value.
      *
      * @return string
@@ -309,6 +337,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [producto_iva] column value.
+     *
+     * @return boolean
+     */
+    public function getProductoIva()
+    {
+
+        return $this->producto_iva;
+    }
+
+    /**
      * Set the value of [idproducto] column.
      *
      * @param  int $v new value
@@ -328,6 +367,31 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
         return $this;
     } // setIdproducto()
+
+    /**
+     * Set the value of [idempresa] column.
+     *
+     * @param  int $v new value
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setIdempresa($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = ProductoPeer::IDEMPRESA;
+        }
+
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
+        }
+
+
+        return $this;
+    } // setIdempresa()
 
     /**
      * Set the value of [producto_nombre] column.
@@ -531,6 +595,35 @@ abstract class BaseProducto extends BaseObject implements Persistent
     } // setProductoCosto()
 
     /**
+     * Sets the value of the [producto_iva] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setProductoIva($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->producto_iva !== $v) {
+            $this->producto_iva = $v;
+            $this->modifiedColumns[] = ProductoPeer::PRODUCTO_IVA;
+        }
+
+
+        return $this;
+    } // setProductoIva()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -563,15 +656,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
         try {
 
             $this->idproducto = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->producto_nombre = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->idcategoria = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->idsubcategoria = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->producto_rendimiento = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->producto_ultimocosto = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
-            $this->idunidadmedida = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
-            $this->producto_baja = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
-            $this->producto_tipo = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->producto_costo = ($row[$startcol + 9] !== null) ? (double) $row[$startcol + 9] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->producto_nombre = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->idcategoria = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->idsubcategoria = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->producto_rendimiento = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->producto_ultimocosto = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->idunidadmedida = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->producto_baja = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->producto_tipo = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->producto_costo = ($row[$startcol + 10] !== null) ? (double) $row[$startcol + 10] : null;
+            $this->producto_iva = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -581,7 +676,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 10; // 10 = ProductoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = ProductoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Producto object", $e);
@@ -604,6 +699,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
+        }
         if ($this->aUnidadmedida !== null && $this->idunidadmedida !== $this->aUnidadmedida->getIdunidadmedida()) {
             $this->aUnidadmedida = null;
         }
@@ -646,6 +744,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aEmpresa = null;
             $this->aUnidadmedida = null;
             $this->collCodigobarrass = null;
 
@@ -778,6 +877,13 @@ abstract class BaseProducto extends BaseObject implements Persistent
             // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
+
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
+                }
+                $this->setEmpresa($this->aEmpresa);
+            }
 
             if ($this->aUnidadmedida !== null) {
                 if ($this->aUnidadmedida->isModified() || $this->aUnidadmedida->isNew()) {
@@ -945,6 +1051,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductoPeer::IDPRODUCTO)) {
             $modifiedColumns[':p' . $index++]  = '`idproducto`';
         }
+        if ($this->isColumnModified(ProductoPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
+        }
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_NOMBRE)) {
             $modifiedColumns[':p' . $index++]  = '`producto_nombre`';
         }
@@ -972,6 +1081,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_COSTO)) {
             $modifiedColumns[':p' . $index++]  = '`producto_costo`';
         }
+        if ($this->isColumnModified(ProductoPeer::PRODUCTO_IVA)) {
+            $modifiedColumns[':p' . $index++]  = '`producto_iva`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `producto` (%s) VALUES (%s)',
@@ -985,6 +1097,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
                 switch ($columnName) {
                     case '`idproducto`':
                         $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_INT);
+                        break;
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
                     case '`producto_nombre`':
                         $stmt->bindValue($identifier, $this->producto_nombre, PDO::PARAM_STR);
@@ -1012,6 +1127,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
                         break;
                     case '`producto_costo`':
                         $stmt->bindValue($identifier, $this->producto_costo, PDO::PARAM_STR);
+                        break;
+                    case '`producto_iva`':
+                        $stmt->bindValue($identifier, (int) $this->producto_iva, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1111,6 +1229,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
             // were passed to this object by their corresponding set
             // method.  This object relates to these object(s) by a
             // foreign key reference.
+
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
+                }
+            }
 
             if ($this->aUnidadmedida !== null) {
                 if (!$this->aUnidadmedida->validate($columns)) {
@@ -1219,31 +1343,37 @@ abstract class BaseProducto extends BaseObject implements Persistent
                 return $this->getIdproducto();
                 break;
             case 1:
-                return $this->getProductoNombre();
+                return $this->getIdempresa();
                 break;
             case 2:
-                return $this->getIdcategoria();
+                return $this->getProductoNombre();
                 break;
             case 3:
-                return $this->getIdsubcategoria();
+                return $this->getIdcategoria();
                 break;
             case 4:
-                return $this->getProductoRendimiento();
+                return $this->getIdsubcategoria();
                 break;
             case 5:
-                return $this->getProductoUltimocosto();
+                return $this->getProductoRendimiento();
                 break;
             case 6:
-                return $this->getIdunidadmedida();
+                return $this->getProductoUltimocosto();
                 break;
             case 7:
-                return $this->getProductoBaja();
+                return $this->getIdunidadmedida();
                 break;
             case 8:
-                return $this->getProductoTipo();
+                return $this->getProductoBaja();
                 break;
             case 9:
+                return $this->getProductoTipo();
+                break;
+            case 10:
                 return $this->getProductoCosto();
+                break;
+            case 11:
+                return $this->getProductoIva();
                 break;
             default:
                 return null;
@@ -1275,15 +1405,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $keys = ProductoPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getIdproducto(),
-            $keys[1] => $this->getProductoNombre(),
-            $keys[2] => $this->getIdcategoria(),
-            $keys[3] => $this->getIdsubcategoria(),
-            $keys[4] => $this->getProductoRendimiento(),
-            $keys[5] => $this->getProductoUltimocosto(),
-            $keys[6] => $this->getIdunidadmedida(),
-            $keys[7] => $this->getProductoBaja(),
-            $keys[8] => $this->getProductoTipo(),
-            $keys[9] => $this->getProductoCosto(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getProductoNombre(),
+            $keys[3] => $this->getIdcategoria(),
+            $keys[4] => $this->getIdsubcategoria(),
+            $keys[5] => $this->getProductoRendimiento(),
+            $keys[6] => $this->getProductoUltimocosto(),
+            $keys[7] => $this->getIdunidadmedida(),
+            $keys[8] => $this->getProductoBaja(),
+            $keys[9] => $this->getProductoTipo(),
+            $keys[10] => $this->getProductoCosto(),
+            $keys[11] => $this->getProductoIva(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1291,6 +1423,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUnidadmedida) {
                 $result['Unidadmedida'] = $this->aUnidadmedida->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
@@ -1353,31 +1488,37 @@ abstract class BaseProducto extends BaseObject implements Persistent
                 $this->setIdproducto($value);
                 break;
             case 1:
-                $this->setProductoNombre($value);
+                $this->setIdempresa($value);
                 break;
             case 2:
-                $this->setIdcategoria($value);
+                $this->setProductoNombre($value);
                 break;
             case 3:
-                $this->setIdsubcategoria($value);
+                $this->setIdcategoria($value);
                 break;
             case 4:
-                $this->setProductoRendimiento($value);
+                $this->setIdsubcategoria($value);
                 break;
             case 5:
-                $this->setProductoUltimocosto($value);
+                $this->setProductoRendimiento($value);
                 break;
             case 6:
-                $this->setIdunidadmedida($value);
+                $this->setProductoUltimocosto($value);
                 break;
             case 7:
-                $this->setProductoBaja($value);
+                $this->setIdunidadmedida($value);
                 break;
             case 8:
-                $this->setProductoTipo($value);
+                $this->setProductoBaja($value);
                 break;
             case 9:
+                $this->setProductoTipo($value);
+                break;
+            case 10:
                 $this->setProductoCosto($value);
+                break;
+            case 11:
+                $this->setProductoIva($value);
                 break;
         } // switch()
     }
@@ -1404,15 +1545,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $keys = ProductoPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setIdproducto($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setProductoNombre($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdcategoria($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdsubcategoria($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setProductoRendimiento($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setProductoUltimocosto($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setIdunidadmedida($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setProductoBaja($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setProductoTipo($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setProductoCosto($arr[$keys[9]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setProductoNombre($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdcategoria($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdsubcategoria($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setProductoRendimiento($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setProductoUltimocosto($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setIdunidadmedida($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setProductoBaja($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setProductoTipo($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setProductoCosto($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setProductoIva($arr[$keys[11]]);
     }
 
     /**
@@ -1425,6 +1568,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $criteria = new Criteria(ProductoPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(ProductoPeer::IDPRODUCTO)) $criteria->add(ProductoPeer::IDPRODUCTO, $this->idproducto);
+        if ($this->isColumnModified(ProductoPeer::IDEMPRESA)) $criteria->add(ProductoPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_NOMBRE)) $criteria->add(ProductoPeer::PRODUCTO_NOMBRE, $this->producto_nombre);
         if ($this->isColumnModified(ProductoPeer::IDCATEGORIA)) $criteria->add(ProductoPeer::IDCATEGORIA, $this->idcategoria);
         if ($this->isColumnModified(ProductoPeer::IDSUBCATEGORIA)) $criteria->add(ProductoPeer::IDSUBCATEGORIA, $this->idsubcategoria);
@@ -1434,6 +1578,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_BAJA)) $criteria->add(ProductoPeer::PRODUCTO_BAJA, $this->producto_baja);
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_TIPO)) $criteria->add(ProductoPeer::PRODUCTO_TIPO, $this->producto_tipo);
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_COSTO)) $criteria->add(ProductoPeer::PRODUCTO_COSTO, $this->producto_costo);
+        if ($this->isColumnModified(ProductoPeer::PRODUCTO_IVA)) $criteria->add(ProductoPeer::PRODUCTO_IVA, $this->producto_iva);
 
         return $criteria;
     }
@@ -1497,6 +1642,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setProductoNombre($this->getProductoNombre());
         $copyObj->setIdcategoria($this->getIdcategoria());
         $copyObj->setIdsubcategoria($this->getIdsubcategoria());
@@ -1506,6 +1652,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $copyObj->setProductoBaja($this->getProductoBaja());
         $copyObj->setProductoTipo($this->getProductoTipo());
         $copyObj->setProductoCosto($this->getProductoCosto());
+        $copyObj->setProductoIva($this->getProductoIva());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1604,6 +1751,58 @@ abstract class BaseProducto extends BaseObject implements Persistent
         }
 
         return self::$peer;
+    }
+
+    /**
+     * Declares an association between this object and a Empresa object.
+     *
+     * @param                  Empresa $v
+     * @return Producto The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEmpresa(Empresa $v = null)
+    {
+        if ($v === null) {
+            $this->setIdempresa(NULL);
+        } else {
+            $this->setIdempresa($v->getIdempresa());
+        }
+
+        $this->aEmpresa = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Empresa object, it will not be re-added.
+        if ($v !== null) {
+            $v->addProducto($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Empresa object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Empresa The associated Empresa object.
+     * @throws PropelException
+     */
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEmpresa->addProductos($this);
+             */
+        }
+
+        return $this->aEmpresa;
     }
 
     /**
@@ -3448,6 +3647,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
     public function clear()
     {
         $this->idproducto = null;
+        $this->idempresa = null;
         $this->producto_nombre = null;
         $this->idcategoria = null;
         $this->idsubcategoria = null;
@@ -3457,6 +3657,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $this->producto_baja = null;
         $this->producto_tipo = null;
         $this->producto_costo = null;
+        $this->producto_iva = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -3514,6 +3715,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
+            }
             if ($this->aUnidadmedida instanceof Persistent) {
               $this->aUnidadmedida->clearAllReferences($deep);
             }
@@ -3549,6 +3753,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collRequisiciondetalles->clearIterator();
         }
         $this->collRequisiciondetalles = null;
+        $this->aEmpresa = null;
         $this->aUnidadmedida = null;
     }
 

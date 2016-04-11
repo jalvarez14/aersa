@@ -9,14 +9,22 @@
  * @method EmpresaQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method EmpresaQuery orderByEmpresaNombrecomercial($order = Criteria::ASC) Order by the empresa_nombrecomercial column
  * @method EmpresaQuery orderByEmpresaRazonsocial($order = Criteria::ASC) Order by the empresa_razonsocial column
+ * @method EmpresaQuery orderByEmpresaEstatus($order = Criteria::ASC) Order by the empresa_estatus column
+ * @method EmpresaQuery orderByEmpresaAdministracion($order = Criteria::ASC) Order by the empresa_administracion column
  *
  * @method EmpresaQuery groupByIdempresa() Group by the idempresa column
  * @method EmpresaQuery groupByEmpresaNombrecomercial() Group by the empresa_nombrecomercial column
  * @method EmpresaQuery groupByEmpresaRazonsocial() Group by the empresa_razonsocial column
+ * @method EmpresaQuery groupByEmpresaEstatus() Group by the empresa_estatus column
+ * @method EmpresaQuery groupByEmpresaAdministracion() Group by the empresa_administracion column
  *
  * @method EmpresaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method EmpresaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method EmpresaQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method EmpresaQuery leftJoinProducto($relationAlias = null) Adds a LEFT JOIN clause to the query using the Producto relation
+ * @method EmpresaQuery rightJoinProducto($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Producto relation
+ * @method EmpresaQuery innerJoinProducto($relationAlias = null) Adds a INNER JOIN clause to the query using the Producto relation
  *
  * @method EmpresaQuery leftJoinProveedor($relationAlias = null) Adds a LEFT JOIN clause to the query using the Proveedor relation
  * @method EmpresaQuery rightJoinProveedor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Proveedor relation
@@ -43,10 +51,14 @@
  *
  * @method Empresa findOneByEmpresaNombrecomercial(string $empresa_nombrecomercial) Return the first Empresa filtered by the empresa_nombrecomercial column
  * @method Empresa findOneByEmpresaRazonsocial(string $empresa_razonsocial) Return the first Empresa filtered by the empresa_razonsocial column
+ * @method Empresa findOneByEmpresaEstatus(boolean $empresa_estatus) Return the first Empresa filtered by the empresa_estatus column
+ * @method Empresa findOneByEmpresaAdministracion(boolean $empresa_administracion) Return the first Empresa filtered by the empresa_administracion column
  *
  * @method array findByIdempresa(int $idempresa) Return Empresa objects filtered by the idempresa column
  * @method array findByEmpresaNombrecomercial(string $empresa_nombrecomercial) Return Empresa objects filtered by the empresa_nombrecomercial column
  * @method array findByEmpresaRazonsocial(string $empresa_razonsocial) Return Empresa objects filtered by the empresa_razonsocial column
+ * @method array findByEmpresaEstatus(boolean $empresa_estatus) Return Empresa objects filtered by the empresa_estatus column
+ * @method array findByEmpresaAdministracion(boolean $empresa_administracion) Return Empresa objects filtered by the empresa_administracion column
  *
  * @package    propel.generator.aersa.om
  */
@@ -154,7 +166,7 @@ abstract class BaseEmpresaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial` FROM `empresa` WHERE `idempresa` = :p0';
+        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial`, `empresa_estatus`, `empresa_administracion` FROM `empresa` WHERE `idempresa` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -341,6 +353,134 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EmpresaPeer::EMPRESA_RAZONSOCIAL, $empresaRazonsocial, $comparison);
+    }
+
+    /**
+     * Filter the query on the empresa_estatus column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmpresaEstatus(true); // WHERE empresa_estatus = true
+     * $query->filterByEmpresaEstatus('yes'); // WHERE empresa_estatus = true
+     * </code>
+     *
+     * @param     boolean|string $empresaEstatus The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function filterByEmpresaEstatus($empresaEstatus = null, $comparison = null)
+    {
+        if (is_string($empresaEstatus)) {
+            $empresaEstatus = in_array(strtolower($empresaEstatus), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(EmpresaPeer::EMPRESA_ESTATUS, $empresaEstatus, $comparison);
+    }
+
+    /**
+     * Filter the query on the empresa_administracion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmpresaAdministracion(true); // WHERE empresa_administracion = true
+     * $query->filterByEmpresaAdministracion('yes'); // WHERE empresa_administracion = true
+     * </code>
+     *
+     * @param     boolean|string $empresaAdministracion The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function filterByEmpresaAdministracion($empresaAdministracion = null, $comparison = null)
+    {
+        if (is_string($empresaAdministracion)) {
+            $empresaAdministracion = in_array(strtolower($empresaAdministracion), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(EmpresaPeer::EMPRESA_ADMINISTRACION, $empresaAdministracion, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Producto object
+     *
+     * @param   Producto|PropelObjectCollection $producto  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProducto($producto, $comparison = null)
+    {
+        if ($producto instanceof Producto) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $producto->getIdempresa(), $comparison);
+        } elseif ($producto instanceof PropelObjectCollection) {
+            return $this
+                ->useProductoQuery()
+                ->filterByPrimaryKeys($producto->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProducto() only accepts arguments of type Producto or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Producto relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinProducto($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Producto');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Producto');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Producto relation Producto object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductoQuery A secondary query class using the current class as primary query
+     */
+    public function useProductoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProducto($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Producto', 'ProductoQuery');
     }
 
     /**

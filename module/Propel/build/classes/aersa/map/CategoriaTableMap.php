@@ -40,7 +40,7 @@ class CategoriaTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idcategoria', 'Idcategoria', 'INTEGER', true, null, null);
         $this->addColumn('categoria_nombre', 'CategoriaNombre', 'VARCHAR', true, 255, null);
-        $this->addColumn('categoria_padre', 'CategoriaPadre', 'INTEGER', false, null, null);
+        $this->addForeignKey('idcategoriapadre', 'Idcategoriapadre', 'INTEGER', 'categoria', 'idcategoria', true, null, null);
         $this->addColumn('categoria_almacenable', 'CategoriaAlmacenable', 'BOOLEAN', false, 1, null);
         // validators
     } // initialize()
@@ -50,6 +50,8 @@ class CategoriaTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('CategoriaRelatedByIdcategoriapadre', 'Categoria', RelationMap::MANY_TO_ONE, array('idcategoriapadre' => 'idcategoria', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('CategoriaRelatedByIdcategoria', 'Categoria', RelationMap::ONE_TO_MANY, array('idcategoria' => 'idcategoriapadre', ), 'CASCADE', 'CASCADE', 'CategoriasRelatedByIdcategoria');
     } // buildRelations()
 
 } // CategoriaTableMap

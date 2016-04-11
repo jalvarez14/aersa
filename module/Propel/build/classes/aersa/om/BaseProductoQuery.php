@@ -7,6 +7,7 @@
  *
  *
  * @method ProductoQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
+ * @method ProductoQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method ProductoQuery orderByProductoNombre($order = Criteria::ASC) Order by the producto_nombre column
  * @method ProductoQuery orderByIdcategoria($order = Criteria::ASC) Order by the idcategoria column
  * @method ProductoQuery orderByIdsubcategoria($order = Criteria::ASC) Order by the idsubcategoria column
@@ -16,8 +17,10 @@
  * @method ProductoQuery orderByProductoBaja($order = Criteria::ASC) Order by the producto_baja column
  * @method ProductoQuery orderByProductoTipo($order = Criteria::ASC) Order by the producto_tipo column
  * @method ProductoQuery orderByProductoCosto($order = Criteria::ASC) Order by the producto_costo column
+ * @method ProductoQuery orderByProductoIva($order = Criteria::ASC) Order by the producto_iva column
  *
  * @method ProductoQuery groupByIdproducto() Group by the idproducto column
+ * @method ProductoQuery groupByIdempresa() Group by the idempresa column
  * @method ProductoQuery groupByProductoNombre() Group by the producto_nombre column
  * @method ProductoQuery groupByIdcategoria() Group by the idcategoria column
  * @method ProductoQuery groupByIdsubcategoria() Group by the idsubcategoria column
@@ -27,10 +30,15 @@
  * @method ProductoQuery groupByProductoBaja() Group by the producto_baja column
  * @method ProductoQuery groupByProductoTipo() Group by the producto_tipo column
  * @method ProductoQuery groupByProductoCosto() Group by the producto_costo column
+ * @method ProductoQuery groupByProductoIva() Group by the producto_iva column
  *
  * @method ProductoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProductoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method ProductoQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method ProductoQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
+ * @method ProductoQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
+ * @method ProductoQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
  *
  * @method ProductoQuery leftJoinUnidadmedida($relationAlias = null) Adds a LEFT JOIN clause to the query using the Unidadmedida relation
  * @method ProductoQuery rightJoinUnidadmedida($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Unidadmedida relation
@@ -67,6 +75,7 @@
  * @method Producto findOne(PropelPDO $con = null) Return the first Producto matching the query
  * @method Producto findOneOrCreate(PropelPDO $con = null) Return the first Producto matching the query, or a new Producto object populated from the query conditions when no match is found
  *
+ * @method Producto findOneByIdempresa(int $idempresa) Return the first Producto filtered by the idempresa column
  * @method Producto findOneByProductoNombre(string $producto_nombre) Return the first Producto filtered by the producto_nombre column
  * @method Producto findOneByIdcategoria(int $idcategoria) Return the first Producto filtered by the idcategoria column
  * @method Producto findOneByIdsubcategoria(int $idsubcategoria) Return the first Producto filtered by the idsubcategoria column
@@ -76,8 +85,10 @@
  * @method Producto findOneByProductoBaja(boolean $producto_baja) Return the first Producto filtered by the producto_baja column
  * @method Producto findOneByProductoTipo(string $producto_tipo) Return the first Producto filtered by the producto_tipo column
  * @method Producto findOneByProductoCosto(double $producto_costo) Return the first Producto filtered by the producto_costo column
+ * @method Producto findOneByProductoIva(boolean $producto_iva) Return the first Producto filtered by the producto_iva column
  *
  * @method array findByIdproducto(int $idproducto) Return Producto objects filtered by the idproducto column
+ * @method array findByIdempresa(int $idempresa) Return Producto objects filtered by the idempresa column
  * @method array findByProductoNombre(string $producto_nombre) Return Producto objects filtered by the producto_nombre column
  * @method array findByIdcategoria(int $idcategoria) Return Producto objects filtered by the idcategoria column
  * @method array findByIdsubcategoria(int $idsubcategoria) Return Producto objects filtered by the idsubcategoria column
@@ -87,6 +98,7 @@
  * @method array findByProductoBaja(boolean $producto_baja) Return Producto objects filtered by the producto_baja column
  * @method array findByProductoTipo(string $producto_tipo) Return Producto objects filtered by the producto_tipo column
  * @method array findByProductoCosto(double $producto_costo) Return Producto objects filtered by the producto_costo column
+ * @method array findByProductoIva(boolean $producto_iva) Return Producto objects filtered by the producto_iva column
  *
  * @package    propel.generator.aersa.om
  */
@@ -194,7 +206,7 @@ abstract class BaseProductoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idproducto`, `producto_nombre`, `idcategoria`, `idsubcategoria`, `producto_rendimiento`, `producto_ultimocosto`, `idunidadmedida`, `producto_baja`, `producto_tipo`, `producto_costo` FROM `producto` WHERE `idproducto` = :p0';
+        $sql = 'SELECT `idproducto`, `idempresa`, `producto_nombre`, `idcategoria`, `idsubcategoria`, `producto_rendimiento`, `producto_ultimocosto`, `idunidadmedida`, `producto_baja`, `producto_tipo`, `producto_costo`, `producto_iva` FROM `producto` WHERE `idproducto` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -323,6 +335,50 @@ abstract class BaseProductoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductoPeer::IDPRODUCTO, $idproducto, $comparison);
+    }
+
+    /**
+     * Filter the query on the idempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
+     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
+     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
+     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
+     * </code>
+     *
+     * @see       filterByEmpresa()
+     *
+     * @param     mixed $idempresa The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function filterByIdempresa($idempresa = null, $comparison = null)
+    {
+        if (is_array($idempresa)) {
+            $useMinMax = false;
+            if (isset($idempresa['min'])) {
+                $this->addUsingAlias(ProductoPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idempresa['max'])) {
+                $this->addUsingAlias(ProductoPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ProductoPeer::IDEMPRESA, $idempresa, $comparison);
     }
 
     /**
@@ -662,6 +718,109 @@ abstract class BaseProductoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductoPeer::PRODUCTO_COSTO, $productoCosto, $comparison);
+    }
+
+    /**
+     * Filter the query on the producto_iva column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByProductoIva(true); // WHERE producto_iva = true
+     * $query->filterByProductoIva('yes'); // WHERE producto_iva = true
+     * </code>
+     *
+     * @param     boolean|string $productoIva The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function filterByProductoIva($productoIva = null, $comparison = null)
+    {
+        if (is_string($productoIva)) {
+            $productoIva = in_array(strtolower($productoIva), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(ProductoPeer::PRODUCTO_IVA, $productoIva, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Empresa object
+     *
+     * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByEmpresa($empresa, $comparison = null)
+    {
+        if ($empresa instanceof Empresa) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDEMPRESA, $empresa->getIdempresa(), $comparison);
+        } elseif ($empresa instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(ProductoPeer::IDEMPRESA, $empresa->toKeyValue('PrimaryKey', 'Idempresa'), $comparison);
+        } else {
+            throw new PropelException('filterByEmpresa() only accepts arguments of type Empresa or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Empresa relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinEmpresa($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Empresa');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Empresa');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Empresa relation Empresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   EmpresaQuery A secondary query class using the current class as primary query
+     */
+    public function useEmpresaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEmpresa($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
     }
 
     /**

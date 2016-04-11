@@ -24,13 +24,13 @@ abstract class BaseEmpresaPeer
     const TM_CLASS = 'EmpresaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the idempresa field */
     const IDEMPRESA = 'empresa.idempresa';
@@ -40,6 +40,12 @@ abstract class BaseEmpresaPeer
 
     /** the column name for the empresa_razonsocial field */
     const EMPRESA_RAZONSOCIAL = 'empresa.empresa_razonsocial';
+
+    /** the column name for the empresa_estatus field */
+    const EMPRESA_ESTATUS = 'empresa.empresa_estatus';
+
+    /** the column name for the empresa_administracion field */
+    const EMPRESA_ADMINISTRACION = 'empresa.empresa_administracion';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -60,12 +66,12 @@ abstract class BaseEmpresaPeer
      * e.g. EmpresaPeer::$fieldNames[EmpresaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idempresa', 'EmpresaNombrecomercial', 'EmpresaRazonsocial', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa', 'empresaNombrecomercial', 'empresaRazonsocial', ),
-        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL, EmpresaPeer::EMPRESA_RAZONSOCIAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA', 'EMPRESA_NOMBRECOMERCIAL', 'EMPRESA_RAZONSOCIAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('idempresa', 'empresa_nombrecomercial', 'empresa_razonsocial', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Idempresa', 'EmpresaNombrecomercial', 'EmpresaRazonsocial', 'EmpresaEstatus', 'EmpresaAdministracion', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa', 'empresaNombrecomercial', 'empresaRazonsocial', 'empresaEstatus', 'empresaAdministracion', ),
+        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL, EmpresaPeer::EMPRESA_RAZONSOCIAL, EmpresaPeer::EMPRESA_ESTATUS, EmpresaPeer::EMPRESA_ADMINISTRACION, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA', 'EMPRESA_NOMBRECOMERCIAL', 'EMPRESA_RAZONSOCIAL', 'EMPRESA_ESTATUS', 'EMPRESA_ADMINISTRACION', ),
+        BasePeer::TYPE_FIELDNAME => array ('idempresa', 'empresa_nombrecomercial', 'empresa_razonsocial', 'empresa_estatus', 'empresa_administracion', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -75,12 +81,12 @@ abstract class BaseEmpresaPeer
      * e.g. EmpresaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idempresa' => 0, 'EmpresaNombrecomercial' => 1, 'EmpresaRazonsocial' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa' => 0, 'empresaNombrecomercial' => 1, 'empresaRazonsocial' => 2, ),
-        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA => 0, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL => 1, EmpresaPeer::EMPRESA_RAZONSOCIAL => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA' => 0, 'EMPRESA_NOMBRECOMERCIAL' => 1, 'EMPRESA_RAZONSOCIAL' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('idempresa' => 0, 'empresa_nombrecomercial' => 1, 'empresa_razonsocial' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Idempresa' => 0, 'EmpresaNombrecomercial' => 1, 'EmpresaRazonsocial' => 2, 'EmpresaEstatus' => 3, 'EmpresaAdministracion' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa' => 0, 'empresaNombrecomercial' => 1, 'empresaRazonsocial' => 2, 'empresaEstatus' => 3, 'empresaAdministracion' => 4, ),
+        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA => 0, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL => 1, EmpresaPeer::EMPRESA_RAZONSOCIAL => 2, EmpresaPeer::EMPRESA_ESTATUS => 3, EmpresaPeer::EMPRESA_ADMINISTRACION => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA' => 0, 'EMPRESA_NOMBRECOMERCIAL' => 1, 'EMPRESA_RAZONSOCIAL' => 2, 'EMPRESA_ESTATUS' => 3, 'EMPRESA_ADMINISTRACION' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idempresa' => 0, 'empresa_nombrecomercial' => 1, 'empresa_razonsocial' => 2, 'empresa_estatus' => 3, 'empresa_administracion' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -157,10 +163,14 @@ abstract class BaseEmpresaPeer
             $criteria->addSelectColumn(EmpresaPeer::IDEMPRESA);
             $criteria->addSelectColumn(EmpresaPeer::EMPRESA_NOMBRECOMERCIAL);
             $criteria->addSelectColumn(EmpresaPeer::EMPRESA_RAZONSOCIAL);
+            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_ESTATUS);
+            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_ADMINISTRACION);
         } else {
             $criteria->addSelectColumn($alias . '.idempresa');
             $criteria->addSelectColumn($alias . '.empresa_nombrecomercial');
             $criteria->addSelectColumn($alias . '.empresa_razonsocial');
+            $criteria->addSelectColumn($alias . '.empresa_estatus');
+            $criteria->addSelectColumn($alias . '.empresa_administracion');
         }
     }
 
@@ -365,6 +375,9 @@ abstract class BaseEmpresaPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in ProductoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductoPeer::clearInstancePool();
         // Invalidate objects in ProveedorPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ProveedorPeer::clearInstancePool();
@@ -713,6 +726,12 @@ abstract class BaseEmpresaPeer
         $objects = EmpresaPeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+
+            // delete related Producto objects
+            $criteria = new Criteria(ProductoPeer::DATABASE_NAME);
+
+            $criteria->add(ProductoPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += ProductoPeer::doDelete($criteria, $con);
 
             // delete related Proveedor objects
             $criteria = new Criteria(ProveedorPeer::DATABASE_NAME);

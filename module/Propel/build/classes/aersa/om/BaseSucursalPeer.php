@@ -24,22 +24,37 @@ abstract class BaseSucursalPeer
     const TM_CLASS = 'SucursalTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the idsucursal field */
     const IDSUCURSAL = 'sucursal.idsucursal';
 
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'sucursal.idempresa';
+
     /** the column name for the sucursal_nombre field */
     const SUCURSAL_NOMBRE = 'sucursal.sucursal_nombre';
 
-    /** the column name for the idempresa field */
-    const IDEMPRESA = 'sucursal.idempresa';
+    /** the column name for the sucursal_habilitarproductos field */
+    const SUCURSAL_HABILITARPRODUCTOS = 'sucursal.sucursal_habilitarproductos';
+
+    /** the column name for the sucursal_habilitarrecetas field */
+    const SUCURSAL_HABILITARRECETAS = 'sucursal.sucursal_habilitarrecetas';
+
+    /** the column name for the sucursal_estatus field */
+    const SUCURSAL_ESTATUS = 'sucursal.sucursal_estatus';
+
+    /** the column name for the sucursal_anioactivo field */
+    const SUCURSAL_ANIOACTIVO = 'sucursal.sucursal_anioactivo';
+
+    /** the column name for the sucursal_mesactivo field */
+    const SUCURSAL_MESACTIVO = 'sucursal.sucursal_mesactivo';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -60,12 +75,12 @@ abstract class BaseSucursalPeer
      * e.g. SucursalPeer::$fieldNames[SucursalPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idsucursal', 'SucursalNombre', 'Idempresa', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idsucursal', 'sucursalNombre', 'idempresa', ),
-        BasePeer::TYPE_COLNAME => array (SucursalPeer::IDSUCURSAL, SucursalPeer::SUCURSAL_NOMBRE, SucursalPeer::IDEMPRESA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDSUCURSAL', 'SUCURSAL_NOMBRE', 'IDEMPRESA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idsucursal', 'sucursal_nombre', 'idempresa', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Idsucursal', 'Idempresa', 'SucursalNombre', 'SucursalHabilitarproductos', 'SucursalHabilitarrecetas', 'SucursalEstatus', 'SucursalAnioactivo', 'SucursalMesactivo', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idsucursal', 'idempresa', 'sucursalNombre', 'sucursalHabilitarproductos', 'sucursalHabilitarrecetas', 'sucursalEstatus', 'sucursalAnioactivo', 'sucursalMesactivo', ),
+        BasePeer::TYPE_COLNAME => array (SucursalPeer::IDSUCURSAL, SucursalPeer::IDEMPRESA, SucursalPeer::SUCURSAL_NOMBRE, SucursalPeer::SUCURSAL_HABILITARPRODUCTOS, SucursalPeer::SUCURSAL_HABILITARRECETAS, SucursalPeer::SUCURSAL_ESTATUS, SucursalPeer::SUCURSAL_ANIOACTIVO, SucursalPeer::SUCURSAL_MESACTIVO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDSUCURSAL', 'IDEMPRESA', 'SUCURSAL_NOMBRE', 'SUCURSAL_HABILITARPRODUCTOS', 'SUCURSAL_HABILITARRECETAS', 'SUCURSAL_ESTATUS', 'SUCURSAL_ANIOACTIVO', 'SUCURSAL_MESACTIVO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idsucursal', 'idempresa', 'sucursal_nombre', 'sucursal_habilitarproductos', 'sucursal_habilitarrecetas', 'sucursal_estatus', 'sucursal_anioactivo', 'sucursal_mesactivo', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -75,12 +90,12 @@ abstract class BaseSucursalPeer
      * e.g. SucursalPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idsucursal' => 0, 'SucursalNombre' => 1, 'Idempresa' => 2, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idsucursal' => 0, 'sucursalNombre' => 1, 'idempresa' => 2, ),
-        BasePeer::TYPE_COLNAME => array (SucursalPeer::IDSUCURSAL => 0, SucursalPeer::SUCURSAL_NOMBRE => 1, SucursalPeer::IDEMPRESA => 2, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDSUCURSAL' => 0, 'SUCURSAL_NOMBRE' => 1, 'IDEMPRESA' => 2, ),
-        BasePeer::TYPE_FIELDNAME => array ('idsucursal' => 0, 'sucursal_nombre' => 1, 'idempresa' => 2, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, )
+        BasePeer::TYPE_PHPNAME => array ('Idsucursal' => 0, 'Idempresa' => 1, 'SucursalNombre' => 2, 'SucursalHabilitarproductos' => 3, 'SucursalHabilitarrecetas' => 4, 'SucursalEstatus' => 5, 'SucursalAnioactivo' => 6, 'SucursalMesactivo' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idsucursal' => 0, 'idempresa' => 1, 'sucursalNombre' => 2, 'sucursalHabilitarproductos' => 3, 'sucursalHabilitarrecetas' => 4, 'sucursalEstatus' => 5, 'sucursalAnioactivo' => 6, 'sucursalMesactivo' => 7, ),
+        BasePeer::TYPE_COLNAME => array (SucursalPeer::IDSUCURSAL => 0, SucursalPeer::IDEMPRESA => 1, SucursalPeer::SUCURSAL_NOMBRE => 2, SucursalPeer::SUCURSAL_HABILITARPRODUCTOS => 3, SucursalPeer::SUCURSAL_HABILITARRECETAS => 4, SucursalPeer::SUCURSAL_ESTATUS => 5, SucursalPeer::SUCURSAL_ANIOACTIVO => 6, SucursalPeer::SUCURSAL_MESACTIVO => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDSUCURSAL' => 0, 'IDEMPRESA' => 1, 'SUCURSAL_NOMBRE' => 2, 'SUCURSAL_HABILITARPRODUCTOS' => 3, 'SUCURSAL_HABILITARRECETAS' => 4, 'SUCURSAL_ESTATUS' => 5, 'SUCURSAL_ANIOACTIVO' => 6, 'SUCURSAL_MESACTIVO' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('idsucursal' => 0, 'idempresa' => 1, 'sucursal_nombre' => 2, 'sucursal_habilitarproductos' => 3, 'sucursal_habilitarrecetas' => 4, 'sucursal_estatus' => 5, 'sucursal_anioactivo' => 6, 'sucursal_mesactivo' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -155,12 +170,22 @@ abstract class BaseSucursalPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(SucursalPeer::IDSUCURSAL);
-            $criteria->addSelectColumn(SucursalPeer::SUCURSAL_NOMBRE);
             $criteria->addSelectColumn(SucursalPeer::IDEMPRESA);
+            $criteria->addSelectColumn(SucursalPeer::SUCURSAL_NOMBRE);
+            $criteria->addSelectColumn(SucursalPeer::SUCURSAL_HABILITARPRODUCTOS);
+            $criteria->addSelectColumn(SucursalPeer::SUCURSAL_HABILITARRECETAS);
+            $criteria->addSelectColumn(SucursalPeer::SUCURSAL_ESTATUS);
+            $criteria->addSelectColumn(SucursalPeer::SUCURSAL_ANIOACTIVO);
+            $criteria->addSelectColumn(SucursalPeer::SUCURSAL_MESACTIVO);
         } else {
             $criteria->addSelectColumn($alias . '.idsucursal');
-            $criteria->addSelectColumn($alias . '.sucursal_nombre');
             $criteria->addSelectColumn($alias . '.idempresa');
+            $criteria->addSelectColumn($alias . '.sucursal_nombre');
+            $criteria->addSelectColumn($alias . '.sucursal_habilitarproductos');
+            $criteria->addSelectColumn($alias . '.sucursal_habilitarrecetas');
+            $criteria->addSelectColumn($alias . '.sucursal_estatus');
+            $criteria->addSelectColumn($alias . '.sucursal_anioactivo');
+            $criteria->addSelectColumn($alias . '.sucursal_mesactivo');
         }
     }
 

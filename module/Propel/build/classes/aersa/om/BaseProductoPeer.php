@@ -24,16 +24,19 @@ abstract class BaseProductoPeer
     const TM_CLASS = 'ProductoTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 12;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /** the column name for the idproducto field */
     const IDPRODUCTO = 'producto.idproducto';
+
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'producto.idempresa';
 
     /** the column name for the producto_nombre field */
     const PRODUCTO_NOMBRE = 'producto.producto_nombre';
@@ -62,6 +65,9 @@ abstract class BaseProductoPeer
     /** the column name for the producto_costo field */
     const PRODUCTO_COSTO = 'producto.producto_costo';
 
+    /** the column name for the producto_iva field */
+    const PRODUCTO_IVA = 'producto.producto_iva';
+
     /** The enumerated values for the producto_tipo field */
     const PRODUCTO_TIPO_SIMPLE = 'simple';
     const PRODUCTO_TIPO_SUBRECETA = 'subreceta';
@@ -86,12 +92,12 @@ abstract class BaseProductoPeer
      * e.g. ProductoPeer::$fieldNames[ProductoPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproducto', 'ProductoNombre', 'Idcategoria', 'Idsubcategoria', 'ProductoRendimiento', 'ProductoUltimocosto', 'Idunidadmedida', 'ProductoBaja', 'ProductoTipo', 'ProductoCosto', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto', 'productoNombre', 'idcategoria', 'idsubcategoria', 'productoRendimiento', 'productoUltimocosto', 'idunidadmedida', 'productoBaja', 'productoTipo', 'productoCosto', ),
-        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO, ProductoPeer::PRODUCTO_NOMBRE, ProductoPeer::IDCATEGORIA, ProductoPeer::IDSUBCATEGORIA, ProductoPeer::PRODUCTO_RENDIMIENTO, ProductoPeer::PRODUCTO_ULTIMOCOSTO, ProductoPeer::IDUNIDADMEDIDA, ProductoPeer::PRODUCTO_BAJA, ProductoPeer::PRODUCTO_TIPO, ProductoPeer::PRODUCTO_COSTO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO', 'PRODUCTO_NOMBRE', 'IDCATEGORIA', 'IDSUBCATEGORIA', 'PRODUCTO_RENDIMIENTO', 'PRODUCTO_ULTIMOCOSTO', 'IDUNIDADMEDIDA', 'PRODUCTO_BAJA', 'PRODUCTO_TIPO', 'PRODUCTO_COSTO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idproducto', 'producto_nombre', 'idcategoria', 'idsubcategoria', 'producto_rendimiento', 'producto_ultimocosto', 'idunidadmedida', 'producto_baja', 'producto_tipo', 'producto_costo', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Idproducto', 'Idempresa', 'ProductoNombre', 'Idcategoria', 'Idsubcategoria', 'ProductoRendimiento', 'ProductoUltimocosto', 'Idunidadmedida', 'ProductoBaja', 'ProductoTipo', 'ProductoCosto', 'ProductoIva', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto', 'idempresa', 'productoNombre', 'idcategoria', 'idsubcategoria', 'productoRendimiento', 'productoUltimocosto', 'idunidadmedida', 'productoBaja', 'productoTipo', 'productoCosto', 'productoIva', ),
+        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO, ProductoPeer::IDEMPRESA, ProductoPeer::PRODUCTO_NOMBRE, ProductoPeer::IDCATEGORIA, ProductoPeer::IDSUBCATEGORIA, ProductoPeer::PRODUCTO_RENDIMIENTO, ProductoPeer::PRODUCTO_ULTIMOCOSTO, ProductoPeer::IDUNIDADMEDIDA, ProductoPeer::PRODUCTO_BAJA, ProductoPeer::PRODUCTO_TIPO, ProductoPeer::PRODUCTO_COSTO, ProductoPeer::PRODUCTO_IVA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO', 'IDEMPRESA', 'PRODUCTO_NOMBRE', 'IDCATEGORIA', 'IDSUBCATEGORIA', 'PRODUCTO_RENDIMIENTO', 'PRODUCTO_ULTIMOCOSTO', 'IDUNIDADMEDIDA', 'PRODUCTO_BAJA', 'PRODUCTO_TIPO', 'PRODUCTO_COSTO', 'PRODUCTO_IVA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idproducto', 'idempresa', 'producto_nombre', 'idcategoria', 'idsubcategoria', 'producto_rendimiento', 'producto_ultimocosto', 'idunidadmedida', 'producto_baja', 'producto_tipo', 'producto_costo', 'producto_iva', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -101,12 +107,12 @@ abstract class BaseProductoPeer
      * e.g. ProductoPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproducto' => 0, 'ProductoNombre' => 1, 'Idcategoria' => 2, 'Idsubcategoria' => 3, 'ProductoRendimiento' => 4, 'ProductoUltimocosto' => 5, 'Idunidadmedida' => 6, 'ProductoBaja' => 7, 'ProductoTipo' => 8, 'ProductoCosto' => 9, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto' => 0, 'productoNombre' => 1, 'idcategoria' => 2, 'idsubcategoria' => 3, 'productoRendimiento' => 4, 'productoUltimocosto' => 5, 'idunidadmedida' => 6, 'productoBaja' => 7, 'productoTipo' => 8, 'productoCosto' => 9, ),
-        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO => 0, ProductoPeer::PRODUCTO_NOMBRE => 1, ProductoPeer::IDCATEGORIA => 2, ProductoPeer::IDSUBCATEGORIA => 3, ProductoPeer::PRODUCTO_RENDIMIENTO => 4, ProductoPeer::PRODUCTO_ULTIMOCOSTO => 5, ProductoPeer::IDUNIDADMEDIDA => 6, ProductoPeer::PRODUCTO_BAJA => 7, ProductoPeer::PRODUCTO_TIPO => 8, ProductoPeer::PRODUCTO_COSTO => 9, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO' => 0, 'PRODUCTO_NOMBRE' => 1, 'IDCATEGORIA' => 2, 'IDSUBCATEGORIA' => 3, 'PRODUCTO_RENDIMIENTO' => 4, 'PRODUCTO_ULTIMOCOSTO' => 5, 'IDUNIDADMEDIDA' => 6, 'PRODUCTO_BAJA' => 7, 'PRODUCTO_TIPO' => 8, 'PRODUCTO_COSTO' => 9, ),
-        BasePeer::TYPE_FIELDNAME => array ('idproducto' => 0, 'producto_nombre' => 1, 'idcategoria' => 2, 'idsubcategoria' => 3, 'producto_rendimiento' => 4, 'producto_ultimocosto' => 5, 'idunidadmedida' => 6, 'producto_baja' => 7, 'producto_tipo' => 8, 'producto_costo' => 9, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        BasePeer::TYPE_PHPNAME => array ('Idproducto' => 0, 'Idempresa' => 1, 'ProductoNombre' => 2, 'Idcategoria' => 3, 'Idsubcategoria' => 4, 'ProductoRendimiento' => 5, 'ProductoUltimocosto' => 6, 'Idunidadmedida' => 7, 'ProductoBaja' => 8, 'ProductoTipo' => 9, 'ProductoCosto' => 10, 'ProductoIva' => 11, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto' => 0, 'idempresa' => 1, 'productoNombre' => 2, 'idcategoria' => 3, 'idsubcategoria' => 4, 'productoRendimiento' => 5, 'productoUltimocosto' => 6, 'idunidadmedida' => 7, 'productoBaja' => 8, 'productoTipo' => 9, 'productoCosto' => 10, 'productoIva' => 11, ),
+        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO => 0, ProductoPeer::IDEMPRESA => 1, ProductoPeer::PRODUCTO_NOMBRE => 2, ProductoPeer::IDCATEGORIA => 3, ProductoPeer::IDSUBCATEGORIA => 4, ProductoPeer::PRODUCTO_RENDIMIENTO => 5, ProductoPeer::PRODUCTO_ULTIMOCOSTO => 6, ProductoPeer::IDUNIDADMEDIDA => 7, ProductoPeer::PRODUCTO_BAJA => 8, ProductoPeer::PRODUCTO_TIPO => 9, ProductoPeer::PRODUCTO_COSTO => 10, ProductoPeer::PRODUCTO_IVA => 11, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO' => 0, 'IDEMPRESA' => 1, 'PRODUCTO_NOMBRE' => 2, 'IDCATEGORIA' => 3, 'IDSUBCATEGORIA' => 4, 'PRODUCTO_RENDIMIENTO' => 5, 'PRODUCTO_ULTIMOCOSTO' => 6, 'IDUNIDADMEDIDA' => 7, 'PRODUCTO_BAJA' => 8, 'PRODUCTO_TIPO' => 9, 'PRODUCTO_COSTO' => 10, 'PRODUCTO_IVA' => 11, ),
+        BasePeer::TYPE_FIELDNAME => array ('idproducto' => 0, 'idempresa' => 1, 'producto_nombre' => 2, 'idcategoria' => 3, 'idsubcategoria' => 4, 'producto_rendimiento' => 5, 'producto_ultimocosto' => 6, 'idunidadmedida' => 7, 'producto_baja' => 8, 'producto_tipo' => 9, 'producto_costo' => 10, 'producto_iva' => 11, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /** The enumerated values for this table */
@@ -235,6 +241,7 @@ abstract class BaseProductoPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(ProductoPeer::IDPRODUCTO);
+            $criteria->addSelectColumn(ProductoPeer::IDEMPRESA);
             $criteria->addSelectColumn(ProductoPeer::PRODUCTO_NOMBRE);
             $criteria->addSelectColumn(ProductoPeer::IDCATEGORIA);
             $criteria->addSelectColumn(ProductoPeer::IDSUBCATEGORIA);
@@ -244,8 +251,10 @@ abstract class BaseProductoPeer
             $criteria->addSelectColumn(ProductoPeer::PRODUCTO_BAJA);
             $criteria->addSelectColumn(ProductoPeer::PRODUCTO_TIPO);
             $criteria->addSelectColumn(ProductoPeer::PRODUCTO_COSTO);
+            $criteria->addSelectColumn(ProductoPeer::PRODUCTO_IVA);
         } else {
             $criteria->addSelectColumn($alias . '.idproducto');
+            $criteria->addSelectColumn($alias . '.idempresa');
             $criteria->addSelectColumn($alias . '.producto_nombre');
             $criteria->addSelectColumn($alias . '.idcategoria');
             $criteria->addSelectColumn($alias . '.idsubcategoria');
@@ -255,6 +264,7 @@ abstract class BaseProductoPeer
             $criteria->addSelectColumn($alias . '.producto_baja');
             $criteria->addSelectColumn($alias . '.producto_tipo');
             $criteria->addSelectColumn($alias . '.producto_costo');
+            $criteria->addSelectColumn($alias . '.producto_iva');
         }
     }
 
@@ -578,6 +588,57 @@ abstract class BaseProductoPeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(ProductoPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            ProductoPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(ProductoPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(ProductoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(ProductoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related Unidadmedida table
      *
      * @param      Criteria $criteria
@@ -625,6 +686,73 @@ abstract class BaseProductoPeer
         $stmt->closeCursor();
 
         return $count;
+    }
+
+
+    /**
+     * Selects a collection of Producto objects pre-filled with their Empresa objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Producto objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(ProductoPeer::DATABASE_NAME);
+        }
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol = ProductoPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(ProductoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = ProductoPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductoPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = ProductoPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                ProductoPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Producto) to $obj2 (Empresa)
+                $obj2->addProducto($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
 
@@ -731,6 +859,8 @@ abstract class BaseProductoPeer
             $con = Propel::getConnection(ProductoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(ProductoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
         $criteria->addJoin(ProductoPeer::IDUNIDADMEDIDA, UnidadmedidaPeer::IDUNIDADMEDIDA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -767,8 +897,13 @@ abstract class BaseProductoPeer
         ProductoPeer::addSelectColumns($criteria);
         $startcol2 = ProductoPeer::NUM_HYDRATE_COLUMNS;
 
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
         UnidadmedidaPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + UnidadmedidaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol4 = $startcol3 + UnidadmedidaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(ProductoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(ProductoPeer::IDUNIDADMEDIDA, UnidadmedidaPeer::IDUNIDADMEDIDA, $join_behavior);
 
@@ -789,23 +924,291 @@ abstract class BaseProductoPeer
                 ProductoPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Unidadmedida rows
+            // Add objects for joined Empresa rows
 
-            $key2 = UnidadmedidaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = UnidadmedidaPeer::getInstanceFromPool($key2);
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (Producto) to the collection in $obj2 (Empresa)
+                $obj2->addProducto($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Unidadmedida rows
+
+            $key3 = UnidadmedidaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = UnidadmedidaPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
                     $cls = UnidadmedidaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UnidadmedidaPeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
+
+                // Add the $obj1 (Producto) to the collection in $obj3 (Unidadmedida)
+                $obj3->addProducto($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(ProductoPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            ProductoPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(ProductoPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(ProductoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(ProductoPeer::IDUNIDADMEDIDA, UnidadmedidaPeer::IDUNIDADMEDIDA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Unidadmedida table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptUnidadmedida(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(ProductoPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            ProductoPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(ProductoPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(ProductoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(ProductoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Producto objects pre-filled with all related objects except Empresa.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Producto objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(ProductoPeer::DATABASE_NAME);
+        }
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol2 = ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        UnidadmedidaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UnidadmedidaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(ProductoPeer::IDUNIDADMEDIDA, UnidadmedidaPeer::IDUNIDADMEDIDA, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = ProductoPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductoPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = ProductoPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                ProductoPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Unidadmedida rows
+
+                $key2 = UnidadmedidaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = UnidadmedidaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = UnidadmedidaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
                     UnidadmedidaPeer::addInstanceToPool($obj2, $key2);
-                } // if obj2 loaded
+                } // if $obj2 already loaded
 
                 // Add the $obj1 (Producto) to the collection in $obj2 (Unidadmedida)
                 $obj2->addProducto($obj1);
-            } // if joined row not null
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Producto objects pre-filled with all related objects except Unidadmedida.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Producto objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptUnidadmedida(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(ProductoPeer::DATABASE_NAME);
+        }
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol2 = ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(ProductoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = ProductoPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductoPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = ProductoPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                ProductoPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Empresa rows
+
+                $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Producto) to the collection in $obj2 (Empresa)
+                $obj2->addProducto($obj1);
+
+            } // if joined row is not null
 
             $results[] = $obj1;
         }

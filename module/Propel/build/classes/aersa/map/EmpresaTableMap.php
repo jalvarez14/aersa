@@ -41,6 +41,8 @@ class EmpresaTableMap extends TableMap
         $this->addPrimaryKey('idempresa', 'Idempresa', 'INTEGER', true, null, null);
         $this->addColumn('empresa_nombrecomercial', 'EmpresaNombrecomercial', 'VARCHAR', true, 255, null);
         $this->addColumn('empresa_razonsocial', 'EmpresaRazonsocial', 'VARCHAR', true, 255, null);
+        $this->addColumn('empresa_estatus', 'EmpresaEstatus', 'BOOLEAN', false, 1, true);
+        $this->addColumn('empresa_administracion', 'EmpresaAdministracion', 'BOOLEAN', false, 1, null);
         // validators
     } // initialize()
 
@@ -49,6 +51,7 @@ class EmpresaTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Producto', 'Producto', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Productos');
         $this->addRelation('Proveedor', 'Proveedor', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Proveedors');
         $this->addRelation('Requisicion', 'Requisicion', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Requisicions');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Sucursals');

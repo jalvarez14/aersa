@@ -39,6 +39,7 @@ class ProductoTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idproducto', 'Idproducto', 'INTEGER', true, null, null);
+        $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addColumn('producto_nombre', 'ProductoNombre', 'LONGVARCHAR', true, null, null);
         $this->addColumn('idcategoria', 'Idcategoria', 'INTEGER', false, null, null);
         $this->addColumn('idsubcategoria', 'Idsubcategoria', 'INTEGER', false, null, null);
@@ -53,6 +54,7 @@ class ProductoTableMap extends TableMap
   2 => 'plu',
 ));
         $this->addColumn('producto_costo', 'ProductoCosto', 'FLOAT', false, null, null);
+        $this->addColumn('producto_iva', 'ProductoIva', 'BOOLEAN', true, 1, null);
         // validators
     } // initialize()
 
@@ -61,6 +63,7 @@ class ProductoTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Unidadmedida', 'Unidadmedida', RelationMap::MANY_TO_ONE, array('idunidadmedida' => 'idunidadmedida', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Codigobarras', 'Codigobarras', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Codigobarrass');
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Compradetalles');

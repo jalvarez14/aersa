@@ -38,8 +38,8 @@ abstract class BaseCategoriaPeer
     /** the column name for the categoria_nombre field */
     const CATEGORIA_NOMBRE = 'categoria.categoria_nombre';
 
-    /** the column name for the categoria_padre field */
-    const CATEGORIA_PADRE = 'categoria.categoria_padre';
+    /** the column name for the idcategoriapadre field */
+    const IDCATEGORIAPADRE = 'categoria.idcategoriapadre';
 
     /** the column name for the categoria_almacenable field */
     const CATEGORIA_ALMACENABLE = 'categoria.categoria_almacenable';
@@ -63,11 +63,11 @@ abstract class BaseCategoriaPeer
      * e.g. CategoriaPeer::$fieldNames[CategoriaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcategoria', 'CategoriaNombre', 'CategoriaPadre', 'CategoriaAlmacenable', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcategoria', 'categoriaNombre', 'categoriaPadre', 'categoriaAlmacenable', ),
-        BasePeer::TYPE_COLNAME => array (CategoriaPeer::IDCATEGORIA, CategoriaPeer::CATEGORIA_NOMBRE, CategoriaPeer::CATEGORIA_PADRE, CategoriaPeer::CATEGORIA_ALMACENABLE, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCATEGORIA', 'CATEGORIA_NOMBRE', 'CATEGORIA_PADRE', 'CATEGORIA_ALMACENABLE', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcategoria', 'categoria_nombre', 'categoria_padre', 'categoria_almacenable', ),
+        BasePeer::TYPE_PHPNAME => array ('Idcategoria', 'CategoriaNombre', 'Idcategoriapadre', 'CategoriaAlmacenable', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcategoria', 'categoriaNombre', 'idcategoriapadre', 'categoriaAlmacenable', ),
+        BasePeer::TYPE_COLNAME => array (CategoriaPeer::IDCATEGORIA, CategoriaPeer::CATEGORIA_NOMBRE, CategoriaPeer::IDCATEGORIAPADRE, CategoriaPeer::CATEGORIA_ALMACENABLE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCATEGORIA', 'CATEGORIA_NOMBRE', 'IDCATEGORIAPADRE', 'CATEGORIA_ALMACENABLE', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcategoria', 'categoria_nombre', 'idcategoriapadre', 'categoria_almacenable', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
@@ -78,11 +78,11 @@ abstract class BaseCategoriaPeer
      * e.g. CategoriaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcategoria' => 0, 'CategoriaNombre' => 1, 'CategoriaPadre' => 2, 'CategoriaAlmacenable' => 3, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcategoria' => 0, 'categoriaNombre' => 1, 'categoriaPadre' => 2, 'categoriaAlmacenable' => 3, ),
-        BasePeer::TYPE_COLNAME => array (CategoriaPeer::IDCATEGORIA => 0, CategoriaPeer::CATEGORIA_NOMBRE => 1, CategoriaPeer::CATEGORIA_PADRE => 2, CategoriaPeer::CATEGORIA_ALMACENABLE => 3, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCATEGORIA' => 0, 'CATEGORIA_NOMBRE' => 1, 'CATEGORIA_PADRE' => 2, 'CATEGORIA_ALMACENABLE' => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcategoria' => 0, 'categoria_nombre' => 1, 'categoria_padre' => 2, 'categoria_almacenable' => 3, ),
+        BasePeer::TYPE_PHPNAME => array ('Idcategoria' => 0, 'CategoriaNombre' => 1, 'Idcategoriapadre' => 2, 'CategoriaAlmacenable' => 3, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcategoria' => 0, 'categoriaNombre' => 1, 'idcategoriapadre' => 2, 'categoriaAlmacenable' => 3, ),
+        BasePeer::TYPE_COLNAME => array (CategoriaPeer::IDCATEGORIA => 0, CategoriaPeer::CATEGORIA_NOMBRE => 1, CategoriaPeer::IDCATEGORIAPADRE => 2, CategoriaPeer::CATEGORIA_ALMACENABLE => 3, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCATEGORIA' => 0, 'CATEGORIA_NOMBRE' => 1, 'IDCATEGORIAPADRE' => 2, 'CATEGORIA_ALMACENABLE' => 3, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcategoria' => 0, 'categoria_nombre' => 1, 'idcategoriapadre' => 2, 'categoria_almacenable' => 3, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
@@ -159,12 +159,12 @@ abstract class BaseCategoriaPeer
         if (null === $alias) {
             $criteria->addSelectColumn(CategoriaPeer::IDCATEGORIA);
             $criteria->addSelectColumn(CategoriaPeer::CATEGORIA_NOMBRE);
-            $criteria->addSelectColumn(CategoriaPeer::CATEGORIA_PADRE);
+            $criteria->addSelectColumn(CategoriaPeer::IDCATEGORIAPADRE);
             $criteria->addSelectColumn(CategoriaPeer::CATEGORIA_ALMACENABLE);
         } else {
             $criteria->addSelectColumn($alias . '.idcategoria');
             $criteria->addSelectColumn($alias . '.categoria_nombre');
-            $criteria->addSelectColumn($alias . '.categoria_padre');
+            $criteria->addSelectColumn($alias . '.idcategoriapadre');
             $criteria->addSelectColumn($alias . '.categoria_almacenable');
         }
     }
@@ -370,6 +370,9 @@ abstract class BaseCategoriaPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CategoriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CategoriaPeer::clearInstancePool();
     }
 
     /**
@@ -464,6 +467,101 @@ abstract class BaseCategoriaPeer
         }
 
         return array($obj, $col);
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining all related tables
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(CategoriaPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            CategoriaPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(CategoriaPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(CategoriaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+    /**
+     * Selects a collection of Categoria objects pre-filled with all related objects.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Categoria objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CategoriaPeer::DATABASE_NAME);
+        }
+
+        CategoriaPeer::addSelectColumns($criteria);
+        $startcol2 = CategoriaPeer::NUM_HYDRATE_COLUMNS;
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CategoriaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CategoriaPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = CategoriaPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CategoriaPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
     /**
@@ -599,6 +697,7 @@ abstract class BaseCategoriaPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += CategoriaPeer::doOnDeleteCascade(new Criteria(CategoriaPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(CategoriaPeer::TABLE_NAME, $con, CategoriaPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -632,24 +731,14 @@ abstract class BaseCategoriaPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            CategoriaPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Categoria) { // it's a model object
-            // invalidate the cache for this single object
-            CategoriaPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(CategoriaPeer::DATABASE_NAME);
             $criteria->add(CategoriaPeer::IDCATEGORIA, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                CategoriaPeer::removeInstanceFromPool($singleval);
-            }
         }
 
         // Set the correct dbName
@@ -662,6 +751,23 @@ abstract class BaseCategoriaPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += CategoriaPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                CategoriaPeer::clearInstancePool();
+            } elseif ($values instanceof Categoria) { // it's a model object
+                CategoriaPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    CategoriaPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             CategoriaPeer::clearRelatedInstancePool();
             $con->commit();
@@ -671,6 +777,39 @@ abstract class BaseCategoriaPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = CategoriaPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related Categoria objects
+            $criteria = new Criteria(CategoriaPeer::DATABASE_NAME);
+
+            $criteria->add(CategoriaPeer::IDCATEGORIAPADRE, $obj->getIdcategoria());
+            $affectedRows += CategoriaPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**
