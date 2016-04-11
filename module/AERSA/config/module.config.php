@@ -132,6 +132,169 @@ return array(
                                     ),
                                ),
                             ),
+                        
+                        'iva' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/iva',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Iva',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Literal',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Iva',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Iva',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                   'nuevo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Iva',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Iva',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+
+                               ),
+                            ),
+                        'categoria' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/categoria',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Categoria',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Literal',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                   'nuevo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+
+                               ),
+                            ),
+                           'empresa' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/empresa',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Empresa',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Literal',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                   'nuevo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Empresa',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+
+                               ),
+                            ),
                         ),
                     ),
                 ),
@@ -182,8 +345,11 @@ return array(
             /*
              * CATALOGO
              */
-            'Application\Catalogo\Controller\Usuario' => 'Application\Catalogo\Controller\UsuarioController',
-            'Application\Catalogo\Controller\Proveedor' => 'Application\Catalogo\Controller\ProveedorController',
+            'Application\Catalogo\Controller\Usuario'       => 'Application\Catalogo\Controller\UsuarioController',
+            'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
+            'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
+            'Application\Catalogo\Controller\Categoria '    => 'Application\Catalogo\Controller\CategoriaController',
+            'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
             
             /*
              * WEBSITE

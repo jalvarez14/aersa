@@ -13,10 +13,10 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class UsuarioController extends AbstractActionController
+class EmpresaController extends AbstractActionController
 {
     public function indexAction()
-    {   
+    {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -25,14 +25,14 @@ class UsuarioController extends AbstractActionController
         
         //SI SE TRATA DE UN ADMIN DE AERSA
         if($session['idrol'] == 1){
-            $collection = \UsuarioQuery::create()->filterByIdrol(array(1,2))->filterByIdusuario($session['idusuario'],  \Criteria::NOT_EQUAL)->orderByIdusuario(\Criteria::DESC)->find();
+            $collection = \EmpresaQuery::create()->orderByIdempresa(\Criteria::DESC)->find();
         }
 
 
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/catalogo/usuario/index');
+        $view_model->setTemplate('/application/catalogo/empresa/index');
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
@@ -46,55 +46,37 @@ class UsuarioController extends AbstractActionController
         $request = $this->getRequest();
         
         //INTANCIAMOS NUESTRO FORMULARIO
-        $form = new \Application\Catalogo\Form\UsuarioForm();
+        $form = new \Application\Catalogo\Form\EmpresaForm();
         
         if($request->isPost()){
             
             $post_data = $request->getPost();
             
-            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-            $post_data['usuario_estatus'] = 1;
-            $form->setData($post_data);
+            //VALIDAMOS QUE LA EMPRESA NO EXISTA EN LA BASE DE DATOS
+            $exist = \EmpresaQuery::create()->filterByEmpresaNombrecomercial($post_data['empresa_nombrecomercial'])->exists();
             
-            //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-            $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->exists();
-            
-            if(!$exist){
-                
+            if(!$exist)
+            {
                 //CREAMOS NUESTRA ENTIDAD VACIA
-                $entity = new \Usuario();
+                $empresaEntity  = setEmpresaData($post_data);
+                $userEntity     = setusuarioData($post_data);
                 
-                //INTANCIAMOS NUESTRO FILTRO
-                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
-            
-                //LE PONEMOS EL FILTRO A NUESTRO FORMULARIO
-                $form->setInputFilter($filter->getInputFilter());
+                //Guardamos las entidades
+                $empresaEntity->save();
+                $userEntity->save();
                 
-                //VERIFICAMOS QUE SEA VALIDO
-                if($form->isValid()){
+                //Obtenemos la relación
+                $relacion   = setRelacion($empresaEntity,$userEntity);
+                //Guardamos la relación
+                $relacion->save();
                     
-                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                    foreach ($post_data as $key => $value){
-                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                    }
-                    
-                    //SETEAMOS EL STATUS Y EL PASSWORD
-                    $entity->setUsuarioEstatus(1);
-                    $entity->setUsuarioPassword(md5($post_data['usuario_passoword']));
-                    
-                    $entity->save();
+                $this->flashMessenger()->addSuccessMessage('Empresa registrada satisfactoriamente!');
 
-                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                    
-                    return $this->redirect()->toUrl('/catalogo/usuario');
-
-                }else{
-                
-                    
-                }
-                
-            }else{
-                $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');
+                return $this->redirect()->toUrl('/catalogo/empresa');
+            }
+            else
+            {
+                $this->flashMessenger()->addErrorMessage('El nombre de empresa ya se encuentra registrado, por favor utilice uno distinto');
             }
             
            
@@ -106,7 +88,7 @@ class UsuarioController extends AbstractActionController
             'form' => $form,
             'messages' => $this->flashMessenger(),
         ));
-        $view_model->setTemplate('/application/catalogo/usuario/nuevo');
+        $view_model->setTemplate('/application/catalogo/empresa/nuevo');
         return $view_model;
 
     }
@@ -191,58 +173,6 @@ class UsuarioController extends AbstractActionController
 
     }
     
-    public function changepasswordAction(){
-        
-        $request = $this->getRequest();
-        
-        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
-        $id = $this->params()->fromRoute('id');
-        
-        //VERIFICAMOS SI EXISTE
-        $exist = \UsuarioQuery::create()->filterByIdusuario($id)->exists();
-        
-        if($exist){
-            
-            //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \UsuarioQuery::create()->findPk($id);
-            
-            //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Catalogo\Form\UsuarioForm();
-            
-            //SI NOS ENVIAN UNA PETICION POST
-            if($request->isPost()){
-                
-                $post_data = $request->getPost();
-                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
-                
-                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                foreach ($post_data as $key => $value){
-                    $entity->setByName($key, md5($value), \BasePeer::TYPE_FIELDNAME);
-                }
-                
-                 //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-                $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
-                
-                //VALIDAMOS SI ES UN FORMULARIO VALIDO
-                $form->setInputFilter($filter->getInputFilter());
-
-                if($form->isValid()){
-
-                    $entity->save();
-
-                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-
-                    return $this->redirect()->toUrl('/catalogo/usuario');
-
-                }
-            }
-            
-        }else{
-            return $this->redirect()->toUrl('/catalogo/usuario');
-        }
-  
-    }
-    
     public function eliminarAction(){
         
         $request = $this->getRequest();
@@ -262,4 +192,41 @@ class UsuarioController extends AbstractActionController
         
     }
 
+}
+
+function setEmpresaData($data)
+{
+    $entity  = new \Empresa();
+    
+    $entity->setEmpresaNombrecomercial($data['empresa_nombrecomercial']);
+    $entity->setEmpresaRazonsocial($data['empresa_razonsocial']);
+    $entity->setEmpresaEstatus($data['empresa_estatus']);
+    $entity->setEmpresaAdministracion($data['empresa_administracion']);
+    return($entity);
+}
+
+function setusuarioData($data)
+{
+    $entity  = new \Usuario();
+    
+    //Todo usuario ingresado por parte de empresa se le asigna administrador por defecto
+    $entity->setIdrol(1);
+    
+    $entity->setUsuarioNombre($data['usuario_nombre']);
+    $entity->setUsuarioEstatus($data['usuario_estatus']);
+    $entity->setUsuarioUsername($data['usuario_username']);
+    $entity->setUsuarioPassword(md5($data['usuario_password']));
+    
+    return($entity);
+}
+function setRelacion($empresa,$usuario)
+{
+    $empresa = $empresa->getIdEmpresa();
+    $usuario = $usuario->getIdusuario();
+    
+    $entity = new \Usuarioempresa();
+    $entity->setIdempresa($empresa);
+    $entity->setIdusuario($usuario);
+    
+    return $entity;
 }
