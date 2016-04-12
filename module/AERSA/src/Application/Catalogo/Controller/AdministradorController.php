@@ -13,10 +13,13 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class EmpresaController extends AbstractActionController
+class AdministradorController extends AbstractActionController
 {
     public function indexAction()
     {
+        echo "hola";
+        $id = $this->params()->fromRoute('id');
+        
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -32,7 +35,7 @@ class EmpresaController extends AbstractActionController
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/catalogo/empresa/index');
+        $view_model->setTemplate('/application/catalogo/administrador/index' );
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
@@ -124,36 +127,52 @@ class EmpresaController extends AbstractActionController
             //SI NOS ENVIAN UNA PETICION POST
             if($request->isPost())
             {
+                
                 $post_data = $request->getPost();
                 
-                $correctName = \EmpresaQuery::create()->filterByEmpresaNombrecomercial($post_data['empresa_nombrecomercial'])->exists();
-                if(!$correctName || $entity->getEmpresaNombrecomercial() == $post_data['empresa_nombrecomercial'])
+                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
+                
+                //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
+                $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioUsername($entity->getUsuarioUsername(), \Criteria::NOT_EQUAL)->exists();
+               
+                if(!$exist)
                 {
 
-                    //Seteamos los datos de la entidad
-                    $entity = setEmpresaData($post_data,$entity);
+                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                    foreach ($post_data as $key => $value){
+                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    }
+
+                    //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+                    $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+                    
+                    //VALIDAMOS SI ES UN FORMULARIO VALIDO
+                    $form->setInputFilter($filter->getInputFilter());
+
+
                     $entity->save();
 
-                    $this->flashMessenger()->addSuccessMessage('Empresa '.$entity->getEmpresaNombrecomercial().' actualizada satisfactoriamente!');
+                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
 
-                    return $this->redirect()->toUrl('/catalogo/empresa');
+                    return $this->redirect()->toUrl('/catalogo/usuario');
 
-                }
-                else
+                    
+                }else
                 {
-                    $this->flashMessenger()->addErrorMessage('El nombre de empresa ya se encuentra registrado, por favor utilice uno distinto');
-                    return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$id);
+                    $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');
                 }
                 
             }
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+            
+           
         }
         else
         {
-            $this->flashMessenger()->addErrorMessage('La empresa que estas tratando de editar no esta registrada en el sistema');
-            return $this->redirect()->toUrl('/catalogo/empresa');
+            return $this->redirect()->toUrl('/catalogo/usuario');
         }
         
         //INTANCIAMOS NUESTRA VISTA
@@ -241,10 +260,9 @@ class EmpresaController extends AbstractActionController
 
 }
 
-function setEmpresaData($data,$entity = Null)
+function setEmpresaData($data)
 {
-    if($entity == null)
-        $entity  = new \Empresa();
+    $entity  = new \Empresa();
     
     $entity->setEmpresaNombrecomercial($data['empresa_nombrecomercial']);
     $entity->setEmpresaRazonsocial($data['empresa_razonsocial']);
@@ -270,7 +288,7 @@ function setusuarioData($data)
 function setRelacion($empresa,$usuario)
 {
     $empresa = $empresa->getIdEmpresa();
-    //$usuario = $usuario->getIdusuario();
+    $usuario = $usuario->getIdusuario();
     
     $entity = new \Usuarioempresa();
     $entity->setIdempresa($empresa);
