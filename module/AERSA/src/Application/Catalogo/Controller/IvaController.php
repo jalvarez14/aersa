@@ -10,6 +10,8 @@ class IvaController extends AbstractActionController
 {
     public function indexAction()
     {
+        return $this->redirect()->toUrl('/catalogo/iva/editar/1');
+        
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -126,7 +128,7 @@ class IvaController extends AbstractActionController
 
                     $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
 
-                    return $this->redirect()->toUrl('/catalogo/iva');
+                    return $this->redirect()->toUrl('/catalogo/iva/editar/1');
 
                     
                 }

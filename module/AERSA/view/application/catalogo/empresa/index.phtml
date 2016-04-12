@@ -23,16 +23,16 @@
                     <a href="/catalogo/empresa/nuevo"><button class="btn default" type="button" style="margin-bottom: 15px;">Nueva empresa</button></a>
                 </div>
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
-                    <thead>
+                    <thead >
                         <tr>
-                            <th> Nombre comercial </th>
-                            <th> Razón social </th>
-                            <th> Estatus </th>
-                            <th> Administrable </th>
-                            <th> Acciones </th>
+                            <th class="text-center"> Nombre comercial </th>
+                            <th class="text-center"> Razón social </th>
+                            <th class="text-center"> Estatus </th>
+                            <th class="text-center"> Administrable </th>
+                            <th class="text-center"> Acciones </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center">
                         <?php foreach ($collection as $entity) : ?>
                             <?php
                             
@@ -64,20 +64,22 @@
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
                                 <td><span class="label label-sm label-<?php echo $classAdm ?>"> <?php echo $administracion ?> </span></td>
                                 
-                                <td>
+                                <td class="text-left">                                    
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
                                             <i class="fa fa-angle-down"></i>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/catalogo/usuario/editar/<?php echo $entity->getIdempresa()?>">
+                                                <a href="/catalogo/empresa/editar/<?php echo $entity->getIdempresa()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
+                                            <!--
                                             <li>
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
+                                            -->
                                         </ul>
                                     </div>
                                 </td>

@@ -1,0 +1,148 @@
+<h3 class="page-title">Registro usuario</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/usuario">Usuarios</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Registro</span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+<?php
+    $form->setAttribute('action', '/catalogo/empresa/sucursal/nuevo/'.$id);
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Sucursal</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_nombre')) ?>  
+                        <?php echo $this->formText($form->get('sucursal_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_estatus')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_estatus')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_anioactivo')) ?>  
+                        <?php echo $this->formText($form->get('sucursal_anioactivo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_mesactivo')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_mesactivo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_habilitarproductos')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_habilitarproductos')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_habilitarrecetas')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_habilitarrecetas')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-body">
+            <h3 class="form-section">Auditor</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('auditor_nombre')) ?>  
+                        <?php echo $this->formText($form->get('auditor_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('auditor_estatus')) ?>  
+                        <?php echo $this->formSelect($form->get('auditor_estatus')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('auditor_username')) ?>  
+                        <?php echo $this->formText($form->get('auditor_username')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('auditor_password')) ?>  
+                        <?php echo $this->formPassword($form->get('auditor_password')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-body">
+            <h3 class="form-section">Almacenista</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('almacenista_nombre')) ?>  
+                        <?php echo $this->formText($form->get('almacenista_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('almacenista_estatus')) ?>  
+                        <?php echo $this->formSelect($form->get('almacenista_estatus')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('almacenista_username')) ?>  
+                        <?php echo $this->formText($form->get('almacenista_username')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('almacenista_password')) ?>  
+                        <?php echo $this->formPassword($form->get('almacenista_password')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Registrar
+            </button>
+        </div>
+    </div>
+</div>

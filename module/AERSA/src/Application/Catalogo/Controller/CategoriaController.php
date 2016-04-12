@@ -161,7 +161,7 @@ class CategoriaController extends AbstractActionController
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
-            
+            $collection = \CategoriaQuery::create()->filterByIdcategoriapadre($id)->find();
            
         }
         else
@@ -172,8 +172,9 @@ class CategoriaController extends AbstractActionController
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setVariables(array(
-            'form' => $form,
-            'messages' => $this->flashMessenger(),
+            'form'          => $form,
+            'messages'      => $this->flashMessenger(),
+            'collection'    => $collection,
         ));
         
         $view_model->setTemplate('/application/catalogo/categoria/editar');
@@ -200,18 +201,142 @@ class CategoriaController extends AbstractActionController
         
     }
     
+    public function nuevasubAction()
+    {
+        $request = $this->getRequest();
+        
+        $id = $this->params()->fromRoute('id');
+        //Obtenemos los nombres de las categorias definidas como padre
+        
+        //Instanciamos el form y le mandamos las categorias padre
+        $form = new \Application\Catalogo\Form\CategoriasForm($dataForm);
+        
+        if($request->isPost())
+        {
+            
+            $post_data = $request->getPost();
+            
+            //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
+            $exist = \CategoriaQuery::create()->filterByCategoriaNombre(($post_data['categoria_nombre']))->exists();
+            
+            if(!$exist)
+            {      
+        
+                //Le ponemos la información a la entidad
+                $entity = setCategoriaData($post_data,$id);
+
+                //Guardamos la entidad
+                $entity->save();
+
+                $this->flashMessenger()->addSuccessMessage('Categoria guardada satisfactoriamente!');
+                return $this->redirect()->toUrl('/catalogo/categoria/editar/'.$id);   
+            }
+            else
+            {
+                $this->flashMessenger()->addErrorMessage('Ya se ingreso una categoria con este nombre anteriormente');
+                //return $this->redirect()->toUrl('/catalogo/categoria');
+            }
+        }
+
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array
+        (
+
+            'form'      => $form,
+            'padres'    => $dataForm,
+            'messages'  => $this->flashMessenger(),
+            'id'        => $id,
+        ));
+
+        $view_model->setTemplate('/application/catalogo/categoria/nuevasub');
+        return $view_model;
+    }
+    
+    public function editarsubAction()
+    {
+        
+        $request = $this->getRequest();
+        
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id = $this->params()->fromRoute('id');
+        
+        //VERIFICAMOS SI EXISTE
+        $exist = \CategoriaQuery::create()->filterByIdcategoria($id)->exists();
+        
+        if($exist)
+        {
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \CategoriaQuery::create()->findPk($id);
+
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Catalogo\Form\CategoriasForm(getPadres());
+            
+            //SI NOS ENVIAN UNA PETICION POST
+            if($request->isPost())
+            {
+                
+                $post_data = $request->getPost();
+                
+                
+                //VERIFICAMOS QUE NO EXISTA UN NOMBRE DE CATEGORIA IGUAL, EN CASO QUE EL NOMBRE SEA DIFERENTE AL ORIGINAL
+                $exist = \CategoriaQuery::create()->filterByCategoriaNombre($post_data['categoria_nombre'])->exists();
+                
+                if($entity->getCategoriaNombre() == $post_data['categoria_nombre'] || !($exist) )
+                {
+                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                    foreach ($post_data as $key => $value){
+                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    }
+
+                    $entity->save();
+
+                    $this->flashMessenger()->addSuccessMessage('Categoria guardada satisfactoriamente!');
+                    return $this->redirect()->toUrl('/catalogo/categoria');
+                    
+                }
+                else
+                {
+                    $this->flashMessenger()->addErrorMessage('El nombre de la categoria ya existe, por favor utilice otro nombre');
+                    return $this->redirect()->toUrl('/catalogo/categoria/editar/'.$id);
+                }
+                
+            }
+            
+            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            $collection = \CategoriaQuery::create()->filterByIdcategoriapadre($id)->find();
+           
+        }
+        else
+        {
+            return $this->redirect()->toUrl('/catalogo/categoria/editarsub/'.$id);
+        }
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'          => $form,
+            'messages'      => $this->flashMessenger(),
+            'collection'    => $collection,
+        ));
+        
+        $view_model->setTemplate('/application/catalogo/categoria/editarsub');
+        return $view_model;
+
+    }
     
 }
 
-function setCategoriaData ($data)
+function setCategoriaData ($data,$padre = null)
 {
     $entity = new \Categoria();
     
     $entity->setCategoriaNombre($data['categoria_nombre']);
     $entity->setCategoriaAlmacenable($data['categoria_almacenable']);
     
-    if($data['idcategoriapadre'] >= 1)
-        $entity->setIdcategoriapadre($data['idcategoriapadre']);
+    if($padre != null)
+        $entity->setIdcategoriapadre($padre);
     
     return $entity;
 }

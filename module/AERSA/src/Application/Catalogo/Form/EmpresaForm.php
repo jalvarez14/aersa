@@ -13,7 +13,7 @@ class EmpresaForm extends Form
         $this->setAttribute('method', 'post');
         
         $this->add(array(
-            'name' => 'idusuario',
+            'name' => 'idempresa',
             'type' => 'Hidden',
         ));
         

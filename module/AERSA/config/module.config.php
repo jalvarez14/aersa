@@ -1,11 +1,4 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
 
 return array(
     'router' => array(
@@ -104,6 +97,16 @@ return array(
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
                                                 'action' => 'changepassword',
+                                            ),
+                                        ),
+                                    ),
+                                   'administrador' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/administrador[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'administrador',
                                             ),
                                         ),
                                     ),
@@ -208,6 +211,26 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'nuevasub' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevasub[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'nuevasub',
+                                            ),
+                                        ),
+                                    ),
+                                   'editarsub' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editarsub[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'editarsub',
+                                            ),
+                                        ),
+                                    ),
                                    'editar' => array(
                                        'type' => 'Segment',
                                        'options' => array(
@@ -241,6 +264,9 @@ return array(
 
                                ),
                             ),
+                           
+                           
+                           
                            'empresa' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -282,6 +308,7 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   
                                    'eliminar' => array(
                                        'type' => 'Segment',
                                        'options' => array(
@@ -295,6 +322,56 @@ return array(
 
                                ),
                             ),
+                           
+                           
+                           
+                           'sucursal' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/empresa/sucursal',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Sucursal',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   
+                                   
+                                   'nuevo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevo[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Sucursal',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Sucursal',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Sucursal',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+
+                               ),
+                            ),
+                           
                         ),
                     ),
                 ),
@@ -350,6 +427,7 @@ return array(
             'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
             'Application\Catalogo\Controller\Categoria '    => 'Application\Catalogo\Controller\CategoriaController',
             'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
+            'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
             
             /*
              * WEBSITE
