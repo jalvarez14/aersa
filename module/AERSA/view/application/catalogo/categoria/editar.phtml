@@ -1,13 +1,13 @@
 <link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
 <link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 
-<?php //echo '<pre>';var_dump($messages->getErrorMessages());echo'</pre>'; ?>
-
-
-
-<?php //foreach ($padres as $item): ?>
-    <?php //echo $item->getCategoriaNombre() ?>
-<?php //endforeach ?>
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
 
 <h3 class="page-title">Registro categoria</h3>
 <div class="page-bar">
