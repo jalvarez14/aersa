@@ -37,6 +37,7 @@ class SucursalController extends AbstractActionController
     public function nuevoAction()
     {
         $id = $this->params()->fromRoute('id');
+        $empresa_nombre = \EmpresaQuery::create()->findPk($id);
         
         $request = $this->getRequest();
         
@@ -48,14 +49,12 @@ class SucursalController extends AbstractActionController
             
             $post_data = $request->getPost();
                 
-                
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $almacenista    = \UsuarioQuery::create()->filterByUsuarioNombre($post_data['almacenista_nombre'])->exists();
             $auditor        = \UsuarioQuery::create()->filterByUsuarioNombre($post_data['auditor_nombre'])->exists();
             
             if(!$almacenista && !$auditor)
             {
-                
                 //Metemos los datos de las entidades
                 $sucursalEntity         = setSucursal($post_data,null,$id);
                 $almacenistaEntity      = setAlmacenista($post_data);
@@ -101,6 +100,7 @@ class SucursalController extends AbstractActionController
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
             'id'        => $id,
+            'empresa'   => $empresa_nombre,
         ));
         $view_model->setTemplate('/application/catalogo/sucursal/nuevo');
         return $view_model;
@@ -109,31 +109,24 @@ class SucursalController extends AbstractActionController
     
     public function editarAction()
     {
+        $id = $this->params()->fromRoute('id');
+        $emp = $this->params()->fromRoute('emp');
+        
+        $empresa_nombre = \EmpresaQuery::create()->findPk($emp);
         
         $request = $this->getRequest();
         
-        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
-        $id = $this->params()->fromRoute('id');
+        $exists         = \SucursalQuery::create()->filterByIdsucursal($id)->exists();
         
-        //VERIFICAMOS SI EXISTE
-        $exist              = \EmpresaQuery::create()->filterByIdempresa($id)->exists();
-        $user               = \UsuarioempresaQuery::create()->filterByIdempresa($id)->find();
-        $idAdmins           = array();
-        foreach ($user as $item)
-            $idaAdmins[] = $item->getIdusuario();
-        //Obtener los administradores de la empresa
-        $administradores    = \UsuarioQuery::create()->filterByIdusuario($idaAdmins)->find();
-        
-        $sucursales         = \SucursalQuery::create()->filterByIdempresa($id)->find();
-        
-        if($exist)
+        if($exists)
         {
-            
             //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \EmpresaQuery::create()->findPk($id);
+            $entity = \SucursalQuery::create()->findPk($id);
 
             //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Catalogo\Form\EmpresaForm();
+            $form = new \Application\Catalogo\Form\SucursalForm();
+            $element = $form->get('sucursal_nombre');
+            $element->setAttribute('disabled', 'disabled');
             
             //SI NOS ENVIAN UNA PETICION POST
             if($request->isPost())
@@ -142,53 +135,34 @@ class SucursalController extends AbstractActionController
                 $post_data = $request->getPost();
                 
                 
-                //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-                $almacenista    = \UsuarioQuery::create()->filterByUsuarioNombre($post_data['almacenista_nombre'])->exists();
-                $auditor        = \UsuarioQuery::create()->filterByUsuarioNombre($post_data['auditor_nombre'])->exists();
-                if(!$almacenista && !$auditor)
-                {
+                //Ingresamos los nuevos datos de la sucursal
+                $entity->setSucursalEstatus(                    $post_data['sucursal_estatus']);
+                $entity->setSucursalAnioactivo(                 $post_data['sucursal_anioactivo']);
+                $entity->setSucursalMesactivo(                  $post_data['sucursal_mesactivo']);
+                $entity->setSucursalHabilitarproductos(         $post_data['sucursal_habilitarproductos']);
+                $entity->setSucursalHabilitarrecetas(           $post_data['sucursal_habilitarrecetas']);
+                
+                $entity->save();
 
-                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                    foreach ($post_data as $key => $value){
-                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                    }
+                $this->flashMessenger()->addSuccessMessage('Sucural actualizada correctamente');
 
-                    //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-                    $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
-                    
-                    //VALIDAMOS SI ES UN FORMULARIO VALIDO
-                    $form->setInputFilter($filter->getInputFilter());
-
-
-                    $entity->save();
-
-                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-
-                    return $this->redirect()->toUrl('/catalogo/empresa/'.$id);
+                return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$emp);
 
                     
-                }else
-                {
-                    if($auditor)
-                        $this->flashMessenger()->addErrorMessage('El nombre de usuario para almacenista ya se encuentra registrado, por favor utilice uno distinto');
-                    if($almacenista)
-                        $this->flashMessenger()->addErrorMessage('El nombre de usuario para auditor ya se encuentra registrado, por favor utilice uno distinto');
-                    
-                    return $this->redirect()->toUrl('/catalogo/empresa/sucursal/nuevo/'.$id);
-                }
+
                 
             }
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
             
+            $entityUsers = \UsuariosucursalQuery::create()->select(array('idusuario'))->filterByIdsucursal($id)->find()->toArray();
+            $administradores = \UsuarioQuery::create()->filterByIdusuario($entityUsers)->find();
             
-           
+            $almacenes  = \AlmacenQuery::create()->filterByIdsucursal($id)->find();
         }
         else
-        {
-            //return $this->redirect()->toUrl('/catalogo/usuario');
-        }
+            return $this->redirect()->toUrl('/catalogo/usuario');
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
@@ -196,7 +170,10 @@ class SucursalController extends AbstractActionController
             'form'              => $form,
             'messages'          => $this->flashMessenger(),
             'administradores'   => $administradores,
-            'sucursales'        => $sucursales,
+            'almacenes'         => $almacenes,
+            'sucursales'        => $entity,
+            'id'                => $id,
+            'empresa'           => $empresa_nombre,
         ));
         $view_model->setTemplate('/application/catalogo/sucursal/editar');
         return $view_model;
@@ -248,8 +225,8 @@ function setAuditor($data,$entity = null)
     $entity->setUsuarioUsername($data['auditor_username']);
     $entity->setUsuarioPassword(md5($data['auditor_password']));
     
-    //Rol 2 = auditor
-    $entity->setIdrol(2);
+    //Rol 4 = auditor
+    $entity->setIdrol(4);
     return $entity;
 }
 function setSucursal($data, $entity = null,$idEmp)
@@ -261,8 +238,8 @@ function setSucursal($data, $entity = null,$idEmp)
     $entity->setSucursalEstatus($data['sucursal_estatus']);
     $entity->setSucursalAnioactivo($data['sucursal_anioactivo']);
     $entity->setSucursalMesactivo($data['sucursal_mesactivo']);
-    $entity->setSucursalHabilitarproductos($data['sucursal_habilitaproductos']);
-    $entity->setSucursalHabilitarrecetas($data['sucursal_habilitarecetas']);
+    $entity->setSucursalHabilitarproductos(0);
+    $entity->setSucursalHabilitarrecetas(0);
     $entity->setIdempresa($idEmp);
     
     return $entity;
@@ -277,7 +254,6 @@ function setUsuarioSucursal($idUser,$idSuc,$entity= null)
     
     return $entity;
 }
-
 function createAlmacenes($idSuc)
 {
     $almacen = new \Almacen();
@@ -315,4 +291,9 @@ function createAlmacenes($idSuc)
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
     $almacen->save();
+}
+
+function getAdministradores($sucursal)
+{
+    
 }
