@@ -45,6 +45,10 @@ class TemplateMapListener implements ListenerAggregateInterface
         
         $template_map=$e->getApplication()->getServiceManager()->get('viewtemplatemapresolver');
        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        
         switch ($section[0])
         {
             case 'Website':
@@ -59,7 +63,7 @@ class TemplateMapListener implements ListenerAggregateInterface
                 break;
             }
             case 'Application':{
-
+                
                 $template_map->merge(
                     array(
                         'layout/layout'      => __DIR__.'/../../../view/application/layout/layout.phtml',
