@@ -60,6 +60,14 @@
  * @method ProductoQuery rightJoinNotacreditodetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacreditodetalle relation
  * @method ProductoQuery innerJoinNotacreditodetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacreditodetalle relation
  *
+ * @method ProductoQuery leftJoinPlantillatablajeria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Plantillatablajeria relation
+ * @method ProductoQuery rightJoinPlantillatablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Plantillatablajeria relation
+ * @method ProductoQuery innerJoinPlantillatablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Plantillatablajeria relation
+ *
+ * @method ProductoQuery leftJoinPlantillatablajeriadetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Plantillatablajeriadetalle relation
+ * @method ProductoQuery rightJoinPlantillatablajeriadetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Plantillatablajeriadetalle relation
+ * @method ProductoQuery innerJoinPlantillatablajeriadetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Plantillatablajeriadetalle relation
+ *
  * @method ProductoQuery leftJoinRecetaRelatedByIdproducto($relationAlias = null) Adds a LEFT JOIN clause to the query using the RecetaRelatedByIdproducto relation
  * @method ProductoQuery rightJoinRecetaRelatedByIdproducto($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RecetaRelatedByIdproducto relation
  * @method ProductoQuery innerJoinRecetaRelatedByIdproducto($relationAlias = null) Adds a INNER JOIN clause to the query using the RecetaRelatedByIdproducto relation
@@ -1193,6 +1201,154 @@ abstract class BaseProductoQuery extends ModelCriteria
         return $this
             ->joinNotacreditodetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacreditodetalle', 'NotacreditodetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Plantillatablajeria object
+     *
+     * @param   Plantillatablajeria|PropelObjectCollection $plantillatablajeria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByPlantillatablajeria($plantillatablajeria, $comparison = null)
+    {
+        if ($plantillatablajeria instanceof Plantillatablajeria) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDPRODUCTO, $plantillatablajeria->getIdproducto(), $comparison);
+        } elseif ($plantillatablajeria instanceof PropelObjectCollection) {
+            return $this
+                ->usePlantillatablajeriaQuery()
+                ->filterByPrimaryKeys($plantillatablajeria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPlantillatablajeria() only accepts arguments of type Plantillatablajeria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Plantillatablajeria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinPlantillatablajeria($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Plantillatablajeria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Plantillatablajeria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Plantillatablajeria relation Plantillatablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   PlantillatablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function usePlantillatablajeriaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPlantillatablajeria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Plantillatablajeria', 'PlantillatablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Plantillatablajeriadetalle object
+     *
+     * @param   Plantillatablajeriadetalle|PropelObjectCollection $plantillatablajeriadetalle  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByPlantillatablajeriadetalle($plantillatablajeriadetalle, $comparison = null)
+    {
+        if ($plantillatablajeriadetalle instanceof Plantillatablajeriadetalle) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDPRODUCTO, $plantillatablajeriadetalle->getIdproducto(), $comparison);
+        } elseif ($plantillatablajeriadetalle instanceof PropelObjectCollection) {
+            return $this
+                ->usePlantillatablajeriadetalleQuery()
+                ->filterByPrimaryKeys($plantillatablajeriadetalle->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPlantillatablajeriadetalle() only accepts arguments of type Plantillatablajeriadetalle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Plantillatablajeriadetalle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinPlantillatablajeriadetalle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Plantillatablajeriadetalle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Plantillatablajeriadetalle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Plantillatablajeriadetalle relation Plantillatablajeriadetalle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   PlantillatablajeriadetalleQuery A secondary query class using the current class as primary query
+     */
+    public function usePlantillatablajeriadetalleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPlantillatablajeriadetalle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Plantillatablajeriadetalle', 'PlantillatablajeriadetalleQuery');
     }
 
     /**

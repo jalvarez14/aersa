@@ -92,10 +92,22 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $collAlmacensPartial;
 
     /**
+     * @var        PropelObjectCollection|Compra[] Collection to store aggregation of Compra objects.
+     */
+    protected $collCompras;
+    protected $collComprasPartial;
+
+    /**
      * @var        PropelObjectCollection|Devolucion[] Collection to store aggregation of Devolucion objects.
      */
     protected $collDevolucions;
     protected $collDevolucionsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Inventariomes[] Collection to store aggregation of Inventariomes objects.
+     */
+    protected $collInventariomess;
+    protected $collInventariomessPartial;
 
     /**
      * @var        PropelObjectCollection|Notacredito[] Collection to store aggregation of Notacredito objects.
@@ -120,6 +132,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      */
     protected $collUsuariosucursals;
     protected $collUsuariosucursalsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Venta[] Collection to store aggregation of Venta objects.
+     */
+    protected $collVentas;
+    protected $collVentasPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -151,7 +169,19 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $comprasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $devolucionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $inventariomessScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -176,6 +206,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $usuariosucursalsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ventasScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -613,7 +649,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->aEmpresa = null;
             $this->collAlmacens = null;
 
+            $this->collCompras = null;
+
             $this->collDevolucions = null;
+
+            $this->collInventariomess = null;
 
             $this->collNotacreditos = null;
 
@@ -622,6 +662,8 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->collTrabajadorpromedios = null;
 
             $this->collUsuariosucursals = null;
+
+            $this->collVentas = null;
 
         } // if (deep)
     }
@@ -776,6 +818,23 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->comprasScheduledForDeletion !== null) {
+                if (!$this->comprasScheduledForDeletion->isEmpty()) {
+                    CompraQuery::create()
+                        ->filterByPrimaryKeys($this->comprasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->comprasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompras !== null) {
+                foreach ($this->collCompras as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->devolucionsScheduledForDeletion !== null) {
                 if (!$this->devolucionsScheduledForDeletion->isEmpty()) {
                     DevolucionQuery::create()
@@ -787,6 +846,23 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             if ($this->collDevolucions !== null) {
                 foreach ($this->collDevolucions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->inventariomessScheduledForDeletion !== null) {
+                if (!$this->inventariomessScheduledForDeletion->isEmpty()) {
+                    InventariomesQuery::create()
+                        ->filterByPrimaryKeys($this->inventariomessScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->inventariomessScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collInventariomess !== null) {
+                foreach ($this->collInventariomess as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -855,6 +931,23 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             if ($this->collUsuariosucursals !== null) {
                 foreach ($this->collUsuariosucursals as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ventasScheduledForDeletion !== null) {
+                if (!$this->ventasScheduledForDeletion->isEmpty()) {
+                    VentaQuery::create()
+                        ->filterByPrimaryKeys($this->ventasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ventasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collVentas !== null) {
+                foreach ($this->collVentas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1065,8 +1158,24 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collCompras !== null) {
+                    foreach ($this->collCompras as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collDevolucions !== null) {
                     foreach ($this->collDevolucions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collInventariomess !== null) {
+                    foreach ($this->collInventariomess as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1099,6 +1208,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
                 if ($this->collUsuariosucursals !== null) {
                     foreach ($this->collUsuariosucursals as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collVentas !== null) {
+                    foreach ($this->collVentas as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1214,8 +1331,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             if (null !== $this->collAlmacens) {
                 $result['Almacens'] = $this->collAlmacens->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collCompras) {
+                $result['Compras'] = $this->collCompras->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collDevolucions) {
                 $result['Devolucions'] = $this->collDevolucions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collInventariomess) {
+                $result['Inventariomess'] = $this->collInventariomess->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collNotacreditos) {
                 $result['Notacreditos'] = $this->collNotacreditos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1228,6 +1351,9 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             }
             if (null !== $this->collUsuariosucursals) {
                 $result['Usuariosucursals'] = $this->collUsuariosucursals->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collVentas) {
+                $result['Ventas'] = $this->collVentas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1422,9 +1548,21 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getCompras() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompra($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getDevolucions() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDevolucion($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getInventariomess() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addInventariomes($relObj->copy($deepCopy));
                 }
             }
 
@@ -1449,6 +1587,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             foreach ($this->getUsuariosucursals() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addUsuariosucursal($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getVentas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addVenta($relObj->copy($deepCopy));
                 }
             }
 
@@ -1568,8 +1712,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         if ('Almacen' == $relationName) {
             $this->initAlmacens();
         }
+        if ('Compra' == $relationName) {
+            $this->initCompras();
+        }
         if ('Devolucion' == $relationName) {
             $this->initDevolucions();
+        }
+        if ('Inventariomes' == $relationName) {
+            $this->initInventariomess();
         }
         if ('Notacredito' == $relationName) {
             $this->initNotacreditos();
@@ -1582,6 +1732,9 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         }
         if ('Usuariosucursal' == $relationName) {
             $this->initUsuariosucursals();
+        }
+        if ('Venta' == $relationName) {
+            $this->initVentas();
         }
     }
 
@@ -1808,6 +1961,356 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         }
 
         return $this;
+    }
+
+    /**
+     * Clears out the collCompras collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addCompras()
+     */
+    public function clearCompras()
+    {
+        $this->collCompras = null; // important to set this to null since that means it is uninitialized
+        $this->collComprasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompras collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompras($v = true)
+    {
+        $this->collComprasPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompras collection.
+     *
+     * By default this just sets the collCompras collection to an empty array (like clearcollCompras());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompras($overrideExisting = true)
+    {
+        if (null !== $this->collCompras && !$overrideExisting) {
+            return;
+        }
+        $this->collCompras = new PropelObjectCollection();
+        $this->collCompras->setModel('Compra');
+    }
+
+    /**
+     * Gets an array of Compra objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     * @throws PropelException
+     */
+    public function getCompras($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collComprasPartial && !$this->isNew();
+        if (null === $this->collCompras || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompras) {
+                // return empty collection
+                $this->initCompras();
+            } else {
+                $collCompras = CompraQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collComprasPartial && count($collCompras)) {
+                      $this->initCompras(false);
+
+                      foreach ($collCompras as $obj) {
+                        if (false == $this->collCompras->contains($obj)) {
+                          $this->collCompras->append($obj);
+                        }
+                      }
+
+                      $this->collComprasPartial = true;
+                    }
+
+                    $collCompras->getInternalIterator()->rewind();
+
+                    return $collCompras;
+                }
+
+                if ($partial && $this->collCompras) {
+                    foreach ($this->collCompras as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompras[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompras = $collCompras;
+                $this->collComprasPartial = false;
+            }
+        }
+
+        return $this->collCompras;
+    }
+
+    /**
+     * Sets a collection of Compra objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $compras A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setCompras(PropelCollection $compras, PropelPDO $con = null)
+    {
+        $comprasToDelete = $this->getCompras(new Criteria(), $con)->diff($compras);
+
+
+        $this->comprasScheduledForDeletion = $comprasToDelete;
+
+        foreach ($comprasToDelete as $compraRemoved) {
+            $compraRemoved->setSucursal(null);
+        }
+
+        $this->collCompras = null;
+        foreach ($compras as $compra) {
+            $this->addCompra($compra);
+        }
+
+        $this->collCompras = $compras;
+        $this->collComprasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Compra objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Compra objects.
+     * @throws PropelException
+     */
+    public function countCompras(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collComprasPartial && !$this->isNew();
+        if (null === $this->collCompras || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompras) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompras());
+            }
+            $query = CompraQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collCompras);
+    }
+
+    /**
+     * Method called to associate a Compra object to this object
+     * through the Compra foreign key attribute.
+     *
+     * @param    Compra $l Compra
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addCompra(Compra $l)
+    {
+        if ($this->collCompras === null) {
+            $this->initCompras();
+            $this->collComprasPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompras->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompra($l);
+
+            if ($this->comprasScheduledForDeletion and $this->comprasScheduledForDeletion->contains($l)) {
+                $this->comprasScheduledForDeletion->remove($this->comprasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Compra $compra The compra object to add.
+     */
+    protected function doAddCompra($compra)
+    {
+        $this->collCompras[]= $compra;
+        $compra->setSucursal($this);
+    }
+
+    /**
+     * @param	Compra $compra The compra object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeCompra($compra)
+    {
+        if ($this->getCompras()->contains($compra)) {
+            $this->collCompras->remove($this->collCompras->search($compra));
+            if (null === $this->comprasScheduledForDeletion) {
+                $this->comprasScheduledForDeletion = clone $this->collCompras;
+                $this->comprasScheduledForDeletion->clear();
+            }
+            $this->comprasScheduledForDeletion[]= clone $compra;
+            $compra->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getCompras($query, $con);
     }
 
     /**
@@ -2102,12 +2605,362 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
      */
+    public function getDevolucionsJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getDevolucions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Devolucions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
     public function getDevolucionsJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = DevolucionQuery::create(null, $criteria);
         $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
 
         return $this->getDevolucions($query, $con);
+    }
+
+    /**
+     * Clears out the collInventariomess collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addInventariomess()
+     */
+    public function clearInventariomess()
+    {
+        $this->collInventariomess = null; // important to set this to null since that means it is uninitialized
+        $this->collInventariomessPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collInventariomess collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialInventariomess($v = true)
+    {
+        $this->collInventariomessPartial = $v;
+    }
+
+    /**
+     * Initializes the collInventariomess collection.
+     *
+     * By default this just sets the collInventariomess collection to an empty array (like clearcollInventariomess());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initInventariomess($overrideExisting = true)
+    {
+        if (null !== $this->collInventariomess && !$overrideExisting) {
+            return;
+        }
+        $this->collInventariomess = new PropelObjectCollection();
+        $this->collInventariomess->setModel('Inventariomes');
+    }
+
+    /**
+     * Gets an array of Inventariomes objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Inventariomes[] List of Inventariomes objects
+     * @throws PropelException
+     */
+    public function getInventariomess($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collInventariomessPartial && !$this->isNew();
+        if (null === $this->collInventariomess || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collInventariomess) {
+                // return empty collection
+                $this->initInventariomess();
+            } else {
+                $collInventariomess = InventariomesQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collInventariomessPartial && count($collInventariomess)) {
+                      $this->initInventariomess(false);
+
+                      foreach ($collInventariomess as $obj) {
+                        if (false == $this->collInventariomess->contains($obj)) {
+                          $this->collInventariomess->append($obj);
+                        }
+                      }
+
+                      $this->collInventariomessPartial = true;
+                    }
+
+                    $collInventariomess->getInternalIterator()->rewind();
+
+                    return $collInventariomess;
+                }
+
+                if ($partial && $this->collInventariomess) {
+                    foreach ($this->collInventariomess as $obj) {
+                        if ($obj->isNew()) {
+                            $collInventariomess[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collInventariomess = $collInventariomess;
+                $this->collInventariomessPartial = false;
+            }
+        }
+
+        return $this->collInventariomess;
+    }
+
+    /**
+     * Sets a collection of Inventariomes objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $inventariomess A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setInventariomess(PropelCollection $inventariomess, PropelPDO $con = null)
+    {
+        $inventariomessToDelete = $this->getInventariomess(new Criteria(), $con)->diff($inventariomess);
+
+
+        $this->inventariomessScheduledForDeletion = $inventariomessToDelete;
+
+        foreach ($inventariomessToDelete as $inventariomesRemoved) {
+            $inventariomesRemoved->setSucursal(null);
+        }
+
+        $this->collInventariomess = null;
+        foreach ($inventariomess as $inventariomes) {
+            $this->addInventariomes($inventariomes);
+        }
+
+        $this->collInventariomess = $inventariomess;
+        $this->collInventariomessPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Inventariomes objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Inventariomes objects.
+     * @throws PropelException
+     */
+    public function countInventariomess(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collInventariomessPartial && !$this->isNew();
+        if (null === $this->collInventariomess || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collInventariomess) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getInventariomess());
+            }
+            $query = InventariomesQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collInventariomess);
+    }
+
+    /**
+     * Method called to associate a Inventariomes object to this object
+     * through the Inventariomes foreign key attribute.
+     *
+     * @param    Inventariomes $l Inventariomes
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addInventariomes(Inventariomes $l)
+    {
+        if ($this->collInventariomess === null) {
+            $this->initInventariomess();
+            $this->collInventariomessPartial = true;
+        }
+
+        if (!in_array($l, $this->collInventariomess->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddInventariomes($l);
+
+            if ($this->inventariomessScheduledForDeletion and $this->inventariomessScheduledForDeletion->contains($l)) {
+                $this->inventariomessScheduledForDeletion->remove($this->inventariomessScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Inventariomes $inventariomes The inventariomes object to add.
+     */
+    protected function doAddInventariomes($inventariomes)
+    {
+        $this->collInventariomess[]= $inventariomes;
+        $inventariomes->setSucursal($this);
+    }
+
+    /**
+     * @param	Inventariomes $inventariomes The inventariomes object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeInventariomes($inventariomes)
+    {
+        if ($this->getInventariomess()->contains($inventariomes)) {
+            $this->collInventariomess->remove($this->collInventariomess->search($inventariomes));
+            if (null === $this->inventariomessScheduledForDeletion) {
+                $this->inventariomessScheduledForDeletion = clone $this->collInventariomess;
+                $this->inventariomessScheduledForDeletion->clear();
+            }
+            $this->inventariomessScheduledForDeletion[]= clone $inventariomes;
+            $inventariomes->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Inventariomess from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Inventariomes[] List of Inventariomes objects
+     */
+    public function getInventariomessJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = InventariomesQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getInventariomess($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Inventariomess from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Inventariomes[] List of Inventariomes objects
+     */
+    public function getInventariomessJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = InventariomesQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getInventariomess($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Inventariomess from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Inventariomes[] List of Inventariomes objects
+     */
+    public function getInventariomessJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = InventariomesQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getInventariomess($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Inventariomess from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Inventariomes[] List of Inventariomes objects
+     */
+    public function getInventariomessJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = InventariomesQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getInventariomess($query, $con);
     }
 
     /**
@@ -2402,6 +3255,31 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
      */
+    public function getNotacreditosJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getNotacreditos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Notacreditos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
     public function getNotacreditosJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = NotacreditoQuery::create(null, $criteria);
@@ -2633,6 +3511,56 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         }
 
         return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacendestino', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacenorigen', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
     }
 
 
@@ -3236,6 +4164,331 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collVentas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addVentas()
+     */
+    public function clearVentas()
+    {
+        $this->collVentas = null; // important to set this to null since that means it is uninitialized
+        $this->collVentasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collVentas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialVentas($v = true)
+    {
+        $this->collVentasPartial = $v;
+    }
+
+    /**
+     * Initializes the collVentas collection.
+     *
+     * By default this just sets the collVentas collection to an empty array (like clearcollVentas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initVentas($overrideExisting = true)
+    {
+        if (null !== $this->collVentas && !$overrideExisting) {
+            return;
+        }
+        $this->collVentas = new PropelObjectCollection();
+        $this->collVentas->setModel('Venta');
+    }
+
+    /**
+     * Gets an array of Venta objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Venta[] List of Venta objects
+     * @throws PropelException
+     */
+    public function getVentas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collVentasPartial && !$this->isNew();
+        if (null === $this->collVentas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collVentas) {
+                // return empty collection
+                $this->initVentas();
+            } else {
+                $collVentas = VentaQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collVentasPartial && count($collVentas)) {
+                      $this->initVentas(false);
+
+                      foreach ($collVentas as $obj) {
+                        if (false == $this->collVentas->contains($obj)) {
+                          $this->collVentas->append($obj);
+                        }
+                      }
+
+                      $this->collVentasPartial = true;
+                    }
+
+                    $collVentas->getInternalIterator()->rewind();
+
+                    return $collVentas;
+                }
+
+                if ($partial && $this->collVentas) {
+                    foreach ($this->collVentas as $obj) {
+                        if ($obj->isNew()) {
+                            $collVentas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collVentas = $collVentas;
+                $this->collVentasPartial = false;
+            }
+        }
+
+        return $this->collVentas;
+    }
+
+    /**
+     * Sets a collection of Venta objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ventas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setVentas(PropelCollection $ventas, PropelPDO $con = null)
+    {
+        $ventasToDelete = $this->getVentas(new Criteria(), $con)->diff($ventas);
+
+
+        $this->ventasScheduledForDeletion = $ventasToDelete;
+
+        foreach ($ventasToDelete as $ventaRemoved) {
+            $ventaRemoved->setSucursal(null);
+        }
+
+        $this->collVentas = null;
+        foreach ($ventas as $venta) {
+            $this->addVenta($venta);
+        }
+
+        $this->collVentas = $ventas;
+        $this->collVentasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Venta objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Venta objects.
+     * @throws PropelException
+     */
+    public function countVentas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collVentasPartial && !$this->isNew();
+        if (null === $this->collVentas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVentas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getVentas());
+            }
+            $query = VentaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collVentas);
+    }
+
+    /**
+     * Method called to associate a Venta object to this object
+     * through the Venta foreign key attribute.
+     *
+     * @param    Venta $l Venta
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addVenta(Venta $l)
+    {
+        if ($this->collVentas === null) {
+            $this->initVentas();
+            $this->collVentasPartial = true;
+        }
+
+        if (!in_array($l, $this->collVentas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddVenta($l);
+
+            if ($this->ventasScheduledForDeletion and $this->ventasScheduledForDeletion->contains($l)) {
+                $this->ventasScheduledForDeletion->remove($this->ventasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Venta $venta The venta object to add.
+     */
+    protected function doAddVenta($venta)
+    {
+        $this->collVentas[]= $venta;
+        $venta->setSucursal($this);
+    }
+
+    /**
+     * @param	Venta $venta The venta object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeVenta($venta)
+    {
+        if ($this->getVentas()->contains($venta)) {
+            $this->collVentas->remove($this->collVentas->search($venta));
+            if (null === $this->ventasScheduledForDeletion) {
+                $this->ventasScheduledForDeletion = clone $this->collVentas;
+                $this->ventasScheduledForDeletion->clear();
+            }
+            $this->ventasScheduledForDeletion[]= clone $venta;
+            $venta->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ventas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Venta[] List of Venta objects
+     */
+    public function getVentasJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentaQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getVentas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ventas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Venta[] List of Venta objects
+     */
+    public function getVentasJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getVentas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ventas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Venta[] List of Venta objects
+     */
+    public function getVentasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getVentas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ventas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Venta[] List of Venta objects
+     */
+    public function getVentasJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getVentas($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -3276,8 +4529,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collCompras) {
+                foreach ($this->collCompras as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collDevolucions) {
                 foreach ($this->collDevolucions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collInventariomess) {
+                foreach ($this->collInventariomess as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -3301,6 +4564,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collVentas) {
+                foreach ($this->collVentas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aEmpresa instanceof Persistent) {
               $this->aEmpresa->clearAllReferences($deep);
             }
@@ -3312,10 +4580,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->collAlmacens->clearIterator();
         }
         $this->collAlmacens = null;
+        if ($this->collCompras instanceof PropelCollection) {
+            $this->collCompras->clearIterator();
+        }
+        $this->collCompras = null;
         if ($this->collDevolucions instanceof PropelCollection) {
             $this->collDevolucions->clearIterator();
         }
         $this->collDevolucions = null;
+        if ($this->collInventariomess instanceof PropelCollection) {
+            $this->collInventariomess->clearIterator();
+        }
+        $this->collInventariomess = null;
         if ($this->collNotacreditos instanceof PropelCollection) {
             $this->collNotacreditos->clearIterator();
         }
@@ -3332,6 +4608,10 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->collUsuariosucursals->clearIterator();
         }
         $this->collUsuariosucursals = null;
+        if ($this->collVentas instanceof PropelCollection) {
+            $this->collVentas->clearIterator();
+        }
+        $this->collVentas = null;
         $this->aEmpresa = null;
     }
 

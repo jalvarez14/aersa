@@ -77,15 +77,20 @@ class UsuarioController extends AbstractActionController {
 
                     //SETEAMOS EL STATUS Y EL PASSWORD
                     $entity->setUsuarioEstatus(1);
-                    $entity->setUsuarioPassword(md5($post_data['usuario_passoword']));
+                    $entity->setUsuarioPassword(md5($post_data['usuario_password']));
 
+                  
                     $entity->save();
 
                     $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
 
+
                     return $this->redirect()->toUrl('/catalogo/usuario');
-                } else {
-                    
+                } 
+                else 
+                {
+
+
                 }
             } else {
                 $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');

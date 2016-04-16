@@ -24,5 +24,24 @@ class ProveedorController extends AbstractActionController
         return $view_model;
 
     }
+    
+    public function nuevoAction(){
+       
+        $request = $this->getRequest();
+        
+        $form = new \Application\Catalogo\Form\ProveedorForm();
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form' => $form,
+            'messages' => $this->flashMessenger(),
+        ));
+        $view_model->setTemplate('/application/catalogo/proveedor/nuevo');
+        return $view_model;
+        
+       
+        
+    }
 
 }

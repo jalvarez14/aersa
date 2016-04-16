@@ -26,6 +26,10 @@
  * @method AlmacenQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
  * @method AlmacenQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
  *
+ * @method AlmacenQuery leftJoinCompra($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compra relation
+ * @method AlmacenQuery rightJoinCompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compra relation
+ * @method AlmacenQuery innerJoinCompra($relationAlias = null) Adds a INNER JOIN clause to the query using the Compra relation
+ *
  * @method AlmacenQuery leftJoinCompradetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compradetalle relation
  * @method AlmacenQuery rightJoinCompradetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compradetalle relation
  * @method AlmacenQuery innerJoinCompradetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Compradetalle relation
@@ -38,6 +42,10 @@
  * @method AlmacenQuery rightJoinDevoluciondetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devoluciondetalle relation
  * @method AlmacenQuery innerJoinDevoluciondetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Devoluciondetalle relation
  *
+ * @method AlmacenQuery leftJoinInventariomes($relationAlias = null) Adds a LEFT JOIN clause to the query using the Inventariomes relation
+ * @method AlmacenQuery rightJoinInventariomes($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Inventariomes relation
+ * @method AlmacenQuery innerJoinInventariomes($relationAlias = null) Adds a INNER JOIN clause to the query using the Inventariomes relation
+ *
  * @method AlmacenQuery leftJoinNotacredito($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notacredito relation
  * @method AlmacenQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
  * @method AlmacenQuery innerJoinNotacredito($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacredito relation
@@ -45,6 +53,18 @@
  * @method AlmacenQuery leftJoinNotacreditodetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notacreditodetalle relation
  * @method AlmacenQuery rightJoinNotacreditodetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacreditodetalle relation
  * @method AlmacenQuery innerJoinNotacreditodetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacreditodetalle relation
+ *
+ * @method AlmacenQuery leftJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
+ * @method AlmacenQuery rightJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
+ * @method AlmacenQuery innerJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
+ *
+ * @method AlmacenQuery leftJoinRequisicionRelatedByIdalmacenorigen($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdalmacenorigen relation
+ * @method AlmacenQuery rightJoinRequisicionRelatedByIdalmacenorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdalmacenorigen relation
+ * @method AlmacenQuery innerJoinRequisicionRelatedByIdalmacenorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdalmacenorigen relation
+ *
+ * @method AlmacenQuery leftJoinVenta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Venta relation
+ * @method AlmacenQuery rightJoinVenta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Venta relation
+ * @method AlmacenQuery innerJoinVenta($relationAlias = null) Adds a INNER JOIN clause to the query using the Venta relation
  *
  * @method Almacen findOne(PropelPDO $con = null) Return the first Almacen matching the query
  * @method Almacen findOneOrCreate(PropelPDO $con = null) Return the first Almacen matching the query, or a new Almacen object populated from the query conditions when no match is found
@@ -503,6 +523,80 @@ abstract class BaseAlmacenQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Compra object
+     *
+     * @param   Compra|PropelObjectCollection $compra  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompra($compra, $comparison = null)
+    {
+        if ($compra instanceof Compra) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $compra->getIdalmacen(), $comparison);
+        } elseif ($compra instanceof PropelObjectCollection) {
+            return $this
+                ->useCompraQuery()
+                ->filterByPrimaryKeys($compra->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompra() only accepts arguments of type Compra or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Compra relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinCompra($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Compra');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Compra');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Compra relation Compra object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CompraQuery A secondary query class using the current class as primary query
+     */
+    public function useCompraQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompra($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Compra', 'CompraQuery');
+    }
+
+    /**
      * Filter the query by a related Compradetalle object
      *
      * @param   Compradetalle|PropelObjectCollection $compradetalle  the related object to use as filter
@@ -725,6 +819,80 @@ abstract class BaseAlmacenQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Inventariomes object
+     *
+     * @param   Inventariomes|PropelObjectCollection $inventariomes  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByInventariomes($inventariomes, $comparison = null)
+    {
+        if ($inventariomes instanceof Inventariomes) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $inventariomes->getIdalmacen(), $comparison);
+        } elseif ($inventariomes instanceof PropelObjectCollection) {
+            return $this
+                ->useInventariomesQuery()
+                ->filterByPrimaryKeys($inventariomes->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInventariomes() only accepts arguments of type Inventariomes or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Inventariomes relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinInventariomes($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Inventariomes');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Inventariomes');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Inventariomes relation Inventariomes object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   InventariomesQuery A secondary query class using the current class as primary query
+     */
+    public function useInventariomesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinInventariomes($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Inventariomes', 'InventariomesQuery');
+    }
+
+    /**
      * Filter the query by a related Notacredito object
      *
      * @param   Notacredito|PropelObjectCollection $notacredito  the related object to use as filter
@@ -870,6 +1038,228 @@ abstract class BaseAlmacenQuery extends ModelCriteria
         return $this
             ->joinNotacreditodetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacreditodetalle', 'NotacreditodetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisicion object
+     *
+     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicionRelatedByIdalmacendestino($requisicion, $comparison = null)
+    {
+        if ($requisicion instanceof Requisicion) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $requisicion->getIdalmacendestino(), $comparison);
+        } elseif ($requisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionRelatedByIdalmacendestinoQuery()
+                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicionRelatedByIdalmacendestino() only accepts arguments of type Requisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinRequisicionRelatedByIdalmacendestino($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisicionRelatedByIdalmacendestino');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisicionRelatedByIdalmacendestino');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisicionRelatedByIdalmacendestino relation Requisicion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisicionQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisicionRelatedByIdalmacendestinoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRequisicionRelatedByIdalmacendestino($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdalmacendestino', 'RequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisicion object
+     *
+     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicionRelatedByIdalmacenorigen($requisicion, $comparison = null)
+    {
+        if ($requisicion instanceof Requisicion) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $requisicion->getIdalmacenorigen(), $comparison);
+        } elseif ($requisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionRelatedByIdalmacenorigenQuery()
+                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicionRelatedByIdalmacenorigen() only accepts arguments of type Requisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisicionRelatedByIdalmacenorigen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinRequisicionRelatedByIdalmacenorigen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisicionRelatedByIdalmacenorigen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisicionRelatedByIdalmacenorigen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisicionRelatedByIdalmacenorigen relation Requisicion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisicionQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisicionRelatedByIdalmacenorigenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRequisicionRelatedByIdalmacenorigen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdalmacenorigen', 'RequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Venta object
+     *
+     * @param   Venta|PropelObjectCollection $venta  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByVenta($venta, $comparison = null)
+    {
+        if ($venta instanceof Venta) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $venta->getIdalmacen(), $comparison);
+        } elseif ($venta instanceof PropelObjectCollection) {
+            return $this
+                ->useVentaQuery()
+                ->filterByPrimaryKeys($venta->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByVenta() only accepts arguments of type Venta or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Venta relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinVenta($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Venta');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Venta');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Venta relation Venta object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   VentaQuery A secondary query class using the current class as primary query
+     */
+    public function useVentaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinVenta($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Venta', 'VentaQuery');
     }
 
     /**

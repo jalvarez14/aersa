@@ -7,7 +7,9 @@
  *
  *
  * @method CompraQuery orderByIdcompra($order = Criteria::ASC) Order by the idcompra column
+ * @method CompraQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method CompraQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
+ * @method CompraQuery orderByIdproveedor($order = Criteria::ASC) Order by the idproveedor column
  * @method CompraQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method CompraQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method CompraQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
@@ -15,13 +17,16 @@
  * @method CompraQuery orderByCompraRevisada($order = Criteria::ASC) Order by the compra_revisada column
  * @method CompraQuery orderByCompraFactura($order = Criteria::ASC) Order by the compra_factura column
  * @method CompraQuery orderByCompraFechacreacion($order = Criteria::ASC) Order by the compra_fechacreacion column
+ * @method CompraQuery orderByCompraFechacompra($order = Criteria::ASC) Order by the compra_fechacompra column
  * @method CompraQuery orderByCompraFechaentrega($order = Criteria::ASC) Order by the compra_fechaentrega column
  * @method CompraQuery orderByCompraIeps($order = Criteria::ASC) Order by the compra_ieps column
  * @method CompraQuery orderByCompraIva($order = Criteria::ASC) Order by the compra_iva column
  * @method CompraQuery orderByCompraTotal($order = Criteria::ASC) Order by the compra_total column
  *
  * @method CompraQuery groupByIdcompra() Group by the idcompra column
+ * @method CompraQuery groupByIdempresa() Group by the idempresa column
  * @method CompraQuery groupByIdsucursal() Group by the idsucursal column
+ * @method CompraQuery groupByIdproveedor() Group by the idproveedor column
  * @method CompraQuery groupByIdusuario() Group by the idusuario column
  * @method CompraQuery groupByIdauditor() Group by the idauditor column
  * @method CompraQuery groupByIdalmacen() Group by the idalmacen column
@@ -29,6 +34,7 @@
  * @method CompraQuery groupByCompraRevisada() Group by the compra_revisada column
  * @method CompraQuery groupByCompraFactura() Group by the compra_factura column
  * @method CompraQuery groupByCompraFechacreacion() Group by the compra_fechacreacion column
+ * @method CompraQuery groupByCompraFechacompra() Group by the compra_fechacompra column
  * @method CompraQuery groupByCompraFechaentrega() Group by the compra_fechaentrega column
  * @method CompraQuery groupByCompraIeps() Group by the compra_ieps column
  * @method CompraQuery groupByCompraIva() Group by the compra_iva column
@@ -38,14 +44,44 @@
  * @method CompraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method CompraQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method CompraQuery leftJoinAlmacen($relationAlias = null) Adds a LEFT JOIN clause to the query using the Almacen relation
+ * @method CompraQuery rightJoinAlmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Almacen relation
+ * @method CompraQuery innerJoinAlmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Almacen relation
+ *
+ * @method CompraQuery leftJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
+ * @method CompraQuery rightJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
+ * @method CompraQuery innerJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdauditor relation
+ *
+ * @method CompraQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
+ * @method CompraQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
+ * @method CompraQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
+ * @method CompraQuery leftJoinProveedor($relationAlias = null) Adds a LEFT JOIN clause to the query using the Proveedor relation
+ * @method CompraQuery rightJoinProveedor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Proveedor relation
+ * @method CompraQuery innerJoinProveedor($relationAlias = null) Adds a INNER JOIN clause to the query using the Proveedor relation
+ *
+ * @method CompraQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
+ * @method CompraQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
+ * @method CompraQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
+ *
+ * @method CompraQuery leftJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
+ * @method CompraQuery rightJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
+ * @method CompraQuery innerJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdusuario relation
+ *
  * @method CompraQuery leftJoinCompradetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compradetalle relation
  * @method CompraQuery rightJoinCompradetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compradetalle relation
  * @method CompraQuery innerJoinCompradetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Compradetalle relation
  *
+ * @method CompraQuery leftJoinCompranota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compranota relation
+ * @method CompraQuery rightJoinCompranota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compranota relation
+ * @method CompraQuery innerJoinCompranota($relationAlias = null) Adds a INNER JOIN clause to the query using the Compranota relation
+ *
  * @method Compra findOne(PropelPDO $con = null) Return the first Compra matching the query
  * @method Compra findOneOrCreate(PropelPDO $con = null) Return the first Compra matching the query, or a new Compra object populated from the query conditions when no match is found
  *
+ * @method Compra findOneByIdempresa(int $idempresa) Return the first Compra filtered by the idempresa column
  * @method Compra findOneByIdsucursal(int $idsucursal) Return the first Compra filtered by the idsucursal column
+ * @method Compra findOneByIdproveedor(int $idproveedor) Return the first Compra filtered by the idproveedor column
  * @method Compra findOneByIdusuario(int $idusuario) Return the first Compra filtered by the idusuario column
  * @method Compra findOneByIdauditor(int $idauditor) Return the first Compra filtered by the idauditor column
  * @method Compra findOneByIdalmacen(int $idalmacen) Return the first Compra filtered by the idalmacen column
@@ -53,13 +89,16 @@
  * @method Compra findOneByCompraRevisada(boolean $compra_revisada) Return the first Compra filtered by the compra_revisada column
  * @method Compra findOneByCompraFactura(string $compra_factura) Return the first Compra filtered by the compra_factura column
  * @method Compra findOneByCompraFechacreacion(string $compra_fechacreacion) Return the first Compra filtered by the compra_fechacreacion column
+ * @method Compra findOneByCompraFechacompra(string $compra_fechacompra) Return the first Compra filtered by the compra_fechacompra column
  * @method Compra findOneByCompraFechaentrega(string $compra_fechaentrega) Return the first Compra filtered by the compra_fechaentrega column
  * @method Compra findOneByCompraIeps(string $compra_ieps) Return the first Compra filtered by the compra_ieps column
  * @method Compra findOneByCompraIva(string $compra_iva) Return the first Compra filtered by the compra_iva column
  * @method Compra findOneByCompraTotal(string $compra_total) Return the first Compra filtered by the compra_total column
  *
  * @method array findByIdcompra(int $idcompra) Return Compra objects filtered by the idcompra column
+ * @method array findByIdempresa(int $idempresa) Return Compra objects filtered by the idempresa column
  * @method array findByIdsucursal(int $idsucursal) Return Compra objects filtered by the idsucursal column
+ * @method array findByIdproveedor(int $idproveedor) Return Compra objects filtered by the idproveedor column
  * @method array findByIdusuario(int $idusuario) Return Compra objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Compra objects filtered by the idauditor column
  * @method array findByIdalmacen(int $idalmacen) Return Compra objects filtered by the idalmacen column
@@ -67,6 +106,7 @@
  * @method array findByCompraRevisada(boolean $compra_revisada) Return Compra objects filtered by the compra_revisada column
  * @method array findByCompraFactura(string $compra_factura) Return Compra objects filtered by the compra_factura column
  * @method array findByCompraFechacreacion(string $compra_fechacreacion) Return Compra objects filtered by the compra_fechacreacion column
+ * @method array findByCompraFechacompra(string $compra_fechacompra) Return Compra objects filtered by the compra_fechacompra column
  * @method array findByCompraFechaentrega(string $compra_fechaentrega) Return Compra objects filtered by the compra_fechaentrega column
  * @method array findByCompraIeps(string $compra_ieps) Return Compra objects filtered by the compra_ieps column
  * @method array findByCompraIva(string $compra_iva) Return Compra objects filtered by the compra_iva column
@@ -178,7 +218,7 @@ abstract class BaseCompraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompra`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_total` FROM `compra` WHERE `idcompra` = :p0';
+        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_total` FROM `compra` WHERE `idcompra` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -310,6 +350,50 @@ abstract class BaseCompraQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
+     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
+     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
+     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
+     * </code>
+     *
+     * @see       filterByEmpresa()
+     *
+     * @param     mixed $idempresa The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByIdempresa($idempresa = null, $comparison = null)
+    {
+        if (is_array($idempresa)) {
+            $useMinMax = false;
+            if (isset($idempresa['min'])) {
+                $this->addUsingAlias(CompraPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idempresa['max'])) {
+                $this->addUsingAlias(CompraPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompraPeer::IDEMPRESA, $idempresa, $comparison);
+    }
+
+    /**
      * Filter the query on the idsucursal column
      *
      * Example usage:
@@ -319,6 +403,8 @@ abstract class BaseCompraQuery extends ModelCriteria
      * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
      * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
      * </code>
+     *
+     * @see       filterBySucursal()
      *
      * @param     mixed $idsucursal The value to use as filter.
      *              Use scalar values for equality.
@@ -352,6 +438,50 @@ abstract class BaseCompraQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idproveedor column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdproveedor(1234); // WHERE idproveedor = 1234
+     * $query->filterByIdproveedor(array(12, 34)); // WHERE idproveedor IN (12, 34)
+     * $query->filterByIdproveedor(array('min' => 12)); // WHERE idproveedor >= 12
+     * $query->filterByIdproveedor(array('max' => 12)); // WHERE idproveedor <= 12
+     * </code>
+     *
+     * @see       filterByProveedor()
+     *
+     * @param     mixed $idproveedor The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByIdproveedor($idproveedor = null, $comparison = null)
+    {
+        if (is_array($idproveedor)) {
+            $useMinMax = false;
+            if (isset($idproveedor['min'])) {
+                $this->addUsingAlias(CompraPeer::IDPROVEEDOR, $idproveedor['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idproveedor['max'])) {
+                $this->addUsingAlias(CompraPeer::IDPROVEEDOR, $idproveedor['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompraPeer::IDPROVEEDOR, $idproveedor, $comparison);
+    }
+
+    /**
      * Filter the query on the idusuario column
      *
      * Example usage:
@@ -361,6 +491,8 @@ abstract class BaseCompraQuery extends ModelCriteria
      * $query->filterByIdusuario(array('min' => 12)); // WHERE idusuario >= 12
      * $query->filterByIdusuario(array('max' => 12)); // WHERE idusuario <= 12
      * </code>
+     *
+     * @see       filterByUsuarioRelatedByIdusuario()
      *
      * @param     mixed $idusuario The value to use as filter.
      *              Use scalar values for equality.
@@ -404,6 +536,8 @@ abstract class BaseCompraQuery extends ModelCriteria
      * $query->filterByIdauditor(array('max' => 12)); // WHERE idauditor <= 12
      * </code>
      *
+     * @see       filterByUsuarioRelatedByIdauditor()
+     *
      * @param     mixed $idauditor The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
@@ -445,6 +579,8 @@ abstract class BaseCompraQuery extends ModelCriteria
      * $query->filterByIdalmacen(array('min' => 12)); // WHERE idalmacen >= 12
      * $query->filterByIdalmacen(array('max' => 12)); // WHERE idalmacen <= 12
      * </code>
+     *
+     * @see       filterByAlmacen()
      *
      * @param     mixed $idalmacen The value to use as filter.
      *              Use scalar values for equality.
@@ -606,28 +742,85 @@ abstract class BaseCompraQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the compra_fechacompra column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompraFechacompra('2011-03-14'); // WHERE compra_fechacompra = '2011-03-14'
+     * $query->filterByCompraFechacompra('now'); // WHERE compra_fechacompra = '2011-03-14'
+     * $query->filterByCompraFechacompra(array('max' => 'yesterday')); // WHERE compra_fechacompra < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $compraFechacompra The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByCompraFechacompra($compraFechacompra = null, $comparison = null)
+    {
+        if (is_array($compraFechacompra)) {
+            $useMinMax = false;
+            if (isset($compraFechacompra['min'])) {
+                $this->addUsingAlias(CompraPeer::COMPRA_FECHACOMPRA, $compraFechacompra['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($compraFechacompra['max'])) {
+                $this->addUsingAlias(CompraPeer::COMPRA_FECHACOMPRA, $compraFechacompra['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompraPeer::COMPRA_FECHACOMPRA, $compraFechacompra, $comparison);
+    }
+
+    /**
      * Filter the query on the compra_fechaentrega column
      *
      * Example usage:
      * <code>
-     * $query->filterByCompraFechaentrega('fooValue');   // WHERE compra_fechaentrega = 'fooValue'
-     * $query->filterByCompraFechaentrega('%fooValue%'); // WHERE compra_fechaentrega LIKE '%fooValue%'
+     * $query->filterByCompraFechaentrega('2011-03-14'); // WHERE compra_fechaentrega = '2011-03-14'
+     * $query->filterByCompraFechaentrega('now'); // WHERE compra_fechaentrega = '2011-03-14'
+     * $query->filterByCompraFechaentrega(array('max' => 'yesterday')); // WHERE compra_fechaentrega < '2011-03-13'
      * </code>
      *
-     * @param     string $compraFechaentrega The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     mixed $compraFechaentrega The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return CompraQuery The current query, for fluid interface
      */
     public function filterByCompraFechaentrega($compraFechaentrega = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($compraFechaentrega)) {
+        if (is_array($compraFechaentrega)) {
+            $useMinMax = false;
+            if (isset($compraFechaentrega['min'])) {
+                $this->addUsingAlias(CompraPeer::COMPRA_FECHAENTREGA, $compraFechaentrega['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($compraFechaentrega['max'])) {
+                $this->addUsingAlias(CompraPeer::COMPRA_FECHAENTREGA, $compraFechaentrega['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $compraFechaentrega)) {
-                $compraFechaentrega = str_replace('*', '%', $compraFechaentrega);
-                $comparison = Criteria::LIKE;
             }
         }
 
@@ -761,6 +954,462 @@ abstract class BaseCompraQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Almacen object
+     *
+     * @param   Almacen|PropelObjectCollection $almacen The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAlmacen($almacen, $comparison = null)
+    {
+        if ($almacen instanceof Almacen) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDALMACEN, $almacen->getIdalmacen(), $comparison);
+        } elseif ($almacen instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CompraPeer::IDALMACEN, $almacen->toKeyValue('PrimaryKey', 'Idalmacen'), $comparison);
+        } else {
+            throw new PropelException('filterByAlmacen() only accepts arguments of type Almacen or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Almacen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinAlmacen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Almacen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Almacen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Almacen relation Almacen object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AlmacenQuery A secondary query class using the current class as primary query
+     */
+    public function useAlmacenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlmacen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Almacen', 'AlmacenQuery');
+    }
+
+    /**
+     * Filter the query by a related Usuario object
+     *
+     * @param   Usuario|PropelObjectCollection $usuario The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUsuarioRelatedByIdauditor($usuario, $comparison = null)
+    {
+        if ($usuario instanceof Usuario) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDAUDITOR, $usuario->getIdusuario(), $comparison);
+        } elseif ($usuario instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CompraPeer::IDAUDITOR, $usuario->toKeyValue('PrimaryKey', 'Idusuario'), $comparison);
+        } else {
+            throw new PropelException('filterByUsuarioRelatedByIdauditor() only accepts arguments of type Usuario or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UsuarioRelatedByIdauditor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinUsuarioRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UsuarioRelatedByIdauditor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UsuarioRelatedByIdauditor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UsuarioRelatedByIdauditor relation Usuario object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   UsuarioQuery A secondary query class using the current class as primary query
+     */
+    public function useUsuarioRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUsuarioRelatedByIdauditor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UsuarioRelatedByIdauditor', 'UsuarioQuery');
+    }
+
+    /**
+     * Filter the query by a related Empresa object
+     *
+     * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByEmpresa($empresa, $comparison = null)
+    {
+        if ($empresa instanceof Empresa) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDEMPRESA, $empresa->getIdempresa(), $comparison);
+        } elseif ($empresa instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CompraPeer::IDEMPRESA, $empresa->toKeyValue('PrimaryKey', 'Idempresa'), $comparison);
+        } else {
+            throw new PropelException('filterByEmpresa() only accepts arguments of type Empresa or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Empresa relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinEmpresa($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Empresa');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Empresa');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Empresa relation Empresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   EmpresaQuery A secondary query class using the current class as primary query
+     */
+    public function useEmpresaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEmpresa($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Proveedor object
+     *
+     * @param   Proveedor|PropelObjectCollection $proveedor The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProveedor($proveedor, $comparison = null)
+    {
+        if ($proveedor instanceof Proveedor) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDPROVEEDOR, $proveedor->getIdproveedor(), $comparison);
+        } elseif ($proveedor instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CompraPeer::IDPROVEEDOR, $proveedor->toKeyValue('PrimaryKey', 'Idproveedor'), $comparison);
+        } else {
+            throw new PropelException('filterByProveedor() only accepts arguments of type Proveedor or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Proveedor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinProveedor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Proveedor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Proveedor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Proveedor relation Proveedor object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProveedorQuery A secondary query class using the current class as primary query
+     */
+    public function useProveedorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProveedor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Proveedor', 'ProveedorQuery');
+    }
+
+    /**
+     * Filter the query by a related Sucursal object
+     *
+     * @param   Sucursal|PropelObjectCollection $sucursal The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySucursal($sucursal, $comparison = null)
+    {
+        if ($sucursal instanceof Sucursal) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDSUCURSAL, $sucursal->getIdsucursal(), $comparison);
+        } elseif ($sucursal instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CompraPeer::IDSUCURSAL, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
+        } else {
+            throw new PropelException('filterBySucursal() only accepts arguments of type Sucursal or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Sucursal relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinSucursal($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Sucursal');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Sucursal');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Sucursal relation Sucursal object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SucursalQuery A secondary query class using the current class as primary query
+     */
+    public function useSucursalQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSucursal($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Sucursal', 'SucursalQuery');
+    }
+
+    /**
+     * Filter the query by a related Usuario object
+     *
+     * @param   Usuario|PropelObjectCollection $usuario The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByUsuarioRelatedByIdusuario($usuario, $comparison = null)
+    {
+        if ($usuario instanceof Usuario) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDUSUARIO, $usuario->getIdusuario(), $comparison);
+        } elseif ($usuario instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CompraPeer::IDUSUARIO, $usuario->toKeyValue('PrimaryKey', 'Idusuario'), $comparison);
+        } else {
+            throw new PropelException('filterByUsuarioRelatedByIdusuario() only accepts arguments of type Usuario or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the UsuarioRelatedByIdusuario relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinUsuarioRelatedByIdusuario($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('UsuarioRelatedByIdusuario');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'UsuarioRelatedByIdusuario');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the UsuarioRelatedByIdusuario relation Usuario object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   UsuarioQuery A secondary query class using the current class as primary query
+     */
+    public function useUsuarioRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinUsuarioRelatedByIdusuario($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'UsuarioRelatedByIdusuario', 'UsuarioQuery');
+    }
+
+    /**
      * Filter the query by a related Compradetalle object
      *
      * @param   Compradetalle|PropelObjectCollection $compradetalle  the related object to use as filter
@@ -832,6 +1481,80 @@ abstract class BaseCompraQuery extends ModelCriteria
         return $this
             ->joinCompradetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Compradetalle', 'CompradetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Compranota object
+     *
+     * @param   Compranota|PropelObjectCollection $compranota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompranota($compranota, $comparison = null)
+    {
+        if ($compranota instanceof Compranota) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDCOMPRA, $compranota->getIdcompra(), $comparison);
+        } elseif ($compranota instanceof PropelObjectCollection) {
+            return $this
+                ->useCompranotaQuery()
+                ->filterByPrimaryKeys($compranota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompranota() only accepts arguments of type Compranota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Compranota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinCompranota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Compranota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Compranota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Compranota relation Compranota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CompranotaQuery A secondary query class using the current class as primary query
+     */
+    public function useCompranotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompranota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Compranota', 'CompranotaQuery');
     }
 
     /**

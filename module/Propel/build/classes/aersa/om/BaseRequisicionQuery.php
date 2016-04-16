@@ -11,6 +11,8 @@
  * @method RequisicionQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
  * @method RequisicionQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method RequisicionQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
+ * @method RequisicionQuery orderByIdalmacenorigen($order = Criteria::ASC) Order by the idalmacenorigen column
+ * @method RequisicionQuery orderByIdalmacendestino($order = Criteria::ASC) Order by the idalmacendestino column
  * @method RequisicionQuery orderByIdconceptosalida($order = Criteria::ASC) Order by the idconceptosalida column
  * @method RequisicionQuery orderByRequisicionFecha($order = Criteria::ASC) Order by the requisicion_fecha column
  * @method RequisicionQuery orderByRequisicionRevisada($order = Criteria::ASC) Order by the requisicion_revisada column
@@ -20,6 +22,8 @@
  * @method RequisicionQuery groupByIdsucursal() Group by the idsucursal column
  * @method RequisicionQuery groupByIdusuario() Group by the idusuario column
  * @method RequisicionQuery groupByIdauditor() Group by the idauditor column
+ * @method RequisicionQuery groupByIdalmacenorigen() Group by the idalmacenorigen column
+ * @method RequisicionQuery groupByIdalmacendestino() Group by the idalmacendestino column
  * @method RequisicionQuery groupByIdconceptosalida() Group by the idconceptosalida column
  * @method RequisicionQuery groupByRequisicionFecha() Group by the requisicion_fecha column
  * @method RequisicionQuery groupByRequisicionRevisada() Group by the requisicion_revisada column
@@ -27,6 +31,14 @@
  * @method RequisicionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RequisicionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method RequisicionQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method RequisicionQuery leftJoinAlmacenRelatedByIdalmacendestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the AlmacenRelatedByIdalmacendestino relation
+ * @method RequisicionQuery rightJoinAlmacenRelatedByIdalmacendestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AlmacenRelatedByIdalmacendestino relation
+ * @method RequisicionQuery innerJoinAlmacenRelatedByIdalmacendestino($relationAlias = null) Adds a INNER JOIN clause to the query using the AlmacenRelatedByIdalmacendestino relation
+ *
+ * @method RequisicionQuery leftJoinAlmacenRelatedByIdalmacenorigen($relationAlias = null) Adds a LEFT JOIN clause to the query using the AlmacenRelatedByIdalmacenorigen relation
+ * @method RequisicionQuery rightJoinAlmacenRelatedByIdalmacenorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AlmacenRelatedByIdalmacenorigen relation
+ * @method RequisicionQuery innerJoinAlmacenRelatedByIdalmacenorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the AlmacenRelatedByIdalmacenorigen relation
  *
  * @method RequisicionQuery leftJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  * @method RequisicionQuery rightJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
@@ -59,6 +71,8 @@
  * @method Requisicion findOneByIdsucursal(int $idsucursal) Return the first Requisicion filtered by the idsucursal column
  * @method Requisicion findOneByIdusuario(int $idusuario) Return the first Requisicion filtered by the idusuario column
  * @method Requisicion findOneByIdauditor(int $idauditor) Return the first Requisicion filtered by the idauditor column
+ * @method Requisicion findOneByIdalmacenorigen(int $idalmacenorigen) Return the first Requisicion filtered by the idalmacenorigen column
+ * @method Requisicion findOneByIdalmacendestino(int $idalmacendestino) Return the first Requisicion filtered by the idalmacendestino column
  * @method Requisicion findOneByIdconceptosalida(int $idconceptosalida) Return the first Requisicion filtered by the idconceptosalida column
  * @method Requisicion findOneByRequisicionFecha(string $requisicion_fecha) Return the first Requisicion filtered by the requisicion_fecha column
  * @method Requisicion findOneByRequisicionRevisada(boolean $requisicion_revisada) Return the first Requisicion filtered by the requisicion_revisada column
@@ -68,6 +82,8 @@
  * @method array findByIdsucursal(int $idsucursal) Return Requisicion objects filtered by the idsucursal column
  * @method array findByIdusuario(int $idusuario) Return Requisicion objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Requisicion objects filtered by the idauditor column
+ * @method array findByIdalmacenorigen(int $idalmacenorigen) Return Requisicion objects filtered by the idalmacenorigen column
+ * @method array findByIdalmacendestino(int $idalmacendestino) Return Requisicion objects filtered by the idalmacendestino column
  * @method array findByIdconceptosalida(int $idconceptosalida) Return Requisicion objects filtered by the idconceptosalida column
  * @method array findByRequisicionFecha(string $requisicion_fecha) Return Requisicion objects filtered by the requisicion_fecha column
  * @method array findByRequisicionRevisada(boolean $requisicion_revisada) Return Requisicion objects filtered by the requisicion_revisada column
@@ -178,7 +194,7 @@ abstract class BaseRequisicionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idconceptosalida`, `requisicion_fecha`, `requisicion_revisada` FROM `requisicion` WHERE `idrequisicion` = :p0';
+        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacenorigen`, `idalmacendestino`, `idconceptosalida`, `requisicion_fecha`, `requisicion_revisada` FROM `requisicion` WHERE `idrequisicion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -486,6 +502,94 @@ abstract class BaseRequisicionQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idalmacenorigen column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdalmacenorigen(1234); // WHERE idalmacenorigen = 1234
+     * $query->filterByIdalmacenorigen(array(12, 34)); // WHERE idalmacenorigen IN (12, 34)
+     * $query->filterByIdalmacenorigen(array('min' => 12)); // WHERE idalmacenorigen >= 12
+     * $query->filterByIdalmacenorigen(array('max' => 12)); // WHERE idalmacenorigen <= 12
+     * </code>
+     *
+     * @see       filterByAlmacenRelatedByIdalmacenorigen()
+     *
+     * @param     mixed $idalmacenorigen The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByIdalmacenorigen($idalmacenorigen = null, $comparison = null)
+    {
+        if (is_array($idalmacenorigen)) {
+            $useMinMax = false;
+            if (isset($idalmacenorigen['min'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idalmacenorigen['max'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen, $comparison);
+    }
+
+    /**
+     * Filter the query on the idalmacendestino column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdalmacendestino(1234); // WHERE idalmacendestino = 1234
+     * $query->filterByIdalmacendestino(array(12, 34)); // WHERE idalmacendestino IN (12, 34)
+     * $query->filterByIdalmacendestino(array('min' => 12)); // WHERE idalmacendestino >= 12
+     * $query->filterByIdalmacendestino(array('max' => 12)); // WHERE idalmacendestino <= 12
+     * </code>
+     *
+     * @see       filterByAlmacenRelatedByIdalmacendestino()
+     *
+     * @param     mixed $idalmacendestino The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByIdalmacendestino($idalmacendestino = null, $comparison = null)
+    {
+        if (is_array($idalmacendestino)) {
+            $useMinMax = false;
+            if (isset($idalmacendestino['min'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idalmacendestino['max'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino, $comparison);
+    }
+
+    /**
      * Filter the query on the idconceptosalida column
      *
      * Example usage:
@@ -597,6 +701,158 @@ abstract class BaseRequisicionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisicionPeer::REQUISICION_REVISADA, $requisicionRevisada, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Almacen object
+     *
+     * @param   Almacen|PropelObjectCollection $almacen The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 RequisicionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAlmacenRelatedByIdalmacendestino($almacen, $comparison = null)
+    {
+        if ($almacen instanceof Almacen) {
+            return $this
+                ->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $almacen->getIdalmacen(), $comparison);
+        } elseif ($almacen instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $almacen->toKeyValue('PrimaryKey', 'Idalmacen'), $comparison);
+        } else {
+            throw new PropelException('filterByAlmacenRelatedByIdalmacendestino() only accepts arguments of type Almacen or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the AlmacenRelatedByIdalmacendestino relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function joinAlmacenRelatedByIdalmacendestino($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('AlmacenRelatedByIdalmacendestino');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'AlmacenRelatedByIdalmacendestino');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the AlmacenRelatedByIdalmacendestino relation Almacen object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AlmacenQuery A secondary query class using the current class as primary query
+     */
+    public function useAlmacenRelatedByIdalmacendestinoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlmacenRelatedByIdalmacendestino($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AlmacenRelatedByIdalmacendestino', 'AlmacenQuery');
+    }
+
+    /**
+     * Filter the query by a related Almacen object
+     *
+     * @param   Almacen|PropelObjectCollection $almacen The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 RequisicionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAlmacenRelatedByIdalmacenorigen($almacen, $comparison = null)
+    {
+        if ($almacen instanceof Almacen) {
+            return $this
+                ->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $almacen->getIdalmacen(), $comparison);
+        } elseif ($almacen instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $almacen->toKeyValue('PrimaryKey', 'Idalmacen'), $comparison);
+        } else {
+            throw new PropelException('filterByAlmacenRelatedByIdalmacenorigen() only accepts arguments of type Almacen or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the AlmacenRelatedByIdalmacenorigen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function joinAlmacenRelatedByIdalmacenorigen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('AlmacenRelatedByIdalmacenorigen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'AlmacenRelatedByIdalmacenorigen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the AlmacenRelatedByIdalmacenorigen relation Almacen object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AlmacenQuery A secondary query class using the current class as primary query
+     */
+    public function useAlmacenRelatedByIdalmacenorigenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAlmacenRelatedByIdalmacenorigen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AlmacenRelatedByIdalmacenorigen', 'AlmacenQuery');
     }
 
     /**

@@ -102,9 +102,21 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     protected $proveedor_estado;
 
     /**
+     * The value for the proveedor_codigopostal field.
+     * @var        string
+     */
+    protected $proveedor_codigopostal;
+
+    /**
      * @var        Empresa
      */
     protected $aEmpresa;
+
+    /**
+     * @var        PropelObjectCollection|Compra[] Collection to store aggregation of Compra objects.
+     */
+    protected $collCompras;
+    protected $collComprasPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -125,6 +137,12 @@ abstract class BaseProveedor extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $comprasScheduledForDeletion = null;
 
     /**
      * Get the [idproveedor] column value.
@@ -256,6 +274,17 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     {
 
         return $this->proveedor_estado;
+    }
+
+    /**
+     * Get the [proveedor_codigopostal] column value.
+     *
+     * @return string
+     */
+    public function getProveedorCodigopostal()
+    {
+
+        return $this->proveedor_codigopostal;
     }
 
     /**
@@ -515,6 +544,27 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     } // setProveedorEstado()
 
     /**
+     * Set the value of [proveedor_codigopostal] column.
+     *
+     * @param  string $v new value
+     * @return Proveedor The current object (for fluent API support)
+     */
+    public function setProveedorCodigopostal($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->proveedor_codigopostal !== $v) {
+            $this->proveedor_codigopostal = $v;
+            $this->modifiedColumns[] = ProveedorPeer::PROVEEDOR_CODIGOPOSTAL;
+        }
+
+
+        return $this;
+    } // setProveedorCodigopostal()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -558,6 +608,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             $this->proveedor_colonia = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->proveedor_ciudad = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->proveedor_estado = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->proveedor_codigopostal = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -567,7 +618,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 12; // 12 = ProveedorPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = ProveedorPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Proveedor object", $e);
@@ -633,6 +684,8 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aEmpresa = null;
+            $this->collCompras = null;
+
         } // if (deep)
     }
 
@@ -769,6 +822,23 @@ abstract class BaseProveedor extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->comprasScheduledForDeletion !== null) {
+                if (!$this->comprasScheduledForDeletion->isEmpty()) {
+                    CompraQuery::create()
+                        ->filterByPrimaryKeys($this->comprasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->comprasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompras !== null) {
+                foreach ($this->collCompras as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -827,6 +897,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_ESTADO)) {
             $modifiedColumns[':p' . $index++]  = '`proveedor_estado`';
         }
+        if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`proveedor_codigopostal`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `proveedor` (%s) VALUES (%s)',
@@ -873,6 +946,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
                         break;
                     case '`proveedor_estado`':
                         $stmt->bindValue($identifier, $this->proveedor_estado, PDO::PARAM_STR);
+                        break;
+                    case '`proveedor_codigopostal`':
+                        $stmt->bindValue($identifier, $this->proveedor_codigopostal, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -985,6 +1061,14 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCompras !== null) {
+                    foreach ($this->collCompras as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1056,6 +1140,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             case 11:
                 return $this->getProveedorEstado();
                 break;
+            case 12:
+                return $this->getProveedorCodigopostal();
+                break;
             default:
                 return null;
                 break;
@@ -1097,6 +1184,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             $keys[9] => $this->getProveedorColonia(),
             $keys[10] => $this->getProveedorCiudad(),
             $keys[11] => $this->getProveedorEstado(),
+            $keys[12] => $this->getProveedorCodigopostal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1106,6 +1194,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aEmpresa) {
                 $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCompras) {
+                $result['Compras'] = $this->collCompras->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1177,6 +1268,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             case 11:
                 $this->setProveedorEstado($value);
                 break;
+            case 12:
+                $this->setProveedorCodigopostal($value);
+                break;
         } // switch()
     }
 
@@ -1213,6 +1307,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if (array_key_exists($keys[9], $arr)) $this->setProveedorColonia($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setProveedorCiudad($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setProveedorEstado($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setProveedorCodigopostal($arr[$keys[12]]);
     }
 
     /**
@@ -1236,6 +1331,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_COLONIA)) $criteria->add(ProveedorPeer::PROVEEDOR_COLONIA, $this->proveedor_colonia);
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_CIUDAD)) $criteria->add(ProveedorPeer::PROVEEDOR_CIUDAD, $this->proveedor_ciudad);
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_ESTADO)) $criteria->add(ProveedorPeer::PROVEEDOR_ESTADO, $this->proveedor_estado);
+        if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL)) $criteria->add(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL, $this->proveedor_codigopostal);
 
         return $criteria;
     }
@@ -1310,6 +1406,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         $copyObj->setProveedorColonia($this->getProveedorColonia());
         $copyObj->setProveedorCiudad($this->getProveedorCiudad());
         $copyObj->setProveedorEstado($this->getProveedorEstado());
+        $copyObj->setProveedorCodigopostal($this->getProveedorCodigopostal());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1317,6 +1414,12 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getCompras() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompra($relObj->copy($deepCopy));
+                }
+            }
 
             //unflag object copy
             $this->startCopy = false;
@@ -1420,6 +1523,372 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         return $this->aEmpresa;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Compra' == $relationName) {
+            $this->initCompras();
+        }
+    }
+
+    /**
+     * Clears out the collCompras collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Proveedor The current object (for fluent API support)
+     * @see        addCompras()
+     */
+    public function clearCompras()
+    {
+        $this->collCompras = null; // important to set this to null since that means it is uninitialized
+        $this->collComprasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompras collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompras($v = true)
+    {
+        $this->collComprasPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompras collection.
+     *
+     * By default this just sets the collCompras collection to an empty array (like clearcollCompras());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompras($overrideExisting = true)
+    {
+        if (null !== $this->collCompras && !$overrideExisting) {
+            return;
+        }
+        $this->collCompras = new PropelObjectCollection();
+        $this->collCompras->setModel('Compra');
+    }
+
+    /**
+     * Gets an array of Compra objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Proveedor is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     * @throws PropelException
+     */
+    public function getCompras($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collComprasPartial && !$this->isNew();
+        if (null === $this->collCompras || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompras) {
+                // return empty collection
+                $this->initCompras();
+            } else {
+                $collCompras = CompraQuery::create(null, $criteria)
+                    ->filterByProveedor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collComprasPartial && count($collCompras)) {
+                      $this->initCompras(false);
+
+                      foreach ($collCompras as $obj) {
+                        if (false == $this->collCompras->contains($obj)) {
+                          $this->collCompras->append($obj);
+                        }
+                      }
+
+                      $this->collComprasPartial = true;
+                    }
+
+                    $collCompras->getInternalIterator()->rewind();
+
+                    return $collCompras;
+                }
+
+                if ($partial && $this->collCompras) {
+                    foreach ($this->collCompras as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompras[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompras = $collCompras;
+                $this->collComprasPartial = false;
+            }
+        }
+
+        return $this->collCompras;
+    }
+
+    /**
+     * Sets a collection of Compra objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $compras A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Proveedor The current object (for fluent API support)
+     */
+    public function setCompras(PropelCollection $compras, PropelPDO $con = null)
+    {
+        $comprasToDelete = $this->getCompras(new Criteria(), $con)->diff($compras);
+
+
+        $this->comprasScheduledForDeletion = $comprasToDelete;
+
+        foreach ($comprasToDelete as $compraRemoved) {
+            $compraRemoved->setProveedor(null);
+        }
+
+        $this->collCompras = null;
+        foreach ($compras as $compra) {
+            $this->addCompra($compra);
+        }
+
+        $this->collCompras = $compras;
+        $this->collComprasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Compra objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Compra objects.
+     * @throws PropelException
+     */
+    public function countCompras(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collComprasPartial && !$this->isNew();
+        if (null === $this->collCompras || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompras) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompras());
+            }
+            $query = CompraQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProveedor($this)
+                ->count($con);
+        }
+
+        return count($this->collCompras);
+    }
+
+    /**
+     * Method called to associate a Compra object to this object
+     * through the Compra foreign key attribute.
+     *
+     * @param    Compra $l Compra
+     * @return Proveedor The current object (for fluent API support)
+     */
+    public function addCompra(Compra $l)
+    {
+        if ($this->collCompras === null) {
+            $this->initCompras();
+            $this->collComprasPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompras->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompra($l);
+
+            if ($this->comprasScheduledForDeletion and $this->comprasScheduledForDeletion->contains($l)) {
+                $this->comprasScheduledForDeletion->remove($this->comprasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Compra $compra The compra object to add.
+     */
+    protected function doAddCompra($compra)
+    {
+        $this->collCompras[]= $compra;
+        $compra->setProveedor($this);
+    }
+
+    /**
+     * @param	Compra $compra The compra object to remove.
+     * @return Proveedor The current object (for fluent API support)
+     */
+    public function removeCompra($compra)
+    {
+        if ($this->getCompras()->contains($compra)) {
+            $this->collCompras->remove($this->collCompras->search($compra));
+            if (null === $this->comprasScheduledForDeletion) {
+                $this->comprasScheduledForDeletion = clone $this->collCompras;
+                $this->comprasScheduledForDeletion->clear();
+            }
+            $this->comprasScheduledForDeletion[]= clone $compra;
+            $compra->setProveedor(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Proveedor is new, it will return
+     * an empty collection; or if this Proveedor has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Proveedor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Proveedor is new, it will return
+     * an empty collection; or if this Proveedor has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Proveedor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Proveedor is new, it will return
+     * an empty collection; or if this Proveedor has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Proveedor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Proveedor is new, it will return
+     * an empty collection; or if this Proveedor has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Proveedor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Proveedor is new, it will return
+     * an empty collection; or if this Proveedor has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Proveedor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1437,6 +1906,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         $this->proveedor_colonia = null;
         $this->proveedor_ciudad = null;
         $this->proveedor_estado = null;
+        $this->proveedor_codigopostal = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1459,6 +1929,11 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCompras) {
+                foreach ($this->collCompras as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aEmpresa instanceof Persistent) {
               $this->aEmpresa->clearAllReferences($deep);
             }
@@ -1466,6 +1941,10 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCompras instanceof PropelCollection) {
+            $this->collCompras->clearIterator();
+        }
+        $this->collCompras = null;
         $this->aEmpresa = null;
     }
 

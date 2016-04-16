@@ -24,13 +24,13 @@ abstract class BaseRequisiciondetallePeer
     const TM_CLASS = 'RequisiciondetalleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the idrequisiciondetalle field */
     const IDREQUISICIONDETALLE = 'requisiciondetalle.idrequisiciondetalle';
@@ -46,12 +46,6 @@ abstract class BaseRequisiciondetallePeer
 
     /** the column name for the requisiciondetalle_revisada field */
     const REQUISICIONDETALLE_REVISADA = 'requisiciondetalle.requisiciondetalle_revisada';
-
-    /** the column name for the idalmacenorigen field */
-    const IDALMACENORIGEN = 'requisiciondetalle.idalmacenorigen';
-
-    /** the column name for the idalmacendestino field */
-    const IDALMACENDESTINO = 'requisiciondetalle.idalmacendestino';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -72,12 +66,12 @@ abstract class BaseRequisiciondetallePeer
      * e.g. RequisiciondetallePeer::$fieldNames[RequisiciondetallePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisiciondetalle', 'Idrequisicion', 'Idproducto', 'RequisiciondetalleCantidad', 'RequisiciondetalleRevisada', 'Idalmacenorigen', 'Idalmacendestino', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisiciondetalle', 'idrequisicion', 'idproducto', 'requisiciondetalleCantidad', 'requisiciondetalleRevisada', 'idalmacenorigen', 'idalmacendestino', ),
-        BasePeer::TYPE_COLNAME => array (RequisiciondetallePeer::IDREQUISICIONDETALLE, RequisiciondetallePeer::IDREQUISICION, RequisiciondetallePeer::IDPRODUCTO, RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD, RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, RequisiciondetallePeer::IDALMACENORIGEN, RequisiciondetallePeer::IDALMACENDESTINO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICIONDETALLE', 'IDREQUISICION', 'IDPRODUCTO', 'REQUISICIONDETALLE_CANTIDAD', 'REQUISICIONDETALLE_REVISADA', 'IDALMACENORIGEN', 'IDALMACENDESTINO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisiciondetalle', 'idrequisicion', 'idproducto', 'requisiciondetalle_cantidad', 'requisiciondetalle_revisada', 'idalmacenorigen', 'idalmacendestino', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Idrequisiciondetalle', 'Idrequisicion', 'Idproducto', 'RequisiciondetalleCantidad', 'RequisiciondetalleRevisada', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisiciondetalle', 'idrequisicion', 'idproducto', 'requisiciondetalleCantidad', 'requisiciondetalleRevisada', ),
+        BasePeer::TYPE_COLNAME => array (RequisiciondetallePeer::IDREQUISICIONDETALLE, RequisiciondetallePeer::IDREQUISICION, RequisiciondetallePeer::IDPRODUCTO, RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD, RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICIONDETALLE', 'IDREQUISICION', 'IDPRODUCTO', 'REQUISICIONDETALLE_CANTIDAD', 'REQUISICIONDETALLE_REVISADA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idrequisiciondetalle', 'idrequisicion', 'idproducto', 'requisiciondetalle_cantidad', 'requisiciondetalle_revisada', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -87,12 +81,12 @@ abstract class BaseRequisiciondetallePeer
      * e.g. RequisiciondetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisiciondetalle' => 0, 'Idrequisicion' => 1, 'Idproducto' => 2, 'RequisiciondetalleCantidad' => 3, 'RequisiciondetalleRevisada' => 4, 'Idalmacenorigen' => 5, 'Idalmacendestino' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisiciondetalle' => 0, 'idrequisicion' => 1, 'idproducto' => 2, 'requisiciondetalleCantidad' => 3, 'requisiciondetalleRevisada' => 4, 'idalmacenorigen' => 5, 'idalmacendestino' => 6, ),
-        BasePeer::TYPE_COLNAME => array (RequisiciondetallePeer::IDREQUISICIONDETALLE => 0, RequisiciondetallePeer::IDREQUISICION => 1, RequisiciondetallePeer::IDPRODUCTO => 2, RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD => 3, RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA => 4, RequisiciondetallePeer::IDALMACENORIGEN => 5, RequisiciondetallePeer::IDALMACENDESTINO => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICIONDETALLE' => 0, 'IDREQUISICION' => 1, 'IDPRODUCTO' => 2, 'REQUISICIONDETALLE_CANTIDAD' => 3, 'REQUISICIONDETALLE_REVISADA' => 4, 'IDALMACENORIGEN' => 5, 'IDALMACENDESTINO' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisiciondetalle' => 0, 'idrequisicion' => 1, 'idproducto' => 2, 'requisiciondetalle_cantidad' => 3, 'requisiciondetalle_revisada' => 4, 'idalmacenorigen' => 5, 'idalmacendestino' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Idrequisiciondetalle' => 0, 'Idrequisicion' => 1, 'Idproducto' => 2, 'RequisiciondetalleCantidad' => 3, 'RequisiciondetalleRevisada' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisiciondetalle' => 0, 'idrequisicion' => 1, 'idproducto' => 2, 'requisiciondetalleCantidad' => 3, 'requisiciondetalleRevisada' => 4, ),
+        BasePeer::TYPE_COLNAME => array (RequisiciondetallePeer::IDREQUISICIONDETALLE => 0, RequisiciondetallePeer::IDREQUISICION => 1, RequisiciondetallePeer::IDPRODUCTO => 2, RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD => 3, RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICIONDETALLE' => 0, 'IDREQUISICION' => 1, 'IDPRODUCTO' => 2, 'REQUISICIONDETALLE_CANTIDAD' => 3, 'REQUISICIONDETALLE_REVISADA' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idrequisiciondetalle' => 0, 'idrequisicion' => 1, 'idproducto' => 2, 'requisiciondetalle_cantidad' => 3, 'requisiciondetalle_revisada' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -171,16 +165,12 @@ abstract class BaseRequisiciondetallePeer
             $criteria->addSelectColumn(RequisiciondetallePeer::IDPRODUCTO);
             $criteria->addSelectColumn(RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD);
             $criteria->addSelectColumn(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA);
-            $criteria->addSelectColumn(RequisiciondetallePeer::IDALMACENORIGEN);
-            $criteria->addSelectColumn(RequisiciondetallePeer::IDALMACENDESTINO);
         } else {
             $criteria->addSelectColumn($alias . '.idrequisiciondetalle');
             $criteria->addSelectColumn($alias . '.idrequisicion');
             $criteria->addSelectColumn($alias . '.idproducto');
             $criteria->addSelectColumn($alias . '.requisiciondetalle_cantidad');
             $criteria->addSelectColumn($alias . '.requisiciondetalle_revisada');
-            $criteria->addSelectColumn($alias . '.idalmacenorigen');
-            $criteria->addSelectColumn($alias . '.idalmacendestino');
         }
     }
 

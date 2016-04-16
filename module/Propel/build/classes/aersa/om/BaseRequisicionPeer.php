@@ -24,13 +24,13 @@ abstract class BaseRequisicionPeer
     const TM_CLASS = 'RequisicionTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the idrequisicion field */
     const IDREQUISICION = 'requisicion.idrequisicion';
@@ -46,6 +46,12 @@ abstract class BaseRequisicionPeer
 
     /** the column name for the idauditor field */
     const IDAUDITOR = 'requisicion.idauditor';
+
+    /** the column name for the idalmacenorigen field */
+    const IDALMACENORIGEN = 'requisicion.idalmacenorigen';
+
+    /** the column name for the idalmacendestino field */
+    const IDALMACENDESTINO = 'requisicion.idalmacendestino';
 
     /** the column name for the idconceptosalida field */
     const IDCONCEPTOSALIDA = 'requisicion.idconceptosalida';
@@ -75,12 +81,12 @@ abstract class BaseRequisicionPeer
      * e.g. RequisicionPeer::$fieldNames[RequisicionPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisicion', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'Idconceptosalida', 'RequisicionFecha', 'RequisicionRevisada', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idconceptosalida', 'requisicionFecha', 'requisicionRevisada', ),
-        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION, RequisicionPeer::IDEMPRESA, RequisicionPeer::IDSUCURSAL, RequisicionPeer::IDUSUARIO, RequisicionPeer::IDAUDITOR, RequisicionPeer::IDCONCEPTOSALIDA, RequisicionPeer::REQUISICION_FECHA, RequisicionPeer::REQUISICION_REVISADA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'IDCONCEPTOSALIDA', 'REQUISICION_FECHA', 'REQUISICION_REVISADA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisicion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idconceptosalida', 'requisicion_fecha', 'requisicion_revisada', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idrequisicion', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'Idalmacenorigen', 'Idalmacendestino', 'Idconceptosalida', 'RequisicionFecha', 'RequisicionRevisada', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacenorigen', 'idalmacendestino', 'idconceptosalida', 'requisicionFecha', 'requisicionRevisada', ),
+        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION, RequisicionPeer::IDEMPRESA, RequisicionPeer::IDSUCURSAL, RequisicionPeer::IDUSUARIO, RequisicionPeer::IDAUDITOR, RequisicionPeer::IDALMACENORIGEN, RequisicionPeer::IDALMACENDESTINO, RequisicionPeer::IDCONCEPTOSALIDA, RequisicionPeer::REQUISICION_FECHA, RequisicionPeer::REQUISICION_REVISADA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACENORIGEN', 'IDALMACENDESTINO', 'IDCONCEPTOSALIDA', 'REQUISICION_FECHA', 'REQUISICION_REVISADA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idrequisicion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacenorigen', 'idalmacendestino', 'idconceptosalida', 'requisicion_fecha', 'requisicion_revisada', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -90,12 +96,12 @@ abstract class BaseRequisicionPeer
      * e.g. RequisicionPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisicion' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'Idconceptosalida' => 5, 'RequisicionFecha' => 6, 'RequisicionRevisada' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idconceptosalida' => 5, 'requisicionFecha' => 6, 'requisicionRevisada' => 7, ),
-        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION => 0, RequisicionPeer::IDEMPRESA => 1, RequisicionPeer::IDSUCURSAL => 2, RequisicionPeer::IDUSUARIO => 3, RequisicionPeer::IDAUDITOR => 4, RequisicionPeer::IDCONCEPTOSALIDA => 5, RequisicionPeer::REQUISICION_FECHA => 6, RequisicionPeer::REQUISICION_REVISADA => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'IDCONCEPTOSALIDA' => 5, 'REQUISICION_FECHA' => 6, 'REQUISICION_REVISADA' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idconceptosalida' => 5, 'requisicion_fecha' => 6, 'requisicion_revisada' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idrequisicion' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'Idalmacenorigen' => 5, 'Idalmacendestino' => 6, 'Idconceptosalida' => 7, 'RequisicionFecha' => 8, 'RequisicionRevisada' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacenorigen' => 5, 'idalmacendestino' => 6, 'idconceptosalida' => 7, 'requisicionFecha' => 8, 'requisicionRevisada' => 9, ),
+        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION => 0, RequisicionPeer::IDEMPRESA => 1, RequisicionPeer::IDSUCURSAL => 2, RequisicionPeer::IDUSUARIO => 3, RequisicionPeer::IDAUDITOR => 4, RequisicionPeer::IDALMACENORIGEN => 5, RequisicionPeer::IDALMACENDESTINO => 6, RequisicionPeer::IDCONCEPTOSALIDA => 7, RequisicionPeer::REQUISICION_FECHA => 8, RequisicionPeer::REQUISICION_REVISADA => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'IDALMACENORIGEN' => 5, 'IDALMACENDESTINO' => 6, 'IDCONCEPTOSALIDA' => 7, 'REQUISICION_FECHA' => 8, 'REQUISICION_REVISADA' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacenorigen' => 5, 'idalmacendestino' => 6, 'idconceptosalida' => 7, 'requisicion_fecha' => 8, 'requisicion_revisada' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -174,6 +180,8 @@ abstract class BaseRequisicionPeer
             $criteria->addSelectColumn(RequisicionPeer::IDSUCURSAL);
             $criteria->addSelectColumn(RequisicionPeer::IDUSUARIO);
             $criteria->addSelectColumn(RequisicionPeer::IDAUDITOR);
+            $criteria->addSelectColumn(RequisicionPeer::IDALMACENORIGEN);
+            $criteria->addSelectColumn(RequisicionPeer::IDALMACENDESTINO);
             $criteria->addSelectColumn(RequisicionPeer::IDCONCEPTOSALIDA);
             $criteria->addSelectColumn(RequisicionPeer::REQUISICION_FECHA);
             $criteria->addSelectColumn(RequisicionPeer::REQUISICION_REVISADA);
@@ -183,6 +191,8 @@ abstract class BaseRequisicionPeer
             $criteria->addSelectColumn($alias . '.idsucursal');
             $criteria->addSelectColumn($alias . '.idusuario');
             $criteria->addSelectColumn($alias . '.idauditor');
+            $criteria->addSelectColumn($alias . '.idalmacenorigen');
+            $criteria->addSelectColumn($alias . '.idalmacendestino');
             $criteria->addSelectColumn($alias . '.idconceptosalida');
             $criteria->addSelectColumn($alias . '.requisicion_fecha');
             $criteria->addSelectColumn($alias . '.requisicion_revisada');
@@ -491,6 +501,108 @@ abstract class BaseRequisicionPeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related AlmacenRelatedByIdalmacendestino table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAlmacenRelatedByIdalmacendestino(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(RequisicionPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            RequisicionPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related AlmacenRelatedByIdalmacenorigen table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAlmacenRelatedByIdalmacenorigen(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(RequisicionPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            RequisicionPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related UsuarioRelatedByIdauditor table
      *
      * @param      Criteria $criteria
@@ -742,6 +854,140 @@ abstract class BaseRequisicionPeer
         $stmt->closeCursor();
 
         return $count;
+    }
+
+
+    /**
+     * Selects a collection of Requisicion objects pre-filled with their Almacen objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Requisicion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAlmacenRelatedByIdalmacendestino(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+        }
+
+        RequisicionPeer::addSelectColumns($criteria);
+        $startcol = RequisicionPeer::NUM_HYDRATE_COLUMNS;
+        AlmacenPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = RequisicionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                RequisicionPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Requisicion) to $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacendestino($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Requisicion objects pre-filled with their Almacen objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Requisicion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAlmacenRelatedByIdalmacenorigen(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+        }
+
+        RequisicionPeer::addSelectColumns($criteria);
+        $startcol = RequisicionPeer::NUM_HYDRATE_COLUMNS;
+        AlmacenPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = RequisicionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                RequisicionPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Requisicion) to $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacenorigen($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
 
@@ -1116,6 +1362,10 @@ abstract class BaseRequisicionPeer
             $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
         $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
@@ -1160,20 +1410,30 @@ abstract class BaseRequisicionPeer
         RequisicionPeer::addSelectColumns($criteria);
         $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
 
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         ConceptosalidaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
 
         EmpresaPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         SucursalPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol9 = $startcol8 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -1202,94 +1462,130 @@ abstract class BaseRequisicionPeer
                 RequisicionPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Usuario rows
+            // Add objects for joined Almacen rows
 
-            $key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = UsuarioPeer::getInstanceFromPool($key2);
+                $obj2 = AlmacenPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = UsuarioPeer::getOMClass();
+                    $cls = AlmacenPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    UsuarioPeer::addInstanceToPool($obj2, $key2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj2 (Usuario)
-                $obj2->addRequisicionRelatedByIdauditor($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacendestino($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Almacen rows
+
+            $key3 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = AlmacenPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
+                    $cls = AlmacenPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    AlmacenPeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj3 (Almacen)
+                $obj3->addRequisicionRelatedByIdalmacenorigen($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Usuario rows
+
+            $key4 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = UsuarioPeer::getInstanceFromPool($key4);
+                if (!$obj4) {
+
+                    $cls = UsuarioPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UsuarioPeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj4 (Usuario)
+                $obj4->addRequisicionRelatedByIdauditor($obj1);
             } // if joined row not null
 
             // Add objects for joined Conceptosalida rows
 
-            $key3 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-            if ($key3 !== null) {
-                $obj3 = ConceptosalidaPeer::getInstanceFromPool($key3);
-                if (!$obj3) {
+            $key5 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = ConceptosalidaPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
 
                     $cls = ConceptosalidaPeer::getOMClass();
 
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ConceptosalidaPeer::addInstanceToPool($obj3, $key3);
-                } // if obj3 loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    ConceptosalidaPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj3 (Conceptosalida)
-                $obj3->addRequisicion($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Conceptosalida)
+                $obj5->addRequisicion($obj1);
             } // if joined row not null
 
             // Add objects for joined Empresa rows
 
-            $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-            if ($key4 !== null) {
-                $obj4 = EmpresaPeer::getInstanceFromPool($key4);
-                if (!$obj4) {
+            $key6 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+            if ($key6 !== null) {
+                $obj6 = EmpresaPeer::getInstanceFromPool($key6);
+                if (!$obj6) {
 
                     $cls = EmpresaPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    EmpresaPeer::addInstanceToPool($obj4, $key4);
-                } // if obj4 loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    EmpresaPeer::addInstanceToPool($obj6, $key6);
+                } // if obj6 loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj4 (Empresa)
-                $obj4->addRequisicion($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Empresa)
+                $obj6->addRequisicion($obj1);
             } // if joined row not null
 
             // Add objects for joined Sucursal rows
 
-            $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-            if ($key5 !== null) {
-                $obj5 = SucursalPeer::getInstanceFromPool($key5);
-                if (!$obj5) {
+            $key7 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+            if ($key7 !== null) {
+                $obj7 = SucursalPeer::getInstanceFromPool($key7);
+                if (!$obj7) {
 
                     $cls = SucursalPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    SucursalPeer::addInstanceToPool($obj5, $key5);
-                } // if obj5 loaded
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    SucursalPeer::addInstanceToPool($obj7, $key7);
+                } // if obj7 loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj5 (Sucursal)
-                $obj5->addRequisicion($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj7 (Sucursal)
+                $obj7->addRequisicion($obj1);
             } // if joined row not null
 
             // Add objects for joined Usuario rows
 
-            $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-            if ($key6 !== null) {
-                $obj6 = UsuarioPeer::getInstanceFromPool($key6);
-                if (!$obj6) {
+            $key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+            if ($key8 !== null) {
+                $obj8 = UsuarioPeer::getInstanceFromPool($key8);
+                if (!$obj8) {
 
                     $cls = UsuarioPeer::getOMClass();
 
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UsuarioPeer::addInstanceToPool($obj6, $key6);
-                } // if obj6 loaded
+                    $obj8 = new $cls();
+                    $obj8->hydrate($row, $startcol8);
+                    UsuarioPeer::addInstanceToPool($obj8, $key8);
+                } // if obj8 loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj6 (Usuario)
-                $obj6->addRequisicionRelatedByIdusuario($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj8 (Usuario)
+                $obj8->addRequisicionRelatedByIdusuario($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1297,6 +1593,124 @@ abstract class BaseRequisicionPeer
         $stmt->closeCursor();
 
         return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related AlmacenRelatedByIdalmacendestino table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptAlmacenRelatedByIdalmacendestino(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(RequisicionPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            RequisicionPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related AlmacenRelatedByIdalmacenorigen table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptAlmacenRelatedByIdalmacenorigen(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(RequisicionPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            RequisicionPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
     }
 
 
@@ -1335,6 +1749,10 @@ abstract class BaseRequisicionPeer
         if ($con === null) {
             $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
 
@@ -1390,6 +1808,10 @@ abstract class BaseRequisicionPeer
         if ($con === null) {
             $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -1448,6 +1870,10 @@ abstract class BaseRequisicionPeer
             $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
         $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
@@ -1504,6 +1930,10 @@ abstract class BaseRequisicionPeer
         if ($con === null) {
             $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -1562,6 +1992,10 @@ abstract class BaseRequisicionPeer
             $con = Propel::getConnection(RequisicionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
         $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
@@ -1582,7 +2016,7 @@ abstract class BaseRequisicionPeer
 
 
     /**
-     * Selects a collection of Requisicion objects pre-filled with all related objects except UsuarioRelatedByIdauditor.
+     * Selects a collection of Requisicion objects pre-filled with all related objects except AlmacenRelatedByIdalmacendestino.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1591,421 +2025,7 @@ abstract class BaseRequisicionPeer
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptUsuarioRelatedByIdauditor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
-        }
-
-        RequisicionPeer::addSelectColumns($criteria);
-        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
-
-        ConceptosalidaPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
-
-        EmpresaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
-
-        SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = RequisicionPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                RequisicionPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Conceptosalida rows
-
-                $key2 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = ConceptosalidaPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = ConceptosalidaPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    ConceptosalidaPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj2 (Conceptosalida)
-                $obj2->addRequisicion($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Empresa rows
-
-                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = EmpresaPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    EmpresaPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj3 (Empresa)
-                $obj3->addRequisicion($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Sucursal rows
-
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
-
-                        $cls = SucursalPeer::getOMClass();
-
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj4 (Sucursal)
-                $obj4->addRequisicion($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Requisicion objects pre-filled with all related objects except Conceptosalida.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisicion objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptConceptosalida(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
-        }
-
-        RequisicionPeer::addSelectColumns($criteria);
-        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
-
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
-
-        EmpresaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
-
-        SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
-
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = RequisicionPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                RequisicionPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Usuario rows
-
-                $key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = UsuarioPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = UsuarioPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    UsuarioPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj2 (Usuario)
-                $obj2->addRequisicionRelatedByIdauditor($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Empresa rows
-
-                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = EmpresaPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    EmpresaPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj3 (Empresa)
-                $obj3->addRequisicion($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Sucursal rows
-
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
-
-                        $cls = SucursalPeer::getOMClass();
-
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj4 (Sucursal)
-                $obj4->addRequisicion($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Usuario rows
-
-                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
-
-                        $cls = UsuarioPeer::getOMClass();
-
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    UsuarioPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj5 (Usuario)
-                $obj5->addRequisicionRelatedByIdusuario($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Requisicion objects pre-filled with all related objects except Empresa.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisicion objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
-        }
-
-        RequisicionPeer::addSelectColumns($criteria);
-        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
-
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
-
-        ConceptosalidaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
-
-        SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
-
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
-
-        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = RequisicionPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                RequisicionPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Usuario rows
-
-                $key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = UsuarioPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = UsuarioPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    UsuarioPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj2 (Usuario)
-                $obj2->addRequisicionRelatedByIdauditor($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Conceptosalida rows
-
-                $key3 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = ConceptosalidaPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = ConceptosalidaPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    ConceptosalidaPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj3 (Conceptosalida)
-                $obj3->addRequisicion($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Sucursal rows
-
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
-
-                        $cls = SucursalPeer::getOMClass();
-
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj4 (Sucursal)
-                $obj4->addRequisicion($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Usuario rows
-
-                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
-
-                        $cls = UsuarioPeer::getOMClass();
-
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    UsuarioPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
-
-                // Add the $obj1 (Requisicion) to the collection in $obj5 (Usuario)
-                $obj5->addRequisicionRelatedByIdusuario($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Requisicion objects pre-filled with all related objects except Sucursal.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisicion objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptAlmacenRelatedByIdalmacendestino(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -2028,14 +2048,19 @@ abstract class BaseRequisicionPeer
         EmpresaPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -2114,22 +2139,963 @@ abstract class BaseRequisicionPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Usuario rows
+                // Add objects for joined Sucursal rows
 
-                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
                 if ($key5 !== null) {
-                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
                     if (!$obj5) {
 
-                        $cls = UsuarioPeer::getOMClass();
+                        $cls = SucursalPeer::getOMClass();
 
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
                 } // if $obj5 already loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj5 (Usuario)
-                $obj5->addRequisicionRelatedByIdusuario($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Sucursal)
+                $obj5->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Usuario)
+                $obj6->addRequisicionRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Requisicion objects pre-filled with all related objects except AlmacenRelatedByIdalmacenorigen.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Requisicion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptAlmacenRelatedByIdalmacenorigen(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+        }
+
+        RequisicionPeer::addSelectColumns($criteria);
+        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        ConceptosalidaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = RequisicionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                RequisicionPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Usuario rows
+
+                $key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = UsuarioPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    UsuarioPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj2 (Usuario)
+                $obj2->addRequisicionRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Conceptosalida rows
+
+                $key3 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = ConceptosalidaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = ConceptosalidaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    ConceptosalidaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj3 (Conceptosalida)
+                $obj3->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj4 (Empresa)
+                $obj4->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Sucursal)
+                $obj5->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Usuario)
+                $obj6->addRequisicionRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Requisicion objects pre-filled with all related objects except UsuarioRelatedByIdauditor.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Requisicion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptUsuarioRelatedByIdauditor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+        }
+
+        RequisicionPeer::addSelectColumns($criteria);
+        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        ConceptosalidaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = RequisicionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                RequisicionPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacendestino($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Almacen rows
+
+                $key3 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = AlmacenPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    AlmacenPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj3 (Almacen)
+                $obj3->addRequisicionRelatedByIdalmacenorigen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Conceptosalida rows
+
+                $key4 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = ConceptosalidaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = ConceptosalidaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    ConceptosalidaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj4 (Conceptosalida)
+                $obj4->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key5 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = EmpresaPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    EmpresaPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Empresa)
+                $obj5->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Sucursal)
+                $obj6->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Requisicion objects pre-filled with all related objects except Conceptosalida.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Requisicion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptConceptosalida(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+        }
+
+        RequisicionPeer::addSelectColumns($criteria);
+        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = RequisicionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                RequisicionPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacendestino($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Almacen rows
+
+                $key3 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = AlmacenPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    AlmacenPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj3 (Almacen)
+                $obj3->addRequisicionRelatedByIdalmacenorigen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key4 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UsuarioPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UsuarioPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj4 (Usuario)
+                $obj4->addRequisicionRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key5 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = EmpresaPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    EmpresaPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Empresa)
+                $obj5->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Sucursal)
+                $obj6->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj7 (Usuario)
+                $obj7->addRequisicionRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Requisicion objects pre-filled with all related objects except Empresa.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Requisicion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+        }
+
+        RequisicionPeer::addSelectColumns($criteria);
+        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        ConceptosalidaPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = RequisicionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                RequisicionPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacendestino($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Almacen rows
+
+                $key3 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = AlmacenPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    AlmacenPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj3 (Almacen)
+                $obj3->addRequisicionRelatedByIdalmacenorigen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key4 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UsuarioPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UsuarioPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj4 (Usuario)
+                $obj4->addRequisicionRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Conceptosalida rows
+
+                $key5 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = ConceptosalidaPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = ConceptosalidaPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    ConceptosalidaPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Conceptosalida)
+                $obj5->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Sucursal)
+                $obj6->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj7 (Usuario)
+                $obj7->addRequisicionRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Requisicion objects pre-filled with all related objects except Sucursal.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Requisicion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(RequisicionPeer::DATABASE_NAME);
+        }
+
+        RequisicionPeer::addSelectColumns($criteria);
+        $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        ConceptosalidaPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = RequisicionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = RequisicionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = RequisicionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                RequisicionPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacendestino($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Almacen rows
+
+                $key3 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = AlmacenPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    AlmacenPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj3 (Almacen)
+                $obj3->addRequisicionRelatedByIdalmacenorigen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key4 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = UsuarioPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    UsuarioPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj4 (Usuario)
+                $obj4->addRequisicionRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Conceptosalida rows
+
+                $key5 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = ConceptosalidaPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = ConceptosalidaPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    ConceptosalidaPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Conceptosalida)
+                $obj5->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key6 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = EmpresaPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    EmpresaPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Empresa)
+                $obj6->addRequisicion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj7 (Usuario)
+                $obj7->addRequisicionRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -2165,14 +3131,24 @@ abstract class BaseRequisicionPeer
         RequisicionPeer::addSelectColumns($criteria);
         $startcol2 = RequisicionPeer::NUM_HYDRATE_COLUMNS;
 
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
         ConceptosalidaPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + ConceptosalidaPeer::NUM_HYDRATE_COLUMNS;
 
         EmpresaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENDESTINO, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(RequisicionPeer::IDALMACENORIGEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(RequisicionPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::IDCONCEPTOSALIDA, $join_behavior);
 
@@ -2198,60 +3174,98 @@ abstract class BaseRequisicionPeer
                 RequisicionPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined Conceptosalida rows
+                // Add objects for joined Almacen rows
 
-                $key2 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = ConceptosalidaPeer::getInstanceFromPool($key2);
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = ConceptosalidaPeer::getOMClass();
+                        $cls = AlmacenPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    ConceptosalidaPeer::addInstanceToPool($obj2, $key2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj2 (Conceptosalida)
-                $obj2->addRequisicion($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj2 (Almacen)
+                $obj2->addRequisicionRelatedByIdalmacendestino($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Almacen rows
+
+                $key3 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = AlmacenPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    AlmacenPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj3 (Almacen)
+                $obj3->addRequisicionRelatedByIdalmacenorigen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Conceptosalida rows
+
+                $key4 = ConceptosalidaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = ConceptosalidaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = ConceptosalidaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    ConceptosalidaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Requisicion) to the collection in $obj4 (Conceptosalida)
+                $obj4->addRequisicion($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Empresa rows
 
-                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
+                $key5 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = EmpresaPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
 
                         $cls = EmpresaPeer::getOMClass();
 
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    EmpresaPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    EmpresaPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj3 (Empresa)
-                $obj3->addRequisicion($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj5 (Empresa)
+                $obj5->addRequisicion($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Sucursal rows
 
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SucursalPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
 
-                // Add the $obj1 (Requisicion) to the collection in $obj4 (Sucursal)
-                $obj4->addRequisicion($obj1);
+                // Add the $obj1 (Requisicion) to the collection in $obj6 (Sucursal)
+                $obj6->addRequisicion($obj1);
 
             } // if joined row is not null
 

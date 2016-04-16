@@ -375,6 +375,21 @@ abstract class BaseEmpresaPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CompraPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompraPeer::clearInstancePool();
+        // Invalidate objects in DevolucionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DevolucionPeer::clearInstancePool();
+        // Invalidate objects in InventariomesPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        InventariomesPeer::clearInstancePool();
+        // Invalidate objects in NotacreditoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NotacreditoPeer::clearInstancePool();
+        // Invalidate objects in PlantillatablajeriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PlantillatablajeriaPeer::clearInstancePool();
         // Invalidate objects in ProductoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ProductoPeer::clearInstancePool();
@@ -393,6 +408,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in UsuarioempresaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UsuarioempresaPeer::clearInstancePool();
+        // Invalidate objects in VentaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        VentaPeer::clearInstancePool();
     }
 
     /**
@@ -727,6 +745,36 @@ abstract class BaseEmpresaPeer
         foreach ($objects as $obj) {
 
 
+            // delete related Compra objects
+            $criteria = new Criteria(CompraPeer::DATABASE_NAME);
+
+            $criteria->add(CompraPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += CompraPeer::doDelete($criteria, $con);
+
+            // delete related Devolucion objects
+            $criteria = new Criteria(DevolucionPeer::DATABASE_NAME);
+
+            $criteria->add(DevolucionPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Inventariomes objects
+            $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
+
+            $criteria->add(InventariomesPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += InventariomesPeer::doDelete($criteria, $con);
+
+            // delete related Notacredito objects
+            $criteria = new Criteria(NotacreditoPeer::DATABASE_NAME);
+
+            $criteria->add(NotacreditoPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
+
+            // delete related Plantillatablajeria objects
+            $criteria = new Criteria(PlantillatablajeriaPeer::DATABASE_NAME);
+
+            $criteria->add(PlantillatablajeriaPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += PlantillatablajeriaPeer::doDelete($criteria, $con);
+
             // delete related Producto objects
             $criteria = new Criteria(ProductoPeer::DATABASE_NAME);
 
@@ -762,6 +810,12 @@ abstract class BaseEmpresaPeer
 
             $criteria->add(UsuarioempresaPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += UsuarioempresaPeer::doDelete($criteria, $con);
+
+            // delete related Venta objects
+            $criteria = new Criteria(VentaPeer::DATABASE_NAME);
+
+            $criteria->add(VentaPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += VentaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

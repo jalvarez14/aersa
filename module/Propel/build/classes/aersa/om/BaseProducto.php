@@ -136,6 +136,18 @@ abstract class BaseProducto extends BaseObject implements Persistent
     protected $collNotacreditodetallesPartial;
 
     /**
+     * @var        PropelObjectCollection|Plantillatablajeria[] Collection to store aggregation of Plantillatablajeria objects.
+     */
+    protected $collPlantillatablajerias;
+    protected $collPlantillatablajeriasPartial;
+
+    /**
+     * @var        PropelObjectCollection|Plantillatablajeriadetalle[] Collection to store aggregation of Plantillatablajeriadetalle objects.
+     */
+    protected $collPlantillatablajeriadetalles;
+    protected $collPlantillatablajeriadetallesPartial;
+
+    /**
      * @var        PropelObjectCollection|Receta[] Collection to store aggregation of Receta objects.
      */
     protected $collRecetasRelatedByIdproducto;
@@ -196,6 +208,18 @@ abstract class BaseProducto extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $notacreditodetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $plantillatablajeriasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $plantillatablajeriadetallesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -754,6 +778,10 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
             $this->collNotacreditodetalles = null;
 
+            $this->collPlantillatablajerias = null;
+
+            $this->collPlantillatablajeriadetalles = null;
+
             $this->collRecetasRelatedByIdproducto = null;
 
             $this->collRecetasRelatedByIdproductoreceta = null;
@@ -965,6 +993,40 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
             if ($this->collNotacreditodetalles !== null) {
                 foreach ($this->collNotacreditodetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->plantillatablajeriasScheduledForDeletion !== null) {
+                if (!$this->plantillatablajeriasScheduledForDeletion->isEmpty()) {
+                    PlantillatablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->plantillatablajeriasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->plantillatablajeriasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPlantillatablajerias !== null) {
+                foreach ($this->collPlantillatablajerias as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->plantillatablajeriadetallesScheduledForDeletion !== null) {
+                if (!$this->plantillatablajeriadetallesScheduledForDeletion->isEmpty()) {
+                    PlantillatablajeriadetalleQuery::create()
+                        ->filterByPrimaryKeys($this->plantillatablajeriadetallesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->plantillatablajeriadetallesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPlantillatablajeriadetalles !== null) {
+                foreach ($this->collPlantillatablajeriadetalles as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1280,6 +1342,22 @@ abstract class BaseProducto extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collPlantillatablajerias !== null) {
+                    foreach ($this->collPlantillatablajerias as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collPlantillatablajeriadetalles !== null) {
+                    foreach ($this->collPlantillatablajeriadetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collRecetasRelatedByIdproducto !== null) {
                     foreach ($this->collRecetasRelatedByIdproducto as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1440,6 +1518,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             if (null !== $this->collNotacreditodetalles) {
                 $result['Notacreditodetalles'] = $this->collNotacreditodetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collPlantillatablajerias) {
+                $result['Plantillatablajerias'] = $this->collPlantillatablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collPlantillatablajeriadetalles) {
+                $result['Plantillatablajeriadetalles'] = $this->collPlantillatablajeriadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRecetasRelatedByIdproducto) {
                 $result['RecetasRelatedByIdproducto'] = $this->collRecetasRelatedByIdproducto->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1685,6 +1769,18 @@ abstract class BaseProducto extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getPlantillatablajerias() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPlantillatablajeria($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getPlantillatablajeriadetalles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPlantillatablajeriadetalle($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRecetasRelatedByIdproducto() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRecetaRelatedByIdproducto($relObj->copy($deepCopy));
@@ -1879,6 +1975,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
         }
         if ('Notacreditodetalle' == $relationName) {
             $this->initNotacreditodetalles();
+        }
+        if ('Plantillatablajeria' == $relationName) {
+            $this->initPlantillatablajerias();
+        }
+        if ('Plantillatablajeriadetalle' == $relationName) {
+            $this->initPlantillatablajeriadetalles();
         }
         if ('RecetaRelatedByIdproducto' == $relationName) {
             $this->initRecetasRelatedByIdproducto();
@@ -2942,6 +3044,506 @@ abstract class BaseProducto extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collPlantillatablajerias collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Producto The current object (for fluent API support)
+     * @see        addPlantillatablajerias()
+     */
+    public function clearPlantillatablajerias()
+    {
+        $this->collPlantillatablajerias = null; // important to set this to null since that means it is uninitialized
+        $this->collPlantillatablajeriasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collPlantillatablajerias collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialPlantillatablajerias($v = true)
+    {
+        $this->collPlantillatablajeriasPartial = $v;
+    }
+
+    /**
+     * Initializes the collPlantillatablajerias collection.
+     *
+     * By default this just sets the collPlantillatablajerias collection to an empty array (like clearcollPlantillatablajerias());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPlantillatablajerias($overrideExisting = true)
+    {
+        if (null !== $this->collPlantillatablajerias && !$overrideExisting) {
+            return;
+        }
+        $this->collPlantillatablajerias = new PropelObjectCollection();
+        $this->collPlantillatablajerias->setModel('Plantillatablajeria');
+    }
+
+    /**
+     * Gets an array of Plantillatablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Producto is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Plantillatablajeria[] List of Plantillatablajeria objects
+     * @throws PropelException
+     */
+    public function getPlantillatablajerias($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collPlantillatablajeriasPartial && !$this->isNew();
+        if (null === $this->collPlantillatablajerias || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPlantillatablajerias) {
+                // return empty collection
+                $this->initPlantillatablajerias();
+            } else {
+                $collPlantillatablajerias = PlantillatablajeriaQuery::create(null, $criteria)
+                    ->filterByProducto($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collPlantillatablajeriasPartial && count($collPlantillatablajerias)) {
+                      $this->initPlantillatablajerias(false);
+
+                      foreach ($collPlantillatablajerias as $obj) {
+                        if (false == $this->collPlantillatablajerias->contains($obj)) {
+                          $this->collPlantillatablajerias->append($obj);
+                        }
+                      }
+
+                      $this->collPlantillatablajeriasPartial = true;
+                    }
+
+                    $collPlantillatablajerias->getInternalIterator()->rewind();
+
+                    return $collPlantillatablajerias;
+                }
+
+                if ($partial && $this->collPlantillatablajerias) {
+                    foreach ($this->collPlantillatablajerias as $obj) {
+                        if ($obj->isNew()) {
+                            $collPlantillatablajerias[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPlantillatablajerias = $collPlantillatablajerias;
+                $this->collPlantillatablajeriasPartial = false;
+            }
+        }
+
+        return $this->collPlantillatablajerias;
+    }
+
+    /**
+     * Sets a collection of Plantillatablajeria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $plantillatablajerias A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setPlantillatablajerias(PropelCollection $plantillatablajerias, PropelPDO $con = null)
+    {
+        $plantillatablajeriasToDelete = $this->getPlantillatablajerias(new Criteria(), $con)->diff($plantillatablajerias);
+
+
+        $this->plantillatablajeriasScheduledForDeletion = $plantillatablajeriasToDelete;
+
+        foreach ($plantillatablajeriasToDelete as $plantillatablajeriaRemoved) {
+            $plantillatablajeriaRemoved->setProducto(null);
+        }
+
+        $this->collPlantillatablajerias = null;
+        foreach ($plantillatablajerias as $plantillatablajeria) {
+            $this->addPlantillatablajeria($plantillatablajeria);
+        }
+
+        $this->collPlantillatablajerias = $plantillatablajerias;
+        $this->collPlantillatablajeriasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Plantillatablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Plantillatablajeria objects.
+     * @throws PropelException
+     */
+    public function countPlantillatablajerias(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collPlantillatablajeriasPartial && !$this->isNew();
+        if (null === $this->collPlantillatablajerias || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPlantillatablajerias) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPlantillatablajerias());
+            }
+            $query = PlantillatablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProducto($this)
+                ->count($con);
+        }
+
+        return count($this->collPlantillatablajerias);
+    }
+
+    /**
+     * Method called to associate a Plantillatablajeria object to this object
+     * through the Plantillatablajeria foreign key attribute.
+     *
+     * @param    Plantillatablajeria $l Plantillatablajeria
+     * @return Producto The current object (for fluent API support)
+     */
+    public function addPlantillatablajeria(Plantillatablajeria $l)
+    {
+        if ($this->collPlantillatablajerias === null) {
+            $this->initPlantillatablajerias();
+            $this->collPlantillatablajeriasPartial = true;
+        }
+
+        if (!in_array($l, $this->collPlantillatablajerias->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddPlantillatablajeria($l);
+
+            if ($this->plantillatablajeriasScheduledForDeletion and $this->plantillatablajeriasScheduledForDeletion->contains($l)) {
+                $this->plantillatablajeriasScheduledForDeletion->remove($this->plantillatablajeriasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Plantillatablajeria $plantillatablajeria The plantillatablajeria object to add.
+     */
+    protected function doAddPlantillatablajeria($plantillatablajeria)
+    {
+        $this->collPlantillatablajerias[]= $plantillatablajeria;
+        $plantillatablajeria->setProducto($this);
+    }
+
+    /**
+     * @param	Plantillatablajeria $plantillatablajeria The plantillatablajeria object to remove.
+     * @return Producto The current object (for fluent API support)
+     */
+    public function removePlantillatablajeria($plantillatablajeria)
+    {
+        if ($this->getPlantillatablajerias()->contains($plantillatablajeria)) {
+            $this->collPlantillatablajerias->remove($this->collPlantillatablajerias->search($plantillatablajeria));
+            if (null === $this->plantillatablajeriasScheduledForDeletion) {
+                $this->plantillatablajeriasScheduledForDeletion = clone $this->collPlantillatablajerias;
+                $this->plantillatablajeriasScheduledForDeletion->clear();
+            }
+            $this->plantillatablajeriasScheduledForDeletion[]= clone $plantillatablajeria;
+            $plantillatablajeria->setProducto(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Plantillatablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Plantillatablajeria[] List of Plantillatablajeria objects
+     */
+    public function getPlantillatablajeriasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = PlantillatablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getPlantillatablajerias($query, $con);
+    }
+
+    /**
+     * Clears out the collPlantillatablajeriadetalles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Producto The current object (for fluent API support)
+     * @see        addPlantillatablajeriadetalles()
+     */
+    public function clearPlantillatablajeriadetalles()
+    {
+        $this->collPlantillatablajeriadetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collPlantillatablajeriadetallesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collPlantillatablajeriadetalles collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialPlantillatablajeriadetalles($v = true)
+    {
+        $this->collPlantillatablajeriadetallesPartial = $v;
+    }
+
+    /**
+     * Initializes the collPlantillatablajeriadetalles collection.
+     *
+     * By default this just sets the collPlantillatablajeriadetalles collection to an empty array (like clearcollPlantillatablajeriadetalles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPlantillatablajeriadetalles($overrideExisting = true)
+    {
+        if (null !== $this->collPlantillatablajeriadetalles && !$overrideExisting) {
+            return;
+        }
+        $this->collPlantillatablajeriadetalles = new PropelObjectCollection();
+        $this->collPlantillatablajeriadetalles->setModel('Plantillatablajeriadetalle');
+    }
+
+    /**
+     * Gets an array of Plantillatablajeriadetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Producto is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Plantillatablajeriadetalle[] List of Plantillatablajeriadetalle objects
+     * @throws PropelException
+     */
+    public function getPlantillatablajeriadetalles($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collPlantillatablajeriadetallesPartial && !$this->isNew();
+        if (null === $this->collPlantillatablajeriadetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPlantillatablajeriadetalles) {
+                // return empty collection
+                $this->initPlantillatablajeriadetalles();
+            } else {
+                $collPlantillatablajeriadetalles = PlantillatablajeriadetalleQuery::create(null, $criteria)
+                    ->filterByProducto($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collPlantillatablajeriadetallesPartial && count($collPlantillatablajeriadetalles)) {
+                      $this->initPlantillatablajeriadetalles(false);
+
+                      foreach ($collPlantillatablajeriadetalles as $obj) {
+                        if (false == $this->collPlantillatablajeriadetalles->contains($obj)) {
+                          $this->collPlantillatablajeriadetalles->append($obj);
+                        }
+                      }
+
+                      $this->collPlantillatablajeriadetallesPartial = true;
+                    }
+
+                    $collPlantillatablajeriadetalles->getInternalIterator()->rewind();
+
+                    return $collPlantillatablajeriadetalles;
+                }
+
+                if ($partial && $this->collPlantillatablajeriadetalles) {
+                    foreach ($this->collPlantillatablajeriadetalles as $obj) {
+                        if ($obj->isNew()) {
+                            $collPlantillatablajeriadetalles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPlantillatablajeriadetalles = $collPlantillatablajeriadetalles;
+                $this->collPlantillatablajeriadetallesPartial = false;
+            }
+        }
+
+        return $this->collPlantillatablajeriadetalles;
+    }
+
+    /**
+     * Sets a collection of Plantillatablajeriadetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $plantillatablajeriadetalles A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setPlantillatablajeriadetalles(PropelCollection $plantillatablajeriadetalles, PropelPDO $con = null)
+    {
+        $plantillatablajeriadetallesToDelete = $this->getPlantillatablajeriadetalles(new Criteria(), $con)->diff($plantillatablajeriadetalles);
+
+
+        $this->plantillatablajeriadetallesScheduledForDeletion = $plantillatablajeriadetallesToDelete;
+
+        foreach ($plantillatablajeriadetallesToDelete as $plantillatablajeriadetalleRemoved) {
+            $plantillatablajeriadetalleRemoved->setProducto(null);
+        }
+
+        $this->collPlantillatablajeriadetalles = null;
+        foreach ($plantillatablajeriadetalles as $plantillatablajeriadetalle) {
+            $this->addPlantillatablajeriadetalle($plantillatablajeriadetalle);
+        }
+
+        $this->collPlantillatablajeriadetalles = $plantillatablajeriadetalles;
+        $this->collPlantillatablajeriadetallesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Plantillatablajeriadetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Plantillatablajeriadetalle objects.
+     * @throws PropelException
+     */
+    public function countPlantillatablajeriadetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collPlantillatablajeriadetallesPartial && !$this->isNew();
+        if (null === $this->collPlantillatablajeriadetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPlantillatablajeriadetalles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPlantillatablajeriadetalles());
+            }
+            $query = PlantillatablajeriadetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProducto($this)
+                ->count($con);
+        }
+
+        return count($this->collPlantillatablajeriadetalles);
+    }
+
+    /**
+     * Method called to associate a Plantillatablajeriadetalle object to this object
+     * through the Plantillatablajeriadetalle foreign key attribute.
+     *
+     * @param    Plantillatablajeriadetalle $l Plantillatablajeriadetalle
+     * @return Producto The current object (for fluent API support)
+     */
+    public function addPlantillatablajeriadetalle(Plantillatablajeriadetalle $l)
+    {
+        if ($this->collPlantillatablajeriadetalles === null) {
+            $this->initPlantillatablajeriadetalles();
+            $this->collPlantillatablajeriadetallesPartial = true;
+        }
+
+        if (!in_array($l, $this->collPlantillatablajeriadetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddPlantillatablajeriadetalle($l);
+
+            if ($this->plantillatablajeriadetallesScheduledForDeletion and $this->plantillatablajeriadetallesScheduledForDeletion->contains($l)) {
+                $this->plantillatablajeriadetallesScheduledForDeletion->remove($this->plantillatablajeriadetallesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Plantillatablajeriadetalle $plantillatablajeriadetalle The plantillatablajeriadetalle object to add.
+     */
+    protected function doAddPlantillatablajeriadetalle($plantillatablajeriadetalle)
+    {
+        $this->collPlantillatablajeriadetalles[]= $plantillatablajeriadetalle;
+        $plantillatablajeriadetalle->setProducto($this);
+    }
+
+    /**
+     * @param	Plantillatablajeriadetalle $plantillatablajeriadetalle The plantillatablajeriadetalle object to remove.
+     * @return Producto The current object (for fluent API support)
+     */
+    public function removePlantillatablajeriadetalle($plantillatablajeriadetalle)
+    {
+        if ($this->getPlantillatablajeriadetalles()->contains($plantillatablajeriadetalle)) {
+            $this->collPlantillatablajeriadetalles->remove($this->collPlantillatablajeriadetalles->search($plantillatablajeriadetalle));
+            if (null === $this->plantillatablajeriadetallesScheduledForDeletion) {
+                $this->plantillatablajeriadetallesScheduledForDeletion = clone $this->collPlantillatablajeriadetalles;
+                $this->plantillatablajeriadetallesScheduledForDeletion->clear();
+            }
+            $this->plantillatablajeriadetallesScheduledForDeletion[]= clone $plantillatablajeriadetalle;
+            $plantillatablajeriadetalle->setProducto(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Plantillatablajeriadetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Plantillatablajeriadetalle[] List of Plantillatablajeriadetalle objects
+     */
+    public function getPlantillatablajeriadetallesJoinPlantillatablajeria($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = PlantillatablajeriadetalleQuery::create(null, $criteria);
+        $query->joinWith('Plantillatablajeria', $join_behavior);
+
+        return $this->getPlantillatablajeriadetalles($query, $con);
+    }
+
+    /**
      * Clears out the collRecetasRelatedByIdproducto collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -3700,6 +4302,16 @@ abstract class BaseProducto extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPlantillatablajerias) {
+                foreach ($this->collPlantillatablajerias as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collPlantillatablajeriadetalles) {
+                foreach ($this->collPlantillatablajeriadetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRecetasRelatedByIdproducto) {
                 foreach ($this->collRecetasRelatedByIdproducto as $o) {
                     $o->clearAllReferences($deep);
@@ -3741,6 +4353,14 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collNotacreditodetalles->clearIterator();
         }
         $this->collNotacreditodetalles = null;
+        if ($this->collPlantillatablajerias instanceof PropelCollection) {
+            $this->collPlantillatablajerias->clearIterator();
+        }
+        $this->collPlantillatablajerias = null;
+        if ($this->collPlantillatablajeriadetalles instanceof PropelCollection) {
+            $this->collPlantillatablajeriadetalles->clearIterator();
+        }
+        $this->collPlantillatablajeriadetalles = null;
         if ($this->collRecetasRelatedByIdproducto instanceof PropelCollection) {
             $this->collRecetasRelatedByIdproducto->clearIterator();
         }
