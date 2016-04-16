@@ -382,6 +382,7 @@ return array(
 
                                ),
                             ),
+                           
                             'tablajeria' => array(
                                 'type' => 'Segment',
                                 'options' => array(
