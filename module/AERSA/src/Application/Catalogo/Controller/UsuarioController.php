@@ -53,7 +53,7 @@ class UsuarioController extends AbstractActionController
             $post_data = $request->getPost();
            
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-            $post_data['usuario_estatus'] = 1;
+            $post_data['usuario_estatus'] = 3;
             $form->setData($post_data);
             
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
@@ -123,7 +123,8 @@ class UsuarioController extends AbstractActionController
         //VERIFICAMOS SI EXISTE
         $exist = \UsuarioQuery::create()->filterByIdusuario($id)->exists();
         
-        if($exist){
+        if($exist)
+        {
             
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \UsuarioQuery::create()->findPk($id);
@@ -142,19 +143,18 @@ class UsuarioController extends AbstractActionController
                 //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
                 $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioUsername($entity->getUsuarioUsername(), \Criteria::NOT_EQUAL)->exists();
                
-                if(!$exist){
+                if(!$exist)
+                {
 
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                    foreach ($post_data as $key => $value){
+                    foreach ($post_data as $key => $value)
                         $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                    }
 
                     //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
                     $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
                     
                     //VALIDAMOS SI ES UN FORMULARIO VALIDO
                     $form->setInputFilter($filter->getInputFilter());
-
 
                     $entity->save();
 
@@ -271,6 +271,7 @@ class UsuarioController extends AbstractActionController
         $form = new \Application\Catalogo\Form\UsuarioForm();
         
         $idEmp = $this->params()->fromRoute('id');
+        $emp = \EmpresaQuery::create()->findPk($idEmp);
         
         if($request->isPost())
         {
@@ -281,8 +282,6 @@ class UsuarioController extends AbstractActionController
             $post_data['usuario_estatus'] = 1;
             $form->setData($post_data);
             
-            
-            
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->exists();
             
@@ -292,42 +291,25 @@ class UsuarioController extends AbstractActionController
                 //CREAMOS NUESTRA ENTIDAD VACIA
                 $entity = new \Usuario();
                 
-                //INTANCIAMOS NUESTRO FILTRO
-                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
-            
-                //LE PONEMOS EL FILTRO A NUESTRO FORMULARIO
-                $form->setInputFilter($filter->getInputFilter());
-                
-                //VERIFICAMOS QUE SEA VALIDO
-                if($form->isValid())
-                {
-                    
-                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                    foreach ($post_data as $key => $value){
-                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                    }
-                    
-                    //SETEAMOS EL STATUS Y EL PASSWORD
-                    $entity->setUsuarioEstatus(1);
-                    $entity->setUsuarioPassword(md5($post_data['usuario_passoword']));
-                    $entity->setIdrol(1);
-                    $entity->save();
-                    
-                    //Proceso para establecer la relación con la empresa
-                    
-                    $relacion =  setRelacion($idEmp, $entity->getIdusuario());
-                    $relacion->save();
-                    
-                    
-                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                    return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$idEmp);
+                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                foreach ($post_data as $key => $value){
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                }
 
-                }
-                else
-                {
-                
-                    
-                }
+                //SETEAMOS EL STATUS Y EL PASSWORD
+                $entity->setUsuarioPassword(md5($post_data['usuario_passoword']));
+                $entity->setIdrol(3);
+                $entity->save();
+
+                //Proceso para establecer la relación con la empresa
+
+                $relacion =  setRelacion($idEmp, $entity->getIdusuario());
+                $relacion->save();
+
+
+                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$idEmp);
+
                 
             }
             else
@@ -344,9 +326,112 @@ class UsuarioController extends AbstractActionController
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
             'id'        => $idEmp,
+            'empresa'   => $emp,
         ));
         $view_model->setTemplate('/application/catalogo/usuario/administrador');
         return $view_model;
+    }
+    
+    public function editaradministradorAction()
+    {
+        $request = $this->getRequest();
+        
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id = $this->params()->fromRoute('id');
+        $emp = $this->params()->fromRoute('emp');
+        
+        //Buscamos el nombre de la empresa que se está editando
+        $exists = \EmpresaQuery::create()->filterByIdempresa($emp)->exists();
+        if($exists)
+            $emp_nombre = \EmpresaQuery::create()->findPk ($emp);
+        else
+            $emp_nombre = "";
+        
+        //VERIFICAMOS SI EXISTE
+        $exist = \UsuarioQuery::create()->filterByIdusuario($id)->exists();
+        
+        if($exist)
+        {
+            
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \UsuarioQuery::create()->findPk($id);
+
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Catalogo\Form\UsuarioForm();
+            $form->get('usuario_estatus')->setAttribute('required', true);
+            
+            //SI NOS ENVIAN UNA PETICION POST
+            if($request->isPost())
+            {
+                
+                $post_data = $request->getPost();
+                
+                $filter = new \Application\Catalogo\Filter\UsuarioFilter();
+                
+                //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
+                $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioUsername($entity->getUsuarioUsername(), \Criteria::NOT_EQUAL)->exists();
+               
+                if(!$exist)
+                {
+
+                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                    foreach ($post_data as $key => $value)
+                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+
+                    //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+                    $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+                    
+                    //VALIDAMOS SI ES UN FORMULARIO VALIDO
+                    $form->setInputFilter($filter->getInputFilter());
+
+                    $entity->save();
+
+                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+
+                    return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$emp);
+
+                    
+                }
+                else
+                    $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');
+                
+            }
+            
+            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+           
+        }
+        else
+            return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$emp);
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'      => $form,
+            'messages'  => $this->flashMessenger(),
+            'empresa'   => $emp_nombre,
+        ));
+        $view_model->setTemplate('/application/catalogo/usuario/editaradministrador');
+        return $view_model;
+    }
+    
+    public function eliminaradministradorAction()
+    {
+        $request = $this->getRequest();
+        
+        if($request->isPost())
+        {
+            
+            $id = $this->params()->fromRoute('id');
+            $emp = $this->params()->fromRoute('emp');
+            $entity = \UsuarioQuery::create()->findPk($id);
+            $entity->delete();
+            
+            $this->flashMessenger()->addSuccessMessage('Registro eliminado satisfactoriamente!');
+
+            return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$emp);
+            
+        }
     }
 }
 

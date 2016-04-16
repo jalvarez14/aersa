@@ -270,7 +270,7 @@ function setusuarioData($data)
 function setRelacion($empresa,$usuario)
 {
     $empresa = $empresa->getIdEmpresa();
-    //$usuario = $usuario->getIdusuario();
+    $usuario = $usuario->getIdusuario();
     
     $entity = new \Usuarioempresa();
     $entity->setIdempresa($empresa);

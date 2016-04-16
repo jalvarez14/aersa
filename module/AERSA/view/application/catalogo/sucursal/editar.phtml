@@ -1,8 +1,217 @@
+<h3 class="page-title">Editar sucursal</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/empresa/editar/<?php echo $id ?>"> <?php echo $empresa->getEmpresaNombrecomercial() ; ?></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span><?php echo $sucursales->getSucursalNombre() ?></span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+<div class="alert alert-danger alert-dismissable">
+    <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+    <strong>Error!</strong>
+    <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
 <?php
+    $form->setAttribute('action', '/catalogo/empresa/sucursal/editar/'.$id.'/'.$empresa->getIdEmpresa());
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Sucursal</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_nombre')) ?>  
+                        <?php echo $this->formText($form->get('sucursal_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_estatus')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_estatus')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_anioactivo')) ?>  
+                        <?php echo $this->formText($form->get('sucursal_anioactivo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_mesactivo')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_mesactivo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_habilitarproductos')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_habilitarproductos')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('sucursal_habilitarrecetas')) ?>  
+                        <?php echo $this->formSelect($form->get('sucursal_habilitarrecetas')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <div class="btn-set pull-right">
+                <a href="/catalogo/usuario/administrador/<?php //echo $form->get('idempresa')->getValue() ?>" ><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo auditor / almacenista</button></a>
+            </div>
+            <h3 class="form-section ">Personal </h3>
+            <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
+                <thead >
+                    <tr>
+                        <th class="text-center"> Nombre </th>
+                        <th class="text-center"> Rol </th>
+                        <th class="text-center"> Estatus </th>
+                        <th class="text-center"> Usuario </th>
+                        <th class="text-center"> Acciones </th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    
+                    <?php foreach ($administradores as $entity) : ?>
+                        <?php
+                        if ($entity->getUsuarioEstatus() == 1) 
+                        {
+                            $estatus = 'Activo';
+                            $class = 'info';
+                        } 
+                        else 
+                        {
+                            $estatus = 'Inactivo';
+                            $class = 'danger';
+                        }
 
+                        ?>
+                        <tr id="<?php echo $entity->getIdusuario() ?>">
+                            <td><?php echo $entity->getUsuarionombre() ?></td>
+                            <?php $rol = \RolQuery::create()->findPk($entity->getIdRol()); ?>
+                            <td><?php echo $rol->getRolNombre() ?></td>
+                            <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
+                            <td><?php echo $entity->getUsuariousername() ?></td>
+
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="/catalogo/usuario/editaradministrador/<?php echo $entity->getIdusuario()?>/<?php //echo $form->get('idempresa')->getValue() ?>">
+                                                <i class="fa fa-pencil"></i> Editar </a>
+                                        </li>
+                                        <?php if (count($administradores) > 1 ): ?>
+                                            <li>
+                                                <a href="javascript:;" class="delete_modal">
+                                                    <i class="fa fa-trash"></i> Eliminar </a>
+                                            </li>
+                                        <?php endif ?>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>        
+    </div>
+</div>
+
+
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <div class="btn-set pull-right">
+                <a href="/catalogo/usuario/administrador/<?php //echo $form->get('idempresa')->getValue() ?>" ><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo almacén</button></a>
+            </div>
+            <h3 class="form-section ">Almacenes </h3>
+            <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
+                <thead >
+                    <tr>
+                        <th class="text-center"> Nombre </th>
+                        <th class="text-center"> Encargado </th>
+                        <th class="text-center"> Estatus </th>
+                        <th class="text-center"> Acciones </th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    
+                    <?php foreach ($almacenes as $entity) : ?>
+                        <?php
+
+                        if ($entity->getAlmacenEstatus() == 1) 
+                        {
+                            $estatus = 'Activo';
+                            $class = 'info';
+                        } 
+                        else 
+                        {
+                            $estatus = 'Inactivo';
+                            $class = 'danger';
+                        }
+
+                        ?>
+                        <tr id="<?php echo $entity->getIdalmacen() ?>">
+                            <td><?php echo $entity->getAlmacennombre() ?></td>
+                            <td><?php echo $entity->getAlmacenEncargado() ?></td>
+                            <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
+                            
+
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                        <i class="fa fa-angle-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="/catalogo/usuario/editaradministrador/<?php echo $entity->getIdAlmacen()?>/<?php //echo $form->get('idempresa')->getValue() ?>">
+                                                <i class="fa fa-pencil"></i> Editar </a>
+                                        </li>
+                                        <?php if (count($administradores) > 1 ): ?>
+                                            <li>
+                                                <a href="javascript:;" class="delete_modal">
+                                                    <i class="fa fa-trash"></i> Eliminar </a>
+                                            </li>
+                                        <?php endif ?>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>        
+    </div>
+</div>
+
+<?php  echo $this->form()->closeTag(); ?>

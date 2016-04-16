@@ -110,6 +110,26 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'editaradministrador' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editaradministrador[/:id][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'editaradministrador',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminaradministrador' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminaradministrador[/:id][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'eliminaradministrador',
+                                            ),
+                                        ),
+                                    ),
                                ),
                             ),
                            'proveedor' => array(
@@ -351,7 +371,7 @@ return array(
                                    'editar' => array(
                                        'type' => 'Segment',
                                        'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Sucursal',
                                                 'action' => 'editar',

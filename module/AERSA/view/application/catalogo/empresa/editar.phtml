@@ -10,6 +10,14 @@
         </li>
     </ul>
 </div>
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
+
 <?php foreach ($messages->getErrorMessages() as $message):?>
     <div class="alert alert-danger alert-dismissable">
         <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
@@ -99,11 +107,13 @@
                         }
 
                         ?>
+                        <div id="divEmp" style="display: none"><?php echo $form->get('idempresa')->getValue() ?></div>
+                    
                         <tr id="<?php echo $entity->getIdusuario() ?>">
                             <td><?php echo $entity->getUsuarionombre() ?></td>
                             <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
                             <td><?php echo $entity->getUsuariousername() ?></td>
-
+                            
                             <td>
                                 <div class="btn-group">
                                     <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
@@ -111,12 +121,12 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li>
-                                            <a href="/catalogo/empresa/editar/<?php echo $entity->getIdusuario()?>">
+                                            <a href="/catalogo/usuario/editaradministrador/<?php echo $entity->getIdusuario()?>/<?php echo $form->get('idempresa')->getValue() ?>">
                                                 <i class="fa fa-pencil"></i> Editar </a>
                                         </li>
                                         <?php if (count($administradores) > 1 ): ?>
                                             <li>
-                                                <a href="javascript:;" class="delete_modal">
+                                                <a href="javascript:;" class="delete_admin">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
                                         <?php endif ?>
@@ -162,28 +172,51 @@
                             $estatus = 'Inactivo';
                             $class = 'danger';
                         }
+                        if ($entity->getSucursalHabilitarproductos() == 1) 
+                        {
+                            $prod = 'Activo';
+                            $classProd = 'info';
+                        } 
+                        else 
+                        {
+                            $prod = 'Inactivo';
+                            $classProd = 'danger';
+                        }
+                        if ($entity->getSucursalHabilitarrecetas() == 1) 
+                        {
+                            $recetas = 'Activo';
+                            $classRec = 'info';
+                        } 
+                        else 
+                        {
+                            $recetas = 'Inactivo';
+                            $classRec = 'danger';
+                        }
 
                         ?>
                         <tr id="<?php echo $entity->getIdsucursal() ?>">
                             <td><?php echo $entity->getSucursalnombre() ?></td>
                             <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
-                            <td><?php echo $entity->getSucursalhabilitarproductos() ?></td>
-                            <td><?php echo $entity->getSucursalhabilitarrecetas() ?></td>
+                            <td><span class="label label-sm label-<?php echo $classProd?>"> <?php echo $prod ?></span></td>
+                            <td><span class="label label-sm label-<?php echo $classRec?>"> <?php echo $recetas ?></span></td>
 
                             <td>
+                                
                                 <div class="btn-group">
                                     <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
                                         <i class="fa fa-angle-down"></i>
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li>
-                                            <a href="/catalogo/empresa/sucursal/editar/<?php echo $entity->getIdSucursal() ?>">
+                                            <a href="/catalogo/empresa/sucursal/editar/<?php echo $entity->getIdSucursal()?>/<?php echo $form->get('idempresa')->getValue() ?>">
                                                 <i class="fa fa-pencil"></i> Editar </a>
                                         </li>
+                                        <!--
                                         <li>
-                                            <a href="javascript:;" class="delete_modal">
+                                            <a href="javascript:;" class="delete_suc">
                                                 <i class="fa fa-trash"></i> Eliminar </a>
                                         </li>
+                                        -->
                                     </ul>
                                 </div>
                             </td>
@@ -198,3 +231,34 @@
 
 <?php  echo $this->form()->closeTag(); ?>
 
+<script>
+    $(document).ready(function(){
+
+        $('.delete_admin').click(function(){
+
+          var id = $(this).closest('tr').attr('id');
+          var emp = $("#divEmp").text();
+          var tmpl = [
+            // tabindex is required for focus
+            ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+              '<div class="modal-header">',
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
+                '<h4 class="modal-title">ADVERTENCIA</h4>', 
+              '</div>',
+              '<form method="post" action="/catalogo/usuario/eliminaradministrador/'+id+'/'+emp+'">',
+                '<div class="modal-body">',
+                  '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
+                '</div>',
+                '<div class="modal-footer">',
+                  '<a href="#" data-dismiss="modal" class="btn btn-default">Cancelar</a>',
+                  '<button class="btn btn-danger" type="submit">Eliminar</button>',
+                '</div>',
+              '</form>',
+            '</div>'
+          ].join('');
+          $(tmpl).modal();
+        });
+        
+        
+    }); 
+</script>
