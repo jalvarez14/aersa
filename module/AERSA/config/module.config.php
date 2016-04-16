@@ -281,7 +281,6 @@ return array(
                                             ),
                                         ),
                                     ),
-
                                ),
                             ),
                            'empresa' => array(
