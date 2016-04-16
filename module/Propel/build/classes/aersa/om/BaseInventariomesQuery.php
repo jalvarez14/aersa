@@ -7,30 +7,42 @@
  *
  *
  * @method InventariomesQuery orderByIdinventariomes($order = Criteria::ASC) Order by the idinventariomes column
- * @method InventariomesQuery orderByIdempleadoempresa($order = Criteria::ASC) Order by the idempleadoempresa column
+ * @method InventariomesQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
+ * @method InventariomesQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
+ * @method InventariomesQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
+ * @method InventariomesQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method InventariomesQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method InventariomesQuery orderByInventariomesFecha($order = Criteria::ASC) Order by the inventariomes_fecha column
  * @method InventariomesQuery orderByInventariomesRevisada($order = Criteria::ASC) Order by the inventariomes_revisada column
- * @method InventariomesQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
- * @method InventariomesQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
- * @method InventariomesQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  *
  * @method InventariomesQuery groupByIdinventariomes() Group by the idinventariomes column
- * @method InventariomesQuery groupByIdempleadoempresa() Group by the idempleadoempresa column
+ * @method InventariomesQuery groupByIdempresa() Group by the idempresa column
+ * @method InventariomesQuery groupByIdsucursal() Group by the idsucursal column
+ * @method InventariomesQuery groupByIdalmacen() Group by the idalmacen column
+ * @method InventariomesQuery groupByIdusuario() Group by the idusuario column
  * @method InventariomesQuery groupByIdauditor() Group by the idauditor column
  * @method InventariomesQuery groupByInventariomesFecha() Group by the inventariomes_fecha column
  * @method InventariomesQuery groupByInventariomesRevisada() Group by the inventariomes_revisada column
- * @method InventariomesQuery groupByIdempresa() Group by the idempresa column
- * @method InventariomesQuery groupByIdsucursal() Group by the idsucursal column
- * @method InventariomesQuery groupByIdusuario() Group by the idusuario column
  *
  * @method InventariomesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method InventariomesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method InventariomesQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method InventariomesQuery leftJoinAlmacen($relationAlias = null) Adds a LEFT JOIN clause to the query using the Almacen relation
+ * @method InventariomesQuery rightJoinAlmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Almacen relation
+ * @method InventariomesQuery innerJoinAlmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Almacen relation
+ *
  * @method InventariomesQuery leftJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  * @method InventariomesQuery rightJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  * @method InventariomesQuery innerJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdauditor relation
+ *
+ * @method InventariomesQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
+ * @method InventariomesQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
+ * @method InventariomesQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
+ * @method InventariomesQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
+ * @method InventariomesQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
+ * @method InventariomesQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
  *
  * @method InventariomesQuery leftJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
  * @method InventariomesQuery rightJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
@@ -43,22 +55,22 @@
  * @method Inventariomes findOne(PropelPDO $con = null) Return the first Inventariomes matching the query
  * @method Inventariomes findOneOrCreate(PropelPDO $con = null) Return the first Inventariomes matching the query, or a new Inventariomes object populated from the query conditions when no match is found
  *
- * @method Inventariomes findOneByIdempleadoempresa(double $idempleadoempresa) Return the first Inventariomes filtered by the idempleadoempresa column
+ * @method Inventariomes findOneByIdempresa(int $idempresa) Return the first Inventariomes filtered by the idempresa column
+ * @method Inventariomes findOneByIdsucursal(int $idsucursal) Return the first Inventariomes filtered by the idsucursal column
+ * @method Inventariomes findOneByIdalmacen(int $idalmacen) Return the first Inventariomes filtered by the idalmacen column
+ * @method Inventariomes findOneByIdusuario(int $idusuario) Return the first Inventariomes filtered by the idusuario column
  * @method Inventariomes findOneByIdauditor(int $idauditor) Return the first Inventariomes filtered by the idauditor column
  * @method Inventariomes findOneByInventariomesFecha(string $inventariomes_fecha) Return the first Inventariomes filtered by the inventariomes_fecha column
  * @method Inventariomes findOneByInventariomesRevisada(boolean $inventariomes_revisada) Return the first Inventariomes filtered by the inventariomes_revisada column
- * @method Inventariomes findOneByIdempresa(int $idempresa) Return the first Inventariomes filtered by the idempresa column
- * @method Inventariomes findOneByIdsucursal(int $idsucursal) Return the first Inventariomes filtered by the idsucursal column
- * @method Inventariomes findOneByIdusuario(int $idusuario) Return the first Inventariomes filtered by the idusuario column
  *
  * @method array findByIdinventariomes(int $idinventariomes) Return Inventariomes objects filtered by the idinventariomes column
- * @method array findByIdempleadoempresa(double $idempleadoempresa) Return Inventariomes objects filtered by the idempleadoempresa column
+ * @method array findByIdempresa(int $idempresa) Return Inventariomes objects filtered by the idempresa column
+ * @method array findByIdsucursal(int $idsucursal) Return Inventariomes objects filtered by the idsucursal column
+ * @method array findByIdalmacen(int $idalmacen) Return Inventariomes objects filtered by the idalmacen column
+ * @method array findByIdusuario(int $idusuario) Return Inventariomes objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Inventariomes objects filtered by the idauditor column
  * @method array findByInventariomesFecha(string $inventariomes_fecha) Return Inventariomes objects filtered by the inventariomes_fecha column
  * @method array findByInventariomesRevisada(boolean $inventariomes_revisada) Return Inventariomes objects filtered by the inventariomes_revisada column
- * @method array findByIdempresa(int $idempresa) Return Inventariomes objects filtered by the idempresa column
- * @method array findByIdsucursal(int $idsucursal) Return Inventariomes objects filtered by the idsucursal column
- * @method array findByIdusuario(int $idusuario) Return Inventariomes objects filtered by the idusuario column
  *
  * @package    propel.generator.aersa.om
  */
@@ -166,7 +178,7 @@ abstract class BaseInventariomesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idinventariomes`, `idempleadoempresa`, `idauditor`, `inventariomes_fecha`, `inventariomes_revisada`, `idempresa`, `idsucursal`, `idusuario` FROM `inventariomes` WHERE `idinventariomes` = :p0';
+        $sql = 'SELECT `idinventariomes`, `idempresa`, `idsucursal`, `idalmacen`, `idusuario`, `idauditor`, `inventariomes_fecha`, `inventariomes_revisada` FROM `inventariomes` WHERE `idinventariomes` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -298,17 +310,19 @@ abstract class BaseInventariomesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the idempleadoempresa column
+     * Filter the query on the idempresa column
      *
      * Example usage:
      * <code>
-     * $query->filterByIdempleadoempresa(1234); // WHERE idempleadoempresa = 1234
-     * $query->filterByIdempleadoempresa(array(12, 34)); // WHERE idempleadoempresa IN (12, 34)
-     * $query->filterByIdempleadoempresa(array('min' => 12)); // WHERE idempleadoempresa >= 12
-     * $query->filterByIdempleadoempresa(array('max' => 12)); // WHERE idempleadoempresa <= 12
+     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
+     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
+     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
+     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
      * </code>
      *
-     * @param     mixed $idempleadoempresa The value to use as filter.
+     * @see       filterByEmpresa()
+     *
+     * @param     mixed $idempresa The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -316,16 +330,16 @@ abstract class BaseInventariomesQuery extends ModelCriteria
      *
      * @return InventariomesQuery The current query, for fluid interface
      */
-    public function filterByIdempleadoempresa($idempleadoempresa = null, $comparison = null)
+    public function filterByIdempresa($idempresa = null, $comparison = null)
     {
-        if (is_array($idempleadoempresa)) {
+        if (is_array($idempresa)) {
             $useMinMax = false;
-            if (isset($idempleadoempresa['min'])) {
-                $this->addUsingAlias(InventariomesPeer::IDEMPLEADOEMPRESA, $idempleadoempresa['min'], Criteria::GREATER_EQUAL);
+            if (isset($idempresa['min'])) {
+                $this->addUsingAlias(InventariomesPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($idempleadoempresa['max'])) {
-                $this->addUsingAlias(InventariomesPeer::IDEMPLEADOEMPRESA, $idempleadoempresa['max'], Criteria::LESS_EQUAL);
+            if (isset($idempresa['max'])) {
+                $this->addUsingAlias(InventariomesPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -336,7 +350,139 @@ abstract class BaseInventariomesQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(InventariomesPeer::IDEMPLEADOEMPRESA, $idempleadoempresa, $comparison);
+        return $this->addUsingAlias(InventariomesPeer::IDEMPRESA, $idempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the idsucursal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
+     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
+     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
+     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
+     * </code>
+     *
+     * @see       filterBySucursal()
+     *
+     * @param     mixed $idsucursal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByIdsucursal($idsucursal = null, $comparison = null)
+    {
+        if (is_array($idsucursal)) {
+            $useMinMax = false;
+            if (isset($idsucursal['min'])) {
+                $this->addUsingAlias(InventariomesPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idsucursal['max'])) {
+                $this->addUsingAlias(InventariomesPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::IDSUCURSAL, $idsucursal, $comparison);
+    }
+
+    /**
+     * Filter the query on the idalmacen column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdalmacen(1234); // WHERE idalmacen = 1234
+     * $query->filterByIdalmacen(array(12, 34)); // WHERE idalmacen IN (12, 34)
+     * $query->filterByIdalmacen(array('min' => 12)); // WHERE idalmacen >= 12
+     * $query->filterByIdalmacen(array('max' => 12)); // WHERE idalmacen <= 12
+     * </code>
+     *
+     * @see       filterByAlmacen()
+     *
+     * @param     mixed $idalmacen The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByIdalmacen($idalmacen = null, $comparison = null)
+    {
+        if (is_array($idalmacen)) {
+            $useMinMax = false;
+            if (isset($idalmacen['min'])) {
+                $this->addUsingAlias(InventariomesPeer::IDALMACEN, $idalmacen['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idalmacen['max'])) {
+                $this->addUsingAlias(InventariomesPeer::IDALMACEN, $idalmacen['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::IDALMACEN, $idalmacen, $comparison);
+    }
+
+    /**
+     * Filter the query on the idusuario column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdusuario(1234); // WHERE idusuario = 1234
+     * $query->filterByIdusuario(array(12, 34)); // WHERE idusuario IN (12, 34)
+     * $query->filterByIdusuario(array('min' => 12)); // WHERE idusuario >= 12
+     * $query->filterByIdusuario(array('max' => 12)); // WHERE idusuario <= 12
+     * </code>
+     *
+     * @see       filterByUsuarioRelatedByIdusuario()
+     *
+     * @param     mixed $idusuario The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByIdusuario($idusuario = null, $comparison = null)
+    {
+        if (is_array($idusuario)) {
+            $useMinMax = false;
+            if (isset($idusuario['min'])) {
+                $this->addUsingAlias(InventariomesPeer::IDUSUARIO, $idusuario['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idusuario['max'])) {
+                $this->addUsingAlias(InventariomesPeer::IDUSUARIO, $idusuario['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::IDUSUARIO, $idusuario, $comparison);
     }
 
     /**
@@ -454,131 +600,79 @@ abstract class BaseInventariomesQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the idempresa column
+     * Filter the query by a related Almacen object
      *
-     * Example usage:
-     * <code>
-     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
-     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
-     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
-     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
-     * </code>
-     *
-     * @param     mixed $idempresa The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param   Almacen|PropelObjectCollection $almacen The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return InventariomesQuery The current query, for fluid interface
+     * @return                 InventariomesQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByIdempresa($idempresa = null, $comparison = null)
+    public function filterByAlmacen($almacen, $comparison = null)
     {
-        if (is_array($idempresa)) {
-            $useMinMax = false;
-            if (isset($idempresa['min'])) {
-                $this->addUsingAlias(InventariomesPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idempresa['max'])) {
-                $this->addUsingAlias(InventariomesPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
+        if ($almacen instanceof Almacen) {
+            return $this
+                ->addUsingAlias(InventariomesPeer::IDALMACEN, $almacen->getIdalmacen(), $comparison);
+        } elseif ($almacen instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
-        }
 
-        return $this->addUsingAlias(InventariomesPeer::IDEMPRESA, $idempresa, $comparison);
+            return $this
+                ->addUsingAlias(InventariomesPeer::IDALMACEN, $almacen->toKeyValue('PrimaryKey', 'Idalmacen'), $comparison);
+        } else {
+            throw new PropelException('filterByAlmacen() only accepts arguments of type Almacen or PropelCollection');
+        }
     }
 
     /**
-     * Filter the query on the idsucursal column
+     * Adds a JOIN clause to the query using the Almacen relation
      *
-     * Example usage:
-     * <code>
-     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
-     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
-     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
-     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
-     * </code>
-     *
-     * @param     mixed $idsucursal The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return InventariomesQuery The current query, for fluid interface
      */
-    public function filterByIdsucursal($idsucursal = null, $comparison = null)
+    public function joinAlmacen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
-        if (is_array($idsucursal)) {
-            $useMinMax = false;
-            if (isset($idsucursal['min'])) {
-                $this->addUsingAlias(InventariomesPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idsucursal['max'])) {
-                $this->addUsingAlias(InventariomesPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Almacen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
         }
 
-        return $this->addUsingAlias(InventariomesPeer::IDSUCURSAL, $idsucursal, $comparison);
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Almacen');
+        }
+
+        return $this;
     }
 
     /**
-     * Filter the query on the idusuario column
+     * Use the Almacen relation Almacen object
      *
-     * Example usage:
-     * <code>
-     * $query->filterByIdusuario(1234); // WHERE idusuario = 1234
-     * $query->filterByIdusuario(array(12, 34)); // WHERE idusuario IN (12, 34)
-     * $query->filterByIdusuario(array('min' => 12)); // WHERE idusuario >= 12
-     * $query->filterByIdusuario(array('max' => 12)); // WHERE idusuario <= 12
-     * </code>
+     * @see       useQuery()
      *
-     * @see       filterByUsuarioRelatedByIdusuario()
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @param     mixed $idusuario The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return InventariomesQuery The current query, for fluid interface
+     * @return   AlmacenQuery A secondary query class using the current class as primary query
      */
-    public function filterByIdusuario($idusuario = null, $comparison = null)
+    public function useAlmacenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
-        if (is_array($idusuario)) {
-            $useMinMax = false;
-            if (isset($idusuario['min'])) {
-                $this->addUsingAlias(InventariomesPeer::IDUSUARIO, $idusuario['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idusuario['max'])) {
-                $this->addUsingAlias(InventariomesPeer::IDUSUARIO, $idusuario['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(InventariomesPeer::IDUSUARIO, $idusuario, $comparison);
+        return $this
+            ->joinAlmacen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Almacen', 'AlmacenQuery');
     }
 
     /**
@@ -658,6 +752,158 @@ abstract class BaseInventariomesQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Empresa object
+     *
+     * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 InventariomesQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByEmpresa($empresa, $comparison = null)
+    {
+        if ($empresa instanceof Empresa) {
+            return $this
+                ->addUsingAlias(InventariomesPeer::IDEMPRESA, $empresa->getIdempresa(), $comparison);
+        } elseif ($empresa instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(InventariomesPeer::IDEMPRESA, $empresa->toKeyValue('PrimaryKey', 'Idempresa'), $comparison);
+        } else {
+            throw new PropelException('filterByEmpresa() only accepts arguments of type Empresa or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Empresa relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function joinEmpresa($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Empresa');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Empresa');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Empresa relation Empresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   EmpresaQuery A secondary query class using the current class as primary query
+     */
+    public function useEmpresaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEmpresa($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Sucursal object
+     *
+     * @param   Sucursal|PropelObjectCollection $sucursal The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 InventariomesQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySucursal($sucursal, $comparison = null)
+    {
+        if ($sucursal instanceof Sucursal) {
+            return $this
+                ->addUsingAlias(InventariomesPeer::IDSUCURSAL, $sucursal->getIdsucursal(), $comparison);
+        } elseif ($sucursal instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(InventariomesPeer::IDSUCURSAL, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
+        } else {
+            throw new PropelException('filterBySucursal() only accepts arguments of type Sucursal or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Sucursal relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function joinSucursal($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Sucursal');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Sucursal');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Sucursal relation Sucursal object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SucursalQuery A secondary query class using the current class as primary query
+     */
+    public function useSucursalQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSucursal($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Sucursal', 'SucursalQuery');
+    }
+
+    /**
      * Filter the query by a related Usuario object
      *
      * @param   Usuario|PropelObjectCollection $usuario The related object(s) to use as filter
@@ -691,7 +937,7 @@ abstract class BaseInventariomesQuery extends ModelCriteria
      *
      * @return InventariomesQuery The current query, for fluid interface
      */
-    public function joinUsuarioRelatedByIdusuario($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUsuarioRelatedByIdusuario($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('UsuarioRelatedByIdusuario');
@@ -726,7 +972,7 @@ abstract class BaseInventariomesQuery extends ModelCriteria
      *
      * @return   UsuarioQuery A secondary query class using the current class as primary query
      */
-    public function useUsuarioRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUsuarioRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUsuarioRelatedByIdusuario($relationAlias, $joinType)

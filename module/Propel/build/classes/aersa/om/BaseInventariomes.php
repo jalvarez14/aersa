@@ -36,10 +36,28 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     protected $idinventariomes;
 
     /**
-     * The value for the idempleadoempresa field.
-     * @var        double
+     * The value for the idempresa field.
+     * @var        int
      */
-    protected $idempleadoempresa;
+    protected $idempresa;
+
+    /**
+     * The value for the idsucursal field.
+     * @var        int
+     */
+    protected $idsucursal;
+
+    /**
+     * The value for the idalmacen field.
+     * @var        int
+     */
+    protected $idalmacen;
+
+    /**
+     * The value for the idusuario field.
+     * @var        int
+     */
+    protected $idusuario;
 
     /**
      * The value for the idauditor field.
@@ -61,27 +79,24 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     protected $inventariomes_revisada;
 
     /**
-     * The value for the idempresa field.
-     * @var        int
+     * @var        Almacen
      */
-    protected $idempresa;
-
-    /**
-     * The value for the idsucursal field.
-     * @var        int
-     */
-    protected $idsucursal;
-
-    /**
-     * The value for the idusuario field.
-     * @var        int
-     */
-    protected $idusuario;
+    protected $aAlmacen;
 
     /**
      * @var        Usuario
      */
     protected $aUsuarioRelatedByIdauditor;
+
+    /**
+     * @var        Empresa
+     */
+    protected $aEmpresa;
+
+    /**
+     * @var        Sucursal
+     */
+    protected $aSucursal;
 
     /**
      * @var        Usuario
@@ -153,14 +168,47 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [idempleadoempresa] column value.
+     * Get the [idempresa] column value.
      *
-     * @return double
+     * @return int
      */
-    public function getIdempleadoempresa()
+    public function getIdempresa()
     {
 
-        return $this->idempleadoempresa;
+        return $this->idempresa;
+    }
+
+    /**
+     * Get the [idsucursal] column value.
+     *
+     * @return int
+     */
+    public function getIdsucursal()
+    {
+
+        return $this->idsucursal;
+    }
+
+    /**
+     * Get the [idalmacen] column value.
+     *
+     * @return int
+     */
+    public function getIdalmacen()
+    {
+
+        return $this->idalmacen;
+    }
+
+    /**
+     * Get the [idusuario] column value.
+     *
+     * @return int
+     */
+    public function getIdusuario()
+    {
+
+        return $this->idusuario;
     }
 
     /**
@@ -226,39 +274,6 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [idempresa] column value.
-     *
-     * @return int
-     */
-    public function getIdempresa()
-    {
-
-        return $this->idempresa;
-    }
-
-    /**
-     * Get the [idsucursal] column value.
-     *
-     * @return int
-     */
-    public function getIdsucursal()
-    {
-
-        return $this->idsucursal;
-    }
-
-    /**
-     * Get the [idusuario] column value.
-     *
-     * @return int
-     */
-    public function getIdusuario()
-    {
-
-        return $this->idusuario;
-    }
-
-    /**
      * Set the value of [idinventariomes] column.
      *
      * @param  int $v new value
@@ -280,25 +295,104 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     } // setIdinventariomes()
 
     /**
-     * Set the value of [idempleadoempresa] column.
+     * Set the value of [idempresa] column.
      *
-     * @param  double $v new value
+     * @param  int $v new value
      * @return Inventariomes The current object (for fluent API support)
      */
-    public function setIdempleadoempresa($v)
+    public function setIdempresa($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
+            $v = (int) $v;
         }
 
-        if ($this->idempleadoempresa !== $v) {
-            $this->idempleadoempresa = $v;
-            $this->modifiedColumns[] = InventariomesPeer::IDEMPLEADOEMPRESA;
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = InventariomesPeer::IDEMPRESA;
+        }
+
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
         }
 
 
         return $this;
-    } // setIdempleadoempresa()
+    } // setIdempresa()
+
+    /**
+     * Set the value of [idsucursal] column.
+     *
+     * @param  int $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setIdsucursal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idsucursal !== $v) {
+            $this->idsucursal = $v;
+            $this->modifiedColumns[] = InventariomesPeer::IDSUCURSAL;
+        }
+
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
+        }
+
+
+        return $this;
+    } // setIdsucursal()
+
+    /**
+     * Set the value of [idalmacen] column.
+     *
+     * @param  int $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setIdalmacen($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idalmacen !== $v) {
+            $this->idalmacen = $v;
+            $this->modifiedColumns[] = InventariomesPeer::IDALMACEN;
+        }
+
+        if ($this->aAlmacen !== null && $this->aAlmacen->getIdalmacen() !== $v) {
+            $this->aAlmacen = null;
+        }
+
+
+        return $this;
+    } // setIdalmacen()
+
+    /**
+     * Set the value of [idusuario] column.
+     *
+     * @param  int $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setIdusuario($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idusuario !== $v) {
+            $this->idusuario = $v;
+            $this->modifiedColumns[] = InventariomesPeer::IDUSUARIO;
+        }
+
+        if ($this->aUsuarioRelatedByIdusuario !== null && $this->aUsuarioRelatedByIdusuario->getIdusuario() !== $v) {
+            $this->aUsuarioRelatedByIdusuario = null;
+        }
+
+
+        return $this;
+    } // setIdusuario()
 
     /**
      * Set the value of [idauditor] column.
@@ -378,73 +472,6 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     } // setInventariomesRevisada()
 
     /**
-     * Set the value of [idempresa] column.
-     *
-     * @param  int $v new value
-     * @return Inventariomes The current object (for fluent API support)
-     */
-    public function setIdempresa($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idempresa !== $v) {
-            $this->idempresa = $v;
-            $this->modifiedColumns[] = InventariomesPeer::IDEMPRESA;
-        }
-
-
-        return $this;
-    } // setIdempresa()
-
-    /**
-     * Set the value of [idsucursal] column.
-     *
-     * @param  int $v new value
-     * @return Inventariomes The current object (for fluent API support)
-     */
-    public function setIdsucursal($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idsucursal !== $v) {
-            $this->idsucursal = $v;
-            $this->modifiedColumns[] = InventariomesPeer::IDSUCURSAL;
-        }
-
-
-        return $this;
-    } // setIdsucursal()
-
-    /**
-     * Set the value of [idusuario] column.
-     *
-     * @param  int $v new value
-     * @return Inventariomes The current object (for fluent API support)
-     */
-    public function setIdusuario($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idusuario !== $v) {
-            $this->idusuario = $v;
-            $this->modifiedColumns[] = InventariomesPeer::IDUSUARIO;
-        }
-
-        if ($this->aUsuarioRelatedByIdusuario !== null && $this->aUsuarioRelatedByIdusuario->getIdusuario() !== $v) {
-            $this->aUsuarioRelatedByIdusuario = null;
-        }
-
-
-        return $this;
-    } // setIdusuario()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -481,13 +508,13 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         try {
 
             $this->idinventariomes = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idempleadoempresa = ($row[$startcol + 1] !== null) ? (double) $row[$startcol + 1] : null;
-            $this->idauditor = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->inventariomes_fecha = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->inventariomes_revisada = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
-            $this->idempresa = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->idsucursal = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
-            $this->idusuario = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idalmacen = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->idusuario = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->idauditor = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->inventariomes_fecha = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->inventariomes_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -520,11 +547,20 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aUsuarioRelatedByIdauditor !== null && $this->idauditor !== $this->aUsuarioRelatedByIdauditor->getIdusuario()) {
-            $this->aUsuarioRelatedByIdauditor = null;
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
+        }
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
+        }
+        if ($this->aAlmacen !== null && $this->idalmacen !== $this->aAlmacen->getIdalmacen()) {
+            $this->aAlmacen = null;
         }
         if ($this->aUsuarioRelatedByIdusuario !== null && $this->idusuario !== $this->aUsuarioRelatedByIdusuario->getIdusuario()) {
             $this->aUsuarioRelatedByIdusuario = null;
+        }
+        if ($this->aUsuarioRelatedByIdauditor !== null && $this->idauditor !== $this->aUsuarioRelatedByIdauditor->getIdusuario()) {
+            $this->aUsuarioRelatedByIdauditor = null;
         }
     } // ensureConsistency
 
@@ -565,7 +601,10 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aAlmacen = null;
             $this->aUsuarioRelatedByIdauditor = null;
+            $this->aEmpresa = null;
+            $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collInventariomesdetalles = null;
 
@@ -687,11 +726,32 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aAlmacen !== null) {
+                if ($this->aAlmacen->isModified() || $this->aAlmacen->isNew()) {
+                    $affectedRows += $this->aAlmacen->save($con);
+                }
+                $this->setAlmacen($this->aAlmacen);
+            }
+
             if ($this->aUsuarioRelatedByIdauditor !== null) {
                 if ($this->aUsuarioRelatedByIdauditor->isModified() || $this->aUsuarioRelatedByIdauditor->isNew()) {
                     $affectedRows += $this->aUsuarioRelatedByIdauditor->save($con);
                 }
                 $this->setUsuarioRelatedByIdauditor($this->aUsuarioRelatedByIdauditor);
+            }
+
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
+                }
+                $this->setEmpresa($this->aEmpresa);
+            }
+
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
+                }
+                $this->setSucursal($this->aSucursal);
             }
 
             if ($this->aUsuarioRelatedByIdusuario !== null) {
@@ -758,8 +818,17 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         if ($this->isColumnModified(InventariomesPeer::IDINVENTARIOMES)) {
             $modifiedColumns[':p' . $index++]  = '`idinventariomes`';
         }
-        if ($this->isColumnModified(InventariomesPeer::IDEMPLEADOEMPRESA)) {
-            $modifiedColumns[':p' . $index++]  = '`idempleadoempresa`';
+        if ($this->isColumnModified(InventariomesPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::IDSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::IDALMACEN)) {
+            $modifiedColumns[':p' . $index++]  = '`idalmacen`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::IDUSUARIO)) {
+            $modifiedColumns[':p' . $index++]  = '`idusuario`';
         }
         if ($this->isColumnModified(InventariomesPeer::IDAUDITOR)) {
             $modifiedColumns[':p' . $index++]  = '`idauditor`';
@@ -769,15 +838,6 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_REVISADA)) {
             $modifiedColumns[':p' . $index++]  = '`inventariomes_revisada`';
-        }
-        if ($this->isColumnModified(InventariomesPeer::IDEMPRESA)) {
-            $modifiedColumns[':p' . $index++]  = '`idempresa`';
-        }
-        if ($this->isColumnModified(InventariomesPeer::IDSUCURSAL)) {
-            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
-        }
-        if ($this->isColumnModified(InventariomesPeer::IDUSUARIO)) {
-            $modifiedColumns[':p' . $index++]  = '`idusuario`';
         }
 
         $sql = sprintf(
@@ -793,8 +853,17 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
                     case '`idinventariomes`':
                         $stmt->bindValue($identifier, $this->idinventariomes, PDO::PARAM_INT);
                         break;
-                    case '`idempleadoempresa`':
-                        $stmt->bindValue($identifier, $this->idempleadoempresa, PDO::PARAM_STR);
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
+                        break;
+                    case '`idsucursal`':
+                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
+                        break;
+                    case '`idalmacen`':
+                        $stmt->bindValue($identifier, $this->idalmacen, PDO::PARAM_INT);
+                        break;
+                    case '`idusuario`':
+                        $stmt->bindValue($identifier, $this->idusuario, PDO::PARAM_INT);
                         break;
                     case '`idauditor`':
                         $stmt->bindValue($identifier, $this->idauditor, PDO::PARAM_INT);
@@ -804,15 +873,6 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
                         break;
                     case '`inventariomes_revisada`':
                         $stmt->bindValue($identifier, (int) $this->inventariomes_revisada, PDO::PARAM_INT);
-                        break;
-                    case '`idempresa`':
-                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
-                        break;
-                    case '`idsucursal`':
-                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
-                        break;
-                    case '`idusuario`':
-                        $stmt->bindValue($identifier, $this->idusuario, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -913,9 +973,27 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aAlmacen !== null) {
+                if (!$this->aAlmacen->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aAlmacen->getValidationFailures());
+                }
+            }
+
             if ($this->aUsuarioRelatedByIdauditor !== null) {
                 if (!$this->aUsuarioRelatedByIdauditor->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aUsuarioRelatedByIdauditor->getValidationFailures());
+                }
+            }
+
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
+                }
+            }
+
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
                 }
             }
 
@@ -978,25 +1056,25 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
                 return $this->getIdinventariomes();
                 break;
             case 1:
-                return $this->getIdempleadoempresa();
-                break;
-            case 2:
-                return $this->getIdauditor();
-                break;
-            case 3:
-                return $this->getInventariomesFecha();
-                break;
-            case 4:
-                return $this->getInventariomesRevisada();
-                break;
-            case 5:
                 return $this->getIdempresa();
                 break;
-            case 6:
+            case 2:
                 return $this->getIdsucursal();
                 break;
-            case 7:
+            case 3:
+                return $this->getIdalmacen();
+                break;
+            case 4:
                 return $this->getIdusuario();
+                break;
+            case 5:
+                return $this->getIdauditor();
+                break;
+            case 6:
+                return $this->getInventariomesFecha();
+                break;
+            case 7:
+                return $this->getInventariomesRevisada();
                 break;
             default:
                 return null;
@@ -1028,13 +1106,13 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         $keys = InventariomesPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getIdinventariomes(),
-            $keys[1] => $this->getIdempleadoempresa(),
-            $keys[2] => $this->getIdauditor(),
-            $keys[3] => $this->getInventariomesFecha(),
-            $keys[4] => $this->getInventariomesRevisada(),
-            $keys[5] => $this->getIdempresa(),
-            $keys[6] => $this->getIdsucursal(),
-            $keys[7] => $this->getIdusuario(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getIdsucursal(),
+            $keys[3] => $this->getIdalmacen(),
+            $keys[4] => $this->getIdusuario(),
+            $keys[5] => $this->getIdauditor(),
+            $keys[6] => $this->getInventariomesFecha(),
+            $keys[7] => $this->getInventariomesRevisada(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1042,8 +1120,17 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aAlmacen) {
+                $result['Almacen'] = $this->aAlmacen->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUsuarioRelatedByIdauditor) {
                 $result['UsuarioRelatedByIdauditor'] = $this->aUsuarioRelatedByIdauditor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUsuarioRelatedByIdusuario) {
                 $result['UsuarioRelatedByIdusuario'] = $this->aUsuarioRelatedByIdusuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1089,25 +1176,25 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
                 $this->setIdinventariomes($value);
                 break;
             case 1:
-                $this->setIdempleadoempresa($value);
-                break;
-            case 2:
-                $this->setIdauditor($value);
-                break;
-            case 3:
-                $this->setInventariomesFecha($value);
-                break;
-            case 4:
-                $this->setInventariomesRevisada($value);
-                break;
-            case 5:
                 $this->setIdempresa($value);
                 break;
-            case 6:
+            case 2:
                 $this->setIdsucursal($value);
                 break;
-            case 7:
+            case 3:
+                $this->setIdalmacen($value);
+                break;
+            case 4:
                 $this->setIdusuario($value);
+                break;
+            case 5:
+                $this->setIdauditor($value);
+                break;
+            case 6:
+                $this->setInventariomesFecha($value);
+                break;
+            case 7:
+                $this->setInventariomesRevisada($value);
                 break;
         } // switch()
     }
@@ -1134,13 +1221,13 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         $keys = InventariomesPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setIdinventariomes($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdempleadoempresa($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdauditor($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setInventariomesFecha($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setInventariomesRevisada($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setIdempresa($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setIdsucursal($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setIdusuario($arr[$keys[7]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdalmacen($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdusuario($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setIdauditor($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setInventariomesFecha($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setInventariomesRevisada($arr[$keys[7]]);
     }
 
     /**
@@ -1153,13 +1240,13 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(InventariomesPeer::IDINVENTARIOMES)) $criteria->add(InventariomesPeer::IDINVENTARIOMES, $this->idinventariomes);
-        if ($this->isColumnModified(InventariomesPeer::IDEMPLEADOEMPRESA)) $criteria->add(InventariomesPeer::IDEMPLEADOEMPRESA, $this->idempleadoempresa);
+        if ($this->isColumnModified(InventariomesPeer::IDEMPRESA)) $criteria->add(InventariomesPeer::IDEMPRESA, $this->idempresa);
+        if ($this->isColumnModified(InventariomesPeer::IDSUCURSAL)) $criteria->add(InventariomesPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(InventariomesPeer::IDALMACEN)) $criteria->add(InventariomesPeer::IDALMACEN, $this->idalmacen);
+        if ($this->isColumnModified(InventariomesPeer::IDUSUARIO)) $criteria->add(InventariomesPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(InventariomesPeer::IDAUDITOR)) $criteria->add(InventariomesPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FECHA)) $criteria->add(InventariomesPeer::INVENTARIOMES_FECHA, $this->inventariomes_fecha);
         if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_REVISADA)) $criteria->add(InventariomesPeer::INVENTARIOMES_REVISADA, $this->inventariomes_revisada);
-        if ($this->isColumnModified(InventariomesPeer::IDEMPRESA)) $criteria->add(InventariomesPeer::IDEMPRESA, $this->idempresa);
-        if ($this->isColumnModified(InventariomesPeer::IDSUCURSAL)) $criteria->add(InventariomesPeer::IDSUCURSAL, $this->idsucursal);
-        if ($this->isColumnModified(InventariomesPeer::IDUSUARIO)) $criteria->add(InventariomesPeer::IDUSUARIO, $this->idusuario);
 
         return $criteria;
     }
@@ -1223,13 +1310,13 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setIdempleadoempresa($this->getIdempleadoempresa());
+        $copyObj->setIdempresa($this->getIdempresa());
+        $copyObj->setIdsucursal($this->getIdsucursal());
+        $copyObj->setIdalmacen($this->getIdalmacen());
+        $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setInventariomesFecha($this->getInventariomesFecha());
         $copyObj->setInventariomesRevisada($this->getInventariomesRevisada());
-        $copyObj->setIdempresa($this->getIdempresa());
-        $copyObj->setIdsucursal($this->getIdsucursal());
-        $copyObj->setIdusuario($this->getIdusuario());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1295,6 +1382,58 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Almacen object.
+     *
+     * @param                  Almacen $v
+     * @return Inventariomes The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlmacen(Almacen $v = null)
+    {
+        if ($v === null) {
+            $this->setIdalmacen(NULL);
+        } else {
+            $this->setIdalmacen($v->getIdalmacen());
+        }
+
+        $this->aAlmacen = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Almacen object, it will not be re-added.
+        if ($v !== null) {
+            $v->addInventariomes($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Almacen object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Almacen The associated Almacen object.
+     * @throws PropelException
+     */
+    public function getAlmacen(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aAlmacen === null && ($this->idalmacen !== null) && $doQuery) {
+            $this->aAlmacen = AlmacenQuery::create()->findPk($this->idalmacen, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlmacen->addInventariomess($this);
+             */
+        }
+
+        return $this->aAlmacen;
+    }
+
+    /**
      * Declares an association between this object and a Usuario object.
      *
      * @param                  Usuario $v
@@ -1344,6 +1483,110 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         }
 
         return $this->aUsuarioRelatedByIdauditor;
+    }
+
+    /**
+     * Declares an association between this object and a Empresa object.
+     *
+     * @param                  Empresa $v
+     * @return Inventariomes The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEmpresa(Empresa $v = null)
+    {
+        if ($v === null) {
+            $this->setIdempresa(NULL);
+        } else {
+            $this->setIdempresa($v->getIdempresa());
+        }
+
+        $this->aEmpresa = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Empresa object, it will not be re-added.
+        if ($v !== null) {
+            $v->addInventariomes($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Empresa object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Empresa The associated Empresa object.
+     * @throws PropelException
+     */
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEmpresa->addInventariomess($this);
+             */
+        }
+
+        return $this->aEmpresa;
+    }
+
+    /**
+     * Declares an association between this object and a Sucursal object.
+     *
+     * @param                  Sucursal $v
+     * @return Inventariomes The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSucursal(Sucursal $v = null)
+    {
+        if ($v === null) {
+            $this->setIdsucursal(NULL);
+        } else {
+            $this->setIdsucursal($v->getIdsucursal());
+        }
+
+        $this->aSucursal = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
+        if ($v !== null) {
+            $v->addInventariomes($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Sucursal object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Sucursal The associated Sucursal object.
+     * @throws PropelException
+     */
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSucursal->addInventariomess($this);
+             */
+        }
+
+        return $this->aSucursal;
     }
 
     /**
@@ -1645,13 +1888,13 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     public function clear()
     {
         $this->idinventariomes = null;
-        $this->idempleadoempresa = null;
+        $this->idempresa = null;
+        $this->idsucursal = null;
+        $this->idalmacen = null;
+        $this->idusuario = null;
         $this->idauditor = null;
         $this->inventariomes_fecha = null;
         $this->inventariomes_revisada = null;
-        $this->idempresa = null;
-        $this->idsucursal = null;
-        $this->idusuario = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1680,8 +1923,17 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->aAlmacen instanceof Persistent) {
+              $this->aAlmacen->clearAllReferences($deep);
+            }
             if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
               $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
+            }
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
+            }
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
             }
             if ($this->aUsuarioRelatedByIdusuario instanceof Persistent) {
               $this->aUsuarioRelatedByIdusuario->clearAllReferences($deep);
@@ -1694,7 +1946,10 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             $this->collInventariomesdetalles->clearIterator();
         }
         $this->collInventariomesdetalles = null;
+        $this->aAlmacen = null;
         $this->aUsuarioRelatedByIdauditor = null;
+        $this->aEmpresa = null;
+        $this->aSucursal = null;
         $this->aUsuarioRelatedByIdusuario = null;
     }
 

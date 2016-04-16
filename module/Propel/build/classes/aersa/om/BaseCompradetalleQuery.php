@@ -12,6 +12,9 @@
  * @method CompradetalleQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
  * @method CompradetalleQuery orderByCompradetalleCantidad($order = Criteria::ASC) Order by the compradetalle_cantidad column
  * @method CompradetalleQuery orderByCompradetalleRevisada($order = Criteria::ASC) Order by the compradetalle_revisada column
+ * @method CompradetalleQuery orderByCompradetalleCostounitario($order = Criteria::ASC) Order by the compradetalle_costounitario column
+ * @method CompradetalleQuery orderByCompradetalleIeps($order = Criteria::ASC) Order by the compradetalle_ieps column
+ * @method CompradetalleQuery orderByCompradetalleSubtotal($order = Criteria::ASC) Order by the compradetalle_subtotal column
  *
  * @method CompradetalleQuery groupByIdcompradetalle() Group by the idcompradetalle column
  * @method CompradetalleQuery groupByIdcompra() Group by the idcompra column
@@ -19,6 +22,9 @@
  * @method CompradetalleQuery groupByIdalmacen() Group by the idalmacen column
  * @method CompradetalleQuery groupByCompradetalleCantidad() Group by the compradetalle_cantidad column
  * @method CompradetalleQuery groupByCompradetalleRevisada() Group by the compradetalle_revisada column
+ * @method CompradetalleQuery groupByCompradetalleCostounitario() Group by the compradetalle_costounitario column
+ * @method CompradetalleQuery groupByCompradetalleIeps() Group by the compradetalle_ieps column
+ * @method CompradetalleQuery groupByCompradetalleSubtotal() Group by the compradetalle_subtotal column
  *
  * @method CompradetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CompradetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -44,6 +50,9 @@
  * @method Compradetalle findOneByIdalmacen(int $idalmacen) Return the first Compradetalle filtered by the idalmacen column
  * @method Compradetalle findOneByCompradetalleCantidad(double $compradetalle_cantidad) Return the first Compradetalle filtered by the compradetalle_cantidad column
  * @method Compradetalle findOneByCompradetalleRevisada(boolean $compradetalle_revisada) Return the first Compradetalle filtered by the compradetalle_revisada column
+ * @method Compradetalle findOneByCompradetalleCostounitario(string $compradetalle_costounitario) Return the first Compradetalle filtered by the compradetalle_costounitario column
+ * @method Compradetalle findOneByCompradetalleIeps(double $compradetalle_ieps) Return the first Compradetalle filtered by the compradetalle_ieps column
+ * @method Compradetalle findOneByCompradetalleSubtotal(string $compradetalle_subtotal) Return the first Compradetalle filtered by the compradetalle_subtotal column
  *
  * @method array findByIdcompradetalle(int $idcompradetalle) Return Compradetalle objects filtered by the idcompradetalle column
  * @method array findByIdcompra(int $idcompra) Return Compradetalle objects filtered by the idcompra column
@@ -51,6 +60,9 @@
  * @method array findByIdalmacen(int $idalmacen) Return Compradetalle objects filtered by the idalmacen column
  * @method array findByCompradetalleCantidad(double $compradetalle_cantidad) Return Compradetalle objects filtered by the compradetalle_cantidad column
  * @method array findByCompradetalleRevisada(boolean $compradetalle_revisada) Return Compradetalle objects filtered by the compradetalle_revisada column
+ * @method array findByCompradetalleCostounitario(string $compradetalle_costounitario) Return Compradetalle objects filtered by the compradetalle_costounitario column
+ * @method array findByCompradetalleIeps(double $compradetalle_ieps) Return Compradetalle objects filtered by the compradetalle_ieps column
+ * @method array findByCompradetalleSubtotal(string $compradetalle_subtotal) Return Compradetalle objects filtered by the compradetalle_subtotal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -158,7 +170,7 @@ abstract class BaseCompradetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompradetalle`, `idcompra`, `idproducto`, `idalmacen`, `compradetalle_cantidad`, `compradetalle_revisada` FROM `compradetalle` WHERE `idcompradetalle` = :p0';
+        $sql = 'SELECT `idcompradetalle`, `idcompra`, `idproducto`, `idalmacen`, `compradetalle_cantidad`, `compradetalle_revisada`, `compradetalle_costounitario`, `compradetalle_ieps`, `compradetalle_subtotal` FROM `compradetalle` WHERE `idcompradetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -488,6 +500,132 @@ abstract class BaseCompradetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_REVISADA, $compradetalleRevisada, $comparison);
+    }
+
+    /**
+     * Filter the query on the compradetalle_costounitario column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompradetalleCostounitario(1234); // WHERE compradetalle_costounitario = 1234
+     * $query->filterByCompradetalleCostounitario(array(12, 34)); // WHERE compradetalle_costounitario IN (12, 34)
+     * $query->filterByCompradetalleCostounitario(array('min' => 12)); // WHERE compradetalle_costounitario >= 12
+     * $query->filterByCompradetalleCostounitario(array('max' => 12)); // WHERE compradetalle_costounitario <= 12
+     * </code>
+     *
+     * @param     mixed $compradetalleCostounitario The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompradetalleQuery The current query, for fluid interface
+     */
+    public function filterByCompradetalleCostounitario($compradetalleCostounitario = null, $comparison = null)
+    {
+        if (is_array($compradetalleCostounitario)) {
+            $useMinMax = false;
+            if (isset($compradetalleCostounitario['min'])) {
+                $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_COSTOUNITARIO, $compradetalleCostounitario['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($compradetalleCostounitario['max'])) {
+                $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_COSTOUNITARIO, $compradetalleCostounitario['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_COSTOUNITARIO, $compradetalleCostounitario, $comparison);
+    }
+
+    /**
+     * Filter the query on the compradetalle_ieps column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompradetalleIeps(1234); // WHERE compradetalle_ieps = 1234
+     * $query->filterByCompradetalleIeps(array(12, 34)); // WHERE compradetalle_ieps IN (12, 34)
+     * $query->filterByCompradetalleIeps(array('min' => 12)); // WHERE compradetalle_ieps >= 12
+     * $query->filterByCompradetalleIeps(array('max' => 12)); // WHERE compradetalle_ieps <= 12
+     * </code>
+     *
+     * @param     mixed $compradetalleIeps The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompradetalleQuery The current query, for fluid interface
+     */
+    public function filterByCompradetalleIeps($compradetalleIeps = null, $comparison = null)
+    {
+        if (is_array($compradetalleIeps)) {
+            $useMinMax = false;
+            if (isset($compradetalleIeps['min'])) {
+                $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_IEPS, $compradetalleIeps['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($compradetalleIeps['max'])) {
+                $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_IEPS, $compradetalleIeps['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_IEPS, $compradetalleIeps, $comparison);
+    }
+
+    /**
+     * Filter the query on the compradetalle_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompradetalleSubtotal(1234); // WHERE compradetalle_subtotal = 1234
+     * $query->filterByCompradetalleSubtotal(array(12, 34)); // WHERE compradetalle_subtotal IN (12, 34)
+     * $query->filterByCompradetalleSubtotal(array('min' => 12)); // WHERE compradetalle_subtotal >= 12
+     * $query->filterByCompradetalleSubtotal(array('max' => 12)); // WHERE compradetalle_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $compradetalleSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompradetalleQuery The current query, for fluid interface
+     */
+    public function filterByCompradetalleSubtotal($compradetalleSubtotal = null, $comparison = null)
+    {
+        if (is_array($compradetalleSubtotal)) {
+            $useMinMax = false;
+            if (isset($compradetalleSubtotal['min'])) {
+                $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_SUBTOTAL, $compradetalleSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($compradetalleSubtotal['max'])) {
+                $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_SUBTOTAL, $compradetalleSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompradetallePeer::COMPRADETALLE_SUBTOTAL, $compradetalleSubtotal, $comparison);
     }
 
     /**

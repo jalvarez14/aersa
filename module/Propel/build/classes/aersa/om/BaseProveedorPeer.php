@@ -24,13 +24,13 @@ abstract class BaseProveedorPeer
     const TM_CLASS = 'ProveedorTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 13;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /** the column name for the idproveedor field */
     const IDPROVEEDOR = 'proveedor.idproveedor';
@@ -68,6 +68,9 @@ abstract class BaseProveedorPeer
     /** the column name for the proveedor_estado field */
     const PROVEEDOR_ESTADO = 'proveedor.proveedor_estado';
 
+    /** the column name for the proveedor_codigopostal field */
+    const PROVEEDOR_CODIGOPOSTAL = 'proveedor.proveedor_codigopostal';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -87,12 +90,12 @@ abstract class BaseProveedorPeer
      * e.g. ProveedorPeer::$fieldNames[ProveedorPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproveedor', 'Idempresa', 'ProveedorNombrecomercial', 'ProveedorRazonsocial', 'ProveedorRfc', 'ProveedorTelefono', 'ProveedorCalle', 'ProveedorNumero', 'ProveedorInterior', 'ProveedorColonia', 'ProveedorCiudad', 'ProveedorEstado', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproveedor', 'idempresa', 'proveedorNombrecomercial', 'proveedorRazonsocial', 'proveedorRfc', 'proveedorTelefono', 'proveedorCalle', 'proveedorNumero', 'proveedorInterior', 'proveedorColonia', 'proveedorCiudad', 'proveedorEstado', ),
-        BasePeer::TYPE_COLNAME => array (ProveedorPeer::IDPROVEEDOR, ProveedorPeer::IDEMPRESA, ProveedorPeer::PROVEEDOR_NOMBRECOMERCIAL, ProveedorPeer::PROVEEDOR_RAZONSOCIAL, ProveedorPeer::PROVEEDOR_RFC, ProveedorPeer::PROVEEDOR_TELEFONO, ProveedorPeer::PROVEEDOR_CALLE, ProveedorPeer::PROVEEDOR_NUMERO, ProveedorPeer::PROVEEDOR_INTERIOR, ProveedorPeer::PROVEEDOR_COLONIA, ProveedorPeer::PROVEEDOR_CIUDAD, ProveedorPeer::PROVEEDOR_ESTADO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPROVEEDOR', 'IDEMPRESA', 'PROVEEDOR_NOMBRECOMERCIAL', 'PROVEEDOR_RAZONSOCIAL', 'PROVEEDOR_RFC', 'PROVEEDOR_TELEFONO', 'PROVEEDOR_CALLE', 'PROVEEDOR_NUMERO', 'PROVEEDOR_INTERIOR', 'PROVEEDOR_COLONIA', 'PROVEEDOR_CIUDAD', 'PROVEEDOR_ESTADO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idproveedor', 'idempresa', 'proveedor_nombrecomercial', 'proveedor_razonsocial', 'proveedor_RFC', 'proveedor_telefono', 'proveedor_calle', 'proveedor_numero', 'proveedor_interior', 'proveedor_colonia', 'proveedor_ciudad', 'proveedor_estado', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('Idproveedor', 'Idempresa', 'ProveedorNombrecomercial', 'ProveedorRazonsocial', 'ProveedorRfc', 'ProveedorTelefono', 'ProveedorCalle', 'ProveedorNumero', 'ProveedorInterior', 'ProveedorColonia', 'ProveedorCiudad', 'ProveedorEstado', 'ProveedorCodigopostal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproveedor', 'idempresa', 'proveedorNombrecomercial', 'proveedorRazonsocial', 'proveedorRfc', 'proveedorTelefono', 'proveedorCalle', 'proveedorNumero', 'proveedorInterior', 'proveedorColonia', 'proveedorCiudad', 'proveedorEstado', 'proveedorCodigopostal', ),
+        BasePeer::TYPE_COLNAME => array (ProveedorPeer::IDPROVEEDOR, ProveedorPeer::IDEMPRESA, ProveedorPeer::PROVEEDOR_NOMBRECOMERCIAL, ProveedorPeer::PROVEEDOR_RAZONSOCIAL, ProveedorPeer::PROVEEDOR_RFC, ProveedorPeer::PROVEEDOR_TELEFONO, ProveedorPeer::PROVEEDOR_CALLE, ProveedorPeer::PROVEEDOR_NUMERO, ProveedorPeer::PROVEEDOR_INTERIOR, ProveedorPeer::PROVEEDOR_COLONIA, ProveedorPeer::PROVEEDOR_CIUDAD, ProveedorPeer::PROVEEDOR_ESTADO, ProveedorPeer::PROVEEDOR_CODIGOPOSTAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPROVEEDOR', 'IDEMPRESA', 'PROVEEDOR_NOMBRECOMERCIAL', 'PROVEEDOR_RAZONSOCIAL', 'PROVEEDOR_RFC', 'PROVEEDOR_TELEFONO', 'PROVEEDOR_CALLE', 'PROVEEDOR_NUMERO', 'PROVEEDOR_INTERIOR', 'PROVEEDOR_COLONIA', 'PROVEEDOR_CIUDAD', 'PROVEEDOR_ESTADO', 'PROVEEDOR_CODIGOPOSTAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('idproveedor', 'idempresa', 'proveedor_nombrecomercial', 'proveedor_razonsocial', 'proveedor_RFC', 'proveedor_telefono', 'proveedor_calle', 'proveedor_numero', 'proveedor_interior', 'proveedor_colonia', 'proveedor_ciudad', 'proveedor_estado', 'proveedor_codigopostal', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -102,12 +105,12 @@ abstract class BaseProveedorPeer
      * e.g. ProveedorPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproveedor' => 0, 'Idempresa' => 1, 'ProveedorNombrecomercial' => 2, 'ProveedorRazonsocial' => 3, 'ProveedorRfc' => 4, 'ProveedorTelefono' => 5, 'ProveedorCalle' => 6, 'ProveedorNumero' => 7, 'ProveedorInterior' => 8, 'ProveedorColonia' => 9, 'ProveedorCiudad' => 10, 'ProveedorEstado' => 11, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproveedor' => 0, 'idempresa' => 1, 'proveedorNombrecomercial' => 2, 'proveedorRazonsocial' => 3, 'proveedorRfc' => 4, 'proveedorTelefono' => 5, 'proveedorCalle' => 6, 'proveedorNumero' => 7, 'proveedorInterior' => 8, 'proveedorColonia' => 9, 'proveedorCiudad' => 10, 'proveedorEstado' => 11, ),
-        BasePeer::TYPE_COLNAME => array (ProveedorPeer::IDPROVEEDOR => 0, ProveedorPeer::IDEMPRESA => 1, ProveedorPeer::PROVEEDOR_NOMBRECOMERCIAL => 2, ProveedorPeer::PROVEEDOR_RAZONSOCIAL => 3, ProveedorPeer::PROVEEDOR_RFC => 4, ProveedorPeer::PROVEEDOR_TELEFONO => 5, ProveedorPeer::PROVEEDOR_CALLE => 6, ProveedorPeer::PROVEEDOR_NUMERO => 7, ProveedorPeer::PROVEEDOR_INTERIOR => 8, ProveedorPeer::PROVEEDOR_COLONIA => 9, ProveedorPeer::PROVEEDOR_CIUDAD => 10, ProveedorPeer::PROVEEDOR_ESTADO => 11, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPROVEEDOR' => 0, 'IDEMPRESA' => 1, 'PROVEEDOR_NOMBRECOMERCIAL' => 2, 'PROVEEDOR_RAZONSOCIAL' => 3, 'PROVEEDOR_RFC' => 4, 'PROVEEDOR_TELEFONO' => 5, 'PROVEEDOR_CALLE' => 6, 'PROVEEDOR_NUMERO' => 7, 'PROVEEDOR_INTERIOR' => 8, 'PROVEEDOR_COLONIA' => 9, 'PROVEEDOR_CIUDAD' => 10, 'PROVEEDOR_ESTADO' => 11, ),
-        BasePeer::TYPE_FIELDNAME => array ('idproveedor' => 0, 'idempresa' => 1, 'proveedor_nombrecomercial' => 2, 'proveedor_razonsocial' => 3, 'proveedor_RFC' => 4, 'proveedor_telefono' => 5, 'proveedor_calle' => 6, 'proveedor_numero' => 7, 'proveedor_interior' => 8, 'proveedor_colonia' => 9, 'proveedor_ciudad' => 10, 'proveedor_estado' => 11, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('Idproveedor' => 0, 'Idempresa' => 1, 'ProveedorNombrecomercial' => 2, 'ProveedorRazonsocial' => 3, 'ProveedorRfc' => 4, 'ProveedorTelefono' => 5, 'ProveedorCalle' => 6, 'ProveedorNumero' => 7, 'ProveedorInterior' => 8, 'ProveedorColonia' => 9, 'ProveedorCiudad' => 10, 'ProveedorEstado' => 11, 'ProveedorCodigopostal' => 12, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproveedor' => 0, 'idempresa' => 1, 'proveedorNombrecomercial' => 2, 'proveedorRazonsocial' => 3, 'proveedorRfc' => 4, 'proveedorTelefono' => 5, 'proveedorCalle' => 6, 'proveedorNumero' => 7, 'proveedorInterior' => 8, 'proveedorColonia' => 9, 'proveedorCiudad' => 10, 'proveedorEstado' => 11, 'proveedorCodigopostal' => 12, ),
+        BasePeer::TYPE_COLNAME => array (ProveedorPeer::IDPROVEEDOR => 0, ProveedorPeer::IDEMPRESA => 1, ProveedorPeer::PROVEEDOR_NOMBRECOMERCIAL => 2, ProveedorPeer::PROVEEDOR_RAZONSOCIAL => 3, ProveedorPeer::PROVEEDOR_RFC => 4, ProveedorPeer::PROVEEDOR_TELEFONO => 5, ProveedorPeer::PROVEEDOR_CALLE => 6, ProveedorPeer::PROVEEDOR_NUMERO => 7, ProveedorPeer::PROVEEDOR_INTERIOR => 8, ProveedorPeer::PROVEEDOR_COLONIA => 9, ProveedorPeer::PROVEEDOR_CIUDAD => 10, ProveedorPeer::PROVEEDOR_ESTADO => 11, ProveedorPeer::PROVEEDOR_CODIGOPOSTAL => 12, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPROVEEDOR' => 0, 'IDEMPRESA' => 1, 'PROVEEDOR_NOMBRECOMERCIAL' => 2, 'PROVEEDOR_RAZONSOCIAL' => 3, 'PROVEEDOR_RFC' => 4, 'PROVEEDOR_TELEFONO' => 5, 'PROVEEDOR_CALLE' => 6, 'PROVEEDOR_NUMERO' => 7, 'PROVEEDOR_INTERIOR' => 8, 'PROVEEDOR_COLONIA' => 9, 'PROVEEDOR_CIUDAD' => 10, 'PROVEEDOR_ESTADO' => 11, 'PROVEEDOR_CODIGOPOSTAL' => 12, ),
+        BasePeer::TYPE_FIELDNAME => array ('idproveedor' => 0, 'idempresa' => 1, 'proveedor_nombrecomercial' => 2, 'proveedor_razonsocial' => 3, 'proveedor_RFC' => 4, 'proveedor_telefono' => 5, 'proveedor_calle' => 6, 'proveedor_numero' => 7, 'proveedor_interior' => 8, 'proveedor_colonia' => 9, 'proveedor_ciudad' => 10, 'proveedor_estado' => 11, 'proveedor_codigopostal' => 12, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -193,6 +196,7 @@ abstract class BaseProveedorPeer
             $criteria->addSelectColumn(ProveedorPeer::PROVEEDOR_COLONIA);
             $criteria->addSelectColumn(ProveedorPeer::PROVEEDOR_CIUDAD);
             $criteria->addSelectColumn(ProveedorPeer::PROVEEDOR_ESTADO);
+            $criteria->addSelectColumn(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL);
         } else {
             $criteria->addSelectColumn($alias . '.idproveedor');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -206,6 +210,7 @@ abstract class BaseProveedorPeer
             $criteria->addSelectColumn($alias . '.proveedor_colonia');
             $criteria->addSelectColumn($alias . '.proveedor_ciudad');
             $criteria->addSelectColumn($alias . '.proveedor_estado');
+            $criteria->addSelectColumn($alias . '.proveedor_codigopostal');
         }
     }
 
@@ -410,6 +415,9 @@ abstract class BaseProveedorPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CompraPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompraPeer::clearInstancePool();
     }
 
     /**
@@ -873,6 +881,7 @@ abstract class BaseProveedorPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += ProveedorPeer::doOnDeleteCascade(new Criteria(ProveedorPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(ProveedorPeer::TABLE_NAME, $con, ProveedorPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -906,24 +915,14 @@ abstract class BaseProveedorPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            ProveedorPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Proveedor) { // it's a model object
-            // invalidate the cache for this single object
-            ProveedorPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(ProveedorPeer::DATABASE_NAME);
             $criteria->add(ProveedorPeer::IDPROVEEDOR, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                ProveedorPeer::removeInstanceFromPool($singleval);
-            }
         }
 
         // Set the correct dbName
@@ -936,6 +935,23 @@ abstract class BaseProveedorPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += ProveedorPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                ProveedorPeer::clearInstancePool();
+            } elseif ($values instanceof Proveedor) { // it's a model object
+                ProveedorPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    ProveedorPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             ProveedorPeer::clearRelatedInstancePool();
             $con->commit();
@@ -945,6 +961,39 @@ abstract class BaseProveedorPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = ProveedorPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related Compra objects
+            $criteria = new Criteria(CompraPeer::DATABASE_NAME);
+
+            $criteria->add(CompraPeer::IDPROVEEDOR, $obj->getIdproveedor());
+            $affectedRows += CompraPeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**

@@ -7,6 +7,7 @@
  *
  *
  * @method DevolucionQuery orderByIddevolucion($order = Criteria::ASC) Order by the iddevolucion column
+ * @method DevolucionQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method DevolucionQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
  * @method DevolucionQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method DevolucionQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
@@ -21,6 +22,7 @@
  * @method DevolucionQuery orderByDevolucionTotal($order = Criteria::ASC) Order by the devolucion_total column
  *
  * @method DevolucionQuery groupByIddevolucion() Group by the iddevolucion column
+ * @method DevolucionQuery groupByIdempresa() Group by the idempresa column
  * @method DevolucionQuery groupByIdsucursal() Group by the idsucursal column
  * @method DevolucionQuery groupByIdusuario() Group by the idusuario column
  * @method DevolucionQuery groupByIdauditor() Group by the idauditor column
@@ -46,6 +48,10 @@
  * @method DevolucionQuery rightJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  * @method DevolucionQuery innerJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  *
+ * @method DevolucionQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
+ * @method DevolucionQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
+ * @method DevolucionQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
  * @method DevolucionQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
  * @method DevolucionQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
  * @method DevolucionQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
@@ -58,9 +64,14 @@
  * @method DevolucionQuery rightJoinDevoluciondetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devoluciondetalle relation
  * @method DevolucionQuery innerJoinDevoluciondetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Devoluciondetalle relation
  *
+ * @method DevolucionQuery leftJoinDevolucionnota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devolucionnota relation
+ * @method DevolucionQuery rightJoinDevolucionnota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucionnota relation
+ * @method DevolucionQuery innerJoinDevolucionnota($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucionnota relation
+ *
  * @method Devolucion findOne(PropelPDO $con = null) Return the first Devolucion matching the query
  * @method Devolucion findOneOrCreate(PropelPDO $con = null) Return the first Devolucion matching the query, or a new Devolucion object populated from the query conditions when no match is found
  *
+ * @method Devolucion findOneByIdempresa(int $idempresa) Return the first Devolucion filtered by the idempresa column
  * @method Devolucion findOneByIdsucursal(int $idsucursal) Return the first Devolucion filtered by the idsucursal column
  * @method Devolucion findOneByIdusuario(int $idusuario) Return the first Devolucion filtered by the idusuario column
  * @method Devolucion findOneByIdauditor(int $idauditor) Return the first Devolucion filtered by the idauditor column
@@ -75,6 +86,7 @@
  * @method Devolucion findOneByDevolucionTotal(string $devolucion_total) Return the first Devolucion filtered by the devolucion_total column
  *
  * @method array findByIddevolucion(int $iddevolucion) Return Devolucion objects filtered by the iddevolucion column
+ * @method array findByIdempresa(int $idempresa) Return Devolucion objects filtered by the idempresa column
  * @method array findByIdsucursal(int $idsucursal) Return Devolucion objects filtered by the idsucursal column
  * @method array findByIdusuario(int $idusuario) Return Devolucion objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Devolucion objects filtered by the idauditor column
@@ -194,7 +206,7 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevolucion`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechaentrega`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total` FROM `devolucion` WHERE `iddevolucion` = :p0';
+        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechaentrega`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total` FROM `devolucion` WHERE `iddevolucion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -323,6 +335,50 @@ abstract class BaseDevolucionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DevolucionPeer::IDDEVOLUCION, $iddevolucion, $comparison);
+    }
+
+    /**
+     * Filter the query on the idempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
+     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
+     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
+     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
+     * </code>
+     *
+     * @see       filterByEmpresa()
+     *
+     * @param     mixed $idempresa The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function filterByIdempresa($idempresa = null, $comparison = null)
+    {
+        if (is_array($idempresa)) {
+            $useMinMax = false;
+            if (isset($idempresa['min'])) {
+                $this->addUsingAlias(DevolucionPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idempresa['max'])) {
+                $this->addUsingAlias(DevolucionPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevolucionPeer::IDEMPRESA, $idempresa, $comparison);
     }
 
     /**
@@ -937,6 +993,82 @@ abstract class BaseDevolucionQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Empresa object
+     *
+     * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DevolucionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByEmpresa($empresa, $comparison = null)
+    {
+        if ($empresa instanceof Empresa) {
+            return $this
+                ->addUsingAlias(DevolucionPeer::IDEMPRESA, $empresa->getIdempresa(), $comparison);
+        } elseif ($empresa instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(DevolucionPeer::IDEMPRESA, $empresa->toKeyValue('PrimaryKey', 'Idempresa'), $comparison);
+        } else {
+            throw new PropelException('filterByEmpresa() only accepts arguments of type Empresa or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Empresa relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function joinEmpresa($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Empresa');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Empresa');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Empresa relation Empresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   EmpresaQuery A secondary query class using the current class as primary query
+     */
+    public function useEmpresaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEmpresa($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
      * Filter the query by a related Sucursal object
      *
      * @param   Sucursal|PropelObjectCollection $sucursal The related object(s) to use as filter
@@ -1160,6 +1292,80 @@ abstract class BaseDevolucionQuery extends ModelCriteria
         return $this
             ->joinDevoluciondetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Devoluciondetalle', 'DevoluciondetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Devolucionnota object
+     *
+     * @param   Devolucionnota|PropelObjectCollection $devolucionnota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DevolucionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByDevolucionnota($devolucionnota, $comparison = null)
+    {
+        if ($devolucionnota instanceof Devolucionnota) {
+            return $this
+                ->addUsingAlias(DevolucionPeer::IDDEVOLUCION, $devolucionnota->getIddevolucion(), $comparison);
+        } elseif ($devolucionnota instanceof PropelObjectCollection) {
+            return $this
+                ->useDevolucionnotaQuery()
+                ->filterByPrimaryKeys($devolucionnota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDevolucionnota() only accepts arguments of type Devolucionnota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Devolucionnota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function joinDevolucionnota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Devolucionnota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Devolucionnota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Devolucionnota relation Devolucionnota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   DevolucionnotaQuery A secondary query class using the current class as primary query
+     */
+    public function useDevolucionnotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDevolucionnota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Devolucionnota', 'DevolucionnotaQuery');
     }
 
     /**

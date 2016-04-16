@@ -60,6 +60,18 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     protected $idauditor;
 
     /**
+     * The value for the idalmacenorigen field.
+     * @var        int
+     */
+    protected $idalmacenorigen;
+
+    /**
+     * The value for the idalmacendestino field.
+     * @var        int
+     */
+    protected $idalmacendestino;
+
+    /**
      * The value for the idconceptosalida field.
      * @var        int
      */
@@ -76,6 +88,16 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $requisicion_revisada;
+
+    /**
+     * @var        Almacen
+     */
+    protected $aAlmacenRelatedByIdalmacendestino;
+
+    /**
+     * @var        Almacen
+     */
+    protected $aAlmacenRelatedByIdalmacenorigen;
 
     /**
      * @var        Usuario
@@ -187,6 +209,28 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     {
 
         return $this->idauditor;
+    }
+
+    /**
+     * Get the [idalmacenorigen] column value.
+     *
+     * @return int
+     */
+    public function getIdalmacenorigen()
+    {
+
+        return $this->idalmacenorigen;
+    }
+
+    /**
+     * Get the [idalmacendestino] column value.
+     *
+     * @return int
+     */
+    public function getIdalmacendestino()
+    {
+
+        return $this->idalmacendestino;
     }
 
     /**
@@ -373,6 +417,56 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     } // setIdauditor()
 
     /**
+     * Set the value of [idalmacenorigen] column.
+     *
+     * @param  int $v new value
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function setIdalmacenorigen($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idalmacenorigen !== $v) {
+            $this->idalmacenorigen = $v;
+            $this->modifiedColumns[] = RequisicionPeer::IDALMACENORIGEN;
+        }
+
+        if ($this->aAlmacenRelatedByIdalmacenorigen !== null && $this->aAlmacenRelatedByIdalmacenorigen->getIdalmacen() !== $v) {
+            $this->aAlmacenRelatedByIdalmacenorigen = null;
+        }
+
+
+        return $this;
+    } // setIdalmacenorigen()
+
+    /**
+     * Set the value of [idalmacendestino] column.
+     *
+     * @param  int $v new value
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function setIdalmacendestino($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idalmacendestino !== $v) {
+            $this->idalmacendestino = $v;
+            $this->modifiedColumns[] = RequisicionPeer::IDALMACENDESTINO;
+        }
+
+        if ($this->aAlmacenRelatedByIdalmacendestino !== null && $this->aAlmacenRelatedByIdalmacendestino->getIdalmacen() !== $v) {
+            $this->aAlmacenRelatedByIdalmacendestino = null;
+        }
+
+
+        return $this;
+    } // setIdalmacendestino()
+
+    /**
      * Set the value of [idconceptosalida] column.
      *
      * @param  int $v new value
@@ -486,9 +580,11 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->idusuario = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->idauditor = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->idconceptosalida = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->requisicion_fecha = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->requisicion_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->idalmacenorigen = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->idalmacendestino = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->idconceptosalida = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->requisicion_fecha = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->requisicion_revisada = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -498,7 +594,7 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = RequisicionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = RequisicionPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Requisicion object", $e);
@@ -532,6 +628,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         }
         if ($this->aUsuarioRelatedByIdauditor !== null && $this->idauditor !== $this->aUsuarioRelatedByIdauditor->getIdusuario()) {
             $this->aUsuarioRelatedByIdauditor = null;
+        }
+        if ($this->aAlmacenRelatedByIdalmacenorigen !== null && $this->idalmacenorigen !== $this->aAlmacenRelatedByIdalmacenorigen->getIdalmacen()) {
+            $this->aAlmacenRelatedByIdalmacenorigen = null;
+        }
+        if ($this->aAlmacenRelatedByIdalmacendestino !== null && $this->idalmacendestino !== $this->aAlmacenRelatedByIdalmacendestino->getIdalmacen()) {
+            $this->aAlmacenRelatedByIdalmacendestino = null;
         }
         if ($this->aConceptosalida !== null && $this->idconceptosalida !== $this->aConceptosalida->getIdconceptosalida()) {
             $this->aConceptosalida = null;
@@ -575,6 +677,8 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aAlmacenRelatedByIdalmacendestino = null;
+            $this->aAlmacenRelatedByIdalmacenorigen = null;
             $this->aUsuarioRelatedByIdauditor = null;
             $this->aConceptosalida = null;
             $this->aEmpresa = null;
@@ -700,6 +804,20 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aAlmacenRelatedByIdalmacendestino !== null) {
+                if ($this->aAlmacenRelatedByIdalmacendestino->isModified() || $this->aAlmacenRelatedByIdalmacendestino->isNew()) {
+                    $affectedRows += $this->aAlmacenRelatedByIdalmacendestino->save($con);
+                }
+                $this->setAlmacenRelatedByIdalmacendestino($this->aAlmacenRelatedByIdalmacendestino);
+            }
+
+            if ($this->aAlmacenRelatedByIdalmacenorigen !== null) {
+                if ($this->aAlmacenRelatedByIdalmacenorigen->isModified() || $this->aAlmacenRelatedByIdalmacenorigen->isNew()) {
+                    $affectedRows += $this->aAlmacenRelatedByIdalmacenorigen->save($con);
+                }
+                $this->setAlmacenRelatedByIdalmacenorigen($this->aAlmacenRelatedByIdalmacenorigen);
+            }
+
             if ($this->aUsuarioRelatedByIdauditor !== null) {
                 if ($this->aUsuarioRelatedByIdauditor->isModified() || $this->aUsuarioRelatedByIdauditor->isNew()) {
                     $affectedRows += $this->aUsuarioRelatedByIdauditor->save($con);
@@ -804,6 +922,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisicionPeer::IDAUDITOR)) {
             $modifiedColumns[':p' . $index++]  = '`idauditor`';
         }
+        if ($this->isColumnModified(RequisicionPeer::IDALMACENORIGEN)) {
+            $modifiedColumns[':p' . $index++]  = '`idalmacenorigen`';
+        }
+        if ($this->isColumnModified(RequisicionPeer::IDALMACENDESTINO)) {
+            $modifiedColumns[':p' . $index++]  = '`idalmacendestino`';
+        }
         if ($this->isColumnModified(RequisicionPeer::IDCONCEPTOSALIDA)) {
             $modifiedColumns[':p' . $index++]  = '`idconceptosalida`';
         }
@@ -838,6 +962,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                         break;
                     case '`idauditor`':
                         $stmt->bindValue($identifier, $this->idauditor, PDO::PARAM_INT);
+                        break;
+                    case '`idalmacenorigen`':
+                        $stmt->bindValue($identifier, $this->idalmacenorigen, PDO::PARAM_INT);
+                        break;
+                    case '`idalmacendestino`':
+                        $stmt->bindValue($identifier, $this->idalmacendestino, PDO::PARAM_INT);
                         break;
                     case '`idconceptosalida`':
                         $stmt->bindValue($identifier, $this->idconceptosalida, PDO::PARAM_INT);
@@ -947,6 +1077,18 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aAlmacenRelatedByIdalmacendestino !== null) {
+                if (!$this->aAlmacenRelatedByIdalmacendestino->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aAlmacenRelatedByIdalmacendestino->getValidationFailures());
+                }
+            }
+
+            if ($this->aAlmacenRelatedByIdalmacenorigen !== null) {
+                if (!$this->aAlmacenRelatedByIdalmacenorigen->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aAlmacenRelatedByIdalmacenorigen->getValidationFailures());
+                }
+            }
+
             if ($this->aUsuarioRelatedByIdauditor !== null) {
                 if (!$this->aUsuarioRelatedByIdauditor->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aUsuarioRelatedByIdauditor->getValidationFailures());
@@ -1042,12 +1184,18 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                 return $this->getIdauditor();
                 break;
             case 5:
-                return $this->getIdconceptosalida();
+                return $this->getIdalmacenorigen();
                 break;
             case 6:
-                return $this->getRequisicionFecha();
+                return $this->getIdalmacendestino();
                 break;
             case 7:
+                return $this->getIdconceptosalida();
+                break;
+            case 8:
+                return $this->getRequisicionFecha();
+                break;
+            case 9:
                 return $this->getRequisicionRevisada();
                 break;
             default:
@@ -1084,9 +1232,11 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $keys[2] => $this->getIdsucursal(),
             $keys[3] => $this->getIdusuario(),
             $keys[4] => $this->getIdauditor(),
-            $keys[5] => $this->getIdconceptosalida(),
-            $keys[6] => $this->getRequisicionFecha(),
-            $keys[7] => $this->getRequisicionRevisada(),
+            $keys[5] => $this->getIdalmacenorigen(),
+            $keys[6] => $this->getIdalmacendestino(),
+            $keys[7] => $this->getIdconceptosalida(),
+            $keys[8] => $this->getRequisicionFecha(),
+            $keys[9] => $this->getRequisicionRevisada(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1094,6 +1244,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aAlmacenRelatedByIdalmacendestino) {
+                $result['AlmacenRelatedByIdalmacendestino'] = $this->aAlmacenRelatedByIdalmacendestino->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aAlmacenRelatedByIdalmacenorigen) {
+                $result['AlmacenRelatedByIdalmacenorigen'] = $this->aAlmacenRelatedByIdalmacenorigen->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUsuarioRelatedByIdauditor) {
                 $result['UsuarioRelatedByIdauditor'] = $this->aUsuarioRelatedByIdauditor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
@@ -1162,12 +1318,18 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                 $this->setIdauditor($value);
                 break;
             case 5:
-                $this->setIdconceptosalida($value);
+                $this->setIdalmacenorigen($value);
                 break;
             case 6:
-                $this->setRequisicionFecha($value);
+                $this->setIdalmacendestino($value);
                 break;
             case 7:
+                $this->setIdconceptosalida($value);
+                break;
+            case 8:
+                $this->setRequisicionFecha($value);
+                break;
+            case 9:
                 $this->setRequisicionRevisada($value);
                 break;
         } // switch()
@@ -1199,9 +1361,11 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setIdusuario($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setIdauditor($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setIdconceptosalida($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setRequisicionFecha($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setRequisicionRevisada($arr[$keys[7]]);
+        if (array_key_exists($keys[5], $arr)) $this->setIdalmacenorigen($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setIdalmacendestino($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setIdconceptosalida($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setRequisicionFecha($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setRequisicionRevisada($arr[$keys[9]]);
     }
 
     /**
@@ -1218,6 +1382,8 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisicionPeer::IDSUCURSAL)) $criteria->add(RequisicionPeer::IDSUCURSAL, $this->idsucursal);
         if ($this->isColumnModified(RequisicionPeer::IDUSUARIO)) $criteria->add(RequisicionPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(RequisicionPeer::IDAUDITOR)) $criteria->add(RequisicionPeer::IDAUDITOR, $this->idauditor);
+        if ($this->isColumnModified(RequisicionPeer::IDALMACENORIGEN)) $criteria->add(RequisicionPeer::IDALMACENORIGEN, $this->idalmacenorigen);
+        if ($this->isColumnModified(RequisicionPeer::IDALMACENDESTINO)) $criteria->add(RequisicionPeer::IDALMACENDESTINO, $this->idalmacendestino);
         if ($this->isColumnModified(RequisicionPeer::IDCONCEPTOSALIDA)) $criteria->add(RequisicionPeer::IDCONCEPTOSALIDA, $this->idconceptosalida);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_FECHA)) $criteria->add(RequisicionPeer::REQUISICION_FECHA, $this->requisicion_fecha);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_REVISADA)) $criteria->add(RequisicionPeer::REQUISICION_REVISADA, $this->requisicion_revisada);
@@ -1288,6 +1454,8 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         $copyObj->setIdsucursal($this->getIdsucursal());
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdauditor($this->getIdauditor());
+        $copyObj->setIdalmacenorigen($this->getIdalmacenorigen());
+        $copyObj->setIdalmacendestino($this->getIdalmacendestino());
         $copyObj->setIdconceptosalida($this->getIdconceptosalida());
         $copyObj->setRequisicionFecha($this->getRequisicionFecha());
         $copyObj->setRequisicionRevisada($this->getRequisicionRevisada());
@@ -1353,6 +1521,110 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         }
 
         return self::$peer;
+    }
+
+    /**
+     * Declares an association between this object and a Almacen object.
+     *
+     * @param                  Almacen $v
+     * @return Requisicion The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlmacenRelatedByIdalmacendestino(Almacen $v = null)
+    {
+        if ($v === null) {
+            $this->setIdalmacendestino(NULL);
+        } else {
+            $this->setIdalmacendestino($v->getIdalmacen());
+        }
+
+        $this->aAlmacenRelatedByIdalmacendestino = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Almacen object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRequisicionRelatedByIdalmacendestino($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Almacen object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Almacen The associated Almacen object.
+     * @throws PropelException
+     */
+    public function getAlmacenRelatedByIdalmacendestino(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aAlmacenRelatedByIdalmacendestino === null && ($this->idalmacendestino !== null) && $doQuery) {
+            $this->aAlmacenRelatedByIdalmacendestino = AlmacenQuery::create()->findPk($this->idalmacendestino, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlmacenRelatedByIdalmacendestino->addRequisicionsRelatedByIdalmacendestino($this);
+             */
+        }
+
+        return $this->aAlmacenRelatedByIdalmacendestino;
+    }
+
+    /**
+     * Declares an association between this object and a Almacen object.
+     *
+     * @param                  Almacen $v
+     * @return Requisicion The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlmacenRelatedByIdalmacenorigen(Almacen $v = null)
+    {
+        if ($v === null) {
+            $this->setIdalmacenorigen(NULL);
+        } else {
+            $this->setIdalmacenorigen($v->getIdalmacen());
+        }
+
+        $this->aAlmacenRelatedByIdalmacenorigen = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Almacen object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRequisicionRelatedByIdalmacenorigen($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Almacen object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Almacen The associated Almacen object.
+     * @throws PropelException
+     */
+    public function getAlmacenRelatedByIdalmacenorigen(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aAlmacenRelatedByIdalmacenorigen === null && ($this->idalmacenorigen !== null) && $doQuery) {
+            $this->aAlmacenRelatedByIdalmacenorigen = AlmacenQuery::create()->findPk($this->idalmacenorigen, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlmacenRelatedByIdalmacenorigen->addRequisicionsRelatedByIdalmacenorigen($this);
+             */
+        }
+
+        return $this->aAlmacenRelatedByIdalmacenorigen;
     }
 
     /**
@@ -1891,6 +2163,8 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         $this->idsucursal = null;
         $this->idusuario = null;
         $this->idauditor = null;
+        $this->idalmacenorigen = null;
+        $this->idalmacendestino = null;
         $this->idconceptosalida = null;
         $this->requisicion_fecha = null;
         $this->requisicion_revisada = null;
@@ -1921,6 +2195,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->aAlmacenRelatedByIdalmacendestino instanceof Persistent) {
+              $this->aAlmacenRelatedByIdalmacendestino->clearAllReferences($deep);
+            }
+            if ($this->aAlmacenRelatedByIdalmacenorigen instanceof Persistent) {
+              $this->aAlmacenRelatedByIdalmacenorigen->clearAllReferences($deep);
+            }
             if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
               $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
             }
@@ -1944,6 +2224,8 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $this->collRequisiciondetalles->clearIterator();
         }
         $this->collRequisiciondetalles = null;
+        $this->aAlmacenRelatedByIdalmacendestino = null;
+        $this->aAlmacenRelatedByIdalmacenorigen = null;
         $this->aUsuarioRelatedByIdauditor = null;
         $this->aConceptosalida = null;
         $this->aEmpresa = null;

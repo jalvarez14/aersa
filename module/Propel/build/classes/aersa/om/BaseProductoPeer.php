@@ -481,6 +481,12 @@ abstract class BaseProductoPeer
         // Invalidate objects in NotacreditodetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditodetallePeer::clearInstancePool();
+        // Invalidate objects in PlantillatablajeriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PlantillatablajeriaPeer::clearInstancePool();
+        // Invalidate objects in PlantillatablajeriadetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PlantillatablajeriadetallePeer::clearInstancePool();
         // Invalidate objects in RecetaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RecetaPeer::clearInstancePool();
@@ -1478,6 +1484,18 @@ abstract class BaseProductoPeer
 
             $criteria->add(NotacreditodetallePeer::IDPRODUCTO, $obj->getIdproducto());
             $affectedRows += NotacreditodetallePeer::doDelete($criteria, $con);
+
+            // delete related Plantillatablajeria objects
+            $criteria = new Criteria(PlantillatablajeriaPeer::DATABASE_NAME);
+
+            $criteria->add(PlantillatablajeriaPeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += PlantillatablajeriaPeer::doDelete($criteria, $con);
+
+            // delete related Plantillatablajeriadetalle objects
+            $criteria = new Criteria(PlantillatablajeriadetallePeer::DATABASE_NAME);
+
+            $criteria->add(PlantillatablajeriadetallePeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += PlantillatablajeriadetallePeer::doDelete($criteria, $con);
 
             // delete related Receta objects
             $criteria = new Criteria(RecetaPeer::DATABASE_NAME);

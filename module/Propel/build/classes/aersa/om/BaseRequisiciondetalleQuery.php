@@ -11,16 +11,12 @@
  * @method RequisiciondetalleQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
  * @method RequisiciondetalleQuery orderByRequisiciondetalleCantidad($order = Criteria::ASC) Order by the requisiciondetalle_cantidad column
  * @method RequisiciondetalleQuery orderByRequisiciondetalleRevisada($order = Criteria::ASC) Order by the requisiciondetalle_revisada column
- * @method RequisiciondetalleQuery orderByIdalmacenorigen($order = Criteria::ASC) Order by the idalmacenorigen column
- * @method RequisiciondetalleQuery orderByIdalmacendestino($order = Criteria::ASC) Order by the idalmacendestino column
  *
  * @method RequisiciondetalleQuery groupByIdrequisiciondetalle() Group by the idrequisiciondetalle column
  * @method RequisiciondetalleQuery groupByIdrequisicion() Group by the idrequisicion column
  * @method RequisiciondetalleQuery groupByIdproducto() Group by the idproducto column
  * @method RequisiciondetalleQuery groupByRequisiciondetalleCantidad() Group by the requisiciondetalle_cantidad column
  * @method RequisiciondetalleQuery groupByRequisiciondetalleRevisada() Group by the requisiciondetalle_revisada column
- * @method RequisiciondetalleQuery groupByIdalmacenorigen() Group by the idalmacenorigen column
- * @method RequisiciondetalleQuery groupByIdalmacendestino() Group by the idalmacendestino column
  *
  * @method RequisiciondetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RequisiciondetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -41,16 +37,12 @@
  * @method Requisiciondetalle findOneByIdproducto(int $idproducto) Return the first Requisiciondetalle filtered by the idproducto column
  * @method Requisiciondetalle findOneByRequisiciondetalleCantidad(double $requisiciondetalle_cantidad) Return the first Requisiciondetalle filtered by the requisiciondetalle_cantidad column
  * @method Requisiciondetalle findOneByRequisiciondetalleRevisada(boolean $requisiciondetalle_revisada) Return the first Requisiciondetalle filtered by the requisiciondetalle_revisada column
- * @method Requisiciondetalle findOneByIdalmacenorigen(int $idalmacenorigen) Return the first Requisiciondetalle filtered by the idalmacenorigen column
- * @method Requisiciondetalle findOneByIdalmacendestino(int $idalmacendestino) Return the first Requisiciondetalle filtered by the idalmacendestino column
  *
  * @method array findByIdrequisiciondetalle(int $idrequisiciondetalle) Return Requisiciondetalle objects filtered by the idrequisiciondetalle column
  * @method array findByIdrequisicion(int $idrequisicion) Return Requisiciondetalle objects filtered by the idrequisicion column
  * @method array findByIdproducto(int $idproducto) Return Requisiciondetalle objects filtered by the idproducto column
  * @method array findByRequisiciondetalleCantidad(double $requisiciondetalle_cantidad) Return Requisiciondetalle objects filtered by the requisiciondetalle_cantidad column
  * @method array findByRequisiciondetalleRevisada(boolean $requisiciondetalle_revisada) Return Requisiciondetalle objects filtered by the requisiciondetalle_revisada column
- * @method array findByIdalmacenorigen(int $idalmacenorigen) Return Requisiciondetalle objects filtered by the idalmacenorigen column
- * @method array findByIdalmacendestino(int $idalmacendestino) Return Requisiciondetalle objects filtered by the idalmacendestino column
  *
  * @package    propel.generator.aersa.om
  */
@@ -158,7 +150,7 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada`, `idalmacenorigen`, `idalmacendestino` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
+        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -444,90 +436,6 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, $requisiciondetalleRevisada, $comparison);
-    }
-
-    /**
-     * Filter the query on the idalmacenorigen column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIdalmacenorigen(1234); // WHERE idalmacenorigen = 1234
-     * $query->filterByIdalmacenorigen(array(12, 34)); // WHERE idalmacenorigen IN (12, 34)
-     * $query->filterByIdalmacenorigen(array('min' => 12)); // WHERE idalmacenorigen >= 12
-     * $query->filterByIdalmacenorigen(array('max' => 12)); // WHERE idalmacenorigen <= 12
-     * </code>
-     *
-     * @param     mixed $idalmacenorigen The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return RequisiciondetalleQuery The current query, for fluid interface
-     */
-    public function filterByIdalmacenorigen($idalmacenorigen = null, $comparison = null)
-    {
-        if (is_array($idalmacenorigen)) {
-            $useMinMax = false;
-            if (isset($idalmacenorigen['min'])) {
-                $this->addUsingAlias(RequisiciondetallePeer::IDALMACENORIGEN, $idalmacenorigen['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idalmacenorigen['max'])) {
-                $this->addUsingAlias(RequisiciondetallePeer::IDALMACENORIGEN, $idalmacenorigen['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RequisiciondetallePeer::IDALMACENORIGEN, $idalmacenorigen, $comparison);
-    }
-
-    /**
-     * Filter the query on the idalmacendestino column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIdalmacendestino(1234); // WHERE idalmacendestino = 1234
-     * $query->filterByIdalmacendestino(array(12, 34)); // WHERE idalmacendestino IN (12, 34)
-     * $query->filterByIdalmacendestino(array('min' => 12)); // WHERE idalmacendestino >= 12
-     * $query->filterByIdalmacendestino(array('max' => 12)); // WHERE idalmacendestino <= 12
-     * </code>
-     *
-     * @param     mixed $idalmacendestino The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return RequisiciondetalleQuery The current query, for fluid interface
-     */
-    public function filterByIdalmacendestino($idalmacendestino = null, $comparison = null)
-    {
-        if (is_array($idalmacendestino)) {
-            $useMinMax = false;
-            if (isset($idalmacendestino['min'])) {
-                $this->addUsingAlias(RequisiciondetallePeer::IDALMACENDESTINO, $idalmacendestino['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idalmacendestino['max'])) {
-                $this->addUsingAlias(RequisiciondetallePeer::IDALMACENDESTINO, $idalmacendestino['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RequisiciondetallePeer::IDALMACENDESTINO, $idalmacendestino, $comparison);
     }
 
     /**

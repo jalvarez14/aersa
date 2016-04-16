@@ -36,6 +36,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     protected $idnotacredito;
 
     /**
+     * The value for the idempresa field.
+     * @var        int
+     */
+    protected $idempresa;
+
+    /**
      * The value for the idsucursal field.
      * @var        int
      */
@@ -119,6 +125,11 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     protected $aUsuarioRelatedByIdauditor;
 
     /**
+     * @var        Empresa
+     */
+    protected $aEmpresa;
+
+    /**
      * @var        Sucursal
      */
     protected $aSucursal;
@@ -133,6 +144,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
      */
     protected $collNotacreditodetalles;
     protected $collNotacreditodetallesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Notacreditonota[] Collection to store aggregation of Notacreditonota objects.
+     */
+    protected $collNotacreditonotas;
+    protected $collNotacreditonotasPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -159,6 +176,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $notacreditodetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $notacreditonotasScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -190,6 +213,17 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     {
 
         return $this->idnotacredito;
+    }
+
+    /**
+     * Get the [idempresa] column value.
+     *
+     * @return int
+     */
+    public function getIdempresa()
+    {
+
+        return $this->idempresa;
     }
 
     /**
@@ -373,6 +407,31 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
 
         return $this;
     } // setIdnotacredito()
+
+    /**
+     * Set the value of [idempresa] column.
+     *
+     * @param  int $v new value
+     * @return Notacredito The current object (for fluent API support)
+     */
+    public function setIdempresa($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = NotacreditoPeer::IDEMPRESA;
+        }
+
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
+        }
+
+
+        return $this;
+    } // setIdempresa()
 
     /**
      * Set the value of [idsucursal] column.
@@ -689,18 +748,19 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         try {
 
             $this->idnotacredito = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idsucursal = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idusuario = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->idauditor = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->idalmacen = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->notacredito_folio = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->notacredito_revisada = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
-            $this->notacredito_factura = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->notacredito_fechacreacion = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->notacredito_fechaentrega = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->notacredito_ieps = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->notacredito_iva = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->notacredito_total = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idusuario = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->idauditor = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->idalmacen = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->notacredito_folio = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->notacredito_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->notacredito_factura = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->notacredito_fechacreacion = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->notacredito_fechaentrega = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->notacredito_ieps = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->notacredito_iva = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->notacredito_total = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -710,7 +770,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = NotacreditoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = NotacreditoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Notacredito object", $e);
@@ -733,6 +793,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
+        }
         if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
             $this->aSucursal = null;
         }
@@ -786,9 +849,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
 
             $this->aAlmacen = null;
             $this->aUsuarioRelatedByIdauditor = null;
+            $this->aEmpresa = null;
             $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collNotacreditodetalles = null;
+
+            $this->collNotacreditonotas = null;
 
         } // if (deep)
     }
@@ -922,6 +988,13 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 $this->setUsuarioRelatedByIdauditor($this->aUsuarioRelatedByIdauditor);
             }
 
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
+                }
+                $this->setEmpresa($this->aEmpresa);
+            }
+
             if ($this->aSucursal !== null) {
                 if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
                     $affectedRows += $this->aSucursal->save($con);
@@ -964,6 +1037,23 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->notacreditonotasScheduledForDeletion !== null) {
+                if (!$this->notacreditonotasScheduledForDeletion->isEmpty()) {
+                    NotacreditonotaQuery::create()
+                        ->filterByPrimaryKeys($this->notacreditonotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->notacreditonotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collNotacreditonotas !== null) {
+                foreach ($this->collNotacreditonotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -992,6 +1082,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(NotacreditoPeer::IDNOTACREDITO)) {
             $modifiedColumns[':p' . $index++]  = '`idnotacredito`';
+        }
+        if ($this->isColumnModified(NotacreditoPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
         }
         if ($this->isColumnModified(NotacreditoPeer::IDSUCURSAL)) {
             $modifiedColumns[':p' . $index++]  = '`idsucursal`';
@@ -1042,6 +1135,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 switch ($columnName) {
                     case '`idnotacredito`':
                         $stmt->bindValue($identifier, $this->idnotacredito, PDO::PARAM_INT);
+                        break;
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
                     case '`idsucursal`':
                         $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
@@ -1190,6 +1286,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
+                }
+            }
+
             if ($this->aSucursal !== null) {
                 if (!$this->aSucursal->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
@@ -1210,6 +1312,14 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
 
                 if ($this->collNotacreditodetalles !== null) {
                     foreach ($this->collNotacreditodetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collNotacreditonotas !== null) {
+                    foreach ($this->collNotacreditonotas as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1255,39 +1365,42 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 return $this->getIdnotacredito();
                 break;
             case 1:
-                return $this->getIdsucursal();
+                return $this->getIdempresa();
                 break;
             case 2:
-                return $this->getIdusuario();
+                return $this->getIdsucursal();
                 break;
             case 3:
-                return $this->getIdauditor();
+                return $this->getIdusuario();
                 break;
             case 4:
-                return $this->getIdalmacen();
+                return $this->getIdauditor();
                 break;
             case 5:
-                return $this->getNotacreditoFolio();
+                return $this->getIdalmacen();
                 break;
             case 6:
-                return $this->getNotacreditoRevisada();
+                return $this->getNotacreditoFolio();
                 break;
             case 7:
-                return $this->getNotacreditoFactura();
+                return $this->getNotacreditoRevisada();
                 break;
             case 8:
-                return $this->getNotacreditoFechacreacion();
+                return $this->getNotacreditoFactura();
                 break;
             case 9:
-                return $this->getNotacreditoFechaentrega();
+                return $this->getNotacreditoFechacreacion();
                 break;
             case 10:
-                return $this->getNotacreditoIeps();
+                return $this->getNotacreditoFechaentrega();
                 break;
             case 11:
-                return $this->getNotacreditoIva();
+                return $this->getNotacreditoIeps();
                 break;
             case 12:
+                return $this->getNotacreditoIva();
+                break;
+            case 13:
                 return $this->getNotacreditoTotal();
                 break;
             default:
@@ -1320,18 +1433,19 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $keys = NotacreditoPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getIdnotacredito(),
-            $keys[1] => $this->getIdsucursal(),
-            $keys[2] => $this->getIdusuario(),
-            $keys[3] => $this->getIdauditor(),
-            $keys[4] => $this->getIdalmacen(),
-            $keys[5] => $this->getNotacreditoFolio(),
-            $keys[6] => $this->getNotacreditoRevisada(),
-            $keys[7] => $this->getNotacreditoFactura(),
-            $keys[8] => $this->getNotacreditoFechacreacion(),
-            $keys[9] => $this->getNotacreditoFechaentrega(),
-            $keys[10] => $this->getNotacreditoIeps(),
-            $keys[11] => $this->getNotacreditoIva(),
-            $keys[12] => $this->getNotacreditoTotal(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getIdsucursal(),
+            $keys[3] => $this->getIdusuario(),
+            $keys[4] => $this->getIdauditor(),
+            $keys[5] => $this->getIdalmacen(),
+            $keys[6] => $this->getNotacreditoFolio(),
+            $keys[7] => $this->getNotacreditoRevisada(),
+            $keys[8] => $this->getNotacreditoFactura(),
+            $keys[9] => $this->getNotacreditoFechacreacion(),
+            $keys[10] => $this->getNotacreditoFechaentrega(),
+            $keys[11] => $this->getNotacreditoIeps(),
+            $keys[12] => $this->getNotacreditoIva(),
+            $keys[13] => $this->getNotacreditoTotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1345,6 +1459,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             if (null !== $this->aUsuarioRelatedByIdauditor) {
                 $result['UsuarioRelatedByIdauditor'] = $this->aUsuarioRelatedByIdauditor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aSucursal) {
                 $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
@@ -1353,6 +1470,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             }
             if (null !== $this->collNotacreditodetalles) {
                 $result['Notacreditodetalles'] = $this->collNotacreditodetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collNotacreditonotas) {
+                $result['Notacreditonotas'] = $this->collNotacreditonotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1392,39 +1512,42 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 $this->setIdnotacredito($value);
                 break;
             case 1:
-                $this->setIdsucursal($value);
+                $this->setIdempresa($value);
                 break;
             case 2:
-                $this->setIdusuario($value);
+                $this->setIdsucursal($value);
                 break;
             case 3:
-                $this->setIdauditor($value);
+                $this->setIdusuario($value);
                 break;
             case 4:
-                $this->setIdalmacen($value);
+                $this->setIdauditor($value);
                 break;
             case 5:
-                $this->setNotacreditoFolio($value);
+                $this->setIdalmacen($value);
                 break;
             case 6:
-                $this->setNotacreditoRevisada($value);
+                $this->setNotacreditoFolio($value);
                 break;
             case 7:
-                $this->setNotacreditoFactura($value);
+                $this->setNotacreditoRevisada($value);
                 break;
             case 8:
-                $this->setNotacreditoFechacreacion($value);
+                $this->setNotacreditoFactura($value);
                 break;
             case 9:
-                $this->setNotacreditoFechaentrega($value);
+                $this->setNotacreditoFechacreacion($value);
                 break;
             case 10:
-                $this->setNotacreditoIeps($value);
+                $this->setNotacreditoFechaentrega($value);
                 break;
             case 11:
-                $this->setNotacreditoIva($value);
+                $this->setNotacreditoIeps($value);
                 break;
             case 12:
+                $this->setNotacreditoIva($value);
+                break;
+            case 13:
                 $this->setNotacreditoTotal($value);
                 break;
         } // switch()
@@ -1452,18 +1575,19 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $keys = NotacreditoPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setIdnotacredito($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdsucursal($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdusuario($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdauditor($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIdalmacen($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setNotacreditoFolio($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setNotacreditoRevisada($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setNotacreditoFactura($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setNotacreditoFechacreacion($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setNotacreditoFechaentrega($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setNotacreditoIeps($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setNotacreditoIva($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setNotacreditoTotal($arr[$keys[12]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdusuario($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdauditor($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setIdalmacen($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setNotacreditoFolio($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setNotacreditoRevisada($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setNotacreditoFactura($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setNotacreditoFechacreacion($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setNotacreditoFechaentrega($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setNotacreditoIeps($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setNotacreditoIva($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setNotacreditoTotal($arr[$keys[13]]);
     }
 
     /**
@@ -1476,6 +1600,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $criteria = new Criteria(NotacreditoPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(NotacreditoPeer::IDNOTACREDITO)) $criteria->add(NotacreditoPeer::IDNOTACREDITO, $this->idnotacredito);
+        if ($this->isColumnModified(NotacreditoPeer::IDEMPRESA)) $criteria->add(NotacreditoPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(NotacreditoPeer::IDSUCURSAL)) $criteria->add(NotacreditoPeer::IDSUCURSAL, $this->idsucursal);
         if ($this->isColumnModified(NotacreditoPeer::IDUSUARIO)) $criteria->add(NotacreditoPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(NotacreditoPeer::IDAUDITOR)) $criteria->add(NotacreditoPeer::IDAUDITOR, $this->idauditor);
@@ -1551,6 +1676,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setIdsucursal($this->getIdsucursal());
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdauditor($this->getIdauditor());
@@ -1574,6 +1700,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             foreach ($this->getNotacreditodetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addNotacreditodetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getNotacreditonotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addNotacreditonota($relObj->copy($deepCopy));
                 }
             }
 
@@ -1732,6 +1864,58 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Empresa object.
+     *
+     * @param                  Empresa $v
+     * @return Notacredito The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEmpresa(Empresa $v = null)
+    {
+        if ($v === null) {
+            $this->setIdempresa(NULL);
+        } else {
+            $this->setIdempresa($v->getIdempresa());
+        }
+
+        $this->aEmpresa = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Empresa object, it will not be re-added.
+        if ($v !== null) {
+            $v->addNotacredito($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Empresa object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Empresa The associated Empresa object.
+     * @throws PropelException
+     */
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEmpresa->addNotacreditos($this);
+             */
+        }
+
+        return $this->aEmpresa;
+    }
+
+    /**
      * Declares an association between this object and a Sucursal object.
      *
      * @param                  Sucursal $v
@@ -1848,6 +2032,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     {
         if ('Notacreditodetalle' == $relationName) {
             $this->initNotacreditodetalles();
+        }
+        if ('Notacreditonota' == $relationName) {
+            $this->initNotacreditonotas();
         }
     }
 
@@ -2127,11 +2314,262 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collNotacreditonotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Notacredito The current object (for fluent API support)
+     * @see        addNotacreditonotas()
+     */
+    public function clearNotacreditonotas()
+    {
+        $this->collNotacreditonotas = null; // important to set this to null since that means it is uninitialized
+        $this->collNotacreditonotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collNotacreditonotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialNotacreditonotas($v = true)
+    {
+        $this->collNotacreditonotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collNotacreditonotas collection.
+     *
+     * By default this just sets the collNotacreditonotas collection to an empty array (like clearcollNotacreditonotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initNotacreditonotas($overrideExisting = true)
+    {
+        if (null !== $this->collNotacreditonotas && !$overrideExisting) {
+            return;
+        }
+        $this->collNotacreditonotas = new PropelObjectCollection();
+        $this->collNotacreditonotas->setModel('Notacreditonota');
+    }
+
+    /**
+     * Gets an array of Notacreditonota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Notacredito is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Notacreditonota[] List of Notacreditonota objects
+     * @throws PropelException
+     */
+    public function getNotacreditonotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collNotacreditonotasPartial && !$this->isNew();
+        if (null === $this->collNotacreditonotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collNotacreditonotas) {
+                // return empty collection
+                $this->initNotacreditonotas();
+            } else {
+                $collNotacreditonotas = NotacreditonotaQuery::create(null, $criteria)
+                    ->filterByNotacredito($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collNotacreditonotasPartial && count($collNotacreditonotas)) {
+                      $this->initNotacreditonotas(false);
+
+                      foreach ($collNotacreditonotas as $obj) {
+                        if (false == $this->collNotacreditonotas->contains($obj)) {
+                          $this->collNotacreditonotas->append($obj);
+                        }
+                      }
+
+                      $this->collNotacreditonotasPartial = true;
+                    }
+
+                    $collNotacreditonotas->getInternalIterator()->rewind();
+
+                    return $collNotacreditonotas;
+                }
+
+                if ($partial && $this->collNotacreditonotas) {
+                    foreach ($this->collNotacreditonotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collNotacreditonotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collNotacreditonotas = $collNotacreditonotas;
+                $this->collNotacreditonotasPartial = false;
+            }
+        }
+
+        return $this->collNotacreditonotas;
+    }
+
+    /**
+     * Sets a collection of Notacreditonota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $notacreditonotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Notacredito The current object (for fluent API support)
+     */
+    public function setNotacreditonotas(PropelCollection $notacreditonotas, PropelPDO $con = null)
+    {
+        $notacreditonotasToDelete = $this->getNotacreditonotas(new Criteria(), $con)->diff($notacreditonotas);
+
+
+        $this->notacreditonotasScheduledForDeletion = $notacreditonotasToDelete;
+
+        foreach ($notacreditonotasToDelete as $notacreditonotaRemoved) {
+            $notacreditonotaRemoved->setNotacredito(null);
+        }
+
+        $this->collNotacreditonotas = null;
+        foreach ($notacreditonotas as $notacreditonota) {
+            $this->addNotacreditonota($notacreditonota);
+        }
+
+        $this->collNotacreditonotas = $notacreditonotas;
+        $this->collNotacreditonotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Notacreditonota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Notacreditonota objects.
+     * @throws PropelException
+     */
+    public function countNotacreditonotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collNotacreditonotasPartial && !$this->isNew();
+        if (null === $this->collNotacreditonotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collNotacreditonotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getNotacreditonotas());
+            }
+            $query = NotacreditonotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByNotacredito($this)
+                ->count($con);
+        }
+
+        return count($this->collNotacreditonotas);
+    }
+
+    /**
+     * Method called to associate a Notacreditonota object to this object
+     * through the Notacreditonota foreign key attribute.
+     *
+     * @param    Notacreditonota $l Notacreditonota
+     * @return Notacredito The current object (for fluent API support)
+     */
+    public function addNotacreditonota(Notacreditonota $l)
+    {
+        if ($this->collNotacreditonotas === null) {
+            $this->initNotacreditonotas();
+            $this->collNotacreditonotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collNotacreditonotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddNotacreditonota($l);
+
+            if ($this->notacreditonotasScheduledForDeletion and $this->notacreditonotasScheduledForDeletion->contains($l)) {
+                $this->notacreditonotasScheduledForDeletion->remove($this->notacreditonotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Notacreditonota $notacreditonota The notacreditonota object to add.
+     */
+    protected function doAddNotacreditonota($notacreditonota)
+    {
+        $this->collNotacreditonotas[]= $notacreditonota;
+        $notacreditonota->setNotacredito($this);
+    }
+
+    /**
+     * @param	Notacreditonota $notacreditonota The notacreditonota object to remove.
+     * @return Notacredito The current object (for fluent API support)
+     */
+    public function removeNotacreditonota($notacreditonota)
+    {
+        if ($this->getNotacreditonotas()->contains($notacreditonota)) {
+            $this->collNotacreditonotas->remove($this->collNotacreditonotas->search($notacreditonota));
+            if (null === $this->notacreditonotasScheduledForDeletion) {
+                $this->notacreditonotasScheduledForDeletion = clone $this->collNotacreditonotas;
+                $this->notacreditonotasScheduledForDeletion->clear();
+            }
+            $this->notacreditonotasScheduledForDeletion[]= clone $notacreditonota;
+            $notacreditonota->setNotacredito(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Notacredito is new, it will return
+     * an empty collection; or if this Notacredito has previously
+     * been saved, it will retrieve related Notacreditonotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Notacredito.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacreditonota[] List of Notacreditonota objects
+     */
+    public function getNotacreditonotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditonotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getNotacreditonotas($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->idnotacredito = null;
+        $this->idempresa = null;
         $this->idsucursal = null;
         $this->idusuario = null;
         $this->idauditor = null;
@@ -2172,11 +2610,19 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collNotacreditonotas) {
+                foreach ($this->collNotacreditonotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aAlmacen instanceof Persistent) {
               $this->aAlmacen->clearAllReferences($deep);
             }
             if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
               $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
+            }
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
             }
             if ($this->aSucursal instanceof Persistent) {
               $this->aSucursal->clearAllReferences($deep);
@@ -2192,8 +2638,13 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $this->collNotacreditodetalles->clearIterator();
         }
         $this->collNotacreditodetalles = null;
+        if ($this->collNotacreditonotas instanceof PropelCollection) {
+            $this->collNotacreditonotas->clearIterator();
+        }
+        $this->collNotacreditonotas = null;
         $this->aAlmacen = null;
         $this->aUsuarioRelatedByIdauditor = null;
+        $this->aEmpresa = null;
         $this->aSucursal = null;
         $this->aUsuarioRelatedByIdusuario = null;
     }

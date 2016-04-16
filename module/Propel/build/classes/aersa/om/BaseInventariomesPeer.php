@@ -35,8 +35,17 @@ abstract class BaseInventariomesPeer
     /** the column name for the idinventariomes field */
     const IDINVENTARIOMES = 'inventariomes.idinventariomes';
 
-    /** the column name for the idempleadoempresa field */
-    const IDEMPLEADOEMPRESA = 'inventariomes.idempleadoempresa';
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'inventariomes.idempresa';
+
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'inventariomes.idsucursal';
+
+    /** the column name for the idalmacen field */
+    const IDALMACEN = 'inventariomes.idalmacen';
+
+    /** the column name for the idusuario field */
+    const IDUSUARIO = 'inventariomes.idusuario';
 
     /** the column name for the idauditor field */
     const IDAUDITOR = 'inventariomes.idauditor';
@@ -46,15 +55,6 @@ abstract class BaseInventariomesPeer
 
     /** the column name for the inventariomes_revisada field */
     const INVENTARIOMES_REVISADA = 'inventariomes.inventariomes_revisada';
-
-    /** the column name for the idempresa field */
-    const IDEMPRESA = 'inventariomes.idempresa';
-
-    /** the column name for the idsucursal field */
-    const IDSUCURSAL = 'inventariomes.idsucursal';
-
-    /** the column name for the idusuario field */
-    const IDUSUARIO = 'inventariomes.idusuario';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -75,11 +75,11 @@ abstract class BaseInventariomesPeer
      * e.g. InventariomesPeer::$fieldNames[InventariomesPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idinventariomes', 'Idempleadoempresa', 'Idauditor', 'InventariomesFecha', 'InventariomesRevisada', 'Idempresa', 'Idsucursal', 'Idusuario', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes', 'idempleadoempresa', 'idauditor', 'inventariomesFecha', 'inventariomesRevisada', 'idempresa', 'idsucursal', 'idusuario', ),
-        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES, InventariomesPeer::IDEMPLEADOEMPRESA, InventariomesPeer::IDAUDITOR, InventariomesPeer::INVENTARIOMES_FECHA, InventariomesPeer::INVENTARIOMES_REVISADA, InventariomesPeer::IDEMPRESA, InventariomesPeer::IDSUCURSAL, InventariomesPeer::IDUSUARIO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES', 'IDEMPLEADOEMPRESA', 'IDAUDITOR', 'INVENTARIOMES_FECHA', 'INVENTARIOMES_REVISADA', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idinventariomes', 'idempleadoempresa', 'idauditor', 'inventariomes_fecha', 'inventariomes_revisada', 'idempresa', 'idsucursal', 'idusuario', ),
+        BasePeer::TYPE_PHPNAME => array ('Idinventariomes', 'Idempresa', 'Idsucursal', 'Idalmacen', 'Idusuario', 'Idauditor', 'InventariomesFecha', 'InventariomesRevisada', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'inventariomesFecha', 'inventariomesRevisada', ),
+        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES, InventariomesPeer::IDEMPRESA, InventariomesPeer::IDSUCURSAL, InventariomesPeer::IDALMACEN, InventariomesPeer::IDUSUARIO, InventariomesPeer::IDAUDITOR, InventariomesPeer::INVENTARIOMES_FECHA, InventariomesPeer::INVENTARIOMES_REVISADA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACEN', 'IDUSUARIO', 'IDAUDITOR', 'INVENTARIOMES_FECHA', 'INVENTARIOMES_REVISADA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idinventariomes', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'inventariomes_fecha', 'inventariomes_revisada', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -90,11 +90,11 @@ abstract class BaseInventariomesPeer
      * e.g. InventariomesPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idinventariomes' => 0, 'Idempleadoempresa' => 1, 'Idauditor' => 2, 'InventariomesFecha' => 3, 'InventariomesRevisada' => 4, 'Idempresa' => 5, 'Idsucursal' => 6, 'Idusuario' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes' => 0, 'idempleadoempresa' => 1, 'idauditor' => 2, 'inventariomesFecha' => 3, 'inventariomesRevisada' => 4, 'idempresa' => 5, 'idsucursal' => 6, 'idusuario' => 7, ),
-        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES => 0, InventariomesPeer::IDEMPLEADOEMPRESA => 1, InventariomesPeer::IDAUDITOR => 2, InventariomesPeer::INVENTARIOMES_FECHA => 3, InventariomesPeer::INVENTARIOMES_REVISADA => 4, InventariomesPeer::IDEMPRESA => 5, InventariomesPeer::IDSUCURSAL => 6, InventariomesPeer::IDUSUARIO => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES' => 0, 'IDEMPLEADOEMPRESA' => 1, 'IDAUDITOR' => 2, 'INVENTARIOMES_FECHA' => 3, 'INVENTARIOMES_REVISADA' => 4, 'IDEMPRESA' => 5, 'IDSUCURSAL' => 6, 'IDUSUARIO' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('idinventariomes' => 0, 'idempleadoempresa' => 1, 'idauditor' => 2, 'inventariomes_fecha' => 3, 'inventariomes_revisada' => 4, 'idempresa' => 5, 'idsucursal' => 6, 'idusuario' => 7, ),
+        BasePeer::TYPE_PHPNAME => array ('Idinventariomes' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacen' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'InventariomesFecha' => 6, 'InventariomesRevisada' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'inventariomesFecha' => 6, 'inventariomesRevisada' => 7, ),
+        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES => 0, InventariomesPeer::IDEMPRESA => 1, InventariomesPeer::IDSUCURSAL => 2, InventariomesPeer::IDALMACEN => 3, InventariomesPeer::IDUSUARIO => 4, InventariomesPeer::IDAUDITOR => 5, InventariomesPeer::INVENTARIOMES_FECHA => 6, InventariomesPeer::INVENTARIOMES_REVISADA => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACEN' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'INVENTARIOMES_FECHA' => 6, 'INVENTARIOMES_REVISADA' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('idinventariomes' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'inventariomes_fecha' => 6, 'inventariomes_revisada' => 7, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
@@ -170,22 +170,22 @@ abstract class BaseInventariomesPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(InventariomesPeer::IDINVENTARIOMES);
-            $criteria->addSelectColumn(InventariomesPeer::IDEMPLEADOEMPRESA);
+            $criteria->addSelectColumn(InventariomesPeer::IDEMPRESA);
+            $criteria->addSelectColumn(InventariomesPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(InventariomesPeer::IDALMACEN);
+            $criteria->addSelectColumn(InventariomesPeer::IDUSUARIO);
             $criteria->addSelectColumn(InventariomesPeer::IDAUDITOR);
             $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_FECHA);
             $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_REVISADA);
-            $criteria->addSelectColumn(InventariomesPeer::IDEMPRESA);
-            $criteria->addSelectColumn(InventariomesPeer::IDSUCURSAL);
-            $criteria->addSelectColumn(InventariomesPeer::IDUSUARIO);
         } else {
             $criteria->addSelectColumn($alias . '.idinventariomes');
-            $criteria->addSelectColumn($alias . '.idempleadoempresa');
+            $criteria->addSelectColumn($alias . '.idempresa');
+            $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.idalmacen');
+            $criteria->addSelectColumn($alias . '.idusuario');
             $criteria->addSelectColumn($alias . '.idauditor');
             $criteria->addSelectColumn($alias . '.inventariomes_fecha');
             $criteria->addSelectColumn($alias . '.inventariomes_revisada');
-            $criteria->addSelectColumn($alias . '.idempresa');
-            $criteria->addSelectColumn($alias . '.idsucursal');
-            $criteria->addSelectColumn($alias . '.idusuario');
         }
     }
 
@@ -491,6 +491,57 @@ abstract class BaseInventariomesPeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Almacen table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAlmacen(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(InventariomesPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            InventariomesPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related UsuarioRelatedByIdauditor table
      *
      * @param      Criteria $criteria
@@ -527,6 +578,108 @@ abstract class BaseInventariomesPeer
         }
 
         $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(InventariomesPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            InventariomesPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(InventariomesPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            InventariomesPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -593,6 +746,73 @@ abstract class BaseInventariomesPeer
 
 
     /**
+     * Selects a collection of Inventariomes objects pre-filled with their Almacen objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Inventariomes objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAlmacen(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+        }
+
+        InventariomesPeer::addSelectColumns($criteria);
+        $startcol = InventariomesPeer::NUM_HYDRATE_COLUMNS;
+        AlmacenPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = InventariomesPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = InventariomesPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = InventariomesPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                InventariomesPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to $obj2 (Almacen)
+                $obj2->addInventariomes($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
      * Selects a collection of Inventariomes objects pre-filled with their Usuario objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -648,6 +868,140 @@ abstract class BaseInventariomesPeer
 
                 // Add the $obj1 (Inventariomes) to $obj2 (Usuario)
                 $obj2->addInventariomesRelatedByIdauditor($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Inventariomes objects pre-filled with their Empresa objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Inventariomes objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+        }
+
+        InventariomesPeer::addSelectColumns($criteria);
+        $startcol = InventariomesPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = InventariomesPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = InventariomesPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = InventariomesPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                InventariomesPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to $obj2 (Empresa)
+                $obj2->addInventariomes($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Inventariomes objects pre-filled with their Sucursal objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Inventariomes objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+        }
+
+        InventariomesPeer::addSelectColumns($criteria);
+        $startcol = InventariomesPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = InventariomesPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = InventariomesPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = InventariomesPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                InventariomesPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to $obj2 (Sucursal)
+                $obj2->addInventariomes($obj1);
 
             } // if joined row was not null
 
@@ -762,7 +1116,13 @@ abstract class BaseInventariomesPeer
             $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
         $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -800,13 +1160,28 @@ abstract class BaseInventariomesPeer
         InventariomesPeer::addSelectColumns($criteria);
         $startcol2 = InventariomesPeer::NUM_HYDRATE_COLUMNS;
 
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
         $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -827,22 +1202,22 @@ abstract class BaseInventariomesPeer
                 InventariomesPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Usuario rows
+            // Add objects for joined Almacen rows
 
-            $key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = UsuarioPeer::getInstanceFromPool($key2);
+                $obj2 = AlmacenPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = UsuarioPeer::getOMClass();
+                    $cls = AlmacenPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    UsuarioPeer::addInstanceToPool($obj2, $key2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (Inventariomes) to the collection in $obj2 (Usuario)
-                $obj2->addInventariomesRelatedByIdauditor($obj1);
+                // Add the $obj1 (Inventariomes) to the collection in $obj2 (Almacen)
+                $obj2->addInventariomes($obj1);
             } // if joined row not null
 
             // Add objects for joined Usuario rows
@@ -860,7 +1235,61 @@ abstract class BaseInventariomesPeer
                 } // if obj3 loaded
 
                 // Add the $obj1 (Inventariomes) to the collection in $obj3 (Usuario)
-                $obj3->addInventariomesRelatedByIdusuario($obj1);
+                $obj3->addInventariomesRelatedByIdauditor($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Empresa rows
+
+            $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                if (!$obj4) {
+
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj4 (Empresa)
+                $obj4->addInventariomes($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Sucursal rows
+
+            $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj5 (Sucursal)
+                $obj5->addInventariomes($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Usuario rows
+
+            $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+            if ($key6 !== null) {
+                $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                if (!$obj6) {
+
+                    $cls = UsuarioPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if obj6 loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj6 (Usuario)
+                $obj6->addInventariomesRelatedByIdusuario($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -868,6 +1297,63 @@ abstract class BaseInventariomesPeer
         $stmt->closeCursor();
 
         return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Almacen table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptAlmacen(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(InventariomesPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            InventariomesPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
     }
 
 
@@ -906,6 +1392,126 @@ abstract class BaseInventariomesPeer
         if ($con === null) {
             $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(InventariomesPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            InventariomesPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(InventariomesPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            InventariomesPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -956,6 +1562,12 @@ abstract class BaseInventariomesPeer
             $con = Propel::getConnection(InventariomesPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
         $stmt = BasePeer::doCount($criteria, $con);
 
         if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -966,6 +1578,152 @@ abstract class BaseInventariomesPeer
         $stmt->closeCursor();
 
         return $count;
+    }
+
+
+    /**
+     * Selects a collection of Inventariomes objects pre-filled with all related objects except Almacen.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Inventariomes objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptAlmacen(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+        }
+
+        InventariomesPeer::addSelectColumns($criteria);
+        $startcol2 = InventariomesPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = InventariomesPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = InventariomesPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = InventariomesPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                InventariomesPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Usuario rows
+
+                $key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = UsuarioPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    UsuarioPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj2 (Usuario)
+                $obj2->addInventariomesRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj3 (Empresa)
+                $obj3->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj4 (Sucursal)
+                $obj4->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj5 (Usuario)
+                $obj5->addInventariomesRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
 
@@ -993,6 +1751,21 @@ abstract class BaseInventariomesPeer
         InventariomesPeer::addSelectColumns($criteria);
         $startcol2 = InventariomesPeer::NUM_HYDRATE_COLUMNS;
 
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
@@ -1010,6 +1783,355 @@ abstract class BaseInventariomesPeer
                 $obj1->hydrate($row);
                 InventariomesPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj2 (Almacen)
+                $obj2->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj3 (Empresa)
+                $obj3->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj4 (Sucursal)
+                $obj4->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Inventariomes objects pre-filled with all related objects except Empresa.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Inventariomes objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+        }
+
+        InventariomesPeer::addSelectColumns($criteria);
+        $startcol2 = InventariomesPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = InventariomesPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = InventariomesPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = InventariomesPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                InventariomesPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj2 (Almacen)
+                $obj2->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj3 (Usuario)
+                $obj3->addInventariomesRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj4 (Sucursal)
+                $obj4->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj5 (Usuario)
+                $obj5->addInventariomesRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Inventariomes objects pre-filled with all related objects except Sucursal.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Inventariomes objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(InventariomesPeer::DATABASE_NAME);
+        }
+
+        InventariomesPeer::addSelectColumns($criteria);
+        $startcol2 = InventariomesPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = InventariomesPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = InventariomesPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = InventariomesPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                InventariomesPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj2 (Almacen)
+                $obj2->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj3 (Usuario)
+                $obj3->addInventariomesRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj4 (Empresa)
+                $obj4->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj5 (Usuario)
+                $obj5->addInventariomesRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
 
             $results[] = $obj1;
         }
@@ -1043,6 +2165,21 @@ abstract class BaseInventariomesPeer
         InventariomesPeer::addSelectColumns($criteria);
         $startcol2 = InventariomesPeer::NUM_HYDRATE_COLUMNS;
 
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(InventariomesPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(InventariomesPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
@@ -1060,6 +2197,63 @@ abstract class BaseInventariomesPeer
                 $obj1->hydrate($row);
                 InventariomesPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj2 (Almacen)
+                $obj2->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj3 (Empresa)
+                $obj3->addInventariomes($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Inventariomes) to the collection in $obj4 (Sucursal)
+                $obj4->addInventariomes($obj1);
+
+            } // if joined row is not null
 
             $results[] = $obj1;
         }

@@ -51,7 +51,7 @@ class UsuarioController extends AbstractActionController
         if($request->isPost()){
             
             $post_data = $request->getPost();
-            
+           
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $post_data['usuario_estatus'] = 1;
             $form->setData($post_data);
@@ -80,7 +80,8 @@ class UsuarioController extends AbstractActionController
                     
                     //SETEAMOS EL STATUS Y EL PASSWORD
                     $entity->setUsuarioEstatus(1);
-                    $entity->setUsuarioPassword(md5($post_data['usuario_passoword']));
+                    $entity->setUsuarioPassword(md5($post_data['usuario_password']));
+
                     
                     $entity->save();
 
@@ -90,7 +91,7 @@ class UsuarioController extends AbstractActionController
 
                 }else{
                 
-                    
+                   
                 }
                 
             }else{

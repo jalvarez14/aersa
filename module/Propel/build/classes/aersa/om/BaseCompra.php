@@ -36,10 +36,22 @@ abstract class BaseCompra extends BaseObject implements Persistent
     protected $idcompra;
 
     /**
+     * The value for the idempresa field.
+     * @var        int
+     */
+    protected $idempresa;
+
+    /**
      * The value for the idsucursal field.
      * @var        int
      */
     protected $idsucursal;
+
+    /**
+     * The value for the idproveedor field.
+     * @var        int
+     */
+    protected $idproveedor;
 
     /**
      * The value for the idusuario field.
@@ -85,6 +97,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
     protected $compra_fechacreacion;
 
     /**
+     * The value for the compra_fechacompra field.
+     * @var        string
+     */
+    protected $compra_fechacompra;
+
+    /**
      * The value for the compra_fechaentrega field.
      * @var        string
      */
@@ -109,10 +127,46 @@ abstract class BaseCompra extends BaseObject implements Persistent
     protected $compra_total;
 
     /**
+     * @var        Almacen
+     */
+    protected $aAlmacen;
+
+    /**
+     * @var        Usuario
+     */
+    protected $aUsuarioRelatedByIdauditor;
+
+    /**
+     * @var        Empresa
+     */
+    protected $aEmpresa;
+
+    /**
+     * @var        Proveedor
+     */
+    protected $aProveedor;
+
+    /**
+     * @var        Sucursal
+     */
+    protected $aSucursal;
+
+    /**
+     * @var        Usuario
+     */
+    protected $aUsuarioRelatedByIdusuario;
+
+    /**
      * @var        PropelObjectCollection|Compradetalle[] Collection to store aggregation of Compradetalle objects.
      */
     protected $collCompradetalles;
     protected $collCompradetallesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Compranota[] Collection to store aggregation of Compranota objects.
+     */
+    protected $collCompranotas;
+    protected $collCompranotasPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -139,6 +193,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $compradetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $compranotasScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -173,6 +233,17 @@ abstract class BaseCompra extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [idempresa] column value.
+     *
+     * @return int
+     */
+    public function getIdempresa()
+    {
+
+        return $this->idempresa;
+    }
+
+    /**
      * Get the [idsucursal] column value.
      *
      * @return int
@@ -181,6 +252,17 @@ abstract class BaseCompra extends BaseObject implements Persistent
     {
 
         return $this->idsucursal;
+    }
+
+    /**
+     * Get the [idproveedor] column value.
+     *
+     * @return int
+     */
+    public function getIdproveedor()
+    {
+
+        return $this->idproveedor;
     }
 
     /**
@@ -290,14 +372,83 @@ abstract class BaseCompra extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [compra_fechaentrega] column value.
+     * Get the [optionally formatted] temporal [compra_fechacompra] column value.
      *
-     * @return string
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCompraFechaentrega()
+    public function getCompraFechacompra($format = 'Y-m-d H:i:s')
     {
+        if ($this->compra_fechacompra === null) {
+            return null;
+        }
 
-        return $this->compra_fechaentrega;
+        if ($this->compra_fechacompra === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->compra_fechacompra);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->compra_fechacompra, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [compra_fechaentrega] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getCompraFechaentrega($format = 'Y-m-d H:i:s')
+    {
+        if ($this->compra_fechaentrega === null) {
+            return null;
+        }
+
+        if ($this->compra_fechaentrega === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->compra_fechaentrega);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->compra_fechaentrega, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -355,6 +506,31 @@ abstract class BaseCompra extends BaseObject implements Persistent
     } // setIdcompra()
 
     /**
+     * Set the value of [idempresa] column.
+     *
+     * @param  int $v new value
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setIdempresa($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = CompraPeer::IDEMPRESA;
+        }
+
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
+        }
+
+
+        return $this;
+    } // setIdempresa()
+
+    /**
      * Set the value of [idsucursal] column.
      *
      * @param  int $v new value
@@ -371,9 +547,38 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $this->modifiedColumns[] = CompraPeer::IDSUCURSAL;
         }
 
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
+        }
+
 
         return $this;
     } // setIdsucursal()
+
+    /**
+     * Set the value of [idproveedor] column.
+     *
+     * @param  int $v new value
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setIdproveedor($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idproveedor !== $v) {
+            $this->idproveedor = $v;
+            $this->modifiedColumns[] = CompraPeer::IDPROVEEDOR;
+        }
+
+        if ($this->aProveedor !== null && $this->aProveedor->getIdproveedor() !== $v) {
+            $this->aProveedor = null;
+        }
+
+
+        return $this;
+    } // setIdproveedor()
 
     /**
      * Set the value of [idusuario] column.
@@ -390,6 +595,10 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->idusuario !== $v) {
             $this->idusuario = $v;
             $this->modifiedColumns[] = CompraPeer::IDUSUARIO;
+        }
+
+        if ($this->aUsuarioRelatedByIdusuario !== null && $this->aUsuarioRelatedByIdusuario->getIdusuario() !== $v) {
+            $this->aUsuarioRelatedByIdusuario = null;
         }
 
 
@@ -413,6 +622,10 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $this->modifiedColumns[] = CompraPeer::IDAUDITOR;
         }
 
+        if ($this->aUsuarioRelatedByIdauditor !== null && $this->aUsuarioRelatedByIdauditor->getIdusuario() !== $v) {
+            $this->aUsuarioRelatedByIdauditor = null;
+        }
+
 
         return $this;
     } // setIdauditor()
@@ -432,6 +645,10 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->idalmacen !== $v) {
             $this->idalmacen = $v;
             $this->modifiedColumns[] = CompraPeer::IDALMACEN;
+        }
+
+        if ($this->aAlmacen !== null && $this->aAlmacen->getIdalmacen() !== $v) {
+            $this->aAlmacen = null;
         }
 
 
@@ -533,21 +750,46 @@ abstract class BaseCompra extends BaseObject implements Persistent
     } // setCompraFechacreacion()
 
     /**
-     * Set the value of [compra_fechaentrega] column.
+     * Sets the value of [compra_fechacompra] column to a normalized version of the date/time value specified.
      *
-     * @param  string $v new value
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setCompraFechacompra($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->compra_fechacompra !== null || $dt !== null) {
+            $currentDateAsString = ($this->compra_fechacompra !== null && $tmpDt = new DateTime($this->compra_fechacompra)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->compra_fechacompra = $newDateAsString;
+                $this->modifiedColumns[] = CompraPeer::COMPRA_FECHACOMPRA;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setCompraFechacompra()
+
+    /**
+     * Sets the value of [compra_fechaentrega] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
      * @return Compra The current object (for fluent API support)
      */
     public function setCompraFechaentrega($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->compra_fechaentrega !== $v) {
-            $this->compra_fechaentrega = $v;
-            $this->modifiedColumns[] = CompraPeer::COMPRA_FECHAENTREGA;
-        }
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->compra_fechaentrega !== null || $dt !== null) {
+            $currentDateAsString = ($this->compra_fechaentrega !== null && $tmpDt = new DateTime($this->compra_fechaentrega)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->compra_fechaentrega = $newDateAsString;
+                $this->modifiedColumns[] = CompraPeer::COMPRA_FECHAENTREGA;
+            }
+        } // if either are not null
 
 
         return $this;
@@ -653,18 +895,21 @@ abstract class BaseCompra extends BaseObject implements Persistent
         try {
 
             $this->idcompra = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idsucursal = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idusuario = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->idauditor = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->idalmacen = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->compra_folio = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->compra_revisada = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
-            $this->compra_factura = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->compra_fechacreacion = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->compra_fechaentrega = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->compra_ieps = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->compra_iva = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->compra_total = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idproveedor = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->idusuario = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->idauditor = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->idalmacen = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->compra_folio = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->compra_revisada = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->compra_factura = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->compra_fechacreacion = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->compra_fechacompra = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->compra_fechaentrega = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->compra_ieps = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->compra_iva = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->compra_total = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -674,7 +919,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = CompraPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 16; // 16 = CompraPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Compra object", $e);
@@ -697,6 +942,24 @@ abstract class BaseCompra extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
+        }
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
+        }
+        if ($this->aProveedor !== null && $this->idproveedor !== $this->aProveedor->getIdproveedor()) {
+            $this->aProveedor = null;
+        }
+        if ($this->aUsuarioRelatedByIdusuario !== null && $this->idusuario !== $this->aUsuarioRelatedByIdusuario->getIdusuario()) {
+            $this->aUsuarioRelatedByIdusuario = null;
+        }
+        if ($this->aUsuarioRelatedByIdauditor !== null && $this->idauditor !== $this->aUsuarioRelatedByIdauditor->getIdusuario()) {
+            $this->aUsuarioRelatedByIdauditor = null;
+        }
+        if ($this->aAlmacen !== null && $this->idalmacen !== $this->aAlmacen->getIdalmacen()) {
+            $this->aAlmacen = null;
+        }
     } // ensureConsistency
 
     /**
@@ -736,7 +999,15 @@ abstract class BaseCompra extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aAlmacen = null;
+            $this->aUsuarioRelatedByIdauditor = null;
+            $this->aEmpresa = null;
+            $this->aProveedor = null;
+            $this->aSucursal = null;
+            $this->aUsuarioRelatedByIdusuario = null;
             $this->collCompradetalles = null;
+
+            $this->collCompranotas = null;
 
         } // if (deep)
     }
@@ -851,6 +1122,53 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aAlmacen !== null) {
+                if ($this->aAlmacen->isModified() || $this->aAlmacen->isNew()) {
+                    $affectedRows += $this->aAlmacen->save($con);
+                }
+                $this->setAlmacen($this->aAlmacen);
+            }
+
+            if ($this->aUsuarioRelatedByIdauditor !== null) {
+                if ($this->aUsuarioRelatedByIdauditor->isModified() || $this->aUsuarioRelatedByIdauditor->isNew()) {
+                    $affectedRows += $this->aUsuarioRelatedByIdauditor->save($con);
+                }
+                $this->setUsuarioRelatedByIdauditor($this->aUsuarioRelatedByIdauditor);
+            }
+
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
+                }
+                $this->setEmpresa($this->aEmpresa);
+            }
+
+            if ($this->aProveedor !== null) {
+                if ($this->aProveedor->isModified() || $this->aProveedor->isNew()) {
+                    $affectedRows += $this->aProveedor->save($con);
+                }
+                $this->setProveedor($this->aProveedor);
+            }
+
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
+                }
+                $this->setSucursal($this->aSucursal);
+            }
+
+            if ($this->aUsuarioRelatedByIdusuario !== null) {
+                if ($this->aUsuarioRelatedByIdusuario->isModified() || $this->aUsuarioRelatedByIdusuario->isNew()) {
+                    $affectedRows += $this->aUsuarioRelatedByIdusuario->save($con);
+                }
+                $this->setUsuarioRelatedByIdusuario($this->aUsuarioRelatedByIdusuario);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -873,6 +1191,23 @@ abstract class BaseCompra extends BaseObject implements Persistent
 
             if ($this->collCompradetalles !== null) {
                 foreach ($this->collCompradetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->compranotasScheduledForDeletion !== null) {
+                if (!$this->compranotasScheduledForDeletion->isEmpty()) {
+                    CompranotaQuery::create()
+                        ->filterByPrimaryKeys($this->compranotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->compranotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCompranotas !== null) {
+                foreach ($this->collCompranotas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -908,8 +1243,14 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::IDCOMPRA)) {
             $modifiedColumns[':p' . $index++]  = '`idcompra`';
         }
+        if ($this->isColumnModified(CompraPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
+        }
         if ($this->isColumnModified(CompraPeer::IDSUCURSAL)) {
             $modifiedColumns[':p' . $index++]  = '`idsucursal`';
+        }
+        if ($this->isColumnModified(CompraPeer::IDPROVEEDOR)) {
+            $modifiedColumns[':p' . $index++]  = '`idproveedor`';
         }
         if ($this->isColumnModified(CompraPeer::IDUSUARIO)) {
             $modifiedColumns[':p' . $index++]  = '`idusuario`';
@@ -931,6 +1272,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(CompraPeer::COMPRA_FECHACREACION)) {
             $modifiedColumns[':p' . $index++]  = '`compra_fechacreacion`';
+        }
+        if ($this->isColumnModified(CompraPeer::COMPRA_FECHACOMPRA)) {
+            $modifiedColumns[':p' . $index++]  = '`compra_fechacompra`';
         }
         if ($this->isColumnModified(CompraPeer::COMPRA_FECHAENTREGA)) {
             $modifiedColumns[':p' . $index++]  = '`compra_fechaentrega`';
@@ -958,8 +1302,14 @@ abstract class BaseCompra extends BaseObject implements Persistent
                     case '`idcompra`':
                         $stmt->bindValue($identifier, $this->idcompra, PDO::PARAM_INT);
                         break;
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
+                        break;
                     case '`idsucursal`':
                         $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
+                        break;
+                    case '`idproveedor`':
+                        $stmt->bindValue($identifier, $this->idproveedor, PDO::PARAM_INT);
                         break;
                     case '`idusuario`':
                         $stmt->bindValue($identifier, $this->idusuario, PDO::PARAM_INT);
@@ -981,6 +1331,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
                         break;
                     case '`compra_fechacreacion`':
                         $stmt->bindValue($identifier, $this->compra_fechacreacion, PDO::PARAM_STR);
+                        break;
+                    case '`compra_fechacompra`':
+                        $stmt->bindValue($identifier, $this->compra_fechacompra, PDO::PARAM_STR);
                         break;
                     case '`compra_fechaentrega`':
                         $stmt->bindValue($identifier, $this->compra_fechaentrega, PDO::PARAM_STR);
@@ -1088,6 +1441,48 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aAlmacen !== null) {
+                if (!$this->aAlmacen->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aAlmacen->getValidationFailures());
+                }
+            }
+
+            if ($this->aUsuarioRelatedByIdauditor !== null) {
+                if (!$this->aUsuarioRelatedByIdauditor->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aUsuarioRelatedByIdauditor->getValidationFailures());
+                }
+            }
+
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
+                }
+            }
+
+            if ($this->aProveedor !== null) {
+                if (!$this->aProveedor->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aProveedor->getValidationFailures());
+                }
+            }
+
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
+                }
+            }
+
+            if ($this->aUsuarioRelatedByIdusuario !== null) {
+                if (!$this->aUsuarioRelatedByIdusuario->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aUsuarioRelatedByIdusuario->getValidationFailures());
+                }
+            }
+
+
             if (($retval = CompraPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -1095,6 +1490,14 @@ abstract class BaseCompra extends BaseObject implements Persistent
 
                 if ($this->collCompradetalles !== null) {
                     foreach ($this->collCompradetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collCompranotas !== null) {
+                    foreach ($this->collCompranotas as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1140,39 +1543,48 @@ abstract class BaseCompra extends BaseObject implements Persistent
                 return $this->getIdcompra();
                 break;
             case 1:
-                return $this->getIdsucursal();
+                return $this->getIdempresa();
                 break;
             case 2:
-                return $this->getIdusuario();
+                return $this->getIdsucursal();
                 break;
             case 3:
-                return $this->getIdauditor();
+                return $this->getIdproveedor();
                 break;
             case 4:
-                return $this->getIdalmacen();
+                return $this->getIdusuario();
                 break;
             case 5:
-                return $this->getCompraFolio();
+                return $this->getIdauditor();
                 break;
             case 6:
-                return $this->getCompraRevisada();
+                return $this->getIdalmacen();
                 break;
             case 7:
-                return $this->getCompraFactura();
+                return $this->getCompraFolio();
                 break;
             case 8:
-                return $this->getCompraFechacreacion();
+                return $this->getCompraRevisada();
                 break;
             case 9:
-                return $this->getCompraFechaentrega();
+                return $this->getCompraFactura();
                 break;
             case 10:
-                return $this->getCompraIeps();
+                return $this->getCompraFechacreacion();
                 break;
             case 11:
-                return $this->getCompraIva();
+                return $this->getCompraFechacompra();
                 break;
             case 12:
+                return $this->getCompraFechaentrega();
+                break;
+            case 13:
+                return $this->getCompraIeps();
+                break;
+            case 14:
+                return $this->getCompraIva();
+                break;
+            case 15:
                 return $this->getCompraTotal();
                 break;
             default:
@@ -1205,18 +1617,21 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $keys = CompraPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getIdcompra(),
-            $keys[1] => $this->getIdsucursal(),
-            $keys[2] => $this->getIdusuario(),
-            $keys[3] => $this->getIdauditor(),
-            $keys[4] => $this->getIdalmacen(),
-            $keys[5] => $this->getCompraFolio(),
-            $keys[6] => $this->getCompraRevisada(),
-            $keys[7] => $this->getCompraFactura(),
-            $keys[8] => $this->getCompraFechacreacion(),
-            $keys[9] => $this->getCompraFechaentrega(),
-            $keys[10] => $this->getCompraIeps(),
-            $keys[11] => $this->getCompraIva(),
-            $keys[12] => $this->getCompraTotal(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getIdsucursal(),
+            $keys[3] => $this->getIdproveedor(),
+            $keys[4] => $this->getIdusuario(),
+            $keys[5] => $this->getIdauditor(),
+            $keys[6] => $this->getIdalmacen(),
+            $keys[7] => $this->getCompraFolio(),
+            $keys[8] => $this->getCompraRevisada(),
+            $keys[9] => $this->getCompraFactura(),
+            $keys[10] => $this->getCompraFechacreacion(),
+            $keys[11] => $this->getCompraFechacompra(),
+            $keys[12] => $this->getCompraFechaentrega(),
+            $keys[13] => $this->getCompraIeps(),
+            $keys[14] => $this->getCompraIva(),
+            $keys[15] => $this->getCompraTotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1224,8 +1639,29 @@ abstract class BaseCompra extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aAlmacen) {
+                $result['Almacen'] = $this->aAlmacen->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUsuarioRelatedByIdauditor) {
+                $result['UsuarioRelatedByIdauditor'] = $this->aUsuarioRelatedByIdauditor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aProveedor) {
+                $result['Proveedor'] = $this->aProveedor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUsuarioRelatedByIdusuario) {
+                $result['UsuarioRelatedByIdusuario'] = $this->aUsuarioRelatedByIdusuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->collCompradetalles) {
                 $result['Compradetalles'] = $this->collCompradetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCompranotas) {
+                $result['Compranotas'] = $this->collCompranotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1265,39 +1701,48 @@ abstract class BaseCompra extends BaseObject implements Persistent
                 $this->setIdcompra($value);
                 break;
             case 1:
-                $this->setIdsucursal($value);
+                $this->setIdempresa($value);
                 break;
             case 2:
-                $this->setIdusuario($value);
+                $this->setIdsucursal($value);
                 break;
             case 3:
-                $this->setIdauditor($value);
+                $this->setIdproveedor($value);
                 break;
             case 4:
-                $this->setIdalmacen($value);
+                $this->setIdusuario($value);
                 break;
             case 5:
-                $this->setCompraFolio($value);
+                $this->setIdauditor($value);
                 break;
             case 6:
-                $this->setCompraRevisada($value);
+                $this->setIdalmacen($value);
                 break;
             case 7:
-                $this->setCompraFactura($value);
+                $this->setCompraFolio($value);
                 break;
             case 8:
-                $this->setCompraFechacreacion($value);
+                $this->setCompraRevisada($value);
                 break;
             case 9:
-                $this->setCompraFechaentrega($value);
+                $this->setCompraFactura($value);
                 break;
             case 10:
-                $this->setCompraIeps($value);
+                $this->setCompraFechacreacion($value);
                 break;
             case 11:
-                $this->setCompraIva($value);
+                $this->setCompraFechacompra($value);
                 break;
             case 12:
+                $this->setCompraFechaentrega($value);
+                break;
+            case 13:
+                $this->setCompraIeps($value);
+                break;
+            case 14:
+                $this->setCompraIva($value);
+                break;
+            case 15:
                 $this->setCompraTotal($value);
                 break;
         } // switch()
@@ -1325,18 +1770,21 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $keys = CompraPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setIdcompra($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdsucursal($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdusuario($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdauditor($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIdalmacen($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setCompraFolio($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setCompraRevisada($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setCompraFactura($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setCompraFechacreacion($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setCompraFechaentrega($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setCompraIeps($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setCompraIva($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setCompraTotal($arr[$keys[12]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdproveedor($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdusuario($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setIdauditor($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setIdalmacen($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setCompraFolio($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setCompraRevisada($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setCompraFactura($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setCompraFechacreacion($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setCompraFechacompra($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setCompraFechaentrega($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setCompraIeps($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setCompraIva($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setCompraTotal($arr[$keys[15]]);
     }
 
     /**
@@ -1349,7 +1797,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $criteria = new Criteria(CompraPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(CompraPeer::IDCOMPRA)) $criteria->add(CompraPeer::IDCOMPRA, $this->idcompra);
+        if ($this->isColumnModified(CompraPeer::IDEMPRESA)) $criteria->add(CompraPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(CompraPeer::IDSUCURSAL)) $criteria->add(CompraPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(CompraPeer::IDPROVEEDOR)) $criteria->add(CompraPeer::IDPROVEEDOR, $this->idproveedor);
         if ($this->isColumnModified(CompraPeer::IDUSUARIO)) $criteria->add(CompraPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(CompraPeer::IDAUDITOR)) $criteria->add(CompraPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(CompraPeer::IDALMACEN)) $criteria->add(CompraPeer::IDALMACEN, $this->idalmacen);
@@ -1357,6 +1807,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::COMPRA_REVISADA)) $criteria->add(CompraPeer::COMPRA_REVISADA, $this->compra_revisada);
         if ($this->isColumnModified(CompraPeer::COMPRA_FACTURA)) $criteria->add(CompraPeer::COMPRA_FACTURA, $this->compra_factura);
         if ($this->isColumnModified(CompraPeer::COMPRA_FECHACREACION)) $criteria->add(CompraPeer::COMPRA_FECHACREACION, $this->compra_fechacreacion);
+        if ($this->isColumnModified(CompraPeer::COMPRA_FECHACOMPRA)) $criteria->add(CompraPeer::COMPRA_FECHACOMPRA, $this->compra_fechacompra);
         if ($this->isColumnModified(CompraPeer::COMPRA_FECHAENTREGA)) $criteria->add(CompraPeer::COMPRA_FECHAENTREGA, $this->compra_fechaentrega);
         if ($this->isColumnModified(CompraPeer::COMPRA_IEPS)) $criteria->add(CompraPeer::COMPRA_IEPS, $this->compra_ieps);
         if ($this->isColumnModified(CompraPeer::COMPRA_IVA)) $criteria->add(CompraPeer::COMPRA_IVA, $this->compra_iva);
@@ -1424,7 +1875,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setIdsucursal($this->getIdsucursal());
+        $copyObj->setIdproveedor($this->getIdproveedor());
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setIdalmacen($this->getIdalmacen());
@@ -1432,6 +1885,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $copyObj->setCompraRevisada($this->getCompraRevisada());
         $copyObj->setCompraFactura($this->getCompraFactura());
         $copyObj->setCompraFechacreacion($this->getCompraFechacreacion());
+        $copyObj->setCompraFechacompra($this->getCompraFechacompra());
         $copyObj->setCompraFechaentrega($this->getCompraFechaentrega());
         $copyObj->setCompraIeps($this->getCompraIeps());
         $copyObj->setCompraIva($this->getCompraIva());
@@ -1447,6 +1901,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
             foreach ($this->getCompradetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCompradetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getCompranotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCompranota($relObj->copy($deepCopy));
                 }
             }
 
@@ -1500,6 +1960,318 @@ abstract class BaseCompra extends BaseObject implements Persistent
         return self::$peer;
     }
 
+    /**
+     * Declares an association between this object and a Almacen object.
+     *
+     * @param                  Almacen $v
+     * @return Compra The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlmacen(Almacen $v = null)
+    {
+        if ($v === null) {
+            $this->setIdalmacen(NULL);
+        } else {
+            $this->setIdalmacen($v->getIdalmacen());
+        }
+
+        $this->aAlmacen = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Almacen object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCompra($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Almacen object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Almacen The associated Almacen object.
+     * @throws PropelException
+     */
+    public function getAlmacen(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aAlmacen === null && ($this->idalmacen !== null) && $doQuery) {
+            $this->aAlmacen = AlmacenQuery::create()->findPk($this->idalmacen, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlmacen->addCompras($this);
+             */
+        }
+
+        return $this->aAlmacen;
+    }
+
+    /**
+     * Declares an association between this object and a Usuario object.
+     *
+     * @param                  Usuario $v
+     * @return Compra The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setUsuarioRelatedByIdauditor(Usuario $v = null)
+    {
+        if ($v === null) {
+            $this->setIdauditor(NULL);
+        } else {
+            $this->setIdauditor($v->getIdusuario());
+        }
+
+        $this->aUsuarioRelatedByIdauditor = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Usuario object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCompraRelatedByIdauditor($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Usuario object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Usuario The associated Usuario object.
+     * @throws PropelException
+     */
+    public function getUsuarioRelatedByIdauditor(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aUsuarioRelatedByIdauditor === null && ($this->idauditor !== null) && $doQuery) {
+            $this->aUsuarioRelatedByIdauditor = UsuarioQuery::create()->findPk($this->idauditor, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUsuarioRelatedByIdauditor->addComprasRelatedByIdauditor($this);
+             */
+        }
+
+        return $this->aUsuarioRelatedByIdauditor;
+    }
+
+    /**
+     * Declares an association between this object and a Empresa object.
+     *
+     * @param                  Empresa $v
+     * @return Compra The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEmpresa(Empresa $v = null)
+    {
+        if ($v === null) {
+            $this->setIdempresa(NULL);
+        } else {
+            $this->setIdempresa($v->getIdempresa());
+        }
+
+        $this->aEmpresa = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Empresa object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCompra($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Empresa object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Empresa The associated Empresa object.
+     * @throws PropelException
+     */
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEmpresa->addCompras($this);
+             */
+        }
+
+        return $this->aEmpresa;
+    }
+
+    /**
+     * Declares an association between this object and a Proveedor object.
+     *
+     * @param                  Proveedor $v
+     * @return Compra The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setProveedor(Proveedor $v = null)
+    {
+        if ($v === null) {
+            $this->setIdproveedor(NULL);
+        } else {
+            $this->setIdproveedor($v->getIdproveedor());
+        }
+
+        $this->aProveedor = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Proveedor object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCompra($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Proveedor object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Proveedor The associated Proveedor object.
+     * @throws PropelException
+     */
+    public function getProveedor(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aProveedor === null && ($this->idproveedor !== null) && $doQuery) {
+            $this->aProveedor = ProveedorQuery::create()->findPk($this->idproveedor, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aProveedor->addCompras($this);
+             */
+        }
+
+        return $this->aProveedor;
+    }
+
+    /**
+     * Declares an association between this object and a Sucursal object.
+     *
+     * @param                  Sucursal $v
+     * @return Compra The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSucursal(Sucursal $v = null)
+    {
+        if ($v === null) {
+            $this->setIdsucursal(NULL);
+        } else {
+            $this->setIdsucursal($v->getIdsucursal());
+        }
+
+        $this->aSucursal = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCompra($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Sucursal object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Sucursal The associated Sucursal object.
+     * @throws PropelException
+     */
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSucursal->addCompras($this);
+             */
+        }
+
+        return $this->aSucursal;
+    }
+
+    /**
+     * Declares an association between this object and a Usuario object.
+     *
+     * @param                  Usuario $v
+     * @return Compra The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setUsuarioRelatedByIdusuario(Usuario $v = null)
+    {
+        if ($v === null) {
+            $this->setIdusuario(NULL);
+        } else {
+            $this->setIdusuario($v->getIdusuario());
+        }
+
+        $this->aUsuarioRelatedByIdusuario = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Usuario object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCompraRelatedByIdusuario($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Usuario object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Usuario The associated Usuario object.
+     * @throws PropelException
+     */
+    public function getUsuarioRelatedByIdusuario(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aUsuarioRelatedByIdusuario === null && ($this->idusuario !== null) && $doQuery) {
+            $this->aUsuarioRelatedByIdusuario = UsuarioQuery::create()->findPk($this->idusuario, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUsuarioRelatedByIdusuario->addComprasRelatedByIdusuario($this);
+             */
+        }
+
+        return $this->aUsuarioRelatedByIdusuario;
+    }
+
 
     /**
      * Initializes a collection based on the name of a relation.
@@ -1513,6 +2285,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
     {
         if ('Compradetalle' == $relationName) {
             $this->initCompradetalles();
+        }
+        if ('Compranota' == $relationName) {
+            $this->initCompranotas();
         }
     }
 
@@ -1792,12 +2567,264 @@ abstract class BaseCompra extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collCompranotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Compra The current object (for fluent API support)
+     * @see        addCompranotas()
+     */
+    public function clearCompranotas()
+    {
+        $this->collCompranotas = null; // important to set this to null since that means it is uninitialized
+        $this->collCompranotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCompranotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCompranotas($v = true)
+    {
+        $this->collCompranotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collCompranotas collection.
+     *
+     * By default this just sets the collCompranotas collection to an empty array (like clearcollCompranotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCompranotas($overrideExisting = true)
+    {
+        if (null !== $this->collCompranotas && !$overrideExisting) {
+            return;
+        }
+        $this->collCompranotas = new PropelObjectCollection();
+        $this->collCompranotas->setModel('Compranota');
+    }
+
+    /**
+     * Gets an array of Compranota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Compra is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Compranota[] List of Compranota objects
+     * @throws PropelException
+     */
+    public function getCompranotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCompranotasPartial && !$this->isNew();
+        if (null === $this->collCompranotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCompranotas) {
+                // return empty collection
+                $this->initCompranotas();
+            } else {
+                $collCompranotas = CompranotaQuery::create(null, $criteria)
+                    ->filterByCompra($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCompranotasPartial && count($collCompranotas)) {
+                      $this->initCompranotas(false);
+
+                      foreach ($collCompranotas as $obj) {
+                        if (false == $this->collCompranotas->contains($obj)) {
+                          $this->collCompranotas->append($obj);
+                        }
+                      }
+
+                      $this->collCompranotasPartial = true;
+                    }
+
+                    $collCompranotas->getInternalIterator()->rewind();
+
+                    return $collCompranotas;
+                }
+
+                if ($partial && $this->collCompranotas) {
+                    foreach ($this->collCompranotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collCompranotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCompranotas = $collCompranotas;
+                $this->collCompranotasPartial = false;
+            }
+        }
+
+        return $this->collCompranotas;
+    }
+
+    /**
+     * Sets a collection of Compranota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $compranotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setCompranotas(PropelCollection $compranotas, PropelPDO $con = null)
+    {
+        $compranotasToDelete = $this->getCompranotas(new Criteria(), $con)->diff($compranotas);
+
+
+        $this->compranotasScheduledForDeletion = $compranotasToDelete;
+
+        foreach ($compranotasToDelete as $compranotaRemoved) {
+            $compranotaRemoved->setCompra(null);
+        }
+
+        $this->collCompranotas = null;
+        foreach ($compranotas as $compranota) {
+            $this->addCompranota($compranota);
+        }
+
+        $this->collCompranotas = $compranotas;
+        $this->collCompranotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Compranota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Compranota objects.
+     * @throws PropelException
+     */
+    public function countCompranotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCompranotasPartial && !$this->isNew();
+        if (null === $this->collCompranotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCompranotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCompranotas());
+            }
+            $query = CompranotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCompra($this)
+                ->count($con);
+        }
+
+        return count($this->collCompranotas);
+    }
+
+    /**
+     * Method called to associate a Compranota object to this object
+     * through the Compranota foreign key attribute.
+     *
+     * @param    Compranota $l Compranota
+     * @return Compra The current object (for fluent API support)
+     */
+    public function addCompranota(Compranota $l)
+    {
+        if ($this->collCompranotas === null) {
+            $this->initCompranotas();
+            $this->collCompranotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collCompranotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCompranota($l);
+
+            if ($this->compranotasScheduledForDeletion and $this->compranotasScheduledForDeletion->contains($l)) {
+                $this->compranotasScheduledForDeletion->remove($this->compranotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Compranota $compranota The compranota object to add.
+     */
+    protected function doAddCompranota($compranota)
+    {
+        $this->collCompranotas[]= $compranota;
+        $compranota->setCompra($this);
+    }
+
+    /**
+     * @param	Compranota $compranota The compranota object to remove.
+     * @return Compra The current object (for fluent API support)
+     */
+    public function removeCompranota($compranota)
+    {
+        if ($this->getCompranotas()->contains($compranota)) {
+            $this->collCompranotas->remove($this->collCompranotas->search($compranota));
+            if (null === $this->compranotasScheduledForDeletion) {
+                $this->compranotasScheduledForDeletion = clone $this->collCompranotas;
+                $this->compranotasScheduledForDeletion->clear();
+            }
+            $this->compranotasScheduledForDeletion[]= clone $compranota;
+            $compranota->setCompra(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Compra is new, it will return
+     * an empty collection; or if this Compra has previously
+     * been saved, it will retrieve related Compranotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Compra.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compranota[] List of Compranota objects
+     */
+    public function getCompranotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompranotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getCompranotas($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->idcompra = null;
+        $this->idempresa = null;
         $this->idsucursal = null;
+        $this->idproveedor = null;
         $this->idusuario = null;
         $this->idauditor = null;
         $this->idalmacen = null;
@@ -1805,6 +2832,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $this->compra_revisada = null;
         $this->compra_factura = null;
         $this->compra_fechacreacion = null;
+        $this->compra_fechacompra = null;
         $this->compra_fechaentrega = null;
         $this->compra_ieps = null;
         $this->compra_iva = null;
@@ -1837,6 +2865,29 @@ abstract class BaseCompra extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collCompranotas) {
+                foreach ($this->collCompranotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aAlmacen instanceof Persistent) {
+              $this->aAlmacen->clearAllReferences($deep);
+            }
+            if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
+              $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
+            }
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
+            }
+            if ($this->aProveedor instanceof Persistent) {
+              $this->aProveedor->clearAllReferences($deep);
+            }
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
+            }
+            if ($this->aUsuarioRelatedByIdusuario instanceof Persistent) {
+              $this->aUsuarioRelatedByIdusuario->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
@@ -1845,6 +2896,16 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $this->collCompradetalles->clearIterator();
         }
         $this->collCompradetalles = null;
+        if ($this->collCompranotas instanceof PropelCollection) {
+            $this->collCompranotas->clearIterator();
+        }
+        $this->collCompranotas = null;
+        $this->aAlmacen = null;
+        $this->aUsuarioRelatedByIdauditor = null;
+        $this->aEmpresa = null;
+        $this->aProveedor = null;
+        $this->aSucursal = null;
+        $this->aUsuarioRelatedByIdusuario = null;
     }
 
     /**

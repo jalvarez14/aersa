@@ -39,18 +39,21 @@ class CompraTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idcompra', 'Idcompra', 'INTEGER', true, null, null);
-        $this->addColumn('idsucursal', 'Idsucursal', 'INTEGER', true, null, null);
-        $this->addColumn('idusuario', 'Idusuario', 'INTEGER', false, null, null);
-        $this->addColumn('idauditor', 'Idauditor', 'INTEGER', false, null, null);
-        $this->addColumn('idalmacen', 'Idalmacen', 'INTEGER', false, null, null);
+        $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
+        $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addForeignKey('idproveedor', 'Idproveedor', 'INTEGER', 'proveedor', 'idproveedor', true, null, null);
+        $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addColumn('compra_folio', 'CompraFolio', 'VARCHAR', true, 45, null);
         $this->addColumn('compra_revisada', 'CompraRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('compra_factura', 'CompraFactura', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('compra_fechacreacion', 'CompraFechacreacion', 'TIMESTAMP', false, null, null);
-        $this->addColumn('compra_fechaentrega', 'CompraFechaentrega', 'VARCHAR', false, 45, null);
+        $this->addColumn('compra_fechacreacion', 'CompraFechacreacion', 'TIMESTAMP', true, null, null);
+        $this->addColumn('compra_fechacompra', 'CompraFechacompra', 'TIMESTAMP', true, null, null);
+        $this->addColumn('compra_fechaentrega', 'CompraFechaentrega', 'TIMESTAMP', false, null, null);
         $this->addColumn('compra_ieps', 'CompraIeps', 'DECIMAL', false, 10, null);
         $this->addColumn('compra_iva', 'CompraIva', 'DECIMAL', false, 10, null);
-        $this->addColumn('compra_total', 'CompraTotal', 'DECIMAL', false, 10, null);
+        $this->addColumn('compra_total', 'CompraTotal', 'DECIMAL', false, 15, null);
         // validators
     } // initialize()
 
@@ -59,7 +62,14 @@ class CompraTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Almacen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('UsuarioRelatedByIdauditor', 'Usuario', RelationMap::MANY_TO_ONE, array('idauditor' => 'idusuario', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Proveedor', 'Proveedor', RelationMap::MANY_TO_ONE, array('idproveedor' => 'idproveedor', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idcompra' => 'idcompra', ), 'CASCADE', 'CASCADE', 'Compradetalles');
+        $this->addRelation('Compranota', 'Compranota', RelationMap::ONE_TO_MANY, array('idcompra' => 'idcompra', ), 'CASCADE', 'CASCADE', 'Compranotas');
     } // buildRelations()
 
 } // CompraTableMap
