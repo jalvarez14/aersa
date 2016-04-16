@@ -162,7 +162,7 @@
     <div class="portlet-body form">
         <div class="form-body">
             <div class="btn-set pull-right">
-                <a href="/catalogo/usuario/administrador/<?php //echo $form->get('idempresa')->getValue() ?>" ><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo almacén</button></a>
+                <a href="/catalogo/almacen/nuevo/<?php echo $id.'/'.$empresa->getIdEmpresa() ?>" ><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo almacén</button></a>
             </div>
             <h3 class="form-section ">Almacenes </h3>
             <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
@@ -204,7 +204,7 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li>
-                                            <a href="/catalogo/usuario/editaradministrador/<?php echo $entity->getIdAlmacen()?>/<?php //echo $form->get('idempresa')->getValue() ?>">
+                                            <a href="/catalogo/almacen/editar/<?php echo $entity->getIdAlmacen()?>/<?php echo $id.'/'.$empresa->getIdEmpresa() ?>">
                                                 <i class="fa fa-pencil"></i> Editar </a>
                                         </li>
                                         <?php if (count($administradores) > 1 ): ?>

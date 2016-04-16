@@ -306,11 +306,16 @@ class UsuarioController extends AbstractActionController {
 
     public function editaradministradorAction() {
         $request = $this->getRequest();
-
+        
+        
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
         $emp = $this->params()->fromRoute('emp');
-
+        
+        $id = $this->params()->fromRoute('id');
+        $idEmp = $this->params()->fromRoute('emp');
+        $idSuc = $this->params()->fromRoute('suc');
+        
         //Buscamos el nombre de la empresa que se está editando
         $exists = \EmpresaQuery::create()->filterByIdempresa($emp)->exists();
         if ($exists)
@@ -366,7 +371,9 @@ class UsuarioController extends AbstractActionController {
             }
 
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $entity->setUsuarioPassword('');
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
         } else
             return $this->redirect()->toUrl('/catalogo/empresa/editar/' . $emp);
 
@@ -396,7 +403,41 @@ class UsuarioController extends AbstractActionController {
             return $this->redirect()->toUrl('/catalogo/empresa/editar/' . $emp);
         }
     }
+    
+    public function changepasswordadministradorAction() 
+    {
 
+        $request = $this->getRequest();
+
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id     = $this->params()->fromRoute('id');
+        $idEmp  = $this->params()->fromRoute('emp');
+        
+        
+        //VERIFICAMOS SI EXISTE
+        $exist = \UsuarioQuery::create()->filterByIdusuario($id)->exists();
+
+        if ($exist) 
+        {
+
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \UsuarioQuery::create()->findPk($id);
+
+            //SI NOS ENVIAN UNA PETICION POST
+            if ($request->isPost()) 
+            {
+                $post_data = $request->getPost();
+                $entity->setUsuarioPassword(md5($post_data['usuario_password']));
+                $entity->save();
+                
+                $this->flashMessenger()->addSuccessMessage('Contraseña modificada correctamente!');
+                return $this->redirect()->toUrl('/catalogo/empresa/editar/'.$idEmp);
+                
+            }
+        } else 
+            return $this->redirect()->toUrl('/catalogo/empresa');
+    }
+    
     public function auditorAction() {
         $request = $this->getRequest();
         $idEmp = $this->params()->fromRoute('emp');
