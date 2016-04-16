@@ -388,7 +388,7 @@ return array(
                                 'options' => array(
                                     'route' => '/tablajeria',
                                     'defaults' => array(
-                                        'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                        'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
                                         'action' => 'index',
                                     ),
                                 ),
@@ -399,7 +399,7 @@ return array(
                                         'options' => array(
                                              'route' => '/nuevo',
                                              'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
                                                  'action' => 'nuevo',
                                              ),
                                          ),
@@ -409,7 +409,7 @@ return array(
                                         'options' => array(
                                              'route' => '/editar[/:id]',
                                              'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
                                                  'action' => 'editar',
                                              ),
                                          ),
@@ -419,7 +419,7 @@ return array(
                                         'options' => array(
                                              'route' => '/nuevo',
                                              'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
                                                  'action' => 'nuevo',
                                              ),
                                          ),
@@ -429,7 +429,7 @@ return array(
                                         'options' => array(
                                              'route' => '/eliminar[/:id]',
                                              'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
                                                  'action' => 'eliminar',
                                              ),
                                          ),
