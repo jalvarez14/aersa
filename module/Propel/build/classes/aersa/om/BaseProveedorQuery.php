@@ -18,6 +18,7 @@
  * @method ProveedorQuery orderByProveedorColonia($order = Criteria::ASC) Order by the proveedor_colonia column
  * @method ProveedorQuery orderByProveedorCiudad($order = Criteria::ASC) Order by the proveedor_ciudad column
  * @method ProveedorQuery orderByProveedorEstado($order = Criteria::ASC) Order by the proveedor_estado column
+ * @method ProveedorQuery orderByProveedorCodigopostal($order = Criteria::ASC) Order by the proveedor_codigopostal column
  *
  * @method ProveedorQuery groupByIdproveedor() Group by the idproveedor column
  * @method ProveedorQuery groupByIdempresa() Group by the idempresa column
@@ -31,6 +32,7 @@
  * @method ProveedorQuery groupByProveedorColonia() Group by the proveedor_colonia column
  * @method ProveedorQuery groupByProveedorCiudad() Group by the proveedor_ciudad column
  * @method ProveedorQuery groupByProveedorEstado() Group by the proveedor_estado column
+ * @method ProveedorQuery groupByProveedorCodigopostal() Group by the proveedor_codigopostal column
  *
  * @method ProveedorQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProveedorQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -39,6 +41,10 @@
  * @method ProveedorQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
  * @method ProveedorQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
  * @method ProveedorQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
+ * @method ProveedorQuery leftJoinCompra($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compra relation
+ * @method ProveedorQuery rightJoinCompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compra relation
+ * @method ProveedorQuery innerJoinCompra($relationAlias = null) Adds a INNER JOIN clause to the query using the Compra relation
  *
  * @method Proveedor findOne(PropelPDO $con = null) Return the first Proveedor matching the query
  * @method Proveedor findOneOrCreate(PropelPDO $con = null) Return the first Proveedor matching the query, or a new Proveedor object populated from the query conditions when no match is found
@@ -54,6 +60,7 @@
  * @method Proveedor findOneByProveedorColonia(string $proveedor_colonia) Return the first Proveedor filtered by the proveedor_colonia column
  * @method Proveedor findOneByProveedorCiudad(string $proveedor_ciudad) Return the first Proveedor filtered by the proveedor_ciudad column
  * @method Proveedor findOneByProveedorEstado(string $proveedor_estado) Return the first Proveedor filtered by the proveedor_estado column
+ * @method Proveedor findOneByProveedorCodigopostal(string $proveedor_codigopostal) Return the first Proveedor filtered by the proveedor_codigopostal column
  *
  * @method array findByIdproveedor(int $idproveedor) Return Proveedor objects filtered by the idproveedor column
  * @method array findByIdempresa(int $idempresa) Return Proveedor objects filtered by the idempresa column
@@ -67,6 +74,7 @@
  * @method array findByProveedorColonia(string $proveedor_colonia) Return Proveedor objects filtered by the proveedor_colonia column
  * @method array findByProveedorCiudad(string $proveedor_ciudad) Return Proveedor objects filtered by the proveedor_ciudad column
  * @method array findByProveedorEstado(string $proveedor_estado) Return Proveedor objects filtered by the proveedor_estado column
+ * @method array findByProveedorCodigopostal(string $proveedor_codigopostal) Return Proveedor objects filtered by the proveedor_codigopostal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -174,7 +182,7 @@ abstract class BaseProveedorQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idproveedor`, `idempresa`, `proveedor_nombrecomercial`, `proveedor_razonsocial`, `proveedor_RFC`, `proveedor_telefono`, `proveedor_calle`, `proveedor_numero`, `proveedor_interior`, `proveedor_colonia`, `proveedor_ciudad`, `proveedor_estado` FROM `proveedor` WHERE `idproveedor` = :p0';
+        $sql = 'SELECT `idproveedor`, `idempresa`, `proveedor_nombrecomercial`, `proveedor_razonsocial`, `proveedor_RFC`, `proveedor_telefono`, `proveedor_calle`, `proveedor_numero`, `proveedor_interior`, `proveedor_colonia`, `proveedor_ciudad`, `proveedor_estado`, `proveedor_codigopostal` FROM `proveedor` WHERE `idproveedor` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -640,6 +648,35 @@ abstract class BaseProveedorQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the proveedor_codigopostal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByProveedorCodigopostal('fooValue');   // WHERE proveedor_codigopostal = 'fooValue'
+     * $query->filterByProveedorCodigopostal('%fooValue%'); // WHERE proveedor_codigopostal LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $proveedorCodigopostal The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProveedorQuery The current query, for fluid interface
+     */
+    public function filterByProveedorCodigopostal($proveedorCodigopostal = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($proveedorCodigopostal)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $proveedorCodigopostal)) {
+                $proveedorCodigopostal = str_replace('*', '%', $proveedorCodigopostal);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL, $proveedorCodigopostal, $comparison);
+    }
+
+    /**
      * Filter the query by a related Empresa object
      *
      * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
@@ -713,6 +750,80 @@ abstract class BaseProveedorQuery extends ModelCriteria
         return $this
             ->joinEmpresa($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Compra object
+     *
+     * @param   Compra|PropelObjectCollection $compra  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProveedorQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompra($compra, $comparison = null)
+    {
+        if ($compra instanceof Compra) {
+            return $this
+                ->addUsingAlias(ProveedorPeer::IDPROVEEDOR, $compra->getIdproveedor(), $comparison);
+        } elseif ($compra instanceof PropelObjectCollection) {
+            return $this
+                ->useCompraQuery()
+                ->filterByPrimaryKeys($compra->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompra() only accepts arguments of type Compra or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Compra relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProveedorQuery The current query, for fluid interface
+     */
+    public function joinCompra($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Compra');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Compra');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Compra relation Compra object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CompraQuery A secondary query class using the current class as primary query
+     */
+    public function useCompraQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompra($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Compra', 'CompraQuery');
     }
 
     /**

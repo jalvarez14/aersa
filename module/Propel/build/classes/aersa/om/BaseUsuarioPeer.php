@@ -380,12 +380,30 @@ abstract class BaseUsuarioPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CompraPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompraPeer::clearInstancePool();
+        // Invalidate objects in CompraPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompraPeer::clearInstancePool();
+        // Invalidate objects in CompranotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompranotaPeer::clearInstancePool();
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
+        // Invalidate objects in DevolucionnotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DevolucionnotaPeer::clearInstancePool();
+        // Invalidate objects in InventariomesPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        InventariomesPeer::clearInstancePool();
+        // Invalidate objects in InventariomesPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        InventariomesPeer::clearInstancePool();
         // Invalidate objects in InventariomesdetallenotaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         InventariomesdetallenotaPeer::clearInstancePool();
@@ -395,6 +413,9 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in NotacreditoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditoPeer::clearInstancePool();
+        // Invalidate objects in NotacreditonotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NotacreditonotaPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -407,6 +428,12 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in UsuariosucursalPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UsuariosucursalPeer::clearInstancePool();
+        // Invalidate objects in VentaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        VentaPeer::clearInstancePool();
+        // Invalidate objects in VentaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        VentaPeer::clearInstancePool();
     }
 
     /**
@@ -979,6 +1006,24 @@ abstract class BaseUsuarioPeer
         foreach ($objects as $obj) {
 
 
+            // delete related Compra objects
+            $criteria = new Criteria(CompraPeer::DATABASE_NAME);
+
+            $criteria->add(CompraPeer::IDAUDITOR, $obj->getIdusuario());
+            $affectedRows += CompraPeer::doDelete($criteria, $con);
+
+            // delete related Compra objects
+            $criteria = new Criteria(CompraPeer::DATABASE_NAME);
+
+            $criteria->add(CompraPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += CompraPeer::doDelete($criteria, $con);
+
+            // delete related Compranota objects
+            $criteria = new Criteria(CompranotaPeer::DATABASE_NAME);
+
+            $criteria->add(CompranotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += CompranotaPeer::doDelete($criteria, $con);
+
             // delete related Devolucion objects
             $criteria = new Criteria(DevolucionPeer::DATABASE_NAME);
 
@@ -990,6 +1035,24 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(DevolucionPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Devolucionnota objects
+            $criteria = new Criteria(DevolucionnotaPeer::DATABASE_NAME);
+
+            $criteria->add(DevolucionnotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += DevolucionnotaPeer::doDelete($criteria, $con);
+
+            // delete related Inventariomes objects
+            $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
+
+            $criteria->add(InventariomesPeer::IDAUDITOR, $obj->getIdusuario());
+            $affectedRows += InventariomesPeer::doDelete($criteria, $con);
+
+            // delete related Inventariomes objects
+            $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
+
+            $criteria->add(InventariomesPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += InventariomesPeer::doDelete($criteria, $con);
 
             // delete related Inventariomesdetallenota objects
             $criteria = new Criteria(InventariomesdetallenotaPeer::DATABASE_NAME);
@@ -1008,6 +1071,12 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(NotacreditoPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
+
+            // delete related Notacreditonota objects
+            $criteria = new Criteria(NotacreditonotaPeer::DATABASE_NAME);
+
+            $criteria->add(NotacreditonotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += NotacreditonotaPeer::doDelete($criteria, $con);
 
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
@@ -1032,6 +1101,18 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(UsuariosucursalPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += UsuariosucursalPeer::doDelete($criteria, $con);
+
+            // delete related Venta objects
+            $criteria = new Criteria(VentaPeer::DATABASE_NAME);
+
+            $criteria->add(VentaPeer::IDAUDITOR, $obj->getIdusuario());
+            $affectedRows += VentaPeer::doDelete($criteria, $con);
+
+            // delete related Venta objects
+            $criteria = new Criteria(VentaPeer::DATABASE_NAME);
+
+            $criteria->add(VentaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += VentaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

@@ -7,6 +7,7 @@
  *
  *
  * @method NotacreditoQuery orderByIdnotacredito($order = Criteria::ASC) Order by the idnotacredito column
+ * @method NotacreditoQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method NotacreditoQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
  * @method NotacreditoQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method NotacreditoQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
@@ -21,6 +22,7 @@
  * @method NotacreditoQuery orderByNotacreditoTotal($order = Criteria::ASC) Order by the notacredito_total column
  *
  * @method NotacreditoQuery groupByIdnotacredito() Group by the idnotacredito column
+ * @method NotacreditoQuery groupByIdempresa() Group by the idempresa column
  * @method NotacreditoQuery groupByIdsucursal() Group by the idsucursal column
  * @method NotacreditoQuery groupByIdusuario() Group by the idusuario column
  * @method NotacreditoQuery groupByIdauditor() Group by the idauditor column
@@ -46,6 +48,10 @@
  * @method NotacreditoQuery rightJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  * @method NotacreditoQuery innerJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  *
+ * @method NotacreditoQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
+ * @method NotacreditoQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
+ * @method NotacreditoQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
  * @method NotacreditoQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
  * @method NotacreditoQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
  * @method NotacreditoQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
@@ -58,9 +64,14 @@
  * @method NotacreditoQuery rightJoinNotacreditodetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacreditodetalle relation
  * @method NotacreditoQuery innerJoinNotacreditodetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacreditodetalle relation
  *
+ * @method NotacreditoQuery leftJoinNotacreditonota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notacreditonota relation
+ * @method NotacreditoQuery rightJoinNotacreditonota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacreditonota relation
+ * @method NotacreditoQuery innerJoinNotacreditonota($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacreditonota relation
+ *
  * @method Notacredito findOne(PropelPDO $con = null) Return the first Notacredito matching the query
  * @method Notacredito findOneOrCreate(PropelPDO $con = null) Return the first Notacredito matching the query, or a new Notacredito object populated from the query conditions when no match is found
  *
+ * @method Notacredito findOneByIdempresa(int $idempresa) Return the first Notacredito filtered by the idempresa column
  * @method Notacredito findOneByIdsucursal(int $idsucursal) Return the first Notacredito filtered by the idsucursal column
  * @method Notacredito findOneByIdusuario(int $idusuario) Return the first Notacredito filtered by the idusuario column
  * @method Notacredito findOneByIdauditor(int $idauditor) Return the first Notacredito filtered by the idauditor column
@@ -75,6 +86,7 @@
  * @method Notacredito findOneByNotacreditoTotal(string $notacredito_total) Return the first Notacredito filtered by the notacredito_total column
  *
  * @method array findByIdnotacredito(int $idnotacredito) Return Notacredito objects filtered by the idnotacredito column
+ * @method array findByIdempresa(int $idempresa) Return Notacredito objects filtered by the idempresa column
  * @method array findByIdsucursal(int $idsucursal) Return Notacredito objects filtered by the idsucursal column
  * @method array findByIdusuario(int $idusuario) Return Notacredito objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Notacredito objects filtered by the idauditor column
@@ -194,7 +206,7 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idnotacredito`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechaentrega`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total` FROM `notacredito` WHERE `idnotacredito` = :p0';
+        $sql = 'SELECT `idnotacredito`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechaentrega`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total` FROM `notacredito` WHERE `idnotacredito` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -323,6 +335,50 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(NotacreditoPeer::IDNOTACREDITO, $idnotacredito, $comparison);
+    }
+
+    /**
+     * Filter the query on the idempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
+     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
+     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
+     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
+     * </code>
+     *
+     * @see       filterByEmpresa()
+     *
+     * @param     mixed $idempresa The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditoQuery The current query, for fluid interface
+     */
+    public function filterByIdempresa($idempresa = null, $comparison = null)
+    {
+        if (is_array($idempresa)) {
+            $useMinMax = false;
+            if (isset($idempresa['min'])) {
+                $this->addUsingAlias(NotacreditoPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idempresa['max'])) {
+                $this->addUsingAlias(NotacreditoPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditoPeer::IDEMPRESA, $idempresa, $comparison);
     }
 
     /**
@@ -937,6 +993,82 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Empresa object
+     *
+     * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 NotacreditoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByEmpresa($empresa, $comparison = null)
+    {
+        if ($empresa instanceof Empresa) {
+            return $this
+                ->addUsingAlias(NotacreditoPeer::IDEMPRESA, $empresa->getIdempresa(), $comparison);
+        } elseif ($empresa instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(NotacreditoPeer::IDEMPRESA, $empresa->toKeyValue('PrimaryKey', 'Idempresa'), $comparison);
+        } else {
+            throw new PropelException('filterByEmpresa() only accepts arguments of type Empresa or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Empresa relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return NotacreditoQuery The current query, for fluid interface
+     */
+    public function joinEmpresa($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Empresa');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Empresa');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Empresa relation Empresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   EmpresaQuery A secondary query class using the current class as primary query
+     */
+    public function useEmpresaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEmpresa($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
      * Filter the query by a related Sucursal object
      *
      * @param   Sucursal|PropelObjectCollection $sucursal The related object(s) to use as filter
@@ -1160,6 +1292,80 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
         return $this
             ->joinNotacreditodetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacreditodetalle', 'NotacreditodetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Notacreditonota object
+     *
+     * @param   Notacreditonota|PropelObjectCollection $notacreditonota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 NotacreditoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByNotacreditonota($notacreditonota, $comparison = null)
+    {
+        if ($notacreditonota instanceof Notacreditonota) {
+            return $this
+                ->addUsingAlias(NotacreditoPeer::IDNOTACREDITO, $notacreditonota->getIdnotacredito(), $comparison);
+        } elseif ($notacreditonota instanceof PropelObjectCollection) {
+            return $this
+                ->useNotacreditonotaQuery()
+                ->filterByPrimaryKeys($notacreditonota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNotacreditonota() only accepts arguments of type Notacreditonota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Notacreditonota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return NotacreditoQuery The current query, for fluid interface
+     */
+    public function joinNotacreditonota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Notacreditonota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Notacreditonota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Notacreditonota relation Notacreditonota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   NotacreditonotaQuery A secondary query class using the current class as primary query
+     */
+    public function useNotacreditonotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinNotacreditonota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Notacreditonota', 'NotacreditonotaQuery');
     }
 
     /**

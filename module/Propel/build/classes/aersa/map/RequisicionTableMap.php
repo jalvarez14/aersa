@@ -43,6 +43,8 @@ class RequisicionTableMap extends TableMap
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idalmacenorigen', 'Idalmacenorigen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
+        $this->addForeignKey('idalmacendestino', 'Idalmacendestino', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idconceptosalida', 'Idconceptosalida', 'INTEGER', 'conceptosalida', 'idconceptosalida', true, null, null);
         $this->addColumn('requisicion_fecha', 'RequisicionFecha', 'TIMESTAMP', true, null, null);
         $this->addColumn('requisicion_revisada', 'RequisicionRevisada', 'BOOLEAN', true, 1, null);
@@ -54,6 +56,8 @@ class RequisicionTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('AlmacenRelatedByIdalmacendestino', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacendestino' => 'idalmacen', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('AlmacenRelatedByIdalmacenorigen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacenorigen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdauditor', 'Usuario', RelationMap::MANY_TO_ONE, array('idauditor' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Conceptosalida', 'Conceptosalida', RelationMap::MANY_TO_ONE, array('idconceptosalida' => 'idconceptosalida', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');

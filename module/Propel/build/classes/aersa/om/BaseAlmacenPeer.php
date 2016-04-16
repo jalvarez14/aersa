@@ -375,6 +375,9 @@ abstract class BaseAlmacenPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CompraPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CompraPeer::clearInstancePool();
         // Invalidate objects in CompradetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompradetallePeer::clearInstancePool();
@@ -384,12 +387,24 @@ abstract class BaseAlmacenPeer
         // Invalidate objects in DevoluciondetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevoluciondetallePeer::clearInstancePool();
+        // Invalidate objects in InventariomesPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        InventariomesPeer::clearInstancePool();
         // Invalidate objects in NotacreditoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditoPeer::clearInstancePool();
         // Invalidate objects in NotacreditodetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditodetallePeer::clearInstancePool();
+        // Invalidate objects in RequisicionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionPeer::clearInstancePool();
+        // Invalidate objects in RequisicionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionPeer::clearInstancePool();
+        // Invalidate objects in VentaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        VentaPeer::clearInstancePool();
     }
 
     /**
@@ -962,6 +977,12 @@ abstract class BaseAlmacenPeer
         foreach ($objects as $obj) {
 
 
+            // delete related Compra objects
+            $criteria = new Criteria(CompraPeer::DATABASE_NAME);
+
+            $criteria->add(CompraPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += CompraPeer::doDelete($criteria, $con);
+
             // delete related Compradetalle objects
             $criteria = new Criteria(CompradetallePeer::DATABASE_NAME);
 
@@ -980,6 +1001,12 @@ abstract class BaseAlmacenPeer
             $criteria->add(DevoluciondetallePeer::IDALMACEN, $obj->getIdalmacen());
             $affectedRows += DevoluciondetallePeer::doDelete($criteria, $con);
 
+            // delete related Inventariomes objects
+            $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
+
+            $criteria->add(InventariomesPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += InventariomesPeer::doDelete($criteria, $con);
+
             // delete related Notacredito objects
             $criteria = new Criteria(NotacreditoPeer::DATABASE_NAME);
 
@@ -991,6 +1018,24 @@ abstract class BaseAlmacenPeer
 
             $criteria->add(NotacreditodetallePeer::IDALMACEN, $obj->getIdalmacen());
             $affectedRows += NotacreditodetallePeer::doDelete($criteria, $con);
+
+            // delete related Requisicion objects
+            $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionPeer::IDALMACENDESTINO, $obj->getIdalmacen());
+            $affectedRows += RequisicionPeer::doDelete($criteria, $con);
+
+            // delete related Requisicion objects
+            $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionPeer::IDALMACENORIGEN, $obj->getIdalmacen());
+            $affectedRows += RequisicionPeer::doDelete($criteria, $con);
+
+            // delete related Venta objects
+            $criteria = new Criteria(VentaPeer::DATABASE_NAME);
+
+            $criteria->add(VentaPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += VentaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

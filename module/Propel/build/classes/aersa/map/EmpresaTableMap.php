@@ -51,12 +51,18 @@ class EmpresaTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Compra', 'Compra', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Compras');
+        $this->addRelation('Devolucion', 'Devolucion', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Devolucions');
+        $this->addRelation('Inventariomes', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Inventariomess');
+        $this->addRelation('Notacredito', 'Notacredito', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Notacreditos');
+        $this->addRelation('Plantillatablajeria', 'Plantillatablajeria', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Plantillatablajerias');
         $this->addRelation('Producto', 'Producto', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Productos');
         $this->addRelation('Proveedor', 'Proveedor', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Proveedors');
         $this->addRelation('Requisicion', 'Requisicion', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Requisicions');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Sucursals');
         $this->addRelation('Trabajadorpromedio', 'Trabajadorpromedio', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Trabajadorpromedios');
         $this->addRelation('Usuarioempresa', 'Usuarioempresa', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Usuarioempresas');
+        $this->addRelation('Venta', 'Venta', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Ventas');
     } // buildRelations()
 
 } // EmpresaTableMap

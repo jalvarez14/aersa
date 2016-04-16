@@ -281,12 +281,8 @@ return array(
                                             ),
                                         ),
                                     ),
-
                                ),
                             ),
-                           
-                           
-                           
                            'empresa' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -342,9 +338,6 @@ return array(
 
                                ),
                             ),
-                           
-                           
-                           
                            'sucursal' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -356,8 +349,6 @@ return array(
                                 ),
                                'may_terminate' => true,
                                'child_routes' => array(
-                                   
-                                   
                                    'nuevo' => array(
                                        'type' => 'Segment',
                                        'options' => array(
@@ -392,6 +383,59 @@ return array(
                                ),
                             ),
                            
+                            'tablajeria' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/tablajeria',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                             'route' => '/nuevo',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'action' => 'nuevo',
+                                             ),
+                                         ),
+                                     ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                             'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'action' => 'editar',
+                                             ),
+                                         ),
+                                     ),
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                             'route' => '/nuevo',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'action' => 'nuevo',
+                                             ),
+                                         ),
+                                     ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                             'route' => '/eliminar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Plantillatablajeria',
+                                                 'action' => 'eliminar',
+                                             ),
+                                         ),
+                                     ),
+                                ),
+                            ),
                         ),
                     ),
                 ),

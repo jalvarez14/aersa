@@ -36,9 +36,17 @@
  * @method SucursalQuery rightJoinAlmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Almacen relation
  * @method SucursalQuery innerJoinAlmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Almacen relation
  *
+ * @method SucursalQuery leftJoinCompra($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compra relation
+ * @method SucursalQuery rightJoinCompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compra relation
+ * @method SucursalQuery innerJoinCompra($relationAlias = null) Adds a INNER JOIN clause to the query using the Compra relation
+ *
  * @method SucursalQuery leftJoinDevolucion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devolucion relation
  * @method SucursalQuery rightJoinDevolucion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucion relation
  * @method SucursalQuery innerJoinDevolucion($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucion relation
+ *
+ * @method SucursalQuery leftJoinInventariomes($relationAlias = null) Adds a LEFT JOIN clause to the query using the Inventariomes relation
+ * @method SucursalQuery rightJoinInventariomes($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Inventariomes relation
+ * @method SucursalQuery innerJoinInventariomes($relationAlias = null) Adds a INNER JOIN clause to the query using the Inventariomes relation
  *
  * @method SucursalQuery leftJoinNotacredito($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notacredito relation
  * @method SucursalQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
@@ -55,6 +63,10 @@
  * @method SucursalQuery leftJoinUsuariosucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuariosucursal relation
  * @method SucursalQuery rightJoinUsuariosucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuariosucursal relation
  * @method SucursalQuery innerJoinUsuariosucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Usuariosucursal relation
+ *
+ * @method SucursalQuery leftJoinVenta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Venta relation
+ * @method SucursalQuery rightJoinVenta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Venta relation
+ * @method SucursalQuery innerJoinVenta($relationAlias = null) Adds a INNER JOIN clause to the query using the Venta relation
  *
  * @method Sucursal findOne(PropelPDO $con = null) Return the first Sucursal matching the query
  * @method Sucursal findOneOrCreate(PropelPDO $con = null) Return the first Sucursal matching the query, or a new Sucursal object populated from the query conditions when no match is found
@@ -702,6 +714,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Compra object
+     *
+     * @param   Compra|PropelObjectCollection $compra  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCompra($compra, $comparison = null)
+    {
+        if ($compra instanceof Compra) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $compra->getIdsucursal(), $comparison);
+        } elseif ($compra instanceof PropelObjectCollection) {
+            return $this
+                ->useCompraQuery()
+                ->filterByPrimaryKeys($compra->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCompra() only accepts arguments of type Compra or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Compra relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinCompra($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Compra');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Compra');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Compra relation Compra object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CompraQuery A secondary query class using the current class as primary query
+     */
+    public function useCompraQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCompra($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Compra', 'CompraQuery');
+    }
+
+    /**
      * Filter the query by a related Devolucion object
      *
      * @param   Devolucion|PropelObjectCollection $devolucion  the related object to use as filter
@@ -773,6 +859,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinDevolucion($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Devolucion', 'DevolucionQuery');
+    }
+
+    /**
+     * Filter the query by a related Inventariomes object
+     *
+     * @param   Inventariomes|PropelObjectCollection $inventariomes  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByInventariomes($inventariomes, $comparison = null)
+    {
+        if ($inventariomes instanceof Inventariomes) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $inventariomes->getIdsucursal(), $comparison);
+        } elseif ($inventariomes instanceof PropelObjectCollection) {
+            return $this
+                ->useInventariomesQuery()
+                ->filterByPrimaryKeys($inventariomes->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInventariomes() only accepts arguments of type Inventariomes or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Inventariomes relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinInventariomes($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Inventariomes');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Inventariomes');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Inventariomes relation Inventariomes object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   InventariomesQuery A secondary query class using the current class as primary query
+     */
+    public function useInventariomesQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinInventariomes($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Inventariomes', 'InventariomesQuery');
     }
 
     /**
@@ -1069,6 +1229,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinUsuariosucursal($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Usuariosucursal', 'UsuariosucursalQuery');
+    }
+
+    /**
+     * Filter the query by a related Venta object
+     *
+     * @param   Venta|PropelObjectCollection $venta  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByVenta($venta, $comparison = null)
+    {
+        if ($venta instanceof Venta) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $venta->getIdsucursal(), $comparison);
+        } elseif ($venta instanceof PropelObjectCollection) {
+            return $this
+                ->useVentaQuery()
+                ->filterByPrimaryKeys($venta->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByVenta() only accepts arguments of type Venta or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Venta relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinVenta($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Venta');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Venta');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Venta relation Venta object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   VentaQuery A secondary query class using the current class as primary query
+     */
+    public function useVentaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinVenta($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Venta', 'VentaQuery');
     }
 
     /**

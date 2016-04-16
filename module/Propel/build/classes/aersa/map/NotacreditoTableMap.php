@@ -39,6 +39,7 @@ class NotacreditoTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idnotacredito', 'Idnotacredito', 'INTEGER', true, null, null);
+        $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
@@ -61,9 +62,11 @@ class NotacreditoTableMap extends TableMap
     {
         $this->addRelation('Almacen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdauditor', 'Usuario', RelationMap::MANY_TO_ONE, array('idauditor' => 'idusuario', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Notacreditodetalle', 'Notacreditodetalle', RelationMap::ONE_TO_MANY, array('idnotacredito' => 'idnotacredito', ), 'CASCADE', 'CASCADE', 'Notacreditodetalles');
+        $this->addRelation('Notacreditonota', 'Notacreditonota', RelationMap::ONE_TO_MANY, array('idnotacredito' => 'idnotacredito', ), 'CASCADE', 'CASCADE', 'Notacreditonotas');
     } // buildRelations()
 
 } // NotacreditoTableMap

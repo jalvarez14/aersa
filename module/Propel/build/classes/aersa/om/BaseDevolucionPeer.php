@@ -24,16 +24,19 @@ abstract class BaseDevolucionPeer
     const TM_CLASS = 'DevolucionTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 14;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /** the column name for the iddevolucion field */
     const IDDEVOLUCION = 'devolucion.iddevolucion';
+
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'devolucion.idempresa';
 
     /** the column name for the idsucursal field */
     const IDSUCURSAL = 'devolucion.idsucursal';
@@ -90,12 +93,12 @@ abstract class BaseDevolucionPeer
      * e.g. DevolucionPeer::$fieldNames[DevolucionPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevolucion', 'Idsucursal', 'Idusuario', 'Idauditor', 'Idalmacen', 'DevolucionFolio', 'DevolucionRevisada', 'DevolucionFactura', 'DevolucionFechacreacion', 'DevolucionFechaentrega', 'DevolucionIeps', 'DevolucionIva', 'DevolucionTotal', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'devolucionFolio', 'devolucionRevisada', 'devolucionFactura', 'devolucionFechacreacion', 'devolucionFechaentrega', 'devolucionIeps', 'devolucionIva', 'devolucionTotal', ),
-        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION, DevolucionPeer::IDSUCURSAL, DevolucionPeer::IDUSUARIO, DevolucionPeer::IDAUDITOR, DevolucionPeer::IDALMACEN, DevolucionPeer::DEVOLUCION_FOLIO, DevolucionPeer::DEVOLUCION_REVISADA, DevolucionPeer::DEVOLUCION_FACTURA, DevolucionPeer::DEVOLUCION_FECHACREACION, DevolucionPeer::DEVOLUCION_FECHAENTREGA, DevolucionPeer::DEVOLUCION_IEPS, DevolucionPeer::DEVOLUCION_IVA, DevolucionPeer::DEVOLUCION_TOTAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'DEVOLUCION_FOLIO', 'DEVOLUCION_REVISADA', 'DEVOLUCION_FACTURA', 'DEVOLUCION_FECHACREACION', 'DEVOLUCION_FECHAENTREGA', 'DEVOLUCION_IEPS', 'DEVOLUCION_IVA', 'DEVOLUCION_TOTAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevolucion', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'devolucion_folio', 'devolucion_revisada', 'devolucion_factura', 'devolucion_fechacreacion', 'devolucion_fechaentrega', 'devolucion_ieps', 'devolucion_iva', 'devolucion_total', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevolucion', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'Idalmacen', 'DevolucionFolio', 'DevolucionRevisada', 'DevolucionFactura', 'DevolucionFechacreacion', 'DevolucionFechaentrega', 'DevolucionIeps', 'DevolucionIva', 'DevolucionTotal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'devolucionFolio', 'devolucionRevisada', 'devolucionFactura', 'devolucionFechacreacion', 'devolucionFechaentrega', 'devolucionIeps', 'devolucionIva', 'devolucionTotal', ),
+        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION, DevolucionPeer::IDEMPRESA, DevolucionPeer::IDSUCURSAL, DevolucionPeer::IDUSUARIO, DevolucionPeer::IDAUDITOR, DevolucionPeer::IDALMACEN, DevolucionPeer::DEVOLUCION_FOLIO, DevolucionPeer::DEVOLUCION_REVISADA, DevolucionPeer::DEVOLUCION_FACTURA, DevolucionPeer::DEVOLUCION_FECHACREACION, DevolucionPeer::DEVOLUCION_FECHAENTREGA, DevolucionPeer::DEVOLUCION_IEPS, DevolucionPeer::DEVOLUCION_IVA, DevolucionPeer::DEVOLUCION_TOTAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'DEVOLUCION_FOLIO', 'DEVOLUCION_REVISADA', 'DEVOLUCION_FACTURA', 'DEVOLUCION_FECHACREACION', 'DEVOLUCION_FECHAENTREGA', 'DEVOLUCION_IEPS', 'DEVOLUCION_IVA', 'DEVOLUCION_TOTAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevolucion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'devolucion_folio', 'devolucion_revisada', 'devolucion_factura', 'devolucion_fechacreacion', 'devolucion_fechaentrega', 'devolucion_ieps', 'devolucion_iva', 'devolucion_total', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -105,12 +108,12 @@ abstract class BaseDevolucionPeer
      * e.g. DevolucionPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevolucion' => 0, 'Idsucursal' => 1, 'Idusuario' => 2, 'Idauditor' => 3, 'Idalmacen' => 4, 'DevolucionFolio' => 5, 'DevolucionRevisada' => 6, 'DevolucionFactura' => 7, 'DevolucionFechacreacion' => 8, 'DevolucionFechaentrega' => 9, 'DevolucionIeps' => 10, 'DevolucionIva' => 11, 'DevolucionTotal' => 12, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion' => 0, 'idsucursal' => 1, 'idusuario' => 2, 'idauditor' => 3, 'idalmacen' => 4, 'devolucionFolio' => 5, 'devolucionRevisada' => 6, 'devolucionFactura' => 7, 'devolucionFechacreacion' => 8, 'devolucionFechaentrega' => 9, 'devolucionIeps' => 10, 'devolucionIva' => 11, 'devolucionTotal' => 12, ),
-        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION => 0, DevolucionPeer::IDSUCURSAL => 1, DevolucionPeer::IDUSUARIO => 2, DevolucionPeer::IDAUDITOR => 3, DevolucionPeer::IDALMACEN => 4, DevolucionPeer::DEVOLUCION_FOLIO => 5, DevolucionPeer::DEVOLUCION_REVISADA => 6, DevolucionPeer::DEVOLUCION_FACTURA => 7, DevolucionPeer::DEVOLUCION_FECHACREACION => 8, DevolucionPeer::DEVOLUCION_FECHAENTREGA => 9, DevolucionPeer::DEVOLUCION_IEPS => 10, DevolucionPeer::DEVOLUCION_IVA => 11, DevolucionPeer::DEVOLUCION_TOTAL => 12, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION' => 0, 'IDSUCURSAL' => 1, 'IDUSUARIO' => 2, 'IDAUDITOR' => 3, 'IDALMACEN' => 4, 'DEVOLUCION_FOLIO' => 5, 'DEVOLUCION_REVISADA' => 6, 'DEVOLUCION_FACTURA' => 7, 'DEVOLUCION_FECHACREACION' => 8, 'DEVOLUCION_FECHAENTREGA' => 9, 'DEVOLUCION_IEPS' => 10, 'DEVOLUCION_IVA' => 11, 'DEVOLUCION_TOTAL' => 12, ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevolucion' => 0, 'idsucursal' => 1, 'idusuario' => 2, 'idauditor' => 3, 'idalmacen' => 4, 'devolucion_folio' => 5, 'devolucion_revisada' => 6, 'devolucion_factura' => 7, 'devolucion_fechacreacion' => 8, 'devolucion_fechaentrega' => 9, 'devolucion_ieps' => 10, 'devolucion_iva' => 11, 'devolucion_total' => 12, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevolucion' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'Idalmacen' => 5, 'DevolucionFolio' => 6, 'DevolucionRevisada' => 7, 'DevolucionFactura' => 8, 'DevolucionFechacreacion' => 9, 'DevolucionFechaentrega' => 10, 'DevolucionIeps' => 11, 'DevolucionIva' => 12, 'DevolucionTotal' => 13, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'devolucionFolio' => 6, 'devolucionRevisada' => 7, 'devolucionFactura' => 8, 'devolucionFechacreacion' => 9, 'devolucionFechaentrega' => 10, 'devolucionIeps' => 11, 'devolucionIva' => 12, 'devolucionTotal' => 13, ),
+        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION => 0, DevolucionPeer::IDEMPRESA => 1, DevolucionPeer::IDSUCURSAL => 2, DevolucionPeer::IDUSUARIO => 3, DevolucionPeer::IDAUDITOR => 4, DevolucionPeer::IDALMACEN => 5, DevolucionPeer::DEVOLUCION_FOLIO => 6, DevolucionPeer::DEVOLUCION_REVISADA => 7, DevolucionPeer::DEVOLUCION_FACTURA => 8, DevolucionPeer::DEVOLUCION_FECHACREACION => 9, DevolucionPeer::DEVOLUCION_FECHAENTREGA => 10, DevolucionPeer::DEVOLUCION_IEPS => 11, DevolucionPeer::DEVOLUCION_IVA => 12, DevolucionPeer::DEVOLUCION_TOTAL => 13, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'IDALMACEN' => 5, 'DEVOLUCION_FOLIO' => 6, 'DEVOLUCION_REVISADA' => 7, 'DEVOLUCION_FACTURA' => 8, 'DEVOLUCION_FECHACREACION' => 9, 'DEVOLUCION_FECHAENTREGA' => 10, 'DEVOLUCION_IEPS' => 11, 'DEVOLUCION_IVA' => 12, 'DEVOLUCION_TOTAL' => 13, ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevolucion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'devolucion_folio' => 6, 'devolucion_revisada' => 7, 'devolucion_factura' => 8, 'devolucion_fechacreacion' => 9, 'devolucion_fechaentrega' => 10, 'devolucion_ieps' => 11, 'devolucion_iva' => 12, 'devolucion_total' => 13, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -185,6 +188,7 @@ abstract class BaseDevolucionPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(DevolucionPeer::IDDEVOLUCION);
+            $criteria->addSelectColumn(DevolucionPeer::IDEMPRESA);
             $criteria->addSelectColumn(DevolucionPeer::IDSUCURSAL);
             $criteria->addSelectColumn(DevolucionPeer::IDUSUARIO);
             $criteria->addSelectColumn(DevolucionPeer::IDAUDITOR);
@@ -199,6 +203,7 @@ abstract class BaseDevolucionPeer
             $criteria->addSelectColumn(DevolucionPeer::DEVOLUCION_TOTAL);
         } else {
             $criteria->addSelectColumn($alias . '.iddevolucion');
+            $criteria->addSelectColumn($alias . '.idempresa');
             $criteria->addSelectColumn($alias . '.idsucursal');
             $criteria->addSelectColumn($alias . '.idusuario');
             $criteria->addSelectColumn($alias . '.idauditor');
@@ -418,6 +423,9 @@ abstract class BaseDevolucionPeer
         // Invalidate objects in DevoluciondetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevoluciondetallePeer::clearInstancePool();
+        // Invalidate objects in DevolucionnotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        DevolucionnotaPeer::clearInstancePool();
     }
 
     /**
@@ -603,6 +611,57 @@ abstract class BaseDevolucionPeer
         }
 
         $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(DevolucionPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            DevolucionPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(DevolucionPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(DevolucionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -854,6 +913,73 @@ abstract class BaseDevolucionPeer
 
 
     /**
+     * Selects a collection of Devolucion objects pre-filled with their Empresa objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Devolucion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(DevolucionPeer::DATABASE_NAME);
+        }
+
+        DevolucionPeer::addSelectColumns($criteria);
+        $startcol = DevolucionPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = DevolucionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = DevolucionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = DevolucionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                DevolucionPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Devolucion) to $obj2 (Empresa)
+                $obj2->addDevolucion($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
      * Selects a collection of Devolucion objects pre-filled with their Sucursal objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1027,6 +1153,8 @@ abstract class BaseDevolucionPeer
 
         $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
@@ -1071,15 +1199,20 @@ abstract class BaseDevolucionPeer
         UsuarioPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1138,40 +1271,58 @@ abstract class BaseDevolucionPeer
                 $obj3->addDevolucionRelatedByIdauditor($obj1);
             } // if joined row not null
 
-            // Add objects for joined Sucursal rows
+            // Add objects for joined Empresa rows
 
-            $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
             if ($key4 !== null) {
-                $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                $obj4 = EmpresaPeer::getInstanceFromPool($key4);
                 if (!$obj4) {
 
-                    $cls = SucursalPeer::getOMClass();
+                    $cls = EmpresaPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
                 } // if obj4 loaded
 
-                // Add the $obj1 (Devolucion) to the collection in $obj4 (Sucursal)
+                // Add the $obj1 (Devolucion) to the collection in $obj4 (Empresa)
                 $obj4->addDevolucion($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Sucursal rows
+
+            $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj5 (Sucursal)
+                $obj5->addDevolucion($obj1);
             } // if joined row not null
 
             // Add objects for joined Usuario rows
 
-            $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-            if ($key5 !== null) {
-                $obj5 = UsuarioPeer::getInstanceFromPool($key5);
-                if (!$obj5) {
+            $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+            if ($key6 !== null) {
+                $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                if (!$obj6) {
 
                     $cls = UsuarioPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    UsuarioPeer::addInstanceToPool($obj5, $key5);
-                } // if obj5 loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if obj6 loaded
 
-                // Add the $obj1 (Devolucion) to the collection in $obj5 (Usuario)
-                $obj5->addDevolucionRelatedByIdusuario($obj1);
+                // Add the $obj1 (Devolucion) to the collection in $obj6 (Usuario)
+                $obj6->addDevolucionRelatedByIdusuario($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1219,6 +1370,8 @@ abstract class BaseDevolucionPeer
         }
 
         $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1275,7 +1428,66 @@ abstract class BaseDevolucionPeer
 
         $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(DevolucionPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            DevolucionPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(DevolucionPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(DevolucionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1330,6 +1542,8 @@ abstract class BaseDevolucionPeer
 
         $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
         $criteria->addJoin(DevolucionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -1383,6 +1597,8 @@ abstract class BaseDevolucionPeer
 
         $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -1425,13 +1641,18 @@ abstract class BaseDevolucionPeer
         UsuarioPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1474,41 +1695,60 @@ abstract class BaseDevolucionPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Empresa rows
 
-                $key3 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = SucursalPeer::getInstanceFromPool($key3);
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = EmpresaPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    SucursalPeer::addInstanceToPool($obj3, $key3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Devolucion) to the collection in $obj3 (Sucursal)
+                // Add the $obj1 (Devolucion) to the collection in $obj3 (Empresa)
                 $obj3->addDevolucion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj4 (Sucursal)
+                $obj4->addDevolucion($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Usuario rows
 
-                $key4 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = UsuarioPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
 
                         $cls = UsuarioPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    UsuarioPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
 
-                // Add the $obj1 (Devolucion) to the collection in $obj4 (Usuario)
-                $obj4->addDevolucionRelatedByIdusuario($obj1);
+                // Add the $obj1 (Devolucion) to the collection in $obj5 (Usuario)
+                $obj5->addDevolucionRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -1547,10 +1787,15 @@ abstract class BaseDevolucionPeer
         AlmacenPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
 
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1591,22 +1836,41 @@ abstract class BaseDevolucionPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Empresa rows
 
-                $key3 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = SucursalPeer::getInstanceFromPool($key3);
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = EmpresaPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    SucursalPeer::addInstanceToPool($obj3, $key3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Devolucion) to the collection in $obj3 (Sucursal)
+                // Add the $obj1 (Devolucion) to the collection in $obj3 (Empresa)
                 $obj3->addDevolucion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj4 (Sucursal)
+                $obj4->addDevolucion($obj1);
 
             } // if joined row is not null
 
@@ -1619,7 +1883,7 @@ abstract class BaseDevolucionPeer
 
 
     /**
-     * Selects a collection of Devolucion objects pre-filled with all related objects except Sucursal.
+     * Selects a collection of Devolucion objects pre-filled with all related objects except Empresa.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1628,7 +1892,7 @@ abstract class BaseDevolucionPeer
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1648,12 +1912,17 @@ abstract class BaseDevolucionPeer
         UsuarioPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -1713,22 +1982,187 @@ abstract class BaseDevolucionPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Usuario rows
+                // Add objects for joined Sucursal rows
 
-                $key4 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = UsuarioPeer::getInstanceFromPool($key4);
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = UsuarioPeer::getOMClass();
+                        $cls = SucursalPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    UsuarioPeer::addInstanceToPool($obj4, $key4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Devolucion) to the collection in $obj4 (Usuario)
-                $obj4->addDevolucionRelatedByIdusuario($obj1);
+                // Add the $obj1 (Devolucion) to the collection in $obj4 (Sucursal)
+                $obj4->addDevolucion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj5 (Usuario)
+                $obj5->addDevolucionRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Devolucion objects pre-filled with all related objects except Sucursal.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Devolucion objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(DevolucionPeer::DATABASE_NAME);
+        }
+
+        DevolucionPeer::addSelectColumns($criteria);
+        $startcol2 = DevolucionPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = DevolucionPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = DevolucionPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = DevolucionPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                DevolucionPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj2 (Almacen)
+                $obj2->addDevolucion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj3 (Usuario)
+                $obj3->addDevolucionRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj4 (Empresa)
+                $obj4->addDevolucion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj5 (Usuario)
+                $obj5->addDevolucionRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -1767,10 +2201,15 @@ abstract class BaseDevolucionPeer
         AlmacenPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
 
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(DevolucionPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(DevolucionPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(DevolucionPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1811,22 +2250,41 @@ abstract class BaseDevolucionPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Empresa rows
 
-                $key3 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = SucursalPeer::getInstanceFromPool($key3);
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = EmpresaPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    SucursalPeer::addInstanceToPool($obj3, $key3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Devolucion) to the collection in $obj3 (Sucursal)
+                // Add the $obj1 (Devolucion) to the collection in $obj3 (Empresa)
                 $obj3->addDevolucion($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Devolucion) to the collection in $obj4 (Sucursal)
+                $obj4->addDevolucion($obj1);
 
             } // if joined row is not null
 
@@ -2080,6 +2538,12 @@ abstract class BaseDevolucionPeer
 
             $criteria->add(DevoluciondetallePeer::IDDEVOLUCION, $obj->getIddevolucion());
             $affectedRows += DevoluciondetallePeer::doDelete($criteria, $con);
+
+            // delete related Devolucionnota objects
+            $criteria = new Criteria(DevolucionnotaPeer::DATABASE_NAME);
+
+            $criteria->add(DevolucionnotaPeer::IDDEVOLUCION, $obj->getIddevolucion());
+            $affectedRows += DevolucionnotaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

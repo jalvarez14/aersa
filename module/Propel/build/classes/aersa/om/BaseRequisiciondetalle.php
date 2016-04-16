@@ -60,18 +60,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     protected $requisiciondetalle_revisada;
 
     /**
-     * The value for the idalmacenorigen field.
-     * @var        int
-     */
-    protected $idalmacenorigen;
-
-    /**
-     * The value for the idalmacendestino field.
-     * @var        int
-     */
-    protected $idalmacendestino;
-
-    /**
      * @var        Producto
      */
     protected $aProducto;
@@ -154,28 +142,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
 
         return $this->requisiciondetalle_revisada;
-    }
-
-    /**
-     * Get the [idalmacenorigen] column value.
-     *
-     * @return int
-     */
-    public function getIdalmacenorigen()
-    {
-
-        return $this->idalmacenorigen;
-    }
-
-    /**
-     * Get the [idalmacendestino] column value.
-     *
-     * @return int
-     */
-    public function getIdalmacendestino()
-    {
-
-        return $this->idalmacendestino;
     }
 
     /**
@@ -300,48 +266,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     } // setRequisiciondetalleRevisada()
 
     /**
-     * Set the value of [idalmacenorigen] column.
-     *
-     * @param  int $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
-     */
-    public function setIdalmacenorigen($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idalmacenorigen !== $v) {
-            $this->idalmacenorigen = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::IDALMACENORIGEN;
-        }
-
-
-        return $this;
-    } // setIdalmacenorigen()
-
-    /**
-     * Set the value of [idalmacendestino] column.
-     *
-     * @param  int $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
-     */
-    public function setIdalmacendestino($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idalmacendestino !== $v) {
-            $this->idalmacendestino = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::IDALMACENDESTINO;
-        }
-
-
-        return $this;
-    } // setIdalmacendestino()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -378,8 +302,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $this->idproducto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->requisiciondetalle_cantidad = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
             $this->requisiciondetalle_revisada = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
-            $this->idalmacenorigen = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->idalmacendestino = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -389,7 +311,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Requisiciondetalle object", $e);
@@ -643,12 +565,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA)) {
             $modifiedColumns[':p' . $index++]  = '`requisiciondetalle_revisada`';
         }
-        if ($this->isColumnModified(RequisiciondetallePeer::IDALMACENORIGEN)) {
-            $modifiedColumns[':p' . $index++]  = '`idalmacenorigen`';
-        }
-        if ($this->isColumnModified(RequisiciondetallePeer::IDALMACENDESTINO)) {
-            $modifiedColumns[':p' . $index++]  = '`idalmacendestino`';
-        }
 
         $sql = sprintf(
             'INSERT INTO `requisiciondetalle` (%s) VALUES (%s)',
@@ -674,12 +590,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
                         break;
                     case '`requisiciondetalle_revisada`':
                         $stmt->bindValue($identifier, (int) $this->requisiciondetalle_revisada, PDO::PARAM_INT);
-                        break;
-                    case '`idalmacenorigen`':
-                        $stmt->bindValue($identifier, $this->idalmacenorigen, PDO::PARAM_INT);
-                        break;
-                    case '`idalmacendestino`':
-                        $stmt->bindValue($identifier, $this->idalmacendestino, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -848,12 +758,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 4:
                 return $this->getRequisiciondetalleRevisada();
                 break;
-            case 5:
-                return $this->getIdalmacenorigen();
-                break;
-            case 6:
-                return $this->getIdalmacendestino();
-                break;
             default:
                 return null;
                 break;
@@ -888,8 +792,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $keys[2] => $this->getIdproducto(),
             $keys[3] => $this->getRequisiciondetalleCantidad(),
             $keys[4] => $this->getRequisiciondetalleRevisada(),
-            $keys[5] => $this->getIdalmacenorigen(),
-            $keys[6] => $this->getIdalmacendestino(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -952,12 +854,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 4:
                 $this->setRequisiciondetalleRevisada($value);
                 break;
-            case 5:
-                $this->setIdalmacenorigen($value);
-                break;
-            case 6:
-                $this->setIdalmacendestino($value);
-                break;
         } // switch()
     }
 
@@ -987,8 +883,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[2], $arr)) $this->setIdproducto($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setRequisiciondetalleCantidad($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setRequisiciondetalleRevisada($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setIdalmacenorigen($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setIdalmacendestino($arr[$keys[6]]);
     }
 
     /**
@@ -1005,8 +899,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::IDPRODUCTO)) $criteria->add(RequisiciondetallePeer::IDPRODUCTO, $this->idproducto);
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD, $this->requisiciondetalle_cantidad);
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, $this->requisiciondetalle_revisada);
-        if ($this->isColumnModified(RequisiciondetallePeer::IDALMACENORIGEN)) $criteria->add(RequisiciondetallePeer::IDALMACENORIGEN, $this->idalmacenorigen);
-        if ($this->isColumnModified(RequisiciondetallePeer::IDALMACENDESTINO)) $criteria->add(RequisiciondetallePeer::IDALMACENDESTINO, $this->idalmacendestino);
 
         return $criteria;
     }
@@ -1074,8 +966,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $copyObj->setIdproducto($this->getIdproducto());
         $copyObj->setRequisiciondetalleCantidad($this->getRequisiciondetalleCantidad());
         $copyObj->setRequisiciondetalleRevisada($this->getRequisiciondetalleRevisada());
-        $copyObj->setIdalmacenorigen($this->getIdalmacenorigen());
-        $copyObj->setIdalmacendestino($this->getIdalmacendestino());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1248,8 +1138,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $this->idproducto = null;
         $this->requisiciondetalle_cantidad = null;
         $this->requisiciondetalle_revisada = null;
-        $this->idalmacenorigen = null;
-        $this->idalmacendestino = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
