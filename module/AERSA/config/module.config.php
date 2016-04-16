@@ -130,6 +130,37 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'auditor' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/auditor/nuevo[/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'auditor',
+                                            ),
+                                        ),
+                                    ),
+                                   'editarauditor' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editarauditor[/:id][/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'editarauditor',
+                                            ),
+                                        ),
+                                    ),
+                                   'changepasswordauditor' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/changepasswordauditor[/:id][/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'changepasswordauditor',
+                                            ),
+                                        ),
+                                    ),
+                                   
                                ),
                             ),
                            'proveedor' => array(

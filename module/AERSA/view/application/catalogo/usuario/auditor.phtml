@@ -1,0 +1,87 @@
+<h3 class="page-title">Auditor / Almacenista</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/empresa">Empresas</span></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/catalogo/empresa/editar/<?php echo $idEmp?>"><?php echo $empresa->getEmpresaNombrecomercial() ?></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Auditor / Almacenista</span>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Registro</span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+<?php
+    $form->setAttribute('action', '/catalogo/usuario/auditor/nuevo/'.$idSuc.'/'.$idEmp);
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Información general </h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('usuario_nombre')) ?>  
+                        <?php echo $this->formText($form->get('usuario_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('usuario_estatus')) ?>  
+                        <?php echo $this->formSelect($form->get('usuario_estatus')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('usuario_username')) ?>  
+                        <?php echo $this->formText($form->get('usuario_username')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('usuario_password')) ?>  
+                        <?php echo $this->formPassword($form->get('usuario_password')) ?>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-md-offset-6">
+                    <div class="form-group">
+                        <label for="idrol">Rol *</label>
+                        <select name="idrol" required class="form-control">
+                            <option value="4">Auditor</option>
+                            <option value="5">Almacenista</option>
+                        </select>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>
