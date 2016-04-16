@@ -35,7 +35,7 @@ class LoginController extends AbstractActionController
                 
                 $usuario = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->findOne();
                 
-                //CREAMOS NUESTRA SESSION
+                //CREAMOS NUESTRA PRESESSION
                 $session = new \Shared\Session\AouthSession();
                 $session->Create(array(
                     "idusuario"         => $usuario->getIdusuario(),
@@ -44,8 +44,9 @@ class LoginController extends AbstractActionController
                     "usuario_username"  => $usuario->getUsuarioUsername(),
                 ));
                 
-                return $this->redirect()->toUrl('/');
-               
+                return $this->redirect()->toUrl('/login/select');
+
+
             }else{
                 return $this->redirect()->toUrl('/login');
             }
@@ -64,6 +65,12 @@ class LoginController extends AbstractActionController
         $session->Close();
         return $this->redirect()->toUrl('/login');
 
+    }
+    
+    public function selectAction(){
+        
+        $this->layout('application/layout/select_layout');
+        
     }
     
 
