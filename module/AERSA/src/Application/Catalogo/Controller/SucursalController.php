@@ -125,8 +125,10 @@ class SucursalController extends AbstractActionController
 
             //INTANCIAMOS NUESTRO FORMULARIO
             $form = new \Application\Catalogo\Form\SucursalForm();
+            /*
             $element = $form->get('sucursal_nombre');
             $element->setAttribute('disabled', 'disabled');
+            */
             
             //SI NOS ENVIAN UNA PETICION POST
             if($request->isPost())
@@ -136,6 +138,7 @@ class SucursalController extends AbstractActionController
                 
                 
                 //Ingresamos los nuevos datos de la sucursal
+                $entity->setSucursalNombre(                     $post_data['sucursal_nombre']);
                 $entity->setSucursalEstatus(                    $post_data['sucursal_estatus']);
                 $entity->setSucursalAnioactivo(                 $post_data['sucursal_anioactivo']);
                 $entity->setSucursalMesactivo(                  $post_data['sucursal_mesactivo']);
@@ -180,7 +183,8 @@ class SucursalController extends AbstractActionController
 
     }
     
-    public function eliminarAction(){
+    public function eliminarAction()
+    {
         
         $request = $this->getRequest();
         

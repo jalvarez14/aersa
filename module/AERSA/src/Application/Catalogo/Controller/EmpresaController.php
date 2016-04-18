@@ -57,26 +57,36 @@ class EmpresaController extends AbstractActionController
             
             if(!$exist)
             {
-                //CREAMOS NUESTRA ENTIDAD VACIA
-                $empresaEntity  = setEmpresaData($post_data);
-                $userEntity     = setusuarioData($post_data);
-                
-                //Guardamos las entidades
-                $empresaEntity->save();
-                $userEntity->save();
-                
-                //Obtenemos la relación
-                $relacion   = setRelacion($empresaEntity,$userEntity);
-                //Guardamos la relación
-                $relacion->save();
-                    
-                $this->flashMessenger()->addSuccessMessage('Empresa registrada satisfactoriamente!');
+                $exist = \UsuarioQuery::create()->filterByUsuarioNombre($post_data['usuario_username'])->exists();
+                if(!$exist)
+                {
+                    //CREAMOS NUESTRA ENTIDAD VACIA
+                    $empresaEntity  = setEmpresaData($post_data);
+                    $userEntity     = setusuarioData($post_data);
 
-                return $this->redirect()->toUrl('/catalogo/empresa');
+                    //Guardamos las entidades
+                    $empresaEntity->save();
+                    $userEntity->save();
+
+                    //Obtenemos la relación
+                    $relacion   = setRelacion($empresaEntity,$userEntity);
+                    //Guardamos la relación
+                    $relacion->save();
+
+                    $this->flashMessenger()->addSuccessMessage('Empresa registrada satisfactoriamente!');
+
+                    return $this->redirect()->toUrl('/catalogo/empresa');
+                }
+                else
+                {
+                    $this->flashMessenger()->addErrorMessage('Ya hay registrado un usuario con ese nombre de usuario');
+                    return $this->redirect()->toUrl('/catalogo/empresa/nuevo');
+                }
             }
             else
             {
                 $this->flashMessenger()->addErrorMessage('El nombre de empresa ya se encuentra registrado, por favor utilice uno distinto');
+                return $this->redirect()->toUrl('/catalogo/empresa/nuevo');
             }
             
            
@@ -152,8 +162,8 @@ class EmpresaController extends AbstractActionController
         }
         else
         {
-            $this->flashMessenger()->addErrorMessage('La empresa que estas tratando de editar no esta registrada en el sistema');
-            return $this->redirect()->toUrl('/catalogo/empresa');
+            //$this->flashMessenger()->addErrorMessage('La empresa que estas tratando de editar no esta registrada en el sistema');
+            //return $this->redirect()->toUrl('/catalogo/empresa');
         }
         
         //INTANCIAMOS NUESTRA VISTA
@@ -258,7 +268,7 @@ function setusuarioData($data)
     $entity  = new \Usuario();
     
     //Todo usuario ingresado por parte de empresa se le asigna administrador por defecto
-    $entity->setIdrol(1);
+    $entity->setIdrol(3);
     
     $entity->setUsuarioNombre($data['usuario_nombre']);
     $entity->setUsuarioEstatus($data['usuario_estatus']);
