@@ -521,8 +521,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    'route'    => 'aersa', //LOCAL
-                    //'route'    => 'aersamx.com', //LOCAL
+                    //'route'    => 'aersa', //LOCAL
+                    'route'    => 'aersamx.com', //PRODUCCION
                     'defaults' => array(
                         'controller' => 'Website\Controller\Index',
                         'action'     => 'index',
