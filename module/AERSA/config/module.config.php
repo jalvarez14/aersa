@@ -10,7 +10,7 @@ return array(
                 'type' => 'Hostname',
                 'options' => array(
                     //'route'    => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com',
+                    'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -521,8 +521,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'aersa', //LOCAL
-                    'route'    => 'aersamx.com', //LOCAL
+                    'route'    => 'aersa', //LOCAL
+                    //'route'    => 'aersamx.com', //LOCAL
                     'defaults' => array(
                         'controller' => 'Website\Controller\Index',
                         'action'     => 'index',

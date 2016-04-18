@@ -48,7 +48,7 @@ class TemplateMapListener implements ListenerAggregateInterface
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         
-        
+
         switch ($section[0])
         {
             case 'Website':
