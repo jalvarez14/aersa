@@ -9,13 +9,29 @@ class ProveedorController extends AbstractActionController
 {
     public function indexAction()
     {
-        return $this->redirect()->toUrl('/catalogo/proveedor/nuevo');
-        /*
+        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
+        
+        //SI SE TRATA DE UN ADMIN DE AERSA
+        if($session['idrol'] == 1){
+            $collection = \EmpresaQuery::create()->orderByIdempresa(\Criteria::DESC)->find();
+        }
+        
+        $proveedores = \ProveedorQuery::create()->find();
+
+        
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/catalogo/proveedor/index');
+        $view_model->setVariables(array(
+            'messages' => $this->flashMessenger(),
+            'collection' => $proveedores,
+        ));
         return $view_model;
-        */
+
     }
     
     public function nuevoAction()
