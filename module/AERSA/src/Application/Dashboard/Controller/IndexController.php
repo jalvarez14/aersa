@@ -18,9 +18,7 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
         
-        $empresa = new \Empresa();
-  
-
+        
     }
 
 }

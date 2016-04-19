@@ -69,7 +69,66 @@ class LoginController extends AbstractActionController
     
     public function selectAction(){
         
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            if($post_data['area_trabajo'] == 1){
+                return $this->redirect()->toUrl('/');
+            }elseif ($post_data['area_trabajo'] == 2) {
+                
+                $session = new \Shared\Session\AouthSession();
+                $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
+                return $this->redirect()->toUrl('/');
+            }
+           
+        }
+        
         $this->layout('application/layout/select_layout');
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        //De acuero al rol seleccionamos la vista
+        $view_model = new ViewModel();
+        
+        $empresas = array();
+        
+        if($session['idrol'] == 1){ //ADMINISTRADOR AERSA
+            $view_model->setTemplate('/application/login/select_admin_aersa');
+            $empresas = \Shared\GeneralFunctions::collectionToSelectArray(\EmpresaQuery::create()->find(),'idempresa','empresa_nombrecomercial');
+        }
+        
+        
+        $form = new \Application\Login\Form\SelectForm($session['idrol'],$empresas);
+        
+        $view_model->setVariables(array(
+            'session' => $session,
+            'form' => $form,
+        ));
+        return $view_model;
+
+        
+    }
+    
+    public function getsucursalesAction(){
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            
+            $post_data = $request->getPost();
+            
+            $idempresa = $post_data['id'];
+            
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($idempresa)->find();
+            $sucursales = \Shared\GeneralFunctions::collectionToSelectArray($sucursales, 'idsucursal', 'sucursal_nombre');
+            
+            return $this->getResponse()->setContent(json_encode($sucursales));
+           
+            
+        }
         
     }
     
