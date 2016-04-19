@@ -1,3 +1,11 @@
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
+
 <h3 class="page-title">Registro proveedor</h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -36,7 +44,13 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('idempresa')) ?>  
-                        <?php echo $this->formSelect($form->get('idempresa')) ?>
+                        <?php //echo $this->formSelect($form->get('idempresa')) ?>
+                        
+                        <select name="idempresa" required="required" class="form-control">
+                            <?php foreach ($empresa as $emp):?>
+                                <option value="<?php echo $emp->getIdEmpresa() ?>"><?php echo $emp->getEmpresaNombrecomercial() ?></option>
+                            <?php endforeach;?>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">

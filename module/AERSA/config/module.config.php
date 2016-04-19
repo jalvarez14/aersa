@@ -564,6 +564,7 @@ return array(
             /*
              * CATALOGO
              */
+
             'Application\Catalogo\Controller\Usuario'               => 'Application\Catalogo\Controller\UsuarioController',
             'Application\Catalogo\Controller\Proveedor'             => 'Application\Catalogo\Controller\ProveedorController',
             'Application\Catalogo\Controller\Iva'                   => 'Application\Catalogo\Controller\IvaController',
@@ -572,8 +573,7 @@ return array(
             'Application\Catalogo\Controller\Sucursal'              => 'Application\Catalogo\Controller\SucursalController',
             'Application\Catalogo\Controller\Almacen'               => 'Application\Catalogo\Controller\AlmacenController',
             'Application\Catalogo\Controller\Plantillatablajeria'   => 'Application\Catalogo\Controller\PlantillatablajeriaController',
-
-            
+      
             /*
              * WEBSITE
              */
