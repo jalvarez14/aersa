@@ -9,7 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    'route'    => 'admin.aersa',
+                    //'route'    => 'admin.aersa', //LOCAL
+                    'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -127,6 +128,83 @@ return array(
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
                                                 'action' => 'eliminaradministrador',
+                                            ),
+                                        ),
+                                    ),
+                                   'changepasswordadministrador' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/changepasswordadministrador[/:id][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'changepasswordadministrador',
+                                            ),
+                                        ),
+                                    ),
+                                   'auditor' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/auditor/nuevo[/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'auditor',
+                                            ),
+                                        ),
+                                    ),
+                                   'editarauditor' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editarauditor[/:id][/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'editarauditor',
+                                            ),
+                                        ),
+                                    ),
+                                   'changepasswordauditor' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/changepasswordauditor[/:id][/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'changepasswordauditor',
+                                            ),
+                                        ),
+                                    ),
+                                   
+                               ),
+                            ),
+                           'almacen' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/almacen',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Almacen',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevo[/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Almacen',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                               ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id][/:suc][/:emp]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Almacen',
+                                                'action' => 'editar',
                                             ),
                                         ),
                                     ),
@@ -443,7 +521,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    'route'    => 'aersa',
+                    //'route'    => 'aersa', //LOCAL
+                    'route'    => 'aersamx.com', //PRODUCCION
                     'defaults' => array(
                         'controller' => 'Website\Controller\Index',
                         'action'     => 'index',
@@ -492,6 +571,7 @@ return array(
             'Application\Catalogo\Controller\Categoria '    => 'Application\Catalogo\Controller\CategoriaController',
             'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
+            'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
             
             /*
              * WEBSITE

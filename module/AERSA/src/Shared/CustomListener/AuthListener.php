@@ -51,9 +51,13 @@ class AuthListener implements ListenerAggregateInterface {
         $AouthSession  = new AouthSession();
 
         $controller = $matches->getParam('controller');
-
+        
         $module = explode('\\', $controller); $module = $module[0];
-
+        
+        if($module == 'Website'){
+            return;
+        }
+        
         $action = $matches->getParam('action');
 
         define("redirect", $matches->getMatchedRouteName());
