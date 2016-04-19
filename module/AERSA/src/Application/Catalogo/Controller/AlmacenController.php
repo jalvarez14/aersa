@@ -8,8 +8,18 @@ use Zend\Console\Request as ConsoleRequest;
 
 class AlmacenController extends AbstractActionController
 {
+    public function indexAction()
+    {
+
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+
+        $view_model->setTemplate('/application/catalogo/almacen/index');
+        return $view_model;
+    }
     public function nuevoAction()
     {
+        
         $idSuc = $this->params()->fromRoute('suc');
         $idEmp = $this->params()->fromRoute('emp');
         
@@ -133,6 +143,4 @@ class AlmacenController extends AbstractActionController
 
     }
     
-    
-
 }
