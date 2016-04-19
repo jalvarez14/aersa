@@ -9,20 +9,17 @@ use Zend\Console\Request as ConsoleRequest;
 class PlantillatablajeriaController extends AbstractActionController {
     public function indexAction()
     {
-
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA
-        
         //SI SE TRATA DE UN ADMIN DE AERSA
 //        if($session['idrol'] == 1){
 //            $collection = \CategoriaQuery::create()->find();
 //        }
         //$idempresa=$session['idempresa'];
 
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA
+        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA ---
         
         $idempresa=1;
         $collection = \PlantillatablajeriaQuery::create()->filterByIdempresa($idempresa)->find();
