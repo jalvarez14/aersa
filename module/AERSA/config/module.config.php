@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route'    => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -460,7 +460,6 @@ return array(
 
                                ),
                             ),
-                           
                             'tablajeria' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -475,43 +474,43 @@ return array(
                                     'nuevo' => array(
                                         'type' => 'Literal',
                                         'options' => array(
-                                             'route' => '/nuevo',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'nuevo',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'editar',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevo' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                             'route' => '/nuevo',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'nuevo',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                             'route' => '/eliminar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'eliminar',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
@@ -521,8 +520,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'aersa', //LOCAL
-                    'route'    => 'aersamx.com', //PRODUCCION
+                    'route'    => 'aersa', //LOCAL
+                    //'route'    => 'aersamx.com', //PRODUCCION
                     'defaults' => array(
                         'controller' => 'Website\Controller\Index',
                         'action'     => 'index',
@@ -565,13 +564,15 @@ return array(
             /*
              * CATALOGO
              */
-            'Application\Catalogo\Controller\Usuario'       => 'Application\Catalogo\Controller\UsuarioController',
-            'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
-            'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
-            'Application\Catalogo\Controller\Categoria '    => 'Application\Catalogo\Controller\CategoriaController',
-            'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
-            'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
-            'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
+            'Application\Catalogo\Controller\Usuario'               => 'Application\Catalogo\Controller\UsuarioController',
+            'Application\Catalogo\Controller\Proveedor'             => 'Application\Catalogo\Controller\ProveedorController',
+            'Application\Catalogo\Controller\Iva'                   => 'Application\Catalogo\Controller\IvaController',
+            'Application\Catalogo\Controller\Categoria '            => 'Application\Catalogo\Controller\CategoriaController',
+            'Application\Catalogo\Controller\Empresa'               => 'Application\Catalogo\Controller\EmpresaController',
+            'Application\Catalogo\Controller\Sucursal'              => 'Application\Catalogo\Controller\SucursalController',
+            'Application\Catalogo\Controller\Almacen'               => 'Application\Catalogo\Controller\AlmacenController',
+            'Application\Catalogo\Controller\Plantillatablajeria'   => 'Application\Catalogo\Controller\PlantillatablajeriaController',
+
             
             /*
              * WEBSITE
