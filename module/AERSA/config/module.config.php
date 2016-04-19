@@ -571,6 +571,7 @@ return array(
             'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
             'Application\Catalogo\Controller\Categoria'     => 'Application\Catalogo\Controller\CategoriaController',
             'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
+            'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
             'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
             
