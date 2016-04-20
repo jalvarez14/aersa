@@ -67,7 +67,7 @@ class ProductoController extends AbstractActionController
             foreach ($post_data as $key => $value) {
                 $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
-            $entity->setIdempresa(1);
+            $entity->setIdempresa(2);
             $entity->save();
             $this->flashMessenger()->addSuccessMessage('Producto registrado satisfactoriamente!');
             return $this->redirect()->toUrl('/catalogo/producto');
@@ -353,10 +353,14 @@ class ProductoController extends AbstractActionController
             $producto = \ProductoQuery::create()->findPk($prod);
             
             //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \CodigobarrasQuery::create()->findPk($id);
+            $entity = \RecetaQuery::create()->findPk($id);
             
-            //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Catalogo\Form\CodigoBarrasForm();
+            $collection  = \ProductoQuery::create()->filterByProductoTipo('simple')->find();
+            $productos = array();
+            foreach ($collection as $item)
+                    $productos[$item->getIdproducto()] = $item->getProductoNombre();
+            $form = new \Application\Catalogo\Form\SubrecetaForm($productos);
+            
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) 
             {
@@ -367,7 +371,7 @@ class ProductoController extends AbstractActionController
                 
                 $entity->save();
 
-                $this->flashMessenger()->addSuccessMessage('Codigo modificado correctamente!');
+                $this->flashMessenger()->addSuccessMessage('Sub receta modificada correctamente!');
                 return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
             }
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
@@ -382,10 +386,10 @@ class ProductoController extends AbstractActionController
         $view_model->setVariables(array(
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
-            'cbarras'   => $entity,
+            'receta'    => $entity,
             'producto'  => $producto,
         ));
-        $view_model->setTemplate('/application/catalogo/producto/editarcodigo');
+        $view_model->setTemplate('/application/catalogo/producto/editarsubreceta');
         return $view_model;
     }
     
@@ -397,10 +401,10 @@ class ProductoController extends AbstractActionController
             $id = $this->params()->fromRoute('id');
             $prod = $this->params()->fromRoute('prod');
             
-            $entity = \CodigobarrasQuery::create()->findPk($id);
+            $entity = \RecetaQuery::create()->findPk($id);
             $entity->delete();
             
-            $this->flashMessenger()->addSuccessMessage('Código eliminado correctamente!');
+            $this->flashMessenger()->addSuccessMessage('Sub receta eleminada correctamente!');
 
             return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
             
