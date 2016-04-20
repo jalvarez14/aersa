@@ -499,43 +499,43 @@ return array(
                                     'nuevo' => array(
                                         'type' => 'Literal',
                                         'options' => array(
-                                             'route' => '/nuevo',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'nuevo',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'editar',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevo' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                             'route' => '/nuevo',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'nuevo',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                             'route' => '/eliminar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                 'action' => 'eliminar',
-                                             ),
-                                         ),
-                                     ),
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
@@ -589,6 +589,7 @@ return array(
             /*
              * CATALOGO
              */
+
             'Application\Catalogo\Controller\Usuario'       => 'Application\Catalogo\Controller\UsuarioController',
             'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
             'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
@@ -598,6 +599,7 @@ return array(
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
             'Application\Catalogo\Controller\Productos'     => 'Application\Catalogo\Controller\ProductosController',
             
+
             /*
              * WEBSITE
              */
