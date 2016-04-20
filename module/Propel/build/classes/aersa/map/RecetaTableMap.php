@@ -36,7 +36,7 @@ class RecetaTableMap extends TableMap
         $this->setPhpName('Receta');
         $this->setClassname('Receta');
         $this->setPackage('aersa');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idreceta', 'Idreceta', 'INTEGER', true, null, null);
         $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);

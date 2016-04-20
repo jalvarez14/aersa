@@ -36,7 +36,7 @@ class CodigobarrasTableMap extends TableMap
         $this->setPhpName('Codigobarras');
         $this->setClassname('Codigobarras');
         $this->setPackage('aersa');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idcodigobarras', 'Idcodigobarras', 'INTEGER', true, null, null);
         $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);

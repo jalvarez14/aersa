@@ -387,6 +387,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in NotacreditoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditoPeer::clearInstancePool();
+        // Invalidate objects in OrdentablajeriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        OrdentablajeriaPeer::clearInstancePool();
         // Invalidate objects in PlantillatablajeriaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         PlantillatablajeriaPeer::clearInstancePool();
@@ -768,6 +771,12 @@ abstract class BaseEmpresaPeer
 
             $criteria->add(NotacreditoPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
+
+            // delete related Ordentablajeria objects
+            $criteria = new Criteria(OrdentablajeriaPeer::DATABASE_NAME);
+
+            $criteria->add(OrdentablajeriaPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
 
             // delete related Plantillatablajeria objects
             $criteria = new Criteria(PlantillatablajeriaPeer::DATABASE_NAME);

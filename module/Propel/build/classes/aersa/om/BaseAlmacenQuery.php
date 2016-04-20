@@ -54,6 +54,14 @@
  * @method AlmacenQuery rightJoinNotacreditodetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacreditodetalle relation
  * @method AlmacenQuery innerJoinNotacreditodetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacreditodetalle relation
  *
+ * @method AlmacenQuery leftJoinOrdentablajeriaRelatedByIdalmacendestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacendestino relation
+ * @method AlmacenQuery rightJoinOrdentablajeriaRelatedByIdalmacendestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacendestino relation
+ * @method AlmacenQuery innerJoinOrdentablajeriaRelatedByIdalmacendestino($relationAlias = null) Adds a INNER JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacendestino relation
+ *
+ * @method AlmacenQuery leftJoinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacenorigen relation
+ * @method AlmacenQuery rightJoinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacenorigen relation
+ * @method AlmacenQuery innerJoinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacenorigen relation
+ *
  * @method AlmacenQuery leftJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
  * @method AlmacenQuery rightJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
  * @method AlmacenQuery innerJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
@@ -1038,6 +1046,154 @@ abstract class BaseAlmacenQuery extends ModelCriteria
         return $this
             ->joinNotacreditodetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacreditodetalle', 'NotacreditodetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajeria object
+     *
+     * @param   Ordentablajeria|PropelObjectCollection $ordentablajeria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajeriaRelatedByIdalmacendestino($ordentablajeria, $comparison = null)
+    {
+        if ($ordentablajeria instanceof Ordentablajeria) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $ordentablajeria->getIdalmacendestino(), $comparison);
+        } elseif ($ordentablajeria instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajeriaRelatedByIdalmacendestinoQuery()
+                ->filterByPrimaryKeys($ordentablajeria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajeriaRelatedByIdalmacendestino() only accepts arguments of type Ordentablajeria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacendestino relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajeriaRelatedByIdalmacendestino($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('OrdentablajeriaRelatedByIdalmacendestino');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'OrdentablajeriaRelatedByIdalmacendestino');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the OrdentablajeriaRelatedByIdalmacendestino relation Ordentablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajeriaRelatedByIdalmacendestinoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajeriaRelatedByIdalmacendestino($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'OrdentablajeriaRelatedByIdalmacendestino', 'OrdentablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajeria object
+     *
+     * @param   Ordentablajeria|PropelObjectCollection $ordentablajeria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajeriaRelatedByIdalmacenorigen($ordentablajeria, $comparison = null)
+    {
+        if ($ordentablajeria instanceof Ordentablajeria) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $ordentablajeria->getIdalmacenorigen(), $comparison);
+        } elseif ($ordentablajeria instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajeriaRelatedByIdalmacenorigenQuery()
+                ->filterByPrimaryKeys($ordentablajeria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajeriaRelatedByIdalmacenorigen() only accepts arguments of type Ordentablajeria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacenorigen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('OrdentablajeriaRelatedByIdalmacenorigen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'OrdentablajeriaRelatedByIdalmacenorigen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the OrdentablajeriaRelatedByIdalmacenorigen relation Ordentablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajeriaRelatedByIdalmacenorigenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'OrdentablajeriaRelatedByIdalmacenorigen', 'OrdentablajeriaQuery');
     }
 
     /**

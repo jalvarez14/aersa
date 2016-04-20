@@ -44,6 +44,11 @@ class NotacreditodetalleTableMap extends TableMap
         $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addColumn('notacreditodetalle_cantidad', 'NotacreditodetalleCantidad', 'FLOAT', true, null, null);
         $this->addColumn('notacreditodetalle_revisada', 'NotacreditodetalleRevisada', 'BOOLEAN', true, 1, false);
+        $this->addColumn('notacreditodetalle_ieps', 'NotacreditodetalleIeps', 'FLOAT', false, null, null);
+        $this->addColumn('notacreditodetalle_descuento', 'NotacreditodetalleDescuento', 'FLOAT', false, null, null);
+        $this->addColumn('notacreditodetalle_subtotal', 'NotacreditodetalleSubtotal', 'DECIMAL', false, 15, null);
+        $this->addColumn('notacreditodetalle_costounitario', 'NotacreditodetalleCostounitario', 'DECIMAL', false, 15, null);
+        $this->addColumn('notacreditodetalle_costounitarioneto', 'NotacreditodetalleCostounitarioneto', 'DECIMAL', false, 15, null);
         // validators
     } // initialize()
 

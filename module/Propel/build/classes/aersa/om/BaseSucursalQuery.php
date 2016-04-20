@@ -52,9 +52,17 @@
  * @method SucursalQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
  * @method SucursalQuery innerJoinNotacredito($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacredito relation
  *
- * @method SucursalQuery leftJoinRequisicion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Requisicion relation
- * @method SucursalQuery rightJoinRequisicion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Requisicion relation
- * @method SucursalQuery innerJoinRequisicion($relationAlias = null) Adds a INNER JOIN clause to the query using the Requisicion relation
+ * @method SucursalQuery leftJoinOrdentablajeria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajeria relation
+ * @method SucursalQuery rightJoinOrdentablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeria relation
+ * @method SucursalQuery innerJoinOrdentablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeria relation
+ *
+ * @method SucursalQuery leftJoinRequisicionRelatedByIdsucursaldestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdsucursaldestino relation
+ * @method SucursalQuery rightJoinRequisicionRelatedByIdsucursaldestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdsucursaldestino relation
+ * @method SucursalQuery innerJoinRequisicionRelatedByIdsucursaldestino($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdsucursaldestino relation
+ *
+ * @method SucursalQuery leftJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
+ * @method SucursalQuery rightJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
+ * @method SucursalQuery innerJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
  *
  * @method SucursalQuery leftJoinTrabajadorpromedio($relationAlias = null) Adds a LEFT JOIN clause to the query using the Trabajadorpromedio relation
  * @method SucursalQuery rightJoinTrabajadorpromedio($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Trabajadorpromedio relation
@@ -1010,41 +1018,41 @@ abstract class BaseSucursalQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related Requisicion object
+     * Filter the query by a related Ordentablajeria object
      *
-     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param   Ordentablajeria|PropelObjectCollection $ordentablajeria  the related object to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return                 SucursalQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByRequisicion($requisicion, $comparison = null)
+    public function filterByOrdentablajeria($ordentablajeria, $comparison = null)
     {
-        if ($requisicion instanceof Requisicion) {
+        if ($ordentablajeria instanceof Ordentablajeria) {
             return $this
-                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $requisicion->getIdsucursal(), $comparison);
-        } elseif ($requisicion instanceof PropelObjectCollection) {
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $ordentablajeria->getIdsucursal(), $comparison);
+        } elseif ($ordentablajeria instanceof PropelObjectCollection) {
             return $this
-                ->useRequisicionQuery()
-                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->useOrdentablajeriaQuery()
+                ->filterByPrimaryKeys($ordentablajeria->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByRequisicion() only accepts arguments of type Requisicion or PropelCollection');
+            throw new PropelException('filterByOrdentablajeria() only accepts arguments of type Ordentablajeria or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Requisicion relation
+     * Adds a JOIN clause to the query using the Ordentablajeria relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return SucursalQuery The current query, for fluid interface
      */
-    public function joinRequisicion($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinOrdentablajeria($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Requisicion');
+        $relationMap = $tableMap->getRelation('Ordentablajeria');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -1059,14 +1067,88 @@ abstract class BaseSucursalQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Requisicion');
+            $this->addJoinObject($join, 'Ordentablajeria');
         }
 
         return $this;
     }
 
     /**
-     * Use the Requisicion relation Requisicion object
+     * Use the Ordentablajeria relation Ordentablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajeriaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajeria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ordentablajeria', 'OrdentablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisicion object
+     *
+     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicionRelatedByIdsucursaldestino($requisicion, $comparison = null)
+    {
+        if ($requisicion instanceof Requisicion) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $requisicion->getIdsucursaldestino(), $comparison);
+        } elseif ($requisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionRelatedByIdsucursaldestinoQuery()
+                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicionRelatedByIdsucursaldestino() only accepts arguments of type Requisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisicionRelatedByIdsucursaldestino relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinRequisicionRelatedByIdsucursaldestino($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisicionRelatedByIdsucursaldestino');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisicionRelatedByIdsucursaldestino');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisicionRelatedByIdsucursaldestino relation Requisicion object
      *
      * @see       useQuery()
      *
@@ -1076,11 +1158,85 @@ abstract class BaseSucursalQuery extends ModelCriteria
      *
      * @return   RequisicionQuery A secondary query class using the current class as primary query
      */
-    public function useRequisicionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useRequisicionRelatedByIdsucursaldestinoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinRequisicion($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Requisicion', 'RequisicionQuery');
+            ->joinRequisicionRelatedByIdsucursaldestino($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdsucursaldestino', 'RequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisicion object
+     *
+     * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicionRelatedByIdsucursalorigen($requisicion, $comparison = null)
+    {
+        if ($requisicion instanceof Requisicion) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $requisicion->getIdsucursalorigen(), $comparison);
+        } elseif ($requisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionRelatedByIdsucursalorigenQuery()
+                ->filterByPrimaryKeys($requisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicionRelatedByIdsucursalorigen() only accepts arguments of type Requisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinRequisicionRelatedByIdsucursalorigen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisicionRelatedByIdsucursalorigen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisicionRelatedByIdsucursalorigen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisicionRelatedByIdsucursalorigen relation Requisicion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisicionQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisicionRelatedByIdsucursalorigenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRequisicionRelatedByIdsucursalorigen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdsucursalorigen', 'RequisicionQuery');
     }
 
     /**

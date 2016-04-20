@@ -8,9 +8,15 @@
  *
  * @method ConceptosalidaQuery orderByIdconceptosalida($order = Criteria::ASC) Order by the idconceptosalida column
  * @method ConceptosalidaQuery orderByConceptosalidaNombre($order = Criteria::ASC) Order by the conceptosalida_nombre column
+ * @method ConceptosalidaQuery orderByAlmacenorigen($order = Criteria::ASC) Order by the almacenorigen column
+ * @method ConceptosalidaQuery orderByAlmacendestino($order = Criteria::ASC) Order by the almacendestino column
+ * @method ConceptosalidaQuery orderByMismasucursal($order = Criteria::ASC) Order by the mismasucursal column
  *
  * @method ConceptosalidaQuery groupByIdconceptosalida() Group by the idconceptosalida column
  * @method ConceptosalidaQuery groupByConceptosalidaNombre() Group by the conceptosalida_nombre column
+ * @method ConceptosalidaQuery groupByAlmacenorigen() Group by the almacenorigen column
+ * @method ConceptosalidaQuery groupByAlmacendestino() Group by the almacendestino column
+ * @method ConceptosalidaQuery groupByMismasucursal() Group by the mismasucursal column
  *
  * @method ConceptosalidaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ConceptosalidaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -24,9 +30,15 @@
  * @method Conceptosalida findOneOrCreate(PropelPDO $con = null) Return the first Conceptosalida matching the query, or a new Conceptosalida object populated from the query conditions when no match is found
  *
  * @method Conceptosalida findOneByConceptosalidaNombre(string $conceptosalida_nombre) Return the first Conceptosalida filtered by the conceptosalida_nombre column
+ * @method Conceptosalida findOneByAlmacenorigen(string $almacenorigen) Return the first Conceptosalida filtered by the almacenorigen column
+ * @method Conceptosalida findOneByAlmacendestino(string $almacendestino) Return the first Conceptosalida filtered by the almacendestino column
+ * @method Conceptosalida findOneByMismasucursal(boolean $mismasucursal) Return the first Conceptosalida filtered by the mismasucursal column
  *
  * @method array findByIdconceptosalida(int $idconceptosalida) Return Conceptosalida objects filtered by the idconceptosalida column
  * @method array findByConceptosalidaNombre(string $conceptosalida_nombre) Return Conceptosalida objects filtered by the conceptosalida_nombre column
+ * @method array findByAlmacenorigen(string $almacenorigen) Return Conceptosalida objects filtered by the almacenorigen column
+ * @method array findByAlmacendestino(string $almacendestino) Return Conceptosalida objects filtered by the almacendestino column
+ * @method array findByMismasucursal(boolean $mismasucursal) Return Conceptosalida objects filtered by the mismasucursal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -134,7 +146,7 @@ abstract class BaseConceptosalidaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idconceptosalida`, `conceptosalida_nombre` FROM `conceptosalida` WHERE `idconceptosalida` = :p0';
+        $sql = 'SELECT `idconceptosalida`, `conceptosalida_nombre`, `almacenorigen`, `almacendestino`, `mismasucursal` FROM `conceptosalida` WHERE `idconceptosalida` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -292,6 +304,91 @@ abstract class BaseConceptosalidaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE, $conceptosalidaNombre, $comparison);
+    }
+
+    /**
+     * Filter the query on the almacenorigen column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAlmacenorigen('fooValue');   // WHERE almacenorigen = 'fooValue'
+     * $query->filterByAlmacenorigen('%fooValue%'); // WHERE almacenorigen LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $almacenorigen The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ConceptosalidaQuery The current query, for fluid interface
+     */
+    public function filterByAlmacenorigen($almacenorigen = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($almacenorigen)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $almacenorigen)) {
+                $almacenorigen = str_replace('*', '%', $almacenorigen);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(ConceptosalidaPeer::ALMACENORIGEN, $almacenorigen, $comparison);
+    }
+
+    /**
+     * Filter the query on the almacendestino column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAlmacendestino('fooValue');   // WHERE almacendestino = 'fooValue'
+     * $query->filterByAlmacendestino('%fooValue%'); // WHERE almacendestino LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $almacendestino The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ConceptosalidaQuery The current query, for fluid interface
+     */
+    public function filterByAlmacendestino($almacendestino = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($almacendestino)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $almacendestino)) {
+                $almacendestino = str_replace('*', '%', $almacendestino);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(ConceptosalidaPeer::ALMACENDESTINO, $almacendestino, $comparison);
+    }
+
+    /**
+     * Filter the query on the mismasucursal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMismasucursal(true); // WHERE mismasucursal = true
+     * $query->filterByMismasucursal('yes'); // WHERE mismasucursal = true
+     * </code>
+     *
+     * @param     boolean|string $mismasucursal The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ConceptosalidaQuery The current query, for fluid interface
+     */
+    public function filterByMismasucursal($mismasucursal = null, $comparison = null)
+    {
+        if (is_string($mismasucursal)) {
+            $mismasucursal = in_array(strtolower($mismasucursal), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(ConceptosalidaPeer::MISMASUCURSAL, $mismasucursal, $comparison);
     }
 
     /**

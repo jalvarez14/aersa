@@ -40,6 +40,9 @@ class ConceptosalidaTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idconceptosalida', 'Idconceptosalida', 'INTEGER', true, null, null);
         $this->addColumn('conceptosalida_nombre', 'ConceptosalidaNombre', 'VARCHAR', true, 255, null);
+        $this->addColumn('almacenorigen', 'Almacenorigen', 'VARCHAR', true, 45, null);
+        $this->addColumn('almacendestino', 'Almacendestino', 'VARCHAR', true, 45, null);
+        $this->addColumn('mismasucursal', 'Mismasucursal', 'BOOLEAN', true, 1, null);
         // validators
     } // initialize()
 

@@ -42,6 +42,24 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     protected $conceptosalida_nombre;
 
     /**
+     * The value for the almacenorigen field.
+     * @var        string
+     */
+    protected $almacenorigen;
+
+    /**
+     * The value for the almacendestino field.
+     * @var        string
+     */
+    protected $almacendestino;
+
+    /**
+     * The value for the mismasucursal field.
+     * @var        boolean
+     */
+    protected $mismasucursal;
+
+    /**
      * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
      */
     protected $collRequisicions;
@@ -96,6 +114,39 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [almacenorigen] column value.
+     *
+     * @return string
+     */
+    public function getAlmacenorigen()
+    {
+
+        return $this->almacenorigen;
+    }
+
+    /**
+     * Get the [almacendestino] column value.
+     *
+     * @return string
+     */
+    public function getAlmacendestino()
+    {
+
+        return $this->almacendestino;
+    }
+
+    /**
+     * Get the [mismasucursal] column value.
+     *
+     * @return boolean
+     */
+    public function getMismasucursal()
+    {
+
+        return $this->mismasucursal;
+    }
+
+    /**
      * Set the value of [idconceptosalida] column.
      *
      * @param  int $v new value
@@ -138,6 +189,77 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     } // setConceptosalidaNombre()
 
     /**
+     * Set the value of [almacenorigen] column.
+     *
+     * @param  string $v new value
+     * @return Conceptosalida The current object (for fluent API support)
+     */
+    public function setAlmacenorigen($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->almacenorigen !== $v) {
+            $this->almacenorigen = $v;
+            $this->modifiedColumns[] = ConceptosalidaPeer::ALMACENORIGEN;
+        }
+
+
+        return $this;
+    } // setAlmacenorigen()
+
+    /**
+     * Set the value of [almacendestino] column.
+     *
+     * @param  string $v new value
+     * @return Conceptosalida The current object (for fluent API support)
+     */
+    public function setAlmacendestino($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->almacendestino !== $v) {
+            $this->almacendestino = $v;
+            $this->modifiedColumns[] = ConceptosalidaPeer::ALMACENDESTINO;
+        }
+
+
+        return $this;
+    } // setAlmacendestino()
+
+    /**
+     * Sets the value of the [mismasucursal] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Conceptosalida The current object (for fluent API support)
+     */
+    public function setMismasucursal($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->mismasucursal !== $v) {
+            $this->mismasucursal = $v;
+            $this->modifiedColumns[] = ConceptosalidaPeer::MISMASUCURSAL;
+        }
+
+
+        return $this;
+    } // setMismasucursal()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -171,6 +293,9 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
 
             $this->idconceptosalida = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->conceptosalida_nombre = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->almacenorigen = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->almacendestino = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->mismasucursal = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -180,7 +305,7 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 2; // 2 = ConceptosalidaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = ConceptosalidaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Conceptosalida object", $e);
@@ -417,6 +542,15 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
         if ($this->isColumnModified(ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE)) {
             $modifiedColumns[':p' . $index++]  = '`conceptosalida_nombre`';
         }
+        if ($this->isColumnModified(ConceptosalidaPeer::ALMACENORIGEN)) {
+            $modifiedColumns[':p' . $index++]  = '`almacenorigen`';
+        }
+        if ($this->isColumnModified(ConceptosalidaPeer::ALMACENDESTINO)) {
+            $modifiedColumns[':p' . $index++]  = '`almacendestino`';
+        }
+        if ($this->isColumnModified(ConceptosalidaPeer::MISMASUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`mismasucursal`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `conceptosalida` (%s) VALUES (%s)',
@@ -433,6 +567,15 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
                         break;
                     case '`conceptosalida_nombre`':
                         $stmt->bindValue($identifier, $this->conceptosalida_nombre, PDO::PARAM_STR);
+                        break;
+                    case '`almacenorigen`':
+                        $stmt->bindValue($identifier, $this->almacenorigen, PDO::PARAM_STR);
+                        break;
+                    case '`almacendestino`':
+                        $stmt->bindValue($identifier, $this->almacendestino, PDO::PARAM_STR);
+                        break;
+                    case '`mismasucursal`':
+                        $stmt->bindValue($identifier, (int) $this->mismasucursal, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -582,6 +725,15 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
             case 1:
                 return $this->getConceptosalidaNombre();
                 break;
+            case 2:
+                return $this->getAlmacenorigen();
+                break;
+            case 3:
+                return $this->getAlmacendestino();
+                break;
+            case 4:
+                return $this->getMismasucursal();
+                break;
             default:
                 return null;
                 break;
@@ -613,6 +765,9 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getIdconceptosalida(),
             $keys[1] => $this->getConceptosalidaNombre(),
+            $keys[2] => $this->getAlmacenorigen(),
+            $keys[3] => $this->getAlmacendestino(),
+            $keys[4] => $this->getMismasucursal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -663,6 +818,15 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
             case 1:
                 $this->setConceptosalidaNombre($value);
                 break;
+            case 2:
+                $this->setAlmacenorigen($value);
+                break;
+            case 3:
+                $this->setAlmacendestino($value);
+                break;
+            case 4:
+                $this->setMismasucursal($value);
+                break;
         } // switch()
     }
 
@@ -689,6 +853,9 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setIdconceptosalida($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setConceptosalidaNombre($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setAlmacenorigen($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setAlmacendestino($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setMismasucursal($arr[$keys[4]]);
     }
 
     /**
@@ -702,6 +869,9 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ConceptosalidaPeer::IDCONCEPTOSALIDA)) $criteria->add(ConceptosalidaPeer::IDCONCEPTOSALIDA, $this->idconceptosalida);
         if ($this->isColumnModified(ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE)) $criteria->add(ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE, $this->conceptosalida_nombre);
+        if ($this->isColumnModified(ConceptosalidaPeer::ALMACENORIGEN)) $criteria->add(ConceptosalidaPeer::ALMACENORIGEN, $this->almacenorigen);
+        if ($this->isColumnModified(ConceptosalidaPeer::ALMACENDESTINO)) $criteria->add(ConceptosalidaPeer::ALMACENDESTINO, $this->almacendestino);
+        if ($this->isColumnModified(ConceptosalidaPeer::MISMASUCURSAL)) $criteria->add(ConceptosalidaPeer::MISMASUCURSAL, $this->mismasucursal);
 
         return $criteria;
     }
@@ -766,6 +936,9 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setConceptosalidaNombre($this->getConceptosalidaNombre());
+        $copyObj->setAlmacenorigen($this->getAlmacenorigen());
+        $copyObj->setAlmacendestino($this->getAlmacendestino());
+        $copyObj->setMismasucursal($this->getMismasucursal());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1188,10 +1361,35 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsJoinSucursalRelatedByIdsucursaldestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
+        $query->joinWith('SucursalRelatedByIdsucursaldestino', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Conceptosalida is new, it will return
+     * an empty collection; or if this Conceptosalida has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Conceptosalida.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinSucursalRelatedByIdsucursalorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('SucursalRelatedByIdsucursalorigen', $join_behavior);
 
         return $this->getRequisicions($query, $con);
     }
@@ -1228,6 +1426,9 @@ abstract class BaseConceptosalida extends BaseObject implements Persistent
     {
         $this->idconceptosalida = null;
         $this->conceptosalida_nombre = null;
+        $this->almacenorigen = null;
+        $this->almacendestino = null;
+        $this->mismasucursal = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

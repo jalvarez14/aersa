@@ -116,10 +116,22 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $collNotacreditosPartial;
 
     /**
+     * @var        PropelObjectCollection|Ordentablajeria[] Collection to store aggregation of Ordentablajeria objects.
+     */
+    protected $collOrdentablajerias;
+    protected $collOrdentablajeriasPartial;
+
+    /**
      * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
      */
-    protected $collRequisicions;
-    protected $collRequisicionsPartial;
+    protected $collRequisicionsRelatedByIdsucursaldestino;
+    protected $collRequisicionsRelatedByIdsucursaldestinoPartial;
+
+    /**
+     * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
+     */
+    protected $collRequisicionsRelatedByIdsucursalorigen;
+    protected $collRequisicionsRelatedByIdsucursalorigenPartial;
 
     /**
      * @var        PropelObjectCollection|Trabajadorpromedio[] Collection to store aggregation of Trabajadorpromedio objects.
@@ -193,7 +205,19 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
-    protected $requisicionsScheduledForDeletion = null;
+    protected $ordentablajeriasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $requisicionsRelatedByIdsucursaldestinoScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $requisicionsRelatedByIdsucursalorigenScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -657,7 +681,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             $this->collNotacreditos = null;
 
-            $this->collRequisicions = null;
+            $this->collOrdentablajerias = null;
+
+            $this->collRequisicionsRelatedByIdsucursaldestino = null;
+
+            $this->collRequisicionsRelatedByIdsucursalorigen = null;
 
             $this->collTrabajadorpromedios = null;
 
@@ -886,17 +914,51 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->requisicionsScheduledForDeletion !== null) {
-                if (!$this->requisicionsScheduledForDeletion->isEmpty()) {
-                    RequisicionQuery::create()
-                        ->filterByPrimaryKeys($this->requisicionsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->ordentablajeriasScheduledForDeletion !== null) {
+                if (!$this->ordentablajeriasScheduledForDeletion->isEmpty()) {
+                    OrdentablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajeriasScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->requisicionsScheduledForDeletion = null;
+                    $this->ordentablajeriasScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collRequisicions !== null) {
-                foreach ($this->collRequisicions as $referrerFK) {
+            if ($this->collOrdentablajerias !== null) {
+                foreach ($this->collOrdentablajerias as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion !== null) {
+                if (!$this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion->isEmpty()) {
+                    RequisicionQuery::create()
+                        ->filterByPrimaryKeys($this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRequisicionsRelatedByIdsucursaldestino !== null) {
+                foreach ($this->collRequisicionsRelatedByIdsucursaldestino as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion !== null) {
+                if (!$this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion->isEmpty()) {
+                    RequisicionQuery::create()
+                        ->filterByPrimaryKeys($this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRequisicionsRelatedByIdsucursalorigen !== null) {
+                foreach ($this->collRequisicionsRelatedByIdsucursalorigen as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1190,8 +1252,24 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     }
                 }
 
-                if ($this->collRequisicions !== null) {
-                    foreach ($this->collRequisicions as $referrerFK) {
+                if ($this->collOrdentablajerias !== null) {
+                    foreach ($this->collOrdentablajerias as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collRequisicionsRelatedByIdsucursaldestino !== null) {
+                    foreach ($this->collRequisicionsRelatedByIdsucursaldestino as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collRequisicionsRelatedByIdsucursalorigen !== null) {
+                    foreach ($this->collRequisicionsRelatedByIdsucursalorigen as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1343,8 +1421,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             if (null !== $this->collNotacreditos) {
                 $result['Notacreditos'] = $this->collNotacreditos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collRequisicions) {
-                $result['Requisicions'] = $this->collRequisicions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            if (null !== $this->collOrdentablajerias) {
+                $result['Ordentablajerias'] = $this->collOrdentablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collRequisicionsRelatedByIdsucursaldestino) {
+                $result['RequisicionsRelatedByIdsucursaldestino'] = $this->collRequisicionsRelatedByIdsucursaldestino->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collRequisicionsRelatedByIdsucursalorigen) {
+                $result['RequisicionsRelatedByIdsucursalorigen'] = $this->collRequisicionsRelatedByIdsucursalorigen->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collTrabajadorpromedios) {
                 $result['Trabajadorpromedios'] = $this->collTrabajadorpromedios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1572,9 +1656,21 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
-            foreach ($this->getRequisicions() as $relObj) {
+            foreach ($this->getOrdentablajerias() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addRequisicion($relObj->copy($deepCopy));
+                    $copyObj->addOrdentablajeria($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getRequisicionsRelatedByIdsucursaldestino() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRequisicionRelatedByIdsucursaldestino($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getRequisicionsRelatedByIdsucursalorigen() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRequisicionRelatedByIdsucursalorigen($relObj->copy($deepCopy));
                 }
             }
 
@@ -1724,8 +1820,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         if ('Notacredito' == $relationName) {
             $this->initNotacreditos();
         }
-        if ('Requisicion' == $relationName) {
-            $this->initRequisicions();
+        if ('Ordentablajeria' == $relationName) {
+            $this->initOrdentablajerias();
+        }
+        if ('RequisicionRelatedByIdsucursaldestino' == $relationName) {
+            $this->initRequisicionsRelatedByIdsucursaldestino();
+        }
+        if ('RequisicionRelatedByIdsucursalorigen' == $relationName) {
+            $this->initRequisicionsRelatedByIdsucursalorigen();
         }
         if ('Trabajadorpromedio' == $relationName) {
             $this->initTrabajadorpromedios();
@@ -3289,36 +3391,36 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     }
 
     /**
-     * Clears out the collRequisicions collection
+     * Clears out the collOrdentablajerias collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return Sucursal The current object (for fluent API support)
-     * @see        addRequisicions()
+     * @see        addOrdentablajerias()
      */
-    public function clearRequisicions()
+    public function clearOrdentablajerias()
     {
-        $this->collRequisicions = null; // important to set this to null since that means it is uninitialized
-        $this->collRequisicionsPartial = null;
+        $this->collOrdentablajerias = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajeriasPartial = null;
 
         return $this;
     }
 
     /**
-     * reset is the collRequisicions collection loaded partially
+     * reset is the collOrdentablajerias collection loaded partially
      *
      * @return void
      */
-    public function resetPartialRequisicions($v = true)
+    public function resetPartialOrdentablajerias($v = true)
     {
-        $this->collRequisicionsPartial = $v;
+        $this->collOrdentablajeriasPartial = $v;
     }
 
     /**
-     * Initializes the collRequisicions collection.
+     * Initializes the collOrdentablajerias collection.
      *
-     * By default this just sets the collRequisicions collection to an empty array (like clearcollRequisicions());
+     * By default this just sets the collOrdentablajerias collection to an empty array (like clearcollOrdentablajerias());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -3327,13 +3429,388 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      *
      * @return void
      */
-    public function initRequisicions($overrideExisting = true)
+    public function initOrdentablajerias($overrideExisting = true)
     {
-        if (null !== $this->collRequisicions && !$overrideExisting) {
+        if (null !== $this->collOrdentablajerias && !$overrideExisting) {
             return;
         }
-        $this->collRequisicions = new PropelObjectCollection();
-        $this->collRequisicions->setModel('Requisicion');
+        $this->collOrdentablajerias = new PropelObjectCollection();
+        $this->collOrdentablajerias->setModel('Ordentablajeria');
+    }
+
+    /**
+     * Gets an array of Ordentablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     * @throws PropelException
+     */
+    public function getOrdentablajerias($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerias || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerias) {
+                // return empty collection
+                $this->initOrdentablajerias();
+            } else {
+                $collOrdentablajerias = OrdentablajeriaQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajeriasPartial && count($collOrdentablajerias)) {
+                      $this->initOrdentablajerias(false);
+
+                      foreach ($collOrdentablajerias as $obj) {
+                        if (false == $this->collOrdentablajerias->contains($obj)) {
+                          $this->collOrdentablajerias->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajeriasPartial = true;
+                    }
+
+                    $collOrdentablajerias->getInternalIterator()->rewind();
+
+                    return $collOrdentablajerias;
+                }
+
+                if ($partial && $this->collOrdentablajerias) {
+                    foreach ($this->collOrdentablajerias as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajerias[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajerias = $collOrdentablajerias;
+                $this->collOrdentablajeriasPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajerias;
+    }
+
+    /**
+     * Sets a collection of Ordentablajeria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajerias A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setOrdentablajerias(PropelCollection $ordentablajerias, PropelPDO $con = null)
+    {
+        $ordentablajeriasToDelete = $this->getOrdentablajerias(new Criteria(), $con)->diff($ordentablajerias);
+
+
+        $this->ordentablajeriasScheduledForDeletion = $ordentablajeriasToDelete;
+
+        foreach ($ordentablajeriasToDelete as $ordentablajeriaRemoved) {
+            $ordentablajeriaRemoved->setSucursal(null);
+        }
+
+        $this->collOrdentablajerias = null;
+        foreach ($ordentablajerias as $ordentablajeria) {
+            $this->addOrdentablajeria($ordentablajeria);
+        }
+
+        $this->collOrdentablajerias = $ordentablajerias;
+        $this->collOrdentablajeriasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajeria objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajerias(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerias || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerias) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajerias());
+            }
+            $query = OrdentablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajerias);
+    }
+
+    /**
+     * Method called to associate a Ordentablajeria object to this object
+     * through the Ordentablajeria foreign key attribute.
+     *
+     * @param    Ordentablajeria $l Ordentablajeria
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addOrdentablajeria(Ordentablajeria $l)
+    {
+        if ($this->collOrdentablajerias === null) {
+            $this->initOrdentablajerias();
+            $this->collOrdentablajeriasPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajerias->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajeria($l);
+
+            if ($this->ordentablajeriasScheduledForDeletion and $this->ordentablajeriasScheduledForDeletion->contains($l)) {
+                $this->ordentablajeriasScheduledForDeletion->remove($this->ordentablajeriasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ordentablajeria $ordentablajeria The ordentablajeria object to add.
+     */
+    protected function doAddOrdentablajeria($ordentablajeria)
+    {
+        $this->collOrdentablajerias[]= $ordentablajeria;
+        $ordentablajeria->setSucursal($this);
+    }
+
+    /**
+     * @param	Ordentablajeria $ordentablajeria The ordentablajeria object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeOrdentablajeria($ordentablajeria)
+    {
+        if ($this->getOrdentablajerias()->contains($ordentablajeria)) {
+            $this->collOrdentablajerias->remove($this->collOrdentablajerias->search($ordentablajeria));
+            if (null === $this->ordentablajeriasScheduledForDeletion) {
+                $this->ordentablajeriasScheduledForDeletion = clone $this->collOrdentablajerias;
+                $this->ordentablajeriasScheduledForDeletion->clear();
+            }
+            $this->ordentablajeriasScheduledForDeletion[]= clone $ordentablajeria;
+            $ordentablajeria->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacendestino', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacenorigen', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+    /**
+     * Clears out the collRequisicionsRelatedByIdsucursaldestino collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addRequisicionsRelatedByIdsucursaldestino()
+     */
+    public function clearRequisicionsRelatedByIdsucursaldestino()
+    {
+        $this->collRequisicionsRelatedByIdsucursaldestino = null; // important to set this to null since that means it is uninitialized
+        $this->collRequisicionsRelatedByIdsucursaldestinoPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRequisicionsRelatedByIdsucursaldestino collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRequisicionsRelatedByIdsucursaldestino($v = true)
+    {
+        $this->collRequisicionsRelatedByIdsucursaldestinoPartial = $v;
+    }
+
+    /**
+     * Initializes the collRequisicionsRelatedByIdsucursaldestino collection.
+     *
+     * By default this just sets the collRequisicionsRelatedByIdsucursaldestino collection to an empty array (like clearcollRequisicionsRelatedByIdsucursaldestino());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRequisicionsRelatedByIdsucursaldestino($overrideExisting = true)
+    {
+        if (null !== $this->collRequisicionsRelatedByIdsucursaldestino && !$overrideExisting) {
+            return;
+        }
+        $this->collRequisicionsRelatedByIdsucursaldestino = new PropelObjectCollection();
+        $this->collRequisicionsRelatedByIdsucursaldestino->setModel('Requisicion');
     }
 
     /**
@@ -3350,79 +3827,79 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      * @throws PropelException
      */
-    public function getRequisicions($criteria = null, PropelPDO $con = null)
+    public function getRequisicionsRelatedByIdsucursaldestino($criteria = null, PropelPDO $con = null)
     {
-        $partial = $this->collRequisicionsPartial && !$this->isNew();
-        if (null === $this->collRequisicions || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collRequisicions) {
+        $partial = $this->collRequisicionsRelatedByIdsucursaldestinoPartial && !$this->isNew();
+        if (null === $this->collRequisicionsRelatedByIdsucursaldestino || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionsRelatedByIdsucursaldestino) {
                 // return empty collection
-                $this->initRequisicions();
+                $this->initRequisicionsRelatedByIdsucursaldestino();
             } else {
-                $collRequisicions = RequisicionQuery::create(null, $criteria)
-                    ->filterBySucursal($this)
+                $collRequisicionsRelatedByIdsucursaldestino = RequisicionQuery::create(null, $criteria)
+                    ->filterBySucursalRelatedByIdsucursaldestino($this)
                     ->find($con);
                 if (null !== $criteria) {
-                    if (false !== $this->collRequisicionsPartial && count($collRequisicions)) {
-                      $this->initRequisicions(false);
+                    if (false !== $this->collRequisicionsRelatedByIdsucursaldestinoPartial && count($collRequisicionsRelatedByIdsucursaldestino)) {
+                      $this->initRequisicionsRelatedByIdsucursaldestino(false);
 
-                      foreach ($collRequisicions as $obj) {
-                        if (false == $this->collRequisicions->contains($obj)) {
-                          $this->collRequisicions->append($obj);
+                      foreach ($collRequisicionsRelatedByIdsucursaldestino as $obj) {
+                        if (false == $this->collRequisicionsRelatedByIdsucursaldestino->contains($obj)) {
+                          $this->collRequisicionsRelatedByIdsucursaldestino->append($obj);
                         }
                       }
 
-                      $this->collRequisicionsPartial = true;
+                      $this->collRequisicionsRelatedByIdsucursaldestinoPartial = true;
                     }
 
-                    $collRequisicions->getInternalIterator()->rewind();
+                    $collRequisicionsRelatedByIdsucursaldestino->getInternalIterator()->rewind();
 
-                    return $collRequisicions;
+                    return $collRequisicionsRelatedByIdsucursaldestino;
                 }
 
-                if ($partial && $this->collRequisicions) {
-                    foreach ($this->collRequisicions as $obj) {
+                if ($partial && $this->collRequisicionsRelatedByIdsucursaldestino) {
+                    foreach ($this->collRequisicionsRelatedByIdsucursaldestino as $obj) {
                         if ($obj->isNew()) {
-                            $collRequisicions[] = $obj;
+                            $collRequisicionsRelatedByIdsucursaldestino[] = $obj;
                         }
                     }
                 }
 
-                $this->collRequisicions = $collRequisicions;
-                $this->collRequisicionsPartial = false;
+                $this->collRequisicionsRelatedByIdsucursaldestino = $collRequisicionsRelatedByIdsucursaldestino;
+                $this->collRequisicionsRelatedByIdsucursaldestinoPartial = false;
             }
         }
 
-        return $this->collRequisicions;
+        return $this->collRequisicionsRelatedByIdsucursaldestino;
     }
 
     /**
-     * Sets a collection of Requisicion objects related by a one-to-many relationship
+     * Sets a collection of RequisicionRelatedByIdsucursaldestino objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param PropelCollection $requisicions A Propel collection.
+     * @param PropelCollection $requisicionsRelatedByIdsucursaldestino A Propel collection.
      * @param PropelPDO $con Optional connection object
      * @return Sucursal The current object (for fluent API support)
      */
-    public function setRequisicions(PropelCollection $requisicions, PropelPDO $con = null)
+    public function setRequisicionsRelatedByIdsucursaldestino(PropelCollection $requisicionsRelatedByIdsucursaldestino, PropelPDO $con = null)
     {
-        $requisicionsToDelete = $this->getRequisicions(new Criteria(), $con)->diff($requisicions);
+        $requisicionsRelatedByIdsucursaldestinoToDelete = $this->getRequisicionsRelatedByIdsucursaldestino(new Criteria(), $con)->diff($requisicionsRelatedByIdsucursaldestino);
 
 
-        $this->requisicionsScheduledForDeletion = $requisicionsToDelete;
+        $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion = $requisicionsRelatedByIdsucursaldestinoToDelete;
 
-        foreach ($requisicionsToDelete as $requisicionRemoved) {
-            $requisicionRemoved->setSucursal(null);
+        foreach ($requisicionsRelatedByIdsucursaldestinoToDelete as $requisicionRelatedByIdsucursaldestinoRemoved) {
+            $requisicionRelatedByIdsucursaldestinoRemoved->setSucursalRelatedByIdsucursaldestino(null);
         }
 
-        $this->collRequisicions = null;
-        foreach ($requisicions as $requisicion) {
-            $this->addRequisicion($requisicion);
+        $this->collRequisicionsRelatedByIdsucursaldestino = null;
+        foreach ($requisicionsRelatedByIdsucursaldestino as $requisicionRelatedByIdsucursaldestino) {
+            $this->addRequisicionRelatedByIdsucursaldestino($requisicionRelatedByIdsucursaldestino);
         }
 
-        $this->collRequisicions = $requisicions;
-        $this->collRequisicionsPartial = false;
+        $this->collRequisicionsRelatedByIdsucursaldestino = $requisicionsRelatedByIdsucursaldestino;
+        $this->collRequisicionsRelatedByIdsucursaldestinoPartial = false;
 
         return $this;
     }
@@ -3436,16 +3913,16 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @return int             Count of related Requisicion objects.
      * @throws PropelException
      */
-    public function countRequisicions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    public function countRequisicionsRelatedByIdsucursaldestino(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
     {
-        $partial = $this->collRequisicionsPartial && !$this->isNew();
-        if (null === $this->collRequisicions || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collRequisicions) {
+        $partial = $this->collRequisicionsRelatedByIdsucursaldestinoPartial && !$this->isNew();
+        if (null === $this->collRequisicionsRelatedByIdsucursaldestino || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionsRelatedByIdsucursaldestino) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getRequisicions());
+                return count($this->getRequisicionsRelatedByIdsucursaldestino());
             }
             $query = RequisicionQuery::create(null, $criteria);
             if ($distinct) {
@@ -3453,11 +3930,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             }
 
             return $query
-                ->filterBySucursal($this)
+                ->filterBySucursalRelatedByIdsucursaldestino($this)
                 ->count($con);
         }
 
-        return count($this->collRequisicions);
+        return count($this->collRequisicionsRelatedByIdsucursaldestino);
     }
 
     /**
@@ -3467,18 +3944,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param    Requisicion $l Requisicion
      * @return Sucursal The current object (for fluent API support)
      */
-    public function addRequisicion(Requisicion $l)
+    public function addRequisicionRelatedByIdsucursaldestino(Requisicion $l)
     {
-        if ($this->collRequisicions === null) {
-            $this->initRequisicions();
-            $this->collRequisicionsPartial = true;
+        if ($this->collRequisicionsRelatedByIdsucursaldestino === null) {
+            $this->initRequisicionsRelatedByIdsucursaldestino();
+            $this->collRequisicionsRelatedByIdsucursaldestinoPartial = true;
         }
 
-        if (!in_array($l, $this->collRequisicions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddRequisicion($l);
+        if (!in_array($l, $this->collRequisicionsRelatedByIdsucursaldestino->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRequisicionRelatedByIdsucursaldestino($l);
 
-            if ($this->requisicionsScheduledForDeletion and $this->requisicionsScheduledForDeletion->contains($l)) {
-                $this->requisicionsScheduledForDeletion->remove($this->requisicionsScheduledForDeletion->search($l));
+            if ($this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion and $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion->contains($l)) {
+                $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion->remove($this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion->search($l));
             }
         }
 
@@ -3486,28 +3963,28 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     }
 
     /**
-     * @param	Requisicion $requisicion The requisicion object to add.
+     * @param	RequisicionRelatedByIdsucursaldestino $requisicionRelatedByIdsucursaldestino The requisicionRelatedByIdsucursaldestino object to add.
      */
-    protected function doAddRequisicion($requisicion)
+    protected function doAddRequisicionRelatedByIdsucursaldestino($requisicionRelatedByIdsucursaldestino)
     {
-        $this->collRequisicions[]= $requisicion;
-        $requisicion->setSucursal($this);
+        $this->collRequisicionsRelatedByIdsucursaldestino[]= $requisicionRelatedByIdsucursaldestino;
+        $requisicionRelatedByIdsucursaldestino->setSucursalRelatedByIdsucursaldestino($this);
     }
 
     /**
-     * @param	Requisicion $requisicion The requisicion object to remove.
+     * @param	RequisicionRelatedByIdsucursaldestino $requisicionRelatedByIdsucursaldestino The requisicionRelatedByIdsucursaldestino object to remove.
      * @return Sucursal The current object (for fluent API support)
      */
-    public function removeRequisicion($requisicion)
+    public function removeRequisicionRelatedByIdsucursaldestino($requisicionRelatedByIdsucursaldestino)
     {
-        if ($this->getRequisicions()->contains($requisicion)) {
-            $this->collRequisicions->remove($this->collRequisicions->search($requisicion));
-            if (null === $this->requisicionsScheduledForDeletion) {
-                $this->requisicionsScheduledForDeletion = clone $this->collRequisicions;
-                $this->requisicionsScheduledForDeletion->clear();
+        if ($this->getRequisicionsRelatedByIdsucursaldestino()->contains($requisicionRelatedByIdsucursaldestino)) {
+            $this->collRequisicionsRelatedByIdsucursaldestino->remove($this->collRequisicionsRelatedByIdsucursaldestino->search($requisicionRelatedByIdsucursaldestino));
+            if (null === $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion) {
+                $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion = clone $this->collRequisicionsRelatedByIdsucursaldestino;
+                $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion->clear();
             }
-            $this->requisicionsScheduledForDeletion[]= clone $requisicion;
-            $requisicion->setSucursal(null);
+            $this->requisicionsRelatedByIdsucursaldestinoScheduledForDeletion[]= clone $requisicionRelatedByIdsucursaldestino;
+            $requisicionRelatedByIdsucursaldestino->setSucursalRelatedByIdsucursaldestino(null);
         }
 
         return $this;
@@ -3519,7 +3996,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Sucursal is new, it will return
      * an empty collection; or if this Sucursal has previously
-     * been saved, it will retrieve related Requisicions from storage.
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursaldestino from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3530,12 +4007,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdsucursaldestinoJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
         $query->joinWith('AlmacenRelatedByIdalmacendestino', $join_behavior);
 
-        return $this->getRequisicions($query, $con);
+        return $this->getRequisicionsRelatedByIdsucursaldestino($query, $con);
     }
 
 
@@ -3544,7 +4021,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Sucursal is new, it will return
      * an empty collection; or if this Sucursal has previously
-     * been saved, it will retrieve related Requisicions from storage.
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursaldestino from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3555,12 +4032,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdsucursaldestinoJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
         $query->joinWith('AlmacenRelatedByIdalmacenorigen', $join_behavior);
 
-        return $this->getRequisicions($query, $con);
+        return $this->getRequisicionsRelatedByIdsucursaldestino($query, $con);
     }
 
 
@@ -3569,7 +4046,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Sucursal is new, it will return
      * an empty collection; or if this Sucursal has previously
-     * been saved, it will retrieve related Requisicions from storage.
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursaldestino from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3580,12 +4057,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdsucursaldestinoJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
         $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
 
-        return $this->getRequisicions($query, $con);
+        return $this->getRequisicionsRelatedByIdsucursaldestino($query, $con);
     }
 
 
@@ -3594,7 +4071,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Sucursal is new, it will return
      * an empty collection; or if this Sucursal has previously
-     * been saved, it will retrieve related Requisicions from storage.
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursaldestino from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3605,12 +4082,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinConceptosalida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdsucursaldestinoJoinConceptosalida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
         $query->joinWith('Conceptosalida', $join_behavior);
 
-        return $this->getRequisicions($query, $con);
+        return $this->getRequisicionsRelatedByIdsucursaldestino($query, $con);
     }
 
 
@@ -3619,7 +4096,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Sucursal is new, it will return
      * an empty collection; or if this Sucursal has previously
-     * been saved, it will retrieve related Requisicions from storage.
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursaldestino from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3630,12 +4107,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdsucursaldestinoJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
         $query->joinWith('Empresa', $join_behavior);
 
-        return $this->getRequisicions($query, $con);
+        return $this->getRequisicionsRelatedByIdsucursaldestino($query, $con);
     }
 
 
@@ -3644,7 +4121,7 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Sucursal is new, it will return
      * an empty collection; or if this Sucursal has previously
-     * been saved, it will retrieve related Requisicions from storage.
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursaldestino from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3655,12 +4132,387 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdsucursaldestinoJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
         $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
 
-        return $this->getRequisicions($query, $con);
+        return $this->getRequisicionsRelatedByIdsucursaldestino($query, $con);
+    }
+
+    /**
+     * Clears out the collRequisicionsRelatedByIdsucursalorigen collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addRequisicionsRelatedByIdsucursalorigen()
+     */
+    public function clearRequisicionsRelatedByIdsucursalorigen()
+    {
+        $this->collRequisicionsRelatedByIdsucursalorigen = null; // important to set this to null since that means it is uninitialized
+        $this->collRequisicionsRelatedByIdsucursalorigenPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRequisicionsRelatedByIdsucursalorigen collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRequisicionsRelatedByIdsucursalorigen($v = true)
+    {
+        $this->collRequisicionsRelatedByIdsucursalorigenPartial = $v;
+    }
+
+    /**
+     * Initializes the collRequisicionsRelatedByIdsucursalorigen collection.
+     *
+     * By default this just sets the collRequisicionsRelatedByIdsucursalorigen collection to an empty array (like clearcollRequisicionsRelatedByIdsucursalorigen());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRequisicionsRelatedByIdsucursalorigen($overrideExisting = true)
+    {
+        if (null !== $this->collRequisicionsRelatedByIdsucursalorigen && !$overrideExisting) {
+            return;
+        }
+        $this->collRequisicionsRelatedByIdsucursalorigen = new PropelObjectCollection();
+        $this->collRequisicionsRelatedByIdsucursalorigen->setModel('Requisicion');
+    }
+
+    /**
+     * Gets an array of Requisicion objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     * @throws PropelException
+     */
+    public function getRequisicionsRelatedByIdsucursalorigen($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionsRelatedByIdsucursalorigenPartial && !$this->isNew();
+        if (null === $this->collRequisicionsRelatedByIdsucursalorigen || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionsRelatedByIdsucursalorigen) {
+                // return empty collection
+                $this->initRequisicionsRelatedByIdsucursalorigen();
+            } else {
+                $collRequisicionsRelatedByIdsucursalorigen = RequisicionQuery::create(null, $criteria)
+                    ->filterBySucursalRelatedByIdsucursalorigen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collRequisicionsRelatedByIdsucursalorigenPartial && count($collRequisicionsRelatedByIdsucursalorigen)) {
+                      $this->initRequisicionsRelatedByIdsucursalorigen(false);
+
+                      foreach ($collRequisicionsRelatedByIdsucursalorigen as $obj) {
+                        if (false == $this->collRequisicionsRelatedByIdsucursalorigen->contains($obj)) {
+                          $this->collRequisicionsRelatedByIdsucursalorigen->append($obj);
+                        }
+                      }
+
+                      $this->collRequisicionsRelatedByIdsucursalorigenPartial = true;
+                    }
+
+                    $collRequisicionsRelatedByIdsucursalorigen->getInternalIterator()->rewind();
+
+                    return $collRequisicionsRelatedByIdsucursalorigen;
+                }
+
+                if ($partial && $this->collRequisicionsRelatedByIdsucursalorigen) {
+                    foreach ($this->collRequisicionsRelatedByIdsucursalorigen as $obj) {
+                        if ($obj->isNew()) {
+                            $collRequisicionsRelatedByIdsucursalorigen[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRequisicionsRelatedByIdsucursalorigen = $collRequisicionsRelatedByIdsucursalorigen;
+                $this->collRequisicionsRelatedByIdsucursalorigenPartial = false;
+            }
+        }
+
+        return $this->collRequisicionsRelatedByIdsucursalorigen;
+    }
+
+    /**
+     * Sets a collection of RequisicionRelatedByIdsucursalorigen objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $requisicionsRelatedByIdsucursalorigen A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setRequisicionsRelatedByIdsucursalorigen(PropelCollection $requisicionsRelatedByIdsucursalorigen, PropelPDO $con = null)
+    {
+        $requisicionsRelatedByIdsucursalorigenToDelete = $this->getRequisicionsRelatedByIdsucursalorigen(new Criteria(), $con)->diff($requisicionsRelatedByIdsucursalorigen);
+
+
+        $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion = $requisicionsRelatedByIdsucursalorigenToDelete;
+
+        foreach ($requisicionsRelatedByIdsucursalorigenToDelete as $requisicionRelatedByIdsucursalorigenRemoved) {
+            $requisicionRelatedByIdsucursalorigenRemoved->setSucursalRelatedByIdsucursalorigen(null);
+        }
+
+        $this->collRequisicionsRelatedByIdsucursalorigen = null;
+        foreach ($requisicionsRelatedByIdsucursalorigen as $requisicionRelatedByIdsucursalorigen) {
+            $this->addRequisicionRelatedByIdsucursalorigen($requisicionRelatedByIdsucursalorigen);
+        }
+
+        $this->collRequisicionsRelatedByIdsucursalorigen = $requisicionsRelatedByIdsucursalorigen;
+        $this->collRequisicionsRelatedByIdsucursalorigenPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Requisicion objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Requisicion objects.
+     * @throws PropelException
+     */
+    public function countRequisicionsRelatedByIdsucursalorigen(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionsRelatedByIdsucursalorigenPartial && !$this->isNew();
+        if (null === $this->collRequisicionsRelatedByIdsucursalorigen || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionsRelatedByIdsucursalorigen) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRequisicionsRelatedByIdsucursalorigen());
+            }
+            $query = RequisicionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursalRelatedByIdsucursalorigen($this)
+                ->count($con);
+        }
+
+        return count($this->collRequisicionsRelatedByIdsucursalorigen);
+    }
+
+    /**
+     * Method called to associate a Requisicion object to this object
+     * through the Requisicion foreign key attribute.
+     *
+     * @param    Requisicion $l Requisicion
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addRequisicionRelatedByIdsucursalorigen(Requisicion $l)
+    {
+        if ($this->collRequisicionsRelatedByIdsucursalorigen === null) {
+            $this->initRequisicionsRelatedByIdsucursalorigen();
+            $this->collRequisicionsRelatedByIdsucursalorigenPartial = true;
+        }
+
+        if (!in_array($l, $this->collRequisicionsRelatedByIdsucursalorigen->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRequisicionRelatedByIdsucursalorigen($l);
+
+            if ($this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion and $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion->contains($l)) {
+                $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion->remove($this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	RequisicionRelatedByIdsucursalorigen $requisicionRelatedByIdsucursalorigen The requisicionRelatedByIdsucursalorigen object to add.
+     */
+    protected function doAddRequisicionRelatedByIdsucursalorigen($requisicionRelatedByIdsucursalorigen)
+    {
+        $this->collRequisicionsRelatedByIdsucursalorigen[]= $requisicionRelatedByIdsucursalorigen;
+        $requisicionRelatedByIdsucursalorigen->setSucursalRelatedByIdsucursalorigen($this);
+    }
+
+    /**
+     * @param	RequisicionRelatedByIdsucursalorigen $requisicionRelatedByIdsucursalorigen The requisicionRelatedByIdsucursalorigen object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeRequisicionRelatedByIdsucursalorigen($requisicionRelatedByIdsucursalorigen)
+    {
+        if ($this->getRequisicionsRelatedByIdsucursalorigen()->contains($requisicionRelatedByIdsucursalorigen)) {
+            $this->collRequisicionsRelatedByIdsucursalorigen->remove($this->collRequisicionsRelatedByIdsucursalorigen->search($requisicionRelatedByIdsucursalorigen));
+            if (null === $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion) {
+                $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion = clone $this->collRequisicionsRelatedByIdsucursalorigen;
+                $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion->clear();
+            }
+            $this->requisicionsRelatedByIdsucursalorigenScheduledForDeletion[]= clone $requisicionRelatedByIdsucursalorigen;
+            $requisicionRelatedByIdsucursalorigen->setSucursalRelatedByIdsucursalorigen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursalorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdsucursalorigenJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacendestino', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdsucursalorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursalorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdsucursalorigenJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacenorigen', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdsucursalorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursalorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdsucursalorigenJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdsucursalorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursalorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdsucursalorigenJoinConceptosalida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('Conceptosalida', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdsucursalorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursalorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdsucursalorigenJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdsucursalorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdsucursalorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdsucursalorigenJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdsucursalorigen($query, $con);
     }
 
     /**
@@ -4549,8 +5401,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collRequisicions) {
-                foreach ($this->collRequisicions as $o) {
+            if ($this->collOrdentablajerias) {
+                foreach ($this->collOrdentablajerias as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collRequisicionsRelatedByIdsucursaldestino) {
+                foreach ($this->collRequisicionsRelatedByIdsucursaldestino as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collRequisicionsRelatedByIdsucursalorigen) {
+                foreach ($this->collRequisicionsRelatedByIdsucursalorigen as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4596,10 +5458,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->collNotacreditos->clearIterator();
         }
         $this->collNotacreditos = null;
-        if ($this->collRequisicions instanceof PropelCollection) {
-            $this->collRequisicions->clearIterator();
+        if ($this->collOrdentablajerias instanceof PropelCollection) {
+            $this->collOrdentablajerias->clearIterator();
         }
-        $this->collRequisicions = null;
+        $this->collOrdentablajerias = null;
+        if ($this->collRequisicionsRelatedByIdsucursaldestino instanceof PropelCollection) {
+            $this->collRequisicionsRelatedByIdsucursaldestino->clearIterator();
+        }
+        $this->collRequisicionsRelatedByIdsucursaldestino = null;
+        if ($this->collRequisicionsRelatedByIdsucursalorigen instanceof PropelCollection) {
+            $this->collRequisicionsRelatedByIdsucursalorigen->clearIterator();
+        }
+        $this->collRequisicionsRelatedByIdsucursalorigen = null;
         if ($this->collTrabajadorpromedios instanceof PropelCollection) {
             $this->collTrabajadorpromedios->clearIterator();
         }

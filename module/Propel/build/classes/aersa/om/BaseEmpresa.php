@@ -85,6 +85,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collNotacreditosPartial;
 
     /**
+     * @var        PropelObjectCollection|Ordentablajeria[] Collection to store aggregation of Ordentablajeria objects.
+     */
+    protected $collOrdentablajerias;
+    protected $collOrdentablajeriasPartial;
+
+    /**
      * @var        PropelObjectCollection|Plantillatablajeria[] Collection to store aggregation of Plantillatablajeria objects.
      */
     protected $collPlantillatablajerias;
@@ -175,6 +181,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $notacreditosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ordentablajeriasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -541,6 +553,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             $this->collNotacreditos = null;
 
+            $this->collOrdentablajerias = null;
+
             $this->collPlantillatablajerias = null;
 
             $this->collProductos = null;
@@ -743,6 +757,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collNotacreditos !== null) {
                 foreach ($this->collNotacreditos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordentablajeriasScheduledForDeletion !== null) {
+                if (!$this->ordentablajeriasScheduledForDeletion->isEmpty()) {
+                    OrdentablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajeriasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajeriasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajerias !== null) {
+                foreach ($this->collOrdentablajerias as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1083,6 +1114,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collOrdentablajerias !== null) {
+                    foreach ($this->collOrdentablajerias as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collPlantillatablajerias !== null) {
                     foreach ($this->collPlantillatablajerias as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1249,6 +1288,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collNotacreditos) {
                 $result['Notacreditos'] = $this->collNotacreditos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdentablajerias) {
+                $result['Ordentablajerias'] = $this->collOrdentablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPlantillatablajerias) {
                 $result['Plantillatablajerias'] = $this->collPlantillatablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1467,6 +1509,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getOrdentablajerias() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajeria($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getPlantillatablajerias() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPlantillatablajeria($relObj->copy($deepCopy));
@@ -1587,6 +1635,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
         if ('Notacredito' == $relationName) {
             $this->initNotacreditos();
+        }
+        if ('Ordentablajeria' == $relationName) {
+            $this->initOrdentablajerias();
         }
         if ('Plantillatablajeria' == $relationName) {
             $this->initPlantillatablajerias();
@@ -2940,6 +2991,381 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collOrdentablajerias collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addOrdentablajerias()
+     */
+    public function clearOrdentablajerias()
+    {
+        $this->collOrdentablajerias = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajeriasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajerias collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajerias($v = true)
+    {
+        $this->collOrdentablajeriasPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajerias collection.
+     *
+     * By default this just sets the collOrdentablajerias collection to an empty array (like clearcollOrdentablajerias());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajerias($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajerias && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajerias = new PropelObjectCollection();
+        $this->collOrdentablajerias->setModel('Ordentablajeria');
+    }
+
+    /**
+     * Gets an array of Ordentablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     * @throws PropelException
+     */
+    public function getOrdentablajerias($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerias || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerias) {
+                // return empty collection
+                $this->initOrdentablajerias();
+            } else {
+                $collOrdentablajerias = OrdentablajeriaQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajeriasPartial && count($collOrdentablajerias)) {
+                      $this->initOrdentablajerias(false);
+
+                      foreach ($collOrdentablajerias as $obj) {
+                        if (false == $this->collOrdentablajerias->contains($obj)) {
+                          $this->collOrdentablajerias->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajeriasPartial = true;
+                    }
+
+                    $collOrdentablajerias->getInternalIterator()->rewind();
+
+                    return $collOrdentablajerias;
+                }
+
+                if ($partial && $this->collOrdentablajerias) {
+                    foreach ($this->collOrdentablajerias as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajerias[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajerias = $collOrdentablajerias;
+                $this->collOrdentablajeriasPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajerias;
+    }
+
+    /**
+     * Sets a collection of Ordentablajeria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajerias A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setOrdentablajerias(PropelCollection $ordentablajerias, PropelPDO $con = null)
+    {
+        $ordentablajeriasToDelete = $this->getOrdentablajerias(new Criteria(), $con)->diff($ordentablajerias);
+
+
+        $this->ordentablajeriasScheduledForDeletion = $ordentablajeriasToDelete;
+
+        foreach ($ordentablajeriasToDelete as $ordentablajeriaRemoved) {
+            $ordentablajeriaRemoved->setEmpresa(null);
+        }
+
+        $this->collOrdentablajerias = null;
+        foreach ($ordentablajerias as $ordentablajeria) {
+            $this->addOrdentablajeria($ordentablajeria);
+        }
+
+        $this->collOrdentablajerias = $ordentablajerias;
+        $this->collOrdentablajeriasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajeria objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajerias(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerias || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerias) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajerias());
+            }
+            $query = OrdentablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajerias);
+    }
+
+    /**
+     * Method called to associate a Ordentablajeria object to this object
+     * through the Ordentablajeria foreign key attribute.
+     *
+     * @param    Ordentablajeria $l Ordentablajeria
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addOrdentablajeria(Ordentablajeria $l)
+    {
+        if ($this->collOrdentablajerias === null) {
+            $this->initOrdentablajerias();
+            $this->collOrdentablajeriasPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajerias->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajeria($l);
+
+            if ($this->ordentablajeriasScheduledForDeletion and $this->ordentablajeriasScheduledForDeletion->contains($l)) {
+                $this->ordentablajeriasScheduledForDeletion->remove($this->ordentablajeriasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ordentablajeria $ordentablajeria The ordentablajeria object to add.
+     */
+    protected function doAddOrdentablajeria($ordentablajeria)
+    {
+        $this->collOrdentablajerias[]= $ordentablajeria;
+        $ordentablajeria->setEmpresa($this);
+    }
+
+    /**
+     * @param	Ordentablajeria $ordentablajeria The ordentablajeria object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeOrdentablajeria($ordentablajeria)
+    {
+        if ($this->getOrdentablajerias()->contains($ordentablajeria)) {
+            $this->collOrdentablajerias->remove($this->collOrdentablajerias->search($ordentablajeria));
+            if (null === $this->ordentablajeriasScheduledForDeletion) {
+                $this->ordentablajeriasScheduledForDeletion = clone $this->collOrdentablajerias;
+                $this->ordentablajeriasScheduledForDeletion->clear();
+            }
+            $this->ordentablajeriasScheduledForDeletion[]= clone $ordentablajeria;
+            $ordentablajeria->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacendestino', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacenorigen', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ordentablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getOrdentablajerias($query, $con);
+    }
+
+    /**
      * Clears out the collPlantillatablajerias collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -4006,10 +4432,35 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsJoinSucursalRelatedByIdsucursaldestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
+        $query->joinWith('SucursalRelatedByIdsucursaldestino', $join_behavior);
+
+        return $this->getRequisicions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Requisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsJoinSucursalRelatedByIdsucursalorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('SucursalRelatedByIdsucursalorigen', $join_behavior);
 
         return $this->getRequisicions($query, $con);
     }
@@ -5142,6 +5593,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collOrdentablajerias) {
+                foreach ($this->collOrdentablajerias as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collPlantillatablajerias) {
                 foreach ($this->collPlantillatablajerias as $o) {
                     $o->clearAllReferences($deep);
@@ -5202,6 +5658,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collNotacreditos->clearIterator();
         }
         $this->collNotacreditos = null;
+        if ($this->collOrdentablajerias instanceof PropelCollection) {
+            $this->collOrdentablajerias->clearIterator();
+        }
+        $this->collOrdentablajerias = null;
         if ($this->collPlantillatablajerias instanceof PropelCollection) {
             $this->collPlantillatablajerias->clearIterator();
         }

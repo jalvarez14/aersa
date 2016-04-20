@@ -8,25 +8,31 @@
  *
  * @method RequisicionQuery orderByIdrequisicion($order = Criteria::ASC) Order by the idrequisicion column
  * @method RequisicionQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
- * @method RequisicionQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
+ * @method RequisicionQuery orderByIdsucursalorigen($order = Criteria::ASC) Order by the idsucursalorigen column
+ * @method RequisicionQuery orderByIdalmacenorigen($order = Criteria::ASC) Order by the idalmacenorigen column
+ * @method RequisicionQuery orderByIdsucursaldestino($order = Criteria::ASC) Order by the idsucursaldestino column
+ * @method RequisicionQuery orderByIdalmacendestino($order = Criteria::ASC) Order by the idalmacendestino column
  * @method RequisicionQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method RequisicionQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
- * @method RequisicionQuery orderByIdalmacenorigen($order = Criteria::ASC) Order by the idalmacenorigen column
- * @method RequisicionQuery orderByIdalmacendestino($order = Criteria::ASC) Order by the idalmacendestino column
  * @method RequisicionQuery orderByIdconceptosalida($order = Criteria::ASC) Order by the idconceptosalida column
  * @method RequisicionQuery orderByRequisicionFecha($order = Criteria::ASC) Order by the requisicion_fecha column
  * @method RequisicionQuery orderByRequisicionRevisada($order = Criteria::ASC) Order by the requisicion_revisada column
+ * @method RequisicionQuery orderByRequisicionFolio($order = Criteria::ASC) Order by the requisicion_folio column
+ * @method RequisicionQuery orderByRequisicionTotal($order = Criteria::ASC) Order by the requisicion_total column
  *
  * @method RequisicionQuery groupByIdrequisicion() Group by the idrequisicion column
  * @method RequisicionQuery groupByIdempresa() Group by the idempresa column
- * @method RequisicionQuery groupByIdsucursal() Group by the idsucursal column
+ * @method RequisicionQuery groupByIdsucursalorigen() Group by the idsucursalorigen column
+ * @method RequisicionQuery groupByIdalmacenorigen() Group by the idalmacenorigen column
+ * @method RequisicionQuery groupByIdsucursaldestino() Group by the idsucursaldestino column
+ * @method RequisicionQuery groupByIdalmacendestino() Group by the idalmacendestino column
  * @method RequisicionQuery groupByIdusuario() Group by the idusuario column
  * @method RequisicionQuery groupByIdauditor() Group by the idauditor column
- * @method RequisicionQuery groupByIdalmacenorigen() Group by the idalmacenorigen column
- * @method RequisicionQuery groupByIdalmacendestino() Group by the idalmacendestino column
  * @method RequisicionQuery groupByIdconceptosalida() Group by the idconceptosalida column
  * @method RequisicionQuery groupByRequisicionFecha() Group by the requisicion_fecha column
  * @method RequisicionQuery groupByRequisicionRevisada() Group by the requisicion_revisada column
+ * @method RequisicionQuery groupByRequisicionFolio() Group by the requisicion_folio column
+ * @method RequisicionQuery groupByRequisicionTotal() Group by the requisicion_total column
  *
  * @method RequisicionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RequisicionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -52,9 +58,13 @@
  * @method RequisicionQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
  * @method RequisicionQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
  *
- * @method RequisicionQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
- * @method RequisicionQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
- * @method RequisicionQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
+ * @method RequisicionQuery leftJoinSucursalRelatedByIdsucursaldestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the SucursalRelatedByIdsucursaldestino relation
+ * @method RequisicionQuery rightJoinSucursalRelatedByIdsucursaldestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SucursalRelatedByIdsucursaldestino relation
+ * @method RequisicionQuery innerJoinSucursalRelatedByIdsucursaldestino($relationAlias = null) Adds a INNER JOIN clause to the query using the SucursalRelatedByIdsucursaldestino relation
+ *
+ * @method RequisicionQuery leftJoinSucursalRelatedByIdsucursalorigen($relationAlias = null) Adds a LEFT JOIN clause to the query using the SucursalRelatedByIdsucursalorigen relation
+ * @method RequisicionQuery rightJoinSucursalRelatedByIdsucursalorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the SucursalRelatedByIdsucursalorigen relation
+ * @method RequisicionQuery innerJoinSucursalRelatedByIdsucursalorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the SucursalRelatedByIdsucursalorigen relation
  *
  * @method RequisicionQuery leftJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
  * @method RequisicionQuery rightJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
@@ -68,25 +78,31 @@
  * @method Requisicion findOneOrCreate(PropelPDO $con = null) Return the first Requisicion matching the query, or a new Requisicion object populated from the query conditions when no match is found
  *
  * @method Requisicion findOneByIdempresa(int $idempresa) Return the first Requisicion filtered by the idempresa column
- * @method Requisicion findOneByIdsucursal(int $idsucursal) Return the first Requisicion filtered by the idsucursal column
+ * @method Requisicion findOneByIdsucursalorigen(int $idsucursalorigen) Return the first Requisicion filtered by the idsucursalorigen column
+ * @method Requisicion findOneByIdalmacenorigen(int $idalmacenorigen) Return the first Requisicion filtered by the idalmacenorigen column
+ * @method Requisicion findOneByIdsucursaldestino(int $idsucursaldestino) Return the first Requisicion filtered by the idsucursaldestino column
+ * @method Requisicion findOneByIdalmacendestino(int $idalmacendestino) Return the first Requisicion filtered by the idalmacendestino column
  * @method Requisicion findOneByIdusuario(int $idusuario) Return the first Requisicion filtered by the idusuario column
  * @method Requisicion findOneByIdauditor(int $idauditor) Return the first Requisicion filtered by the idauditor column
- * @method Requisicion findOneByIdalmacenorigen(int $idalmacenorigen) Return the first Requisicion filtered by the idalmacenorigen column
- * @method Requisicion findOneByIdalmacendestino(int $idalmacendestino) Return the first Requisicion filtered by the idalmacendestino column
  * @method Requisicion findOneByIdconceptosalida(int $idconceptosalida) Return the first Requisicion filtered by the idconceptosalida column
  * @method Requisicion findOneByRequisicionFecha(string $requisicion_fecha) Return the first Requisicion filtered by the requisicion_fecha column
  * @method Requisicion findOneByRequisicionRevisada(boolean $requisicion_revisada) Return the first Requisicion filtered by the requisicion_revisada column
+ * @method Requisicion findOneByRequisicionFolio(string $requisicion_folio) Return the first Requisicion filtered by the requisicion_folio column
+ * @method Requisicion findOneByRequisicionTotal(string $requisicion_total) Return the first Requisicion filtered by the requisicion_total column
  *
  * @method array findByIdrequisicion(int $idrequisicion) Return Requisicion objects filtered by the idrequisicion column
  * @method array findByIdempresa(int $idempresa) Return Requisicion objects filtered by the idempresa column
- * @method array findByIdsucursal(int $idsucursal) Return Requisicion objects filtered by the idsucursal column
+ * @method array findByIdsucursalorigen(int $idsucursalorigen) Return Requisicion objects filtered by the idsucursalorigen column
+ * @method array findByIdalmacenorigen(int $idalmacenorigen) Return Requisicion objects filtered by the idalmacenorigen column
+ * @method array findByIdsucursaldestino(int $idsucursaldestino) Return Requisicion objects filtered by the idsucursaldestino column
+ * @method array findByIdalmacendestino(int $idalmacendestino) Return Requisicion objects filtered by the idalmacendestino column
  * @method array findByIdusuario(int $idusuario) Return Requisicion objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Requisicion objects filtered by the idauditor column
- * @method array findByIdalmacenorigen(int $idalmacenorigen) Return Requisicion objects filtered by the idalmacenorigen column
- * @method array findByIdalmacendestino(int $idalmacendestino) Return Requisicion objects filtered by the idalmacendestino column
  * @method array findByIdconceptosalida(int $idconceptosalida) Return Requisicion objects filtered by the idconceptosalida column
  * @method array findByRequisicionFecha(string $requisicion_fecha) Return Requisicion objects filtered by the requisicion_fecha column
  * @method array findByRequisicionRevisada(boolean $requisicion_revisada) Return Requisicion objects filtered by the requisicion_revisada column
+ * @method array findByRequisicionFolio(string $requisicion_folio) Return Requisicion objects filtered by the requisicion_folio column
+ * @method array findByRequisicionTotal(string $requisicion_total) Return Requisicion objects filtered by the requisicion_total column
  *
  * @package    propel.generator.aersa.om
  */
@@ -194,7 +210,7 @@ abstract class BaseRequisicionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacenorigen`, `idalmacendestino`, `idconceptosalida`, `requisicion_fecha`, `requisicion_revisada` FROM `requisicion` WHERE `idrequisicion` = :p0';
+        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursalorigen`, `idalmacenorigen`, `idsucursaldestino`, `idalmacendestino`, `idusuario`, `idauditor`, `idconceptosalida`, `requisicion_fecha`, `requisicion_revisada`, `requisicion_folio`, `requisicion_total` FROM `requisicion` WHERE `idrequisicion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -370,19 +386,19 @@ abstract class BaseRequisicionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the idsucursal column
+     * Filter the query on the idsucursalorigen column
      *
      * Example usage:
      * <code>
-     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
-     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
-     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
-     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
+     * $query->filterByIdsucursalorigen(1234); // WHERE idsucursalorigen = 1234
+     * $query->filterByIdsucursalorigen(array(12, 34)); // WHERE idsucursalorigen IN (12, 34)
+     * $query->filterByIdsucursalorigen(array('min' => 12)); // WHERE idsucursalorigen >= 12
+     * $query->filterByIdsucursalorigen(array('max' => 12)); // WHERE idsucursalorigen <= 12
      * </code>
      *
-     * @see       filterBySucursal()
+     * @see       filterBySucursalRelatedByIdsucursalorigen()
      *
-     * @param     mixed $idsucursal The value to use as filter.
+     * @param     mixed $idsucursalorigen The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -390,16 +406,16 @@ abstract class BaseRequisicionQuery extends ModelCriteria
      *
      * @return RequisicionQuery The current query, for fluid interface
      */
-    public function filterByIdsucursal($idsucursal = null, $comparison = null)
+    public function filterByIdsucursalorigen($idsucursalorigen = null, $comparison = null)
     {
-        if (is_array($idsucursal)) {
+        if (is_array($idsucursalorigen)) {
             $useMinMax = false;
-            if (isset($idsucursal['min'])) {
-                $this->addUsingAlias(RequisicionPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
+            if (isset($idsucursalorigen['min'])) {
+                $this->addUsingAlias(RequisicionPeer::IDSUCURSALORIGEN, $idsucursalorigen['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($idsucursal['max'])) {
-                $this->addUsingAlias(RequisicionPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
+            if (isset($idsucursalorigen['max'])) {
+                $this->addUsingAlias(RequisicionPeer::IDSUCURSALORIGEN, $idsucursalorigen['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -410,7 +426,139 @@ abstract class BaseRequisicionQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(RequisicionPeer::IDSUCURSAL, $idsucursal, $comparison);
+        return $this->addUsingAlias(RequisicionPeer::IDSUCURSALORIGEN, $idsucursalorigen, $comparison);
+    }
+
+    /**
+     * Filter the query on the idalmacenorigen column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdalmacenorigen(1234); // WHERE idalmacenorigen = 1234
+     * $query->filterByIdalmacenorigen(array(12, 34)); // WHERE idalmacenorigen IN (12, 34)
+     * $query->filterByIdalmacenorigen(array('min' => 12)); // WHERE idalmacenorigen >= 12
+     * $query->filterByIdalmacenorigen(array('max' => 12)); // WHERE idalmacenorigen <= 12
+     * </code>
+     *
+     * @see       filterByAlmacenRelatedByIdalmacenorigen()
+     *
+     * @param     mixed $idalmacenorigen The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByIdalmacenorigen($idalmacenorigen = null, $comparison = null)
+    {
+        if (is_array($idalmacenorigen)) {
+            $useMinMax = false;
+            if (isset($idalmacenorigen['min'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idalmacenorigen['max'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen, $comparison);
+    }
+
+    /**
+     * Filter the query on the idsucursaldestino column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdsucursaldestino(1234); // WHERE idsucursaldestino = 1234
+     * $query->filterByIdsucursaldestino(array(12, 34)); // WHERE idsucursaldestino IN (12, 34)
+     * $query->filterByIdsucursaldestino(array('min' => 12)); // WHERE idsucursaldestino >= 12
+     * $query->filterByIdsucursaldestino(array('max' => 12)); // WHERE idsucursaldestino <= 12
+     * </code>
+     *
+     * @see       filterBySucursalRelatedByIdsucursaldestino()
+     *
+     * @param     mixed $idsucursaldestino The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByIdsucursaldestino($idsucursaldestino = null, $comparison = null)
+    {
+        if (is_array($idsucursaldestino)) {
+            $useMinMax = false;
+            if (isset($idsucursaldestino['min'])) {
+                $this->addUsingAlias(RequisicionPeer::IDSUCURSALDESTINO, $idsucursaldestino['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idsucursaldestino['max'])) {
+                $this->addUsingAlias(RequisicionPeer::IDSUCURSALDESTINO, $idsucursaldestino['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::IDSUCURSALDESTINO, $idsucursaldestino, $comparison);
+    }
+
+    /**
+     * Filter the query on the idalmacendestino column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdalmacendestino(1234); // WHERE idalmacendestino = 1234
+     * $query->filterByIdalmacendestino(array(12, 34)); // WHERE idalmacendestino IN (12, 34)
+     * $query->filterByIdalmacendestino(array('min' => 12)); // WHERE idalmacendestino >= 12
+     * $query->filterByIdalmacendestino(array('max' => 12)); // WHERE idalmacendestino <= 12
+     * </code>
+     *
+     * @see       filterByAlmacenRelatedByIdalmacendestino()
+     *
+     * @param     mixed $idalmacendestino The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByIdalmacendestino($idalmacendestino = null, $comparison = null)
+    {
+        if (is_array($idalmacendestino)) {
+            $useMinMax = false;
+            if (isset($idalmacendestino['min'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idalmacendestino['max'])) {
+                $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino, $comparison);
     }
 
     /**
@@ -499,94 +647,6 @@ abstract class BaseRequisicionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisicionPeer::IDAUDITOR, $idauditor, $comparison);
-    }
-
-    /**
-     * Filter the query on the idalmacenorigen column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIdalmacenorigen(1234); // WHERE idalmacenorigen = 1234
-     * $query->filterByIdalmacenorigen(array(12, 34)); // WHERE idalmacenorigen IN (12, 34)
-     * $query->filterByIdalmacenorigen(array('min' => 12)); // WHERE idalmacenorigen >= 12
-     * $query->filterByIdalmacenorigen(array('max' => 12)); // WHERE idalmacenorigen <= 12
-     * </code>
-     *
-     * @see       filterByAlmacenRelatedByIdalmacenorigen()
-     *
-     * @param     mixed $idalmacenorigen The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return RequisicionQuery The current query, for fluid interface
-     */
-    public function filterByIdalmacenorigen($idalmacenorigen = null, $comparison = null)
-    {
-        if (is_array($idalmacenorigen)) {
-            $useMinMax = false;
-            if (isset($idalmacenorigen['min'])) {
-                $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idalmacenorigen['max'])) {
-                $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RequisicionPeer::IDALMACENORIGEN, $idalmacenorigen, $comparison);
-    }
-
-    /**
-     * Filter the query on the idalmacendestino column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIdalmacendestino(1234); // WHERE idalmacendestino = 1234
-     * $query->filterByIdalmacendestino(array(12, 34)); // WHERE idalmacendestino IN (12, 34)
-     * $query->filterByIdalmacendestino(array('min' => 12)); // WHERE idalmacendestino >= 12
-     * $query->filterByIdalmacendestino(array('max' => 12)); // WHERE idalmacendestino <= 12
-     * </code>
-     *
-     * @see       filterByAlmacenRelatedByIdalmacendestino()
-     *
-     * @param     mixed $idalmacendestino The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return RequisicionQuery The current query, for fluid interface
-     */
-    public function filterByIdalmacendestino($idalmacendestino = null, $comparison = null)
-    {
-        if (is_array($idalmacendestino)) {
-            $useMinMax = false;
-            if (isset($idalmacendestino['min'])) {
-                $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idalmacendestino['max'])) {
-                $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RequisicionPeer::IDALMACENDESTINO, $idalmacendestino, $comparison);
     }
 
     /**
@@ -701,6 +761,77 @@ abstract class BaseRequisicionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisicionPeer::REQUISICION_REVISADA, $requisicionRevisada, $comparison);
+    }
+
+    /**
+     * Filter the query on the requisicion_folio column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRequisicionFolio('fooValue');   // WHERE requisicion_folio = 'fooValue'
+     * $query->filterByRequisicionFolio('%fooValue%'); // WHERE requisicion_folio LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $requisicionFolio The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByRequisicionFolio($requisicionFolio = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($requisicionFolio)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $requisicionFolio)) {
+                $requisicionFolio = str_replace('*', '%', $requisicionFolio);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::REQUISICION_FOLIO, $requisicionFolio, $comparison);
+    }
+
+    /**
+     * Filter the query on the requisicion_total column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRequisicionTotal(1234); // WHERE requisicion_total = 1234
+     * $query->filterByRequisicionTotal(array(12, 34)); // WHERE requisicion_total IN (12, 34)
+     * $query->filterByRequisicionTotal(array('min' => 12)); // WHERE requisicion_total >= 12
+     * $query->filterByRequisicionTotal(array('max' => 12)); // WHERE requisicion_total <= 12
+     * </code>
+     *
+     * @param     mixed $requisicionTotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByRequisicionTotal($requisicionTotal = null, $comparison = null)
+    {
+        if (is_array($requisicionTotal)) {
+            $useMinMax = false;
+            if (isset($requisicionTotal['min'])) {
+                $this->addUsingAlias(RequisicionPeer::REQUISICION_TOTAL, $requisicionTotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($requisicionTotal['max'])) {
+                $this->addUsingAlias(RequisicionPeer::REQUISICION_TOTAL, $requisicionTotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::REQUISICION_TOTAL, $requisicionTotal, $comparison);
     }
 
     /**
@@ -1092,35 +1223,35 @@ abstract class BaseRequisicionQuery extends ModelCriteria
      * @return                 RequisicionQuery The current query, for fluid interface
      * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterBySucursal($sucursal, $comparison = null)
+    public function filterBySucursalRelatedByIdsucursaldestino($sucursal, $comparison = null)
     {
         if ($sucursal instanceof Sucursal) {
             return $this
-                ->addUsingAlias(RequisicionPeer::IDSUCURSAL, $sucursal->getIdsucursal(), $comparison);
+                ->addUsingAlias(RequisicionPeer::IDSUCURSALDESTINO, $sucursal->getIdsucursal(), $comparison);
         } elseif ($sucursal instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(RequisicionPeer::IDSUCURSAL, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
+                ->addUsingAlias(RequisicionPeer::IDSUCURSALDESTINO, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
         } else {
-            throw new PropelException('filterBySucursal() only accepts arguments of type Sucursal or PropelCollection');
+            throw new PropelException('filterBySucursalRelatedByIdsucursaldestino() only accepts arguments of type Sucursal or PropelCollection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Sucursal relation
+     * Adds a JOIN clause to the query using the SucursalRelatedByIdsucursaldestino relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return RequisicionQuery The current query, for fluid interface
      */
-    public function joinSucursal($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinSucursalRelatedByIdsucursaldestino($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Sucursal');
+        $relationMap = $tableMap->getRelation('SucursalRelatedByIdsucursaldestino');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -1135,14 +1266,14 @@ abstract class BaseRequisicionQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Sucursal');
+            $this->addJoinObject($join, 'SucursalRelatedByIdsucursaldestino');
         }
 
         return $this;
     }
 
     /**
-     * Use the Sucursal relation Sucursal object
+     * Use the SucursalRelatedByIdsucursaldestino relation Sucursal object
      *
      * @see       useQuery()
      *
@@ -1152,11 +1283,87 @@ abstract class BaseRequisicionQuery extends ModelCriteria
      *
      * @return   SucursalQuery A secondary query class using the current class as primary query
      */
-    public function useSucursalQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useSucursalRelatedByIdsucursaldestinoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinSucursal($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Sucursal', 'SucursalQuery');
+            ->joinSucursalRelatedByIdsucursaldestino($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SucursalRelatedByIdsucursaldestino', 'SucursalQuery');
+    }
+
+    /**
+     * Filter the query by a related Sucursal object
+     *
+     * @param   Sucursal|PropelObjectCollection $sucursal The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 RequisicionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySucursalRelatedByIdsucursalorigen($sucursal, $comparison = null)
+    {
+        if ($sucursal instanceof Sucursal) {
+            return $this
+                ->addUsingAlias(RequisicionPeer::IDSUCURSALORIGEN, $sucursal->getIdsucursal(), $comparison);
+        } elseif ($sucursal instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RequisicionPeer::IDSUCURSALORIGEN, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
+        } else {
+            throw new PropelException('filterBySucursalRelatedByIdsucursalorigen() only accepts arguments of type Sucursal or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the SucursalRelatedByIdsucursalorigen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function joinSucursalRelatedByIdsucursalorigen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('SucursalRelatedByIdsucursalorigen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'SucursalRelatedByIdsucursalorigen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the SucursalRelatedByIdsucursalorigen relation Sucursal object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SucursalQuery A secondary query class using the current class as primary query
+     */
+    public function useSucursalRelatedByIdsucursalorigenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSucursalRelatedByIdsucursalorigen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'SucursalRelatedByIdsucursalorigen', 'SucursalQuery');
     }
 
     /**

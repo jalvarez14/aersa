@@ -44,6 +44,9 @@ class DevoluciondetalleTableMap extends TableMap
         $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addColumn('devoluciondetalle_cantidad', 'DevoluciondetalleCantidad', 'FLOAT', true, null, null);
         $this->addColumn('devoluciondetalle_revisada', 'DevoluciondetalleRevisada', 'BOOLEAN', true, 1, false);
+        $this->addColumn('devoluciondetalle_subtotal', 'DevoluciondetalleSubtotal', 'DECIMAL', false, 15, null);
+        $this->addColumn('devoluciondetalle_ieps', 'DevoluciondetalleIeps', 'FLOAT', false, null, null);
+        $this->addColumn('devoluciondetalle_descuento', 'DevoluciondetalleDescuento', 'FLOAT', false, null, null);
         // validators
     } // initialize()
 

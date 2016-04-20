@@ -859,6 +859,10 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[] = ProveedorPeer::IDPROVEEDOR;
+        if (null !== $this->idproveedor) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ProveedorPeer::IDPROVEEDOR . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(ProveedorPeer::IDPROVEEDOR)) {

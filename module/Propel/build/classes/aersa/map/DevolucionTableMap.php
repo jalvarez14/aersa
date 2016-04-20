@@ -44,7 +44,7 @@ class DevolucionTableMap extends TableMap
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
-        $this->addColumn('devolucion_folio', 'DevolucionFolio', 'VARCHAR', true, 45, null);
+        $this->addColumn('devolucion_folio', 'DevolucionFolio', 'VARCHAR', true, 10, null);
         $this->addColumn('devolucion_revisada', 'DevolucionRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('devolucion_factura', 'DevolucionFactura', 'LONGVARCHAR', false, null, null);
         $this->addColumn('devolucion_fechacreacion', 'DevolucionFechacreacion', 'TIMESTAMP', false, null, null);

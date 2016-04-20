@@ -11,12 +11,16 @@
  * @method RequisiciondetalleQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
  * @method RequisiciondetalleQuery orderByRequisiciondetalleCantidad($order = Criteria::ASC) Order by the requisiciondetalle_cantidad column
  * @method RequisiciondetalleQuery orderByRequisiciondetalleRevisada($order = Criteria::ASC) Order by the requisiciondetalle_revisada column
+ * @method RequisiciondetalleQuery orderByRequisiciondetallePreciounitario($order = Criteria::ASC) Order by the requisiciondetalle_preciounitario column
+ * @method RequisiciondetalleQuery orderByRequisiciondetalleSubtotal($order = Criteria::ASC) Order by the requisiciondetalle_subtotal column
  *
  * @method RequisiciondetalleQuery groupByIdrequisiciondetalle() Group by the idrequisiciondetalle column
  * @method RequisiciondetalleQuery groupByIdrequisicion() Group by the idrequisicion column
  * @method RequisiciondetalleQuery groupByIdproducto() Group by the idproducto column
  * @method RequisiciondetalleQuery groupByRequisiciondetalleCantidad() Group by the requisiciondetalle_cantidad column
  * @method RequisiciondetalleQuery groupByRequisiciondetalleRevisada() Group by the requisiciondetalle_revisada column
+ * @method RequisiciondetalleQuery groupByRequisiciondetallePreciounitario() Group by the requisiciondetalle_preciounitario column
+ * @method RequisiciondetalleQuery groupByRequisiciondetalleSubtotal() Group by the requisiciondetalle_subtotal column
  *
  * @method RequisiciondetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RequisiciondetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -37,12 +41,16 @@
  * @method Requisiciondetalle findOneByIdproducto(int $idproducto) Return the first Requisiciondetalle filtered by the idproducto column
  * @method Requisiciondetalle findOneByRequisiciondetalleCantidad(double $requisiciondetalle_cantidad) Return the first Requisiciondetalle filtered by the requisiciondetalle_cantidad column
  * @method Requisiciondetalle findOneByRequisiciondetalleRevisada(boolean $requisiciondetalle_revisada) Return the first Requisiciondetalle filtered by the requisiciondetalle_revisada column
+ * @method Requisiciondetalle findOneByRequisiciondetallePreciounitario(string $requisiciondetalle_preciounitario) Return the first Requisiciondetalle filtered by the requisiciondetalle_preciounitario column
+ * @method Requisiciondetalle findOneByRequisiciondetalleSubtotal(string $requisiciondetalle_subtotal) Return the first Requisiciondetalle filtered by the requisiciondetalle_subtotal column
  *
  * @method array findByIdrequisiciondetalle(int $idrequisiciondetalle) Return Requisiciondetalle objects filtered by the idrequisiciondetalle column
  * @method array findByIdrequisicion(int $idrequisicion) Return Requisiciondetalle objects filtered by the idrequisicion column
  * @method array findByIdproducto(int $idproducto) Return Requisiciondetalle objects filtered by the idproducto column
  * @method array findByRequisiciondetalleCantidad(double $requisiciondetalle_cantidad) Return Requisiciondetalle objects filtered by the requisiciondetalle_cantidad column
  * @method array findByRequisiciondetalleRevisada(boolean $requisiciondetalle_revisada) Return Requisiciondetalle objects filtered by the requisiciondetalle_revisada column
+ * @method array findByRequisiciondetallePreciounitario(string $requisiciondetalle_preciounitario) Return Requisiciondetalle objects filtered by the requisiciondetalle_preciounitario column
+ * @method array findByRequisiciondetalleSubtotal(string $requisiciondetalle_subtotal) Return Requisiciondetalle objects filtered by the requisiciondetalle_subtotal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -150,7 +158,7 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
+        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada`, `requisiciondetalle_preciounitario`, `requisiciondetalle_subtotal` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -436,6 +444,90 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, $requisiciondetalleRevisada, $comparison);
+    }
+
+    /**
+     * Filter the query on the requisiciondetalle_preciounitario column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRequisiciondetallePreciounitario(1234); // WHERE requisiciondetalle_preciounitario = 1234
+     * $query->filterByRequisiciondetallePreciounitario(array(12, 34)); // WHERE requisiciondetalle_preciounitario IN (12, 34)
+     * $query->filterByRequisiciondetallePreciounitario(array('min' => 12)); // WHERE requisiciondetalle_preciounitario >= 12
+     * $query->filterByRequisiciondetallePreciounitario(array('max' => 12)); // WHERE requisiciondetalle_preciounitario <= 12
+     * </code>
+     *
+     * @param     mixed $requisiciondetallePreciounitario The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisiciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByRequisiciondetallePreciounitario($requisiciondetallePreciounitario = null, $comparison = null)
+    {
+        if (is_array($requisiciondetallePreciounitario)) {
+            $useMinMax = false;
+            if (isset($requisiciondetallePreciounitario['min'])) {
+                $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, $requisiciondetallePreciounitario['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($requisiciondetallePreciounitario['max'])) {
+                $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, $requisiciondetallePreciounitario['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, $requisiciondetallePreciounitario, $comparison);
+    }
+
+    /**
+     * Filter the query on the requisiciondetalle_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRequisiciondetalleSubtotal(1234); // WHERE requisiciondetalle_subtotal = 1234
+     * $query->filterByRequisiciondetalleSubtotal(array(12, 34)); // WHERE requisiciondetalle_subtotal IN (12, 34)
+     * $query->filterByRequisiciondetalleSubtotal(array('min' => 12)); // WHERE requisiciondetalle_subtotal >= 12
+     * $query->filterByRequisiciondetalleSubtotal(array('max' => 12)); // WHERE requisiciondetalle_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $requisiciondetalleSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisiciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByRequisiciondetalleSubtotal($requisiciondetalleSubtotal = null, $comparison = null)
+    {
+        if (is_array($requisiciondetalleSubtotal)) {
+            $useMinMax = false;
+            if (isset($requisiciondetalleSubtotal['min'])) {
+                $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, $requisiciondetalleSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($requisiciondetalleSubtotal['max'])) {
+                $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, $requisiciondetalleSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, $requisiciondetalleSubtotal, $comparison);
     }
 
     /**

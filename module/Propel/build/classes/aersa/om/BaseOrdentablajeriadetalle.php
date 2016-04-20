@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'requisiciondetalle' table.
+ * Base class that represents a row from the 'ordentablajeriadetalle' table.
  *
  *
  *
  * @package    propel.generator.aersa.om
  */
-abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
+abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'RequisiciondetallePeer';
+    const PEER = 'OrdentablajeriadetallePeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        RequisiciondetallePeer
+     * @var        OrdentablajeriadetallePeer
      */
     protected static $peer;
 
@@ -30,56 +30,39 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the idrequisiciondetalle field.
+     * The value for the idordentablajeriadetalle field.
      * @var        int
      */
-    protected $idrequisiciondetalle;
+    protected $idordentablajeriadetalle;
 
     /**
-     * The value for the idrequisicion field.
+     * The value for the idordentablajeria field.
      * @var        int
      */
-    protected $idrequisicion;
+    protected $idordentablajeria;
 
     /**
      * The value for the idproducto field.
-     * @var        int
+     * @var        string
      */
     protected $idproducto;
 
     /**
-     * The value for the requisiciondetalle_cantidad field.
+     * The value for the ordentablajeriadetalle_cantidad field.
      * @var        double
      */
-    protected $requisiciondetalle_cantidad;
+    protected $ordentablajeriadetalle_cantidad;
 
     /**
-     * The value for the requisiciondetalle_revisada field.
-     * @var        boolean
+     * The value for the ordentablajeriadetalle_porcion field.
+     * @var        double
      */
-    protected $requisiciondetalle_revisada;
+    protected $ordentablajeriadetalle_porcion;
 
     /**
-     * The value for the requisiciondetalle_preciounitario field.
-     * @var        string
+     * @var        Ordentablajeria
      */
-    protected $requisiciondetalle_preciounitario;
-
-    /**
-     * The value for the requisiciondetalle_subtotal field.
-     * @var        string
-     */
-    protected $requisiciondetalle_subtotal;
-
-    /**
-     * @var        Producto
-     */
-    protected $aProducto;
-
-    /**
-     * @var        Requisicion
-     */
-    protected $aRequisicion;
+    protected $aOrdentablajeria;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -102,31 +85,31 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [idrequisiciondetalle] column value.
+     * Get the [idordentablajeriadetalle] column value.
      *
      * @return int
      */
-    public function getIdrequisiciondetalle()
+    public function getIdordentablajeriadetalle()
     {
 
-        return $this->idrequisiciondetalle;
+        return $this->idordentablajeriadetalle;
     }
 
     /**
-     * Get the [idrequisicion] column value.
+     * Get the [idordentablajeria] column value.
      *
      * @return int
      */
-    public function getIdrequisicion()
+    public function getIdordentablajeria()
     {
 
-        return $this->idrequisicion;
+        return $this->idordentablajeria;
     }
 
     /**
      * Get the [idproducto] column value.
      *
-     * @return int
+     * @return string
      */
     public function getIdproducto()
     {
@@ -135,114 +118,88 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [requisiciondetalle_cantidad] column value.
+     * Get the [ordentablajeriadetalle_cantidad] column value.
      *
      * @return double
      */
-    public function getRequisiciondetalleCantidad()
+    public function getOrdentablajeriadetalleCantidad()
     {
 
-        return $this->requisiciondetalle_cantidad;
+        return $this->ordentablajeriadetalle_cantidad;
     }
 
     /**
-     * Get the [requisiciondetalle_revisada] column value.
+     * Get the [ordentablajeriadetalle_porcion] column value.
      *
-     * @return boolean
+     * @return double
      */
-    public function getRequisiciondetalleRevisada()
+    public function getOrdentablajeriadetallePorcion()
     {
 
-        return $this->requisiciondetalle_revisada;
+        return $this->ordentablajeriadetalle_porcion;
     }
 
     /**
-     * Get the [requisiciondetalle_preciounitario] column value.
-     *
-     * @return string
-     */
-    public function getRequisiciondetallePreciounitario()
-    {
-
-        return $this->requisiciondetalle_preciounitario;
-    }
-
-    /**
-     * Get the [requisiciondetalle_subtotal] column value.
-     *
-     * @return string
-     */
-    public function getRequisiciondetalleSubtotal()
-    {
-
-        return $this->requisiciondetalle_subtotal;
-    }
-
-    /**
-     * Set the value of [idrequisiciondetalle] column.
+     * Set the value of [idordentablajeriadetalle] column.
      *
      * @param  int $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
      */
-    public function setIdrequisiciondetalle($v)
+    public function setIdordentablajeriadetalle($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idrequisiciondetalle !== $v) {
-            $this->idrequisiciondetalle = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::IDREQUISICIONDETALLE;
+        if ($this->idordentablajeriadetalle !== $v) {
+            $this->idordentablajeriadetalle = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE;
         }
 
 
         return $this;
-    } // setIdrequisiciondetalle()
+    } // setIdordentablajeriadetalle()
 
     /**
-     * Set the value of [idrequisicion] column.
+     * Set the value of [idordentablajeria] column.
      *
      * @param  int $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
      */
-    public function setIdrequisicion($v)
+    public function setIdordentablajeria($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idrequisicion !== $v) {
-            $this->idrequisicion = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::IDREQUISICION;
+        if ($this->idordentablajeria !== $v) {
+            $this->idordentablajeria = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::IDORDENTABLAJERIA;
         }
 
-        if ($this->aRequisicion !== null && $this->aRequisicion->getIdrequisicion() !== $v) {
-            $this->aRequisicion = null;
+        if ($this->aOrdentablajeria !== null && $this->aOrdentablajeria->getIdordentablajeria() !== $v) {
+            $this->aOrdentablajeria = null;
         }
 
 
         return $this;
-    } // setIdrequisicion()
+    } // setIdordentablajeria()
 
     /**
      * Set the value of [idproducto] column.
      *
-     * @param  int $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
+     * @param  string $v new value
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
      */
     public function setIdproducto($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+        if ($v !== null) {
+            $v = (string) $v;
         }
 
         if ($this->idproducto !== $v) {
             $this->idproducto = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::IDPRODUCTO;
-        }
-
-        if ($this->aProducto !== null && $this->aProducto->getIdproducto() !== $v) {
-            $this->aProducto = null;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::IDPRODUCTO;
         }
 
 
@@ -250,96 +207,46 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     } // setIdproducto()
 
     /**
-     * Set the value of [requisiciondetalle_cantidad] column.
+     * Set the value of [ordentablajeriadetalle_cantidad] column.
      *
      * @param  double $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
      */
-    public function setRequisiciondetalleCantidad($v)
+    public function setOrdentablajeriadetalleCantidad($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (double) $v;
         }
 
-        if ($this->requisiciondetalle_cantidad !== $v) {
-            $this->requisiciondetalle_cantidad = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD;
+        if ($this->ordentablajeriadetalle_cantidad !== $v) {
+            $this->ordentablajeriadetalle_cantidad = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD;
         }
 
 
         return $this;
-    } // setRequisiciondetalleCantidad()
+    } // setOrdentablajeriadetalleCantidad()
 
     /**
-     * Sets the value of the [requisiciondetalle_revisada] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * Set the value of [ordentablajeriadetalle_porcion] column.
      *
-     * @param boolean|integer|string $v The new value
-     * @return Requisiciondetalle The current object (for fluent API support)
+     * @param  double $v new value
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
      */
-    public function setRequisiciondetalleRevisada($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->requisiciondetalle_revisada !== $v) {
-            $this->requisiciondetalle_revisada = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA;
-        }
-
-
-        return $this;
-    } // setRequisiciondetalleRevisada()
-
-    /**
-     * Set the value of [requisiciondetalle_preciounitario] column.
-     *
-     * @param  string $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
-     */
-    public function setRequisiciondetallePreciounitario($v)
+    public function setOrdentablajeriadetallePorcion($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
+            $v = (double) $v;
         }
 
-        if ($this->requisiciondetalle_preciounitario !== $v) {
-            $this->requisiciondetalle_preciounitario = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO;
-        }
-
-
-        return $this;
-    } // setRequisiciondetallePreciounitario()
-
-    /**
-     * Set the value of [requisiciondetalle_subtotal] column.
-     *
-     * @param  string $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
-     */
-    public function setRequisiciondetalleSubtotal($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->requisiciondetalle_subtotal !== $v) {
-            $this->requisiciondetalle_subtotal = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL;
+        if ($this->ordentablajeriadetalle_porcion !== $v) {
+            $this->ordentablajeriadetalle_porcion = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION;
         }
 
 
         return $this;
-    } // setRequisiciondetalleSubtotal()
+    } // setOrdentablajeriadetallePorcion()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -373,13 +280,11 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
         try {
 
-            $this->idrequisiciondetalle = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idrequisicion = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idproducto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->requisiciondetalle_cantidad = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
-            $this->requisiciondetalle_revisada = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
-            $this->requisiciondetalle_preciounitario = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->requisiciondetalle_subtotal = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->idordentablajeriadetalle = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idordentablajeria = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idproducto = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->ordentablajeriadetalle_cantidad = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
+            $this->ordentablajeriadetalle_porcion = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -389,10 +294,10 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = OrdentablajeriadetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Requisiciondetalle object", $e);
+            throw new PropelException("Error populating Ordentablajeriadetalle object", $e);
         }
     }
 
@@ -412,11 +317,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aRequisicion !== null && $this->idrequisicion !== $this->aRequisicion->getIdrequisicion()) {
-            $this->aRequisicion = null;
-        }
-        if ($this->aProducto !== null && $this->idproducto !== $this->aProducto->getIdproducto()) {
-            $this->aProducto = null;
+        if ($this->aOrdentablajeria !== null && $this->idordentablajeria !== $this->aOrdentablajeria->getIdordentablajeria()) {
+            $this->aOrdentablajeria = null;
         }
     } // ensureConsistency
 
@@ -441,13 +343,13 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(OrdentablajeriadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = RequisiciondetallePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = OrdentablajeriadetallePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -457,8 +359,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aProducto = null;
-            $this->aRequisicion = null;
+            $this->aOrdentablajeria = null;
         } // if (deep)
     }
 
@@ -479,12 +380,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(OrdentablajeriadetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = RequisiciondetalleQuery::create()
+            $deleteQuery = OrdentablajeriadetalleQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -522,7 +423,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(OrdentablajeriadetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -542,7 +443,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                RequisiciondetallePeer::addInstanceToPool($this);
+                OrdentablajeriadetallePeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -577,18 +478,11 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aProducto !== null) {
-                if ($this->aProducto->isModified() || $this->aProducto->isNew()) {
-                    $affectedRows += $this->aProducto->save($con);
+            if ($this->aOrdentablajeria !== null) {
+                if ($this->aOrdentablajeria->isModified() || $this->aOrdentablajeria->isNew()) {
+                    $affectedRows += $this->aOrdentablajeria->save($con);
                 }
-                $this->setProducto($this->aProducto);
-            }
-
-            if ($this->aRequisicion !== null) {
-                if ($this->aRequisicion->isModified() || $this->aRequisicion->isNew()) {
-                    $affectedRows += $this->aRequisicion->save($con);
-                }
-                $this->setRequisicion($this->aRequisicion);
+                $this->setOrdentablajeria($this->aOrdentablajeria);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -622,36 +516,30 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = RequisiciondetallePeer::IDREQUISICIONDETALLE;
-        if (null !== $this->idrequisiciondetalle) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RequisiciondetallePeer::IDREQUISICIONDETALLE . ')');
+        $this->modifiedColumns[] = OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE;
+        if (null !== $this->idordentablajeriadetalle) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(RequisiciondetallePeer::IDREQUISICIONDETALLE)) {
-            $modifiedColumns[':p' . $index++]  = '`idrequisiciondetalle`';
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE)) {
+            $modifiedColumns[':p' . $index++]  = '`idordentablajeriadetalle`';
         }
-        if ($this->isColumnModified(RequisiciondetallePeer::IDREQUISICION)) {
-            $modifiedColumns[':p' . $index++]  = '`idrequisicion`';
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::IDORDENTABLAJERIA)) {
+            $modifiedColumns[':p' . $index++]  = '`idordentablajeria`';
         }
-        if ($this->isColumnModified(RequisiciondetallePeer::IDPRODUCTO)) {
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::IDPRODUCTO)) {
             $modifiedColumns[':p' . $index++]  = '`idproducto`';
         }
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD)) {
-            $modifiedColumns[':p' . $index++]  = '`requisiciondetalle_cantidad`';
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_cantidad`';
         }
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA)) {
-            $modifiedColumns[':p' . $index++]  = '`requisiciondetalle_revisada`';
-        }
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO)) {
-            $modifiedColumns[':p' . $index++]  = '`requisiciondetalle_preciounitario`';
-        }
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL)) {
-            $modifiedColumns[':p' . $index++]  = '`requisiciondetalle_subtotal`';
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_porcion`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `requisiciondetalle` (%s) VALUES (%s)',
+            'INSERT INTO `ordentablajeriadetalle` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -660,26 +548,20 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`idrequisiciondetalle`':
-                        $stmt->bindValue($identifier, $this->idrequisiciondetalle, PDO::PARAM_INT);
+                    case '`idordentablajeriadetalle`':
+                        $stmt->bindValue($identifier, $this->idordentablajeriadetalle, PDO::PARAM_INT);
                         break;
-                    case '`idrequisicion`':
-                        $stmt->bindValue($identifier, $this->idrequisicion, PDO::PARAM_INT);
+                    case '`idordentablajeria`':
+                        $stmt->bindValue($identifier, $this->idordentablajeria, PDO::PARAM_INT);
                         break;
                     case '`idproducto`':
-                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_INT);
+                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_STR);
                         break;
-                    case '`requisiciondetalle_cantidad`':
-                        $stmt->bindValue($identifier, $this->requisiciondetalle_cantidad, PDO::PARAM_STR);
+                    case '`ordentablajeriadetalle_cantidad`':
+                        $stmt->bindValue($identifier, $this->ordentablajeriadetalle_cantidad, PDO::PARAM_STR);
                         break;
-                    case '`requisiciondetalle_revisada`':
-                        $stmt->bindValue($identifier, (int) $this->requisiciondetalle_revisada, PDO::PARAM_INT);
-                        break;
-                    case '`requisiciondetalle_preciounitario`':
-                        $stmt->bindValue($identifier, $this->requisiciondetalle_preciounitario, PDO::PARAM_STR);
-                        break;
-                    case '`requisiciondetalle_subtotal`':
-                        $stmt->bindValue($identifier, $this->requisiciondetalle_subtotal, PDO::PARAM_STR);
+                    case '`ordentablajeriadetalle_porcion`':
+                        $stmt->bindValue($identifier, $this->ordentablajeriadetalle_porcion, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -694,7 +576,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdrequisiciondetalle($pk);
+        $this->setIdordentablajeriadetalle($pk);
 
         $this->setNew(false);
     }
@@ -780,20 +662,14 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aProducto !== null) {
-                if (!$this->aProducto->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aProducto->getValidationFailures());
-                }
-            }
-
-            if ($this->aRequisicion !== null) {
-                if (!$this->aRequisicion->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aRequisicion->getValidationFailures());
+            if ($this->aOrdentablajeria !== null) {
+                if (!$this->aOrdentablajeria->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aOrdentablajeria->getValidationFailures());
                 }
             }
 
 
-            if (($retval = RequisiciondetallePeer::doValidate($this, $columns)) !== true) {
+            if (($retval = OrdentablajeriadetallePeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -817,7 +693,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = RequisiciondetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = OrdentablajeriadetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -834,25 +710,19 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdrequisiciondetalle();
+                return $this->getIdordentablajeriadetalle();
                 break;
             case 1:
-                return $this->getIdrequisicion();
+                return $this->getIdordentablajeria();
                 break;
             case 2:
                 return $this->getIdproducto();
                 break;
             case 3:
-                return $this->getRequisiciondetalleCantidad();
+                return $this->getOrdentablajeriadetalleCantidad();
                 break;
             case 4:
-                return $this->getRequisiciondetalleRevisada();
-                break;
-            case 5:
-                return $this->getRequisiciondetallePreciounitario();
-                break;
-            case 6:
-                return $this->getRequisiciondetalleSubtotal();
+                return $this->getOrdentablajeriadetallePorcion();
                 break;
             default:
                 return null;
@@ -877,19 +747,17 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Requisiciondetalle'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Ordentablajeriadetalle'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Requisiciondetalle'][$this->getPrimaryKey()] = true;
-        $keys = RequisiciondetallePeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Ordentablajeriadetalle'][$this->getPrimaryKey()] = true;
+        $keys = OrdentablajeriadetallePeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdrequisiciondetalle(),
-            $keys[1] => $this->getIdrequisicion(),
+            $keys[0] => $this->getIdordentablajeriadetalle(),
+            $keys[1] => $this->getIdordentablajeria(),
             $keys[2] => $this->getIdproducto(),
-            $keys[3] => $this->getRequisiciondetalleCantidad(),
-            $keys[4] => $this->getRequisiciondetalleRevisada(),
-            $keys[5] => $this->getRequisiciondetallePreciounitario(),
-            $keys[6] => $this->getRequisiciondetalleSubtotal(),
+            $keys[3] => $this->getOrdentablajeriadetalleCantidad(),
+            $keys[4] => $this->getOrdentablajeriadetallePorcion(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -897,11 +765,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aProducto) {
-                $result['Producto'] = $this->aProducto->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aRequisicion) {
-                $result['Requisicion'] = $this->aRequisicion->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aOrdentablajeria) {
+                $result['Ordentablajeria'] = $this->aOrdentablajeria->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -921,7 +786,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = RequisiciondetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = OrdentablajeriadetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -938,25 +803,19 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdrequisiciondetalle($value);
+                $this->setIdordentablajeriadetalle($value);
                 break;
             case 1:
-                $this->setIdrequisicion($value);
+                $this->setIdordentablajeria($value);
                 break;
             case 2:
                 $this->setIdproducto($value);
                 break;
             case 3:
-                $this->setRequisiciondetalleCantidad($value);
+                $this->setOrdentablajeriadetalleCantidad($value);
                 break;
             case 4:
-                $this->setRequisiciondetalleRevisada($value);
-                break;
-            case 5:
-                $this->setRequisiciondetallePreciounitario($value);
-                break;
-            case 6:
-                $this->setRequisiciondetalleSubtotal($value);
+                $this->setOrdentablajeriadetallePorcion($value);
                 break;
         } // switch()
     }
@@ -980,15 +839,13 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = RequisiciondetallePeer::getFieldNames($keyType);
+        $keys = OrdentablajeriadetallePeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdrequisiciondetalle($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdrequisicion($arr[$keys[1]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdordentablajeriadetalle($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdordentablajeria($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdproducto($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setRequisiciondetalleCantidad($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setRequisiciondetalleRevisada($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setRequisiciondetallePreciounitario($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setRequisiciondetalleSubtotal($arr[$keys[6]]);
+        if (array_key_exists($keys[3], $arr)) $this->setOrdentablajeriadetalleCantidad($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setOrdentablajeriadetallePorcion($arr[$keys[4]]);
     }
 
     /**
@@ -998,15 +855,13 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria = new Criteria(OrdentablajeriadetallePeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(RequisiciondetallePeer::IDREQUISICIONDETALLE)) $criteria->add(RequisiciondetallePeer::IDREQUISICIONDETALLE, $this->idrequisiciondetalle);
-        if ($this->isColumnModified(RequisiciondetallePeer::IDREQUISICION)) $criteria->add(RequisiciondetallePeer::IDREQUISICION, $this->idrequisicion);
-        if ($this->isColumnModified(RequisiciondetallePeer::IDPRODUCTO)) $criteria->add(RequisiciondetallePeer::IDPRODUCTO, $this->idproducto);
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD, $this->requisiciondetalle_cantidad);
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, $this->requisiciondetalle_revisada);
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, $this->requisiciondetalle_preciounitario);
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, $this->requisiciondetalle_subtotal);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE)) $criteria->add(OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE, $this->idordentablajeriadetalle);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::IDORDENTABLAJERIA)) $criteria->add(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, $this->idordentablajeria);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::IDPRODUCTO)) $criteria->add(OrdentablajeriadetallePeer::IDPRODUCTO, $this->idproducto);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD, $this->ordentablajeriadetalle_cantidad);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION, $this->ordentablajeriadetalle_porcion);
 
         return $criteria;
     }
@@ -1021,8 +876,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
-        $criteria->add(RequisiciondetallePeer::IDREQUISICIONDETALLE, $this->idrequisiciondetalle);
+        $criteria = new Criteria(OrdentablajeriadetallePeer::DATABASE_NAME);
+        $criteria->add(OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE, $this->idordentablajeriadetalle);
 
         return $criteria;
     }
@@ -1033,18 +888,18 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdrequisiciondetalle();
+        return $this->getIdordentablajeriadetalle();
     }
 
     /**
-     * Generic method to set the primary key (idrequisiciondetalle column).
+     * Generic method to set the primary key (idordentablajeriadetalle column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdrequisiciondetalle($key);
+        $this->setIdordentablajeriadetalle($key);
     }
 
     /**
@@ -1054,7 +909,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdrequisiciondetalle();
+        return null === $this->getIdordentablajeriadetalle();
     }
 
     /**
@@ -1063,19 +918,17 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Requisiciondetalle (or compatible) type.
+     * @param object $copyObj An object of Ordentablajeriadetalle (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setIdrequisicion($this->getIdrequisicion());
+        $copyObj->setIdordentablajeria($this->getIdordentablajeria());
         $copyObj->setIdproducto($this->getIdproducto());
-        $copyObj->setRequisiciondetalleCantidad($this->getRequisiciondetalleCantidad());
-        $copyObj->setRequisiciondetalleRevisada($this->getRequisiciondetalleRevisada());
-        $copyObj->setRequisiciondetallePreciounitario($this->getRequisiciondetallePreciounitario());
-        $copyObj->setRequisiciondetalleSubtotal($this->getRequisiciondetalleSubtotal());
+        $copyObj->setOrdentablajeriadetalleCantidad($this->getOrdentablajeriadetalleCantidad());
+        $copyObj->setOrdentablajeriadetallePorcion($this->getOrdentablajeriadetallePorcion());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1090,7 +943,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdrequisiciondetalle(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdordentablajeriadetalle(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1103,7 +956,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Requisiciondetalle Clone of current object.
+     * @return Ordentablajeriadetalle Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1123,38 +976,38 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return RequisiciondetallePeer
+     * @return OrdentablajeriadetallePeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new RequisiciondetallePeer();
+            self::$peer = new OrdentablajeriadetallePeer();
         }
 
         return self::$peer;
     }
 
     /**
-     * Declares an association between this object and a Producto object.
+     * Declares an association between this object and a Ordentablajeria object.
      *
-     * @param                  Producto $v
-     * @return Requisiciondetalle The current object (for fluent API support)
+     * @param                  Ordentablajeria $v
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setProducto(Producto $v = null)
+    public function setOrdentablajeria(Ordentablajeria $v = null)
     {
         if ($v === null) {
-            $this->setIdproducto(NULL);
+            $this->setIdordentablajeria(NULL);
         } else {
-            $this->setIdproducto($v->getIdproducto());
+            $this->setIdordentablajeria($v->getIdordentablajeria());
         }
 
-        $this->aProducto = $v;
+        $this->aOrdentablajeria = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Producto object, it will not be re-added.
+        // If this object has already been added to the Ordentablajeria object, it will not be re-added.
         if ($v !== null) {
-            $v->addRequisiciondetalle($this);
+            $v->addOrdentablajeriadetalle($this);
         }
 
 
@@ -1163,79 +1016,27 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated Producto object
+     * Get the associated Ordentablajeria object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return Producto The associated Producto object.
+     * @return Ordentablajeria The associated Ordentablajeria object.
      * @throws PropelException
      */
-    public function getProducto(PropelPDO $con = null, $doQuery = true)
+    public function getOrdentablajeria(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aProducto === null && ($this->idproducto !== null) && $doQuery) {
-            $this->aProducto = ProductoQuery::create()->findPk($this->idproducto, $con);
+        if ($this->aOrdentablajeria === null && ($this->idordentablajeria !== null) && $doQuery) {
+            $this->aOrdentablajeria = OrdentablajeriaQuery::create()->findPk($this->idordentablajeria, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aProducto->addRequisiciondetalles($this);
+                $this->aOrdentablajeria->addOrdentablajeriadetalles($this);
              */
         }
 
-        return $this->aProducto;
-    }
-
-    /**
-     * Declares an association between this object and a Requisicion object.
-     *
-     * @param                  Requisicion $v
-     * @return Requisiciondetalle The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setRequisicion(Requisicion $v = null)
-    {
-        if ($v === null) {
-            $this->setIdrequisicion(NULL);
-        } else {
-            $this->setIdrequisicion($v->getIdrequisicion());
-        }
-
-        $this->aRequisicion = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Requisicion object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRequisiciondetalle($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Requisicion object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Requisicion The associated Requisicion object.
-     * @throws PropelException
-     */
-    public function getRequisicion(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aRequisicion === null && ($this->idrequisicion !== null) && $doQuery) {
-            $this->aRequisicion = RequisicionQuery::create()->findPk($this->idrequisicion, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aRequisicion->addRequisiciondetalles($this);
-             */
-        }
-
-        return $this->aRequisicion;
+        return $this->aOrdentablajeria;
     }
 
     /**
@@ -1243,13 +1044,11 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->idrequisiciondetalle = null;
-        $this->idrequisicion = null;
+        $this->idordentablajeriadetalle = null;
+        $this->idordentablajeria = null;
         $this->idproducto = null;
-        $this->requisiciondetalle_cantidad = null;
-        $this->requisiciondetalle_revisada = null;
-        $this->requisiciondetalle_preciounitario = null;
-        $this->requisiciondetalle_subtotal = null;
+        $this->ordentablajeriadetalle_cantidad = null;
+        $this->ordentablajeriadetalle_porcion = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1272,18 +1071,14 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aProducto instanceof Persistent) {
-              $this->aProducto->clearAllReferences($deep);
-            }
-            if ($this->aRequisicion instanceof Persistent) {
-              $this->aRequisicion->clearAllReferences($deep);
+            if ($this->aOrdentablajeria instanceof Persistent) {
+              $this->aOrdentablajeria->clearAllReferences($deep);
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aProducto = null;
-        $this->aRequisicion = null;
+        $this->aOrdentablajeria = null;
     }
 
     /**
@@ -1293,7 +1088,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(RequisiciondetallePeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(OrdentablajeriadetallePeer::DEFAULT_STRING_FORMAT);
     }
 
     /**
