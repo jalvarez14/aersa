@@ -195,9 +195,6 @@ return array(
                                             ),
                                         ),
                                     ),
-                               ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
                                    'editar' => array(
                                        'type' => 'Segment',
                                        'options' => array(
