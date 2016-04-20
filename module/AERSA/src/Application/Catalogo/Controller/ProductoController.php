@@ -5,7 +5,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class ProductosController extends AbstractActionController
+class ProductoController extends AbstractActionController
 {
     public function indexAction()
     {
@@ -16,19 +16,20 @@ class ProductosController extends AbstractActionController
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
         
         //SI SE TRATA DE UN ADMIN DE AERSA
-        if($session['idrol'] == 1){
-            $collection = \EmpresaQuery::create()->orderByIdempresa(\Criteria::DESC)->find();
-        }
+        if($session['idempresa'] == 1)
+            $collection = \EmpresaQuery::create()->findPk($session['idempresa']);
+        
+        
         
         $proveedores = \ProveedorQuery::create()->find();
 
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/catalogo/productos/index');
+        $view_model->setTemplate('/application/catalogo/producto/index');
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
-            'collection' => $proveedores,
+            'collection' => $collection,
         ));
         return $view_model;
 

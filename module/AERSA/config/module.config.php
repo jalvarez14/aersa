@@ -233,12 +233,12 @@ return array(
                                     ),
                                ),
                             ),
-                           'productos' => array(
+                           'producto' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/producto',
                                     'defaults' => array(
-                                        'controller' => 'Application\Catalogo\Controller\Productos',
+                                        'controller' => 'Application\Catalogo\Controller\Producto',
                                         'action' => 'index',
                                     ),
                                 ),
@@ -249,7 +249,7 @@ return array(
                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
-                                                'controller' => 'Application\Catalogo\Controller\Productos',
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
                                                 'action' => 'nuevo',
                                             ),
                                         ),
@@ -597,7 +597,7 @@ return array(
             'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
             'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
-            'Application\Catalogo\Controller\Productos'     => 'Application\Catalogo\Controller\ProductosController',
+            'Application\Catalogo\Controller\Producto'      => 'Application\Catalogo\Controller\ProductoController',
             
 
             /*
