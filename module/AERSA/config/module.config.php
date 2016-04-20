@@ -598,7 +598,7 @@ return array(
             'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
             'Application\Catalogo\Controller\Producto'      => 'Application\Catalogo\Controller\ProductoController',
-            
+            'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
 
             /*
              * WEBSITE
