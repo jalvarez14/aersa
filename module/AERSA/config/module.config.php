@@ -610,6 +610,58 @@ return array(
                             ),
                         ),
                     ),
+                    /*
+                     * PROCESOS
+                     */
+                    'procesos' => array( 
+                        'type' => 'Literal', 'options' => array(
+                            'route' => '/procesos', 
+                        ),
+                        'may_terminate' => true, 
+                        'child_routes' => array( 
+                            'compra' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/compra', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Compra', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevoregistro', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Compra', 
+                                                'action' => 'nuevoregistro', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Compra', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Compra', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                ), 
+                            ), 
+                        ), 
+                    ), 
                 ),
             ),
             'website' => array(
@@ -668,7 +720,13 @@ return array(
             'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
             'Application\Catalogo\Controller\Producto'      => 'Application\Catalogo\Controller\ProductoController',
+            'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
             
+            /*
+             * PROCESO
+             */
+            
+            'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
 
             /*
              * WEBSITE

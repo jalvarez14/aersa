@@ -107,6 +107,18 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $collNotacreditodetallesPartial;
 
     /**
+     * @var        PropelObjectCollection|Ordentablajeria[] Collection to store aggregation of Ordentablajeria objects.
+     */
+    protected $collOrdentablajeriasRelatedByIdalmacendestino;
+    protected $collOrdentablajeriasRelatedByIdalmacendestinoPartial;
+
+    /**
+     * @var        PropelObjectCollection|Ordentablajeria[] Collection to store aggregation of Ordentablajeria objects.
+     */
+    protected $collOrdentablajeriasRelatedByIdalmacenorigen;
+    protected $collOrdentablajeriasRelatedByIdalmacenorigenPartial;
+
+    /**
      * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
      */
     protected $collRequisicionsRelatedByIdalmacendestino;
@@ -185,6 +197,18 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $notacreditodetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -502,6 +526,10 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             $this->collNotacreditodetalles = null;
 
+            $this->collOrdentablajeriasRelatedByIdalmacendestino = null;
+
+            $this->collOrdentablajeriasRelatedByIdalmacenorigen = null;
+
             $this->collRequisicionsRelatedByIdalmacendestino = null;
 
             $this->collRequisicionsRelatedByIdalmacenorigen = null;
@@ -757,6 +785,40 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             if ($this->collNotacreditodetalles !== null) {
                 foreach ($this->collNotacreditodetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion !== null) {
+                if (!$this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion->isEmpty()) {
+                    OrdentablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajeriasRelatedByIdalmacendestino !== null) {
+                foreach ($this->collOrdentablajeriasRelatedByIdalmacendestino as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion !== null) {
+                if (!$this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion->isEmpty()) {
+                    OrdentablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajeriasRelatedByIdalmacenorigen !== null) {
+                foreach ($this->collOrdentablajeriasRelatedByIdalmacenorigen as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1048,6 +1110,22 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collOrdentablajeriasRelatedByIdalmacendestino !== null) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdalmacendestino as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collOrdentablajeriasRelatedByIdalmacenorigen !== null) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdalmacenorigen as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collRequisicionsRelatedByIdalmacendestino !== null) {
                     foreach ($this->collRequisicionsRelatedByIdalmacendestino as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1186,6 +1264,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             }
             if (null !== $this->collNotacreditodetalles) {
                 $result['Notacreditodetalles'] = $this->collNotacreditodetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdentablajeriasRelatedByIdalmacendestino) {
+                $result['OrdentablajeriasRelatedByIdalmacendestino'] = $this->collOrdentablajeriasRelatedByIdalmacendestino->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdentablajeriasRelatedByIdalmacenorigen) {
+                $result['OrdentablajeriasRelatedByIdalmacenorigen'] = $this->collOrdentablajeriasRelatedByIdalmacenorigen->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRequisicionsRelatedByIdalmacendestino) {
                 $result['RequisicionsRelatedByIdalmacendestino'] = $this->collRequisicionsRelatedByIdalmacendestino->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1407,6 +1491,18 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getOrdentablajeriasRelatedByIdalmacendestino() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajeriaRelatedByIdalmacendestino($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getOrdentablajeriasRelatedByIdalmacenorigen() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajeriaRelatedByIdalmacenorigen($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRequisicionsRelatedByIdalmacendestino() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRequisicionRelatedByIdalmacendestino($relObj->copy($deepCopy));
@@ -1558,6 +1654,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         }
         if ('Notacreditodetalle' == $relationName) {
             $this->initNotacreditodetalles();
+        }
+        if ('OrdentablajeriaRelatedByIdalmacendestino' == $relationName) {
+            $this->initOrdentablajeriasRelatedByIdalmacendestino();
+        }
+        if ('OrdentablajeriaRelatedByIdalmacenorigen' == $relationName) {
+            $this->initOrdentablajeriasRelatedByIdalmacenorigen();
         }
         if ('RequisicionRelatedByIdalmacendestino' == $relationName) {
             $this->initRequisicionsRelatedByIdalmacendestino();
@@ -3721,6 +3823,706 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collOrdentablajeriasRelatedByIdalmacendestino collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addOrdentablajeriasRelatedByIdalmacendestino()
+     */
+    public function clearOrdentablajeriasRelatedByIdalmacendestino()
+    {
+        $this->collOrdentablajeriasRelatedByIdalmacendestino = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajeriasRelatedByIdalmacendestino collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajeriasRelatedByIdalmacendestino($v = true)
+    {
+        $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajeriasRelatedByIdalmacendestino collection.
+     *
+     * By default this just sets the collOrdentablajeriasRelatedByIdalmacendestino collection to an empty array (like clearcollOrdentablajeriasRelatedByIdalmacendestino());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajeriasRelatedByIdalmacendestino($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajeriasRelatedByIdalmacendestino && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajeriasRelatedByIdalmacendestino = new PropelObjectCollection();
+        $this->collOrdentablajeriasRelatedByIdalmacendestino->setModel('Ordentablajeria');
+    }
+
+    /**
+     * Gets an array of Ordentablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     * @throws PropelException
+     */
+    public function getOrdentablajeriasRelatedByIdalmacendestino($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdalmacendestino || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdalmacendestino) {
+                // return empty collection
+                $this->initOrdentablajeriasRelatedByIdalmacendestino();
+            } else {
+                $collOrdentablajeriasRelatedByIdalmacendestino = OrdentablajeriaQuery::create(null, $criteria)
+                    ->filterByAlmacenRelatedByIdalmacendestino($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial && count($collOrdentablajeriasRelatedByIdalmacendestino)) {
+                      $this->initOrdentablajeriasRelatedByIdalmacendestino(false);
+
+                      foreach ($collOrdentablajeriasRelatedByIdalmacendestino as $obj) {
+                        if (false == $this->collOrdentablajeriasRelatedByIdalmacendestino->contains($obj)) {
+                          $this->collOrdentablajeriasRelatedByIdalmacendestino->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial = true;
+                    }
+
+                    $collOrdentablajeriasRelatedByIdalmacendestino->getInternalIterator()->rewind();
+
+                    return $collOrdentablajeriasRelatedByIdalmacendestino;
+                }
+
+                if ($partial && $this->collOrdentablajeriasRelatedByIdalmacendestino) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdalmacendestino as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajeriasRelatedByIdalmacendestino[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajeriasRelatedByIdalmacendestino = $collOrdentablajeriasRelatedByIdalmacendestino;
+                $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajeriasRelatedByIdalmacendestino;
+    }
+
+    /**
+     * Sets a collection of OrdentablajeriaRelatedByIdalmacendestino objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajeriasRelatedByIdalmacendestino A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setOrdentablajeriasRelatedByIdalmacendestino(PropelCollection $ordentablajeriasRelatedByIdalmacendestino, PropelPDO $con = null)
+    {
+        $ordentablajeriasRelatedByIdalmacendestinoToDelete = $this->getOrdentablajeriasRelatedByIdalmacendestino(new Criteria(), $con)->diff($ordentablajeriasRelatedByIdalmacendestino);
+
+
+        $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion = $ordentablajeriasRelatedByIdalmacendestinoToDelete;
+
+        foreach ($ordentablajeriasRelatedByIdalmacendestinoToDelete as $ordentablajeriaRelatedByIdalmacendestinoRemoved) {
+            $ordentablajeriaRelatedByIdalmacendestinoRemoved->setAlmacenRelatedByIdalmacendestino(null);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdalmacendestino = null;
+        foreach ($ordentablajeriasRelatedByIdalmacendestino as $ordentablajeriaRelatedByIdalmacendestino) {
+            $this->addOrdentablajeriaRelatedByIdalmacendestino($ordentablajeriaRelatedByIdalmacendestino);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdalmacendestino = $ordentablajeriasRelatedByIdalmacendestino;
+        $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajeria objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajeriasRelatedByIdalmacendestino(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdalmacendestino || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdalmacendestino) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajeriasRelatedByIdalmacendestino());
+            }
+            $query = OrdentablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacenRelatedByIdalmacendestino($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajeriasRelatedByIdalmacendestino);
+    }
+
+    /**
+     * Method called to associate a Ordentablajeria object to this object
+     * through the Ordentablajeria foreign key attribute.
+     *
+     * @param    Ordentablajeria $l Ordentablajeria
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addOrdentablajeriaRelatedByIdalmacendestino(Ordentablajeria $l)
+    {
+        if ($this->collOrdentablajeriasRelatedByIdalmacendestino === null) {
+            $this->initOrdentablajeriasRelatedByIdalmacendestino();
+            $this->collOrdentablajeriasRelatedByIdalmacendestinoPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajeriasRelatedByIdalmacendestino->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajeriaRelatedByIdalmacendestino($l);
+
+            if ($this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion and $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion->contains($l)) {
+                $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion->remove($this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdalmacendestino $ordentablajeriaRelatedByIdalmacendestino The ordentablajeriaRelatedByIdalmacendestino object to add.
+     */
+    protected function doAddOrdentablajeriaRelatedByIdalmacendestino($ordentablajeriaRelatedByIdalmacendestino)
+    {
+        $this->collOrdentablajeriasRelatedByIdalmacendestino[]= $ordentablajeriaRelatedByIdalmacendestino;
+        $ordentablajeriaRelatedByIdalmacendestino->setAlmacenRelatedByIdalmacendestino($this);
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdalmacendestino $ordentablajeriaRelatedByIdalmacendestino The ordentablajeriaRelatedByIdalmacendestino object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeOrdentablajeriaRelatedByIdalmacendestino($ordentablajeriaRelatedByIdalmacendestino)
+    {
+        if ($this->getOrdentablajeriasRelatedByIdalmacendestino()->contains($ordentablajeriaRelatedByIdalmacendestino)) {
+            $this->collOrdentablajeriasRelatedByIdalmacendestino->remove($this->collOrdentablajeriasRelatedByIdalmacendestino->search($ordentablajeriaRelatedByIdalmacendestino));
+            if (null === $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion) {
+                $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion = clone $this->collOrdentablajeriasRelatedByIdalmacendestino;
+                $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion->clear();
+            }
+            $this->ordentablajeriasRelatedByIdalmacendestinoScheduledForDeletion[]= clone $ordentablajeriaRelatedByIdalmacendestino;
+            $ordentablajeriaRelatedByIdalmacendestino->setAlmacenRelatedByIdalmacendestino(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacendestino from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacendestinoJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacendestino($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacendestino from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacendestinoJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacendestino($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacendestino from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacendestinoJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacendestino($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacendestino from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacendestinoJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacendestino($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacendestino from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacendestinoJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacendestino($query, $con);
+    }
+
+    /**
+     * Clears out the collOrdentablajeriasRelatedByIdalmacenorigen collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addOrdentablajeriasRelatedByIdalmacenorigen()
+     */
+    public function clearOrdentablajeriasRelatedByIdalmacenorigen()
+    {
+        $this->collOrdentablajeriasRelatedByIdalmacenorigen = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajeriasRelatedByIdalmacenorigen collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajeriasRelatedByIdalmacenorigen($v = true)
+    {
+        $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajeriasRelatedByIdalmacenorigen collection.
+     *
+     * By default this just sets the collOrdentablajeriasRelatedByIdalmacenorigen collection to an empty array (like clearcollOrdentablajeriasRelatedByIdalmacenorigen());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajeriasRelatedByIdalmacenorigen($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajeriasRelatedByIdalmacenorigen && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajeriasRelatedByIdalmacenorigen = new PropelObjectCollection();
+        $this->collOrdentablajeriasRelatedByIdalmacenorigen->setModel('Ordentablajeria');
+    }
+
+    /**
+     * Gets an array of Ordentablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     * @throws PropelException
+     */
+    public function getOrdentablajeriasRelatedByIdalmacenorigen($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdalmacenorigen || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdalmacenorigen) {
+                // return empty collection
+                $this->initOrdentablajeriasRelatedByIdalmacenorigen();
+            } else {
+                $collOrdentablajeriasRelatedByIdalmacenorigen = OrdentablajeriaQuery::create(null, $criteria)
+                    ->filterByAlmacenRelatedByIdalmacenorigen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial && count($collOrdentablajeriasRelatedByIdalmacenorigen)) {
+                      $this->initOrdentablajeriasRelatedByIdalmacenorigen(false);
+
+                      foreach ($collOrdentablajeriasRelatedByIdalmacenorigen as $obj) {
+                        if (false == $this->collOrdentablajeriasRelatedByIdalmacenorigen->contains($obj)) {
+                          $this->collOrdentablajeriasRelatedByIdalmacenorigen->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial = true;
+                    }
+
+                    $collOrdentablajeriasRelatedByIdalmacenorigen->getInternalIterator()->rewind();
+
+                    return $collOrdentablajeriasRelatedByIdalmacenorigen;
+                }
+
+                if ($partial && $this->collOrdentablajeriasRelatedByIdalmacenorigen) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdalmacenorigen as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajeriasRelatedByIdalmacenorigen[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajeriasRelatedByIdalmacenorigen = $collOrdentablajeriasRelatedByIdalmacenorigen;
+                $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajeriasRelatedByIdalmacenorigen;
+    }
+
+    /**
+     * Sets a collection of OrdentablajeriaRelatedByIdalmacenorigen objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajeriasRelatedByIdalmacenorigen A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setOrdentablajeriasRelatedByIdalmacenorigen(PropelCollection $ordentablajeriasRelatedByIdalmacenorigen, PropelPDO $con = null)
+    {
+        $ordentablajeriasRelatedByIdalmacenorigenToDelete = $this->getOrdentablajeriasRelatedByIdalmacenorigen(new Criteria(), $con)->diff($ordentablajeriasRelatedByIdalmacenorigen);
+
+
+        $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion = $ordentablajeriasRelatedByIdalmacenorigenToDelete;
+
+        foreach ($ordentablajeriasRelatedByIdalmacenorigenToDelete as $ordentablajeriaRelatedByIdalmacenorigenRemoved) {
+            $ordentablajeriaRelatedByIdalmacenorigenRemoved->setAlmacenRelatedByIdalmacenorigen(null);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdalmacenorigen = null;
+        foreach ($ordentablajeriasRelatedByIdalmacenorigen as $ordentablajeriaRelatedByIdalmacenorigen) {
+            $this->addOrdentablajeriaRelatedByIdalmacenorigen($ordentablajeriaRelatedByIdalmacenorigen);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdalmacenorigen = $ordentablajeriasRelatedByIdalmacenorigen;
+        $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajeria objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajeriasRelatedByIdalmacenorigen(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdalmacenorigen || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdalmacenorigen) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajeriasRelatedByIdalmacenorigen());
+            }
+            $query = OrdentablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacenRelatedByIdalmacenorigen($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajeriasRelatedByIdalmacenorigen);
+    }
+
+    /**
+     * Method called to associate a Ordentablajeria object to this object
+     * through the Ordentablajeria foreign key attribute.
+     *
+     * @param    Ordentablajeria $l Ordentablajeria
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addOrdentablajeriaRelatedByIdalmacenorigen(Ordentablajeria $l)
+    {
+        if ($this->collOrdentablajeriasRelatedByIdalmacenorigen === null) {
+            $this->initOrdentablajeriasRelatedByIdalmacenorigen();
+            $this->collOrdentablajeriasRelatedByIdalmacenorigenPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajeriasRelatedByIdalmacenorigen->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajeriaRelatedByIdalmacenorigen($l);
+
+            if ($this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion and $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion->contains($l)) {
+                $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion->remove($this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdalmacenorigen $ordentablajeriaRelatedByIdalmacenorigen The ordentablajeriaRelatedByIdalmacenorigen object to add.
+     */
+    protected function doAddOrdentablajeriaRelatedByIdalmacenorigen($ordentablajeriaRelatedByIdalmacenorigen)
+    {
+        $this->collOrdentablajeriasRelatedByIdalmacenorigen[]= $ordentablajeriaRelatedByIdalmacenorigen;
+        $ordentablajeriaRelatedByIdalmacenorigen->setAlmacenRelatedByIdalmacenorigen($this);
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdalmacenorigen $ordentablajeriaRelatedByIdalmacenorigen The ordentablajeriaRelatedByIdalmacenorigen object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeOrdentablajeriaRelatedByIdalmacenorigen($ordentablajeriaRelatedByIdalmacenorigen)
+    {
+        if ($this->getOrdentablajeriasRelatedByIdalmacenorigen()->contains($ordentablajeriaRelatedByIdalmacenorigen)) {
+            $this->collOrdentablajeriasRelatedByIdalmacenorigen->remove($this->collOrdentablajeriasRelatedByIdalmacenorigen->search($ordentablajeriaRelatedByIdalmacenorigen));
+            if (null === $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion) {
+                $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion = clone $this->collOrdentablajeriasRelatedByIdalmacenorigen;
+                $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion->clear();
+            }
+            $this->ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion[]= clone $ordentablajeriaRelatedByIdalmacenorigen;
+            $ordentablajeriaRelatedByIdalmacenorigen->setAlmacenRelatedByIdalmacenorigen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacenorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacenorigenJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacenorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacenorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacenorigenJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacenorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacenorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacenorigenJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacenorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacenorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacenorigenJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacenorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdalmacenorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdalmacenorigenJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdalmacenorigen($query, $con);
+    }
+
+    /**
      * Clears out the collRequisicionsRelatedByIdalmacendestino collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -4037,10 +4839,35 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsRelatedByIdalmacendestinoJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdalmacendestinoJoinSucursalRelatedByIdsucursaldestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
+        $query->joinWith('SucursalRelatedByIdsucursaldestino', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdalmacendestino($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdalmacendestino from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdalmacendestinoJoinSucursalRelatedByIdsucursalorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('SucursalRelatedByIdsucursalorigen', $join_behavior);
 
         return $this->getRequisicionsRelatedByIdalmacendestino($query, $con);
     }
@@ -4387,10 +5214,35 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsRelatedByIdalmacenorigenJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdalmacenorigenJoinSucursalRelatedByIdsucursaldestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
+        $query->joinWith('SucursalRelatedByIdsucursaldestino', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdalmacenorigen($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdalmacenorigen from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdalmacenorigenJoinSucursalRelatedByIdsucursalorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('SucursalRelatedByIdsucursalorigen', $join_behavior);
 
         return $this->getRequisicionsRelatedByIdalmacenorigen($query, $con);
     }
@@ -4812,6 +5664,16 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collOrdentablajeriasRelatedByIdalmacendestino) {
+                foreach ($this->collOrdentablajeriasRelatedByIdalmacendestino as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collOrdentablajeriasRelatedByIdalmacenorigen) {
+                foreach ($this->collOrdentablajeriasRelatedByIdalmacenorigen as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRequisicionsRelatedByIdalmacendestino) {
                 foreach ($this->collRequisicionsRelatedByIdalmacendestino as $o) {
                     $o->clearAllReferences($deep);
@@ -4862,6 +5724,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $this->collNotacreditodetalles->clearIterator();
         }
         $this->collNotacreditodetalles = null;
+        if ($this->collOrdentablajeriasRelatedByIdalmacendestino instanceof PropelCollection) {
+            $this->collOrdentablajeriasRelatedByIdalmacendestino->clearIterator();
+        }
+        $this->collOrdentablajeriasRelatedByIdalmacendestino = null;
+        if ($this->collOrdentablajeriasRelatedByIdalmacenorigen instanceof PropelCollection) {
+            $this->collOrdentablajeriasRelatedByIdalmacenorigen->clearIterator();
+        }
+        $this->collOrdentablajeriasRelatedByIdalmacenorigen = null;
         if ($this->collRequisicionsRelatedByIdalmacendestino instanceof PropelCollection) {
             $this->collRequisicionsRelatedByIdalmacendestino->clearIterator();
         }

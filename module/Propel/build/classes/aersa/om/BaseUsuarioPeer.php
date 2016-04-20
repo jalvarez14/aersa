@@ -416,6 +416,12 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in NotacreditonotaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditonotaPeer::clearInstancePool();
+        // Invalidate objects in OrdentablajeriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        OrdentablajeriaPeer::clearInstancePool();
+        // Invalidate objects in OrdentablajeriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        OrdentablajeriaPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -1077,6 +1083,18 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(NotacreditonotaPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += NotacreditonotaPeer::doDelete($criteria, $con);
+
+            // delete related Ordentablajeria objects
+            $criteria = new Criteria(OrdentablajeriaPeer::DATABASE_NAME);
+
+            $criteria->add(OrdentablajeriaPeer::IDAUDITOR, $obj->getIdusuario());
+            $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
+
+            // delete related Ordentablajeria objects
+            $criteria = new Criteria(OrdentablajeriaPeer::DATABASE_NAME);
+
+            $criteria->add(OrdentablajeriaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
 
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);

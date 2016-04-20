@@ -67,6 +67,36 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
     protected $notacreditodetalle_revisada;
 
     /**
+     * The value for the notacreditodetalle_ieps field.
+     * @var        double
+     */
+    protected $notacreditodetalle_ieps;
+
+    /**
+     * The value for the notacreditodetalle_descuento field.
+     * @var        double
+     */
+    protected $notacreditodetalle_descuento;
+
+    /**
+     * The value for the notacreditodetalle_subtotal field.
+     * @var        string
+     */
+    protected $notacreditodetalle_subtotal;
+
+    /**
+     * The value for the notacreditodetalle_costounitario field.
+     * @var        string
+     */
+    protected $notacreditodetalle_costounitario;
+
+    /**
+     * The value for the notacreditodetalle_costounitarioneto field.
+     * @var        string
+     */
+    protected $notacreditodetalle_costounitarioneto;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -186,6 +216,61 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
     {
 
         return $this->notacreditodetalle_revisada;
+    }
+
+    /**
+     * Get the [notacreditodetalle_ieps] column value.
+     *
+     * @return double
+     */
+    public function getNotacreditodetalleIeps()
+    {
+
+        return $this->notacreditodetalle_ieps;
+    }
+
+    /**
+     * Get the [notacreditodetalle_descuento] column value.
+     *
+     * @return double
+     */
+    public function getNotacreditodetalleDescuento()
+    {
+
+        return $this->notacreditodetalle_descuento;
+    }
+
+    /**
+     * Get the [notacreditodetalle_subtotal] column value.
+     *
+     * @return string
+     */
+    public function getNotacreditodetalleSubtotal()
+    {
+
+        return $this->notacreditodetalle_subtotal;
+    }
+
+    /**
+     * Get the [notacreditodetalle_costounitario] column value.
+     *
+     * @return string
+     */
+    public function getNotacreditodetalleCostounitario()
+    {
+
+        return $this->notacreditodetalle_costounitario;
+    }
+
+    /**
+     * Get the [notacreditodetalle_costounitarioneto] column value.
+     *
+     * @return string
+     */
+    public function getNotacreditodetalleCostounitarioneto()
+    {
+
+        return $this->notacreditodetalle_costounitarioneto;
     }
 
     /**
@@ -335,6 +420,111 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
     } // setNotacreditodetalleRevisada()
 
     /**
+     * Set the value of [notacreditodetalle_ieps] column.
+     *
+     * @param  double $v new value
+     * @return Notacreditodetalle The current object (for fluent API support)
+     */
+    public function setNotacreditodetalleIeps($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->notacreditodetalle_ieps !== $v) {
+            $this->notacreditodetalle_ieps = $v;
+            $this->modifiedColumns[] = NotacreditodetallePeer::NOTACREDITODETALLE_IEPS;
+        }
+
+
+        return $this;
+    } // setNotacreditodetalleIeps()
+
+    /**
+     * Set the value of [notacreditodetalle_descuento] column.
+     *
+     * @param  double $v new value
+     * @return Notacreditodetalle The current object (for fluent API support)
+     */
+    public function setNotacreditodetalleDescuento($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->notacreditodetalle_descuento !== $v) {
+            $this->notacreditodetalle_descuento = $v;
+            $this->modifiedColumns[] = NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO;
+        }
+
+
+        return $this;
+    } // setNotacreditodetalleDescuento()
+
+    /**
+     * Set the value of [notacreditodetalle_subtotal] column.
+     *
+     * @param  string $v new value
+     * @return Notacreditodetalle The current object (for fluent API support)
+     */
+    public function setNotacreditodetalleSubtotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->notacreditodetalle_subtotal !== $v) {
+            $this->notacreditodetalle_subtotal = $v;
+            $this->modifiedColumns[] = NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL;
+        }
+
+
+        return $this;
+    } // setNotacreditodetalleSubtotal()
+
+    /**
+     * Set the value of [notacreditodetalle_costounitario] column.
+     *
+     * @param  string $v new value
+     * @return Notacreditodetalle The current object (for fluent API support)
+     */
+    public function setNotacreditodetalleCostounitario($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->notacreditodetalle_costounitario !== $v) {
+            $this->notacreditodetalle_costounitario = $v;
+            $this->modifiedColumns[] = NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO;
+        }
+
+
+        return $this;
+    } // setNotacreditodetalleCostounitario()
+
+    /**
+     * Set the value of [notacreditodetalle_costounitarioneto] column.
+     *
+     * @param  string $v new value
+     * @return Notacreditodetalle The current object (for fluent API support)
+     */
+    public function setNotacreditodetalleCostounitarioneto($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->notacreditodetalle_costounitarioneto !== $v) {
+            $this->notacreditodetalle_costounitarioneto = $v;
+            $this->modifiedColumns[] = NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO;
+        }
+
+
+        return $this;
+    } // setNotacreditodetalleCostounitarioneto()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -376,6 +566,11 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
             $this->idalmacen = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->notacreditodetalle_cantidad = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
             $this->notacreditodetalle_revisada = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+            $this->notacreditodetalle_ieps = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->notacreditodetalle_descuento = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+            $this->notacreditodetalle_subtotal = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->notacreditodetalle_costounitario = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->notacreditodetalle_costounitarioneto = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -385,7 +580,7 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 6; // 6 = NotacreditodetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = NotacreditodetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Notacreditodetalle object", $e);
@@ -653,6 +848,21 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA)) {
             $modifiedColumns[':p' . $index++]  = '`notacreditodetalle_revisada`';
         }
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_IEPS)) {
+            $modifiedColumns[':p' . $index++]  = '`notacreditodetalle_ieps`';
+        }
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`notacreditodetalle_descuento`';
+        }
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`notacreditodetalle_subtotal`';
+        }
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO)) {
+            $modifiedColumns[':p' . $index++]  = '`notacreditodetalle_costounitario`';
+        }
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO)) {
+            $modifiedColumns[':p' . $index++]  = '`notacreditodetalle_costounitarioneto`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `notacreditodetalle` (%s) VALUES (%s)',
@@ -681,6 +891,21 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
                         break;
                     case '`notacreditodetalle_revisada`':
                         $stmt->bindValue($identifier, (int) $this->notacreditodetalle_revisada, PDO::PARAM_INT);
+                        break;
+                    case '`notacreditodetalle_ieps`':
+                        $stmt->bindValue($identifier, $this->notacreditodetalle_ieps, PDO::PARAM_STR);
+                        break;
+                    case '`notacreditodetalle_descuento`':
+                        $stmt->bindValue($identifier, $this->notacreditodetalle_descuento, PDO::PARAM_STR);
+                        break;
+                    case '`notacreditodetalle_subtotal`':
+                        $stmt->bindValue($identifier, $this->notacreditodetalle_subtotal, PDO::PARAM_STR);
+                        break;
+                    case '`notacreditodetalle_costounitario`':
+                        $stmt->bindValue($identifier, $this->notacreditodetalle_costounitario, PDO::PARAM_STR);
+                        break;
+                    case '`notacreditodetalle_costounitarioneto`':
+                        $stmt->bindValue($identifier, $this->notacreditodetalle_costounitarioneto, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -858,6 +1083,21 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
             case 5:
                 return $this->getNotacreditodetalleRevisada();
                 break;
+            case 6:
+                return $this->getNotacreditodetalleIeps();
+                break;
+            case 7:
+                return $this->getNotacreditodetalleDescuento();
+                break;
+            case 8:
+                return $this->getNotacreditodetalleSubtotal();
+                break;
+            case 9:
+                return $this->getNotacreditodetalleCostounitario();
+                break;
+            case 10:
+                return $this->getNotacreditodetalleCostounitarioneto();
+                break;
             default:
                 return null;
                 break;
@@ -893,6 +1133,11 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
             $keys[3] => $this->getIdalmacen(),
             $keys[4] => $this->getNotacreditodetalleCantidad(),
             $keys[5] => $this->getNotacreditodetalleRevisada(),
+            $keys[6] => $this->getNotacreditodetalleIeps(),
+            $keys[7] => $this->getNotacreditodetalleDescuento(),
+            $keys[8] => $this->getNotacreditodetalleSubtotal(),
+            $keys[9] => $this->getNotacreditodetalleCostounitario(),
+            $keys[10] => $this->getNotacreditodetalleCostounitarioneto(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -961,6 +1206,21 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
             case 5:
                 $this->setNotacreditodetalleRevisada($value);
                 break;
+            case 6:
+                $this->setNotacreditodetalleIeps($value);
+                break;
+            case 7:
+                $this->setNotacreditodetalleDescuento($value);
+                break;
+            case 8:
+                $this->setNotacreditodetalleSubtotal($value);
+                break;
+            case 9:
+                $this->setNotacreditodetalleCostounitario($value);
+                break;
+            case 10:
+                $this->setNotacreditodetalleCostounitarioneto($value);
+                break;
         } // switch()
     }
 
@@ -991,6 +1251,11 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[3], $arr)) $this->setIdalmacen($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setNotacreditodetalleCantidad($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setNotacreditodetalleRevisada($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setNotacreditodetalleIeps($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setNotacreditodetalleDescuento($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setNotacreditodetalleSubtotal($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setNotacreditodetalleCostounitario($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setNotacreditodetalleCostounitarioneto($arr[$keys[10]]);
     }
 
     /**
@@ -1008,6 +1273,11 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditodetallePeer::IDALMACEN)) $criteria->add(NotacreditodetallePeer::IDALMACEN, $this->idalmacen);
         if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_CANTIDAD)) $criteria->add(NotacreditodetallePeer::NOTACREDITODETALLE_CANTIDAD, $this->notacreditodetalle_cantidad);
         if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA)) $criteria->add(NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA, $this->notacreditodetalle_revisada);
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_IEPS)) $criteria->add(NotacreditodetallePeer::NOTACREDITODETALLE_IEPS, $this->notacreditodetalle_ieps);
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO)) $criteria->add(NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO, $this->notacreditodetalle_descuento);
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL)) $criteria->add(NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL, $this->notacreditodetalle_subtotal);
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO)) $criteria->add(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO, $this->notacreditodetalle_costounitario);
+        if ($this->isColumnModified(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO)) $criteria->add(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO, $this->notacreditodetalle_costounitarioneto);
 
         return $criteria;
     }
@@ -1076,6 +1346,11 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
         $copyObj->setIdalmacen($this->getIdalmacen());
         $copyObj->setNotacreditodetalleCantidad($this->getNotacreditodetalleCantidad());
         $copyObj->setNotacreditodetalleRevisada($this->getNotacreditodetalleRevisada());
+        $copyObj->setNotacreditodetalleIeps($this->getNotacreditodetalleIeps());
+        $copyObj->setNotacreditodetalleDescuento($this->getNotacreditodetalleDescuento());
+        $copyObj->setNotacreditodetalleSubtotal($this->getNotacreditodetalleSubtotal());
+        $copyObj->setNotacreditodetalleCostounitario($this->getNotacreditodetalleCostounitario());
+        $copyObj->setNotacreditodetalleCostounitarioneto($this->getNotacreditodetalleCostounitarioneto());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1301,6 +1576,11 @@ abstract class BaseNotacreditodetalle extends BaseObject implements Persistent
         $this->idalmacen = null;
         $this->notacreditodetalle_cantidad = null;
         $this->notacreditodetalle_revisada = null;
+        $this->notacreditodetalle_ieps = null;
+        $this->notacreditodetalle_descuento = null;
+        $this->notacreditodetalle_subtotal = null;
+        $this->notacreditodetalle_costounitario = null;
+        $this->notacreditodetalle_costounitarioneto = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

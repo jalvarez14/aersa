@@ -1,0 +1,285 @@
+<style>
+    .notes textarea{ 
+        overflow-y: scroll; 
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        resize: none;
+        
+    }
+    .notes .right-label{
+        margin-left: 4%;
+        display: inline;
+    }
+    .notes .left-label{
+        display: inline;
+        margin-left: 65%;
+    }
+</style>
+<form class="form-horizontal" action="#">
+    <div class="form-body">
+        <h3 class="form-section"><b>Compras - Registro</b></h3><br><br>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Fecha</label>
+                    <div class="col-md-9">
+                        <input type="text" placeholder="" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+                <div class="form-group has-error">
+                    <label class="control-label col-md-3">Tipo</label>
+                    <div class="col-md-9">
+                        <select class="form-control" name="foo">
+                            <option value="1">Option 1</option>
+                            <option value="1">Option 2</option>
+                            <option value="1">Option 3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Proveedor</label>
+                    <div class="col-md-9">
+                        <input type="text" placeholder="" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Folio</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Fecha de entrega</label>
+                    <div class="col-md-9">
+                        <input type="text" placeholder="" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">Factura</label>
+                    <div class="col-md-9">
+                        <input type="text" placeholder="" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group has-error">
+                    <label class="control-label col-md-3">Almacen</label>
+                    <div class="col-md-9">
+                        <select class="form-control" name="foo">
+                            <option value="1">Option 1</option>
+                            <option value="1">Option 2</option>
+                            <option value="1">Option 3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>  
+            <div class="col-md-6">
+                <div class="form-group has-error">
+                    <label class="control-label col-md-3">Revision</label>
+                    <div class="col-md-9">
+                        <select class="form-control" name="foo">
+                            <option value="1">Option 1</option>
+                            <option value="1">Option 2</option>
+                            <option value="1">Option 3</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+    </div>
+</form><br><br><br>
+<div class="portlet light portlet-fit ">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="bold">Productos</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table-toolbar">
+            <div class="row">
+            </div>
+        </div>
+        <div id="sample_editable_1_wrapper" class="dataTables_wrapper no-footer">
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="dataTables_length" id="sample_editable_1_length">
+                        <label> 
+                            <select name="sample_editable_1_length" aria-controls="sample_editable_1" class="form-control input-sm input-xsmall input-inline">
+                                <option value="5">5</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="-1">All</option>
+                            </select> registros</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div id="sample_editable_1_filter" class="dataTables_filter">
+                        <input style="float: right; margin-left: 15px" type="search" class="form-control input-sm input-small input-inline" placeholder="" aria-controls="sample_editable_1">
+                        <button style="float: right" class="btn green">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-scrollable">
+                <table id="sample_editable_1" class="table table-striped table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="sample_editable_1_info">
+                    <thead>
+                        <tr role="row">
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Full Name : activate to sort column ascending"> Fecha</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Points : activate to sort column ascending"> Proveedor </th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending"> Tipo </th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending"> Total </th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending"> Revisada </th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending"> Opciones </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr role="row" class="odd">
+                            <td class="sorting_1"> alex </td>
+                            <td> Alex Nilson </td>
+                            <td> 1234 </td>
+                            <td class="center"> power user </td>
+                            <td>
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="edit"> Edit </a>
+                                <a href="javascript:;" class="delete"> Delete </a>
+                            </td>
+                        </tr><tr role="row" class="even">
+                            <td class="sorting_1"> alex </td>
+                            <td> Alex Nilson </td>
+                            <td> 1234 </td>
+                            <td class="center"> power user </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="edit"> Edit </a>
+                                <a href="javascript:;" class="delete"> Delete </a>
+                            </td>
+                        </tr><tr role="row" class="even">
+                            <td class="sorting_1"> giovanny </td>
+                            <td> Alex Nilson </td>
+                            <td> 1234 </td>
+                            <td class="center"> power user </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="edit"> Edit </a>
+                                <a href="javascript:;" class="delete"> Delete </a>
+                            </td>
+                        </tr><tr role="row" class="odd">
+                            <td class="sorting_1"> alex </td>
+                            <td> Alex Nilson </td>
+                            <td> 1234 </td>
+                            <td class="center"> power user </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="edit"> Edit </a>
+                                <a href="javascript:;" class="delete"> Delete </a>
+                            </td>
+                        </tr><tr role="row" class="even">
+                            <td class="sorting_1"> gist124 </td>
+                            <td> Nick Roberts </td>
+                            <td> 62 </td>
+                            <td class="center"> new user </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="edit"> Edit </a>
+                                <a href="javascript:;" class="delete"> Delete </a>
+                            </td>
+                        </tr><tr role="row" class="odd">
+                            <td class="sorting_1"> goldweb </td>
+                            <td> Sergio Jackson </td>
+                            <td> 132 </td>
+                            <td class="center"> elite user </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="edit"> Edit </a>
+                                <a href="javascript:;" class="delete"> Delete </a>
+                            </td>
+                        </tr></tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-sm-5">
+                    <div class="dataTables_info" id="sample_editable_1_info" role="status" aria-live="polite">Showing 1 to 5 of 8 entries</div>
+                </div>
+                <div class="col-md-7 col-sm-7">
+                    <div class="dataTables_paginate paging_bootstrap_number" id="sample_editable_1_paginate">
+                        <ul class="pagination" style="visibility: visible;">
+                            <li class="prev disabled">
+                                <a title="Prev" href="#">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="#">1</a>
+                            </li>
+                            <li>
+                                <a href="#">2</a>
+                            </li><li class="next">
+                                <a title="Next" href="#">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin-left: 950px">
+        <label>Subtotal: </label><br>
+        <label>IEPS: </label><br>
+        <label>IVA: </label><br>
+        <label>TOTAL: </label><br><br>
+    </div>
+        <button style="margin-left: 970px" class="btn green">Guardar</button>
+</div><br>
+<div class="portlet light portlet-fit ">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="bold">Notas</span>
+        </div>
+    </div>
+    <div class="notes">
+        <label class="right-label">Nombre de usuario</label><label class="left-label">16 abril 2016 14:32:00</label>
+        <textarea rows="5" cols="125"></textarea><br><br>
+        <label class="right-label">Nombre de usuario</label><label class="left-label">16 abril 2016 14:32:00</label>
+        <textarea rows="5" cols="125"></textarea><br><br>
+        <label class="right-label">Nombre de usuario</label><label class="left-label">16 abril 2016 14:32:00</label>
+        <textarea rows="5" cols="125"></textarea>
+    </div><br>
+    <div style="margin-left: 970px">
+        <button class="btn green">Crear nota</button>
+    </div>
+</div>

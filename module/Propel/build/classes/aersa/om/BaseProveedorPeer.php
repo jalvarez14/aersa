@@ -807,6 +807,10 @@ abstract class BaseProveedorPeer
             $criteria = $values->buildCriteria(); // build Criteria from Proveedor object
         }
 
+        if ($criteria->containsKey(ProveedorPeer::IDPROVEEDOR) && $criteria->keyContainsValue(ProveedorPeer::IDPROVEEDOR) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ProveedorPeer::IDPROVEEDOR.')');
+        }
+
 
         // Set the correct dbName
         $criteria->setDbName(ProveedorPeer::DATABASE_NAME);

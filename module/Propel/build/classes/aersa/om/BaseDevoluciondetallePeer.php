@@ -24,13 +24,13 @@ abstract class BaseDevoluciondetallePeer
     const TM_CLASS = 'DevoluciondetalleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 9;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /** the column name for the iddevoluciondetalle field */
     const IDDEVOLUCIONDETALLE = 'devoluciondetalle.iddevoluciondetalle';
@@ -49,6 +49,15 @@ abstract class BaseDevoluciondetallePeer
 
     /** the column name for the devoluciondetalle_revisada field */
     const DEVOLUCIONDETALLE_REVISADA = 'devoluciondetalle.devoluciondetalle_revisada';
+
+    /** the column name for the devoluciondetalle_subtotal field */
+    const DEVOLUCIONDETALLE_SUBTOTAL = 'devoluciondetalle.devoluciondetalle_subtotal';
+
+    /** the column name for the devoluciondetalle_ieps field */
+    const DEVOLUCIONDETALLE_IEPS = 'devoluciondetalle.devoluciondetalle_ieps';
+
+    /** the column name for the devoluciondetalle_descuento field */
+    const DEVOLUCIONDETALLE_DESCUENTO = 'devoluciondetalle.devoluciondetalle_descuento';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -69,12 +78,12 @@ abstract class BaseDevoluciondetallePeer
      * e.g. DevoluciondetallePeer::$fieldNames[DevoluciondetallePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevoluciondetalle', 'Iddevolucion', 'Idproducto', 'Idalmacen', 'DevoluciondetalleCantidad', 'DevoluciondetalleRevisada', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevoluciondetalle', 'iddevolucion', 'idproducto', 'idalmacen', 'devoluciondetalleCantidad', 'devoluciondetalleRevisada', ),
-        BasePeer::TYPE_COLNAME => array (DevoluciondetallePeer::IDDEVOLUCIONDETALLE, DevoluciondetallePeer::IDDEVOLUCION, DevoluciondetallePeer::IDPRODUCTO, DevoluciondetallePeer::IDALMACEN, DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD, DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONDETALLE', 'IDDEVOLUCION', 'IDPRODUCTO', 'IDALMACEN', 'DEVOLUCIONDETALLE_CANTIDAD', 'DEVOLUCIONDETALLE_REVISADA', ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevoluciondetalle', 'iddevolucion', 'idproducto', 'idalmacen', 'devoluciondetalle_cantidad', 'devoluciondetalle_revisada', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevoluciondetalle', 'Iddevolucion', 'Idproducto', 'Idalmacen', 'DevoluciondetalleCantidad', 'DevoluciondetalleRevisada', 'DevoluciondetalleSubtotal', 'DevoluciondetalleIeps', 'DevoluciondetalleDescuento', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevoluciondetalle', 'iddevolucion', 'idproducto', 'idalmacen', 'devoluciondetalleCantidad', 'devoluciondetalleRevisada', 'devoluciondetalleSubtotal', 'devoluciondetalleIeps', 'devoluciondetalleDescuento', ),
+        BasePeer::TYPE_COLNAME => array (DevoluciondetallePeer::IDDEVOLUCIONDETALLE, DevoluciondetallePeer::IDDEVOLUCION, DevoluciondetallePeer::IDPRODUCTO, DevoluciondetallePeer::IDALMACEN, DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD, DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA, DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL, DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS, DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONDETALLE', 'IDDEVOLUCION', 'IDPRODUCTO', 'IDALMACEN', 'DEVOLUCIONDETALLE_CANTIDAD', 'DEVOLUCIONDETALLE_REVISADA', 'DEVOLUCIONDETALLE_SUBTOTAL', 'DEVOLUCIONDETALLE_IEPS', 'DEVOLUCIONDETALLE_DESCUENTO', ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevoluciondetalle', 'iddevolucion', 'idproducto', 'idalmacen', 'devoluciondetalle_cantidad', 'devoluciondetalle_revisada', 'devoluciondetalle_subtotal', 'devoluciondetalle_ieps', 'devoluciondetalle_descuento', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -84,12 +93,12 @@ abstract class BaseDevoluciondetallePeer
      * e.g. DevoluciondetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevoluciondetalle' => 0, 'Iddevolucion' => 1, 'Idproducto' => 2, 'Idalmacen' => 3, 'DevoluciondetalleCantidad' => 4, 'DevoluciondetalleRevisada' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevoluciondetalle' => 0, 'iddevolucion' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'devoluciondetalleCantidad' => 4, 'devoluciondetalleRevisada' => 5, ),
-        BasePeer::TYPE_COLNAME => array (DevoluciondetallePeer::IDDEVOLUCIONDETALLE => 0, DevoluciondetallePeer::IDDEVOLUCION => 1, DevoluciondetallePeer::IDPRODUCTO => 2, DevoluciondetallePeer::IDALMACEN => 3, DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD => 4, DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONDETALLE' => 0, 'IDDEVOLUCION' => 1, 'IDPRODUCTO' => 2, 'IDALMACEN' => 3, 'DEVOLUCIONDETALLE_CANTIDAD' => 4, 'DEVOLUCIONDETALLE_REVISADA' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevoluciondetalle' => 0, 'iddevolucion' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'devoluciondetalle_cantidad' => 4, 'devoluciondetalle_revisada' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevoluciondetalle' => 0, 'Iddevolucion' => 1, 'Idproducto' => 2, 'Idalmacen' => 3, 'DevoluciondetalleCantidad' => 4, 'DevoluciondetalleRevisada' => 5, 'DevoluciondetalleSubtotal' => 6, 'DevoluciondetalleIeps' => 7, 'DevoluciondetalleDescuento' => 8, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevoluciondetalle' => 0, 'iddevolucion' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'devoluciondetalleCantidad' => 4, 'devoluciondetalleRevisada' => 5, 'devoluciondetalleSubtotal' => 6, 'devoluciondetalleIeps' => 7, 'devoluciondetalleDescuento' => 8, ),
+        BasePeer::TYPE_COLNAME => array (DevoluciondetallePeer::IDDEVOLUCIONDETALLE => 0, DevoluciondetallePeer::IDDEVOLUCION => 1, DevoluciondetallePeer::IDPRODUCTO => 2, DevoluciondetallePeer::IDALMACEN => 3, DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD => 4, DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA => 5, DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL => 6, DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS => 7, DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO => 8, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONDETALLE' => 0, 'IDDEVOLUCION' => 1, 'IDPRODUCTO' => 2, 'IDALMACEN' => 3, 'DEVOLUCIONDETALLE_CANTIDAD' => 4, 'DEVOLUCIONDETALLE_REVISADA' => 5, 'DEVOLUCIONDETALLE_SUBTOTAL' => 6, 'DEVOLUCIONDETALLE_IEPS' => 7, 'DEVOLUCIONDETALLE_DESCUENTO' => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevoluciondetalle' => 0, 'iddevolucion' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'devoluciondetalle_cantidad' => 4, 'devoluciondetalle_revisada' => 5, 'devoluciondetalle_subtotal' => 6, 'devoluciondetalle_ieps' => 7, 'devoluciondetalle_descuento' => 8, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -169,6 +178,9 @@ abstract class BaseDevoluciondetallePeer
             $criteria->addSelectColumn(DevoluciondetallePeer::IDALMACEN);
             $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD);
             $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA);
+            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL);
+            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS);
+            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO);
         } else {
             $criteria->addSelectColumn($alias . '.iddevoluciondetalle');
             $criteria->addSelectColumn($alias . '.iddevolucion');
@@ -176,6 +188,9 @@ abstract class BaseDevoluciondetallePeer
             $criteria->addSelectColumn($alias . '.idalmacen');
             $criteria->addSelectColumn($alias . '.devoluciondetalle_cantidad');
             $criteria->addSelectColumn($alias . '.devoluciondetalle_revisada');
+            $criteria->addSelectColumn($alias . '.devoluciondetalle_subtotal');
+            $criteria->addSelectColumn($alias . '.devoluciondetalle_ieps');
+            $criteria->addSelectColumn($alias . '.devoluciondetalle_descuento');
         }
     }
 

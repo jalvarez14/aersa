@@ -86,7 +86,9 @@
                         type:'post',
                         dataType: 'json',
                         success: function (data, textStatus, jqXHR) {
-
+                            
+                            $container.find('select[name=idsucursal]').append('<option value="admin">Administración</option>');
+                             
                             $.each(data,function(index){
                                 var option = $('<option>');
                                 option.attr('value',index);

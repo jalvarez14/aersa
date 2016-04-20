@@ -759,6 +759,10 @@ abstract class BaseCodigobarrasPeer
             $criteria = $values->buildCriteria(); // build Criteria from Codigobarras object
         }
 
+        if ($criteria->containsKey(CodigobarrasPeer::IDCODIGOBARRAS) && $criteria->keyContainsValue(CodigobarrasPeer::IDCODIGOBARRAS) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.CodigobarrasPeer::IDCODIGOBARRAS.')');
+        }
+
 
         // Set the correct dbName
         $criteria->setDbName(CodigobarrasPeer::DATABASE_NAME);

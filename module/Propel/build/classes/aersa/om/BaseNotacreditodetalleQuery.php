@@ -12,6 +12,11 @@
  * @method NotacreditodetalleQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
  * @method NotacreditodetalleQuery orderByNotacreditodetalleCantidad($order = Criteria::ASC) Order by the notacreditodetalle_cantidad column
  * @method NotacreditodetalleQuery orderByNotacreditodetalleRevisada($order = Criteria::ASC) Order by the notacreditodetalle_revisada column
+ * @method NotacreditodetalleQuery orderByNotacreditodetalleIeps($order = Criteria::ASC) Order by the notacreditodetalle_ieps column
+ * @method NotacreditodetalleQuery orderByNotacreditodetalleDescuento($order = Criteria::ASC) Order by the notacreditodetalle_descuento column
+ * @method NotacreditodetalleQuery orderByNotacreditodetalleSubtotal($order = Criteria::ASC) Order by the notacreditodetalle_subtotal column
+ * @method NotacreditodetalleQuery orderByNotacreditodetalleCostounitario($order = Criteria::ASC) Order by the notacreditodetalle_costounitario column
+ * @method NotacreditodetalleQuery orderByNotacreditodetalleCostounitarioneto($order = Criteria::ASC) Order by the notacreditodetalle_costounitarioneto column
  *
  * @method NotacreditodetalleQuery groupByIdnotacreditodetalle() Group by the idnotacreditodetalle column
  * @method NotacreditodetalleQuery groupByIdnotacredito() Group by the idnotacredito column
@@ -19,6 +24,11 @@
  * @method NotacreditodetalleQuery groupByIdalmacen() Group by the idalmacen column
  * @method NotacreditodetalleQuery groupByNotacreditodetalleCantidad() Group by the notacreditodetalle_cantidad column
  * @method NotacreditodetalleQuery groupByNotacreditodetalleRevisada() Group by the notacreditodetalle_revisada column
+ * @method NotacreditodetalleQuery groupByNotacreditodetalleIeps() Group by the notacreditodetalle_ieps column
+ * @method NotacreditodetalleQuery groupByNotacreditodetalleDescuento() Group by the notacreditodetalle_descuento column
+ * @method NotacreditodetalleQuery groupByNotacreditodetalleSubtotal() Group by the notacreditodetalle_subtotal column
+ * @method NotacreditodetalleQuery groupByNotacreditodetalleCostounitario() Group by the notacreditodetalle_costounitario column
+ * @method NotacreditodetalleQuery groupByNotacreditodetalleCostounitarioneto() Group by the notacreditodetalle_costounitarioneto column
  *
  * @method NotacreditodetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method NotacreditodetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -44,6 +54,11 @@
  * @method Notacreditodetalle findOneByIdalmacen(int $idalmacen) Return the first Notacreditodetalle filtered by the idalmacen column
  * @method Notacreditodetalle findOneByNotacreditodetalleCantidad(double $notacreditodetalle_cantidad) Return the first Notacreditodetalle filtered by the notacreditodetalle_cantidad column
  * @method Notacreditodetalle findOneByNotacreditodetalleRevisada(boolean $notacreditodetalle_revisada) Return the first Notacreditodetalle filtered by the notacreditodetalle_revisada column
+ * @method Notacreditodetalle findOneByNotacreditodetalleIeps(double $notacreditodetalle_ieps) Return the first Notacreditodetalle filtered by the notacreditodetalle_ieps column
+ * @method Notacreditodetalle findOneByNotacreditodetalleDescuento(double $notacreditodetalle_descuento) Return the first Notacreditodetalle filtered by the notacreditodetalle_descuento column
+ * @method Notacreditodetalle findOneByNotacreditodetalleSubtotal(string $notacreditodetalle_subtotal) Return the first Notacreditodetalle filtered by the notacreditodetalle_subtotal column
+ * @method Notacreditodetalle findOneByNotacreditodetalleCostounitario(string $notacreditodetalle_costounitario) Return the first Notacreditodetalle filtered by the notacreditodetalle_costounitario column
+ * @method Notacreditodetalle findOneByNotacreditodetalleCostounitarioneto(string $notacreditodetalle_costounitarioneto) Return the first Notacreditodetalle filtered by the notacreditodetalle_costounitarioneto column
  *
  * @method array findByIdnotacreditodetalle(int $idnotacreditodetalle) Return Notacreditodetalle objects filtered by the idnotacreditodetalle column
  * @method array findByIdnotacredito(int $idnotacredito) Return Notacreditodetalle objects filtered by the idnotacredito column
@@ -51,6 +66,11 @@
  * @method array findByIdalmacen(int $idalmacen) Return Notacreditodetalle objects filtered by the idalmacen column
  * @method array findByNotacreditodetalleCantidad(double $notacreditodetalle_cantidad) Return Notacreditodetalle objects filtered by the notacreditodetalle_cantidad column
  * @method array findByNotacreditodetalleRevisada(boolean $notacreditodetalle_revisada) Return Notacreditodetalle objects filtered by the notacreditodetalle_revisada column
+ * @method array findByNotacreditodetalleIeps(double $notacreditodetalle_ieps) Return Notacreditodetalle objects filtered by the notacreditodetalle_ieps column
+ * @method array findByNotacreditodetalleDescuento(double $notacreditodetalle_descuento) Return Notacreditodetalle objects filtered by the notacreditodetalle_descuento column
+ * @method array findByNotacreditodetalleSubtotal(string $notacreditodetalle_subtotal) Return Notacreditodetalle objects filtered by the notacreditodetalle_subtotal column
+ * @method array findByNotacreditodetalleCostounitario(string $notacreditodetalle_costounitario) Return Notacreditodetalle objects filtered by the notacreditodetalle_costounitario column
+ * @method array findByNotacreditodetalleCostounitarioneto(string $notacreditodetalle_costounitarioneto) Return Notacreditodetalle objects filtered by the notacreditodetalle_costounitarioneto column
  *
  * @package    propel.generator.aersa.om
  */
@@ -158,7 +178,7 @@ abstract class BaseNotacreditodetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idnotacreditodetalle`, `idnotacredito`, `idproducto`, `idalmacen`, `notacreditodetalle_cantidad`, `notacreditodetalle_revisada` FROM `notacreditodetalle` WHERE `idnotacreditodetalle` = :p0';
+        $sql = 'SELECT `idnotacreditodetalle`, `idnotacredito`, `idproducto`, `idalmacen`, `notacreditodetalle_cantidad`, `notacreditodetalle_revisada`, `notacreditodetalle_ieps`, `notacreditodetalle_descuento`, `notacreditodetalle_subtotal`, `notacreditodetalle_costounitario`, `notacreditodetalle_costounitarioneto` FROM `notacreditodetalle` WHERE `idnotacreditodetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -488,6 +508,216 @@ abstract class BaseNotacreditodetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA, $notacreditodetalleRevisada, $comparison);
+    }
+
+    /**
+     * Filter the query on the notacreditodetalle_ieps column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotacreditodetalleIeps(1234); // WHERE notacreditodetalle_ieps = 1234
+     * $query->filterByNotacreditodetalleIeps(array(12, 34)); // WHERE notacreditodetalle_ieps IN (12, 34)
+     * $query->filterByNotacreditodetalleIeps(array('min' => 12)); // WHERE notacreditodetalle_ieps >= 12
+     * $query->filterByNotacreditodetalleIeps(array('max' => 12)); // WHERE notacreditodetalle_ieps <= 12
+     * </code>
+     *
+     * @param     mixed $notacreditodetalleIeps The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditodetalleQuery The current query, for fluid interface
+     */
+    public function filterByNotacreditodetalleIeps($notacreditodetalleIeps = null, $comparison = null)
+    {
+        if (is_array($notacreditodetalleIeps)) {
+            $useMinMax = false;
+            if (isset($notacreditodetalleIeps['min'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_IEPS, $notacreditodetalleIeps['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditodetalleIeps['max'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_IEPS, $notacreditodetalleIeps['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_IEPS, $notacreditodetalleIeps, $comparison);
+    }
+
+    /**
+     * Filter the query on the notacreditodetalle_descuento column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotacreditodetalleDescuento(1234); // WHERE notacreditodetalle_descuento = 1234
+     * $query->filterByNotacreditodetalleDescuento(array(12, 34)); // WHERE notacreditodetalle_descuento IN (12, 34)
+     * $query->filterByNotacreditodetalleDescuento(array('min' => 12)); // WHERE notacreditodetalle_descuento >= 12
+     * $query->filterByNotacreditodetalleDescuento(array('max' => 12)); // WHERE notacreditodetalle_descuento <= 12
+     * </code>
+     *
+     * @param     mixed $notacreditodetalleDescuento The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditodetalleQuery The current query, for fluid interface
+     */
+    public function filterByNotacreditodetalleDescuento($notacreditodetalleDescuento = null, $comparison = null)
+    {
+        if (is_array($notacreditodetalleDescuento)) {
+            $useMinMax = false;
+            if (isset($notacreditodetalleDescuento['min'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO, $notacreditodetalleDescuento['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditodetalleDescuento['max'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO, $notacreditodetalleDescuento['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO, $notacreditodetalleDescuento, $comparison);
+    }
+
+    /**
+     * Filter the query on the notacreditodetalle_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotacreditodetalleSubtotal(1234); // WHERE notacreditodetalle_subtotal = 1234
+     * $query->filterByNotacreditodetalleSubtotal(array(12, 34)); // WHERE notacreditodetalle_subtotal IN (12, 34)
+     * $query->filterByNotacreditodetalleSubtotal(array('min' => 12)); // WHERE notacreditodetalle_subtotal >= 12
+     * $query->filterByNotacreditodetalleSubtotal(array('max' => 12)); // WHERE notacreditodetalle_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $notacreditodetalleSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditodetalleQuery The current query, for fluid interface
+     */
+    public function filterByNotacreditodetalleSubtotal($notacreditodetalleSubtotal = null, $comparison = null)
+    {
+        if (is_array($notacreditodetalleSubtotal)) {
+            $useMinMax = false;
+            if (isset($notacreditodetalleSubtotal['min'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL, $notacreditodetalleSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditodetalleSubtotal['max'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL, $notacreditodetalleSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL, $notacreditodetalleSubtotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the notacreditodetalle_costounitario column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotacreditodetalleCostounitario(1234); // WHERE notacreditodetalle_costounitario = 1234
+     * $query->filterByNotacreditodetalleCostounitario(array(12, 34)); // WHERE notacreditodetalle_costounitario IN (12, 34)
+     * $query->filterByNotacreditodetalleCostounitario(array('min' => 12)); // WHERE notacreditodetalle_costounitario >= 12
+     * $query->filterByNotacreditodetalleCostounitario(array('max' => 12)); // WHERE notacreditodetalle_costounitario <= 12
+     * </code>
+     *
+     * @param     mixed $notacreditodetalleCostounitario The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditodetalleQuery The current query, for fluid interface
+     */
+    public function filterByNotacreditodetalleCostounitario($notacreditodetalleCostounitario = null, $comparison = null)
+    {
+        if (is_array($notacreditodetalleCostounitario)) {
+            $useMinMax = false;
+            if (isset($notacreditodetalleCostounitario['min'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO, $notacreditodetalleCostounitario['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditodetalleCostounitario['max'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO, $notacreditodetalleCostounitario['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO, $notacreditodetalleCostounitario, $comparison);
+    }
+
+    /**
+     * Filter the query on the notacreditodetalle_costounitarioneto column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotacreditodetalleCostounitarioneto(1234); // WHERE notacreditodetalle_costounitarioneto = 1234
+     * $query->filterByNotacreditodetalleCostounitarioneto(array(12, 34)); // WHERE notacreditodetalle_costounitarioneto IN (12, 34)
+     * $query->filterByNotacreditodetalleCostounitarioneto(array('min' => 12)); // WHERE notacreditodetalle_costounitarioneto >= 12
+     * $query->filterByNotacreditodetalleCostounitarioneto(array('max' => 12)); // WHERE notacreditodetalle_costounitarioneto <= 12
+     * </code>
+     *
+     * @param     mixed $notacreditodetalleCostounitarioneto The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditodetalleQuery The current query, for fluid interface
+     */
+    public function filterByNotacreditodetalleCostounitarioneto($notacreditodetalleCostounitarioneto = null, $comparison = null)
+    {
+        if (is_array($notacreditodetalleCostounitarioneto)) {
+            $useMinMax = false;
+            if (isset($notacreditodetalleCostounitarioneto['min'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO, $notacreditodetalleCostounitarioneto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditodetalleCostounitarioneto['max'])) {
+                $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO, $notacreditodetalleCostounitarioneto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO, $notacreditodetalleCostounitarioneto, $comparison);
     }
 
     /**

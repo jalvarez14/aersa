@@ -40,14 +40,17 @@ class RequisicionTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idrequisicion', 'Idrequisicion', 'INTEGER', true, null, null);
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
-        $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addForeignKey('idsucursalorigen', 'Idsucursalorigen', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addForeignKey('idalmacenorigen', 'Idalmacenorigen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
+        $this->addForeignKey('idsucursaldestino', 'Idsucursaldestino', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addForeignKey('idalmacendestino', 'Idalmacendestino', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addForeignKey('idalmacenorigen', 'Idalmacenorigen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
-        $this->addForeignKey('idalmacendestino', 'Idalmacendestino', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idconceptosalida', 'Idconceptosalida', 'INTEGER', 'conceptosalida', 'idconceptosalida', true, null, null);
         $this->addColumn('requisicion_fecha', 'RequisicionFecha', 'TIMESTAMP', true, null, null);
         $this->addColumn('requisicion_revisada', 'RequisicionRevisada', 'BOOLEAN', true, 1, null);
+        $this->addColumn('requisicion_folio', 'RequisicionFolio', 'VARCHAR', true, 10, null);
+        $this->addColumn('requisicion_total', 'RequisicionTotal', 'DECIMAL', true, 15, null);
         // validators
     } // initialize()
 
@@ -61,7 +64,8 @@ class RequisicionTableMap extends TableMap
         $this->addRelation('UsuarioRelatedByIdauditor', 'Usuario', RelationMap::MANY_TO_ONE, array('idauditor' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Conceptosalida', 'Conceptosalida', RelationMap::MANY_TO_ONE, array('idconceptosalida' => 'idconceptosalida', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('SucursalRelatedByIdsucursaldestino', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursaldestino' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('SucursalRelatedByIdsucursalorigen', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursalorigen' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Requisiciondetalle', 'Requisiciondetalle', RelationMap::ONE_TO_MANY, array('idrequisicion' => 'idrequisicion', ), 'CASCADE', 'CASCADE', 'Requisiciondetalles');
     } // buildRelations()

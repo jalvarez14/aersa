@@ -143,6 +143,18 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     protected $collNotacreditonotasPartial;
 
     /**
+     * @var        PropelObjectCollection|Ordentablajeria[] Collection to store aggregation of Ordentablajeria objects.
+     */
+    protected $collOrdentablajeriasRelatedByIdauditor;
+    protected $collOrdentablajeriasRelatedByIdauditorPartial;
+
+    /**
+     * @var        PropelObjectCollection|Ordentablajeria[] Collection to store aggregation of Ordentablajeria objects.
+     */
+    protected $collOrdentablajeriasRelatedByIdusuario;
+    protected $collOrdentablajeriasRelatedByIdusuarioPartial;
+
+    /**
      * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
      */
     protected $collRequisicionsRelatedByIdauditor;
@@ -269,6 +281,18 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $notacreditonotasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ordentablajeriasRelatedByIdauditorScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ordentablajeriasRelatedByIdusuarioScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -647,6 +671,10 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
             $this->collNotacreditonotas = null;
 
+            $this->collOrdentablajeriasRelatedByIdauditor = null;
+
+            $this->collOrdentablajeriasRelatedByIdusuario = null;
+
             $this->collRequisicionsRelatedByIdauditor = null;
 
             $this->collRequisicionsRelatedByIdusuario = null;
@@ -993,6 +1021,40 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
             if ($this->collNotacreditonotas !== null) {
                 foreach ($this->collNotacreditonotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordentablajeriasRelatedByIdauditorScheduledForDeletion !== null) {
+                if (!$this->ordentablajeriasRelatedByIdauditorScheduledForDeletion->isEmpty()) {
+                    OrdentablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajeriasRelatedByIdauditorScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajeriasRelatedByIdauditor !== null) {
+                foreach ($this->collOrdentablajeriasRelatedByIdauditor as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion !== null) {
+                if (!$this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion->isEmpty()) {
+                    OrdentablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajeriasRelatedByIdusuario !== null) {
+                foreach ($this->collOrdentablajeriasRelatedByIdusuario as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1381,6 +1443,22 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collOrdentablajeriasRelatedByIdauditor !== null) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdauditor as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collOrdentablajeriasRelatedByIdusuario !== null) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdusuario as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collRequisicionsRelatedByIdauditor !== null) {
                     foreach ($this->collRequisicionsRelatedByIdauditor as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1562,6 +1640,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             }
             if (null !== $this->collNotacreditonotas) {
                 $result['Notacreditonotas'] = $this->collNotacreditonotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdentablajeriasRelatedByIdauditor) {
+                $result['OrdentablajeriasRelatedByIdauditor'] = $this->collOrdentablajeriasRelatedByIdauditor->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdentablajeriasRelatedByIdusuario) {
+                $result['OrdentablajeriasRelatedByIdusuario'] = $this->collOrdentablajeriasRelatedByIdusuario->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRequisicionsRelatedByIdauditor) {
                 $result['RequisicionsRelatedByIdauditor'] = $this->collRequisicionsRelatedByIdauditor->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1828,6 +1912,18 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getOrdentablajeriasRelatedByIdauditor() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajeriaRelatedByIdauditor($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getOrdentablajeriasRelatedByIdusuario() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajeriaRelatedByIdusuario($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRequisicionsRelatedByIdauditor() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRequisicionRelatedByIdauditor($relObj->copy($deepCopy));
@@ -2012,6 +2108,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         }
         if ('Notacreditonota' == $relationName) {
             $this->initNotacreditonotas();
+        }
+        if ('OrdentablajeriaRelatedByIdauditor' == $relationName) {
+            $this->initOrdentablajeriasRelatedByIdauditor();
+        }
+        if ('OrdentablajeriaRelatedByIdusuario' == $relationName) {
+            $this->initOrdentablajeriasRelatedByIdusuario();
         }
         if ('RequisicionRelatedByIdauditor' == $relationName) {
             $this->initRequisicionsRelatedByIdauditor();
@@ -5484,6 +5586,706 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collOrdentablajeriasRelatedByIdauditor collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addOrdentablajeriasRelatedByIdauditor()
+     */
+    public function clearOrdentablajeriasRelatedByIdauditor()
+    {
+        $this->collOrdentablajeriasRelatedByIdauditor = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajeriasRelatedByIdauditorPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajeriasRelatedByIdauditor collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajeriasRelatedByIdauditor($v = true)
+    {
+        $this->collOrdentablajeriasRelatedByIdauditorPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajeriasRelatedByIdauditor collection.
+     *
+     * By default this just sets the collOrdentablajeriasRelatedByIdauditor collection to an empty array (like clearcollOrdentablajeriasRelatedByIdauditor());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajeriasRelatedByIdauditor($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajeriasRelatedByIdauditor && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajeriasRelatedByIdauditor = new PropelObjectCollection();
+        $this->collOrdentablajeriasRelatedByIdauditor->setModel('Ordentablajeria');
+    }
+
+    /**
+     * Gets an array of Ordentablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     * @throws PropelException
+     */
+    public function getOrdentablajeriasRelatedByIdauditor($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdauditorPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdauditor || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdauditor) {
+                // return empty collection
+                $this->initOrdentablajeriasRelatedByIdauditor();
+            } else {
+                $collOrdentablajeriasRelatedByIdauditor = OrdentablajeriaQuery::create(null, $criteria)
+                    ->filterByUsuarioRelatedByIdauditor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajeriasRelatedByIdauditorPartial && count($collOrdentablajeriasRelatedByIdauditor)) {
+                      $this->initOrdentablajeriasRelatedByIdauditor(false);
+
+                      foreach ($collOrdentablajeriasRelatedByIdauditor as $obj) {
+                        if (false == $this->collOrdentablajeriasRelatedByIdauditor->contains($obj)) {
+                          $this->collOrdentablajeriasRelatedByIdauditor->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajeriasRelatedByIdauditorPartial = true;
+                    }
+
+                    $collOrdentablajeriasRelatedByIdauditor->getInternalIterator()->rewind();
+
+                    return $collOrdentablajeriasRelatedByIdauditor;
+                }
+
+                if ($partial && $this->collOrdentablajeriasRelatedByIdauditor) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdauditor as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajeriasRelatedByIdauditor[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajeriasRelatedByIdauditor = $collOrdentablajeriasRelatedByIdauditor;
+                $this->collOrdentablajeriasRelatedByIdauditorPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajeriasRelatedByIdauditor;
+    }
+
+    /**
+     * Sets a collection of OrdentablajeriaRelatedByIdauditor objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajeriasRelatedByIdauditor A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setOrdentablajeriasRelatedByIdauditor(PropelCollection $ordentablajeriasRelatedByIdauditor, PropelPDO $con = null)
+    {
+        $ordentablajeriasRelatedByIdauditorToDelete = $this->getOrdentablajeriasRelatedByIdauditor(new Criteria(), $con)->diff($ordentablajeriasRelatedByIdauditor);
+
+
+        $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion = $ordentablajeriasRelatedByIdauditorToDelete;
+
+        foreach ($ordentablajeriasRelatedByIdauditorToDelete as $ordentablajeriaRelatedByIdauditorRemoved) {
+            $ordentablajeriaRelatedByIdauditorRemoved->setUsuarioRelatedByIdauditor(null);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdauditor = null;
+        foreach ($ordentablajeriasRelatedByIdauditor as $ordentablajeriaRelatedByIdauditor) {
+            $this->addOrdentablajeriaRelatedByIdauditor($ordentablajeriaRelatedByIdauditor);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdauditor = $ordentablajeriasRelatedByIdauditor;
+        $this->collOrdentablajeriasRelatedByIdauditorPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajeria objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajeriasRelatedByIdauditor(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdauditorPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdauditor || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdauditor) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajeriasRelatedByIdauditor());
+            }
+            $query = OrdentablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuarioRelatedByIdauditor($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajeriasRelatedByIdauditor);
+    }
+
+    /**
+     * Method called to associate a Ordentablajeria object to this object
+     * through the Ordentablajeria foreign key attribute.
+     *
+     * @param    Ordentablajeria $l Ordentablajeria
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addOrdentablajeriaRelatedByIdauditor(Ordentablajeria $l)
+    {
+        if ($this->collOrdentablajeriasRelatedByIdauditor === null) {
+            $this->initOrdentablajeriasRelatedByIdauditor();
+            $this->collOrdentablajeriasRelatedByIdauditorPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajeriasRelatedByIdauditor->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajeriaRelatedByIdauditor($l);
+
+            if ($this->ordentablajeriasRelatedByIdauditorScheduledForDeletion and $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion->contains($l)) {
+                $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion->remove($this->ordentablajeriasRelatedByIdauditorScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdauditor $ordentablajeriaRelatedByIdauditor The ordentablajeriaRelatedByIdauditor object to add.
+     */
+    protected function doAddOrdentablajeriaRelatedByIdauditor($ordentablajeriaRelatedByIdauditor)
+    {
+        $this->collOrdentablajeriasRelatedByIdauditor[]= $ordentablajeriaRelatedByIdauditor;
+        $ordentablajeriaRelatedByIdauditor->setUsuarioRelatedByIdauditor($this);
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdauditor $ordentablajeriaRelatedByIdauditor The ordentablajeriaRelatedByIdauditor object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeOrdentablajeriaRelatedByIdauditor($ordentablajeriaRelatedByIdauditor)
+    {
+        if ($this->getOrdentablajeriasRelatedByIdauditor()->contains($ordentablajeriaRelatedByIdauditor)) {
+            $this->collOrdentablajeriasRelatedByIdauditor->remove($this->collOrdentablajeriasRelatedByIdauditor->search($ordentablajeriaRelatedByIdauditor));
+            if (null === $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion) {
+                $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion = clone $this->collOrdentablajeriasRelatedByIdauditor;
+                $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion->clear();
+            }
+            $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion[]= clone $ordentablajeriaRelatedByIdauditor;
+            $ordentablajeriaRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdauditorJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacendestino', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdauditorJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacenorigen', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdauditorJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdauditorJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdauditorJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdauditor($query, $con);
+    }
+
+    /**
+     * Clears out the collOrdentablajeriasRelatedByIdusuario collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addOrdentablajeriasRelatedByIdusuario()
+     */
+    public function clearOrdentablajeriasRelatedByIdusuario()
+    {
+        $this->collOrdentablajeriasRelatedByIdusuario = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajeriasRelatedByIdusuarioPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajeriasRelatedByIdusuario collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajeriasRelatedByIdusuario($v = true)
+    {
+        $this->collOrdentablajeriasRelatedByIdusuarioPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajeriasRelatedByIdusuario collection.
+     *
+     * By default this just sets the collOrdentablajeriasRelatedByIdusuario collection to an empty array (like clearcollOrdentablajeriasRelatedByIdusuario());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajeriasRelatedByIdusuario($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajeriasRelatedByIdusuario && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajeriasRelatedByIdusuario = new PropelObjectCollection();
+        $this->collOrdentablajeriasRelatedByIdusuario->setModel('Ordentablajeria');
+    }
+
+    /**
+     * Gets an array of Ordentablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     * @throws PropelException
+     */
+    public function getOrdentablajeriasRelatedByIdusuario($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdusuarioPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdusuario || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdusuario) {
+                // return empty collection
+                $this->initOrdentablajeriasRelatedByIdusuario();
+            } else {
+                $collOrdentablajeriasRelatedByIdusuario = OrdentablajeriaQuery::create(null, $criteria)
+                    ->filterByUsuarioRelatedByIdusuario($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajeriasRelatedByIdusuarioPartial && count($collOrdentablajeriasRelatedByIdusuario)) {
+                      $this->initOrdentablajeriasRelatedByIdusuario(false);
+
+                      foreach ($collOrdentablajeriasRelatedByIdusuario as $obj) {
+                        if (false == $this->collOrdentablajeriasRelatedByIdusuario->contains($obj)) {
+                          $this->collOrdentablajeriasRelatedByIdusuario->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajeriasRelatedByIdusuarioPartial = true;
+                    }
+
+                    $collOrdentablajeriasRelatedByIdusuario->getInternalIterator()->rewind();
+
+                    return $collOrdentablajeriasRelatedByIdusuario;
+                }
+
+                if ($partial && $this->collOrdentablajeriasRelatedByIdusuario) {
+                    foreach ($this->collOrdentablajeriasRelatedByIdusuario as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajeriasRelatedByIdusuario[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajeriasRelatedByIdusuario = $collOrdentablajeriasRelatedByIdusuario;
+                $this->collOrdentablajeriasRelatedByIdusuarioPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajeriasRelatedByIdusuario;
+    }
+
+    /**
+     * Sets a collection of OrdentablajeriaRelatedByIdusuario objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajeriasRelatedByIdusuario A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setOrdentablajeriasRelatedByIdusuario(PropelCollection $ordentablajeriasRelatedByIdusuario, PropelPDO $con = null)
+    {
+        $ordentablajeriasRelatedByIdusuarioToDelete = $this->getOrdentablajeriasRelatedByIdusuario(new Criteria(), $con)->diff($ordentablajeriasRelatedByIdusuario);
+
+
+        $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion = $ordentablajeriasRelatedByIdusuarioToDelete;
+
+        foreach ($ordentablajeriasRelatedByIdusuarioToDelete as $ordentablajeriaRelatedByIdusuarioRemoved) {
+            $ordentablajeriaRelatedByIdusuarioRemoved->setUsuarioRelatedByIdusuario(null);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdusuario = null;
+        foreach ($ordentablajeriasRelatedByIdusuario as $ordentablajeriaRelatedByIdusuario) {
+            $this->addOrdentablajeriaRelatedByIdusuario($ordentablajeriaRelatedByIdusuario);
+        }
+
+        $this->collOrdentablajeriasRelatedByIdusuario = $ordentablajeriasRelatedByIdusuario;
+        $this->collOrdentablajeriasRelatedByIdusuarioPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajeria objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajeriasRelatedByIdusuario(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriasRelatedByIdusuarioPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriasRelatedByIdusuario || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriasRelatedByIdusuario) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajeriasRelatedByIdusuario());
+            }
+            $query = OrdentablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuarioRelatedByIdusuario($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajeriasRelatedByIdusuario);
+    }
+
+    /**
+     * Method called to associate a Ordentablajeria object to this object
+     * through the Ordentablajeria foreign key attribute.
+     *
+     * @param    Ordentablajeria $l Ordentablajeria
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addOrdentablajeriaRelatedByIdusuario(Ordentablajeria $l)
+    {
+        if ($this->collOrdentablajeriasRelatedByIdusuario === null) {
+            $this->initOrdentablajeriasRelatedByIdusuario();
+            $this->collOrdentablajeriasRelatedByIdusuarioPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajeriasRelatedByIdusuario->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajeriaRelatedByIdusuario($l);
+
+            if ($this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion and $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion->contains($l)) {
+                $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion->remove($this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdusuario $ordentablajeriaRelatedByIdusuario The ordentablajeriaRelatedByIdusuario object to add.
+     */
+    protected function doAddOrdentablajeriaRelatedByIdusuario($ordentablajeriaRelatedByIdusuario)
+    {
+        $this->collOrdentablajeriasRelatedByIdusuario[]= $ordentablajeriaRelatedByIdusuario;
+        $ordentablajeriaRelatedByIdusuario->setUsuarioRelatedByIdusuario($this);
+    }
+
+    /**
+     * @param	OrdentablajeriaRelatedByIdusuario $ordentablajeriaRelatedByIdusuario The ordentablajeriaRelatedByIdusuario object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeOrdentablajeriaRelatedByIdusuario($ordentablajeriaRelatedByIdusuario)
+    {
+        if ($this->getOrdentablajeriasRelatedByIdusuario()->contains($ordentablajeriaRelatedByIdusuario)) {
+            $this->collOrdentablajeriasRelatedByIdusuario->remove($this->collOrdentablajeriasRelatedByIdusuario->search($ordentablajeriaRelatedByIdusuario));
+            if (null === $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion) {
+                $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion = clone $this->collOrdentablajeriasRelatedByIdusuario;
+                $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion->clear();
+            }
+            $this->ordentablajeriasRelatedByIdusuarioScheduledForDeletion[]= clone $ordentablajeriaRelatedByIdusuario;
+            $ordentablajeriaRelatedByIdusuario->setUsuarioRelatedByIdusuario(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdusuarioJoinAlmacenRelatedByIdalmacendestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacendestino', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdusuarioJoinAlmacenRelatedByIdalmacenorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('AlmacenRelatedByIdalmacenorigen', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdusuarioJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdusuarioJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related OrdentablajeriasRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeria[] List of Ordentablajeria objects
+     */
+    public function getOrdentablajeriasRelatedByIdusuarioJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getOrdentablajeriasRelatedByIdusuario($query, $con);
+    }
+
+    /**
      * Clears out the collRequisicionsRelatedByIdauditor collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -5825,10 +6627,35 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsRelatedByIdauditorJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdauditorJoinSucursalRelatedByIdsucursaldestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
+        $query->joinWith('SucursalRelatedByIdsucursaldestino', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdauditorJoinSucursalRelatedByIdsucursalorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('SucursalRelatedByIdsucursalorigen', $join_behavior);
 
         return $this->getRequisicionsRelatedByIdauditor($query, $con);
     }
@@ -6175,10 +7002,35 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
      */
-    public function getRequisicionsRelatedByIdusuarioJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getRequisicionsRelatedByIdusuarioJoinSucursalRelatedByIdsucursaldestino($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = RequisicionQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
+        $query->joinWith('SucursalRelatedByIdsucursaldestino', $join_behavior);
+
+        return $this->getRequisicionsRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related RequisicionsRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicion[] List of Requisicion objects
+     */
+    public function getRequisicionsRelatedByIdusuarioJoinSucursalRelatedByIdsucursalorigen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionQuery::create(null, $criteria);
+        $query->joinWith('SucursalRelatedByIdsucursalorigen', $join_behavior);
 
         return $this->getRequisicionsRelatedByIdusuario($query, $con);
     }
@@ -7376,6 +8228,16 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collOrdentablajeriasRelatedByIdauditor) {
+                foreach ($this->collOrdentablajeriasRelatedByIdauditor as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collOrdentablajeriasRelatedByIdusuario) {
+                foreach ($this->collOrdentablajeriasRelatedByIdusuario as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRequisicionsRelatedByIdauditor) {
                 foreach ($this->collRequisicionsRelatedByIdauditor as $o) {
                     $o->clearAllReferences($deep);
@@ -7461,6 +8323,14 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             $this->collNotacreditonotas->clearIterator();
         }
         $this->collNotacreditonotas = null;
+        if ($this->collOrdentablajeriasRelatedByIdauditor instanceof PropelCollection) {
+            $this->collOrdentablajeriasRelatedByIdauditor->clearIterator();
+        }
+        $this->collOrdentablajeriasRelatedByIdauditor = null;
+        if ($this->collOrdentablajeriasRelatedByIdusuario instanceof PropelCollection) {
+            $this->collOrdentablajeriasRelatedByIdusuario->clearIterator();
+        }
+        $this->collOrdentablajeriasRelatedByIdusuario = null;
         if ($this->collRequisicionsRelatedByIdauditor instanceof PropelCollection) {
             $this->collRequisicionsRelatedByIdauditor->clearIterator();
         }

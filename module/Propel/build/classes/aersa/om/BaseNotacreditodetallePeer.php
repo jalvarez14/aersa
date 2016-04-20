@@ -24,13 +24,13 @@ abstract class BaseNotacreditodetallePeer
     const TM_CLASS = 'NotacreditodetalleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 11;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 11;
 
     /** the column name for the idnotacreditodetalle field */
     const IDNOTACREDITODETALLE = 'notacreditodetalle.idnotacreditodetalle';
@@ -49,6 +49,21 @@ abstract class BaseNotacreditodetallePeer
 
     /** the column name for the notacreditodetalle_revisada field */
     const NOTACREDITODETALLE_REVISADA = 'notacreditodetalle.notacreditodetalle_revisada';
+
+    /** the column name for the notacreditodetalle_ieps field */
+    const NOTACREDITODETALLE_IEPS = 'notacreditodetalle.notacreditodetalle_ieps';
+
+    /** the column name for the notacreditodetalle_descuento field */
+    const NOTACREDITODETALLE_DESCUENTO = 'notacreditodetalle.notacreditodetalle_descuento';
+
+    /** the column name for the notacreditodetalle_subtotal field */
+    const NOTACREDITODETALLE_SUBTOTAL = 'notacreditodetalle.notacreditodetalle_subtotal';
+
+    /** the column name for the notacreditodetalle_costounitario field */
+    const NOTACREDITODETALLE_COSTOUNITARIO = 'notacreditodetalle.notacreditodetalle_costounitario';
+
+    /** the column name for the notacreditodetalle_costounitarioneto field */
+    const NOTACREDITODETALLE_COSTOUNITARIONETO = 'notacreditodetalle.notacreditodetalle_costounitarioneto';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -69,12 +84,12 @@ abstract class BaseNotacreditodetallePeer
      * e.g. NotacreditodetallePeer::$fieldNames[NotacreditodetallePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacreditodetalle', 'Idnotacredito', 'Idproducto', 'Idalmacen', 'NotacreditodetalleCantidad', 'NotacreditodetalleRevisada', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacreditodetalle', 'idnotacredito', 'idproducto', 'idalmacen', 'notacreditodetalleCantidad', 'notacreditodetalleRevisada', ),
-        BasePeer::TYPE_COLNAME => array (NotacreditodetallePeer::IDNOTACREDITODETALLE, NotacreditodetallePeer::IDNOTACREDITO, NotacreditodetallePeer::IDPRODUCTO, NotacreditodetallePeer::IDALMACEN, NotacreditodetallePeer::NOTACREDITODETALLE_CANTIDAD, NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITODETALLE', 'IDNOTACREDITO', 'IDPRODUCTO', 'IDALMACEN', 'NOTACREDITODETALLE_CANTIDAD', 'NOTACREDITODETALLE_REVISADA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacreditodetalle', 'idnotacredito', 'idproducto', 'idalmacen', 'notacreditodetalle_cantidad', 'notacreditodetalle_revisada', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idnotacreditodetalle', 'Idnotacredito', 'Idproducto', 'Idalmacen', 'NotacreditodetalleCantidad', 'NotacreditodetalleRevisada', 'NotacreditodetalleIeps', 'NotacreditodetalleDescuento', 'NotacreditodetalleSubtotal', 'NotacreditodetalleCostounitario', 'NotacreditodetalleCostounitarioneto', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacreditodetalle', 'idnotacredito', 'idproducto', 'idalmacen', 'notacreditodetalleCantidad', 'notacreditodetalleRevisada', 'notacreditodetalleIeps', 'notacreditodetalleDescuento', 'notacreditodetalleSubtotal', 'notacreditodetalleCostounitario', 'notacreditodetalleCostounitarioneto', ),
+        BasePeer::TYPE_COLNAME => array (NotacreditodetallePeer::IDNOTACREDITODETALLE, NotacreditodetallePeer::IDNOTACREDITO, NotacreditodetallePeer::IDPRODUCTO, NotacreditodetallePeer::IDALMACEN, NotacreditodetallePeer::NOTACREDITODETALLE_CANTIDAD, NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA, NotacreditodetallePeer::NOTACREDITODETALLE_IEPS, NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO, NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL, NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO, NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITODETALLE', 'IDNOTACREDITO', 'IDPRODUCTO', 'IDALMACEN', 'NOTACREDITODETALLE_CANTIDAD', 'NOTACREDITODETALLE_REVISADA', 'NOTACREDITODETALLE_IEPS', 'NOTACREDITODETALLE_DESCUENTO', 'NOTACREDITODETALLE_SUBTOTAL', 'NOTACREDITODETALLE_COSTOUNITARIO', 'NOTACREDITODETALLE_COSTOUNITARIONETO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotacreditodetalle', 'idnotacredito', 'idproducto', 'idalmacen', 'notacreditodetalle_cantidad', 'notacreditodetalle_revisada', 'notacreditodetalle_ieps', 'notacreditodetalle_descuento', 'notacreditodetalle_subtotal', 'notacreditodetalle_costounitario', 'notacreditodetalle_costounitarioneto', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -84,12 +99,12 @@ abstract class BaseNotacreditodetallePeer
      * e.g. NotacreditodetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacreditodetalle' => 0, 'Idnotacredito' => 1, 'Idproducto' => 2, 'Idalmacen' => 3, 'NotacreditodetalleCantidad' => 4, 'NotacreditodetalleRevisada' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacreditodetalle' => 0, 'idnotacredito' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'notacreditodetalleCantidad' => 4, 'notacreditodetalleRevisada' => 5, ),
-        BasePeer::TYPE_COLNAME => array (NotacreditodetallePeer::IDNOTACREDITODETALLE => 0, NotacreditodetallePeer::IDNOTACREDITO => 1, NotacreditodetallePeer::IDPRODUCTO => 2, NotacreditodetallePeer::IDALMACEN => 3, NotacreditodetallePeer::NOTACREDITODETALLE_CANTIDAD => 4, NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITODETALLE' => 0, 'IDNOTACREDITO' => 1, 'IDPRODUCTO' => 2, 'IDALMACEN' => 3, 'NOTACREDITODETALLE_CANTIDAD' => 4, 'NOTACREDITODETALLE_REVISADA' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacreditodetalle' => 0, 'idnotacredito' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'notacreditodetalle_cantidad' => 4, 'notacreditodetalle_revisada' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idnotacreditodetalle' => 0, 'Idnotacredito' => 1, 'Idproducto' => 2, 'Idalmacen' => 3, 'NotacreditodetalleCantidad' => 4, 'NotacreditodetalleRevisada' => 5, 'NotacreditodetalleIeps' => 6, 'NotacreditodetalleDescuento' => 7, 'NotacreditodetalleSubtotal' => 8, 'NotacreditodetalleCostounitario' => 9, 'NotacreditodetalleCostounitarioneto' => 10, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacreditodetalle' => 0, 'idnotacredito' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'notacreditodetalleCantidad' => 4, 'notacreditodetalleRevisada' => 5, 'notacreditodetalleIeps' => 6, 'notacreditodetalleDescuento' => 7, 'notacreditodetalleSubtotal' => 8, 'notacreditodetalleCostounitario' => 9, 'notacreditodetalleCostounitarioneto' => 10, ),
+        BasePeer::TYPE_COLNAME => array (NotacreditodetallePeer::IDNOTACREDITODETALLE => 0, NotacreditodetallePeer::IDNOTACREDITO => 1, NotacreditodetallePeer::IDPRODUCTO => 2, NotacreditodetallePeer::IDALMACEN => 3, NotacreditodetallePeer::NOTACREDITODETALLE_CANTIDAD => 4, NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA => 5, NotacreditodetallePeer::NOTACREDITODETALLE_IEPS => 6, NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO => 7, NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL => 8, NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO => 9, NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO => 10, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITODETALLE' => 0, 'IDNOTACREDITO' => 1, 'IDPRODUCTO' => 2, 'IDALMACEN' => 3, 'NOTACREDITODETALLE_CANTIDAD' => 4, 'NOTACREDITODETALLE_REVISADA' => 5, 'NOTACREDITODETALLE_IEPS' => 6, 'NOTACREDITODETALLE_DESCUENTO' => 7, 'NOTACREDITODETALLE_SUBTOTAL' => 8, 'NOTACREDITODETALLE_COSTOUNITARIO' => 9, 'NOTACREDITODETALLE_COSTOUNITARIONETO' => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotacreditodetalle' => 0, 'idnotacredito' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'notacreditodetalle_cantidad' => 4, 'notacreditodetalle_revisada' => 5, 'notacreditodetalle_ieps' => 6, 'notacreditodetalle_descuento' => 7, 'notacreditodetalle_subtotal' => 8, 'notacreditodetalle_costounitario' => 9, 'notacreditodetalle_costounitarioneto' => 10, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -169,6 +184,11 @@ abstract class BaseNotacreditodetallePeer
             $criteria->addSelectColumn(NotacreditodetallePeer::IDALMACEN);
             $criteria->addSelectColumn(NotacreditodetallePeer::NOTACREDITODETALLE_CANTIDAD);
             $criteria->addSelectColumn(NotacreditodetallePeer::NOTACREDITODETALLE_REVISADA);
+            $criteria->addSelectColumn(NotacreditodetallePeer::NOTACREDITODETALLE_IEPS);
+            $criteria->addSelectColumn(NotacreditodetallePeer::NOTACREDITODETALLE_DESCUENTO);
+            $criteria->addSelectColumn(NotacreditodetallePeer::NOTACREDITODETALLE_SUBTOTAL);
+            $criteria->addSelectColumn(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIO);
+            $criteria->addSelectColumn(NotacreditodetallePeer::NOTACREDITODETALLE_COSTOUNITARIONETO);
         } else {
             $criteria->addSelectColumn($alias . '.idnotacreditodetalle');
             $criteria->addSelectColumn($alias . '.idnotacredito');
@@ -176,6 +196,11 @@ abstract class BaseNotacreditodetallePeer
             $criteria->addSelectColumn($alias . '.idalmacen');
             $criteria->addSelectColumn($alias . '.notacreditodetalle_cantidad');
             $criteria->addSelectColumn($alias . '.notacreditodetalle_revisada');
+            $criteria->addSelectColumn($alias . '.notacreditodetalle_ieps');
+            $criteria->addSelectColumn($alias . '.notacreditodetalle_descuento');
+            $criteria->addSelectColumn($alias . '.notacreditodetalle_subtotal');
+            $criteria->addSelectColumn($alias . '.notacreditodetalle_costounitario');
+            $criteria->addSelectColumn($alias . '.notacreditodetalle_costounitarioneto');
         }
     }
 

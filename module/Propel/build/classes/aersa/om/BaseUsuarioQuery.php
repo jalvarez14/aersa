@@ -76,6 +76,14 @@
  * @method UsuarioQuery rightJoinNotacreditonota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacreditonota relation
  * @method UsuarioQuery innerJoinNotacreditonota($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacreditonota relation
  *
+ * @method UsuarioQuery leftJoinOrdentablajeriaRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrdentablajeriaRelatedByIdauditor relation
+ * @method UsuarioQuery rightJoinOrdentablajeriaRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrdentablajeriaRelatedByIdauditor relation
+ * @method UsuarioQuery innerJoinOrdentablajeriaRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the OrdentablajeriaRelatedByIdauditor relation
+ *
+ * @method UsuarioQuery leftJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
+ * @method UsuarioQuery rightJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
+ * @method UsuarioQuery innerJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
+ *
  * @method UsuarioQuery leftJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
  * @method UsuarioQuery rightJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
  * @method UsuarioQuery innerJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdauditor relation
@@ -1473,6 +1481,154 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinNotacreditonota($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacreditonota', 'NotacreditonotaQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajeria object
+     *
+     * @param   Ordentablajeria|PropelObjectCollection $ordentablajeria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajeriaRelatedByIdauditor($ordentablajeria, $comparison = null)
+    {
+        if ($ordentablajeria instanceof Ordentablajeria) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $ordentablajeria->getIdauditor(), $comparison);
+        } elseif ($ordentablajeria instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajeriaRelatedByIdauditorQuery()
+                ->filterByPrimaryKeys($ordentablajeria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajeriaRelatedByIdauditor() only accepts arguments of type Ordentablajeria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the OrdentablajeriaRelatedByIdauditor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajeriaRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('OrdentablajeriaRelatedByIdauditor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'OrdentablajeriaRelatedByIdauditor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the OrdentablajeriaRelatedByIdauditor relation Ordentablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajeriaRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajeriaRelatedByIdauditor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'OrdentablajeriaRelatedByIdauditor', 'OrdentablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajeria object
+     *
+     * @param   Ordentablajeria|PropelObjectCollection $ordentablajeria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajeriaRelatedByIdusuario($ordentablajeria, $comparison = null)
+    {
+        if ($ordentablajeria instanceof Ordentablajeria) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $ordentablajeria->getIdusuario(), $comparison);
+        } elseif ($ordentablajeria instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajeriaRelatedByIdusuarioQuery()
+                ->filterByPrimaryKeys($ordentablajeria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajeriaRelatedByIdusuario() only accepts arguments of type Ordentablajeria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajeriaRelatedByIdusuario($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('OrdentablajeriaRelatedByIdusuario');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'OrdentablajeriaRelatedByIdusuario');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the OrdentablajeriaRelatedByIdusuario relation Ordentablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajeriaRelatedByIdusuarioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajeriaRelatedByIdusuario($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'OrdentablajeriaRelatedByIdusuario', 'OrdentablajeriaQuery');
     }
 
     /**

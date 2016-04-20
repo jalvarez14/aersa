@@ -12,6 +12,9 @@
  * @method DevoluciondetalleQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
  * @method DevoluciondetalleQuery orderByDevoluciondetalleCantidad($order = Criteria::ASC) Order by the devoluciondetalle_cantidad column
  * @method DevoluciondetalleQuery orderByDevoluciondetalleRevisada($order = Criteria::ASC) Order by the devoluciondetalle_revisada column
+ * @method DevoluciondetalleQuery orderByDevoluciondetalleSubtotal($order = Criteria::ASC) Order by the devoluciondetalle_subtotal column
+ * @method DevoluciondetalleQuery orderByDevoluciondetalleIeps($order = Criteria::ASC) Order by the devoluciondetalle_ieps column
+ * @method DevoluciondetalleQuery orderByDevoluciondetalleDescuento($order = Criteria::ASC) Order by the devoluciondetalle_descuento column
  *
  * @method DevoluciondetalleQuery groupByIddevoluciondetalle() Group by the iddevoluciondetalle column
  * @method DevoluciondetalleQuery groupByIddevolucion() Group by the iddevolucion column
@@ -19,6 +22,9 @@
  * @method DevoluciondetalleQuery groupByIdalmacen() Group by the idalmacen column
  * @method DevoluciondetalleQuery groupByDevoluciondetalleCantidad() Group by the devoluciondetalle_cantidad column
  * @method DevoluciondetalleQuery groupByDevoluciondetalleRevisada() Group by the devoluciondetalle_revisada column
+ * @method DevoluciondetalleQuery groupByDevoluciondetalleSubtotal() Group by the devoluciondetalle_subtotal column
+ * @method DevoluciondetalleQuery groupByDevoluciondetalleIeps() Group by the devoluciondetalle_ieps column
+ * @method DevoluciondetalleQuery groupByDevoluciondetalleDescuento() Group by the devoluciondetalle_descuento column
  *
  * @method DevoluciondetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method DevoluciondetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -44,6 +50,9 @@
  * @method Devoluciondetalle findOneByIdalmacen(int $idalmacen) Return the first Devoluciondetalle filtered by the idalmacen column
  * @method Devoluciondetalle findOneByDevoluciondetalleCantidad(double $devoluciondetalle_cantidad) Return the first Devoluciondetalle filtered by the devoluciondetalle_cantidad column
  * @method Devoluciondetalle findOneByDevoluciondetalleRevisada(boolean $devoluciondetalle_revisada) Return the first Devoluciondetalle filtered by the devoluciondetalle_revisada column
+ * @method Devoluciondetalle findOneByDevoluciondetalleSubtotal(string $devoluciondetalle_subtotal) Return the first Devoluciondetalle filtered by the devoluciondetalle_subtotal column
+ * @method Devoluciondetalle findOneByDevoluciondetalleIeps(double $devoluciondetalle_ieps) Return the first Devoluciondetalle filtered by the devoluciondetalle_ieps column
+ * @method Devoluciondetalle findOneByDevoluciondetalleDescuento(double $devoluciondetalle_descuento) Return the first Devoluciondetalle filtered by the devoluciondetalle_descuento column
  *
  * @method array findByIddevoluciondetalle(int $iddevoluciondetalle) Return Devoluciondetalle objects filtered by the iddevoluciondetalle column
  * @method array findByIddevolucion(int $iddevolucion) Return Devoluciondetalle objects filtered by the iddevolucion column
@@ -51,6 +60,9 @@
  * @method array findByIdalmacen(int $idalmacen) Return Devoluciondetalle objects filtered by the idalmacen column
  * @method array findByDevoluciondetalleCantidad(double $devoluciondetalle_cantidad) Return Devoluciondetalle objects filtered by the devoluciondetalle_cantidad column
  * @method array findByDevoluciondetalleRevisada(boolean $devoluciondetalle_revisada) Return Devoluciondetalle objects filtered by the devoluciondetalle_revisada column
+ * @method array findByDevoluciondetalleSubtotal(string $devoluciondetalle_subtotal) Return Devoluciondetalle objects filtered by the devoluciondetalle_subtotal column
+ * @method array findByDevoluciondetalleIeps(double $devoluciondetalle_ieps) Return Devoluciondetalle objects filtered by the devoluciondetalle_ieps column
+ * @method array findByDevoluciondetalleDescuento(double $devoluciondetalle_descuento) Return Devoluciondetalle objects filtered by the devoluciondetalle_descuento column
  *
  * @package    propel.generator.aersa.om
  */
@@ -158,7 +170,7 @@ abstract class BaseDevoluciondetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevoluciondetalle`, `iddevolucion`, `idproducto`, `idalmacen`, `devoluciondetalle_cantidad`, `devoluciondetalle_revisada` FROM `devoluciondetalle` WHERE `iddevoluciondetalle` = :p0';
+        $sql = 'SELECT `iddevoluciondetalle`, `iddevolucion`, `idproducto`, `idalmacen`, `devoluciondetalle_cantidad`, `devoluciondetalle_revisada`, `devoluciondetalle_subtotal`, `devoluciondetalle_ieps`, `devoluciondetalle_descuento` FROM `devoluciondetalle` WHERE `iddevoluciondetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -488,6 +500,132 @@ abstract class BaseDevoluciondetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA, $devoluciondetalleRevisada, $comparison);
+    }
+
+    /**
+     * Filter the query on the devoluciondetalle_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevoluciondetalleSubtotal(1234); // WHERE devoluciondetalle_subtotal = 1234
+     * $query->filterByDevoluciondetalleSubtotal(array(12, 34)); // WHERE devoluciondetalle_subtotal IN (12, 34)
+     * $query->filterByDevoluciondetalleSubtotal(array('min' => 12)); // WHERE devoluciondetalle_subtotal >= 12
+     * $query->filterByDevoluciondetalleSubtotal(array('max' => 12)); // WHERE devoluciondetalle_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $devoluciondetalleSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevoluciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByDevoluciondetalleSubtotal($devoluciondetalleSubtotal = null, $comparison = null)
+    {
+        if (is_array($devoluciondetalleSubtotal)) {
+            $useMinMax = false;
+            if (isset($devoluciondetalleSubtotal['min'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL, $devoluciondetalleSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devoluciondetalleSubtotal['max'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL, $devoluciondetalleSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL, $devoluciondetalleSubtotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the devoluciondetalle_ieps column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevoluciondetalleIeps(1234); // WHERE devoluciondetalle_ieps = 1234
+     * $query->filterByDevoluciondetalleIeps(array(12, 34)); // WHERE devoluciondetalle_ieps IN (12, 34)
+     * $query->filterByDevoluciondetalleIeps(array('min' => 12)); // WHERE devoluciondetalle_ieps >= 12
+     * $query->filterByDevoluciondetalleIeps(array('max' => 12)); // WHERE devoluciondetalle_ieps <= 12
+     * </code>
+     *
+     * @param     mixed $devoluciondetalleIeps The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevoluciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByDevoluciondetalleIeps($devoluciondetalleIeps = null, $comparison = null)
+    {
+        if (is_array($devoluciondetalleIeps)) {
+            $useMinMax = false;
+            if (isset($devoluciondetalleIeps['min'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS, $devoluciondetalleIeps['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devoluciondetalleIeps['max'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS, $devoluciondetalleIeps['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS, $devoluciondetalleIeps, $comparison);
+    }
+
+    /**
+     * Filter the query on the devoluciondetalle_descuento column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevoluciondetalleDescuento(1234); // WHERE devoluciondetalle_descuento = 1234
+     * $query->filterByDevoluciondetalleDescuento(array(12, 34)); // WHERE devoluciondetalle_descuento IN (12, 34)
+     * $query->filterByDevoluciondetalleDescuento(array('min' => 12)); // WHERE devoluciondetalle_descuento >= 12
+     * $query->filterByDevoluciondetalleDescuento(array('max' => 12)); // WHERE devoluciondetalle_descuento <= 12
+     * </code>
+     *
+     * @param     mixed $devoluciondetalleDescuento The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevoluciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByDevoluciondetalleDescuento($devoluciondetalleDescuento = null, $comparison = null)
+    {
+        if (is_array($devoluciondetalleDescuento)) {
+            $useMinMax = false;
+            if (isset($devoluciondetalleDescuento['min'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO, $devoluciondetalleDescuento['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devoluciondetalleDescuento['max'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO, $devoluciondetalleDescuento['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO, $devoluciondetalleDescuento, $comparison);
     }
 
     /**

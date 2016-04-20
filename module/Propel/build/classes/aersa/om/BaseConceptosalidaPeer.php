@@ -24,19 +24,28 @@ abstract class BaseConceptosalidaPeer
     const TM_CLASS = 'ConceptosalidaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 2;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 2;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the idconceptosalida field */
     const IDCONCEPTOSALIDA = 'conceptosalida.idconceptosalida';
 
     /** the column name for the conceptosalida_nombre field */
     const CONCEPTOSALIDA_NOMBRE = 'conceptosalida.conceptosalida_nombre';
+
+    /** the column name for the almacenorigen field */
+    const ALMACENORIGEN = 'conceptosalida.almacenorigen';
+
+    /** the column name for the almacendestino field */
+    const ALMACENDESTINO = 'conceptosalida.almacendestino';
+
+    /** the column name for the mismasucursal field */
+    const MISMASUCURSAL = 'conceptosalida.mismasucursal';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -57,12 +66,12 @@ abstract class BaseConceptosalidaPeer
      * e.g. ConceptosalidaPeer::$fieldNames[ConceptosalidaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idconceptosalida', 'ConceptosalidaNombre', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idconceptosalida', 'conceptosalidaNombre', ),
-        BasePeer::TYPE_COLNAME => array (ConceptosalidaPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCONCEPTOSALIDA', 'CONCEPTOSALIDA_NOMBRE', ),
-        BasePeer::TYPE_FIELDNAME => array ('idconceptosalida', 'conceptosalida_nombre', ),
-        BasePeer::TYPE_NUM => array (0, 1, )
+        BasePeer::TYPE_PHPNAME => array ('Idconceptosalida', 'ConceptosalidaNombre', 'Almacenorigen', 'Almacendestino', 'Mismasucursal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idconceptosalida', 'conceptosalidaNombre', 'almacenorigen', 'almacendestino', 'mismasucursal', ),
+        BasePeer::TYPE_COLNAME => array (ConceptosalidaPeer::IDCONCEPTOSALIDA, ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE, ConceptosalidaPeer::ALMACENORIGEN, ConceptosalidaPeer::ALMACENDESTINO, ConceptosalidaPeer::MISMASUCURSAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCONCEPTOSALIDA', 'CONCEPTOSALIDA_NOMBRE', 'ALMACENORIGEN', 'ALMACENDESTINO', 'MISMASUCURSAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('idconceptosalida', 'conceptosalida_nombre', 'almacenorigen', 'almacendestino', 'mismasucursal', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -72,12 +81,12 @@ abstract class BaseConceptosalidaPeer
      * e.g. ConceptosalidaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idconceptosalida' => 0, 'ConceptosalidaNombre' => 1, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idconceptosalida' => 0, 'conceptosalidaNombre' => 1, ),
-        BasePeer::TYPE_COLNAME => array (ConceptosalidaPeer::IDCONCEPTOSALIDA => 0, ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE => 1, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCONCEPTOSALIDA' => 0, 'CONCEPTOSALIDA_NOMBRE' => 1, ),
-        BasePeer::TYPE_FIELDNAME => array ('idconceptosalida' => 0, 'conceptosalida_nombre' => 1, ),
-        BasePeer::TYPE_NUM => array (0, 1, )
+        BasePeer::TYPE_PHPNAME => array ('Idconceptosalida' => 0, 'ConceptosalidaNombre' => 1, 'Almacenorigen' => 2, 'Almacendestino' => 3, 'Mismasucursal' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idconceptosalida' => 0, 'conceptosalidaNombre' => 1, 'almacenorigen' => 2, 'almacendestino' => 3, 'mismasucursal' => 4, ),
+        BasePeer::TYPE_COLNAME => array (ConceptosalidaPeer::IDCONCEPTOSALIDA => 0, ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE => 1, ConceptosalidaPeer::ALMACENORIGEN => 2, ConceptosalidaPeer::ALMACENDESTINO => 3, ConceptosalidaPeer::MISMASUCURSAL => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCONCEPTOSALIDA' => 0, 'CONCEPTOSALIDA_NOMBRE' => 1, 'ALMACENORIGEN' => 2, 'ALMACENDESTINO' => 3, 'MISMASUCURSAL' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idconceptosalida' => 0, 'conceptosalida_nombre' => 1, 'almacenorigen' => 2, 'almacendestino' => 3, 'mismasucursal' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -153,9 +162,15 @@ abstract class BaseConceptosalidaPeer
         if (null === $alias) {
             $criteria->addSelectColumn(ConceptosalidaPeer::IDCONCEPTOSALIDA);
             $criteria->addSelectColumn(ConceptosalidaPeer::CONCEPTOSALIDA_NOMBRE);
+            $criteria->addSelectColumn(ConceptosalidaPeer::ALMACENORIGEN);
+            $criteria->addSelectColumn(ConceptosalidaPeer::ALMACENDESTINO);
+            $criteria->addSelectColumn(ConceptosalidaPeer::MISMASUCURSAL);
         } else {
             $criteria->addSelectColumn($alias . '.idconceptosalida');
             $criteria->addSelectColumn($alias . '.conceptosalida_nombre');
+            $criteria->addSelectColumn($alias . '.almacenorigen');
+            $criteria->addSelectColumn($alias . '.almacendestino');
+            $criteria->addSelectColumn($alias . '.mismasucursal');
         }
     }
 

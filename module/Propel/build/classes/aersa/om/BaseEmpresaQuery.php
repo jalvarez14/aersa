@@ -38,6 +38,10 @@
  * @method EmpresaQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
  * @method EmpresaQuery innerJoinNotacredito($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacredito relation
  *
+ * @method EmpresaQuery leftJoinOrdentablajeria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajeria relation
+ * @method EmpresaQuery rightJoinOrdentablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeria relation
+ * @method EmpresaQuery innerJoinOrdentablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeria relation
+ *
  * @method EmpresaQuery leftJoinPlantillatablajeria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Plantillatablajeria relation
  * @method EmpresaQuery rightJoinPlantillatablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Plantillatablajeria relation
  * @method EmpresaQuery innerJoinPlantillatablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Plantillatablajeria relation
@@ -727,6 +731,80 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         return $this
             ->joinNotacredito($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacredito', 'NotacreditoQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajeria object
+     *
+     * @param   Ordentablajeria|PropelObjectCollection $ordentablajeria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajeria($ordentablajeria, $comparison = null)
+    {
+        if ($ordentablajeria instanceof Ordentablajeria) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $ordentablajeria->getIdempresa(), $comparison);
+        } elseif ($ordentablajeria instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajeriaQuery()
+                ->filterByPrimaryKeys($ordentablajeria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajeria() only accepts arguments of type Ordentablajeria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ordentablajeria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajeria($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ordentablajeria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ordentablajeria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ordentablajeria relation Ordentablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajeriaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajeria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ordentablajeria', 'OrdentablajeriaQuery');
     }
 
     /**

@@ -43,6 +43,8 @@ class RequisiciondetalleTableMap extends TableMap
         $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
         $this->addColumn('requisiciondetalle_cantidad', 'RequisiciondetalleCantidad', 'FLOAT', true, null, null);
         $this->addColumn('requisiciondetalle_revisada', 'RequisiciondetalleRevisada', 'BOOLEAN', true, 1, null);
+        $this->addColumn('requisiciondetalle_preciounitario', 'RequisiciondetallePreciounitario', 'DECIMAL', true, 15, null);
+        $this->addColumn('requisiciondetalle_subtotal', 'RequisiciondetalleSubtotal', 'DECIMAL', true, 15, null);
         // validators
     } // initialize()
 

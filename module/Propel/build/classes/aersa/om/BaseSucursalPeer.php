@@ -405,6 +405,12 @@ abstract class BaseSucursalPeer
         // Invalidate objects in NotacreditoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditoPeer::clearInstancePool();
+        // Invalidate objects in OrdentablajeriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        OrdentablajeriaPeer::clearInstancePool();
+        // Invalidate objects in RequisicionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -1019,10 +1025,22 @@ abstract class BaseSucursalPeer
             $criteria->add(NotacreditoPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
 
+            // delete related Ordentablajeria objects
+            $criteria = new Criteria(OrdentablajeriaPeer::DATABASE_NAME);
+
+            $criteria->add(OrdentablajeriaPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
+
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
 
-            $criteria->add(RequisicionPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $criteria->add(RequisicionPeer::IDSUCURSALDESTINO, $obj->getIdsucursal());
+            $affectedRows += RequisicionPeer::doDelete($criteria, $con);
+
+            // delete related Requisicion objects
+            $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionPeer::IDSUCURSALORIGEN, $obj->getIdsucursal());
             $affectedRows += RequisicionPeer::doDelete($criteria, $con);
 
             // delete related Trabajadorpromedio objects

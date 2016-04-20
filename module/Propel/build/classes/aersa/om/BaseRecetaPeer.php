@@ -1100,6 +1100,10 @@ abstract class BaseRecetaPeer
             $criteria = $values->buildCriteria(); // build Criteria from Receta object
         }
 
+        if ($criteria->containsKey(RecetaPeer::IDRECETA) && $criteria->keyContainsValue(RecetaPeer::IDRECETA) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RecetaPeer::IDRECETA.')');
+        }
+
 
         // Set the correct dbName
         $criteria->setDbName(RecetaPeer::DATABASE_NAME);

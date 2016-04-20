@@ -44,7 +44,7 @@ class NotacreditoTableMap extends TableMap
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
-        $this->addColumn('notacredito_folio', 'NotacreditoFolio', 'VARCHAR', true, 45, null);
+        $this->addColumn('notacredito_folio', 'NotacreditoFolio', 'VARCHAR', true, 10, null);
         $this->addColumn('notacredito_revisada', 'NotacreditoRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('notacredito_factura', 'NotacreditoFactura', 'LONGVARCHAR', false, null, null);
         $this->addColumn('notacredito_fechacreacion', 'NotacreditoFechacreacion', 'TIMESTAMP', true, null, null);
