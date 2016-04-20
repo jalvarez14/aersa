@@ -76,11 +76,21 @@ class LoginController extends AbstractActionController
             
             if($post_data['area_trabajo'] == 1){
                 return $this->redirect()->toUrl('/');
+                
             }elseif ($post_data['area_trabajo'] == 2) {
                 
-                $session = new \Shared\Session\AouthSession();
-                $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
-                return $this->redirect()->toUrl('/');
+                if($post_data["idsucursal"] != 'admin'){
+                    
+                    $session = new \Shared\Session\AouthSession();
+                    $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
+                    return $this->redirect()->toUrl('/');
+                
+                }else{
+                    $session = new \Shared\Session\AouthSession();
+                    $session->setEmpresa($post_data['idempresa']);
+                    return $this->redirect()->toUrl('/');
+                }
+
             }
            
         }
@@ -119,10 +129,11 @@ class LoginController extends AbstractActionController
         if($request->isPost()){
             
             $post_data = $request->getPost();
-            
+           
             $idempresa = $post_data['id'];
             
             $sucursales = \SucursalQuery::create()->filterByIdempresa($idempresa)->find();
+            
             $sucursales = \Shared\GeneralFunctions::collectionToSelectArray($sucursales, 'idsucursal', 'sucursal_nombre');
             
             return $this->getResponse()->setContent(json_encode($sucursales));

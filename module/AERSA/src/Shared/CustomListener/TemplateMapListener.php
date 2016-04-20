@@ -76,15 +76,40 @@ class TemplateMapListener implements ListenerAggregateInterface
                     ));
                     break;
                 
-                }
-                
-                $template_map->merge(
+                //ADMINISTRADOR AERSA ENTRANDO COMO ADMINISTRADOR DE EMPRESA
+                }elseif($session['idrol'] == 1 && !is_null($session['idempresa']) && is_null($session['idsucursal'])){
+                    
+                    $template_map->merge(
                     array(
-                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout.phtml',
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_2.phtml',
                         'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
-                break;
+                    break;
+                    
+                //ADMINISTRADOR AERSA ENTRANDO COMO ADMINISTRADOR DE EMPRESA->SUCRUSAL 
+                }elseif($session['idrol'] == 1 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
+                    
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_3.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                    
+                    
+                }else{
+                
+                    $template_map->merge(
+                        array(
+                            'layout/layout'      => __DIR__.'/../../../view/application/layout/layout.phtml',
+                            'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                            'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                        ));
+                    
+                    break;
+                }
             }
 
 

@@ -92,6 +92,15 @@ class AouthSession extends AbstractActionController {
         $session_data->idsucursal       = $idsucrusal;
 
     }
+    
+    public function setEmpresa($idempresa){
+        
+        $session_data = new Container('session_data');
+        
+        $session_data->idempresa        = $idempresa;
+
+
+    }
 
 }
 
