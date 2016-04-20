@@ -254,6 +254,76 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                   'nuevocodigo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevocodigo[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'nuevocodigo',
+                                            ),
+                                        ),
+                                    ),
+                                   'editarcodigo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editarcodigo[/:id][/:prod]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'editarcodigo',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminarcodigo' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminarcodigo[/:id][/:prod]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'eliminarcodigo',
+                                            ),
+                                        ),
+                                    ),
+                                   'nuevasubreceta' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/nuevasubreceta[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'nuevasubreceta',
+                                            ),
+                                        ),
+                                    ),
+                                   'editarsubreceta' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editarsubreceta[/:id][/:prod]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'editarsubreceta',
+                                            ),
+                                        ),
+                                    ),
+                                   'eliminarsubreceta' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminarsubreceta[/:id][/:prod]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'eliminarsubreceta',
+                                            ),
+                                        ),
+                                    ),
                                ),
                             ),
                         

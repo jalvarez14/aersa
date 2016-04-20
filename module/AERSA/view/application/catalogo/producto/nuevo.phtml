@@ -1,8 +1,119 @@
+
+
+<h3 class="page-title">Registro producto</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/producto">Producto</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Registro</span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
 <?php
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+    $form->setAttribute('action', '/catalogo/producto/nuevo');
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Información del producto</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_nombre')) ?>  
+                        <?php echo $this->formText($form->get('producto_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idcategoria')) ?>  
+                        <?php echo $this->formSelect($form->get('idcategoria')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idsubcategoria')) ?>  
+                        <?php echo $this->formSelect($form->get('idsubcategoria')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idunidadmedida')) ?>  
+                        <?php echo $this->formSelect  ($form->get('idunidadmedida')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_tipo')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_tipo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_iva')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_iva')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_costo')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_costo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_ultimocosto')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_ultimocosto')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_stock')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_stock')) ?>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_baja')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_baja')) ?>
+                    </div>
+                </div>
+                
+                
+                
+            </div>
+            
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Registrar producto
+            </button>
+        </div>
+    </div>
+</div>

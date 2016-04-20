@@ -17,11 +17,9 @@ class ProductoController extends AbstractActionController
         
         //SI SE TRATA DE UN ADMIN DE AERSA
         if($session['idempresa'] == 1)
-            $collection = \EmpresaQuery::create()->findPk($session['idempresa']);
+            $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
         
-        
-        
-        $proveedores = \ProveedorQuery::create()->find();
+        $productos = \ProductoQuery::create()->find();
 
         
         //INTANCIAMOS NUESTRA VISTA
@@ -29,7 +27,7 @@ class ProductoController extends AbstractActionController
         $view_model->setTemplate('/application/catalogo/producto/index');
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
-            'collection' => $collection,
+            'productos' => $productos,
         ));
         return $view_model;
 
@@ -40,42 +38,39 @@ class ProductoController extends AbstractActionController
         
         $request = $this->getRequest();
         
-        $emp = \EmpresaQuery::create()->find();
-    
-        $form = new \Application\Catalogo\Form\ProveedorForm();
+        $categorias = array();
+        $subcategorias = array();
         
+        $cats   = \CategoriaQuery::create()->filterByIdcategoriapadre(null)->find();
+        $sub    = \CategoriaQuery::create()->filterByIdcategoriapadre(null, \Criteria::NOT_EQUAL)->find();
+        
+        //Crear arreglo de datos para formulario en campo categorias
+        foreach ($cats as $item)
+            $categorias[$item->getIdCategoria()] = $item->getCategorianombre();
+        
+        //Crear arreglo de datos para formulario en campo subcategorias
+        foreach ($sub as $item)
+            $subcategorias[$item->getIdCategoria()] = $item->getCategorianombre();
+        
+        $form = new \Application\Catalogo\Form\ProductosForm($categorias,$subcategorias);
         
         if ($request->isPost()) 
         {
             $post_data = $request->getPost();
 
-            //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-            $exist = \ProveedorQuery::create()->filterByProveedorNombrecomercial($post_data['proveedor_nombrecomercial'])->exists();
+            //VALIDACION PENDIENTE
+            //$exist = \ProductoQuery::create()->filterByProductoNombre($post_data['producto_nombre'])->exists();
 
-            if (!$exist) 
-            {
+            //CREAMOS NUESTRA ENTIDAD VACIA
+            $entity = new \Producto();
 
-                //CREAMOS NUESTRA ENTIDAD VACIA
-                $entity = new \Proveedor();
-
-                foreach ($post_data as $key => $value) {
-                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                }
-
-                //SETEAMOS EL STATUS Y EL PASSWORD
-                $entity->setIdempresa($post_data['idempresa']);
-
-                $entity->save();
-                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/catalogo/proveedor/nuevo');
-
-            } 
-            else 
-            {
-                $this->flashMessenger()->addErrorMessage('Este nombre de proveedor ya está duplicado');
-                return $this->redirect()->toUrl('/catalogo/proveedor/nuevo');
+            foreach ($post_data as $key => $value) {
+                $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
-             
+            $entity->setIdempresa(1);
+            $entity->save();
+            $this->flashMessenger()->addSuccessMessage('Producto registrado satisfactoriamente!');
+            return $this->redirect()->toUrl('/catalogo/producto');
             
         }
         
@@ -84,13 +79,333 @@ class ProductoController extends AbstractActionController
         $view_model->setVariables(array(
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
-            'empresa'   => $emp,
+            
         ));
-        $view_model->setTemplate('/application/catalogo/proveedor/nuevo');
+        $view_model->setTemplate('/application/catalogo/producto/nuevo');
         return $view_model;
         
-       
-        
+    }
+    
+    public function editarAction() 
+    {
+
+        $request = $this->getRequest();
+
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id = $this->params()->fromRoute('id');
+
+        //VERIFICAMOS SI EXISTE
+        $exist = \ProductoQuery::create()->filterByIdproducto($id)->exists();
+
+        if ($exist) 
+        {
+            
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \ProductoQuery::create()->findPk($id);
+            
+            //Obtenemos las categorias y subcategorias
+            $cats   = \CategoriaQuery::create()->filterByIdcategoriapadre(null)->find();
+            $sub    = \CategoriaQuery::create()->filterByIdcategoriapadre(null, \Criteria::NOT_EQUAL)->find();
+            
+            //Obtenemos los códigos de barras
+            $cbarras = \CodigobarrasQuery::create()->filterByIdproducto($id)->find();
+            
+            //Obtenemos las recetas
+            $recetas = \RecetaQuery::create()->filterByIdproducto($id)->find();
+            
+            //Crear arreglo de datos para formulario en campo categorias
+            foreach ($cats as $item)
+                $categorias[$item->getIdCategoria()] = $item->getCategorianombre();
+
+            //Crear arreglo de datos para formulario en campo subcategorias
+            foreach ($sub as $item)
+                $subcategorias[$item->getIdCategoria()] = $item->getCategorianombre();
+
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Catalogo\Form\ProductosForm($categorias,$subcategorias);
+            //SI NOS ENVIAN UNA PETICION POST
+            if ($request->isPost()) 
+            {
+                $post_data = $request->getPost();
+                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                foreach ($post_data as $key => $value)
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                
+                $entity->save();
+
+                $this->flashMessenger()->addSuccessMessage('Registro actualizado satisfactoriamente!');
+
+                return $this->redirect()->toUrl('/catalogo/producto/editar/'.$id);
+            }
+            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+        } 
+        else 
+            return $this->redirect()->toUrl('/catalogo/producto');
+
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'      => $form,
+            'messages'  => $this->flashMessenger(),
+            'cbarras'   => $cbarras,
+            'recetas'   => $recetas,
+            'producto'  => $entity,
+        ));
+        $view_model->setTemplate('/application/catalogo/producto/editar');
+        return $view_model;
     }
 
+    public function nuevocodigoAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        
+        $prod = \ProductoQuery::create()->findPk($id);
+        
+        $request = $this->getRequest();
+        
+        $form = new \Application\Catalogo\Form\CodigoBarrasForm();
+        
+        if ($request->isPost()) 
+        {
+            $post_data = $request->getPost();
+
+            //VALIDACION PENDIENTE
+            $exists = \CodigobarrasQuery::create()->filterByCodigobarrasCodigo($post_data['codigobarras_codigo'])->exists();
+            
+            if(!$exists)
+            {
+                //CREAMOS NUESTRA ENTIDAD VACIA
+                $entity = new \Codigobarras();
+                
+                foreach ($post_data as $key => $value) {
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                }
+                $entity->setIdproducto($id);
+                $entity->save();
+                
+                $this->flashMessenger()->addSuccessMessage('Código registrado satisfactoriamente!');
+                return $this->redirect()->toUrl('/catalogo/producto/editar/'.$id);
+            }
+            else
+            {
+                $this->flashMessenger()->addErrorMessage('Ya existe un código de barras idéntico');
+                return $this->redirect()->toUrl('/catalogo/producto/nuevocodigo/'.$id);
+            }
+
+            
+        }
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'      => $form,
+            'messages'  => $this->flashMessenger(),
+            'producto'  => $prod,
+            
+        ));
+        $view_model->setTemplate('/application/catalogo/producto/nuevocodigo');
+        return $view_model;
+        
+    }
+    
+    public function editarcodigoAction() 
+    {
+
+        $request = $this->getRequest();
+
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id = $this->params()->fromRoute('id');
+        $prod = $this->params()->fromRoute('prod');
+        
+        //VERIFICAMOS SI EXISTE
+        $exist = \ProductoQuery::create()->filterByIdproducto($prod)->exists();
+        
+        if ($exist) 
+        {
+            $producto = \ProductoQuery::create()->findPk($prod);
+            
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \CodigobarrasQuery::create()->findPk($id);
+            
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Catalogo\Form\CodigoBarrasForm();
+            //SI NOS ENVIAN UNA PETICION POST
+            if ($request->isPost()) 
+            {
+                $post_data = $request->getPost();
+                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                foreach ($post_data as $key => $value)
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                
+                $entity->save();
+
+                $this->flashMessenger()->addSuccessMessage('Codigo modificado correctamente!');
+                return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
+            }
+            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+        } 
+        else 
+            return $this->redirect()->toUrl('/catalogo/producto');
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'      => $form,
+            'messages'  => $this->flashMessenger(),
+            'cbarras'   => $entity,
+            'producto'  => $producto,
+        ));
+        $view_model->setTemplate('/application/catalogo/producto/editarcodigo');
+        return $view_model;
+    }
+    
+    public function eliminarcodigoAction()
+    {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $id = $this->params()->fromRoute('id');
+            $prod = $this->params()->fromRoute('prod');
+            
+            $entity = \CodigobarrasQuery::create()->findPk($id);
+            $entity->delete();
+            
+            $this->flashMessenger()->addSuccessMessage('Código eliminado correctamente!');
+
+            return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
+            
+        }
+        
+    }
+    
+    public function nuevasubrecetaAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        
+        $prod = \ProductoQuery::create()->findPk($id);
+        
+        $request = $this->getRequest();
+        
+        $collection  = \ProductoQuery::create()->filterByProductoTipo('simple')->find();
+        $productos = array();
+        foreach ($collection as $item)
+                $productos[$item->getIdproducto()] = $item->getProductoNombre();
+        
+        $form = new \Application\Catalogo\Form\SubrecetaForm($productos);
+        
+        
+        if ($request->isPost()) 
+        {
+            $post_data = $request->getPost();
+            
+            $exists = \RecetaQuery::create()->filterByIdproducto($post_data['idproductoreceta'])->exists();
+            
+
+            //CREAMOS NUESTRA ENTIDAD VACIA
+            $entity = new \Receta();
+
+            foreach ($post_data as $key => $value) {
+                $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+            }
+            $entity->setIdproducto($id);
+            $entity->save();
+
+            $this->flashMessenger()->addSuccessMessage('Sub receta registrada correctamente!');
+            return $this->redirect()->toUrl('/catalogo/producto/editar/'.$id);
+
+
+
+
+            
+        }
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'      => $form,
+            'messages'  => $this->flashMessenger(),
+            'producto'  => $prod,
+            
+        ));
+        $view_model->setTemplate('/application/catalogo/producto/nuevasubreceta');
+        return $view_model;
+        
+    }
+    
+    public function editarsubrecetaAction() 
+    {
+
+        $request = $this->getRequest();
+
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id = $this->params()->fromRoute('id');
+        $prod = $this->params()->fromRoute('prod');
+        
+        //VERIFICAMOS SI EXISTE
+        $exist = \ProductoQuery::create()->filterByIdproducto($prod)->exists();
+        
+        if ($exist) 
+        {
+            $producto = \ProductoQuery::create()->findPk($prod);
+            
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \CodigobarrasQuery::create()->findPk($id);
+            
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Catalogo\Form\CodigoBarrasForm();
+            //SI NOS ENVIAN UNA PETICION POST
+            if ($request->isPost()) 
+            {
+                $post_data = $request->getPost();
+                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                foreach ($post_data as $key => $value)
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                
+                $entity->save();
+
+                $this->flashMessenger()->addSuccessMessage('Codigo modificado correctamente!');
+                return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
+            }
+            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+        } 
+        else 
+            return $this->redirect()->toUrl('/catalogo/producto');
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'      => $form,
+            'messages'  => $this->flashMessenger(),
+            'cbarras'   => $entity,
+            'producto'  => $producto,
+        ));
+        $view_model->setTemplate('/application/catalogo/producto/editarcodigo');
+        return $view_model;
+    }
+    
+    public function eliminarsubrecetaAction()
+    {
+        $request = $this->getRequest();
+        if($request->isPost())
+        {
+            $id = $this->params()->fromRoute('id');
+            $prod = $this->params()->fromRoute('prod');
+            
+            $entity = \CodigobarrasQuery::create()->findPk($id);
+            $entity->delete();
+            
+            $this->flashMessenger()->addSuccessMessage('Código eliminado correctamente!');
+
+            return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
+            
+        }
+        
+    }
+    
 }

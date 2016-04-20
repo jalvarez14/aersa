@@ -1,2 +1,258 @@
-<?php
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
 
+<h3 class="page-title"><?php echo $producto->getProductonombre() ?></h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+         <li>
+            <a href="/catalogo/producto">Productos</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span><?php echo $producto->getProductonombre() ?></span>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Editar</span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+<?php
+    $form->setAttribute('action', '/catalogo/producto/editar/'.$producto->getIdProducto());
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Información del producto</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_nombre')) ?>  
+                        <?php echo $this->formText($form->get('producto_nombre')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idcategoria')) ?>  
+                        <?php echo $this->formSelect($form->get('idcategoria')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idsubcategoria')) ?>  
+                        <?php echo $this->formSelect($form->get('idsubcategoria')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idunidadmedida')) ?>  
+                        <?php echo $this->formSelect  ($form->get('idunidadmedida')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_tipo')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_tipo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_iva')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_iva')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_costo')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_costo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_ultimocosto')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_ultimocosto')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_stock')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_stock')) ?>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_baja')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_baja')) ?>
+                    </div>
+                </div>
+                
+                
+                
+            </div>
+            
+        </div>
+        
+        <div class="form-actions right" style="background-color: white">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+        <div class="portlet-body form">
+
+            <div class="form-body">
+                <h3 class="form-section">Código de barras</h3>
+                <div class="btn-set pull-right">
+                    <a href="/catalogo/producto/nuevocodigo/<?php echo $producto->getIdproducto() ?>"><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo código de barras</button></a>
+
+                </div>
+                <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
+                    <thead >
+                        <tr>
+                            <th class="text-center"> Código de barras </th>
+                            <th class="text-center"> Cantidad </th>
+                            <th class="text-center"> Opciones </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <?php foreach ($cbarras as $entity) : ?>
+
+                            <tr id="<?php echo $entity->getidcodigobarras() ?>">
+                                <td><?php echo $entity->getCodigobarrasCodigo() ?></td>
+                                <td><?php echo $entity->getCodigobarrasCantidad() ?></td>
+
+                                <td class="text-left">                                    
+                                    <div class="btn-group">
+                                        <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                            <i class="fa fa-angle-down"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="/catalogo/producto/editarcodigo/<?php echo $entity->getidcodigobarras() ?>/<?php echo $producto->getIdproducto() ?>">
+                                                    <i class="fa fa-pencil"></i> Editar </a>
+                                            </li>
+                                            
+                                            <li>
+                                                <a href="javascript:;" class="delete_code">
+                                                    <i class="fa fa-trash"></i> Eliminar </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <?php if($producto->getProductoTipo() == 'subreceta' || $producto->getProductoTipo() == 'plu') :?>
+            
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <h3 class="form-section">Subreceta</h3>
+                    <div class="btn-set pull-right">
+                        <a href="/catalogo/producto/nuevasubreceta/<?php echo $producto->getIdproducto() ?>"><button class="btn default" type="button" style="margin-bottom: 15px;">Nueva sub receta</button></a>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
+                        <thead >
+                            <tr>
+                                <th class="text-center"> Producto </th>
+                                <th class="text-center"> Cantidad </th>
+                                <th class="text-center"> Opciones </th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <?php foreach ($recetas as $entity) : ?>
+
+                                <tr id="<?php echo $entity->getIdreceta() ?>">
+                                    <td><?php echo $entity->getIdproducto() ?></td>
+                                    <td><?php echo $entity->getRecetaCantidad() ?></td>
+
+                                    <td class="text-left">                                    
+                                        <div class="btn-group">
+                                            <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                                <i class="fa fa-angle-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="/catalogo/producto/editarcodigo/<?php echo $entity->getIdreceta() ?>/<?php echo $producto->getIdProducto() ?>">
+                                                        <i class="fa fa-pencil"></i> Editar </a>
+                                                </li>
+                                                
+                                                <li>
+                                                    <a href="javascript:;" class="delete_modal">
+                                                        <i class="fa fa-trash"></i> Eliminar </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <?php  endif?>
+        <!--
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+        -->
+    </div>
+</div>
+
+<?php echo '<script> var prod = '.$producto->getIdproducto().'</script>'; ?>
+<script>
+    $(document).ready(function(){
+
+        $('.delete_code').click(function(){
+
+          var id = $(this).closest('tr').attr('id');
+          
+          var tmpl = [
+            // tabindex is required for focus
+            ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+              '<div class="modal-header">',
+                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
+                '<h4 class="modal-title">ADVERTENCIA</h4>', 
+              '</div>',
+              '<form method="post" action="/catalogo/producto/eliminarcodigo/'+id+'/'+ prod +'">',
+                '<div class="modal-body">',
+                  '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
+                '</div>',
+                '<div class="modal-footer">',
+                  '<a href="#" data-dismiss="modal" class="btn btn-default">Cancelar</a>',
+                  '<button class="btn btn-danger" type="submit">Eliminar</button>',
+                '</div>',
+              '</form>',
+            '</div>'
+          ].join('');
+          $(tmpl).modal();
+        });
+    }); 
+</script>
