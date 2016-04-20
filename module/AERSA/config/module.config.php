@@ -233,6 +233,29 @@ return array(
                                     ),
                                ),
                             ),
+                           'producto' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/producto',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Producto',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Literal',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                               ),
+                            ),
                         
                         'iva' => array(
                                 'type' => 'Literal',
@@ -460,6 +483,8 @@ return array(
 
                                ),
                             ),
+
+                           
                             'tablajeria' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -565,15 +590,16 @@ return array(
              * CATALOGO
              */
 
-            'Application\Catalogo\Controller\Usuario'               => 'Application\Catalogo\Controller\UsuarioController',
-            'Application\Catalogo\Controller\Proveedor'             => 'Application\Catalogo\Controller\ProveedorController',
-            'Application\Catalogo\Controller\Iva'                   => 'Application\Catalogo\Controller\IvaController',
-            'Application\Catalogo\Controller\Categoria '            => 'Application\Catalogo\Controller\CategoriaController',
-            'Application\Catalogo\Controller\Empresa'               => 'Application\Catalogo\Controller\EmpresaController',
-            'Application\Catalogo\Controller\Sucursal'              => 'Application\Catalogo\Controller\SucursalController',
-            'Application\Catalogo\Controller\Almacen'               => 'Application\Catalogo\Controller\AlmacenController',
-            'Application\Catalogo\Controller\Plantillatablajeria'   => 'Application\Catalogo\Controller\PlantillatablajeriaController',
-      
+            'Application\Catalogo\Controller\Usuario'       => 'Application\Catalogo\Controller\UsuarioController',
+            'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
+            'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
+            'Application\Catalogo\Controller\Categoria'     => 'Application\Catalogo\Controller\CategoriaController',
+            'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
+            'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
+            'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
+            'Application\Catalogo\Controller\Producto'      => 'Application\Catalogo\Controller\ProductoController',
+            
+
             /*
              * WEBSITE
              */

@@ -76,6 +76,7 @@ class AlmacenController extends AbstractActionController
             'Créditos al costo',
             'Bonificados',
             'Consignación',
+            'Servicio',
         );
         
         $id     = $this->params()->fromRoute('id');

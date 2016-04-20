@@ -295,6 +295,14 @@ function createAlmacenes($idSuc)
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
     $almacen->save();
+    
+    $almacen = new \Almacen();
+    $almacen->setAlmacenNombre('Servicio');
+    $almacen->setAlmacenEstatus(1);
+    $almacen->setIdsucursal($idSuc);
+    $almacen->save();
+    
+    
 }
 
 function getAdministradores($sucursal)
