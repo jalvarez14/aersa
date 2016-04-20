@@ -233,6 +233,29 @@ return array(
                                     ),
                                ),
                             ),
+                           'productos' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/producto',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Productos',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Literal',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Productos',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                               ),
+                            ),
                         
                         'iva' => array(
                                 'type' => 'Literal',
@@ -573,7 +596,7 @@ return array(
             'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
             'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
-            'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
+            'Application\Catalogo\Controller\Productos'     => 'Application\Catalogo\Controller\ProductosController',
             
             /*
              * WEBSITE
