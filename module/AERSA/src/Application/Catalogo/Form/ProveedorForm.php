@@ -22,7 +22,6 @@ class ProveedorForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Empresa *',
-                'empty_option' => 'Sin especificar',
                 'value_options' => $idempresa
             ),
             'attributes' => array(

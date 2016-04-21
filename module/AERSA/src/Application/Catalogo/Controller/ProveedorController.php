@@ -21,7 +21,6 @@ class ProveedorController extends AbstractActionController
         }
         
         $proveedores = \ProveedorQuery::create()->find();
-
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
@@ -29,6 +28,7 @@ class ProveedorController extends AbstractActionController
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $proveedores,
+            'session'   => $session,
         ));
         return $view_model;
 
@@ -36,12 +36,17 @@ class ProveedorController extends AbstractActionController
     
     public function nuevoAction()
     {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
         
         $request = $this->getRequest();
         
-        $emp = \EmpresaQuery::create()->find();
-    
-        $form = new \Application\Catalogo\Form\ProveedorForm();
+        $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
+        //$emp = \EmpresaQuery::create()->findPk(2);
+        
+        $empresa= array();
+        $empresa[$emp->getIdempresa()] = $emp->getEmpresaNombrecomercial();
+        $form = new \Application\Catalogo\Form\ProveedorForm($empresa);
         
         
         if ($request->isPost()) 
@@ -84,6 +89,7 @@ class ProveedorController extends AbstractActionController
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
             'empresa'   => $emp,
+            'session'   => $session,
         ));
         $view_model->setTemplate('/application/catalogo/proveedor/nuevo');
         return $view_model;
