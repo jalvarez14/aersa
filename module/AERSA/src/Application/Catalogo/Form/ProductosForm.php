@@ -4,9 +4,9 @@ namespace Application\Catalogo\Form;
 
 use Zend\Form\Form;
 
-class ProductoForm extends Form
+class ProductosForm extends Form
 {
-    public function __construct($idempresa = array())
+    public function __construct($categorias = array(),$subcategorias = array())
     {
         // we want to ignore the name passed
         parent::__construct('producto_form');
@@ -16,10 +16,7 @@ class ProductoForm extends Form
             'name' => 'idproducto',
             'type' => 'Hidden',
         ));
-        $this->add(array(
-            'name' => 'idempresa',
-            'type' => 'Hidden',
-        ));
+
         
         $this->add(array(
             'name' => 'producto_nombre',
@@ -38,8 +35,7 @@ class ProductoForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Categoria *',
-                'value_options' => array(
-                ),
+                'value_options' => $categorias,
             ),
             'attributes' => array(
                 'required' => true,
@@ -51,8 +47,28 @@ class ProductoForm extends Form
             'name' => 'idsubcategoria',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Subcategoria *',
+                'label' => 'Subcategoria',
+                'empty_option' => 'Sin especificar',
+                'value_options' => $subcategorias
+            ),
+            'attributes' => array(
+                'required' => false,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'idunidadmedida',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Unidad de medida *',
                 'value_options' => array(
+                    1 => 'Pieza',
+                    2 => 'Botella',
+                    3 => 'Kilogramos',
+                    4 => 'Litros',
+                    5 => 'Porcion',
+                    6 => 'Caja'
                 ),
             ),
             'attributes' => array(
@@ -61,6 +77,38 @@ class ProductoForm extends Form
             ),
         ));
         
+        $this->add(array(
+            'name' => 'producto_tipo',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Tipo *',
+                'value_options' => array(
+                    'simple' => 'Simple',
+                    'subreceta' => 'Subreceta',
+                    'plu' => 'Botón de venta'
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'producto_iva',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Iva *',
+                'value_options' => array(
+                    1 => 'Si',
+                    2 => 'No',
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
         
         $this->add(array(
             'name' => 'producto_rendimiento',
@@ -75,7 +123,7 @@ class ProductoForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'producto _ultimocosto',
+            'name' => 'producto_costo',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Costo *',
@@ -87,10 +135,10 @@ class ProductoForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'proveedor_telefono',
+            'name' => 'producto_ultimocosto',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Telefono *',
+                'label' => 'Último costo *',
             ),
             'attributes' => array(
                 'required' => true,
@@ -99,83 +147,36 @@ class ProductoForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'proveedor_calle',
+            'name' => 'producto_stock',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Calle',
+                'label' => 'Stock *',
             ),
             'attributes' => array(
+                'required' => true,
                 'class' => 'form-control',
+                'disabled' => 'disabled',
+                'value' => '0',
             ),
         ));
+        
+        
         
         $this->add(array(
-            'name' => 'proveedor_numero',
-            'type' => 'Text',
+            'name' => 'producto_baja',
+            'type' => 'Select',
             'options' => array(
-                    'label' => 'Número exterior',
+                'label' => 'Baja *',
+                'value_options' => array(
+                    1 => 'Si',
+                    2 => 'No',
+                ),
             ),
             'attributes' => array(
+                'required' => true,
                 'class' => 'form-control',
             ),
-        ));
-        
-        $this->add(array(
-            'name' => 'proveedor_interior',
-            'type' => 'Text',
-            'options' => array(
-                    'label' => 'Número interior',
-            ),
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
-        
-        $this->add(array(
-            'name' => 'proveedor_colonia',
-            'type' => 'Text',
-            'options' => array(
-                    'label' => 'Colonia',
-            ),
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
-        
-        $this->add(array(
-            'name' => 'proveedor_ciudad',
-            'type' => 'Text',
-            'options' => array(
-                    'label' => 'Ciudad',
-            ),
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
-        
-        $this->add(array(
-            'name' => 'proveedor_estado',
-            'type' => 'Text',
-            'options' => array(
-                    'label' => 'Estado',
-            ),
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
-        
-         $this->add(array(
-            'name' => 'proveedor_codigopostal',
-            'type' => 'Text',
-            'options' => array(
-                    'label' => 'Código postal',
-            ),
-            'attributes' => array(
-                'class' => 'form-control',
-            ),
-        ));
-        
-        
+        ));        
 
     }
 }

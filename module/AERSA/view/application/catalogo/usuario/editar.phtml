@@ -10,6 +10,13 @@
         </li>
     </ul>
 </div>
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
 <?php foreach ($messages->getErrorMessages() as $message):?>
     <div class="alert alert-danger alert-dismissable">
         <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>

@@ -1,0 +1,62 @@
+
+
+<h3 class="page-title">Editar codigo de barras</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/producto/editar/<?php echo $producto->getIdproducto() ?>"><?php echo $producto->getProductonombre()?></a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Editar codigo</span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+<?php
+    $form->setAttribute('action', '/catalogo/producto/editarcodigo/'.$cbarras->getIdCodigobarras().'/'.$producto->getIdProducto());
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Código de barras</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('codigobarras_codigo')) ?>  
+                        <?php echo $this->formText($form->get('codigobarras_codigo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('codigobarras_cantidad')) ?>  
+                        <?php echo $this->formText($form->get('codigobarras_cantidad')) ?>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>
