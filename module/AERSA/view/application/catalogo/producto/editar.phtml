@@ -191,9 +191,9 @@
                             </thead>
                             <tbody class="text-center">
                                 <?php foreach ($recetas as $entity) : ?>
-                                
+                                <?php $nombreProducto = \ProductoQuery::create()->findPk($entity->getIdproductoreceta())?>
                                     <tr id="<?php echo $entity->getIdreceta() ?>">
-                                        <td><?php echo $entity->getIdproductoreceta() ?></td>
+                                        <td><?php echo $nombreProducto->getProductoNombre() ?></td>
                                         <td><?php echo $entity->getRecetaCantidad() ?></td>
 
                                         <td class="text-left">                                    

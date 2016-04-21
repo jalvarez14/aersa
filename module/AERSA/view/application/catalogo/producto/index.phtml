@@ -35,12 +35,21 @@
                         </tr>
                     </thead>
                     <tbody class="text-center">
+                        
+                        
                         <?php foreach ($productos as $entity) : ?>
 
+                        <?php $categoria    = \CategoriaQuery::create()->findPk($entity->getIdCategoria()) ?>
+                        <?php $subcategoria = \CategoriaQuery::create()->findPk($entity->getIdsubcategoria()) ?>
+                        
                             <tr id="<?php echo $entity->getIdproducto() ?>">
                                 <td><?php echo $entity->getProductoNombre() ?></td>
-                                <td><?php echo $entity->getIdcategoria() ?></td>
-                                <td><?php echo $entity->getIdsubcategoria() ?></td>
+                                <td><span class="label label-sm label-success"> <?php echo $categoria->getCategoriaNombre() ?> </span></td>
+                                <?php if($subcategoria != NULL): ?>
+                                <td><span class="label label-sm label-success"><?php echo $subcategoria->getCategoriaNombre() ?></span></td>
+                                <?php else:?>
+                                    <td><span class="label label-sm label-danger"> N/A </span></td>
+                                <?php endif ?>
                                 <td><?php echo $entity->getIdunidadmedida() ?></td>
                                 <td><?php echo $entity->getProductocosto() ?></td>
                                 

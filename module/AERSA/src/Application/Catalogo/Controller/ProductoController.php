@@ -22,6 +22,8 @@ class ProductoController extends AbstractActionController
         $productos = \ProductoQuery::create()->find();
 
         
+        
+                
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/catalogo/producto/index');
