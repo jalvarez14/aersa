@@ -19,7 +19,6 @@ class IndexController extends AbstractActionController
     {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-        
     }
 
 }
