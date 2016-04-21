@@ -52,6 +52,8 @@ class CategoriaTableMap extends TableMap
     {
         $this->addRelation('CategoriaRelatedByIdcategoriapadre', 'Categoria', RelationMap::MANY_TO_ONE, array('idcategoriapadre' => 'idcategoria', ), 'CASCADE', 'CASCADE');
         $this->addRelation('CategoriaRelatedByIdcategoria', 'Categoria', RelationMap::ONE_TO_MANY, array('idcategoria' => 'idcategoriapadre', ), 'CASCADE', 'CASCADE', 'CategoriasRelatedByIdcategoria');
+        $this->addRelation('ProductoRelatedByIdcategoria', 'Producto', RelationMap::ONE_TO_MANY, array('idcategoria' => 'idcategoria', ), 'CASCADE', 'CASCADE', 'ProductosRelatedByIdcategoria');
+        $this->addRelation('ProductoRelatedByIdsubcategoria', 'Producto', RelationMap::ONE_TO_MANY, array('idcategoria' => 'idsubcategoria', ), 'CASCADE', 'CASCADE', 'ProductosRelatedByIdsubcategoria');
     } // buildRelations()
 
 } // CategoriaTableMap

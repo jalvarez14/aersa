@@ -601,18 +601,24 @@
   <table name="producto" phpName="Producto" idMethod="native">
     <column name="idproducto" phpName="Idproducto" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <column name="idunidadmedida" phpName="Idunidadmedida" type="INTEGER" required="true"/>
     <column name="producto_nombre" phpName="ProductoNombre" type="LONGVARCHAR" required="true"/>
     <column name="idcategoria" phpName="Idcategoria" type="INTEGER" required="false"/>
     <column name="idsubcategoria" phpName="Idsubcategoria" type="INTEGER" required="false"/>
     <column name="producto_rendimiento" phpName="ProductoRendimiento" type="INTEGER" required="false"/>
     <column name="producto_ultimocosto" phpName="ProductoUltimocosto" type="FLOAT" required="false"/>
-    <column name="idunidadmedida" phpName="Idunidadmedida" type="INTEGER" required="false"/>
     <column name="producto_baja" phpName="ProductoBaja" type="BOOLEAN" size="1" required="true"/>
     <column name="producto_tipo" phpName="ProductoTipo" type="CHAR" sqlType="enum('simple','subreceta','plu')" required="true"/>
     <column name="producto_costo" phpName="ProductoCosto" type="FLOAT" required="false"/>
     <column name="producto_iva" phpName="ProductoIva" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="categoria" name="idcategoria_producto" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcategoria" foreign="idcategoria"/>
+    </foreign-key>
     <foreign-key foreignTable="empresa" name="idempresa_producto" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="categoria" name="idsubcategoria_producto" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsubcategoria" foreign="idcategoria"/>
     </foreign-key>
     <foreign-key foreignTable="unidadmedida" name="idunidadmedida_producto" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idunidadmedida" foreign="idunidadmedida"/>
@@ -622,6 +628,12 @@
     </index>
     <index name="idempresa">
       <index-column name="idempresa"/>
+    </index>
+    <index name="idsubcategoria">
+      <index-column name="idsubcategoria"/>
+    </index>
+    <index name="idcategoria">
+      <index-column name="idcategoria"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
