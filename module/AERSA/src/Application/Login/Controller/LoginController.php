@@ -110,7 +110,19 @@ class LoginController extends AbstractActionController
             $empresas = \Shared\GeneralFunctions::collectionToSelectArray(\EmpresaQuery::create()->find(),'idempresa','empresa_nombrecomercial');
         }
         
-        
+        if($session['idrol'] == 2){ //ADMINISTRADOR AERSA
+            $view_model->setTemplate('/application/login/select_auditor_aersa');
+            
+            $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->find();
+            $empresas = array();
+            $usuario_empresa = new \Usuarioempresa();
+            foreach ($usuario_empresas as $usuario_empresa){
+                $id = $usuario_empresa->getIdempresa();
+                $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
+            }
+
+        }
+
         $form = new \Application\Login\Form\SelectForm($session['idrol'],$empresas);
         
         $view_model->setVariables(array(

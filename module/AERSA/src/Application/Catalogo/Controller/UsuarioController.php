@@ -66,10 +66,7 @@ class UsuarioController extends AbstractActionController {
 
                 //LE PONEMOS EL FILTRO A NUESTRO FORMULARIO
                 $form->setInputFilter($filter->getInputFilter());
-
-                //VERIFICAMOS QUE SEA VALIDO
-                if ($form->isValid()) {
-
+                
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
                     foreach ($post_data as $key => $value) {
                         $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
@@ -86,12 +83,7 @@ class UsuarioController extends AbstractActionController {
 
 
                     return $this->redirect()->toUrl('/catalogo/usuario');
-                } 
-                else 
-                {
-
-
-                }
+                
             } else {
                 $this->flashMessenger()->addErrorMessage('El nombre de usuario ya se encuentra registrado, por favor utilice uno distinto');
             }
