@@ -91,6 +91,7 @@ CREATE TABLE `compra`
     `compra_ieps` DECIMAL(10,5),
     `compra_iva` DECIMAL(10,5),
     `compra_total` DECIMAL(15,5),
+    `compra_tipo` enum('ordecompra','compra') NOT NULL,
     PRIMARY KEY (`idcompra`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),

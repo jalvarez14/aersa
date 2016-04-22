@@ -64,6 +64,7 @@
     <column name="compra_ieps" phpName="CompraIeps" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="compra_iva" phpName="CompraIva" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="compra_total" phpName="CompraTotal" type="DECIMAL" size="15" scale="5" required="false"/>
+    <column name="compra_tipo" phpName="CompraTipo" type="CHAR" sqlType="enum('ordecompra','compra')" required="true"/>
     <foreign-key foreignTable="almacen" name="idalmacen_compra" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>

@@ -619,7 +619,7 @@ return array(
                             'compra' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
-                                    'route' => '/compra', 
+                                    'route' => '/compra[/]', 
                                     'defaults' => array( 
                                         'controller' => 'Application\Proceso\Controller\Compra', 'action' => 'index', 
                                     ), 
@@ -628,7 +628,7 @@ return array(
                                 'child_routes' => array( 
                                     'nuevoregistro' => array( 
                                         'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevoregistro', 
+                                            'route' => '/nuevoregistro[/]', 
                                             'defaults' => array( 
                                                 'controller' => 'Application\Proceso\Controller\Compra', 
                                                 'action' => 'nuevoregistro', 
@@ -638,7 +638,7 @@ return array(
                                     'editar' => array( 
                                         'type' => 'Segment', 
                                         'options' => array( 
-                                            'route' => '/editar[/:id]', 
+                                            'route' => '/editar[/:id][/]', 
                                              'defaults' => array( 
                                                  'controller' => 'Application\Proceso\Controller\Compra', 
                                                  'action' => 'editar', 
@@ -648,7 +648,7 @@ return array(
                                     'eliminar' => array( 
                                         'type' => 'Segment', 
                                         'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
+                                            'route' => '/eliminar[/:id][/]', 
                                             'defaults' => array( 
                                                 'controller' => 'Application\Proceso\Controller\Compra', 
                                                 'action' => 'eliminar',

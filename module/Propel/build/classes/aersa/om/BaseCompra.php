@@ -127,6 +127,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
     protected $compra_total;
 
     /**
+     * The value for the compra_tipo field.
+     * @var        string
+     */
+    protected $compra_tipo;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -482,6 +488,17 @@ abstract class BaseCompra extends BaseObject implements Persistent
     {
 
         return $this->compra_total;
+    }
+
+    /**
+     * Get the [compra_tipo] column value.
+     *
+     * @return string
+     */
+    public function getCompraTipo()
+    {
+
+        return $this->compra_tipo;
     }
 
     /**
@@ -859,6 +876,27 @@ abstract class BaseCompra extends BaseObject implements Persistent
     } // setCompraTotal()
 
     /**
+     * Set the value of [compra_tipo] column.
+     *
+     * @param  string $v new value
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setCompraTipo($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->compra_tipo !== $v) {
+            $this->compra_tipo = $v;
+            $this->modifiedColumns[] = CompraPeer::COMPRA_TIPO;
+        }
+
+
+        return $this;
+    } // setCompraTipo()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -910,6 +948,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $this->compra_ieps = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->compra_iva = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
             $this->compra_total = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->compra_tipo = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -919,7 +958,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 16; // 16 = CompraPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 17; // 17 = CompraPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Compra object", $e);
@@ -1288,6 +1327,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::COMPRA_TOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`compra_total`';
         }
+        if ($this->isColumnModified(CompraPeer::COMPRA_TIPO)) {
+            $modifiedColumns[':p' . $index++]  = '`compra_tipo`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `compra` (%s) VALUES (%s)',
@@ -1346,6 +1388,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
                         break;
                     case '`compra_total`':
                         $stmt->bindValue($identifier, $this->compra_total, PDO::PARAM_STR);
+                        break;
+                    case '`compra_tipo`':
+                        $stmt->bindValue($identifier, $this->compra_tipo, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1587,6 +1632,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             case 15:
                 return $this->getCompraTotal();
                 break;
+            case 16:
+                return $this->getCompraTipo();
+                break;
             default:
                 return null;
                 break;
@@ -1632,6 +1680,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $keys[13] => $this->getCompraIeps(),
             $keys[14] => $this->getCompraIva(),
             $keys[15] => $this->getCompraTotal(),
+            $keys[16] => $this->getCompraTipo(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1745,6 +1794,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             case 15:
                 $this->setCompraTotal($value);
                 break;
+            case 16:
+                $this->setCompraTipo($value);
+                break;
         } // switch()
     }
 
@@ -1785,6 +1837,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if (array_key_exists($keys[13], $arr)) $this->setCompraIeps($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setCompraIva($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setCompraTotal($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setCompraTipo($arr[$keys[16]]);
     }
 
     /**
@@ -1812,6 +1865,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::COMPRA_IEPS)) $criteria->add(CompraPeer::COMPRA_IEPS, $this->compra_ieps);
         if ($this->isColumnModified(CompraPeer::COMPRA_IVA)) $criteria->add(CompraPeer::COMPRA_IVA, $this->compra_iva);
         if ($this->isColumnModified(CompraPeer::COMPRA_TOTAL)) $criteria->add(CompraPeer::COMPRA_TOTAL, $this->compra_total);
+        if ($this->isColumnModified(CompraPeer::COMPRA_TIPO)) $criteria->add(CompraPeer::COMPRA_TIPO, $this->compra_tipo);
 
         return $criteria;
     }
@@ -1890,6 +1944,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $copyObj->setCompraIeps($this->getCompraIeps());
         $copyObj->setCompraIva($this->getCompraIva());
         $copyObj->setCompraTotal($this->getCompraTotal());
+        $copyObj->setCompraTipo($this->getCompraTipo());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2837,6 +2892,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $this->compra_ieps = null;
         $this->compra_iva = null;
         $this->compra_total = null;
+        $this->compra_tipo = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
