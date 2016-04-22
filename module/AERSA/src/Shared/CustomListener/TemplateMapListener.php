@@ -99,6 +99,30 @@ class TemplateMapListener implements ListenerAggregateInterface
                     break;
                     
                     
+                }
+                //AUDITOR AERSA
+                elseif($session['idrol'] == 2 && !is_null($session['idempresa']) && is_null($session['idsucursal'])){
+                    
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_2.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                    
+                    
+                }elseif($session['idrol'] == 2 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
+                    
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_3.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                    
+                    
                 }else{
                 
                     $template_map->merge(

@@ -8,12 +8,12 @@
  *
  * @method ProductoQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
  * @method ProductoQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
+ * @method ProductoQuery orderByIdunidadmedida($order = Criteria::ASC) Order by the idunidadmedida column
  * @method ProductoQuery orderByProductoNombre($order = Criteria::ASC) Order by the producto_nombre column
  * @method ProductoQuery orderByIdcategoria($order = Criteria::ASC) Order by the idcategoria column
  * @method ProductoQuery orderByIdsubcategoria($order = Criteria::ASC) Order by the idsubcategoria column
  * @method ProductoQuery orderByProductoRendimiento($order = Criteria::ASC) Order by the producto_rendimiento column
  * @method ProductoQuery orderByProductoUltimocosto($order = Criteria::ASC) Order by the producto_ultimocosto column
- * @method ProductoQuery orderByIdunidadmedida($order = Criteria::ASC) Order by the idunidadmedida column
  * @method ProductoQuery orderByProductoBaja($order = Criteria::ASC) Order by the producto_baja column
  * @method ProductoQuery orderByProductoTipo($order = Criteria::ASC) Order by the producto_tipo column
  * @method ProductoQuery orderByProductoCosto($order = Criteria::ASC) Order by the producto_costo column
@@ -21,12 +21,12 @@
  *
  * @method ProductoQuery groupByIdproducto() Group by the idproducto column
  * @method ProductoQuery groupByIdempresa() Group by the idempresa column
+ * @method ProductoQuery groupByIdunidadmedida() Group by the idunidadmedida column
  * @method ProductoQuery groupByProductoNombre() Group by the producto_nombre column
  * @method ProductoQuery groupByIdcategoria() Group by the idcategoria column
  * @method ProductoQuery groupByIdsubcategoria() Group by the idsubcategoria column
  * @method ProductoQuery groupByProductoRendimiento() Group by the producto_rendimiento column
  * @method ProductoQuery groupByProductoUltimocosto() Group by the producto_ultimocosto column
- * @method ProductoQuery groupByIdunidadmedida() Group by the idunidadmedida column
  * @method ProductoQuery groupByProductoBaja() Group by the producto_baja column
  * @method ProductoQuery groupByProductoTipo() Group by the producto_tipo column
  * @method ProductoQuery groupByProductoCosto() Group by the producto_costo column
@@ -36,9 +36,17 @@
  * @method ProductoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method ProductoQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method ProductoQuery leftJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+ * @method ProductoQuery rightJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+ * @method ProductoQuery innerJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+ *
  * @method ProductoQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
  * @method ProductoQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
  * @method ProductoQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
+ * @method ProductoQuery leftJoinCategoriaRelatedByIdsubcategoria($relationAlias = null) Adds a LEFT JOIN clause to the query using the CategoriaRelatedByIdsubcategoria relation
+ * @method ProductoQuery rightJoinCategoriaRelatedByIdsubcategoria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoriaRelatedByIdsubcategoria relation
+ * @method ProductoQuery innerJoinCategoriaRelatedByIdsubcategoria($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoriaRelatedByIdsubcategoria relation
  *
  * @method ProductoQuery leftJoinUnidadmedida($relationAlias = null) Adds a LEFT JOIN clause to the query using the Unidadmedida relation
  * @method ProductoQuery rightJoinUnidadmedida($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Unidadmedida relation
@@ -88,12 +96,12 @@
  * @method Producto findOneOrCreate(PropelPDO $con = null) Return the first Producto matching the query, or a new Producto object populated from the query conditions when no match is found
  *
  * @method Producto findOneByIdempresa(int $idempresa) Return the first Producto filtered by the idempresa column
+ * @method Producto findOneByIdunidadmedida(int $idunidadmedida) Return the first Producto filtered by the idunidadmedida column
  * @method Producto findOneByProductoNombre(string $producto_nombre) Return the first Producto filtered by the producto_nombre column
  * @method Producto findOneByIdcategoria(int $idcategoria) Return the first Producto filtered by the idcategoria column
  * @method Producto findOneByIdsubcategoria(int $idsubcategoria) Return the first Producto filtered by the idsubcategoria column
  * @method Producto findOneByProductoRendimiento(int $producto_rendimiento) Return the first Producto filtered by the producto_rendimiento column
  * @method Producto findOneByProductoUltimocosto(double $producto_ultimocosto) Return the first Producto filtered by the producto_ultimocosto column
- * @method Producto findOneByIdunidadmedida(int $idunidadmedida) Return the first Producto filtered by the idunidadmedida column
  * @method Producto findOneByProductoBaja(boolean $producto_baja) Return the first Producto filtered by the producto_baja column
  * @method Producto findOneByProductoTipo(string $producto_tipo) Return the first Producto filtered by the producto_tipo column
  * @method Producto findOneByProductoCosto(double $producto_costo) Return the first Producto filtered by the producto_costo column
@@ -101,12 +109,12 @@
  *
  * @method array findByIdproducto(int $idproducto) Return Producto objects filtered by the idproducto column
  * @method array findByIdempresa(int $idempresa) Return Producto objects filtered by the idempresa column
+ * @method array findByIdunidadmedida(int $idunidadmedida) Return Producto objects filtered by the idunidadmedida column
  * @method array findByProductoNombre(string $producto_nombre) Return Producto objects filtered by the producto_nombre column
  * @method array findByIdcategoria(int $idcategoria) Return Producto objects filtered by the idcategoria column
  * @method array findByIdsubcategoria(int $idsubcategoria) Return Producto objects filtered by the idsubcategoria column
  * @method array findByProductoRendimiento(int $producto_rendimiento) Return Producto objects filtered by the producto_rendimiento column
  * @method array findByProductoUltimocosto(double $producto_ultimocosto) Return Producto objects filtered by the producto_ultimocosto column
- * @method array findByIdunidadmedida(int $idunidadmedida) Return Producto objects filtered by the idunidadmedida column
  * @method array findByProductoBaja(boolean $producto_baja) Return Producto objects filtered by the producto_baja column
  * @method array findByProductoTipo(string $producto_tipo) Return Producto objects filtered by the producto_tipo column
  * @method array findByProductoCosto(double $producto_costo) Return Producto objects filtered by the producto_costo column
@@ -218,7 +226,7 @@ abstract class BaseProductoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idproducto`, `idempresa`, `producto_nombre`, `idcategoria`, `idsubcategoria`, `producto_rendimiento`, `producto_ultimocosto`, `idunidadmedida`, `producto_baja`, `producto_tipo`, `producto_costo`, `producto_iva` FROM `producto` WHERE `idproducto` = :p0';
+        $sql = 'SELECT `idproducto`, `idempresa`, `idunidadmedida`, `producto_nombre`, `idcategoria`, `idsubcategoria`, `producto_rendimiento`, `producto_ultimocosto`, `producto_baja`, `producto_tipo`, `producto_costo`, `producto_iva` FROM `producto` WHERE `idproducto` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -394,6 +402,50 @@ abstract class BaseProductoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idunidadmedida column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdunidadmedida(1234); // WHERE idunidadmedida = 1234
+     * $query->filterByIdunidadmedida(array(12, 34)); // WHERE idunidadmedida IN (12, 34)
+     * $query->filterByIdunidadmedida(array('min' => 12)); // WHERE idunidadmedida >= 12
+     * $query->filterByIdunidadmedida(array('max' => 12)); // WHERE idunidadmedida <= 12
+     * </code>
+     *
+     * @see       filterByUnidadmedida()
+     *
+     * @param     mixed $idunidadmedida The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function filterByIdunidadmedida($idunidadmedida = null, $comparison = null)
+    {
+        if (is_array($idunidadmedida)) {
+            $useMinMax = false;
+            if (isset($idunidadmedida['min'])) {
+                $this->addUsingAlias(ProductoPeer::IDUNIDADMEDIDA, $idunidadmedida['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idunidadmedida['max'])) {
+                $this->addUsingAlias(ProductoPeer::IDUNIDADMEDIDA, $idunidadmedida['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ProductoPeer::IDUNIDADMEDIDA, $idunidadmedida, $comparison);
+    }
+
+    /**
      * Filter the query on the producto_nombre column
      *
      * Example usage:
@@ -432,6 +484,8 @@ abstract class BaseProductoQuery extends ModelCriteria
      * $query->filterByIdcategoria(array('min' => 12)); // WHERE idcategoria >= 12
      * $query->filterByIdcategoria(array('max' => 12)); // WHERE idcategoria <= 12
      * </code>
+     *
+     * @see       filterByCategoriaRelatedByIdcategoria()
      *
      * @param     mixed $idcategoria The value to use as filter.
      *              Use scalar values for equality.
@@ -474,6 +528,8 @@ abstract class BaseProductoQuery extends ModelCriteria
      * $query->filterByIdsubcategoria(array('min' => 12)); // WHERE idsubcategoria >= 12
      * $query->filterByIdsubcategoria(array('max' => 12)); // WHERE idsubcategoria <= 12
      * </code>
+     *
+     * @see       filterByCategoriaRelatedByIdsubcategoria()
      *
      * @param     mixed $idsubcategoria The value to use as filter.
      *              Use scalar values for equality.
@@ -588,50 +644,6 @@ abstract class BaseProductoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductoPeer::PRODUCTO_ULTIMOCOSTO, $productoUltimocosto, $comparison);
-    }
-
-    /**
-     * Filter the query on the idunidadmedida column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIdunidadmedida(1234); // WHERE idunidadmedida = 1234
-     * $query->filterByIdunidadmedida(array(12, 34)); // WHERE idunidadmedida IN (12, 34)
-     * $query->filterByIdunidadmedida(array('min' => 12)); // WHERE idunidadmedida >= 12
-     * $query->filterByIdunidadmedida(array('max' => 12)); // WHERE idunidadmedida <= 12
-     * </code>
-     *
-     * @see       filterByUnidadmedida()
-     *
-     * @param     mixed $idunidadmedida The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ProductoQuery The current query, for fluid interface
-     */
-    public function filterByIdunidadmedida($idunidadmedida = null, $comparison = null)
-    {
-        if (is_array($idunidadmedida)) {
-            $useMinMax = false;
-            if (isset($idunidadmedida['min'])) {
-                $this->addUsingAlias(ProductoPeer::IDUNIDADMEDIDA, $idunidadmedida['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idunidadmedida['max'])) {
-                $this->addUsingAlias(ProductoPeer::IDUNIDADMEDIDA, $idunidadmedida['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(ProductoPeer::IDUNIDADMEDIDA, $idunidadmedida, $comparison);
     }
 
     /**
@@ -760,6 +772,82 @@ abstract class BaseProductoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Categoria object
+     *
+     * @param   Categoria|PropelObjectCollection $categoria The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCategoriaRelatedByIdcategoria($categoria, $comparison = null)
+    {
+        if ($categoria instanceof Categoria) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDCATEGORIA, $categoria->getIdcategoria(), $comparison);
+        } elseif ($categoria instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(ProductoPeer::IDCATEGORIA, $categoria->toKeyValue('PrimaryKey', 'Idcategoria'), $comparison);
+        } else {
+            throw new PropelException('filterByCategoriaRelatedByIdcategoria() only accepts arguments of type Categoria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinCategoriaRelatedByIdcategoria($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CategoriaRelatedByIdcategoria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CategoriaRelatedByIdcategoria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CategoriaRelatedByIdcategoria relation Categoria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CategoriaQuery A secondary query class using the current class as primary query
+     */
+    public function useCategoriaRelatedByIdcategoriaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCategoriaRelatedByIdcategoria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CategoriaRelatedByIdcategoria', 'CategoriaQuery');
+    }
+
+    /**
      * Filter the query by a related Empresa object
      *
      * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
@@ -836,6 +924,82 @@ abstract class BaseProductoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Categoria object
+     *
+     * @param   Categoria|PropelObjectCollection $categoria The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCategoriaRelatedByIdsubcategoria($categoria, $comparison = null)
+    {
+        if ($categoria instanceof Categoria) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDSUBCATEGORIA, $categoria->getIdcategoria(), $comparison);
+        } elseif ($categoria instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(ProductoPeer::IDSUBCATEGORIA, $categoria->toKeyValue('PrimaryKey', 'Idcategoria'), $comparison);
+        } else {
+            throw new PropelException('filterByCategoriaRelatedByIdsubcategoria() only accepts arguments of type Categoria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the CategoriaRelatedByIdsubcategoria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinCategoriaRelatedByIdsubcategoria($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('CategoriaRelatedByIdsubcategoria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'CategoriaRelatedByIdsubcategoria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the CategoriaRelatedByIdsubcategoria relation Categoria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CategoriaQuery A secondary query class using the current class as primary query
+     */
+    public function useCategoriaRelatedByIdsubcategoriaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCategoriaRelatedByIdsubcategoria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'CategoriaRelatedByIdsubcategoria', 'CategoriaQuery');
+    }
+
+    /**
      * Filter the query by a related Unidadmedida object
      *
      * @param   Unidadmedida|PropelObjectCollection $unidadmedida The related object(s) to use as filter
@@ -869,7 +1033,7 @@ abstract class BaseProductoQuery extends ModelCriteria
      *
      * @return ProductoQuery The current query, for fluid interface
      */
-    public function joinUnidadmedida($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUnidadmedida($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Unidadmedida');
@@ -904,7 +1068,7 @@ abstract class BaseProductoQuery extends ModelCriteria
      *
      * @return   UnidadmedidaQuery A secondary query class using the current class as primary query
      */
-    public function useUnidadmedidaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUnidadmedidaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUnidadmedida($relationAlias, $joinType)

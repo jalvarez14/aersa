@@ -40,12 +40,12 @@ class ProductoTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idproducto', 'Idproducto', 'INTEGER', true, null, null);
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
+        $this->addForeignKey('idunidadmedida', 'Idunidadmedida', 'INTEGER', 'unidadmedida', 'idunidadmedida', true, null, null);
         $this->addColumn('producto_nombre', 'ProductoNombre', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('idcategoria', 'Idcategoria', 'INTEGER', false, null, null);
-        $this->addColumn('idsubcategoria', 'Idsubcategoria', 'INTEGER', false, null, null);
+        $this->addForeignKey('idcategoria', 'Idcategoria', 'INTEGER', 'categoria', 'idcategoria', false, null, null);
+        $this->addForeignKey('idsubcategoria', 'Idsubcategoria', 'INTEGER', 'categoria', 'idcategoria', false, null, null);
         $this->addColumn('producto_rendimiento', 'ProductoRendimiento', 'INTEGER', false, null, null);
         $this->addColumn('producto_ultimocosto', 'ProductoUltimocosto', 'FLOAT', false, null, null);
-        $this->addForeignKey('idunidadmedida', 'Idunidadmedida', 'INTEGER', 'unidadmedida', 'idunidadmedida', false, null, null);
         $this->addColumn('producto_baja', 'ProductoBaja', 'BOOLEAN', true, 1, null);
         $this->addColumn('producto_tipo', 'ProductoTipo', 'CHAR', true, null, null);
         $this->getColumn('producto_tipo', false)->setValueSet(array (
@@ -63,7 +63,9 @@ class ProductoTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('CategoriaRelatedByIdcategoria', 'Categoria', RelationMap::MANY_TO_ONE, array('idcategoria' => 'idcategoria', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('CategoriaRelatedByIdsubcategoria', 'Categoria', RelationMap::MANY_TO_ONE, array('idsubcategoria' => 'idcategoria', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Unidadmedida', 'Unidadmedida', RelationMap::MANY_TO_ONE, array('idunidadmedida' => 'idunidadmedida', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Codigobarras', 'Codigobarras', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Codigobarrass');
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Compradetalles');

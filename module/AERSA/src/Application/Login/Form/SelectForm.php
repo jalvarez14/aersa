@@ -12,22 +12,34 @@ class SelectForm extends Form
         parent::__construct('select_form');
         $this->setAttribute('method', 'post');
         
-        $this->add(array(
-            'name' => 'area_trabajo',
-            'type' => 'Select',
-            'options' => array(
-                'empty_option' => 'Área de trabajo',
-                'value_options' => array(
-                    1 => 'Administración AERSA',
-                    2 => 'Empresas'
+        if($idrol == 1){
+            
+            $this->add(array(
+                'name' => 'area_trabajo',
+                'type' => 'Select',
+                'options' => array(
+                    'empty_option' => 'Área de trabajo',
+                    'value_options' => array(
+                        1 => 'Administración AERSA',
+                        2 => 'Empresas'
+                    ),
                 ),
-            ),
-            'attributes' => array(
-                'required' => true,
-                'class' => 'form-control placeholder-no-fix',
-            ),
-        ));
-        
+                'attributes' => array(
+                    'required' => true,
+                    'class' => 'form-control placeholder-no-fix',
+                ),
+            ));
+            
+        }elseif ($idrol == 2) {
+            
+            $this->add(array(
+                'name' => 'area_trabajo',
+                'type' => 'Hidden',
+                'attributes' => array(
+                    'value' => 2,
+                ),
+            ));
+        }
         $this->add(array(
             'name' => 'idempresa',
             'type' => 'Select',
@@ -54,6 +66,8 @@ class SelectForm extends Form
                 'class' => 'form-control placeholder-no-fix',
             ),
         ));
+        
+        
 
     }
 }
