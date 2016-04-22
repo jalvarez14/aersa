@@ -1,3 +1,8 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+
 <style>
     .notes textarea{ 
         overflow-y: scroll; 
@@ -24,7 +29,12 @@
                 <div class="form-group">
                     <label class="control-label col-md-3">Fecha</label>
                     <div class="col-md-9">
-                        <input type="text" placeholder="" class="form-control">
+                        <script>
+                            $(function() {
+                            $( "#datepicker" ).datepicker.formatDate("DD, MM d, yy"
+                             });
+                        </script>
+                        <input type="text" id="datepicker" placeholder="" class="form-control"/>
                     </div>
                 </div>
             </div>

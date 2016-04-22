@@ -46,7 +46,7 @@
                                 <tr id="<?php echo $entity->getIdcompra() ?>">
                                 <td><?php echo $entity->getCompraFechacompra() ?></td>
                                 <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial()?></td>
-                                <td><?php echo "pending"?></td>
+                                <td><?php echo $entity->getCompratipo()?></td>
                                 <td><?php echo $entity->getCompraTotal()?></td>
                                 <td><?php
                                         $revisada = $entity->getCompraRevisada();
