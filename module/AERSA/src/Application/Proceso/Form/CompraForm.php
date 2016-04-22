@@ -5,7 +5,7 @@ namespace Application\Proceso\Form;
 use Zend\Form\Form;
 
     class CompraForm extends Form{
-    public function __construct ($idempresa, $idsucursal, $idusuario) {
+    public function __construct ($idempresa, $idsucursal, $idproveedor, $idusuario, $idalmacen) {
         parent::__construct('CompraForm');
         
         $this->add(array(
@@ -27,7 +27,6 @@ use Zend\Form\Form;
                 'label' => 'Fecha'
             )
         ));
-        //autocomplete
         $this->add(array(
            'name'  => 'idproveedor',
             'type' => 'Hidden',

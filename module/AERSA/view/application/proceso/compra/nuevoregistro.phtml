@@ -1,3 +1,8 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+
 <style>
     .notes textarea{ 
         overflow-y: scroll; 
@@ -18,13 +23,18 @@
 </style>
 <form class="form-horizontal" action="#">
     <div class="form-body">
-        <h3 class="form-section"><b>Compras - Registro</b></h3><br><br>
+        <h3 class="page-title">Compras - Registro</h3><br><br>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label col-md-3">Fecha</label>
                     <div class="col-md-9">
-                        <input type="text" placeholder="" class="form-control">
+                        <script>
+                            $(function() {
+                            $( "#datepicker" ).datepicker.formatDate("DD, MM d, yy"
+                             });
+                        </script>
+                        <input type="text" id="datepicker" placeholder="" class="form-control"/>
                     </div>
                 </div>
             </div>
@@ -110,11 +120,11 @@
         </div>
         <!--/row-->
     </div>
-</form><br><br><br>
+</form>
 <div class="portlet light portlet-fit ">
     <div class="portlet-title">
-        <div class="caption">
-            <span class="bold">Productos</span>
+        <div class="caption portlet">
+            <h2 >Productos</h2>
         </div>
     </div>
     <div class="portlet-body">
@@ -127,7 +137,7 @@
                 <div class="col-md-6 col-sm-6">
                     <div class="dataTables_length" id="sample_editable_1_length">
                         <label> 
-                            <select name="sample_editable_1_length" aria-controls="sample_editable_1" class="form-control input-sm input-xsmall input-inline">
+                            Mostrar <select name="sample_editable_1_length" aria-controls="sample_editable_1" class="form-control input-sm input-xsmall input-inline">
                                 <option value="5">5</option>
                                 <option value="15">15</option>
                                 <option value="20">20</option>
@@ -137,8 +147,10 @@
                 </div>
                 <div class="col-md-6 col-sm-6">
                     <div id="sample_editable_1_filter" class="dataTables_filter">
-                        <input style="float: right; margin-left: 15px" type="search" class="form-control input-sm input-small input-inline" placeholder="" aria-controls="sample_editable_1">
-                        <button style="float: right" class="btn green">Agregar</button>
+                        <label style=" margin-left: 220px">Buscar:  
+                            <input type="search" class="form-control input-sm input-small input-inline" placeholder="" aria-controls="sample_editable_1">
+                        </label>
+                        <button style="float: right" class="btn default">Agregar</button>
                     </div>
                 </div>
             </div>
@@ -146,92 +158,25 @@
                 <table id="sample_editable_1" class="table table-striped table-hover table-bordered dataTable no-footer" role="grid" aria-describedby="sample_editable_1_info">
                     <thead>
                         <tr role="row">
-                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Full Name : activate to sort column ascending"> Fecha</th>
-                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Points : activate to sort column ascending"> Proveedor </th>
-                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending"> Tipo </th>
-                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending"> Total </th>
-                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending"> Revisada </th>
-                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending"> Opciones </th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Full Name : activate to sort column ascending">Producto</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Points : activate to sort column ascending">Cantidad</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending">Precio</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending">C.U. Neto</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Notes : activate to sort column ascending">Desc.</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending">IEPS</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending">Subtotal</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending">Revisada</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending">Almacen</th>
+                            <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending">Opciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr role="row" class="odd">
-                            <td class="sorting_1"> alex </td>
-                            <td> Alex Nilson </td>
-                            <td> 1234 </td>
-                            <td class="center"> power user </td>
-                            <td>
-                            </td>
-                            <td>
-                                <a href="javascript:;" class="edit"> Edit </a>
-                                <a href="javascript:;" class="delete"> Delete </a>
-                            </td>
-                        </tr><tr role="row" class="even">
-                            <td class="sorting_1"> alex </td>
-                            <td> Alex Nilson </td>
-                            <td> 1234 </td>
-                            <td class="center"> power user </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                <a href="javascript:;" class="edit"> Edit </a>
-                                <a href="javascript:;" class="delete"> Delete </a>
-                            </td>
-                        </tr><tr role="row" class="even">
-                            <td class="sorting_1"> giovanny </td>
-                            <td> Alex Nilson </td>
-                            <td> 1234 </td>
-                            <td class="center"> power user </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                <a href="javascript:;" class="edit"> Edit </a>
-                                <a href="javascript:;" class="delete"> Delete </a>
-                            </td>
-                        </tr><tr role="row" class="odd">
-                            <td class="sorting_1"> alex </td>
-                            <td> Alex Nilson </td>
-                            <td> 1234 </td>
-                            <td class="center"> power user </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                <a href="javascript:;" class="edit"> Edit </a>
-                                <a href="javascript:;" class="delete"> Delete </a>
-                            </td>
-                        </tr><tr role="row" class="even">
-                            <td class="sorting_1"> gist124 </td>
-                            <td> Nick Roberts </td>
-                            <td> 62 </td>
-                            <td class="center"> new user </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                <a href="javascript:;" class="edit"> Edit </a>
-                                <a href="javascript:;" class="delete"> Delete </a>
-                            </td>
-                        </tr><tr role="row" class="odd">
-                            <td class="sorting_1"> goldweb </td>
-                            <td> Sergio Jackson </td>
-                            <td> 132 </td>
-                            <td class="center"> elite user </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                <a href="javascript:;" class="edit"> Edit </a>
-                                <a href="javascript:;" class="delete"> Delete </a>
-                            </td>
-                        </tr></tbody>
+<!--                CUERPO  DE LA TABLA-->
+                      
                 </table>
             </div>
             <div class="row">
                 <div class="col-md-5 col-sm-5">
-                    <div class="dataTables_info" id="sample_editable_1_info" role="status" aria-live="polite">Showing 1 to 5 of 8 entries</div>
+                    <div class="dataTables_info" id="sample_editable_1_info" role="status" aria-live="polite">Mostrando registros del 1 a 5 de un total de 8 registros</div>
                 </div>
                 <div class="col-md-7 col-sm-7">
                     <div class="dataTables_paginate paging_bootstrap_number" id="sample_editable_1_paginate">
@@ -246,7 +191,8 @@
                             </li>
                             <li>
                                 <a href="#">2</a>
-                            </li><li class="next">
+                            </li>
+                            <li class="next">
                                 <a title="Next" href="#">
                                     <i class="fa fa-angle-right"></i>
                                 </a>
@@ -263,12 +209,12 @@
         <label>IVA: </label><br>
         <label>TOTAL: </label><br><br>
     </div>
-        <button style="margin-left: 970px" class="btn green">Guardar</button>
+        <button style="margin-left: 970px" class="btn default">Guardar</button><br><br>
 </div><br>
 <div class="portlet light portlet-fit ">
     <div class="portlet-title">
         <div class="caption">
-            <span class="bold">Notas</span>
+            <h2>Notas</h2>
         </div>
     </div>
     <div class="notes">
@@ -280,6 +226,6 @@
         <textarea rows="5" cols="125"></textarea>
     </div><br>
     <div style="margin-left: 970px">
-        <button class="btn green">Crear nota</button>
+        <button class="btn default">Crear nota</button><br><br>
     </div>
 </div>
