@@ -122,15 +122,27 @@ class PlantillatablajeriaController extends AbstractActionController {
     }
     
     public function eliminarAction()
+    {
+    $request = $this->getRequest();
+    if($request->isPost())
         {
-        $request = $this->getRequest();
-        if($request->isPost())
-            {
-            $id = $this->params()->fromRoute('id');
-            $plantilla = \PlantillatablajeriaQuery::create()->findPk($id);
-            $plantilla->delete();
-            $this->flashMessenger()->addSuccessMessage('Plantilla de tablajeria eliminada satisfactoriamente!');
-            return $this->redirect()->toUrl('/catalogo/tablajeria');       
-            }
+        $id = $this->params()->fromRoute('id');
+        $plantilla = \PlantillatablajeriaQuery::create()->findPk($id);
+        $plantilla->delete();
+        $this->flashMessenger()->addSuccessMessage('Plantilla de tablajeria eliminada satisfactoriamente!');
+        return $this->redirect()->toUrl('/catalogo/tablajeria');       
         }
+    }
+    
+    
+    public function prefetchproductsAction(){
+        
+        $productos = \ProductoQuery::create()->orderByProductoNombre(\Criteria::ASC)->limit(5)->find();
+        $productos = \Shared\GeneralFunctions::collectionToSelectArray($productos, 'idproducto', 'producto_nombre');
+        
+        return $this->getResponse()->setContent(json_encode($productos));
+        
+    }
+
+        
 }

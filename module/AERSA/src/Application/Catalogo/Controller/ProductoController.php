@@ -58,6 +58,9 @@ class ProductoController extends AbstractActionController
         
         if ($request->isPost()) 
         {
+            $session = new \Shared\Session\AouthSession();
+            $session = $session->getData();
+            
             $post_data = $request->getPost();
 
             //VALIDACION PENDIENTE
@@ -69,7 +72,8 @@ class ProductoController extends AbstractActionController
             foreach ($post_data as $key => $value) {
                 $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
-            $entity->setIdempresa(2);
+            $entity->setIdempresa($session['idempresa']);
+            
             $entity->save();
             $this->flashMessenger()->addSuccessMessage('Producto registrado satisfactoriamente!');
             return $this->redirect()->toUrl('/catalogo/producto');

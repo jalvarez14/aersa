@@ -1,66 +1,80 @@
-<h3 class="page-title">Registro plantilla tablajeria</h3>
-<div class="page-bar">
-    <ul class="page-breadcrumb">
-        <li>
-            <a href="/catalogo/tablajeria">Tablajerias</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <span>Registro</span>
-        </li>
-    </ul>
-</div>
-<?php foreach ($messages->getSuccessMessages() as $message):?>
-    <div class="alert alert-success alert-dismissable">
-        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-        <strong>Éxito!</strong>
-        <?php echo $message?>
+<div id="form_container">
+    <h3 class="page-title">Registro plantilla tablajeria</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/catalogo/tablajeria">Tablajerias</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span>Registro</span>
+            </li>
+        </ul>
     </div>
-<?php endforeach;?>
+    <?php foreach ($messages->getSuccessMessages() as $message):?>
+        <div class="alert alert-success alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Éxito!</strong>
+            <?php echo $message?>
+        </div>
+    <?php endforeach;?>
 
-<?php foreach ($messages->getErrorMessages() as $message):?>
-    <div class="alert alert-danger alert-dismissable">
-        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-        <strong>Error!</strong>
-        <?php echo $message?>
-        
-    </div>
-<?php endforeach;?>
-<?php
-    $form->setAttribute('action', '/catalogo/tablajeria/nuevo');
-    echo $this->form()->openTag($form);
-?>
-<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
-    <div class="portlet-body form">
-        <div class="form-body">
-            <h3 class="form-section">Información general</h3>
-            <div class="row">
-                    <?php echo  $this->formHidden($form->get('idempresa'));?>
-                <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('plantillatablajeria_nombre')); ?>  
-                    <?php echo  $this->formText($form->get('plantillatablajeria_nombre'));?>
-                </div>
-                <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('idproducto')) ?>  
-                    <?php echo  $this->formSelect($form->get('idproducto'))?>
-                </div>
-                <div class="col-md-12">
-                    <?php echo $this->formLabel($form->get('plantillatablajeria_descripcion')) ?>  
-                    <?php echo  $this->formTextarea($form->get('plantillatablajeria_descripcion'))?>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <p>(*)Campos obligatorios</p>
-                </div>
-            </div>
+    <?php foreach ($messages->getErrorMessages() as $message):?>
+        <div class="alert alert-danger alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Error!</strong>
+            <?php echo $message?>
+
         </div>
-        <div class="form-actions right">
-            <button class="btn blue" type="submit">
-                <i class="fa fa-check"></i>
-                Guardar
-            </button>
+    <?php endforeach;?>
+    <?php
+        $form->setAttribute('action', '/catalogo/tablajeria/nuevo');
+        echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="form-section">Información general</h3>
+                <div class="row">
+                        <?php echo  $this->formHidden($form->get('idempresa'));?>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('plantillatablajeria_nombre')); ?>  
+                        <?php echo  $this->formText($form->get('plantillatablajeria_nombre'));?>
+                    </div>
+                    <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('idproducto')); ?>  
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                 <?php echo $this->formText($form->get('idproducto')); ?>  
+
+                            </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <?php echo $this->formLabel($form->get('plantillatablajeria_descripcion')) ?>  
+                        <?php echo  $this->formTextarea($form->get('plantillatablajeria_descripcion'))?>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions right">
+                <button class="btn blue" type="submit">
+                    <i class="fa fa-check"></i>
+                    Guardar
+                </button>
+            </div>
         </div>
     </div>
 </div>
+<script type="text/javascript" src="/application/custom/js/catalogo/tablajeria.js"></script>
+<script>
+    var $form = $('#form_container').tablajeria();
+    $form.formBind();
+</script>

@@ -603,6 +603,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/prefetchproducts',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
+                                                'action' => 'prefetchproducts',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
