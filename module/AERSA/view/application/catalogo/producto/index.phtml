@@ -41,10 +41,11 @@
 
                         <?php $categoria    = \CategoriaQuery::create()->findPk($entity->getIdCategoria()) ?>
                         <?php $subcategoria = \CategoriaQuery::create()->findPk($entity->getIdsubcategoria()) ?>
-                        
+                            
+                           
                             <tr id="<?php echo $entity->getIdproducto() ?>">
                                 <td><?php echo $entity->getProductoNombre() ?></td>
-                                <td><span class="label label-sm label-success"> <?php echo $categoria->getCategoriaNombre() ?> </span></td>
+                                <td><span class="label label-sm label-success"> <?php echo $entity->getCategoriaRelatedByIdcategoria()->getCategoriaNombre() ?> </span></td>
                                 <?php if($subcategoria != NULL): ?>
                                 <td><span class="label label-sm label-success"><?php echo $subcategoria->getCategoriaNombre() ?></span></td>
                                 <?php else:?>

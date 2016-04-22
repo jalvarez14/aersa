@@ -22,6 +22,7 @@
  * @method CompraQuery orderByCompraIeps($order = Criteria::ASC) Order by the compra_ieps column
  * @method CompraQuery orderByCompraIva($order = Criteria::ASC) Order by the compra_iva column
  * @method CompraQuery orderByCompraTotal($order = Criteria::ASC) Order by the compra_total column
+ * @method CompraQuery orderByCompraTipo($order = Criteria::ASC) Order by the compra_tipo column
  *
  * @method CompraQuery groupByIdcompra() Group by the idcompra column
  * @method CompraQuery groupByIdempresa() Group by the idempresa column
@@ -39,6 +40,7 @@
  * @method CompraQuery groupByCompraIeps() Group by the compra_ieps column
  * @method CompraQuery groupByCompraIva() Group by the compra_iva column
  * @method CompraQuery groupByCompraTotal() Group by the compra_total column
+ * @method CompraQuery groupByCompraTipo() Group by the compra_tipo column
  *
  * @method CompraQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CompraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -94,6 +96,7 @@
  * @method Compra findOneByCompraIeps(string $compra_ieps) Return the first Compra filtered by the compra_ieps column
  * @method Compra findOneByCompraIva(string $compra_iva) Return the first Compra filtered by the compra_iva column
  * @method Compra findOneByCompraTotal(string $compra_total) Return the first Compra filtered by the compra_total column
+ * @method Compra findOneByCompraTipo(string $compra_tipo) Return the first Compra filtered by the compra_tipo column
  *
  * @method array findByIdcompra(int $idcompra) Return Compra objects filtered by the idcompra column
  * @method array findByIdempresa(int $idempresa) Return Compra objects filtered by the idempresa column
@@ -111,6 +114,7 @@
  * @method array findByCompraIeps(string $compra_ieps) Return Compra objects filtered by the compra_ieps column
  * @method array findByCompraIva(string $compra_iva) Return Compra objects filtered by the compra_iva column
  * @method array findByCompraTotal(string $compra_total) Return Compra objects filtered by the compra_total column
+ * @method array findByCompraTipo(string $compra_tipo) Return Compra objects filtered by the compra_tipo column
  *
  * @package    propel.generator.aersa.om
  */
@@ -218,7 +222,7 @@ abstract class BaseCompraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_total` FROM `compra` WHERE `idcompra` = :p0';
+        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_total`, `compra_tipo` FROM `compra` WHERE `idcompra` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -951,6 +955,35 @@ abstract class BaseCompraQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompraPeer::COMPRA_TOTAL, $compraTotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the compra_tipo column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompraTipo('fooValue');   // WHERE compra_tipo = 'fooValue'
+     * $query->filterByCompraTipo('%fooValue%'); // WHERE compra_tipo LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $compraTipo The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByCompraTipo($compraTipo = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($compraTipo)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $compraTipo)) {
+                $compraTipo = str_replace('*', '%', $compraTipo);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(CompraPeer::COMPRA_TIPO, $compraTipo, $comparison);
     }
 
     /**

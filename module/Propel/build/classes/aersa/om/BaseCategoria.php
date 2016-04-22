@@ -65,6 +65,18 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     protected $collCategoriasRelatedByIdcategoriaPartial;
 
     /**
+     * @var        PropelObjectCollection|Producto[] Collection to store aggregation of Producto objects.
+     */
+    protected $collProductosRelatedByIdcategoria;
+    protected $collProductosRelatedByIdcategoriaPartial;
+
+    /**
+     * @var        PropelObjectCollection|Producto[] Collection to store aggregation of Producto objects.
+     */
+    protected $collProductosRelatedByIdsubcategoria;
+    protected $collProductosRelatedByIdsubcategoriaPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -89,6 +101,18 @@ abstract class BaseCategoria extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $categoriasRelatedByIdcategoriaScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $productosRelatedByIdcategoriaScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $productosRelatedByIdsubcategoriaScheduledForDeletion = null;
 
     /**
      * Get the [idcategoria] column value.
@@ -343,6 +367,10 @@ abstract class BaseCategoria extends BaseObject implements Persistent
             $this->aCategoriaRelatedByIdcategoriapadre = null;
             $this->collCategoriasRelatedByIdcategoria = null;
 
+            $this->collProductosRelatedByIdcategoria = null;
+
+            $this->collProductosRelatedByIdsubcategoria = null;
+
         } // if (deep)
     }
 
@@ -490,6 +518,40 @@ abstract class BaseCategoria extends BaseObject implements Persistent
 
             if ($this->collCategoriasRelatedByIdcategoria !== null) {
                 foreach ($this->collCategoriasRelatedByIdcategoria as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->productosRelatedByIdcategoriaScheduledForDeletion !== null) {
+                if (!$this->productosRelatedByIdcategoriaScheduledForDeletion->isEmpty()) {
+                    ProductoQuery::create()
+                        ->filterByPrimaryKeys($this->productosRelatedByIdcategoriaScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->productosRelatedByIdcategoriaScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProductosRelatedByIdcategoria !== null) {
+                foreach ($this->collProductosRelatedByIdcategoria as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->productosRelatedByIdsubcategoriaScheduledForDeletion !== null) {
+                if (!$this->productosRelatedByIdsubcategoriaScheduledForDeletion->isEmpty()) {
+                    ProductoQuery::create()
+                        ->filterByPrimaryKeys($this->productosRelatedByIdsubcategoriaScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->productosRelatedByIdsubcategoriaScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProductosRelatedByIdsubcategoria !== null) {
+                foreach ($this->collProductosRelatedByIdsubcategoria as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -676,6 +738,22 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collProductosRelatedByIdcategoria !== null) {
+                    foreach ($this->collProductosRelatedByIdcategoria as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collProductosRelatedByIdsubcategoria !== null) {
+                    foreach ($this->collProductosRelatedByIdsubcategoria as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -768,6 +846,12 @@ abstract class BaseCategoria extends BaseObject implements Persistent
             }
             if (null !== $this->collCategoriasRelatedByIdcategoria) {
                 $result['CategoriasRelatedByIdcategoria'] = $this->collCategoriasRelatedByIdcategoria->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collProductosRelatedByIdcategoria) {
+                $result['ProductosRelatedByIdcategoria'] = $this->collProductosRelatedByIdcategoria->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collProductosRelatedByIdsubcategoria) {
+                $result['ProductosRelatedByIdsubcategoria'] = $this->collProductosRelatedByIdsubcategoria->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -938,6 +1022,18 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getProductosRelatedByIdcategoria() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProductoRelatedByIdcategoria($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getProductosRelatedByIdsubcategoria() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProductoRelatedByIdsubcategoria($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
@@ -1053,6 +1149,12 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     {
         if ('CategoriaRelatedByIdcategoria' == $relationName) {
             $this->initCategoriasRelatedByIdcategoria();
+        }
+        if ('ProductoRelatedByIdcategoria' == $relationName) {
+            $this->initProductosRelatedByIdcategoria();
+        }
+        if ('ProductoRelatedByIdsubcategoria' == $relationName) {
+            $this->initProductosRelatedByIdsubcategoria();
         }
     }
 
@@ -1282,6 +1384,556 @@ abstract class BaseCategoria extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collProductosRelatedByIdcategoria collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Categoria The current object (for fluent API support)
+     * @see        addProductosRelatedByIdcategoria()
+     */
+    public function clearProductosRelatedByIdcategoria()
+    {
+        $this->collProductosRelatedByIdcategoria = null; // important to set this to null since that means it is uninitialized
+        $this->collProductosRelatedByIdcategoriaPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProductosRelatedByIdcategoria collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProductosRelatedByIdcategoria($v = true)
+    {
+        $this->collProductosRelatedByIdcategoriaPartial = $v;
+    }
+
+    /**
+     * Initializes the collProductosRelatedByIdcategoria collection.
+     *
+     * By default this just sets the collProductosRelatedByIdcategoria collection to an empty array (like clearcollProductosRelatedByIdcategoria());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProductosRelatedByIdcategoria($overrideExisting = true)
+    {
+        if (null !== $this->collProductosRelatedByIdcategoria && !$overrideExisting) {
+            return;
+        }
+        $this->collProductosRelatedByIdcategoria = new PropelObjectCollection();
+        $this->collProductosRelatedByIdcategoria->setModel('Producto');
+    }
+
+    /**
+     * Gets an array of Producto objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Categoria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     * @throws PropelException
+     */
+    public function getProductosRelatedByIdcategoria($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosRelatedByIdcategoriaPartial && !$this->isNew();
+        if (null === $this->collProductosRelatedByIdcategoria || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProductosRelatedByIdcategoria) {
+                // return empty collection
+                $this->initProductosRelatedByIdcategoria();
+            } else {
+                $collProductosRelatedByIdcategoria = ProductoQuery::create(null, $criteria)
+                    ->filterByCategoriaRelatedByIdcategoria($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProductosRelatedByIdcategoriaPartial && count($collProductosRelatedByIdcategoria)) {
+                      $this->initProductosRelatedByIdcategoria(false);
+
+                      foreach ($collProductosRelatedByIdcategoria as $obj) {
+                        if (false == $this->collProductosRelatedByIdcategoria->contains($obj)) {
+                          $this->collProductosRelatedByIdcategoria->append($obj);
+                        }
+                      }
+
+                      $this->collProductosRelatedByIdcategoriaPartial = true;
+                    }
+
+                    $collProductosRelatedByIdcategoria->getInternalIterator()->rewind();
+
+                    return $collProductosRelatedByIdcategoria;
+                }
+
+                if ($partial && $this->collProductosRelatedByIdcategoria) {
+                    foreach ($this->collProductosRelatedByIdcategoria as $obj) {
+                        if ($obj->isNew()) {
+                            $collProductosRelatedByIdcategoria[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProductosRelatedByIdcategoria = $collProductosRelatedByIdcategoria;
+                $this->collProductosRelatedByIdcategoriaPartial = false;
+            }
+        }
+
+        return $this->collProductosRelatedByIdcategoria;
+    }
+
+    /**
+     * Sets a collection of ProductoRelatedByIdcategoria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $productosRelatedByIdcategoria A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function setProductosRelatedByIdcategoria(PropelCollection $productosRelatedByIdcategoria, PropelPDO $con = null)
+    {
+        $productosRelatedByIdcategoriaToDelete = $this->getProductosRelatedByIdcategoria(new Criteria(), $con)->diff($productosRelatedByIdcategoria);
+
+
+        $this->productosRelatedByIdcategoriaScheduledForDeletion = $productosRelatedByIdcategoriaToDelete;
+
+        foreach ($productosRelatedByIdcategoriaToDelete as $productoRelatedByIdcategoriaRemoved) {
+            $productoRelatedByIdcategoriaRemoved->setCategoriaRelatedByIdcategoria(null);
+        }
+
+        $this->collProductosRelatedByIdcategoria = null;
+        foreach ($productosRelatedByIdcategoria as $productoRelatedByIdcategoria) {
+            $this->addProductoRelatedByIdcategoria($productoRelatedByIdcategoria);
+        }
+
+        $this->collProductosRelatedByIdcategoria = $productosRelatedByIdcategoria;
+        $this->collProductosRelatedByIdcategoriaPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Producto objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Producto objects.
+     * @throws PropelException
+     */
+    public function countProductosRelatedByIdcategoria(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosRelatedByIdcategoriaPartial && !$this->isNew();
+        if (null === $this->collProductosRelatedByIdcategoria || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProductosRelatedByIdcategoria) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProductosRelatedByIdcategoria());
+            }
+            $query = ProductoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCategoriaRelatedByIdcategoria($this)
+                ->count($con);
+        }
+
+        return count($this->collProductosRelatedByIdcategoria);
+    }
+
+    /**
+     * Method called to associate a Producto object to this object
+     * through the Producto foreign key attribute.
+     *
+     * @param    Producto $l Producto
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function addProductoRelatedByIdcategoria(Producto $l)
+    {
+        if ($this->collProductosRelatedByIdcategoria === null) {
+            $this->initProductosRelatedByIdcategoria();
+            $this->collProductosRelatedByIdcategoriaPartial = true;
+        }
+
+        if (!in_array($l, $this->collProductosRelatedByIdcategoria->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProductoRelatedByIdcategoria($l);
+
+            if ($this->productosRelatedByIdcategoriaScheduledForDeletion and $this->productosRelatedByIdcategoriaScheduledForDeletion->contains($l)) {
+                $this->productosRelatedByIdcategoriaScheduledForDeletion->remove($this->productosRelatedByIdcategoriaScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ProductoRelatedByIdcategoria $productoRelatedByIdcategoria The productoRelatedByIdcategoria object to add.
+     */
+    protected function doAddProductoRelatedByIdcategoria($productoRelatedByIdcategoria)
+    {
+        $this->collProductosRelatedByIdcategoria[]= $productoRelatedByIdcategoria;
+        $productoRelatedByIdcategoria->setCategoriaRelatedByIdcategoria($this);
+    }
+
+    /**
+     * @param	ProductoRelatedByIdcategoria $productoRelatedByIdcategoria The productoRelatedByIdcategoria object to remove.
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function removeProductoRelatedByIdcategoria($productoRelatedByIdcategoria)
+    {
+        if ($this->getProductosRelatedByIdcategoria()->contains($productoRelatedByIdcategoria)) {
+            $this->collProductosRelatedByIdcategoria->remove($this->collProductosRelatedByIdcategoria->search($productoRelatedByIdcategoria));
+            if (null === $this->productosRelatedByIdcategoriaScheduledForDeletion) {
+                $this->productosRelatedByIdcategoriaScheduledForDeletion = clone $this->collProductosRelatedByIdcategoria;
+                $this->productosRelatedByIdcategoriaScheduledForDeletion->clear();
+            }
+            $this->productosRelatedByIdcategoriaScheduledForDeletion[]= $productoRelatedByIdcategoria;
+            $productoRelatedByIdcategoria->setCategoriaRelatedByIdcategoria(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Categoria is new, it will return
+     * an empty collection; or if this Categoria has previously
+     * been saved, it will retrieve related ProductosRelatedByIdcategoria from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Categoria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     */
+    public function getProductosRelatedByIdcategoriaJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductoQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getProductosRelatedByIdcategoria($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Categoria is new, it will return
+     * an empty collection; or if this Categoria has previously
+     * been saved, it will retrieve related ProductosRelatedByIdcategoria from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Categoria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     */
+    public function getProductosRelatedByIdcategoriaJoinUnidadmedida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductoQuery::create(null, $criteria);
+        $query->joinWith('Unidadmedida', $join_behavior);
+
+        return $this->getProductosRelatedByIdcategoria($query, $con);
+    }
+
+    /**
+     * Clears out the collProductosRelatedByIdsubcategoria collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Categoria The current object (for fluent API support)
+     * @see        addProductosRelatedByIdsubcategoria()
+     */
+    public function clearProductosRelatedByIdsubcategoria()
+    {
+        $this->collProductosRelatedByIdsubcategoria = null; // important to set this to null since that means it is uninitialized
+        $this->collProductosRelatedByIdsubcategoriaPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProductosRelatedByIdsubcategoria collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProductosRelatedByIdsubcategoria($v = true)
+    {
+        $this->collProductosRelatedByIdsubcategoriaPartial = $v;
+    }
+
+    /**
+     * Initializes the collProductosRelatedByIdsubcategoria collection.
+     *
+     * By default this just sets the collProductosRelatedByIdsubcategoria collection to an empty array (like clearcollProductosRelatedByIdsubcategoria());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProductosRelatedByIdsubcategoria($overrideExisting = true)
+    {
+        if (null !== $this->collProductosRelatedByIdsubcategoria && !$overrideExisting) {
+            return;
+        }
+        $this->collProductosRelatedByIdsubcategoria = new PropelObjectCollection();
+        $this->collProductosRelatedByIdsubcategoria->setModel('Producto');
+    }
+
+    /**
+     * Gets an array of Producto objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Categoria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     * @throws PropelException
+     */
+    public function getProductosRelatedByIdsubcategoria($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosRelatedByIdsubcategoriaPartial && !$this->isNew();
+        if (null === $this->collProductosRelatedByIdsubcategoria || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProductosRelatedByIdsubcategoria) {
+                // return empty collection
+                $this->initProductosRelatedByIdsubcategoria();
+            } else {
+                $collProductosRelatedByIdsubcategoria = ProductoQuery::create(null, $criteria)
+                    ->filterByCategoriaRelatedByIdsubcategoria($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProductosRelatedByIdsubcategoriaPartial && count($collProductosRelatedByIdsubcategoria)) {
+                      $this->initProductosRelatedByIdsubcategoria(false);
+
+                      foreach ($collProductosRelatedByIdsubcategoria as $obj) {
+                        if (false == $this->collProductosRelatedByIdsubcategoria->contains($obj)) {
+                          $this->collProductosRelatedByIdsubcategoria->append($obj);
+                        }
+                      }
+
+                      $this->collProductosRelatedByIdsubcategoriaPartial = true;
+                    }
+
+                    $collProductosRelatedByIdsubcategoria->getInternalIterator()->rewind();
+
+                    return $collProductosRelatedByIdsubcategoria;
+                }
+
+                if ($partial && $this->collProductosRelatedByIdsubcategoria) {
+                    foreach ($this->collProductosRelatedByIdsubcategoria as $obj) {
+                        if ($obj->isNew()) {
+                            $collProductosRelatedByIdsubcategoria[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProductosRelatedByIdsubcategoria = $collProductosRelatedByIdsubcategoria;
+                $this->collProductosRelatedByIdsubcategoriaPartial = false;
+            }
+        }
+
+        return $this->collProductosRelatedByIdsubcategoria;
+    }
+
+    /**
+     * Sets a collection of ProductoRelatedByIdsubcategoria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $productosRelatedByIdsubcategoria A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function setProductosRelatedByIdsubcategoria(PropelCollection $productosRelatedByIdsubcategoria, PropelPDO $con = null)
+    {
+        $productosRelatedByIdsubcategoriaToDelete = $this->getProductosRelatedByIdsubcategoria(new Criteria(), $con)->diff($productosRelatedByIdsubcategoria);
+
+
+        $this->productosRelatedByIdsubcategoriaScheduledForDeletion = $productosRelatedByIdsubcategoriaToDelete;
+
+        foreach ($productosRelatedByIdsubcategoriaToDelete as $productoRelatedByIdsubcategoriaRemoved) {
+            $productoRelatedByIdsubcategoriaRemoved->setCategoriaRelatedByIdsubcategoria(null);
+        }
+
+        $this->collProductosRelatedByIdsubcategoria = null;
+        foreach ($productosRelatedByIdsubcategoria as $productoRelatedByIdsubcategoria) {
+            $this->addProductoRelatedByIdsubcategoria($productoRelatedByIdsubcategoria);
+        }
+
+        $this->collProductosRelatedByIdsubcategoria = $productosRelatedByIdsubcategoria;
+        $this->collProductosRelatedByIdsubcategoriaPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Producto objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Producto objects.
+     * @throws PropelException
+     */
+    public function countProductosRelatedByIdsubcategoria(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosRelatedByIdsubcategoriaPartial && !$this->isNew();
+        if (null === $this->collProductosRelatedByIdsubcategoria || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProductosRelatedByIdsubcategoria) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProductosRelatedByIdsubcategoria());
+            }
+            $query = ProductoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCategoriaRelatedByIdsubcategoria($this)
+                ->count($con);
+        }
+
+        return count($this->collProductosRelatedByIdsubcategoria);
+    }
+
+    /**
+     * Method called to associate a Producto object to this object
+     * through the Producto foreign key attribute.
+     *
+     * @param    Producto $l Producto
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function addProductoRelatedByIdsubcategoria(Producto $l)
+    {
+        if ($this->collProductosRelatedByIdsubcategoria === null) {
+            $this->initProductosRelatedByIdsubcategoria();
+            $this->collProductosRelatedByIdsubcategoriaPartial = true;
+        }
+
+        if (!in_array($l, $this->collProductosRelatedByIdsubcategoria->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProductoRelatedByIdsubcategoria($l);
+
+            if ($this->productosRelatedByIdsubcategoriaScheduledForDeletion and $this->productosRelatedByIdsubcategoriaScheduledForDeletion->contains($l)) {
+                $this->productosRelatedByIdsubcategoriaScheduledForDeletion->remove($this->productosRelatedByIdsubcategoriaScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	ProductoRelatedByIdsubcategoria $productoRelatedByIdsubcategoria The productoRelatedByIdsubcategoria object to add.
+     */
+    protected function doAddProductoRelatedByIdsubcategoria($productoRelatedByIdsubcategoria)
+    {
+        $this->collProductosRelatedByIdsubcategoria[]= $productoRelatedByIdsubcategoria;
+        $productoRelatedByIdsubcategoria->setCategoriaRelatedByIdsubcategoria($this);
+    }
+
+    /**
+     * @param	ProductoRelatedByIdsubcategoria $productoRelatedByIdsubcategoria The productoRelatedByIdsubcategoria object to remove.
+     * @return Categoria The current object (for fluent API support)
+     */
+    public function removeProductoRelatedByIdsubcategoria($productoRelatedByIdsubcategoria)
+    {
+        if ($this->getProductosRelatedByIdsubcategoria()->contains($productoRelatedByIdsubcategoria)) {
+            $this->collProductosRelatedByIdsubcategoria->remove($this->collProductosRelatedByIdsubcategoria->search($productoRelatedByIdsubcategoria));
+            if (null === $this->productosRelatedByIdsubcategoriaScheduledForDeletion) {
+                $this->productosRelatedByIdsubcategoriaScheduledForDeletion = clone $this->collProductosRelatedByIdsubcategoria;
+                $this->productosRelatedByIdsubcategoriaScheduledForDeletion->clear();
+            }
+            $this->productosRelatedByIdsubcategoriaScheduledForDeletion[]= $productoRelatedByIdsubcategoria;
+            $productoRelatedByIdsubcategoria->setCategoriaRelatedByIdsubcategoria(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Categoria is new, it will return
+     * an empty collection; or if this Categoria has previously
+     * been saved, it will retrieve related ProductosRelatedByIdsubcategoria from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Categoria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     */
+    public function getProductosRelatedByIdsubcategoriaJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductoQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getProductosRelatedByIdsubcategoria($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Categoria is new, it will return
+     * an empty collection; or if this Categoria has previously
+     * been saved, it will retrieve related ProductosRelatedByIdsubcategoria from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Categoria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Producto[] List of Producto objects
+     */
+    public function getProductosRelatedByIdsubcategoriaJoinUnidadmedida($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductoQuery::create(null, $criteria);
+        $query->joinWith('Unidadmedida', $join_behavior);
+
+        return $this->getProductosRelatedByIdsubcategoria($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1317,6 +1969,16 @@ abstract class BaseCategoria extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collProductosRelatedByIdcategoria) {
+                foreach ($this->collProductosRelatedByIdcategoria as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collProductosRelatedByIdsubcategoria) {
+                foreach ($this->collProductosRelatedByIdsubcategoria as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aCategoriaRelatedByIdcategoriapadre instanceof Persistent) {
               $this->aCategoriaRelatedByIdcategoriapadre->clearAllReferences($deep);
             }
@@ -1328,6 +1990,14 @@ abstract class BaseCategoria extends BaseObject implements Persistent
             $this->collCategoriasRelatedByIdcategoria->clearIterator();
         }
         $this->collCategoriasRelatedByIdcategoria = null;
+        if ($this->collProductosRelatedByIdcategoria instanceof PropelCollection) {
+            $this->collProductosRelatedByIdcategoria->clearIterator();
+        }
+        $this->collProductosRelatedByIdcategoria = null;
+        if ($this->collProductosRelatedByIdsubcategoria instanceof PropelCollection) {
+            $this->collProductosRelatedByIdsubcategoria->clearIterator();
+        }
+        $this->collProductosRelatedByIdsubcategoria = null;
         $this->aCategoriaRelatedByIdcategoriapadre = null;
     }
 

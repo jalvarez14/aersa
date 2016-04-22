@@ -373,6 +373,12 @@ abstract class BaseCategoriaPeer
         // Invalidate objects in CategoriaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CategoriaPeer::clearInstancePool();
+        // Invalidate objects in ProductoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductoPeer::clearInstancePool();
+        // Invalidate objects in ProductoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductoPeer::clearInstancePool();
     }
 
     /**
@@ -807,6 +813,18 @@ abstract class BaseCategoriaPeer
 
             $criteria->add(CategoriaPeer::IDCATEGORIAPADRE, $obj->getIdcategoria());
             $affectedRows += CategoriaPeer::doDelete($criteria, $con);
+
+            // delete related Producto objects
+            $criteria = new Criteria(ProductoPeer::DATABASE_NAME);
+
+            $criteria->add(ProductoPeer::IDCATEGORIA, $obj->getIdcategoria());
+            $affectedRows += ProductoPeer::doDelete($criteria, $con);
+
+            // delete related Producto objects
+            $criteria = new Criteria(ProductoPeer::DATABASE_NAME);
+
+            $criteria->add(ProductoPeer::IDSUBCATEGORIA, $obj->getIdcategoria());
+            $affectedRows += ProductoPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

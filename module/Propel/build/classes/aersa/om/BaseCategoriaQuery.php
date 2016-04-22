@@ -28,6 +28,14 @@
  * @method CategoriaQuery rightJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
  * @method CategoriaQuery innerJoinCategoriaRelatedByIdcategoria($relationAlias = null) Adds a INNER JOIN clause to the query using the CategoriaRelatedByIdcategoria relation
  *
+ * @method CategoriaQuery leftJoinProductoRelatedByIdcategoria($relationAlias = null) Adds a LEFT JOIN clause to the query using the ProductoRelatedByIdcategoria relation
+ * @method CategoriaQuery rightJoinProductoRelatedByIdcategoria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ProductoRelatedByIdcategoria relation
+ * @method CategoriaQuery innerJoinProductoRelatedByIdcategoria($relationAlias = null) Adds a INNER JOIN clause to the query using the ProductoRelatedByIdcategoria relation
+ *
+ * @method CategoriaQuery leftJoinProductoRelatedByIdsubcategoria($relationAlias = null) Adds a LEFT JOIN clause to the query using the ProductoRelatedByIdsubcategoria relation
+ * @method CategoriaQuery rightJoinProductoRelatedByIdsubcategoria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the ProductoRelatedByIdsubcategoria relation
+ * @method CategoriaQuery innerJoinProductoRelatedByIdsubcategoria($relationAlias = null) Adds a INNER JOIN clause to the query using the ProductoRelatedByIdsubcategoria relation
+ *
  * @method Categoria findOne(PropelPDO $con = null) Return the first Categoria matching the query
  * @method Categoria findOneOrCreate(PropelPDO $con = null) Return the first Categoria matching the query, or a new Categoria object populated from the query conditions when no match is found
  *
@@ -525,6 +533,154 @@ abstract class BaseCategoriaQuery extends ModelCriteria
         return $this
             ->joinCategoriaRelatedByIdcategoria($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'CategoriaRelatedByIdcategoria', 'CategoriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Producto object
+     *
+     * @param   Producto|PropelObjectCollection $producto  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CategoriaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProductoRelatedByIdcategoria($producto, $comparison = null)
+    {
+        if ($producto instanceof Producto) {
+            return $this
+                ->addUsingAlias(CategoriaPeer::IDCATEGORIA, $producto->getIdcategoria(), $comparison);
+        } elseif ($producto instanceof PropelObjectCollection) {
+            return $this
+                ->useProductoRelatedByIdcategoriaQuery()
+                ->filterByPrimaryKeys($producto->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProductoRelatedByIdcategoria() only accepts arguments of type Producto or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ProductoRelatedByIdcategoria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CategoriaQuery The current query, for fluid interface
+     */
+    public function joinProductoRelatedByIdcategoria($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ProductoRelatedByIdcategoria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ProductoRelatedByIdcategoria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ProductoRelatedByIdcategoria relation Producto object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductoQuery A secondary query class using the current class as primary query
+     */
+    public function useProductoRelatedByIdcategoriaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinProductoRelatedByIdcategoria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ProductoRelatedByIdcategoria', 'ProductoQuery');
+    }
+
+    /**
+     * Filter the query by a related Producto object
+     *
+     * @param   Producto|PropelObjectCollection $producto  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CategoriaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProductoRelatedByIdsubcategoria($producto, $comparison = null)
+    {
+        if ($producto instanceof Producto) {
+            return $this
+                ->addUsingAlias(CategoriaPeer::IDCATEGORIA, $producto->getIdsubcategoria(), $comparison);
+        } elseif ($producto instanceof PropelObjectCollection) {
+            return $this
+                ->useProductoRelatedByIdsubcategoriaQuery()
+                ->filterByPrimaryKeys($producto->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProductoRelatedByIdsubcategoria() only accepts arguments of type Producto or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the ProductoRelatedByIdsubcategoria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CategoriaQuery The current query, for fluid interface
+     */
+    public function joinProductoRelatedByIdsubcategoria($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('ProductoRelatedByIdsubcategoria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'ProductoRelatedByIdsubcategoria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the ProductoRelatedByIdsubcategoria relation Producto object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductoQuery A secondary query class using the current class as primary query
+     */
+    public function useProductoRelatedByIdsubcategoriaQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinProductoRelatedByIdsubcategoria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'ProductoRelatedByIdsubcategoria', 'ProductoQuery');
     }
 
     /**

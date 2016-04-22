@@ -54,6 +54,11 @@ class CompraTableMap extends TableMap
         $this->addColumn('compra_ieps', 'CompraIeps', 'DECIMAL', false, 10, null);
         $this->addColumn('compra_iva', 'CompraIva', 'DECIMAL', false, 10, null);
         $this->addColumn('compra_total', 'CompraTotal', 'DECIMAL', false, 15, null);
+        $this->addColumn('compra_tipo', 'CompraTipo', 'CHAR', true, null, null);
+        $this->getColumn('compra_tipo', false)->setValueSet(array (
+  0 => 'ordecompra',
+  1 => 'compra',
+));
         // validators
     } // initialize()
 

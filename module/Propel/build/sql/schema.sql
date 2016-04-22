@@ -91,6 +91,7 @@ CREATE TABLE `compra`
     `compra_ieps` DECIMAL(10,5),
     `compra_iva` DECIMAL(10,5),
     `compra_total` DECIMAL(15,5),
+    `compra_tipo` enum('ordecompra','compra') NOT NULL,
     PRIMARY KEY (`idcompra`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -736,12 +737,12 @@ CREATE TABLE `producto`
 (
     `idproducto` INTEGER NOT NULL AUTO_INCREMENT,
     `idempresa` INTEGER NOT NULL,
+    `idunidadmedida` INTEGER NOT NULL,
     `producto_nombre` TEXT NOT NULL,
     `idcategoria` INTEGER,
     `idsubcategoria` INTEGER,
     `producto_rendimiento` INTEGER,
     `producto_ultimocosto` FLOAT,
-    `idunidadmedida` INTEGER,
     `producto_baja` TINYINT(1) NOT NULL,
     `producto_tipo` enum('simple','subreceta','plu') NOT NULL,
     `producto_costo` FLOAT,
@@ -749,9 +750,21 @@ CREATE TABLE `producto`
     PRIMARY KEY (`idproducto`),
     INDEX `idunidadmedida` (`idunidadmedida`),
     INDEX `idempresa` (`idempresa`),
+    INDEX `idsubcategoria` (`idsubcategoria`),
+    INDEX `idcategoria` (`idcategoria`),
+    CONSTRAINT `idcategoria_producto`
+        FOREIGN KEY (`idcategoria`)
+        REFERENCES `categoria` (`idcategoria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT `idempresa_producto`
         FOREIGN KEY (`idempresa`)
         REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsubcategoria_producto`
+        FOREIGN KEY (`idsubcategoria`)
+        REFERENCES `categoria` (`idcategoria`)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT `idunidadmedida_producto`

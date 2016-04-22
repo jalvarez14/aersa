@@ -326,7 +326,7 @@ abstract class BaseUnidadmedidaQuery extends ModelCriteria
      *
      * @return UnidadmedidaQuery The current query, for fluid interface
      */
-    public function joinProducto($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinProducto($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Producto');
@@ -361,7 +361,7 @@ abstract class BaseUnidadmedidaQuery extends ModelCriteria
      *
      * @return   ProductoQuery A secondary query class using the current class as primary query
      */
-    public function useProductoQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useProductoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinProducto($relationAlias, $joinType)
