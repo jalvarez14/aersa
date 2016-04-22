@@ -16,13 +16,15 @@ use Zend\Console\Request as ConsoleRequest;
 class CompraController extends AbstractActionController {
     
     public function indexAction() {
-            
+
+        $collection = \CompraQuery::create()->find();
+        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/compra/index');
-//        $view_model->setVariables(array(
-//            'messages' => $this->flashMessenger(),
-//            'collection' => $collection,
-//        ));
+            $view_model->setVariables(array(
+            'messages' => $this->flashMessenger(),
+            'collection' => $collection,
+        ));
         return $view_model;
 
     }
