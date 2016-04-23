@@ -43,6 +43,7 @@ class PlantillatablajeriaController extends AbstractActionController {
         if($request->isPost()){
             
             $post_data = $request->getPost();
+
             $plantillatablajeria = new \Plantillatablajeria();
             foreach ($post_data as $key => $data){
                 if($key != 'idempresa')
@@ -133,16 +134,5 @@ class PlantillatablajeriaController extends AbstractActionController {
         return $this->redirect()->toUrl('/catalogo/tablajeria');       
         }
     }
-    
-    
-    public function prefetchproductsAction(){
-        
-        $productos = \ProductoQuery::create()->orderByProductoNombre(\Criteria::ASC)->limit(5)->find();
-        $productos = \Shared\GeneralFunctions::collectionToSelectArray($productos, 'idproducto', 'producto_nombre');
-        
-        return $this->getResponse()->setContent(json_encode($productos));
-        
-    }
 
-        
 }

@@ -42,12 +42,13 @@
                         <?php echo  $this->formText($form->get('plantillatablajeria_nombre'));?>
                     </div>
                     <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('idproducto')); ?>  
+                            <?php echo $this->formHidden($form->get('idproducto')); ?>  
+                            <?php echo $this->formLabel($form->get('idproducto_autocomplete')); ?>  
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="fa fa-search"></i>
                                 </span>
-                                 <?php echo $this->formText($form->get('idproducto')); ?>  
+                                 <?php echo $this->formText($form->get('idproducto_autocomplete')); ?>  
 
                             </div>
 

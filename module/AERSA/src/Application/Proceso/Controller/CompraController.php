@@ -30,12 +30,26 @@ class CompraController extends AbstractActionController {
     }
     public function nuevoregistroAction() {
         
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+        $anio_activo = $sucursal->getSucursalAnioactivo();
+        $mes_activo = $sucursal->getSucursalMesactivo();
+        
+        $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
+        $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
+        
+        $form = new \Application\Proceso\Form\CompraForm($almecenes);
+        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/compra/nuevoregistro');
-//        $view_model->setVariables(array(
-//            'messages' => $this->flashMessenger(),
-//            'collection' => $collection,
-//        ));
+        $view_model->setVariables(array(
+            'form' => $form,
+            'anio_activo' => $anio_activo,
+            'mes_activo' => $mes_activo,
+        ));
+
         return $view_model;
     }
 }

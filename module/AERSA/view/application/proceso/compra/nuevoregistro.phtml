@@ -1,127 +1,136 @@
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<link rel="stylesheet" href="/resources/demos/style.css">
-
 <style>
-    .notes textarea{ 
-        overflow-y: scroll; 
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        resize: none;
-        
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
     }
-    .notes .right-label{
-        margin-left: 4%;
-        display: inline;
-    }
-    .notes .left-label{
-        display: inline;
-        margin-left: 65%;
+    #productos_table .fa-trash{
+        color:red;
     }
 </style>
+<div id="form_container">
 <form class="form-horizontal" action="#">
-    <div class="form-body">
-        <h3 class="page-title">Compras - Registro</h3><br><br>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label col-md-3">Fecha</label>
-                    <div class="col-md-9">
-                        <script>
-                            $(function() {
-                            $( "#datepicker" ).datepicker.formatDate("DD, MM d, yy"
-                             });
-                        </script>
-                        <input type="text" id="datepicker" placeholder="" class="form-control"/>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="page-title">Compras - Registro</h3><br><br>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+
+                            <?php echo $this->formLabel($form->get('compra_fechacompra')) ?>  
+                            <?php echo $this->formText($form->get('compra_fechacompra')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_tipo')) ?>  
+                            <?php echo $this->formSelect($form->get('compra_tipo')) ?> 
+                        </div>
                     </div>
-                </div>
-            </div>
-            <!--/span-->
-            <div class="col-md-6">
-                <div class="form-group has-error">
-                    <label class="control-label col-md-3">Tipo</label>
-                    <div class="col-md-9">
-                        <select class="form-control" name="foo">
-                            <option value="1">Option 1</option>
-                            <option value="1">Option 2</option>
-                            <option value="1">Option 3</option>
-                        </select>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formHidden($form->get('idproveedor')); ?>  
+                            <?php echo $this->formLabel($form->get('idproveedor_autocomplete')); ?>  
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                 <?php echo $this->formText($form->get('idproveedor_autocomplete')); ?>  
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_folio')) ?>  
+                            <?php echo $this->formText($form->get('compra_folio')) ?> 
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <!--/row-->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label col-md-3">Proveedor</label>
-                    <div class="col-md-9">
-                        <input type="text" placeholder="" class="form-control">
+                    <div class="form-group">
+                        <div class="col-md-6">
+
+                            <?php echo $this->formLabel($form->get('compra_fechaentrega')) ?>  
+                            <?php echo $this->formText($form->get('compra_fechaentrega')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_factura')) ?>  
+                            <?php echo $this->formFile($form->get('compra_factura')) ?> 
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label col-md-3">Folio</label>
-                    <div class="col-md-9">
-                        <input type="text" class="form-control"> 
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/row-->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label col-md-3">Fecha de entrega</label>
-                    <div class="col-md-9">
-                        <input type="text" placeholder="" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label col-md-3">Factura</label>
-                    <div class="col-md-9">
-                        <input type="text" placeholder="" class="form-control">
+                    <div class="form-group">
+                        <div class="col-md-6">
+
+                            <?php echo $this->formLabel($form->get('idalmacen')) ?>  
+                            <?php echo $this->formSelect($form->get('idalmacen')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_revision')) ?>  
+                            <?php echo $this->formSelect($form->get('compra_revision')) ?> 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--/row-->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group has-error">
-                    <label class="control-label col-md-3">Almacen</label>
-                    <div class="col-md-9">
-                        <select class="form-control" name="foo">
-                            <option value="1">Option 1</option>
-                            <option value="1">Option 2</option>
-                            <option value="1">Option 3</option>
-                        </select>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <h3 class="page-title">Productos</h3><br><br>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-5 col-md-offset-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                    <input id="producto_autocomplete" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button disabled id="producto_add" class="btn grey-mint" type="button">Agregar</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>  
-            <div class="col-md-6">
-                <div class="form-group has-error">
-                    <label class="control-label col-md-3">Revision</label>
-                    <div class="col-md-9">
-                        <select class="form-control" name="foo">
-                            <option value="1">Option 1</option>
-                            <option value="1">Option 2</option>
-                            <option value="1">Option 3</option>
-                        </select>
+                    <div class="row">
+                        <table class="table" id="productos_table">
+                            <thead>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>C.U. Neto</th>
+                                <th>Desc.</th>
+                                <th>IEPS</th>
+                                <th>Subtotal</th>
+                                <th>Revisada</th>
+                                <th>Almacen</th>
+                                <th>Opciones</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Producto 1</td>
+                                    <td><input type="text"></td>
+                                    <td><input type="text"></td>
+                                    <td>$ 100.00</td>
+                                    <td><input type="text"></td>
+                                    <td><input type="text"></td>
+                                    <td>$ 100.00</td>
+                                    <td><input type="checkbox"></td>
+                                    <td>
+                                        <select class="form-control">
+                                            <option>almacen 1</option>
+                                            <option>almacen 2</option>
+                                            <option>almacen 3</option>
+                                        </select>
+                                    </td>
+                                    <td><i class="fa fa-trash"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <!--/span-->
         </div>
-        <!--/row-->
     </div>
 </form>
-<div class="portlet light portlet-fit ">
+<!--<div class="portlet light portlet-fit ">
     <div class="portlet-title">
         <div class="caption portlet">
             <h2 >Productos</h2>
@@ -170,7 +179,7 @@
                             <th class="sorting" tabindex="0" aria-controls="sample_editable_1" rowspan="1" colspan="1" style="width: 122px;" aria-label=" Edit : activate to sort column ascending">Opciones</th>
                         </tr>
                     </thead>
-<!--                CUERPO  DE LA TABLA-->
+                CUERPO  DE LA TABLA
                       
                 </table>
             </div>
@@ -210,22 +219,11 @@
         <label>TOTAL: </label><br><br>
     </div>
         <button style="margin-left: 970px" class="btn default">Guardar</button><br><br>
-</div><br>
-<div class="portlet light portlet-fit ">
-    <div class="portlet-title">
-        <div class="caption">
-            <h2>Notas</h2>
-        </div>
-    </div>
-    <div class="notes">
-        <label class="right-label">Nombre de usuario</label><label class="left-label">16 abril 2016 14:32:00</label>
-        <textarea rows="5" cols="125"></textarea><br><br>
-        <label class="right-label">Nombre de usuario</label><label class="left-label">16 abril 2016 14:32:00</label>
-        <textarea rows="5" cols="125"></textarea><br><br>
-        <label class="right-label">Nombre de usuario</label><label class="left-label">16 abril 2016 14:32:00</label>
-        <textarea rows="5" cols="125"></textarea>
-    </div><br>
-    <div style="margin-left: 970px">
-        <button class="btn default">Crear nota</button><br><br>
-    </div>
+</div>-->
+
 </div>
+<script type="text/javascript" src="/application/custom/js/procesos/compra.js"></script>
+<script>
+    var $form = $('#form_container').compra();
+    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
+</script>

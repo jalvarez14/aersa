@@ -65,18 +65,24 @@
             var bestPictures = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                prefetch: '/catalogo/tablajeria/prefetchproducts',
                 remote: {
-                  url: '/catalogo/tablajeria/getproducts',
+                  url: '/catalogo/tablajeria/getproducts?q=%QUERY',
                   wildcard: '%QUERY'
                 }
               });
            
-              $('input[name=idproducto]').typeahead(null, {
+              $('input[name=idproducto_autocomplete]').typeahead(null, {
                 name: 'best-pictures',
                 display: 'value',
+                hint: true,
+                highlight: true,
                 source: bestPictures
               });
+              
+              $('input[name=idproducto_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+                  $('input[name=idproducto]').val(suggestion.id);
+              });
+              
         }
 
         /*

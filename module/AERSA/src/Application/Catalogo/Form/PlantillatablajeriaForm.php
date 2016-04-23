@@ -28,15 +28,21 @@ class PlantillatablajeriaForm extends Form {
         
         $this->add(array(
            'name' => 'idproducto',
-            'type' => 'Select',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
+        
+        $this->add(array(
+           'name' => 'idproducto_autocomplete',
+            'type' => 'Text',
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
             ),
-            'options' => array(
+              'options' => array(
                 'label' => 'Producto *',
-                'empty_option' => 'Seleccione un producto',
-                'value_options' => $producto_array,
             ),
         ));
         

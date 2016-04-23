@@ -20,5 +20,34 @@ class IndexController extends AbstractActionController
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
     }
+    
+    public function getproveedoresAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $search = $this->params()->fromQuery('q');
+        
+        $query = \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->filterByProveedorNombrecomercial('%'.$search.'%',  \Criteria::LIKE)->find();
+        $result = \Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproveedor', 'proveedor_nombrecomercial');
+        
+        return $this->getResponse()->setContent(json_encode($result));
+
+        
+        
+    }
+    
+    public function getproductosAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $search = $this->params()->fromQuery('q');
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->find();
+
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre')));
+
+        
+    }
 
 }
