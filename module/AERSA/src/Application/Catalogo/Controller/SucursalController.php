@@ -50,8 +50,8 @@ class SucursalController extends AbstractActionController
             $post_data = $request->getPost();
                 
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-            $almacenista    = \UsuarioQuery::create()->filterByUsuarioNombre($post_data['almacenista_nombre'])->exists();
-            $auditor        = \UsuarioQuery::create()->filterByUsuarioNombre($post_data['auditor_nombre'])->exists();
+            $almacenista    = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['almacenista_username'])->exists();
+            $auditor        = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['auditor_username'])->exists();
             
             if(!$almacenista && !$auditor)
             {
@@ -87,8 +87,9 @@ class SucursalController extends AbstractActionController
                     $this->flashMessenger()->addErrorMessage('El nombre de usuario para almacenista ya se encuentra registrado, por favor utilice uno distinto');
                 if($almacenista)
                     $this->flashMessenger()->addErrorMessage('El nombre de usuario para auditor ya se encuentra registrado, por favor utilice uno distinto');
-
+                
                 return $this->redirect()->toUrl('/catalogo/empresa/sucursal/nuevo/'.$id);
+        
             }
             
            
@@ -202,7 +203,18 @@ class SucursalController extends AbstractActionController
         }
         
     }
-
+    
+    public function checkuserAction()
+    {
+        $user = $this->params()->fromRoute('username');
+        $result = \UsuarioQuery::create()->filterByUsuarioUsername($user)->find()->toArray();
+        return $this->getResponse()->setContent(json_encode($result));
+        
+        
+        
+        
+            
+    }
 }
 
 function setAlmacenista($data,$entity = null)
@@ -264,42 +276,49 @@ function createAlmacenes($idSuc)
     $almacen->setAlmacenNombre('Almacén general');
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
+    $almacen->setAlmacenEncargado("");
     $almacen->save();
     
     $almacen = new \Almacen();
     $almacen->setAlmacenNombre('Cocina');
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
+    $almacen->setAlmacenEncargado("");
     $almacen->save();
     
     $almacen = new \Almacen();
     $almacen->setAlmacenNombre('Barra');
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
+    $almacen->setAlmacenEncargado("");
     $almacen->save();
     
     $almacen = new \Almacen();
     $almacen->setAlmacenNombre('Créditos al costo');
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
+    $almacen->setAlmacenEncargado("");
     $almacen->save();
     
     $almacen = new \Almacen();
     $almacen->setAlmacenNombre('Bonificados');
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
+    $almacen->setAlmacenEncargado("");
     $almacen->save();
     
     $almacen = new \Almacen();
     $almacen->setAlmacenNombre('Consignación');
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
+    $almacen->setAlmacenEncargado("");
     $almacen->save();
     
     $almacen = new \Almacen();
     $almacen->setAlmacenNombre('Servicio');
     $almacen->setAlmacenEstatus(1);
     $almacen->setIdsucursal($idSuc);
+    $almacen->setAlmacenEncargado("");
     $almacen->save();
     
     
