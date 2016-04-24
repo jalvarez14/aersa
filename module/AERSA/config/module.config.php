@@ -27,15 +27,6 @@ return array(
                             ),
                         ),
                     ),
-                    'autocomplete' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/autocomplete[/:action]',
-                            'defaults' => array(
-                                'controller'    => 'Application\Dashboard\Controller\Index',
-                            ),
-                        ),
-                    ),
                     /*
                     * LOGIN
                     */
@@ -556,6 +547,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'checkuser' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/checkuser[/:username]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Sucursal',
+                                                'action' => 'checkuser',
+                                            ),
+                                        ),
+                                    ),
 
                                ),
                             ),
@@ -609,26 +610,6 @@ return array(
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
                                                 'action' => 'eliminar',
-                                            ),
-                                        ),
-                                    ),
-                                    'prefetchproducts' => array(
-                                        'type' => 'Segment',
-                                        'options' => array(
-                                            'route' => '/prefetchproducts',
-                                            'defaults' => array(
-                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                'action' => 'prefetchproducts',
-                                            ),
-                                        ),
-                                    ),
-                                    'getproducts' => array(
-                                        'type' => 'Segment',
-                                        'options' => array(
-                                            'route' => '/getproducts',
-                                            'defaults' => array(
-                                                'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                'action' => 'getproducts',
                                             ),
                                         ),
                                     ),

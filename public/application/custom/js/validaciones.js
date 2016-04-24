@@ -1,6 +1,12 @@
 
 $( document ).ready(function() {
 
+    $("[name=auditor_username]").focusout(function () {
+        checkUser('auditor_username', 'Nombre de usuario *');
+    });
+    $("[name=almacenista_username]").focusout(function () {
+        checkUser('almacenista_username', 'Nombre de usuario *');
+    });
     $("[name=usuario_username]").focusout(function () {
         checkUser('usuario_username', 'Nombre de usuario *');
     });
