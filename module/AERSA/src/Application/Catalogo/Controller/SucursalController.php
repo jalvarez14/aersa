@@ -208,12 +208,7 @@ class SucursalController extends AbstractActionController
     {
         $user = $this->params()->fromRoute('username');
         $result = \UsuarioQuery::create()->filterByUsuarioUsername($user)->find()->toArray();
-        return $this->getResponse()->setContent(json_encode($result));
-        
-        
-        
-        
-            
+        return $this->getResponse()->setContent(json_encode($result));      
     }
 }
 

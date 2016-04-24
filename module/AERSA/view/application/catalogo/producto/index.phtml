@@ -26,15 +26,15 @@
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
                     <thead >
                         <tr>
-                            <th class="text-center"> Nombre </th>
-                            <th class="text-center"> Categoria </th>
-                            <th class="text-center"> Subcategoria </th>
-                            <th class="text-center"> Unidad medida </th>
-                            <th class="text-center"> Costo </th>
-                            <th class="text-center"> Opciones </th>
+                            <th> Nombre </th>
+                            <th> Categoria </th>
+                            <th> Subcategoria </th>
+                            <th> Unidad medida </th>
+                            <th> Costo </th>
+                            <th> Opciones </th>
                         </tr>
                     </thead>
-                    <tbody class="text-center">
+                    <tbody>
                         
                         
                         <?php foreach ($productos as $entity) : ?>
@@ -51,7 +51,7 @@
                                 <?php else:?>
                                     <td><span class="label label-sm label-danger"> N/A </span></td>
                                 <?php endif ?>
-                                <td><?php echo $entity->getIdunidadmedida() ?></td>
+                                    <td><span class="label label-sm label-success"><?php echo  $entity->getUnidadmedida()->getUnidadmedidaNombre() ?></span></td>
                                 <td><?php echo $entity->getProductocosto() ?></td>
                                 
                                 <td class="text-left">                                    

@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<link href="/application/custom/css/multiple-select.css" rel="stylesheet"/>
 
 <h3 class="page-title">Registro usuario</h3>
 <div class="page-bar">
@@ -53,6 +54,12 @@
                         <?php echo $this->formPassword($form->get('usuario_password')) ?>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('idempresas')) ?>  
+                        <?php echo $this->formSelect($form->get('idempresas')) ?>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -61,7 +68,7 @@
             </div>
         </div>
         <div class="form-actions right">
-            <button class="btn blue" type="submit">
+            <button class="btn blue" id="btnSubmit" type="submit">
                 <i class="fa fa-check"></i>
                 Guardar
             </button>
@@ -70,3 +77,8 @@
 </div>
 
 <script src="/application/custom/js/validaciones.js"></script>
+<script src="/application/custom/js/multiple-select.js"></script>
+<script>
+    $('select').multipleSelect();
+</script>
+    

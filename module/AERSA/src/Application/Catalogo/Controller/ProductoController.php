@@ -44,17 +44,13 @@ class ProductoController extends AbstractActionController
         $subcategorias = array();
         
         $cats   = \CategoriaQuery::create()->filterByIdcategoriapadre(null)->find();
-        $sub    = \CategoriaQuery::create()->filterByIdcategoriapadre(null, \Criteria::NOT_EQUAL)->find();
-        
+
         //Crear arreglo de datos para formulario en campo categorias
         foreach ($cats as $item)
             $categorias[$item->getIdCategoria()] = $item->getCategorianombre();
         
-        //Crear arreglo de datos para formulario en campo subcategorias
-        foreach ($sub as $item)
-            $subcategorias[$item->getIdCategoria()] = $item->getCategorianombre();
-        
-        $form = new \Application\Catalogo\Form\ProductosForm($categorias,$subcategorias);
+
+        $form = new \Application\Catalogo\Form\ProductosForm($categorias);
         
         if ($request->isPost()) 
         {
@@ -70,7 +66,7 @@ class ProductoController extends AbstractActionController
             $entity = new \Producto();
 
             foreach ($post_data as $key => $value) {
-                $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
             $entity->setIdempresa($session['idempresa']);
             
@@ -417,5 +413,7 @@ class ProductoController extends AbstractActionController
         }
         
     }
+    
+
     
 }

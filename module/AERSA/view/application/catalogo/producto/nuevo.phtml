@@ -72,12 +72,7 @@
                         <?php echo $this->formSelect  ($form->get('producto_iva')) ?>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
-                        <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
-                    </div>
-                </div>
+                
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_costo')) ?>  
@@ -103,6 +98,12 @@
                         <?php echo $this->formSelect  ($form->get('producto_baja')) ?>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
+                    </div>
+                </div>
                 
                 
                 
@@ -117,3 +118,5 @@
         </div>
     </div>
 </div>
+
+<script src="/application/custom/js/catalogo/productos.js"></script>
