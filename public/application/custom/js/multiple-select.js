@@ -8,7 +8,7 @@
 (function ($) {
 
     'use strict';
-    
+
     // it only does '%s', and return '' when arguments are undefined
     var sprintf = function (str) {
         var args = arguments,
@@ -140,9 +140,10 @@
 
         // restore class and title from select element
         this.$parent = $(sprintf(
-            '<div class="ms-parent " %s/>',
+            '<div class="ms-parent %s" %s/>',
             $el.attr('class') || '',
             sprintf('title="%s"', $el.attr('title'))));
+
         // add placeholder to choice button
         this.$choice = $(sprintf([
                 '<button type="button" class="ms-choice">',
@@ -150,11 +151,9 @@
                 '<div></div>',
                 '</button>'
             ].join(''),
-            
             this.options.placeholder));
 
         // default position is bottom
-
         this.$drop = $(sprintf('<div class="ms-drop %s"%s></div>',
             this.options.position,
             sprintf(' style="width: %s"', this.options.dropWidth)));

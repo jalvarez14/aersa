@@ -16,7 +16,7 @@ $( document ).ready(function() {
         {
             $("[name=sucursal_anioactivo]").addClass('invalid');
             $("label[for=sucursal_anioactivo").addClass('invalid') + "']";
-            $("label[for=sucursal_anioactivo").text('El año de regustro tiene que ser mayor a 2000');
+            $("label[for=sucursal_anioactivo").text('El año debe de ser un número mayor a 2000.');
             $('#btnSubmit').prop('disabled', true);
         }
         else

@@ -19,7 +19,7 @@ class IvaForm extends Form
         
         $this->add(array(
             'name' => 'tasaiva_valor',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Iva *',
             ),

@@ -98,7 +98,7 @@ class UsuarioForm extends Form
             ),
             'attributes' => array(
                 'required' => true,
-                'class' => 'form-control',
+                'class' => 'form-control test',
                 'multiple'  => 'multiple',
             ),
         ));

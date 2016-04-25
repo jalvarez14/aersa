@@ -109,7 +109,7 @@ class SucursalForm extends Form
         
         $this->add(array(
             'name' => 'sucursal_anioactivo',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Año activo *',
             ),
