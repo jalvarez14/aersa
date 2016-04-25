@@ -715,7 +715,7 @@
         name: '',
         isOpen: false,
         placeholder: '',
-        selectAll: true,
+        selectAll: false,
         selectAllDelimiter: ['[', ']'],
         minimumCountSelected: 3,
         ellipsis: false,

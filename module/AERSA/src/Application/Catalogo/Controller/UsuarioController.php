@@ -39,14 +39,17 @@ class UsuarioController extends AbstractActionController {
         return $view_model;
     }
 
-    public function nuevoAction() {
+    public function nuevoAction() 
+    {
         $request = $this->getRequest();
 
         //INTANCIAMOS NUESTRO FORMULARIO
         $form = new \Application\Catalogo\Form\UsuarioForm();
-
-        if ($request->isPost()) {
-
+        $empresas = \EmpresaQuery::create()->find();
+        
+        if ($request->isPost()) 
+        {
+            
             $post_data = $request->getPost();
 
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
@@ -56,7 +59,9 @@ class UsuarioController extends AbstractActionController {
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->exists();
 
-            if (!$exist) {
+            if (!$exist) 
+            {
+                
 
                 //CREAMOS NUESTRA ENTIDAD VACIA
                 $entity = new \Usuario();
@@ -69,16 +74,21 @@ class UsuarioController extends AbstractActionController {
                 
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
                     foreach ($post_data as $key => $value) {
-                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                        if($key != 'idempresas')
+                            $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                     }
-
                     //SETEAMOS EL STATUS Y EL PASSWORD
-                    $entity->setUsuarioEstatus(1);
                     $entity->setUsuarioPassword(md5($post_data['usuario_password']));
-
-                  
                     $entity->save();
-
+                    
+                    
+                    foreach ($post_data['idempresas'] as $item)
+                    {
+                        $relacion = setRelacion($item, $entity->getIdusuario ());
+                        $relacion->save();
+                    }
+                    
+                    
                     $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
 
 
@@ -94,7 +104,8 @@ class UsuarioController extends AbstractActionController {
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
-        ));
+            'empresas' => $empresas,
+        )); 
         $view_model->setTemplate('/application/catalogo/usuario/nuevo');
         return $view_model;
     }
@@ -165,6 +176,7 @@ class UsuarioController extends AbstractActionController {
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
+                
         ));
         $view_model->setTemplate('/application/catalogo/usuario/editar');
         return $view_model;
