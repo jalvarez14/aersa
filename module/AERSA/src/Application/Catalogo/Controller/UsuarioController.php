@@ -615,7 +615,15 @@ class UsuarioController extends AbstractActionController {
         } else 
             return $this->redirect()->toUrl('/catalogo/empresa');
     }
-}
+
+    public function checkuserAction()
+    {
+        $user = $this->params()->fromRoute('username');
+        $result = \UsuarioQuery::create()->filterByUsuarioUsername($user)->find()->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    }
+    
+            }
 
 function setRelacion($empresa, $usuario) {
     $entity = new \Usuarioempresa();

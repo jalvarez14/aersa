@@ -171,6 +171,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'checkuser' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/checkuser[/:username]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'checkuser',
+                                            ),
+                                        ),
+                                    ),
                                    
                                ),
                             ),
@@ -321,6 +331,7 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   
                                ),
                             ),
                         
@@ -446,6 +457,16 @@ return array(
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
                                                 'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+                                   'getsubcat' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/getsubcat[/:idcategoria]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'getsubcat',
                                             ),
                                         ),
                                     ),

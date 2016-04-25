@@ -35,6 +35,7 @@ class ProductosForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Categoria *',
+                'empty_option' => 'Sin especificar',
                 'value_options' => $categorias,
             ),
             'attributes' => array(
@@ -117,7 +118,7 @@ class ProductosForm extends Form
                 'label' => 'Rendimiento *',
             ),
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
             ),
         ));

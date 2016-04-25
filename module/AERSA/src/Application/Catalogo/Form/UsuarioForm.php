@@ -86,5 +86,22 @@ class UsuarioForm extends Form
                 'class' => 'form-control',
             ),
         ));
+        
+        $this->add(array(
+            'name' => 'idempresas',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Empresas a cargo *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+                'multiple'  => 'multiple',
+            ),
+        ));
+        
     }
 }

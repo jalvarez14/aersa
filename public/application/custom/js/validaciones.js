@@ -10,6 +10,25 @@ $( document ).ready(function() {
     $("[name=usuario_username]").focusout(function () {
         checkUser('usuario_username', 'Nombre de usuario *');
     });
+    $("[name=sucursal_anioactivo]").focusout(function () {
+        var año = $("[name=sucursal_anioactivo]").val();
+        if(año < 2000 || !$.isNumeric(año))
+        {
+            $("[name=sucursal_anioactivo]").addClass('invalid');
+            $("label[for=sucursal_anioactivo").addClass('invalid') + "']";
+            $("label[for=sucursal_anioactivo").text('El año de regustro tiene que ser mayor a 2000');
+            $('#btnSubmit').prop('disabled', true);
+        }
+        else
+        {
+            $("[name=sucursal_anioactivo]").removeClass('invalid');
+            $("label[for=sucursal_anioactivo").removeClass('invalid') + "']";
+            $("label[for=sucursal_anioactivo").text('Año activo *');
+            $('#btnSubmit').prop('disabled', false);
+        }
+    });
+    
+    
     
     function checkUser(inputName,labelText)
     {
@@ -17,7 +36,7 @@ $( document ).ready(function() {
         
         $.ajax({
            type: "GET",
-           url: "/catalogo/empresa/sucursal/checkuser/"+ username,
+           url: "/catalogo/usuario/checkuser/"+ username,
            dataType: "json",
            success: function (data) {
                 console.log(data);
