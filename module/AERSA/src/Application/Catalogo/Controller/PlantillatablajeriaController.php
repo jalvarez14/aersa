@@ -135,4 +135,19 @@ class PlantillatablajeriaController extends AbstractActionController {
         }
     }
 
+    
+    public function getproductsAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $search = $this->params()->fromQuery('q');
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->find();
+
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre')));
+
+        
+    }
+
+
 }
