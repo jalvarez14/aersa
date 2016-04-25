@@ -171,6 +171,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'checkuser' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/checkuser[/:username]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Usuario',
+                                                'action' => 'checkuser',
+                                            ),
+                                        ),
+                                    ),
                                    
                                ),
                             ),
@@ -321,6 +331,7 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   
                                ),
                             ),
                         
@@ -449,6 +460,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'getsubcat' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/getsubcat[/:idcategoria]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'getsubcat',
+                                            ),
+                                        ),
+                                    ),
                                ),
                             ),
                            'empresa' => array(
@@ -547,6 +568,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'checkuser' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/checkuser[/:username]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Sucursal',
+                                                'action' => 'checkuser',
+                                            ),
+                                        ),
+                                    ),
 
                                ),
                             ),
@@ -603,13 +634,13 @@ return array(
                                             ),
                                         ),
                                     ),
-                                    'eliminar' => array(
+                                    'getproducts' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/prefetchproducts',
+                                            'route' => '/getproducts[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Plantillatablajeria',
-                                                'action' => 'prefetchproducts',
+                                                'action' => 'getproducts',
                                             ),
                                         ),
                                     ),
@@ -629,7 +660,7 @@ return array(
                             'compra' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
-                                    'route' => '/compra[/]', 
+                                    'route' => '/compra', 
                                     'defaults' => array( 
                                         'controller' => 'Application\Proceso\Controller\Compra', 'action' => 'index', 
                                     ), 
@@ -638,7 +669,7 @@ return array(
                                 'child_routes' => array( 
                                     'nuevoregistro' => array( 
                                         'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevoregistro[/]', 
+                                            'route' => '/nuevoregistro', 
                                             'defaults' => array( 
                                                 'controller' => 'Application\Proceso\Controller\Compra', 
                                                 'action' => 'nuevoregistro', 
@@ -648,7 +679,7 @@ return array(
                                     'editar' => array( 
                                         'type' => 'Segment', 
                                         'options' => array( 
-                                            'route' => '/editar[/:id][/]', 
+                                            'route' => '/editar[/:id]', 
                                              'defaults' => array( 
                                                  'controller' => 'Application\Proceso\Controller\Compra', 
                                                  'action' => 'editar', 
@@ -658,7 +689,7 @@ return array(
                                     'eliminar' => array( 
                                         'type' => 'Segment', 
                                         'options' => array( 
-                                            'route' => '/eliminar[/:id][/]', 
+                                            'route' => '/eliminar[/:id]', 
                                             'defaults' => array( 
                                                 'controller' => 'Application\Proceso\Controller\Compra', 
                                                 'action' => 'eliminar',
@@ -748,9 +779,9 @@ return array(
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
+            'layout/layout'           => __DIR__ . '/../view/application/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
+            'error/404'               => __DIR__ . '/../view/application/layout/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ),
         'template_path_stack' => array(

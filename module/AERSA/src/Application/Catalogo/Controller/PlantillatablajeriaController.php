@@ -43,6 +43,7 @@ class PlantillatablajeriaController extends AbstractActionController {
         if($request->isPost()){
             
             $post_data = $request->getPost();
+
             $plantillatablajeria = new \Plantillatablajeria();
             foreach ($post_data as $key => $data){
                 if($key != 'idempresa')
@@ -134,15 +135,17 @@ class PlantillatablajeriaController extends AbstractActionController {
         }
     }
     
-    
-    public function prefetchproductsAction(){
+    public function getproductsAction(){
         
-        $productos = \ProductoQuery::create()->orderByProductoNombre(\Criteria::ASC)->limit(5)->find();
-        $productos = \Shared\GeneralFunctions::collectionToSelectArray($productos, 'idproducto', 'producto_nombre');
-        
-        return $this->getResponse()->setContent(json_encode($productos));
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $search = $this->params()->fromQuery('q');
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->find();
+
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre')));
+
         
     }
 
-        
 }
