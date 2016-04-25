@@ -113,7 +113,7 @@ class ProductosForm extends Form
         
         $this->add(array(
             'name' => 'producto_rendimiento',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Rendimiento *',
             ),
@@ -125,7 +125,7 @@ class ProductosForm extends Form
         
         $this->add(array(
             'name' => 'producto_costo',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Costo *',
             ),
@@ -137,7 +137,7 @@ class ProductosForm extends Form
         
         $this->add(array(
             'name' => 'producto_ultimocosto',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Último costo *',
             ),

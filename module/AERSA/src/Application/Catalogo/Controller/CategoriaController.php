@@ -161,6 +161,8 @@ class CategoriaController extends AbstractActionController
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            $element = $form->get('categoria_nombre');
+            $element->setAttribute('disabled', 'disabled');
             $collection = \CategoriaQuery::create()->filterByIdcategoriapadre($id)->find();
            
         }

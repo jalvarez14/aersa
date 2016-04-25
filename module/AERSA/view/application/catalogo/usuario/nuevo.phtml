@@ -55,14 +55,23 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <?php echo $this->formLabel($form->get('idempresas')) ?>  
-                        <?php echo $this->formSelect($form->get('idempresas')) ?>
+                    <div class="form-group test">
+                        <label for="idempresas">Empresas a cargo *</label></br>
+                       
+                        <select name="idempresas[]" id="empresas" formnovalidate="formnovalidate" class="row col-md-12" multiple="multiple">
+                            
+                            <?php foreach( $empresas as $item): ?>
+                                <option value="<?php echo $item->getIdempresa() ?>"><?php echo $item->getEmpresanombrecomercial() ?></option>
+                            <?php endforeach; ?>
+                                
+                        </select>
+                        
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
+                    <br>
                     <p>(*)Campos obligatorios</p>
                 </div>
             </div>
@@ -72,6 +81,7 @@
                 <i class="fa fa-check"></i>
                 Guardar
             </button>
+            
         </div>
     </div>
 </div>
@@ -79,6 +89,22 @@
 <script src="/application/custom/js/validaciones.js"></script>
 <script src="/application/custom/js/multiple-select.js"></script>
 <script>
-    $('select').multipleSelect();
+    
+    $('#empresas').multipleSelect();
+    $('[name=idrol]').change(function()
+    {
+        if ($('[name=idrol]').val() != 2)
+        {
+            $('.ms-choice').addClass('hide');
+            $("label[for='idempresas']").addClass('hide');
+        }
+        else
+        {
+            $('.ms-choice').removeClass('hide');
+            $("label[for='idempresas']").removeClass('hide');
+        }
+    });
+    $('.ms-choice').addClass('hide');
+    $("label[for='idempresas']").addClass('hide');
 </script>
     

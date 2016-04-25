@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/numberInput.css">
+
 <h3 class="page-title">Tasa IVA</h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -38,7 +40,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('tasaiva_valor')) ?>  
-                        <?php echo $this->formText($form->get('tasaiva_valor')) ?>
+                        <?php echo $this->formNumber($form->get('tasaiva_valor')) ?>
                     </div>
                 </div>
             </div>
