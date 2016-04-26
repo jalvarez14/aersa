@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route'    => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -21,6 +21,16 @@ return array(
                         'type'    => 'Segment',
                         'options' => array(
                             'route'    => '/',
+                            'defaults' => array(
+                                'controller'    => 'Application\Dashboard\Controller\Index',
+                                'action'        => 'index',
+                            ),
+                        ),
+                    ),
+                    'autocomplete' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/autocomplete[/:action]',
                             'defaults' => array(
                                 'controller'    => 'Application\Dashboard\Controller\Index',
                                 'action'        => 'index',
@@ -705,8 +715,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'aersa', //LOCAL
-                    'route'    => 'aersamx.com', //PRODUCCION
+                    'route'    => 'aersa', //LOCAL
+                    //'route'    => 'aersamx.com', //PRODUCCION
                     'defaults' => array(
                         'controller' => 'Website\Controller\Index',
                         'action'     => 'index',

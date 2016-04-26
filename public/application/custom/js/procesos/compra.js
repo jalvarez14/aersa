@@ -127,6 +127,13 @@
                     var option = $('<option value="'+index+'">'+this+'</option>');
                     almacenen_select.find('select').append(option);
                 });
+                
+                var tipo = $('select[name=compra_tipo] option:selected').val();
+                
+                if(tipo == 'ordecompra'){
+                    console.log(almacenen_select.find('select'));
+                    almacenen_select.find('select').attr('disabled',true);
+                }
 
                                
                 var tr = $('<tr>');
@@ -139,7 +146,7 @@
                 tr.append('<td>'+accounting.formatMoney(0)+'</td>');
                 tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
                 tr.append(almacenen_select);
-                tr.append('<td><i class="fa fa-trash"></i></td>');
+                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
                 //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
                 tr.find('input').numeric();
@@ -163,6 +170,24 @@
             
             
             });
+            
+            //Si el tipo de entidad es orden de compra, el campo de almacén (entidad) y almacén (registro) se encuentra disable
+           $('select[name=compra_tipo]').on('change',function(){
+               
+               var selected = $('select[name=compra_tipo] option:selected').val();
+               if(selected == 'ordecompra'){
+                   $('select[name=idalmacen]').attr('disabled',true);
+                   $('select[name=idalmacen]').attr('required',false);
+                   $('#productos_table tbody select').attr('disabled',true);
+               }else{
+                   $('select[name=idalmacen]').attr('disabled',false);
+                   $('select[name=idalmacen]').attr('required',true);
+                   $('#productos_table tbody select').attr('disabled',false);
+               }
+           });
+           
+           
+
               
              
 
