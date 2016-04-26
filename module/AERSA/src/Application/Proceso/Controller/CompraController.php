@@ -48,6 +48,7 @@ class CompraController extends AbstractActionController {
             'form' => $form,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'almacenes' => json_encode($almecenes) //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
         ));
 
         return $view_model;

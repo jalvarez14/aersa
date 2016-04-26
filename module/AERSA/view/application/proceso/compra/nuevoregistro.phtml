@@ -81,6 +81,7 @@
                                     <span class="input-group-addon">
                                         <i class="fa fa-search"></i>
                                     </span>
+                                    <input id="idproducto" type="hidden">
                                     <input id="producto_autocomplete" class="form-control" type="text">
                                 </div>
                             </div>
@@ -104,7 +105,7 @@
                                 <th>Opciones</th>
                             </thead>
                             <tbody>
-                                <tr>
+<!--                                <tr>
                                     <td>Producto 1</td>
                                     <td><input type="text"></td>
                                     <td><input type="text"></td>
@@ -121,10 +122,16 @@
                                         </select>
                                     </td>
                                     <td><i class="fa fa-trash"></i></td>
-                                </tr>
+                                </tr>-->
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="form-actions right">
+                    <button class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
                 </div>
             </div>
         </div>
@@ -225,5 +232,5 @@
 <script type="text/javascript" src="/application/custom/js/procesos/compra.js"></script>
 <script>
     var $form = $('#form_container').compra();
-    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
+    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $almacenes?>);
 </script>

@@ -61,7 +61,7 @@
             
         }
         
-        plugin.new = function(anio,mes){
+        plugin.new = function(anio,mes,almacenes){
             
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
@@ -115,40 +115,57 @@
             
             $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
                 $('#producto_add').attr('disabled',false);
+                $('input#idproducto').val(suggestion.id);
             });
             
             var count = 0;
-            $('#producto_add').on('click',function(){
+            $('#producto_add').on('click',function(){  
+                
+                //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
+                var almacenen_select = $('<td><select class="form-control" name=productos['+count+'][almacen]></td>');
+                $.each(almacenes,function(index){
+                    var option = $('<option value="'+index+'">'+this+'</option>');
+                    almacenen_select.find('select').append(option);
+                });
+
+                               
                 var tr = $('<tr>');
-                tr.append('<td>Producto 1</td>');
-                tr.append(' <td><input type="text" name=productos['+count+'][canitdad]></td>');
-                tr.append(' <td><input type="text"></td>');
-                tr.append('<td>$ 100.00</td>');
-                tr.append('<td><input type="text"></td>');
-                tr.append(' <td><input type="text"></td>');
-                tr.append(' <td>$ 100.00</td>');
-                tr.append('<td><input type="checkbox"></td>');
-                tr.append('<td><select class="form-control"><option>almacen 1</option><option>almacen 2</option><option>almacen 3</option></select></td>');
+                tr.append('<td><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
+                tr.append('<td><input type="text" name=productos['+count+'][canitdad]></td>');
+                tr.append('<td><input type="text" name=productos['+count+'][precio]></td>');
+                tr.append('<td>'+accounting.formatMoney(0)+'</td>');
+                tr.append('<td><input type="text" name=productos['+count+'][descuento]></td>');
+                tr.append('<td><input type="text" name=productos['+count+'][ieps]></td>');
+                tr.append('<td>'+accounting.formatMoney(0)+'</td>');
+                tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                tr.append(almacenen_select);
                 tr.append('<td><i class="fa fa-trash"></i></td>');
                 
+                //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
+                tr.find('input').numeric();
                 
-              $('#productos_table tbody').append(tr);
-              count ++;
-                                    
-                          $('.fa-trash').on('click',function(){
+                //INSERTAMOS EN LA TABLA
+                $('#productos_table tbody').append(tr);
+                
+                //LIMPIAMOS EL AUTOCOMPLETE
+                $('input#producto_autocomplete').typeahead('val', ''); 
+                $('input#idproducto').typeahead('val', ''); 
+                $('#producto_add').attr('disabled',true);
+                
+                
+              count ++;          
+              $('.fa-trash').on('click',function(){
                 var tr = $(this).closest('tr');
                 console.log(tr);
                 tr.remove();
             });         
-                
+              
+            
+            
             });
-            
-            
-            
-            
-            
+              
+             
 
-            
         }
 
         /*
