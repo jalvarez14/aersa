@@ -1,3 +1,6 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/numberInput.css">
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+
 <h3 class="page-title">Registro sucursal</h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -46,7 +49,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('sucursal_anioactivo')) ?>  
-                        <?php echo $this->formText($form->get('sucursal_anioactivo')) ?>
+                        <?php echo $this->formNumber($form->get('sucursal_anioactivo')) ?>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -55,7 +58,7 @@
                         <?php echo $this->formSelect($form->get('sucursal_mesactivo')) ?>
                     </div>
                 </div>
-                <!--
+                
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('sucursal_habilitarproductos')) ?>  
@@ -68,7 +71,6 @@
                         <?php echo $this->formSelect($form->get('sucursal_habilitarrecetas')) ?>
                     </div>
                 </div>
-                -->
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -76,6 +78,10 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
         <div class="form-body">
             <h3 class="form-section">Auditor</h3>
             <div class="row">
@@ -110,6 +116,10 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
         <div class="form-body">
             <h3 class="form-section">Almacenista</h3>
             <div class="row">
@@ -145,10 +155,14 @@
             </div>
         </div>
         <div class="form-actions right">
-            <button class="btn blue" type="submit">
+            <button class="btn blue" id="btnSubmit" type="submit">
                 <i class="fa fa-check"></i>
                 Registrar
             </button>
         </div>
     </div>
 </div>
+    
+
+<script src="/application/custom/js/validaciones.js"></script>
+

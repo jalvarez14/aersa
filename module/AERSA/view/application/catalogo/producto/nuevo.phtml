@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/numberInput.css">
 
 
 <h3 class="page-title">Registro producto</h3>
@@ -72,22 +73,17 @@
                         <?php echo $this->formSelect  ($form->get('producto_iva')) ?>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
-                        <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
-                    </div>
-                </div>
+                
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_costo')) ?>  
-                        <?php echo $this->formText  ($form->get('producto_costo')) ?>
+                        <?php echo $this->formNumber  ($form->get('producto_costo')) ?>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_ultimocosto')) ?>  
-                        <?php echo $this->formText  ($form->get('producto_ultimocosto')) ?>
+                        <?php echo $this->formNumber  ($form->get('producto_ultimocosto')) ?>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -101,6 +97,12 @@
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_baja')) ?>  
                         <?php echo $this->formSelect  ($form->get('producto_baja')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
+                        <?php echo $this->formNumber  ($form->get('producto_rendimiento')) ?>
                     </div>
                 </div>
                 
@@ -117,3 +119,5 @@
         </div>
     </div>
 </div>
+
+<script src="/application/custom/js/catalogo/productos.js"></script>

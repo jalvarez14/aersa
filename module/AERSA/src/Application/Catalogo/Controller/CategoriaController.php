@@ -161,6 +161,8 @@ class CategoriaController extends AbstractActionController
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            $element = $form->get('categoria_nombre');
+            $element->setAttribute('disabled', 'disabled');
             $collection = \CategoriaQuery::create()->filterByIdcategoriapadre($id)->find();
            
         }
@@ -326,6 +328,12 @@ class CategoriaController extends AbstractActionController
 
     }
     
+    public function getsubcatAction()
+    {
+        $cat = $this->params()->fromRoute('idcategoria');
+        $result = \CategoriaQuery::create()->filterByIdcategoriapadre($cat)->find()->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    }
 }
 
 function setCategoriaData ($data,$padre = null)

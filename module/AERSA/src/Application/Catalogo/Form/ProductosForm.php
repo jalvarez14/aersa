@@ -35,6 +35,7 @@ class ProductosForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Categoria *',
+                'empty_option' => 'Sin especificar',
                 'value_options' => $categorias,
             ),
             'attributes' => array(
@@ -112,19 +113,19 @@ class ProductosForm extends Form
         
         $this->add(array(
             'name' => 'producto_rendimiento',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Rendimiento *',
             ),
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
             ),
         ));
         
         $this->add(array(
             'name' => 'producto_costo',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Costo *',
             ),
@@ -136,7 +137,7 @@ class ProductosForm extends Form
         
         $this->add(array(
             'name' => 'producto_ultimocosto',
-            'type' => 'Text',
+            'type' => 'Number',
             'options' => array(
                 'label' => 'Último costo *',
             ),

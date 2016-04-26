@@ -66,7 +66,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                  url: '/catalogo/tablajeria/getproducts?q=%QUERY',
+                  url: '/autocomplete/getproductos?q=%QUERY',
                   wildcard: '%QUERY'
                 }
               });
@@ -83,6 +83,8 @@
                   $('input[name=idproducto]').val(suggestion.id);
               });
               
+        
+
         }
 
         /*

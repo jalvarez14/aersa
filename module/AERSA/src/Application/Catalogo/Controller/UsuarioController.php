@@ -39,14 +39,17 @@ class UsuarioController extends AbstractActionController {
         return $view_model;
     }
 
-    public function nuevoAction() {
+    public function nuevoAction() 
+    {
         $request = $this->getRequest();
 
         //INTANCIAMOS NUESTRO FORMULARIO
         $form = new \Application\Catalogo\Form\UsuarioForm();
-
-        if ($request->isPost()) {
-
+        $empresas = \EmpresaQuery::create()->find();
+        
+        if ($request->isPost()) 
+        {
+            
             $post_data = $request->getPost();
 
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
@@ -56,7 +59,9 @@ class UsuarioController extends AbstractActionController {
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->exists();
 
-            if (!$exist) {
+            if (!$exist) 
+            {
+                
 
                 //CREAMOS NUESTRA ENTIDAD VACIA
                 $entity = new \Usuario();
@@ -69,16 +74,21 @@ class UsuarioController extends AbstractActionController {
                 
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
                     foreach ($post_data as $key => $value) {
-                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                        if($key != 'idempresas')
+                            $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                     }
-
                     //SETEAMOS EL STATUS Y EL PASSWORD
-                    $entity->setUsuarioEstatus(1);
                     $entity->setUsuarioPassword(md5($post_data['usuario_password']));
-
-                  
                     $entity->save();
-
+                    
+                    
+                    foreach ($post_data['idempresas'] as $item)
+                    {
+                        $relacion = setRelacion($item, $entity->getIdusuario ());
+                        $relacion->save();
+                    }
+                    
+                    
                     $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
 
 
@@ -94,7 +104,8 @@ class UsuarioController extends AbstractActionController {
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
-        ));
+            'empresas' => $empresas,
+        )); 
         $view_model->setTemplate('/application/catalogo/usuario/nuevo');
         return $view_model;
     }
@@ -108,12 +119,20 @@ class UsuarioController extends AbstractActionController {
 
         //VERIFICAMOS SI EXISTE
         $exist = \UsuarioQuery::create()->filterByIdusuario($id)->exists();
-
+        
         if ($exist) {
-
+            
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \UsuarioQuery::create()->findPk($id);
-
+            $empresas = \EmpresaQuery::create()->find();
+            
+            //OBTENEMOS LA RELACION CON USUARIO EMPRESA
+            $usuario_empresa_array = array();
+            $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($entity->getIdusuario())->find();
+            foreach ($usuario_empresas as $empresa){
+                $usuario_empresa_array[] = $empresa->getIdempresa();
+            }
+         
             //INTANCIAMOS NUESTRO FORMULARIO
             $form = new \Application\Catalogo\Form\UsuarioForm();
             $form->get('usuario_estatus')->setAttribute('required', true);
@@ -122,7 +141,9 @@ class UsuarioController extends AbstractActionController {
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();
-
+                
+               
+ 
                 $filter = new \Application\Catalogo\Filter\UsuarioFilter();
 
                 //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
@@ -131,8 +152,11 @@ class UsuarioController extends AbstractActionController {
                 if (!$exist) {
 
                     //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                    foreach ($post_data as $key => $value)
-                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    foreach ($post_data as $key => $value){
+                        if(\UsuarioPeer::getTableMap()->hasColumn($key)){
+                            $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                        }
+                    }
 
                     //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
                     $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
@@ -141,7 +165,22 @@ class UsuarioController extends AbstractActionController {
                     $form->setInputFilter($filter->getInputFilter());
 
                     $entity->save();
-
+                    
+                    $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($entity->getIdusuario())->find()->delete();
+                    //Las empresas  a las que va teener acceso en caso de ser auditor
+                    if($entity->getIdrol() == 2){
+                        
+                        foreach ($post_data['idempresas'] as $value){
+                            
+                            $usuario_empresa = new \Usuarioempresa();
+                            $usuario_empresa->setIdempresa($value)
+                                            ->setIdusuario($entity->getIdusuario())
+                                            ->save();
+                            
+                        }
+                        
+                    }
+                    
                     $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
 
                     return $this->redirect()->toUrl('/catalogo/usuario');
@@ -165,6 +204,10 @@ class UsuarioController extends AbstractActionController {
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
+            'empresas' => $empresas,
+            'idrol' => $entity->getIdrol(),
+            'usuario_empresa' => json_encode($usuario_empresa_array),
+                
         ));
         $view_model->setTemplate('/application/catalogo/usuario/editar');
         return $view_model;
@@ -615,7 +658,15 @@ class UsuarioController extends AbstractActionController {
         } else 
             return $this->redirect()->toUrl('/catalogo/empresa');
     }
-}
+
+    public function checkuserAction()
+    {
+        $user = $this->params()->fromRoute('username');
+        $result = \UsuarioQuery::create()->filterByUsuarioUsername($user)->find()->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    }
+    
+            }
 
 function setRelacion($empresa, $usuario) {
     $entity = new \Usuarioempresa();

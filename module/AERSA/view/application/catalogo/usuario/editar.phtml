@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<link href="/application/custom/css/multiple-select.css" rel="stylesheet"/>
 <h3 class="page-title"><?php echo $form->get('usuario_nombre')->getValue()?></h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -58,7 +60,23 @@
                         <?php echo $this->formSelect($form->get('usuario_estatus')) ?>
                     </div>
                 </div>
+                
             </div>
+            <div class="row" style="display: none" id="usuario_empresa_container">
+                    <div class="col-md-6">
+                        <div class="form-group test">
+                            <label for="idempresas">Empresas a cargo</label></br>
+
+                            <select name="idempresas[]" id="empresas" formnovalidate="formnovalidate" class="row col-md-12" multiple="multiple">
+
+                                <?php foreach( $empresas as $item): ?>
+                                    <option value="<?php echo $item->getIdempresa() ?>"><?php echo $item->getEmpresanombrecomercial() ?></option>
+                                <?php endforeach; ?>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
             <div class="row">
                 <div class="col-md-12">
                     <p>(*)Campos obligatorios</p>
@@ -106,3 +124,27 @@
     </div>
 </div>
 <?php  echo $this->form()->closeTag(); ?>
+<script src="/application/custom/js/multiple-select.js"></script>
+<script>
+    
+    $('#empresas').multipleSelect();
+    
+    var idrol = <?php echo $idrol ?>;
+    if(idrol == 2){
+        $('#usuario_empresa_container').show();
+    }
+
+    $("#empresas").multipleSelect("setSelects", <?php echo $usuario_empresa?>);
+    
+    $('select[name=idrol]').on('change',function(){
+        var val = $('select[name=idrol] option:selected').val();
+        if(val == 2){
+            $('#usuario_empresa_container').show();
+        }else{
+            $("#empresas").multipleSelect("uncheckAll");
+            $('#usuario_empresa_container').hide();
+        }
+    });
+
+</script>
+    
