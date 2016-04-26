@@ -2589,6 +2589,31 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
      */
+    public function getDevolucionsJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getDevolucions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Devolucions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
     public function getDevolucionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = DevolucionQuery::create(null, $criteria);
@@ -3493,6 +3518,31 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     {
         $query = NotacreditoQuery::create(null, $criteria);
         $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getNotacreditos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Notacreditos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
+    public function getNotacreditosJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
 
         return $this->getNotacreditos($query, $con);
     }

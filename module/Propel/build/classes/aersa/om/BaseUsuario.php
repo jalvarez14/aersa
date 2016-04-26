@@ -107,6 +107,18 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     protected $collDevolucionnotasPartial;
 
     /**
+     * @var        PropelObjectCollection|Ingreso[] Collection to store aggregation of Ingreso objects.
+     */
+    protected $collIngresosRelatedByIdauditor;
+    protected $collIngresosRelatedByIdauditorPartial;
+
+    /**
+     * @var        PropelObjectCollection|Ingreso[] Collection to store aggregation of Ingreso objects.
+     */
+    protected $collIngresosRelatedByIdusuario;
+    protected $collIngresosRelatedByIdusuarioPartial;
+
+    /**
      * @var        PropelObjectCollection|Inventariomes[] Collection to store aggregation of Inventariomes objects.
      */
     protected $collInventariomessRelatedByIdauditor;
@@ -155,6 +167,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     protected $collOrdentablajeriasRelatedByIdusuarioPartial;
 
     /**
+     * @var        PropelObjectCollection|Ordentablajerianota[] Collection to store aggregation of Ordentablajerianota objects.
+     */
+    protected $collOrdentablajerianotas;
+    protected $collOrdentablajerianotasPartial;
+
+    /**
      * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
      */
     protected $collRequisicionsRelatedByIdauditor;
@@ -165,6 +183,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      */
     protected $collRequisicionsRelatedByIdusuario;
     protected $collRequisicionsRelatedByIdusuarioPartial;
+
+    /**
+     * @var        PropelObjectCollection|Requisicionnota[] Collection to store aggregation of Requisicionnota objects.
+     */
+    protected $collRequisicionnotas;
+    protected $collRequisicionnotasPartial;
 
     /**
      * @var        PropelObjectCollection|Usuarioempresa[] Collection to store aggregation of Usuarioempresa objects.
@@ -250,6 +274,18 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $ingresosRelatedByIdauditorScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ingresosRelatedByIdusuarioScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $inventariomessRelatedByIdauditorScheduledForDeletion = null;
 
     /**
@@ -298,6 +334,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $ordentablajerianotasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $requisicionsRelatedByIdauditorScheduledForDeletion = null;
 
     /**
@@ -305,6 +347,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $requisicionsRelatedByIdusuarioScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $requisicionnotasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -659,6 +707,10 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
             $this->collDevolucionnotas = null;
 
+            $this->collIngresosRelatedByIdauditor = null;
+
+            $this->collIngresosRelatedByIdusuario = null;
+
             $this->collInventariomessRelatedByIdauditor = null;
 
             $this->collInventariomessRelatedByIdusuario = null;
@@ -675,9 +727,13 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
             $this->collOrdentablajeriasRelatedByIdusuario = null;
 
+            $this->collOrdentablajerianotas = null;
+
             $this->collRequisicionsRelatedByIdauditor = null;
 
             $this->collRequisicionsRelatedByIdusuario = null;
+
+            $this->collRequisicionnotas = null;
 
             $this->collUsuarioempresas = null;
 
@@ -925,6 +981,40 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->ingresosRelatedByIdauditorScheduledForDeletion !== null) {
+                if (!$this->ingresosRelatedByIdauditorScheduledForDeletion->isEmpty()) {
+                    IngresoQuery::create()
+                        ->filterByPrimaryKeys($this->ingresosRelatedByIdauditorScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ingresosRelatedByIdauditorScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collIngresosRelatedByIdauditor !== null) {
+                foreach ($this->collIngresosRelatedByIdauditor as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ingresosRelatedByIdusuarioScheduledForDeletion !== null) {
+                if (!$this->ingresosRelatedByIdusuarioScheduledForDeletion->isEmpty()) {
+                    IngresoQuery::create()
+                        ->filterByPrimaryKeys($this->ingresosRelatedByIdusuarioScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ingresosRelatedByIdusuarioScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collIngresosRelatedByIdusuario !== null) {
+                foreach ($this->collIngresosRelatedByIdusuario as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->inventariomessRelatedByIdauditorScheduledForDeletion !== null) {
                 if (!$this->inventariomessRelatedByIdauditorScheduledForDeletion->isEmpty()) {
                     InventariomesQuery::create()
@@ -1061,6 +1151,23 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->ordentablajerianotasScheduledForDeletion !== null) {
+                if (!$this->ordentablajerianotasScheduledForDeletion->isEmpty()) {
+                    OrdentablajerianotaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajerianotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajerianotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajerianotas !== null) {
+                foreach ($this->collOrdentablajerianotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->requisicionsRelatedByIdauditorScheduledForDeletion !== null) {
                 if (!$this->requisicionsRelatedByIdauditorScheduledForDeletion->isEmpty()) {
                     RequisicionQuery::create()
@@ -1089,6 +1196,23 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
             if ($this->collRequisicionsRelatedByIdusuario !== null) {
                 foreach ($this->collRequisicionsRelatedByIdusuario as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->requisicionnotasScheduledForDeletion !== null) {
+                if (!$this->requisicionnotasScheduledForDeletion->isEmpty()) {
+                    RequisicionnotaQuery::create()
+                        ->filterByPrimaryKeys($this->requisicionnotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->requisicionnotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRequisicionnotas !== null) {
+                foreach ($this->collRequisicionnotas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1395,6 +1519,22 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collIngresosRelatedByIdauditor !== null) {
+                    foreach ($this->collIngresosRelatedByIdauditor as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collIngresosRelatedByIdusuario !== null) {
+                    foreach ($this->collIngresosRelatedByIdusuario as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collInventariomessRelatedByIdauditor !== null) {
                     foreach ($this->collInventariomessRelatedByIdauditor as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1459,6 +1599,14 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collOrdentablajerianotas !== null) {
+                    foreach ($this->collOrdentablajerianotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collRequisicionsRelatedByIdauditor !== null) {
                     foreach ($this->collRequisicionsRelatedByIdauditor as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1469,6 +1617,14 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
                 if ($this->collRequisicionsRelatedByIdusuario !== null) {
                     foreach ($this->collRequisicionsRelatedByIdusuario as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collRequisicionnotas !== null) {
+                    foreach ($this->collRequisicionnotas as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1623,6 +1779,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             if (null !== $this->collDevolucionnotas) {
                 $result['Devolucionnotas'] = $this->collDevolucionnotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collIngresosRelatedByIdauditor) {
+                $result['IngresosRelatedByIdauditor'] = $this->collIngresosRelatedByIdauditor->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collIngresosRelatedByIdusuario) {
+                $result['IngresosRelatedByIdusuario'] = $this->collIngresosRelatedByIdusuario->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collInventariomessRelatedByIdauditor) {
                 $result['InventariomessRelatedByIdauditor'] = $this->collInventariomessRelatedByIdauditor->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -1647,11 +1809,17 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             if (null !== $this->collOrdentablajeriasRelatedByIdusuario) {
                 $result['OrdentablajeriasRelatedByIdusuario'] = $this->collOrdentablajeriasRelatedByIdusuario->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collOrdentablajerianotas) {
+                $result['Ordentablajerianotas'] = $this->collOrdentablajerianotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collRequisicionsRelatedByIdauditor) {
                 $result['RequisicionsRelatedByIdauditor'] = $this->collRequisicionsRelatedByIdauditor->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRequisicionsRelatedByIdusuario) {
                 $result['RequisicionsRelatedByIdusuario'] = $this->collRequisicionsRelatedByIdusuario->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collRequisicionnotas) {
+                $result['Requisicionnotas'] = $this->collRequisicionnotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUsuarioempresas) {
                 $result['Usuarioempresas'] = $this->collUsuarioempresas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1876,6 +2044,18 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getIngresosRelatedByIdauditor() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addIngresoRelatedByIdauditor($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getIngresosRelatedByIdusuario() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addIngresoRelatedByIdusuario($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getInventariomessRelatedByIdauditor() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addInventariomesRelatedByIdauditor($relObj->copy($deepCopy));
@@ -1924,6 +2104,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getOrdentablajerianotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajerianota($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRequisicionsRelatedByIdauditor() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRequisicionRelatedByIdauditor($relObj->copy($deepCopy));
@@ -1933,6 +2119,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             foreach ($this->getRequisicionsRelatedByIdusuario() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRequisicionRelatedByIdusuario($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getRequisicionnotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRequisicionnota($relObj->copy($deepCopy));
                 }
             }
 
@@ -2091,6 +2283,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         if ('Devolucionnota' == $relationName) {
             $this->initDevolucionnotas();
         }
+        if ('IngresoRelatedByIdauditor' == $relationName) {
+            $this->initIngresosRelatedByIdauditor();
+        }
+        if ('IngresoRelatedByIdusuario' == $relationName) {
+            $this->initIngresosRelatedByIdusuario();
+        }
         if ('InventariomesRelatedByIdauditor' == $relationName) {
             $this->initInventariomessRelatedByIdauditor();
         }
@@ -2115,11 +2313,17 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         if ('OrdentablajeriaRelatedByIdusuario' == $relationName) {
             $this->initOrdentablajeriasRelatedByIdusuario();
         }
+        if ('Ordentablajerianota' == $relationName) {
+            $this->initOrdentablajerianotas();
+        }
         if ('RequisicionRelatedByIdauditor' == $relationName) {
             $this->initRequisicionsRelatedByIdauditor();
         }
         if ('RequisicionRelatedByIdusuario' == $relationName) {
             $this->initRequisicionsRelatedByIdusuario();
+        }
+        if ('Requisicionnota' == $relationName) {
+            $this->initRequisicionnotas();
         }
         if ('Usuarioempresa' == $relationName) {
             $this->initUsuarioempresas();
@@ -3327,6 +3531,31 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
      */
+    public function getDevolucionsRelatedByIdauditorJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getDevolucionsRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related DevolucionsRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
     public function getDevolucionsRelatedByIdauditorJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = DevolucionQuery::create(null, $criteria);
@@ -3627,6 +3856,31 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
      */
+    public function getDevolucionsRelatedByIdusuarioJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getDevolucionsRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related DevolucionsRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
     public function getDevolucionsRelatedByIdusuarioJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = DevolucionQuery::create(null, $criteria);
@@ -3883,6 +4137,556 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         $query->joinWith('Devolucion', $join_behavior);
 
         return $this->getDevolucionnotas($query, $con);
+    }
+
+    /**
+     * Clears out the collIngresosRelatedByIdauditor collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addIngresosRelatedByIdauditor()
+     */
+    public function clearIngresosRelatedByIdauditor()
+    {
+        $this->collIngresosRelatedByIdauditor = null; // important to set this to null since that means it is uninitialized
+        $this->collIngresosRelatedByIdauditorPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collIngresosRelatedByIdauditor collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialIngresosRelatedByIdauditor($v = true)
+    {
+        $this->collIngresosRelatedByIdauditorPartial = $v;
+    }
+
+    /**
+     * Initializes the collIngresosRelatedByIdauditor collection.
+     *
+     * By default this just sets the collIngresosRelatedByIdauditor collection to an empty array (like clearcollIngresosRelatedByIdauditor());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initIngresosRelatedByIdauditor($overrideExisting = true)
+    {
+        if (null !== $this->collIngresosRelatedByIdauditor && !$overrideExisting) {
+            return;
+        }
+        $this->collIngresosRelatedByIdauditor = new PropelObjectCollection();
+        $this->collIngresosRelatedByIdauditor->setModel('Ingreso');
+    }
+
+    /**
+     * Gets an array of Ingreso objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     * @throws PropelException
+     */
+    public function getIngresosRelatedByIdauditor($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresosRelatedByIdauditorPartial && !$this->isNew();
+        if (null === $this->collIngresosRelatedByIdauditor || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collIngresosRelatedByIdauditor) {
+                // return empty collection
+                $this->initIngresosRelatedByIdauditor();
+            } else {
+                $collIngresosRelatedByIdauditor = IngresoQuery::create(null, $criteria)
+                    ->filterByUsuarioRelatedByIdauditor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collIngresosRelatedByIdauditorPartial && count($collIngresosRelatedByIdauditor)) {
+                      $this->initIngresosRelatedByIdauditor(false);
+
+                      foreach ($collIngresosRelatedByIdauditor as $obj) {
+                        if (false == $this->collIngresosRelatedByIdauditor->contains($obj)) {
+                          $this->collIngresosRelatedByIdauditor->append($obj);
+                        }
+                      }
+
+                      $this->collIngresosRelatedByIdauditorPartial = true;
+                    }
+
+                    $collIngresosRelatedByIdauditor->getInternalIterator()->rewind();
+
+                    return $collIngresosRelatedByIdauditor;
+                }
+
+                if ($partial && $this->collIngresosRelatedByIdauditor) {
+                    foreach ($this->collIngresosRelatedByIdauditor as $obj) {
+                        if ($obj->isNew()) {
+                            $collIngresosRelatedByIdauditor[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collIngresosRelatedByIdauditor = $collIngresosRelatedByIdauditor;
+                $this->collIngresosRelatedByIdauditorPartial = false;
+            }
+        }
+
+        return $this->collIngresosRelatedByIdauditor;
+    }
+
+    /**
+     * Sets a collection of IngresoRelatedByIdauditor objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ingresosRelatedByIdauditor A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setIngresosRelatedByIdauditor(PropelCollection $ingresosRelatedByIdauditor, PropelPDO $con = null)
+    {
+        $ingresosRelatedByIdauditorToDelete = $this->getIngresosRelatedByIdauditor(new Criteria(), $con)->diff($ingresosRelatedByIdauditor);
+
+
+        $this->ingresosRelatedByIdauditorScheduledForDeletion = $ingresosRelatedByIdauditorToDelete;
+
+        foreach ($ingresosRelatedByIdauditorToDelete as $ingresoRelatedByIdauditorRemoved) {
+            $ingresoRelatedByIdauditorRemoved->setUsuarioRelatedByIdauditor(null);
+        }
+
+        $this->collIngresosRelatedByIdauditor = null;
+        foreach ($ingresosRelatedByIdauditor as $ingresoRelatedByIdauditor) {
+            $this->addIngresoRelatedByIdauditor($ingresoRelatedByIdauditor);
+        }
+
+        $this->collIngresosRelatedByIdauditor = $ingresosRelatedByIdauditor;
+        $this->collIngresosRelatedByIdauditorPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ingreso objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ingreso objects.
+     * @throws PropelException
+     */
+    public function countIngresosRelatedByIdauditor(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresosRelatedByIdauditorPartial && !$this->isNew();
+        if (null === $this->collIngresosRelatedByIdauditor || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collIngresosRelatedByIdauditor) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getIngresosRelatedByIdauditor());
+            }
+            $query = IngresoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuarioRelatedByIdauditor($this)
+                ->count($con);
+        }
+
+        return count($this->collIngresosRelatedByIdauditor);
+    }
+
+    /**
+     * Method called to associate a Ingreso object to this object
+     * through the Ingreso foreign key attribute.
+     *
+     * @param    Ingreso $l Ingreso
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addIngresoRelatedByIdauditor(Ingreso $l)
+    {
+        if ($this->collIngresosRelatedByIdauditor === null) {
+            $this->initIngresosRelatedByIdauditor();
+            $this->collIngresosRelatedByIdauditorPartial = true;
+        }
+
+        if (!in_array($l, $this->collIngresosRelatedByIdauditor->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddIngresoRelatedByIdauditor($l);
+
+            if ($this->ingresosRelatedByIdauditorScheduledForDeletion and $this->ingresosRelatedByIdauditorScheduledForDeletion->contains($l)) {
+                $this->ingresosRelatedByIdauditorScheduledForDeletion->remove($this->ingresosRelatedByIdauditorScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	IngresoRelatedByIdauditor $ingresoRelatedByIdauditor The ingresoRelatedByIdauditor object to add.
+     */
+    protected function doAddIngresoRelatedByIdauditor($ingresoRelatedByIdauditor)
+    {
+        $this->collIngresosRelatedByIdauditor[]= $ingresoRelatedByIdauditor;
+        $ingresoRelatedByIdauditor->setUsuarioRelatedByIdauditor($this);
+    }
+
+    /**
+     * @param	IngresoRelatedByIdauditor $ingresoRelatedByIdauditor The ingresoRelatedByIdauditor object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeIngresoRelatedByIdauditor($ingresoRelatedByIdauditor)
+    {
+        if ($this->getIngresosRelatedByIdauditor()->contains($ingresoRelatedByIdauditor)) {
+            $this->collIngresosRelatedByIdauditor->remove($this->collIngresosRelatedByIdauditor->search($ingresoRelatedByIdauditor));
+            if (null === $this->ingresosRelatedByIdauditorScheduledForDeletion) {
+                $this->ingresosRelatedByIdauditorScheduledForDeletion = clone $this->collIngresosRelatedByIdauditor;
+                $this->ingresosRelatedByIdauditorScheduledForDeletion->clear();
+            }
+            $this->ingresosRelatedByIdauditorScheduledForDeletion[]= clone $ingresoRelatedByIdauditor;
+            $ingresoRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related IngresosRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     */
+    public function getIngresosRelatedByIdauditorJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresoQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getIngresosRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related IngresosRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     */
+    public function getIngresosRelatedByIdauditorJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresoQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getIngresosRelatedByIdauditor($query, $con);
+    }
+
+    /**
+     * Clears out the collIngresosRelatedByIdusuario collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addIngresosRelatedByIdusuario()
+     */
+    public function clearIngresosRelatedByIdusuario()
+    {
+        $this->collIngresosRelatedByIdusuario = null; // important to set this to null since that means it is uninitialized
+        $this->collIngresosRelatedByIdusuarioPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collIngresosRelatedByIdusuario collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialIngresosRelatedByIdusuario($v = true)
+    {
+        $this->collIngresosRelatedByIdusuarioPartial = $v;
+    }
+
+    /**
+     * Initializes the collIngresosRelatedByIdusuario collection.
+     *
+     * By default this just sets the collIngresosRelatedByIdusuario collection to an empty array (like clearcollIngresosRelatedByIdusuario());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initIngresosRelatedByIdusuario($overrideExisting = true)
+    {
+        if (null !== $this->collIngresosRelatedByIdusuario && !$overrideExisting) {
+            return;
+        }
+        $this->collIngresosRelatedByIdusuario = new PropelObjectCollection();
+        $this->collIngresosRelatedByIdusuario->setModel('Ingreso');
+    }
+
+    /**
+     * Gets an array of Ingreso objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     * @throws PropelException
+     */
+    public function getIngresosRelatedByIdusuario($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresosRelatedByIdusuarioPartial && !$this->isNew();
+        if (null === $this->collIngresosRelatedByIdusuario || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collIngresosRelatedByIdusuario) {
+                // return empty collection
+                $this->initIngresosRelatedByIdusuario();
+            } else {
+                $collIngresosRelatedByIdusuario = IngresoQuery::create(null, $criteria)
+                    ->filterByUsuarioRelatedByIdusuario($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collIngresosRelatedByIdusuarioPartial && count($collIngresosRelatedByIdusuario)) {
+                      $this->initIngresosRelatedByIdusuario(false);
+
+                      foreach ($collIngresosRelatedByIdusuario as $obj) {
+                        if (false == $this->collIngresosRelatedByIdusuario->contains($obj)) {
+                          $this->collIngresosRelatedByIdusuario->append($obj);
+                        }
+                      }
+
+                      $this->collIngresosRelatedByIdusuarioPartial = true;
+                    }
+
+                    $collIngresosRelatedByIdusuario->getInternalIterator()->rewind();
+
+                    return $collIngresosRelatedByIdusuario;
+                }
+
+                if ($partial && $this->collIngresosRelatedByIdusuario) {
+                    foreach ($this->collIngresosRelatedByIdusuario as $obj) {
+                        if ($obj->isNew()) {
+                            $collIngresosRelatedByIdusuario[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collIngresosRelatedByIdusuario = $collIngresosRelatedByIdusuario;
+                $this->collIngresosRelatedByIdusuarioPartial = false;
+            }
+        }
+
+        return $this->collIngresosRelatedByIdusuario;
+    }
+
+    /**
+     * Sets a collection of IngresoRelatedByIdusuario objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ingresosRelatedByIdusuario A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setIngresosRelatedByIdusuario(PropelCollection $ingresosRelatedByIdusuario, PropelPDO $con = null)
+    {
+        $ingresosRelatedByIdusuarioToDelete = $this->getIngresosRelatedByIdusuario(new Criteria(), $con)->diff($ingresosRelatedByIdusuario);
+
+
+        $this->ingresosRelatedByIdusuarioScheduledForDeletion = $ingresosRelatedByIdusuarioToDelete;
+
+        foreach ($ingresosRelatedByIdusuarioToDelete as $ingresoRelatedByIdusuarioRemoved) {
+            $ingresoRelatedByIdusuarioRemoved->setUsuarioRelatedByIdusuario(null);
+        }
+
+        $this->collIngresosRelatedByIdusuario = null;
+        foreach ($ingresosRelatedByIdusuario as $ingresoRelatedByIdusuario) {
+            $this->addIngresoRelatedByIdusuario($ingresoRelatedByIdusuario);
+        }
+
+        $this->collIngresosRelatedByIdusuario = $ingresosRelatedByIdusuario;
+        $this->collIngresosRelatedByIdusuarioPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ingreso objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ingreso objects.
+     * @throws PropelException
+     */
+    public function countIngresosRelatedByIdusuario(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresosRelatedByIdusuarioPartial && !$this->isNew();
+        if (null === $this->collIngresosRelatedByIdusuario || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collIngresosRelatedByIdusuario) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getIngresosRelatedByIdusuario());
+            }
+            $query = IngresoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuarioRelatedByIdusuario($this)
+                ->count($con);
+        }
+
+        return count($this->collIngresosRelatedByIdusuario);
+    }
+
+    /**
+     * Method called to associate a Ingreso object to this object
+     * through the Ingreso foreign key attribute.
+     *
+     * @param    Ingreso $l Ingreso
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addIngresoRelatedByIdusuario(Ingreso $l)
+    {
+        if ($this->collIngresosRelatedByIdusuario === null) {
+            $this->initIngresosRelatedByIdusuario();
+            $this->collIngresosRelatedByIdusuarioPartial = true;
+        }
+
+        if (!in_array($l, $this->collIngresosRelatedByIdusuario->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddIngresoRelatedByIdusuario($l);
+
+            if ($this->ingresosRelatedByIdusuarioScheduledForDeletion and $this->ingresosRelatedByIdusuarioScheduledForDeletion->contains($l)) {
+                $this->ingresosRelatedByIdusuarioScheduledForDeletion->remove($this->ingresosRelatedByIdusuarioScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	IngresoRelatedByIdusuario $ingresoRelatedByIdusuario The ingresoRelatedByIdusuario object to add.
+     */
+    protected function doAddIngresoRelatedByIdusuario($ingresoRelatedByIdusuario)
+    {
+        $this->collIngresosRelatedByIdusuario[]= $ingresoRelatedByIdusuario;
+        $ingresoRelatedByIdusuario->setUsuarioRelatedByIdusuario($this);
+    }
+
+    /**
+     * @param	IngresoRelatedByIdusuario $ingresoRelatedByIdusuario The ingresoRelatedByIdusuario object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeIngresoRelatedByIdusuario($ingresoRelatedByIdusuario)
+    {
+        if ($this->getIngresosRelatedByIdusuario()->contains($ingresoRelatedByIdusuario)) {
+            $this->collIngresosRelatedByIdusuario->remove($this->collIngresosRelatedByIdusuario->search($ingresoRelatedByIdusuario));
+            if (null === $this->ingresosRelatedByIdusuarioScheduledForDeletion) {
+                $this->ingresosRelatedByIdusuarioScheduledForDeletion = clone $this->collIngresosRelatedByIdusuario;
+                $this->ingresosRelatedByIdusuarioScheduledForDeletion->clear();
+            }
+            $this->ingresosRelatedByIdusuarioScheduledForDeletion[]= clone $ingresoRelatedByIdusuario;
+            $ingresoRelatedByIdusuario->setUsuarioRelatedByIdusuario(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related IngresosRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     */
+    public function getIngresosRelatedByIdusuarioJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresoQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getIngresosRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related IngresosRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     */
+    public function getIngresosRelatedByIdusuarioJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresoQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getIngresosRelatedByIdusuario($query, $con);
     }
 
     /**
@@ -5027,6 +5831,31 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
      */
+    public function getNotacreditosRelatedByIdauditorJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getNotacreditosRelatedByIdauditor($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related NotacreditosRelatedByIdauditor from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
     public function getNotacreditosRelatedByIdauditorJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = NotacreditoQuery::create(null, $criteria);
@@ -5306,6 +6135,31 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     {
         $query = NotacreditoQuery::create(null, $criteria);
         $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getNotacreditosRelatedByIdusuario($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related NotacreditosRelatedByIdusuario from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
+    public function getNotacreditosRelatedByIdusuarioJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
 
         return $this->getNotacreditosRelatedByIdusuario($query, $con);
     }
@@ -6286,6 +7140,256 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collOrdentablajerianotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addOrdentablajerianotas()
+     */
+    public function clearOrdentablajerianotas()
+    {
+        $this->collOrdentablajerianotas = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajerianotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajerianotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajerianotas($v = true)
+    {
+        $this->collOrdentablajerianotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajerianotas collection.
+     *
+     * By default this just sets the collOrdentablajerianotas collection to an empty array (like clearcollOrdentablajerianotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajerianotas($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajerianotas && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajerianotas = new PropelObjectCollection();
+        $this->collOrdentablajerianotas->setModel('Ordentablajerianota');
+    }
+
+    /**
+     * Gets an array of Ordentablajerianota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajerianota[] List of Ordentablajerianota objects
+     * @throws PropelException
+     */
+    public function getOrdentablajerianotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajerianotasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerianotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerianotas) {
+                // return empty collection
+                $this->initOrdentablajerianotas();
+            } else {
+                $collOrdentablajerianotas = OrdentablajerianotaQuery::create(null, $criteria)
+                    ->filterByUsuario($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajerianotasPartial && count($collOrdentablajerianotas)) {
+                      $this->initOrdentablajerianotas(false);
+
+                      foreach ($collOrdentablajerianotas as $obj) {
+                        if (false == $this->collOrdentablajerianotas->contains($obj)) {
+                          $this->collOrdentablajerianotas->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajerianotasPartial = true;
+                    }
+
+                    $collOrdentablajerianotas->getInternalIterator()->rewind();
+
+                    return $collOrdentablajerianotas;
+                }
+
+                if ($partial && $this->collOrdentablajerianotas) {
+                    foreach ($this->collOrdentablajerianotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajerianotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajerianotas = $collOrdentablajerianotas;
+                $this->collOrdentablajerianotasPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajerianotas;
+    }
+
+    /**
+     * Sets a collection of Ordentablajerianota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajerianotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setOrdentablajerianotas(PropelCollection $ordentablajerianotas, PropelPDO $con = null)
+    {
+        $ordentablajerianotasToDelete = $this->getOrdentablajerianotas(new Criteria(), $con)->diff($ordentablajerianotas);
+
+
+        $this->ordentablajerianotasScheduledForDeletion = $ordentablajerianotasToDelete;
+
+        foreach ($ordentablajerianotasToDelete as $ordentablajerianotaRemoved) {
+            $ordentablajerianotaRemoved->setUsuario(null);
+        }
+
+        $this->collOrdentablajerianotas = null;
+        foreach ($ordentablajerianotas as $ordentablajerianota) {
+            $this->addOrdentablajerianota($ordentablajerianota);
+        }
+
+        $this->collOrdentablajerianotas = $ordentablajerianotas;
+        $this->collOrdentablajerianotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajerianota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajerianota objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajerianotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajerianotasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerianotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerianotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajerianotas());
+            }
+            $query = OrdentablajerianotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuario($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajerianotas);
+    }
+
+    /**
+     * Method called to associate a Ordentablajerianota object to this object
+     * through the Ordentablajerianota foreign key attribute.
+     *
+     * @param    Ordentablajerianota $l Ordentablajerianota
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addOrdentablajerianota(Ordentablajerianota $l)
+    {
+        if ($this->collOrdentablajerianotas === null) {
+            $this->initOrdentablajerianotas();
+            $this->collOrdentablajerianotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajerianotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajerianota($l);
+
+            if ($this->ordentablajerianotasScheduledForDeletion and $this->ordentablajerianotasScheduledForDeletion->contains($l)) {
+                $this->ordentablajerianotasScheduledForDeletion->remove($this->ordentablajerianotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ordentablajerianota $ordentablajerianota The ordentablajerianota object to add.
+     */
+    protected function doAddOrdentablajerianota($ordentablajerianota)
+    {
+        $this->collOrdentablajerianotas[]= $ordentablajerianota;
+        $ordentablajerianota->setUsuario($this);
+    }
+
+    /**
+     * @param	Ordentablajerianota $ordentablajerianota The ordentablajerianota object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeOrdentablajerianota($ordentablajerianota)
+    {
+        if ($this->getOrdentablajerianotas()->contains($ordentablajerianota)) {
+            $this->collOrdentablajerianotas->remove($this->collOrdentablajerianotas->search($ordentablajerianota));
+            if (null === $this->ordentablajerianotasScheduledForDeletion) {
+                $this->ordentablajerianotasScheduledForDeletion = clone $this->collOrdentablajerianotas;
+                $this->ordentablajerianotasScheduledForDeletion->clear();
+            }
+            $this->ordentablajerianotasScheduledForDeletion[]= clone $ordentablajerianota;
+            $ordentablajerianota->setUsuario(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related Ordentablajerianotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajerianota[] List of Ordentablajerianota objects
+     */
+    public function getOrdentablajerianotasJoinOrdentablajeria($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajerianotaQuery::create(null, $criteria);
+        $query->joinWith('Ordentablajeria', $join_behavior);
+
+        return $this->getOrdentablajerianotas($query, $con);
+    }
+
+    /**
      * Clears out the collRequisicionsRelatedByIdauditor collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -7033,6 +8137,256 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         $query->joinWith('SucursalRelatedByIdsucursalorigen', $join_behavior);
 
         return $this->getRequisicionsRelatedByIdusuario($query, $con);
+    }
+
+    /**
+     * Clears out the collRequisicionnotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addRequisicionnotas()
+     */
+    public function clearRequisicionnotas()
+    {
+        $this->collRequisicionnotas = null; // important to set this to null since that means it is uninitialized
+        $this->collRequisicionnotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRequisicionnotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRequisicionnotas($v = true)
+    {
+        $this->collRequisicionnotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collRequisicionnotas collection.
+     *
+     * By default this just sets the collRequisicionnotas collection to an empty array (like clearcollRequisicionnotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRequisicionnotas($overrideExisting = true)
+    {
+        if (null !== $this->collRequisicionnotas && !$overrideExisting) {
+            return;
+        }
+        $this->collRequisicionnotas = new PropelObjectCollection();
+        $this->collRequisicionnotas->setModel('Requisicionnota');
+    }
+
+    /**
+     * Gets an array of Requisicionnota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Requisicionnota[] List of Requisicionnota objects
+     * @throws PropelException
+     */
+    public function getRequisicionnotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionnotasPartial && !$this->isNew();
+        if (null === $this->collRequisicionnotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionnotas) {
+                // return empty collection
+                $this->initRequisicionnotas();
+            } else {
+                $collRequisicionnotas = RequisicionnotaQuery::create(null, $criteria)
+                    ->filterByUsuario($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collRequisicionnotasPartial && count($collRequisicionnotas)) {
+                      $this->initRequisicionnotas(false);
+
+                      foreach ($collRequisicionnotas as $obj) {
+                        if (false == $this->collRequisicionnotas->contains($obj)) {
+                          $this->collRequisicionnotas->append($obj);
+                        }
+                      }
+
+                      $this->collRequisicionnotasPartial = true;
+                    }
+
+                    $collRequisicionnotas->getInternalIterator()->rewind();
+
+                    return $collRequisicionnotas;
+                }
+
+                if ($partial && $this->collRequisicionnotas) {
+                    foreach ($this->collRequisicionnotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collRequisicionnotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRequisicionnotas = $collRequisicionnotas;
+                $this->collRequisicionnotasPartial = false;
+            }
+        }
+
+        return $this->collRequisicionnotas;
+    }
+
+    /**
+     * Sets a collection of Requisicionnota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $requisicionnotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setRequisicionnotas(PropelCollection $requisicionnotas, PropelPDO $con = null)
+    {
+        $requisicionnotasToDelete = $this->getRequisicionnotas(new Criteria(), $con)->diff($requisicionnotas);
+
+
+        $this->requisicionnotasScheduledForDeletion = $requisicionnotasToDelete;
+
+        foreach ($requisicionnotasToDelete as $requisicionnotaRemoved) {
+            $requisicionnotaRemoved->setUsuario(null);
+        }
+
+        $this->collRequisicionnotas = null;
+        foreach ($requisicionnotas as $requisicionnota) {
+            $this->addRequisicionnota($requisicionnota);
+        }
+
+        $this->collRequisicionnotas = $requisicionnotas;
+        $this->collRequisicionnotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Requisicionnota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Requisicionnota objects.
+     * @throws PropelException
+     */
+    public function countRequisicionnotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionnotasPartial && !$this->isNew();
+        if (null === $this->collRequisicionnotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionnotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRequisicionnotas());
+            }
+            $query = RequisicionnotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuario($this)
+                ->count($con);
+        }
+
+        return count($this->collRequisicionnotas);
+    }
+
+    /**
+     * Method called to associate a Requisicionnota object to this object
+     * through the Requisicionnota foreign key attribute.
+     *
+     * @param    Requisicionnota $l Requisicionnota
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addRequisicionnota(Requisicionnota $l)
+    {
+        if ($this->collRequisicionnotas === null) {
+            $this->initRequisicionnotas();
+            $this->collRequisicionnotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collRequisicionnotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRequisicionnota($l);
+
+            if ($this->requisicionnotasScheduledForDeletion and $this->requisicionnotasScheduledForDeletion->contains($l)) {
+                $this->requisicionnotasScheduledForDeletion->remove($this->requisicionnotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Requisicionnota $requisicionnota The requisicionnota object to add.
+     */
+    protected function doAddRequisicionnota($requisicionnota)
+    {
+        $this->collRequisicionnotas[]= $requisicionnota;
+        $requisicionnota->setUsuario($this);
+    }
+
+    /**
+     * @param	Requisicionnota $requisicionnota The requisicionnota object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeRequisicionnota($requisicionnota)
+    {
+        if ($this->getRequisicionnotas()->contains($requisicionnota)) {
+            $this->collRequisicionnotas->remove($this->collRequisicionnotas->search($requisicionnota));
+            if (null === $this->requisicionnotasScheduledForDeletion) {
+                $this->requisicionnotasScheduledForDeletion = clone $this->collRequisicionnotas;
+                $this->requisicionnotasScheduledForDeletion->clear();
+            }
+            $this->requisicionnotasScheduledForDeletion[]= clone $requisicionnota;
+            $requisicionnota->setUsuario(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related Requisicionnotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicionnota[] List of Requisicionnota objects
+     */
+    public function getRequisicionnotasJoinRequisicion($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionnotaQuery::create(null, $criteria);
+        $query->joinWith('Requisicion', $join_behavior);
+
+        return $this->getRequisicionnotas($query, $con);
     }
 
     /**
@@ -8198,6 +9552,16 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collIngresosRelatedByIdauditor) {
+                foreach ($this->collIngresosRelatedByIdauditor as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collIngresosRelatedByIdusuario) {
+                foreach ($this->collIngresosRelatedByIdusuario as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collInventariomessRelatedByIdauditor) {
                 foreach ($this->collInventariomessRelatedByIdauditor as $o) {
                     $o->clearAllReferences($deep);
@@ -8238,6 +9602,11 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collOrdentablajerianotas) {
+                foreach ($this->collOrdentablajerianotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRequisicionsRelatedByIdauditor) {
                 foreach ($this->collRequisicionsRelatedByIdauditor as $o) {
                     $o->clearAllReferences($deep);
@@ -8245,6 +9614,11 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             }
             if ($this->collRequisicionsRelatedByIdusuario) {
                 foreach ($this->collRequisicionsRelatedByIdusuario as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collRequisicionnotas) {
+                foreach ($this->collRequisicionnotas as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -8299,6 +9673,14 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             $this->collDevolucionnotas->clearIterator();
         }
         $this->collDevolucionnotas = null;
+        if ($this->collIngresosRelatedByIdauditor instanceof PropelCollection) {
+            $this->collIngresosRelatedByIdauditor->clearIterator();
+        }
+        $this->collIngresosRelatedByIdauditor = null;
+        if ($this->collIngresosRelatedByIdusuario instanceof PropelCollection) {
+            $this->collIngresosRelatedByIdusuario->clearIterator();
+        }
+        $this->collIngresosRelatedByIdusuario = null;
         if ($this->collInventariomessRelatedByIdauditor instanceof PropelCollection) {
             $this->collInventariomessRelatedByIdauditor->clearIterator();
         }
@@ -8331,6 +9713,10 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             $this->collOrdentablajeriasRelatedByIdusuario->clearIterator();
         }
         $this->collOrdentablajeriasRelatedByIdusuario = null;
+        if ($this->collOrdentablajerianotas instanceof PropelCollection) {
+            $this->collOrdentablajerianotas->clearIterator();
+        }
+        $this->collOrdentablajerianotas = null;
         if ($this->collRequisicionsRelatedByIdauditor instanceof PropelCollection) {
             $this->collRequisicionsRelatedByIdauditor->clearIterator();
         }
@@ -8339,6 +9725,10 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             $this->collRequisicionsRelatedByIdusuario->clearIterator();
         }
         $this->collRequisicionsRelatedByIdusuario = null;
+        if ($this->collRequisicionnotas instanceof PropelCollection) {
+            $this->collRequisicionnotas->clearIterator();
+        }
+        $this->collRequisicionnotas = null;
         if ($this->collUsuarioempresas instanceof PropelCollection) {
             $this->collUsuarioempresas->clearIterator();
         }

@@ -133,6 +133,30 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     protected $ordentablajeria_folio;
 
     /**
+     * The value for the ordentablajeria_esporcion field.
+     * @var        boolean
+     */
+    protected $ordentablajeria_esporcion;
+
+    /**
+     * The value for the ordentablajeria_numeroporciones field.
+     * @var        double
+     */
+    protected $ordentablajeria_numeroporciones;
+
+    /**
+     * The value for the ordentablajeria_fecha field.
+     * @var        string
+     */
+    protected $ordentablajeria_fecha;
+
+    /**
+     * The value for the ordentablajeria_fechacreacion field.
+     * @var        string
+     */
+    protected $ordentablajeria_fechacreacion;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacenRelatedByIdalmacendestino;
@@ -174,6 +198,12 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     protected $collOrdentablajeriadetallesPartial;
 
     /**
+     * @var        PropelObjectCollection|Ordentablajerianota[] Collection to store aggregation of Ordentablajerianota objects.
+     */
+    protected $collOrdentablajerianotas;
+    protected $collOrdentablajerianotasPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -198,6 +228,12 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $ordentablajeriadetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ordentablajerianotasScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -405,6 +441,108 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     {
 
         return $this->ordentablajeria_folio;
+    }
+
+    /**
+     * Get the [ordentablajeria_esporcion] column value.
+     *
+     * @return boolean
+     */
+    public function getOrdentablajeriaEsporcion()
+    {
+
+        return $this->ordentablajeria_esporcion;
+    }
+
+    /**
+     * Get the [ordentablajeria_numeroporciones] column value.
+     *
+     * @return double
+     */
+    public function getOrdentablajeriaNumeroporciones()
+    {
+
+        return $this->ordentablajeria_numeroporciones;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [ordentablajeria_fecha] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getOrdentablajeriaFecha($format = 'Y-m-d H:i:s')
+    {
+        if ($this->ordentablajeria_fecha === null) {
+            return null;
+        }
+
+        if ($this->ordentablajeria_fecha === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->ordentablajeria_fecha);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->ordentablajeria_fecha, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [ordentablajeria_fechacreacion] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getOrdentablajeriaFechacreacion($format = 'Y-m-d H:i:s')
+    {
+        if ($this->ordentablajeria_fechacreacion === null) {
+            return null;
+        }
+
+        if ($this->ordentablajeria_fechacreacion === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->ordentablajeria_fechacreacion);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->ordentablajeria_fechacreacion, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -801,6 +939,102 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     } // setOrdentablajeriaFolio()
 
     /**
+     * Sets the value of the [ordentablajeria_esporcion] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setOrdentablajeriaEsporcion($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->ordentablajeria_esporcion !== $v) {
+            $this->ordentablajeria_esporcion = $v;
+            $this->modifiedColumns[] = OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION;
+        }
+
+
+        return $this;
+    } // setOrdentablajeriaEsporcion()
+
+    /**
+     * Set the value of [ordentablajeria_numeroporciones] column.
+     *
+     * @param  double $v new value
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setOrdentablajeriaNumeroporciones($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->ordentablajeria_numeroporciones !== $v) {
+            $this->ordentablajeria_numeroporciones = $v;
+            $this->modifiedColumns[] = OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES;
+        }
+
+
+        return $this;
+    } // setOrdentablajeriaNumeroporciones()
+
+    /**
+     * Sets the value of [ordentablajeria_fecha] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setOrdentablajeriaFecha($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->ordentablajeria_fecha !== null || $dt !== null) {
+            $currentDateAsString = ($this->ordentablajeria_fecha !== null && $tmpDt = new DateTime($this->ordentablajeria_fecha)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->ordentablajeria_fecha = $newDateAsString;
+                $this->modifiedColumns[] = OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setOrdentablajeriaFecha()
+
+    /**
+     * Sets the value of [ordentablajeria_fechacreacion] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setOrdentablajeriaFechacreacion($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->ordentablajeria_fechacreacion !== null || $dt !== null) {
+            $currentDateAsString = ($this->ordentablajeria_fechacreacion !== null && $tmpDt = new DateTime($this->ordentablajeria_fechacreacion)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->ordentablajeria_fechacreacion = $newDateAsString;
+                $this->modifiedColumns[] = OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setOrdentablajeriaFechacreacion()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -853,6 +1087,10 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->ordentablajeria_aprovechamiento = ($row[$startcol + 14] !== null) ? (double) $row[$startcol + 14] : null;
             $this->ordentablajeria_revisada = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
             $this->ordentablajeria_folio = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->ordentablajeria_esporcion = ($row[$startcol + 17] !== null) ? (boolean) $row[$startcol + 17] : null;
+            $this->ordentablajeria_numeroporciones = ($row[$startcol + 18] !== null) ? (double) $row[$startcol + 18] : null;
+            $this->ordentablajeria_fecha = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
+            $this->ordentablajeria_fechacreacion = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -862,7 +1100,7 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 17; // 17 = OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 21; // 21 = OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Ordentablajeria object", $e);
@@ -953,6 +1191,8 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collOrdentablajeriadetalles = null;
+
+            $this->collOrdentablajerianotas = null;
 
         } // if (deep)
     }
@@ -1149,6 +1389,23 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->ordentablajerianotasScheduledForDeletion !== null) {
+                if (!$this->ordentablajerianotasScheduledForDeletion->isEmpty()) {
+                    OrdentablajerianotaQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajerianotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajerianotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajerianotas !== null) {
+                foreach ($this->collOrdentablajerianotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -1226,6 +1483,18 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO)) {
             $modifiedColumns[':p' . $index++]  = '`ordentablajeria_folio`';
         }
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeria_esporcion`';
+        }
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeria_numeroporciones`';
+        }
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeria_fecha`';
+        }
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeria_fechacreacion`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `ordentablajeria` (%s) VALUES (%s)',
@@ -1287,6 +1556,18 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                         break;
                     case '`ordentablajeria_folio`':
                         $stmt->bindValue($identifier, $this->ordentablajeria_folio, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeria_esporcion`':
+                        $stmt->bindValue($identifier, (int) $this->ordentablajeria_esporcion, PDO::PARAM_INT);
+                        break;
+                    case '`ordentablajeria_numeroporciones`':
+                        $stmt->bindValue($identifier, $this->ordentablajeria_numeroporciones, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeria_fecha`':
+                        $stmt->bindValue($identifier, $this->ordentablajeria_fecha, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeria_fechacreacion`':
+                        $stmt->bindValue($identifier, $this->ordentablajeria_fechacreacion, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1443,6 +1724,14 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collOrdentablajerianotas !== null) {
+                    foreach ($this->collOrdentablajerianotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1529,6 +1818,18 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             case 16:
                 return $this->getOrdentablajeriaFolio();
                 break;
+            case 17:
+                return $this->getOrdentablajeriaEsporcion();
+                break;
+            case 18:
+                return $this->getOrdentablajeriaNumeroporciones();
+                break;
+            case 19:
+                return $this->getOrdentablajeriaFecha();
+                break;
+            case 20:
+                return $this->getOrdentablajeriaFechacreacion();
+                break;
             default:
                 return null;
                 break;
@@ -1575,6 +1876,10 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $keys[14] => $this->getOrdentablajeriaAprovechamiento(),
             $keys[15] => $this->getOrdentablajeriaRevisada(),
             $keys[16] => $this->getOrdentablajeriaFolio(),
+            $keys[17] => $this->getOrdentablajeriaEsporcion(),
+            $keys[18] => $this->getOrdentablajeriaNumeroporciones(),
+            $keys[19] => $this->getOrdentablajeriaFecha(),
+            $keys[20] => $this->getOrdentablajeriaFechacreacion(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1605,6 +1910,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             }
             if (null !== $this->collOrdentablajeriadetalles) {
                 $result['Ordentablajeriadetalles'] = $this->collOrdentablajeriadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdentablajerianotas) {
+                $result['Ordentablajerianotas'] = $this->collOrdentablajerianotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1691,6 +1999,18 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             case 16:
                 $this->setOrdentablajeriaFolio($value);
                 break;
+            case 17:
+                $this->setOrdentablajeriaEsporcion($value);
+                break;
+            case 18:
+                $this->setOrdentablajeriaNumeroporciones($value);
+                break;
+            case 19:
+                $this->setOrdentablajeriaFecha($value);
+                break;
+            case 20:
+                $this->setOrdentablajeriaFechacreacion($value);
+                break;
         } // switch()
     }
 
@@ -1732,6 +2052,10 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if (array_key_exists($keys[14], $arr)) $this->setOrdentablajeriaAprovechamiento($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setOrdentablajeriaRevisada($arr[$keys[15]]);
         if (array_key_exists($keys[16], $arr)) $this->setOrdentablajeriaFolio($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setOrdentablajeriaEsporcion($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setOrdentablajeriaNumeroporciones($arr[$keys[18]]);
+        if (array_key_exists($keys[19], $arr)) $this->setOrdentablajeriaFecha($arr[$keys[19]]);
+        if (array_key_exists($keys[20], $arr)) $this->setOrdentablajeriaFechacreacion($arr[$keys[20]]);
     }
 
     /**
@@ -1760,6 +2084,10 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO, $this->ordentablajeria_aprovechamiento);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA, $this->ordentablajeria_revisada);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO, $this->ordentablajeria_folio);
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION, $this->ordentablajeria_esporcion);
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $this->ordentablajeria_numeroporciones);
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA, $this->ordentablajeria_fecha);
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION, $this->ordentablajeria_fechacreacion);
 
         return $criteria;
     }
@@ -1839,6 +2167,10 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         $copyObj->setOrdentablajeriaAprovechamiento($this->getOrdentablajeriaAprovechamiento());
         $copyObj->setOrdentablajeriaRevisada($this->getOrdentablajeriaRevisada());
         $copyObj->setOrdentablajeriaFolio($this->getOrdentablajeriaFolio());
+        $copyObj->setOrdentablajeriaEsporcion($this->getOrdentablajeriaEsporcion());
+        $copyObj->setOrdentablajeriaNumeroporciones($this->getOrdentablajeriaNumeroporciones());
+        $copyObj->setOrdentablajeriaFecha($this->getOrdentablajeriaFecha());
+        $copyObj->setOrdentablajeriaFechacreacion($this->getOrdentablajeriaFechacreacion());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1850,6 +2182,12 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             foreach ($this->getOrdentablajeriadetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addOrdentablajeriadetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getOrdentablajerianotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajerianota($relObj->copy($deepCopy));
                 }
             }
 
@@ -2281,6 +2619,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ('Ordentablajeriadetalle' == $relationName) {
             $this->initOrdentablajeriadetalles();
         }
+        if ('Ordentablajerianota' == $relationName) {
+            $this->initOrdentablajerianotas();
+        }
     }
 
     /**
@@ -2508,6 +2849,281 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         return $this;
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ordentablajeria is new, it will return
+     * an empty collection; or if this Ordentablajeria has previously
+     * been saved, it will retrieve related Ordentablajeriadetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ordentablajeria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeriadetalle[] List of Ordentablajeriadetalle objects
+     */
+    public function getOrdentablajeriadetallesJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriadetalleQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getOrdentablajeriadetalles($query, $con);
+    }
+
+    /**
+     * Clears out the collOrdentablajerianotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Ordentablajeria The current object (for fluent API support)
+     * @see        addOrdentablajerianotas()
+     */
+    public function clearOrdentablajerianotas()
+    {
+        $this->collOrdentablajerianotas = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajerianotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajerianotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajerianotas($v = true)
+    {
+        $this->collOrdentablajerianotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajerianotas collection.
+     *
+     * By default this just sets the collOrdentablajerianotas collection to an empty array (like clearcollOrdentablajerianotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajerianotas($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajerianotas && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajerianotas = new PropelObjectCollection();
+        $this->collOrdentablajerianotas->setModel('Ordentablajerianota');
+    }
+
+    /**
+     * Gets an array of Ordentablajerianota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Ordentablajeria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajerianota[] List of Ordentablajerianota objects
+     * @throws PropelException
+     */
+    public function getOrdentablajerianotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajerianotasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerianotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerianotas) {
+                // return empty collection
+                $this->initOrdentablajerianotas();
+            } else {
+                $collOrdentablajerianotas = OrdentablajerianotaQuery::create(null, $criteria)
+                    ->filterByOrdentablajeria($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajerianotasPartial && count($collOrdentablajerianotas)) {
+                      $this->initOrdentablajerianotas(false);
+
+                      foreach ($collOrdentablajerianotas as $obj) {
+                        if (false == $this->collOrdentablajerianotas->contains($obj)) {
+                          $this->collOrdentablajerianotas->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajerianotasPartial = true;
+                    }
+
+                    $collOrdentablajerianotas->getInternalIterator()->rewind();
+
+                    return $collOrdentablajerianotas;
+                }
+
+                if ($partial && $this->collOrdentablajerianotas) {
+                    foreach ($this->collOrdentablajerianotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajerianotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajerianotas = $collOrdentablajerianotas;
+                $this->collOrdentablajerianotasPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajerianotas;
+    }
+
+    /**
+     * Sets a collection of Ordentablajerianota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajerianotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setOrdentablajerianotas(PropelCollection $ordentablajerianotas, PropelPDO $con = null)
+    {
+        $ordentablajerianotasToDelete = $this->getOrdentablajerianotas(new Criteria(), $con)->diff($ordentablajerianotas);
+
+
+        $this->ordentablajerianotasScheduledForDeletion = $ordentablajerianotasToDelete;
+
+        foreach ($ordentablajerianotasToDelete as $ordentablajerianotaRemoved) {
+            $ordentablajerianotaRemoved->setOrdentablajeria(null);
+        }
+
+        $this->collOrdentablajerianotas = null;
+        foreach ($ordentablajerianotas as $ordentablajerianota) {
+            $this->addOrdentablajerianota($ordentablajerianota);
+        }
+
+        $this->collOrdentablajerianotas = $ordentablajerianotas;
+        $this->collOrdentablajerianotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajerianota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajerianota objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajerianotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajerianotasPartial && !$this->isNew();
+        if (null === $this->collOrdentablajerianotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajerianotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajerianotas());
+            }
+            $query = OrdentablajerianotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByOrdentablajeria($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajerianotas);
+    }
+
+    /**
+     * Method called to associate a Ordentablajerianota object to this object
+     * through the Ordentablajerianota foreign key attribute.
+     *
+     * @param    Ordentablajerianota $l Ordentablajerianota
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function addOrdentablajerianota(Ordentablajerianota $l)
+    {
+        if ($this->collOrdentablajerianotas === null) {
+            $this->initOrdentablajerianotas();
+            $this->collOrdentablajerianotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajerianotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajerianota($l);
+
+            if ($this->ordentablajerianotasScheduledForDeletion and $this->ordentablajerianotasScheduledForDeletion->contains($l)) {
+                $this->ordentablajerianotasScheduledForDeletion->remove($this->ordentablajerianotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ordentablajerianota $ordentablajerianota The ordentablajerianota object to add.
+     */
+    protected function doAddOrdentablajerianota($ordentablajerianota)
+    {
+        $this->collOrdentablajerianotas[]= $ordentablajerianota;
+        $ordentablajerianota->setOrdentablajeria($this);
+    }
+
+    /**
+     * @param	Ordentablajerianota $ordentablajerianota The ordentablajerianota object to remove.
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function removeOrdentablajerianota($ordentablajerianota)
+    {
+        if ($this->getOrdentablajerianotas()->contains($ordentablajerianota)) {
+            $this->collOrdentablajerianotas->remove($this->collOrdentablajerianotas->search($ordentablajerianota));
+            if (null === $this->ordentablajerianotasScheduledForDeletion) {
+                $this->ordentablajerianotasScheduledForDeletion = clone $this->collOrdentablajerianotas;
+                $this->ordentablajerianotasScheduledForDeletion->clear();
+            }
+            $this->ordentablajerianotasScheduledForDeletion[]= clone $ordentablajerianota;
+            $ordentablajerianota->setOrdentablajeria(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ordentablajeria is new, it will return
+     * an empty collection; or if this Ordentablajeria has previously
+     * been saved, it will retrieve related Ordentablajerianotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ordentablajeria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajerianota[] List of Ordentablajerianota objects
+     */
+    public function getOrdentablajerianotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajerianotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getOrdentablajerianotas($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -2530,6 +3146,10 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         $this->ordentablajeria_aprovechamiento = null;
         $this->ordentablajeria_revisada = null;
         $this->ordentablajeria_folio = null;
+        $this->ordentablajeria_esporcion = null;
+        $this->ordentablajeria_numeroporciones = null;
+        $this->ordentablajeria_fecha = null;
+        $this->ordentablajeria_fechacreacion = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -2555,6 +3175,11 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = true;
             if ($this->collOrdentablajeriadetalles) {
                 foreach ($this->collOrdentablajeriadetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collOrdentablajerianotas) {
+                foreach ($this->collOrdentablajerianotas as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -2587,6 +3212,10 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->collOrdentablajeriadetalles->clearIterator();
         }
         $this->collOrdentablajeriadetalles = null;
+        if ($this->collOrdentablajerianotas instanceof PropelCollection) {
+            $this->collOrdentablajerianotas->clearIterator();
+        }
+        $this->collOrdentablajerianotas = null;
         $this->aAlmacenRelatedByIdalmacendestino = null;
         $this->aAlmacenRelatedByIdalmacenorigen = null;
         $this->aUsuarioRelatedByIdauditor = null;

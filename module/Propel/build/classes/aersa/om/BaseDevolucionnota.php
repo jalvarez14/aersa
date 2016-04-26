@@ -54,6 +54,12 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
     protected $devolucionnota_nota;
 
     /**
+     * The value for the devolucionnota_fecha field.
+     * @var        string
+     */
+    protected $devolucionnota_fecha;
+
+    /**
      * @var        Devolucion
      */
     protected $aDevolucion;
@@ -125,6 +131,46 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
     {
 
         return $this->devolucionnota_nota;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [devolucionnota_fecha] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getDevolucionnotaFecha($format = 'Y-m-d H:i:s')
+    {
+        if ($this->devolucionnota_fecha === null) {
+            return null;
+        }
+
+        if ($this->devolucionnota_fecha === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->devolucionnota_fecha);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->devolucionnota_fecha, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -220,6 +266,29 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
     } // setDevolucionnotaNota()
 
     /**
+     * Sets the value of [devolucionnota_fecha] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Devolucionnota The current object (for fluent API support)
+     */
+    public function setDevolucionnotaFecha($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->devolucionnota_fecha !== null || $dt !== null) {
+            $currentDateAsString = ($this->devolucionnota_fecha !== null && $tmpDt = new DateTime($this->devolucionnota_fecha)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->devolucionnota_fecha = $newDateAsString;
+                $this->modifiedColumns[] = DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setDevolucionnotaFecha()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -255,6 +324,7 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
             $this->iddevolucion = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->idusuario = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->devolucionnota_nota = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->devolucionnota_fecha = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -264,7 +334,7 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 4; // 4 = DevolucionnotaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = DevolucionnotaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Devolucionnota object", $e);
@@ -515,6 +585,9 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA)) {
             $modifiedColumns[':p' . $index++]  = '`devolucionnota_nota`';
         }
+        if ($this->isColumnModified(DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA)) {
+            $modifiedColumns[':p' . $index++]  = '`devolucionnota_fecha`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `devolucionnota` (%s) VALUES (%s)',
@@ -537,6 +610,9 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
                         break;
                     case '`devolucionnota_nota`':
                         $stmt->bindValue($identifier, $this->devolucionnota_nota, PDO::PARAM_STR);
+                        break;
+                    case '`devolucionnota_fecha`':
+                        $stmt->bindValue($identifier, $this->devolucionnota_fecha, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -702,6 +778,9 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
             case 3:
                 return $this->getDevolucionnotaNota();
                 break;
+            case 4:
+                return $this->getDevolucionnotaFecha();
+                break;
             default:
                 return null;
                 break;
@@ -735,6 +814,7 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
             $keys[1] => $this->getIddevolucion(),
             $keys[2] => $this->getIdusuario(),
             $keys[3] => $this->getDevolucionnotaNota(),
+            $keys[4] => $this->getDevolucionnotaFecha(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -794,6 +874,9 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
             case 3:
                 $this->setDevolucionnotaNota($value);
                 break;
+            case 4:
+                $this->setDevolucionnotaFecha($value);
+                break;
         } // switch()
     }
 
@@ -822,6 +905,7 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setIddevolucion($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdusuario($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setDevolucionnotaNota($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setDevolucionnotaFecha($arr[$keys[4]]);
     }
 
     /**
@@ -837,6 +921,7 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionnotaPeer::IDDEVOLUCION)) $criteria->add(DevolucionnotaPeer::IDDEVOLUCION, $this->iddevolucion);
         if ($this->isColumnModified(DevolucionnotaPeer::IDUSUARIO)) $criteria->add(DevolucionnotaPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA)) $criteria->add(DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA, $this->devolucionnota_nota);
+        if ($this->isColumnModified(DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA)) $criteria->add(DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA, $this->devolucionnota_fecha);
 
         return $criteria;
     }
@@ -903,6 +988,7 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
         $copyObj->setIddevolucion($this->getIddevolucion());
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setDevolucionnotaNota($this->getDevolucionnotaNota());
+        $copyObj->setDevolucionnotaFecha($this->getDevolucionnotaFecha());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1074,6 +1160,7 @@ abstract class BaseDevolucionnota extends BaseObject implements Persistent
         $this->iddevolucion = null;
         $this->idusuario = null;
         $this->devolucionnota_nota = null;
+        $this->devolucionnota_fecha = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

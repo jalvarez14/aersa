@@ -42,6 +42,7 @@ class DevolucionnotaTableMap extends TableMap
         $this->addForeignKey('iddevolucion', 'Iddevolucion', 'INTEGER', 'devolucion', 'iddevolucion', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addColumn('devolucionnota_nota', 'DevolucionnotaNota', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('devolucionnota_fecha', 'DevolucionnotaFecha', 'TIMESTAMP', true, null, null);
         // validators
     } // initialize()
 

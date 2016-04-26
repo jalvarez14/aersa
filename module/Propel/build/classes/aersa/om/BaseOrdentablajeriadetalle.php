@@ -43,7 +43,7 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
 
     /**
      * The value for the idproducto field.
-     * @var        string
+     * @var        int
      */
     protected $idproducto;
 
@@ -54,15 +54,45 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
     protected $ordentablajeriadetalle_cantidad;
 
     /**
-     * The value for the ordentablajeriadetalle_porcion field.
+     * The value for the ordentablajeriadetalle_pesoporcion field.
      * @var        double
      */
-    protected $ordentablajeriadetalle_porcion;
+    protected $ordentablajeriadetalle_pesoporcion;
+
+    /**
+     * The value for the ordentablajeriadetalle_precioporcion field.
+     * @var        string
+     */
+    protected $ordentablajeriadetalle_precioporcion;
+
+    /**
+     * The value for the ordentablajeriadetalle_pesototal field.
+     * @var        double
+     */
+    protected $ordentablajeriadetalle_pesototal;
+
+    /**
+     * The value for the ordentablajeriadetalle_subtotal field.
+     * @var        string
+     */
+    protected $ordentablajeriadetalle_subtotal;
+
+    /**
+     * The value for the ordentablajeriadetalle_revisada field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $ordentablajeriadetalle_revisada;
 
     /**
      * @var        Ordentablajeria
      */
     protected $aOrdentablajeria;
+
+    /**
+     * @var        Producto
+     */
+    protected $aProducto;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -83,6 +113,27 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->ordentablajeriadetalle_revisada = false;
+    }
+
+    /**
+     * Initializes internal state of BaseOrdentablajeriadetalle object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idordentablajeriadetalle] column value.
@@ -109,7 +160,7 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
     /**
      * Get the [idproducto] column value.
      *
-     * @return string
+     * @return int
      */
     public function getIdproducto()
     {
@@ -129,14 +180,58 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
     }
 
     /**
-     * Get the [ordentablajeriadetalle_porcion] column value.
+     * Get the [ordentablajeriadetalle_pesoporcion] column value.
      *
      * @return double
      */
-    public function getOrdentablajeriadetallePorcion()
+    public function getOrdentablajeriadetallePesoporcion()
     {
 
-        return $this->ordentablajeriadetalle_porcion;
+        return $this->ordentablajeriadetalle_pesoporcion;
+    }
+
+    /**
+     * Get the [ordentablajeriadetalle_precioporcion] column value.
+     *
+     * @return string
+     */
+    public function getOrdentablajeriadetallePrecioporcion()
+    {
+
+        return $this->ordentablajeriadetalle_precioporcion;
+    }
+
+    /**
+     * Get the [ordentablajeriadetalle_pesototal] column value.
+     *
+     * @return double
+     */
+    public function getOrdentablajeriadetallePesototal()
+    {
+
+        return $this->ordentablajeriadetalle_pesototal;
+    }
+
+    /**
+     * Get the [ordentablajeriadetalle_subtotal] column value.
+     *
+     * @return string
+     */
+    public function getOrdentablajeriadetalleSubtotal()
+    {
+
+        return $this->ordentablajeriadetalle_subtotal;
+    }
+
+    /**
+     * Get the [ordentablajeriadetalle_revisada] column value.
+     *
+     * @return boolean
+     */
+    public function getOrdentablajeriadetalleRevisada()
+    {
+
+        return $this->ordentablajeriadetalle_revisada;
     }
 
     /**
@@ -188,18 +283,22 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
     /**
      * Set the value of [idproducto] column.
      *
-     * @param  string $v new value
+     * @param  int $v new value
      * @return Ordentablajeriadetalle The current object (for fluent API support)
      */
     public function setIdproducto($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
         }
 
         if ($this->idproducto !== $v) {
             $this->idproducto = $v;
             $this->modifiedColumns[] = OrdentablajeriadetallePeer::IDPRODUCTO;
+        }
+
+        if ($this->aProducto !== null && $this->aProducto->getIdproducto() !== $v) {
+            $this->aProducto = null;
         }
 
 
@@ -228,25 +327,117 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
     } // setOrdentablajeriadetalleCantidad()
 
     /**
-     * Set the value of [ordentablajeriadetalle_porcion] column.
+     * Set the value of [ordentablajeriadetalle_pesoporcion] column.
      *
      * @param  double $v new value
      * @return Ordentablajeriadetalle The current object (for fluent API support)
      */
-    public function setOrdentablajeriadetallePorcion($v)
+    public function setOrdentablajeriadetallePesoporcion($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (double) $v;
         }
 
-        if ($this->ordentablajeriadetalle_porcion !== $v) {
-            $this->ordentablajeriadetalle_porcion = $v;
-            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION;
+        if ($this->ordentablajeriadetalle_pesoporcion !== $v) {
+            $this->ordentablajeriadetalle_pesoporcion = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION;
         }
 
 
         return $this;
-    } // setOrdentablajeriadetallePorcion()
+    } // setOrdentablajeriadetallePesoporcion()
+
+    /**
+     * Set the value of [ordentablajeriadetalle_precioporcion] column.
+     *
+     * @param  string $v new value
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
+     */
+    public function setOrdentablajeriadetallePrecioporcion($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->ordentablajeriadetalle_precioporcion !== $v) {
+            $this->ordentablajeriadetalle_precioporcion = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION;
+        }
+
+
+        return $this;
+    } // setOrdentablajeriadetallePrecioporcion()
+
+    /**
+     * Set the value of [ordentablajeriadetalle_pesototal] column.
+     *
+     * @param  double $v new value
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
+     */
+    public function setOrdentablajeriadetallePesototal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->ordentablajeriadetalle_pesototal !== $v) {
+            $this->ordentablajeriadetalle_pesototal = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL;
+        }
+
+
+        return $this;
+    } // setOrdentablajeriadetallePesototal()
+
+    /**
+     * Set the value of [ordentablajeriadetalle_subtotal] column.
+     *
+     * @param  string $v new value
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
+     */
+    public function setOrdentablajeriadetalleSubtotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->ordentablajeriadetalle_subtotal !== $v) {
+            $this->ordentablajeriadetalle_subtotal = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL;
+        }
+
+
+        return $this;
+    } // setOrdentablajeriadetalleSubtotal()
+
+    /**
+     * Sets the value of the [ordentablajeriadetalle_revisada] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
+     */
+    public function setOrdentablajeriadetalleRevisada($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->ordentablajeriadetalle_revisada !== $v) {
+            $this->ordentablajeriadetalle_revisada = $v;
+            $this->modifiedColumns[] = OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA;
+        }
+
+
+        return $this;
+    } // setOrdentablajeriadetalleRevisada()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -258,6 +449,10 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->ordentablajeriadetalle_revisada !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -282,9 +477,13 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
 
             $this->idordentablajeriadetalle = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->idordentablajeria = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idproducto = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+            $this->idproducto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->ordentablajeriadetalle_cantidad = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
-            $this->ordentablajeriadetalle_porcion = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
+            $this->ordentablajeriadetalle_pesoporcion = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
+            $this->ordentablajeriadetalle_precioporcion = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+            $this->ordentablajeriadetalle_pesototal = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->ordentablajeriadetalle_subtotal = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->ordentablajeriadetalle_revisada = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -294,7 +493,7 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = OrdentablajeriadetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = OrdentablajeriadetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Ordentablajeriadetalle object", $e);
@@ -319,6 +518,9 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
 
         if ($this->aOrdentablajeria !== null && $this->idordentablajeria !== $this->aOrdentablajeria->getIdordentablajeria()) {
             $this->aOrdentablajeria = null;
+        }
+        if ($this->aProducto !== null && $this->idproducto !== $this->aProducto->getIdproducto()) {
+            $this->aProducto = null;
         }
     } // ensureConsistency
 
@@ -360,6 +562,7 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
         if ($deep) {  // also de-associate any related objects?
 
             $this->aOrdentablajeria = null;
+            $this->aProducto = null;
         } // if (deep)
     }
 
@@ -485,6 +688,13 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
                 $this->setOrdentablajeria($this->aOrdentablajeria);
             }
 
+            if ($this->aProducto !== null) {
+                if ($this->aProducto->isModified() || $this->aProducto->isNew()) {
+                    $affectedRows += $this->aProducto->save($con);
+                }
+                $this->setProducto($this->aProducto);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -534,8 +744,20 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
         if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD)) {
             $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_cantidad`';
         }
-        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION)) {
-            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_porcion`';
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_pesoporcion`';
+        }
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_precioporcion`';
+        }
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_pesototal`';
+        }
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_subtotal`';
+        }
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeriadetalle_revisada`';
         }
 
         $sql = sprintf(
@@ -555,13 +777,25 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
                         $stmt->bindValue($identifier, $this->idordentablajeria, PDO::PARAM_INT);
                         break;
                     case '`idproducto`':
-                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_INT);
                         break;
                     case '`ordentablajeriadetalle_cantidad`':
                         $stmt->bindValue($identifier, $this->ordentablajeriadetalle_cantidad, PDO::PARAM_STR);
                         break;
-                    case '`ordentablajeriadetalle_porcion`':
-                        $stmt->bindValue($identifier, $this->ordentablajeriadetalle_porcion, PDO::PARAM_STR);
+                    case '`ordentablajeriadetalle_pesoporcion`':
+                        $stmt->bindValue($identifier, $this->ordentablajeriadetalle_pesoporcion, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeriadetalle_precioporcion`':
+                        $stmt->bindValue($identifier, $this->ordentablajeriadetalle_precioporcion, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeriadetalle_pesototal`':
+                        $stmt->bindValue($identifier, $this->ordentablajeriadetalle_pesototal, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeriadetalle_subtotal`':
+                        $stmt->bindValue($identifier, $this->ordentablajeriadetalle_subtotal, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeriadetalle_revisada`':
+                        $stmt->bindValue($identifier, (int) $this->ordentablajeriadetalle_revisada, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -668,6 +902,12 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
                 }
             }
 
+            if ($this->aProducto !== null) {
+                if (!$this->aProducto->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aProducto->getValidationFailures());
+                }
+            }
+
 
             if (($retval = OrdentablajeriadetallePeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
@@ -722,7 +962,19 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
                 return $this->getOrdentablajeriadetalleCantidad();
                 break;
             case 4:
-                return $this->getOrdentablajeriadetallePorcion();
+                return $this->getOrdentablajeriadetallePesoporcion();
+                break;
+            case 5:
+                return $this->getOrdentablajeriadetallePrecioporcion();
+                break;
+            case 6:
+                return $this->getOrdentablajeriadetallePesototal();
+                break;
+            case 7:
+                return $this->getOrdentablajeriadetalleSubtotal();
+                break;
+            case 8:
+                return $this->getOrdentablajeriadetalleRevisada();
                 break;
             default:
                 return null;
@@ -757,7 +1009,11 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
             $keys[1] => $this->getIdordentablajeria(),
             $keys[2] => $this->getIdproducto(),
             $keys[3] => $this->getOrdentablajeriadetalleCantidad(),
-            $keys[4] => $this->getOrdentablajeriadetallePorcion(),
+            $keys[4] => $this->getOrdentablajeriadetallePesoporcion(),
+            $keys[5] => $this->getOrdentablajeriadetallePrecioporcion(),
+            $keys[6] => $this->getOrdentablajeriadetallePesototal(),
+            $keys[7] => $this->getOrdentablajeriadetalleSubtotal(),
+            $keys[8] => $this->getOrdentablajeriadetalleRevisada(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -767,6 +1023,9 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
         if ($includeForeignObjects) {
             if (null !== $this->aOrdentablajeria) {
                 $result['Ordentablajeria'] = $this->aOrdentablajeria->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aProducto) {
+                $result['Producto'] = $this->aProducto->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -815,7 +1074,19 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
                 $this->setOrdentablajeriadetalleCantidad($value);
                 break;
             case 4:
-                $this->setOrdentablajeriadetallePorcion($value);
+                $this->setOrdentablajeriadetallePesoporcion($value);
+                break;
+            case 5:
+                $this->setOrdentablajeriadetallePrecioporcion($value);
+                break;
+            case 6:
+                $this->setOrdentablajeriadetallePesototal($value);
+                break;
+            case 7:
+                $this->setOrdentablajeriadetalleSubtotal($value);
+                break;
+            case 8:
+                $this->setOrdentablajeriadetalleRevisada($value);
                 break;
         } // switch()
     }
@@ -845,7 +1116,11 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
         if (array_key_exists($keys[1], $arr)) $this->setIdordentablajeria($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdproducto($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setOrdentablajeriadetalleCantidad($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setOrdentablajeriadetallePorcion($arr[$keys[4]]);
+        if (array_key_exists($keys[4], $arr)) $this->setOrdentablajeriadetallePesoporcion($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setOrdentablajeriadetallePrecioporcion($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setOrdentablajeriadetallePesototal($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setOrdentablajeriadetalleSubtotal($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setOrdentablajeriadetalleRevisada($arr[$keys[8]]);
     }
 
     /**
@@ -861,7 +1136,11 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
         if ($this->isColumnModified(OrdentablajeriadetallePeer::IDORDENTABLAJERIA)) $criteria->add(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, $this->idordentablajeria);
         if ($this->isColumnModified(OrdentablajeriadetallePeer::IDPRODUCTO)) $criteria->add(OrdentablajeriadetallePeer::IDPRODUCTO, $this->idproducto);
         if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD, $this->ordentablajeriadetalle_cantidad);
-        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION, $this->ordentablajeriadetalle_porcion);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION, $this->ordentablajeriadetalle_pesoporcion);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION, $this->ordentablajeriadetalle_precioporcion);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL, $this->ordentablajeriadetalle_pesototal);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL, $this->ordentablajeriadetalle_subtotal);
+        if ($this->isColumnModified(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA)) $criteria->add(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA, $this->ordentablajeriadetalle_revisada);
 
         return $criteria;
     }
@@ -928,7 +1207,11 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
         $copyObj->setIdordentablajeria($this->getIdordentablajeria());
         $copyObj->setIdproducto($this->getIdproducto());
         $copyObj->setOrdentablajeriadetalleCantidad($this->getOrdentablajeriadetalleCantidad());
-        $copyObj->setOrdentablajeriadetallePorcion($this->getOrdentablajeriadetallePorcion());
+        $copyObj->setOrdentablajeriadetallePesoporcion($this->getOrdentablajeriadetallePesoporcion());
+        $copyObj->setOrdentablajeriadetallePrecioporcion($this->getOrdentablajeriadetallePrecioporcion());
+        $copyObj->setOrdentablajeriadetallePesototal($this->getOrdentablajeriadetallePesototal());
+        $copyObj->setOrdentablajeriadetalleSubtotal($this->getOrdentablajeriadetalleSubtotal());
+        $copyObj->setOrdentablajeriadetalleRevisada($this->getOrdentablajeriadetalleRevisada());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1040,6 +1323,58 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
     }
 
     /**
+     * Declares an association between this object and a Producto object.
+     *
+     * @param                  Producto $v
+     * @return Ordentablajeriadetalle The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setProducto(Producto $v = null)
+    {
+        if ($v === null) {
+            $this->setIdproducto(NULL);
+        } else {
+            $this->setIdproducto($v->getIdproducto());
+        }
+
+        $this->aProducto = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Producto object, it will not be re-added.
+        if ($v !== null) {
+            $v->addOrdentablajeriadetalle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Producto object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Producto The associated Producto object.
+     * @throws PropelException
+     */
+    public function getProducto(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aProducto === null && ($this->idproducto !== null) && $doQuery) {
+            $this->aProducto = ProductoQuery::create()->findPk($this->idproducto, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aProducto->addOrdentablajeriadetalles($this);
+             */
+        }
+
+        return $this->aProducto;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1048,11 +1383,16 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
         $this->idordentablajeria = null;
         $this->idproducto = null;
         $this->ordentablajeriadetalle_cantidad = null;
-        $this->ordentablajeriadetalle_porcion = null;
+        $this->ordentablajeriadetalle_pesoporcion = null;
+        $this->ordentablajeriadetalle_precioporcion = null;
+        $this->ordentablajeriadetalle_pesototal = null;
+        $this->ordentablajeriadetalle_subtotal = null;
+        $this->ordentablajeriadetalle_revisada = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1074,11 +1414,15 @@ abstract class BaseOrdentablajeriadetalle extends BaseObject implements Persiste
             if ($this->aOrdentablajeria instanceof Persistent) {
               $this->aOrdentablajeria->clearAllReferences($deep);
             }
+            if ($this->aProducto instanceof Persistent) {
+              $this->aProducto->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
         $this->aOrdentablajeria = null;
+        $this->aProducto = null;
     }
 
     /**

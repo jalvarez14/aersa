@@ -23,6 +23,10 @@
  * @method OrdentablajeriaQuery orderByOrdentablajeriaAprovechamiento($order = Criteria::ASC) Order by the ordentablajeria_aprovechamiento column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaRevisada($order = Criteria::ASC) Order by the ordentablajeria_revisada column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaFolio($order = Criteria::ASC) Order by the ordentablajeria_folio column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaEsporcion($order = Criteria::ASC) Order by the ordentablajeria_esporcion column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaNumeroporciones($order = Criteria::ASC) Order by the ordentablajeria_numeroporciones column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaFecha($order = Criteria::ASC) Order by the ordentablajeria_fecha column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaFechacreacion($order = Criteria::ASC) Order by the ordentablajeria_fechacreacion column
  *
  * @method OrdentablajeriaQuery groupByIdordentablajeria() Group by the idordentablajeria column
  * @method OrdentablajeriaQuery groupByIdempresa() Group by the idempresa column
@@ -41,6 +45,10 @@
  * @method OrdentablajeriaQuery groupByOrdentablajeriaAprovechamiento() Group by the ordentablajeria_aprovechamiento column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaRevisada() Group by the ordentablajeria_revisada column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaFolio() Group by the ordentablajeria_folio column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaEsporcion() Group by the ordentablajeria_esporcion column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaNumeroporciones() Group by the ordentablajeria_numeroporciones column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaFecha() Group by the ordentablajeria_fecha column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaFechacreacion() Group by the ordentablajeria_fechacreacion column
  *
  * @method OrdentablajeriaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method OrdentablajeriaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -78,6 +86,10 @@
  * @method OrdentablajeriaQuery rightJoinOrdentablajeriadetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeriadetalle relation
  * @method OrdentablajeriaQuery innerJoinOrdentablajeriadetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeriadetalle relation
  *
+ * @method OrdentablajeriaQuery leftJoinOrdentablajerianota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajerianota relation
+ * @method OrdentablajeriaQuery rightJoinOrdentablajerianota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajerianota relation
+ * @method OrdentablajeriaQuery innerJoinOrdentablajerianota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajerianota relation
+ *
  * @method Ordentablajeria findOne(PropelPDO $con = null) Return the first Ordentablajeria matching the query
  * @method Ordentablajeria findOneOrCreate(PropelPDO $con = null) Return the first Ordentablajeria matching the query, or a new Ordentablajeria object populated from the query conditions when no match is found
  *
@@ -97,6 +109,10 @@
  * @method Ordentablajeria findOneByOrdentablajeriaAprovechamiento(double $ordentablajeria_aprovechamiento) Return the first Ordentablajeria filtered by the ordentablajeria_aprovechamiento column
  * @method Ordentablajeria findOneByOrdentablajeriaRevisada(boolean $ordentablajeria_revisada) Return the first Ordentablajeria filtered by the ordentablajeria_revisada column
  * @method Ordentablajeria findOneByOrdentablajeriaFolio(string $ordentablajeria_folio) Return the first Ordentablajeria filtered by the ordentablajeria_folio column
+ * @method Ordentablajeria findOneByOrdentablajeriaEsporcion(boolean $ordentablajeria_esporcion) Return the first Ordentablajeria filtered by the ordentablajeria_esporcion column
+ * @method Ordentablajeria findOneByOrdentablajeriaNumeroporciones(double $ordentablajeria_numeroporciones) Return the first Ordentablajeria filtered by the ordentablajeria_numeroporciones column
+ * @method Ordentablajeria findOneByOrdentablajeriaFecha(string $ordentablajeria_fecha) Return the first Ordentablajeria filtered by the ordentablajeria_fecha column
+ * @method Ordentablajeria findOneByOrdentablajeriaFechacreacion(string $ordentablajeria_fechacreacion) Return the first Ordentablajeria filtered by the ordentablajeria_fechacreacion column
  *
  * @method array findByIdordentablajeria(int $idordentablajeria) Return Ordentablajeria objects filtered by the idordentablajeria column
  * @method array findByIdempresa(int $idempresa) Return Ordentablajeria objects filtered by the idempresa column
@@ -115,6 +131,10 @@
  * @method array findByOrdentablajeriaAprovechamiento(double $ordentablajeria_aprovechamiento) Return Ordentablajeria objects filtered by the ordentablajeria_aprovechamiento column
  * @method array findByOrdentablajeriaRevisada(boolean $ordentablajeria_revisada) Return Ordentablajeria objects filtered by the ordentablajeria_revisada column
  * @method array findByOrdentablajeriaFolio(string $ordentablajeria_folio) Return Ordentablajeria objects filtered by the ordentablajeria_folio column
+ * @method array findByOrdentablajeriaEsporcion(boolean $ordentablajeria_esporcion) Return Ordentablajeria objects filtered by the ordentablajeria_esporcion column
+ * @method array findByOrdentablajeriaNumeroporciones(double $ordentablajeria_numeroporciones) Return Ordentablajeria objects filtered by the ordentablajeria_numeroporciones column
+ * @method array findByOrdentablajeriaFecha(string $ordentablajeria_fecha) Return Ordentablajeria objects filtered by the ordentablajeria_fecha column
+ * @method array findByOrdentablajeriaFechacreacion(string $ordentablajeria_fechacreacion) Return Ordentablajeria objects filtered by the ordentablajeria_fechacreacion column
  *
  * @package    propel.generator.aersa.om
  */
@@ -222,7 +242,7 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
+        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio`, `ordentablajeria_esporcion`, `ordentablajeria_numeroporciones`, `ordentablajeria_fecha`, `ordentablajeria_fechacreacion` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1012,6 +1032,161 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the ordentablajeria_esporcion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaEsporcion(true); // WHERE ordentablajeria_esporcion = true
+     * $query->filterByOrdentablajeriaEsporcion('yes'); // WHERE ordentablajeria_esporcion = true
+     * </code>
+     *
+     * @param     boolean|string $ordentablajeriaEsporcion The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaEsporcion($ordentablajeriaEsporcion = null, $comparison = null)
+    {
+        if (is_string($ordentablajeriaEsporcion)) {
+            $ordentablajeriaEsporcion = in_array(strtolower($ordentablajeriaEsporcion), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION, $ordentablajeriaEsporcion, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeria_numeroporciones column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaNumeroporciones(1234); // WHERE ordentablajeria_numeroporciones = 1234
+     * $query->filterByOrdentablajeriaNumeroporciones(array(12, 34)); // WHERE ordentablajeria_numeroporciones IN (12, 34)
+     * $query->filterByOrdentablajeriaNumeroporciones(array('min' => 12)); // WHERE ordentablajeria_numeroporciones >= 12
+     * $query->filterByOrdentablajeriaNumeroporciones(array('max' => 12)); // WHERE ordentablajeria_numeroporciones <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriaNumeroporciones The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaNumeroporciones($ordentablajeriaNumeroporciones = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriaNumeroporciones)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriaNumeroporciones['min'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriaNumeroporciones['max'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeria_fecha column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaFecha('2011-03-14'); // WHERE ordentablajeria_fecha = '2011-03-14'
+     * $query->filterByOrdentablajeriaFecha('now'); // WHERE ordentablajeria_fecha = '2011-03-14'
+     * $query->filterByOrdentablajeriaFecha(array('max' => 'yesterday')); // WHERE ordentablajeria_fecha < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $ordentablajeriaFecha The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaFecha($ordentablajeriaFecha = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriaFecha)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriaFecha['min'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA, $ordentablajeriaFecha['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriaFecha['max'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA, $ordentablajeriaFecha['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA, $ordentablajeriaFecha, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeria_fechacreacion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaFechacreacion('2011-03-14'); // WHERE ordentablajeria_fechacreacion = '2011-03-14'
+     * $query->filterByOrdentablajeriaFechacreacion('now'); // WHERE ordentablajeria_fechacreacion = '2011-03-14'
+     * $query->filterByOrdentablajeriaFechacreacion(array('max' => 'yesterday')); // WHERE ordentablajeria_fechacreacion < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $ordentablajeriaFechacreacion The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaFechacreacion($ordentablajeriaFechacreacion = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriaFechacreacion)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriaFechacreacion['min'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION, $ordentablajeriaFechacreacion['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriaFechacreacion['max'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION, $ordentablajeriaFechacreacion['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION, $ordentablajeriaFechacreacion, $comparison);
+    }
+
+    /**
      * Filter the query by a related Almacen object
      *
      * @param   Almacen|PropelObjectCollection $almacen The related object(s) to use as filter
@@ -1615,6 +1790,80 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
         return $this
             ->joinOrdentablajeriadetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ordentablajeriadetalle', 'OrdentablajeriadetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajerianota object
+     *
+     * @param   Ordentablajerianota|PropelObjectCollection $ordentablajerianota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 OrdentablajeriaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajerianota($ordentablajerianota, $comparison = null)
+    {
+        if ($ordentablajerianota instanceof Ordentablajerianota) {
+            return $this
+                ->addUsingAlias(OrdentablajeriaPeer::IDORDENTABLAJERIA, $ordentablajerianota->getIdordentablajeria(), $comparison);
+        } elseif ($ordentablajerianota instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajerianotaQuery()
+                ->filterByPrimaryKeys($ordentablajerianota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajerianota() only accepts arguments of type Ordentablajerianota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ordentablajerianota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajerianota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ordentablajerianota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ordentablajerianota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ordentablajerianota relation Ordentablajerianota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajerianotaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajerianotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajerianota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ordentablajerianota', 'OrdentablajerianotaQuery');
     }
 
     /**

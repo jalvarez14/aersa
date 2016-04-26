@@ -10,11 +10,13 @@
  * @method CompranotaQuery orderByIdcompra($order = Criteria::ASC) Order by the idcompra column
  * @method CompranotaQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method CompranotaQuery orderByCompranotaNota($order = Criteria::ASC) Order by the compranota_nota column
+ * @method CompranotaQuery orderByCompranotaFecha($order = Criteria::ASC) Order by the compranota_fecha column
  *
  * @method CompranotaQuery groupByIdcompranota() Group by the idcompranota column
  * @method CompranotaQuery groupByIdcompra() Group by the idcompra column
  * @method CompranotaQuery groupByIdusuario() Group by the idusuario column
  * @method CompranotaQuery groupByCompranotaNota() Group by the compranota_nota column
+ * @method CompranotaQuery groupByCompranotaFecha() Group by the compranota_fecha column
  *
  * @method CompranotaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CompranotaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -34,11 +36,13 @@
  * @method Compranota findOneByIdcompra(int $idcompra) Return the first Compranota filtered by the idcompra column
  * @method Compranota findOneByIdusuario(int $idusuario) Return the first Compranota filtered by the idusuario column
  * @method Compranota findOneByCompranotaNota(string $compranota_nota) Return the first Compranota filtered by the compranota_nota column
+ * @method Compranota findOneByCompranotaFecha(string $compranota_fecha) Return the first Compranota filtered by the compranota_fecha column
  *
  * @method array findByIdcompranota(int $idcompranota) Return Compranota objects filtered by the idcompranota column
  * @method array findByIdcompra(int $idcompra) Return Compranota objects filtered by the idcompra column
  * @method array findByIdusuario(int $idusuario) Return Compranota objects filtered by the idusuario column
  * @method array findByCompranotaNota(string $compranota_nota) Return Compranota objects filtered by the compranota_nota column
+ * @method array findByCompranotaFecha(string $compranota_fecha) Return Compranota objects filtered by the compranota_fecha column
  *
  * @package    propel.generator.aersa.om
  */
@@ -146,7 +150,7 @@ abstract class BaseCompranotaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompranota`, `idcompra`, `idusuario`, `compranota_nota` FROM `compranota` WHERE `idcompranota` = :p0';
+        $sql = 'SELECT `idcompranota`, `idcompra`, `idusuario`, `compranota_nota`, `compranota_fecha` FROM `compranota` WHERE `idcompranota` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -392,6 +396,49 @@ abstract class BaseCompranotaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompranotaPeer::COMPRANOTA_NOTA, $compranotaNota, $comparison);
+    }
+
+    /**
+     * Filter the query on the compranota_fecha column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompranotaFecha('2011-03-14'); // WHERE compranota_fecha = '2011-03-14'
+     * $query->filterByCompranotaFecha('now'); // WHERE compranota_fecha = '2011-03-14'
+     * $query->filterByCompranotaFecha(array('max' => 'yesterday')); // WHERE compranota_fecha < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $compranotaFecha The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompranotaQuery The current query, for fluid interface
+     */
+    public function filterByCompranotaFecha($compranotaFecha = null, $comparison = null)
+    {
+        if (is_array($compranotaFecha)) {
+            $useMinMax = false;
+            if (isset($compranotaFecha['min'])) {
+                $this->addUsingAlias(CompranotaPeer::COMPRANOTA_FECHA, $compranotaFecha['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($compranotaFecha['max'])) {
+                $this->addUsingAlias(CompranotaPeer::COMPRANOTA_FECHA, $compranotaFecha['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompranotaPeer::COMPRANOTA_FECHA, $compranotaFecha, $comparison);
     }
 
     /**

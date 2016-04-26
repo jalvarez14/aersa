@@ -24,13 +24,13 @@ abstract class BaseDevolucionnotaPeer
     const TM_CLASS = 'DevolucionnotaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the iddevolucionnota field */
     const IDDEVOLUCIONNOTA = 'devolucionnota.iddevolucionnota';
@@ -43,6 +43,9 @@ abstract class BaseDevolucionnotaPeer
 
     /** the column name for the devolucionnota_nota field */
     const DEVOLUCIONNOTA_NOTA = 'devolucionnota.devolucionnota_nota';
+
+    /** the column name for the devolucionnota_fecha field */
+    const DEVOLUCIONNOTA_FECHA = 'devolucionnota.devolucionnota_fecha';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -63,12 +66,12 @@ abstract class BaseDevolucionnotaPeer
      * e.g. DevolucionnotaPeer::$fieldNames[DevolucionnotaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevolucionnota', 'Iddevolucion', 'Idusuario', 'DevolucionnotaNota', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucionnota', 'iddevolucion', 'idusuario', 'devolucionnotaNota', ),
-        BasePeer::TYPE_COLNAME => array (DevolucionnotaPeer::IDDEVOLUCIONNOTA, DevolucionnotaPeer::IDDEVOLUCION, DevolucionnotaPeer::IDUSUARIO, DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONNOTA', 'IDDEVOLUCION', 'IDUSUARIO', 'DEVOLUCIONNOTA_NOTA', ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevolucionnota', 'iddevolucion', 'idusuario', 'devolucionnota_nota', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevolucionnota', 'Iddevolucion', 'Idusuario', 'DevolucionnotaNota', 'DevolucionnotaFecha', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucionnota', 'iddevolucion', 'idusuario', 'devolucionnotaNota', 'devolucionnotaFecha', ),
+        BasePeer::TYPE_COLNAME => array (DevolucionnotaPeer::IDDEVOLUCIONNOTA, DevolucionnotaPeer::IDDEVOLUCION, DevolucionnotaPeer::IDUSUARIO, DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA, DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONNOTA', 'IDDEVOLUCION', 'IDUSUARIO', 'DEVOLUCIONNOTA_NOTA', 'DEVOLUCIONNOTA_FECHA', ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevolucionnota', 'iddevolucion', 'idusuario', 'devolucionnota_nota', 'devolucionnota_fecha', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -78,12 +81,12 @@ abstract class BaseDevolucionnotaPeer
      * e.g. DevolucionnotaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevolucionnota' => 0, 'Iddevolucion' => 1, 'Idusuario' => 2, 'DevolucionnotaNota' => 3, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucionnota' => 0, 'iddevolucion' => 1, 'idusuario' => 2, 'devolucionnotaNota' => 3, ),
-        BasePeer::TYPE_COLNAME => array (DevolucionnotaPeer::IDDEVOLUCIONNOTA => 0, DevolucionnotaPeer::IDDEVOLUCION => 1, DevolucionnotaPeer::IDUSUARIO => 2, DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA => 3, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONNOTA' => 0, 'IDDEVOLUCION' => 1, 'IDUSUARIO' => 2, 'DEVOLUCIONNOTA_NOTA' => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevolucionnota' => 0, 'iddevolucion' => 1, 'idusuario' => 2, 'devolucionnota_nota' => 3, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevolucionnota' => 0, 'Iddevolucion' => 1, 'Idusuario' => 2, 'DevolucionnotaNota' => 3, 'DevolucionnotaFecha' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucionnota' => 0, 'iddevolucion' => 1, 'idusuario' => 2, 'devolucionnotaNota' => 3, 'devolucionnotaFecha' => 4, ),
+        BasePeer::TYPE_COLNAME => array (DevolucionnotaPeer::IDDEVOLUCIONNOTA => 0, DevolucionnotaPeer::IDDEVOLUCION => 1, DevolucionnotaPeer::IDUSUARIO => 2, DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA => 3, DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONNOTA' => 0, 'IDDEVOLUCION' => 1, 'IDUSUARIO' => 2, 'DEVOLUCIONNOTA_NOTA' => 3, 'DEVOLUCIONNOTA_FECHA' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevolucionnota' => 0, 'iddevolucion' => 1, 'idusuario' => 2, 'devolucionnota_nota' => 3, 'devolucionnota_fecha' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -161,11 +164,13 @@ abstract class BaseDevolucionnotaPeer
             $criteria->addSelectColumn(DevolucionnotaPeer::IDDEVOLUCION);
             $criteria->addSelectColumn(DevolucionnotaPeer::IDUSUARIO);
             $criteria->addSelectColumn(DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA);
+            $criteria->addSelectColumn(DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA);
         } else {
             $criteria->addSelectColumn($alias . '.iddevolucionnota');
             $criteria->addSelectColumn($alias . '.iddevolucion');
             $criteria->addSelectColumn($alias . '.idusuario');
             $criteria->addSelectColumn($alias . '.devolucionnota_nota');
+            $criteria->addSelectColumn($alias . '.devolucionnota_fecha');
         }
     }
 

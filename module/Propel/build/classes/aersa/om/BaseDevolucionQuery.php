@@ -12,6 +12,7 @@
  * @method DevolucionQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method DevolucionQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method DevolucionQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
+ * @method DevolucionQuery orderByIdproveedor($order = Criteria::ASC) Order by the idproveedor column
  * @method DevolucionQuery orderByDevolucionFolio($order = Criteria::ASC) Order by the devolucion_folio column
  * @method DevolucionQuery orderByDevolucionRevisada($order = Criteria::ASC) Order by the devolucion_revisada column
  * @method DevolucionQuery orderByDevolucionFactura($order = Criteria::ASC) Order by the devolucion_factura column
@@ -27,6 +28,7 @@
  * @method DevolucionQuery groupByIdusuario() Group by the idusuario column
  * @method DevolucionQuery groupByIdauditor() Group by the idauditor column
  * @method DevolucionQuery groupByIdalmacen() Group by the idalmacen column
+ * @method DevolucionQuery groupByIdproveedor() Group by the idproveedor column
  * @method DevolucionQuery groupByDevolucionFolio() Group by the devolucion_folio column
  * @method DevolucionQuery groupByDevolucionRevisada() Group by the devolucion_revisada column
  * @method DevolucionQuery groupByDevolucionFactura() Group by the devolucion_factura column
@@ -52,6 +54,10 @@
  * @method DevolucionQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
  * @method DevolucionQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
  *
+ * @method DevolucionQuery leftJoinProveedor($relationAlias = null) Adds a LEFT JOIN clause to the query using the Proveedor relation
+ * @method DevolucionQuery rightJoinProveedor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Proveedor relation
+ * @method DevolucionQuery innerJoinProveedor($relationAlias = null) Adds a INNER JOIN clause to the query using the Proveedor relation
+ *
  * @method DevolucionQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
  * @method DevolucionQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
  * @method DevolucionQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
@@ -76,6 +82,7 @@
  * @method Devolucion findOneByIdusuario(int $idusuario) Return the first Devolucion filtered by the idusuario column
  * @method Devolucion findOneByIdauditor(int $idauditor) Return the first Devolucion filtered by the idauditor column
  * @method Devolucion findOneByIdalmacen(int $idalmacen) Return the first Devolucion filtered by the idalmacen column
+ * @method Devolucion findOneByIdproveedor(int $idproveedor) Return the first Devolucion filtered by the idproveedor column
  * @method Devolucion findOneByDevolucionFolio(string $devolucion_folio) Return the first Devolucion filtered by the devolucion_folio column
  * @method Devolucion findOneByDevolucionRevisada(boolean $devolucion_revisada) Return the first Devolucion filtered by the devolucion_revisada column
  * @method Devolucion findOneByDevolucionFactura(string $devolucion_factura) Return the first Devolucion filtered by the devolucion_factura column
@@ -91,6 +98,7 @@
  * @method array findByIdusuario(int $idusuario) Return Devolucion objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Devolucion objects filtered by the idauditor column
  * @method array findByIdalmacen(int $idalmacen) Return Devolucion objects filtered by the idalmacen column
+ * @method array findByIdproveedor(int $idproveedor) Return Devolucion objects filtered by the idproveedor column
  * @method array findByDevolucionFolio(string $devolucion_folio) Return Devolucion objects filtered by the devolucion_folio column
  * @method array findByDevolucionRevisada(boolean $devolucion_revisada) Return Devolucion objects filtered by the devolucion_revisada column
  * @method array findByDevolucionFactura(string $devolucion_factura) Return Devolucion objects filtered by the devolucion_factura column
@@ -206,7 +214,7 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechaentrega`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total` FROM `devolucion` WHERE `iddevolucion` = :p0';
+        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `idproveedor`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechaentrega`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total` FROM `devolucion` WHERE `iddevolucion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -555,6 +563,50 @@ abstract class BaseDevolucionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DevolucionPeer::IDALMACEN, $idalmacen, $comparison);
+    }
+
+    /**
+     * Filter the query on the idproveedor column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdproveedor(1234); // WHERE idproveedor = 1234
+     * $query->filterByIdproveedor(array(12, 34)); // WHERE idproveedor IN (12, 34)
+     * $query->filterByIdproveedor(array('min' => 12)); // WHERE idproveedor >= 12
+     * $query->filterByIdproveedor(array('max' => 12)); // WHERE idproveedor <= 12
+     * </code>
+     *
+     * @see       filterByProveedor()
+     *
+     * @param     mixed $idproveedor The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function filterByIdproveedor($idproveedor = null, $comparison = null)
+    {
+        if (is_array($idproveedor)) {
+            $useMinMax = false;
+            if (isset($idproveedor['min'])) {
+                $this->addUsingAlias(DevolucionPeer::IDPROVEEDOR, $idproveedor['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idproveedor['max'])) {
+                $this->addUsingAlias(DevolucionPeer::IDPROVEEDOR, $idproveedor['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevolucionPeer::IDPROVEEDOR, $idproveedor, $comparison);
     }
 
     /**
@@ -1066,6 +1118,82 @@ abstract class BaseDevolucionQuery extends ModelCriteria
         return $this
             ->joinEmpresa($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Proveedor object
+     *
+     * @param   Proveedor|PropelObjectCollection $proveedor The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 DevolucionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProveedor($proveedor, $comparison = null)
+    {
+        if ($proveedor instanceof Proveedor) {
+            return $this
+                ->addUsingAlias(DevolucionPeer::IDPROVEEDOR, $proveedor->getIdproveedor(), $comparison);
+        } elseif ($proveedor instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(DevolucionPeer::IDPROVEEDOR, $proveedor->toKeyValue('PrimaryKey', 'Idproveedor'), $comparison);
+        } else {
+            throw new PropelException('filterByProveedor() only accepts arguments of type Proveedor or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Proveedor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function joinProveedor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Proveedor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Proveedor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Proveedor relation Proveedor object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProveedorQuery A secondary query class using the current class as primary query
+     */
+    public function useProveedorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProveedor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Proveedor', 'ProveedorQuery');
     }
 
     /**

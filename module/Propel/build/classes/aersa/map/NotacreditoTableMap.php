@@ -41,6 +41,7 @@ class NotacreditoTableMap extends TableMap
         $this->addPrimaryKey('idnotacredito', 'Idnotacredito', 'INTEGER', true, null, null);
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addForeignKey('idproveedor', 'Idproveedor', 'INTEGER', 'proveedor', 'idproveedor', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
@@ -48,10 +49,11 @@ class NotacreditoTableMap extends TableMap
         $this->addColumn('notacredito_revisada', 'NotacreditoRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('notacredito_factura', 'NotacreditoFactura', 'LONGVARCHAR', false, null, null);
         $this->addColumn('notacredito_fechacreacion', 'NotacreditoFechacreacion', 'TIMESTAMP', true, null, null);
-        $this->addColumn('notacredito_fechaentrega', 'NotacreditoFechaentrega', 'VARCHAR', false, 45, null);
-        $this->addColumn('notacredito_ieps', 'NotacreditoIeps', 'DECIMAL', false, 10, null);
-        $this->addColumn('notacredito_iva', 'NotacreditoIva', 'DECIMAL', false, 10, null);
-        $this->addColumn('notacredito_total', 'NotacreditoTotal', 'DECIMAL', false, 10, null);
+        $this->addColumn('notacredito_fechaentrega', 'NotacreditoFechaentrega', 'TIMESTAMP', false, null, null);
+        $this->addColumn('notacredito_ieps', 'NotacreditoIeps', 'DECIMAL', false, 15, null);
+        $this->addColumn('notacredito_iva', 'NotacreditoIva', 'DECIMAL', false, 15, null);
+        $this->addColumn('notacredito_total', 'NotacreditoTotal', 'DECIMAL', false, 15, null);
+        $this->addColumn('notacredito_subtotal', 'NotacreditoSubtotal', 'DECIMAL', false, 15, null);
         // validators
     } // initialize()
 
@@ -63,6 +65,7 @@ class NotacreditoTableMap extends TableMap
         $this->addRelation('Almacen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdauditor', 'Usuario', RelationMap::MANY_TO_ONE, array('idauditor' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Proveedor', 'Proveedor', RelationMap::MANY_TO_ONE, array('idproveedor' => 'idproveedor', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Notacreditodetalle', 'Notacreditodetalle', RelationMap::ONE_TO_MANY, array('idnotacredito' => 'idnotacredito', ), 'CASCADE', 'CASCADE', 'Notacreditodetalles');

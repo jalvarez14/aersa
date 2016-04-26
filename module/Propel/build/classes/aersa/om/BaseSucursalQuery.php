@@ -44,6 +44,10 @@
  * @method SucursalQuery rightJoinDevolucion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucion relation
  * @method SucursalQuery innerJoinDevolucion($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucion relation
  *
+ * @method SucursalQuery leftJoinIngreso($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ingreso relation
+ * @method SucursalQuery rightJoinIngreso($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ingreso relation
+ * @method SucursalQuery innerJoinIngreso($relationAlias = null) Adds a INNER JOIN clause to the query using the Ingreso relation
+ *
  * @method SucursalQuery leftJoinInventariomes($relationAlias = null) Adds a LEFT JOIN clause to the query using the Inventariomes relation
  * @method SucursalQuery rightJoinInventariomes($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Inventariomes relation
  * @method SucursalQuery innerJoinInventariomes($relationAlias = null) Adds a INNER JOIN clause to the query using the Inventariomes relation
@@ -867,6 +871,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinDevolucion($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Devolucion', 'DevolucionQuery');
+    }
+
+    /**
+     * Filter the query by a related Ingreso object
+     *
+     * @param   Ingreso|PropelObjectCollection $ingreso  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByIngreso($ingreso, $comparison = null)
+    {
+        if ($ingreso instanceof Ingreso) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $ingreso->getIdsucursal(), $comparison);
+        } elseif ($ingreso instanceof PropelObjectCollection) {
+            return $this
+                ->useIngresoQuery()
+                ->filterByPrimaryKeys($ingreso->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByIngreso() only accepts arguments of type Ingreso or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ingreso relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinIngreso($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ingreso');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ingreso');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ingreso relation Ingreso object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   IngresoQuery A secondary query class using the current class as primary query
+     */
+    public function useIngresoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinIngreso($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ingreso', 'IngresoQuery');
     }
 
     /**

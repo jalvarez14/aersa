@@ -9,6 +9,7 @@
  * @method NotacreditoQuery orderByIdnotacredito($order = Criteria::ASC) Order by the idnotacredito column
  * @method NotacreditoQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method NotacreditoQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
+ * @method NotacreditoQuery orderByIdproveedor($order = Criteria::ASC) Order by the idproveedor column
  * @method NotacreditoQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method NotacreditoQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method NotacreditoQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
@@ -20,10 +21,12 @@
  * @method NotacreditoQuery orderByNotacreditoIeps($order = Criteria::ASC) Order by the notacredito_ieps column
  * @method NotacreditoQuery orderByNotacreditoIva($order = Criteria::ASC) Order by the notacredito_iva column
  * @method NotacreditoQuery orderByNotacreditoTotal($order = Criteria::ASC) Order by the notacredito_total column
+ * @method NotacreditoQuery orderByNotacreditoSubtotal($order = Criteria::ASC) Order by the notacredito_subtotal column
  *
  * @method NotacreditoQuery groupByIdnotacredito() Group by the idnotacredito column
  * @method NotacreditoQuery groupByIdempresa() Group by the idempresa column
  * @method NotacreditoQuery groupByIdsucursal() Group by the idsucursal column
+ * @method NotacreditoQuery groupByIdproveedor() Group by the idproveedor column
  * @method NotacreditoQuery groupByIdusuario() Group by the idusuario column
  * @method NotacreditoQuery groupByIdauditor() Group by the idauditor column
  * @method NotacreditoQuery groupByIdalmacen() Group by the idalmacen column
@@ -35,6 +38,7 @@
  * @method NotacreditoQuery groupByNotacreditoIeps() Group by the notacredito_ieps column
  * @method NotacreditoQuery groupByNotacreditoIva() Group by the notacredito_iva column
  * @method NotacreditoQuery groupByNotacreditoTotal() Group by the notacredito_total column
+ * @method NotacreditoQuery groupByNotacreditoSubtotal() Group by the notacredito_subtotal column
  *
  * @method NotacreditoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method NotacreditoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -51,6 +55,10 @@
  * @method NotacreditoQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
  * @method NotacreditoQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
  * @method NotacreditoQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
+ * @method NotacreditoQuery leftJoinProveedor($relationAlias = null) Adds a LEFT JOIN clause to the query using the Proveedor relation
+ * @method NotacreditoQuery rightJoinProveedor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Proveedor relation
+ * @method NotacreditoQuery innerJoinProveedor($relationAlias = null) Adds a INNER JOIN clause to the query using the Proveedor relation
  *
  * @method NotacreditoQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
  * @method NotacreditoQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
@@ -73,6 +81,7 @@
  *
  * @method Notacredito findOneByIdempresa(int $idempresa) Return the first Notacredito filtered by the idempresa column
  * @method Notacredito findOneByIdsucursal(int $idsucursal) Return the first Notacredito filtered by the idsucursal column
+ * @method Notacredito findOneByIdproveedor(int $idproveedor) Return the first Notacredito filtered by the idproveedor column
  * @method Notacredito findOneByIdusuario(int $idusuario) Return the first Notacredito filtered by the idusuario column
  * @method Notacredito findOneByIdauditor(int $idauditor) Return the first Notacredito filtered by the idauditor column
  * @method Notacredito findOneByIdalmacen(int $idalmacen) Return the first Notacredito filtered by the idalmacen column
@@ -84,10 +93,12 @@
  * @method Notacredito findOneByNotacreditoIeps(string $notacredito_ieps) Return the first Notacredito filtered by the notacredito_ieps column
  * @method Notacredito findOneByNotacreditoIva(string $notacredito_iva) Return the first Notacredito filtered by the notacredito_iva column
  * @method Notacredito findOneByNotacreditoTotal(string $notacredito_total) Return the first Notacredito filtered by the notacredito_total column
+ * @method Notacredito findOneByNotacreditoSubtotal(string $notacredito_subtotal) Return the first Notacredito filtered by the notacredito_subtotal column
  *
  * @method array findByIdnotacredito(int $idnotacredito) Return Notacredito objects filtered by the idnotacredito column
  * @method array findByIdempresa(int $idempresa) Return Notacredito objects filtered by the idempresa column
  * @method array findByIdsucursal(int $idsucursal) Return Notacredito objects filtered by the idsucursal column
+ * @method array findByIdproveedor(int $idproveedor) Return Notacredito objects filtered by the idproveedor column
  * @method array findByIdusuario(int $idusuario) Return Notacredito objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Notacredito objects filtered by the idauditor column
  * @method array findByIdalmacen(int $idalmacen) Return Notacredito objects filtered by the idalmacen column
@@ -99,6 +110,7 @@
  * @method array findByNotacreditoIeps(string $notacredito_ieps) Return Notacredito objects filtered by the notacredito_ieps column
  * @method array findByNotacreditoIva(string $notacredito_iva) Return Notacredito objects filtered by the notacredito_iva column
  * @method array findByNotacreditoTotal(string $notacredito_total) Return Notacredito objects filtered by the notacredito_total column
+ * @method array findByNotacreditoSubtotal(string $notacredito_subtotal) Return Notacredito objects filtered by the notacredito_subtotal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -206,7 +218,7 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idnotacredito`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechaentrega`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total` FROM `notacredito` WHERE `idnotacredito` = :p0';
+        $sql = 'SELECT `idnotacredito`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechaentrega`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total`, `notacredito_subtotal` FROM `notacredito` WHERE `idnotacredito` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -423,6 +435,50 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(NotacreditoPeer::IDSUCURSAL, $idsucursal, $comparison);
+    }
+
+    /**
+     * Filter the query on the idproveedor column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdproveedor(1234); // WHERE idproveedor = 1234
+     * $query->filterByIdproveedor(array(12, 34)); // WHERE idproveedor IN (12, 34)
+     * $query->filterByIdproveedor(array('min' => 12)); // WHERE idproveedor >= 12
+     * $query->filterByIdproveedor(array('max' => 12)); // WHERE idproveedor <= 12
+     * </code>
+     *
+     * @see       filterByProveedor()
+     *
+     * @param     mixed $idproveedor The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditoQuery The current query, for fluid interface
+     */
+    public function filterByIdproveedor($idproveedor = null, $comparison = null)
+    {
+        if (is_array($idproveedor)) {
+            $useMinMax = false;
+            if (isset($idproveedor['min'])) {
+                $this->addUsingAlias(NotacreditoPeer::IDPROVEEDOR, $idproveedor['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idproveedor['max'])) {
+                $this->addUsingAlias(NotacreditoPeer::IDPROVEEDOR, $idproveedor['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditoPeer::IDPROVEEDOR, $idproveedor, $comparison);
     }
 
     /**
@@ -690,24 +746,38 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByNotacreditoFechaentrega('fooValue');   // WHERE notacredito_fechaentrega = 'fooValue'
-     * $query->filterByNotacreditoFechaentrega('%fooValue%'); // WHERE notacredito_fechaentrega LIKE '%fooValue%'
+     * $query->filterByNotacreditoFechaentrega('2011-03-14'); // WHERE notacredito_fechaentrega = '2011-03-14'
+     * $query->filterByNotacreditoFechaentrega('now'); // WHERE notacredito_fechaentrega = '2011-03-14'
+     * $query->filterByNotacreditoFechaentrega(array('max' => 'yesterday')); // WHERE notacredito_fechaentrega < '2011-03-13'
      * </code>
      *
-     * @param     string $notacreditoFechaentrega The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     mixed $notacreditoFechaentrega The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return NotacreditoQuery The current query, for fluid interface
      */
     public function filterByNotacreditoFechaentrega($notacreditoFechaentrega = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($notacreditoFechaentrega)) {
+        if (is_array($notacreditoFechaentrega)) {
+            $useMinMax = false;
+            if (isset($notacreditoFechaentrega['min'])) {
+                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHAENTREGA, $notacreditoFechaentrega['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditoFechaentrega['max'])) {
+                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHAENTREGA, $notacreditoFechaentrega['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $notacreditoFechaentrega)) {
-                $notacreditoFechaentrega = str_replace('*', '%', $notacreditoFechaentrega);
-                $comparison = Criteria::LIKE;
             }
         }
 
@@ -838,6 +908,48 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_TOTAL, $notacreditoTotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the notacredito_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotacreditoSubtotal(1234); // WHERE notacredito_subtotal = 1234
+     * $query->filterByNotacreditoSubtotal(array(12, 34)); // WHERE notacredito_subtotal IN (12, 34)
+     * $query->filterByNotacreditoSubtotal(array('min' => 12)); // WHERE notacredito_subtotal >= 12
+     * $query->filterByNotacreditoSubtotal(array('max' => 12)); // WHERE notacredito_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $notacreditoSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditoQuery The current query, for fluid interface
+     */
+    public function filterByNotacreditoSubtotal($notacreditoSubtotal = null, $comparison = null)
+    {
+        if (is_array($notacreditoSubtotal)) {
+            $useMinMax = false;
+            if (isset($notacreditoSubtotal['min'])) {
+                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_SUBTOTAL, $notacreditoSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditoSubtotal['max'])) {
+                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_SUBTOTAL, $notacreditoSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_SUBTOTAL, $notacreditoSubtotal, $comparison);
     }
 
     /**
@@ -1066,6 +1178,82 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
         return $this
             ->joinEmpresa($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Proveedor object
+     *
+     * @param   Proveedor|PropelObjectCollection $proveedor The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 NotacreditoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProveedor($proveedor, $comparison = null)
+    {
+        if ($proveedor instanceof Proveedor) {
+            return $this
+                ->addUsingAlias(NotacreditoPeer::IDPROVEEDOR, $proveedor->getIdproveedor(), $comparison);
+        } elseif ($proveedor instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(NotacreditoPeer::IDPROVEEDOR, $proveedor->toKeyValue('PrimaryKey', 'Idproveedor'), $comparison);
+        } else {
+            throw new PropelException('filterByProveedor() only accepts arguments of type Proveedor or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Proveedor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return NotacreditoQuery The current query, for fluid interface
+     */
+    public function joinProveedor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Proveedor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Proveedor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Proveedor relation Proveedor object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProveedorQuery A secondary query class using the current class as primary query
+     */
+    public function useProveedorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProveedor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Proveedor', 'ProveedorQuery');
     }
 
     /**

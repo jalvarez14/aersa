@@ -66,6 +66,12 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     protected $idalmacen;
 
     /**
+     * The value for the idproveedor field.
+     * @var        int
+     */
+    protected $idproveedor;
+
+    /**
      * The value for the devolucion_folio field.
      * @var        string
      */
@@ -128,6 +134,11 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
      * @var        Empresa
      */
     protected $aEmpresa;
+
+    /**
+     * @var        Proveedor
+     */
+    protected $aProveedor;
 
     /**
      * @var        Sucursal
@@ -268,6 +279,17 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     {
 
         return $this->idalmacen;
+    }
+
+    /**
+     * Get the [idproveedor] column value.
+     *
+     * @return int
+     */
+    public function getIdproveedor()
+    {
+
+        return $this->idproveedor;
     }
 
     /**
@@ -534,6 +556,31 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     } // setIdalmacen()
 
     /**
+     * Set the value of [idproveedor] column.
+     *
+     * @param  int $v new value
+     * @return Devolucion The current object (for fluent API support)
+     */
+    public function setIdproveedor($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idproveedor !== $v) {
+            $this->idproveedor = $v;
+            $this->modifiedColumns[] = DevolucionPeer::IDPROVEEDOR;
+        }
+
+        if ($this->aProveedor !== null && $this->aProveedor->getIdproveedor() !== $v) {
+            $this->aProveedor = null;
+        }
+
+
+        return $this;
+    } // setIdproveedor()
+
+    /**
      * Set the value of [devolucion_folio] column.
      *
      * @param  string $v new value
@@ -753,14 +800,15 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $this->idusuario = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->idauditor = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
             $this->idalmacen = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->devolucion_folio = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->devolucion_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
-            $this->devolucion_factura = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->devolucion_fechacreacion = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->devolucion_fechaentrega = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->devolucion_ieps = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->devolucion_iva = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-            $this->devolucion_total = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->idproveedor = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->devolucion_folio = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->devolucion_revisada = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->devolucion_factura = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->devolucion_fechacreacion = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->devolucion_fechaentrega = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->devolucion_ieps = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->devolucion_iva = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->devolucion_total = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -770,7 +818,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 14; // 14 = DevolucionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 15; // 15 = DevolucionPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Devolucion object", $e);
@@ -807,6 +855,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         }
         if ($this->aAlmacen !== null && $this->idalmacen !== $this->aAlmacen->getIdalmacen()) {
             $this->aAlmacen = null;
+        }
+        if ($this->aProveedor !== null && $this->idproveedor !== $this->aProveedor->getIdproveedor()) {
+            $this->aProveedor = null;
         }
     } // ensureConsistency
 
@@ -850,6 +901,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $this->aAlmacen = null;
             $this->aUsuarioRelatedByIdauditor = null;
             $this->aEmpresa = null;
+            $this->aProveedor = null;
             $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collDevoluciondetalles = null;
@@ -995,6 +1047,13 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                 $this->setEmpresa($this->aEmpresa);
             }
 
+            if ($this->aProveedor !== null) {
+                if ($this->aProveedor->isModified() || $this->aProveedor->isNew()) {
+                    $affectedRows += $this->aProveedor->save($con);
+                }
+                $this->setProveedor($this->aProveedor);
+            }
+
             if ($this->aSucursal !== null) {
                 if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
                     $affectedRows += $this->aSucursal->save($con);
@@ -1098,6 +1157,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::IDALMACEN)) {
             $modifiedColumns[':p' . $index++]  = '`idalmacen`';
         }
+        if ($this->isColumnModified(DevolucionPeer::IDPROVEEDOR)) {
+            $modifiedColumns[':p' . $index++]  = '`idproveedor`';
+        }
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FOLIO)) {
             $modifiedColumns[':p' . $index++]  = '`devolucion_folio`';
         }
@@ -1150,6 +1212,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                         break;
                     case '`idalmacen`':
                         $stmt->bindValue($identifier, $this->idalmacen, PDO::PARAM_INT);
+                        break;
+                    case '`idproveedor`':
+                        $stmt->bindValue($identifier, $this->idproveedor, PDO::PARAM_INT);
                         break;
                     case '`devolucion_folio`':
                         $stmt->bindValue($identifier, $this->devolucion_folio, PDO::PARAM_STR);
@@ -1292,6 +1357,12 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aProveedor !== null) {
+                if (!$this->aProveedor->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aProveedor->getValidationFailures());
+                }
+            }
+
             if ($this->aSucursal !== null) {
                 if (!$this->aSucursal->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
@@ -1380,27 +1451,30 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                 return $this->getIdalmacen();
                 break;
             case 6:
-                return $this->getDevolucionFolio();
+                return $this->getIdproveedor();
                 break;
             case 7:
-                return $this->getDevolucionRevisada();
+                return $this->getDevolucionFolio();
                 break;
             case 8:
-                return $this->getDevolucionFactura();
+                return $this->getDevolucionRevisada();
                 break;
             case 9:
-                return $this->getDevolucionFechacreacion();
+                return $this->getDevolucionFactura();
                 break;
             case 10:
-                return $this->getDevolucionFechaentrega();
+                return $this->getDevolucionFechacreacion();
                 break;
             case 11:
-                return $this->getDevolucionIeps();
+                return $this->getDevolucionFechaentrega();
                 break;
             case 12:
-                return $this->getDevolucionIva();
+                return $this->getDevolucionIeps();
                 break;
             case 13:
+                return $this->getDevolucionIva();
+                break;
+            case 14:
                 return $this->getDevolucionTotal();
                 break;
             default:
@@ -1438,14 +1512,15 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $keys[3] => $this->getIdusuario(),
             $keys[4] => $this->getIdauditor(),
             $keys[5] => $this->getIdalmacen(),
-            $keys[6] => $this->getDevolucionFolio(),
-            $keys[7] => $this->getDevolucionRevisada(),
-            $keys[8] => $this->getDevolucionFactura(),
-            $keys[9] => $this->getDevolucionFechacreacion(),
-            $keys[10] => $this->getDevolucionFechaentrega(),
-            $keys[11] => $this->getDevolucionIeps(),
-            $keys[12] => $this->getDevolucionIva(),
-            $keys[13] => $this->getDevolucionTotal(),
+            $keys[6] => $this->getIdproveedor(),
+            $keys[7] => $this->getDevolucionFolio(),
+            $keys[8] => $this->getDevolucionRevisada(),
+            $keys[9] => $this->getDevolucionFactura(),
+            $keys[10] => $this->getDevolucionFechacreacion(),
+            $keys[11] => $this->getDevolucionFechaentrega(),
+            $keys[12] => $this->getDevolucionIeps(),
+            $keys[13] => $this->getDevolucionIva(),
+            $keys[14] => $this->getDevolucionTotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1461,6 +1536,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             }
             if (null !== $this->aEmpresa) {
                 $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aProveedor) {
+                $result['Proveedor'] = $this->aProveedor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSucursal) {
                 $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1527,27 +1605,30 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                 $this->setIdalmacen($value);
                 break;
             case 6:
-                $this->setDevolucionFolio($value);
+                $this->setIdproveedor($value);
                 break;
             case 7:
-                $this->setDevolucionRevisada($value);
+                $this->setDevolucionFolio($value);
                 break;
             case 8:
-                $this->setDevolucionFactura($value);
+                $this->setDevolucionRevisada($value);
                 break;
             case 9:
-                $this->setDevolucionFechacreacion($value);
+                $this->setDevolucionFactura($value);
                 break;
             case 10:
-                $this->setDevolucionFechaentrega($value);
+                $this->setDevolucionFechacreacion($value);
                 break;
             case 11:
-                $this->setDevolucionIeps($value);
+                $this->setDevolucionFechaentrega($value);
                 break;
             case 12:
-                $this->setDevolucionIva($value);
+                $this->setDevolucionIeps($value);
                 break;
             case 13:
+                $this->setDevolucionIva($value);
+                break;
+            case 14:
                 $this->setDevolucionTotal($value);
                 break;
         } // switch()
@@ -1580,14 +1661,15 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if (array_key_exists($keys[3], $arr)) $this->setIdusuario($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setIdauditor($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setIdalmacen($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setDevolucionFolio($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setDevolucionRevisada($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setDevolucionFactura($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setDevolucionFechacreacion($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setDevolucionFechaentrega($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setDevolucionIeps($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setDevolucionIva($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setDevolucionTotal($arr[$keys[13]]);
+        if (array_key_exists($keys[6], $arr)) $this->setIdproveedor($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setDevolucionFolio($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setDevolucionRevisada($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setDevolucionFactura($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setDevolucionFechacreacion($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setDevolucionFechaentrega($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setDevolucionIeps($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setDevolucionIva($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setDevolucionTotal($arr[$keys[14]]);
     }
 
     /**
@@ -1605,6 +1687,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::IDUSUARIO)) $criteria->add(DevolucionPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(DevolucionPeer::IDAUDITOR)) $criteria->add(DevolucionPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(DevolucionPeer::IDALMACEN)) $criteria->add(DevolucionPeer::IDALMACEN, $this->idalmacen);
+        if ($this->isColumnModified(DevolucionPeer::IDPROVEEDOR)) $criteria->add(DevolucionPeer::IDPROVEEDOR, $this->idproveedor);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FOLIO)) $criteria->add(DevolucionPeer::DEVOLUCION_FOLIO, $this->devolucion_folio);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_REVISADA)) $criteria->add(DevolucionPeer::DEVOLUCION_REVISADA, $this->devolucion_revisada);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FACTURA)) $criteria->add(DevolucionPeer::DEVOLUCION_FACTURA, $this->devolucion_factura);
@@ -1681,6 +1764,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setIdalmacen($this->getIdalmacen());
+        $copyObj->setIdproveedor($this->getIdproveedor());
         $copyObj->setDevolucionFolio($this->getDevolucionFolio());
         $copyObj->setDevolucionRevisada($this->getDevolucionRevisada());
         $copyObj->setDevolucionFactura($this->getDevolucionFactura());
@@ -1913,6 +1997,58 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         }
 
         return $this->aEmpresa;
+    }
+
+    /**
+     * Declares an association between this object and a Proveedor object.
+     *
+     * @param                  Proveedor $v
+     * @return Devolucion The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setProveedor(Proveedor $v = null)
+    {
+        if ($v === null) {
+            $this->setIdproveedor(NULL);
+        } else {
+            $this->setIdproveedor($v->getIdproveedor());
+        }
+
+        $this->aProveedor = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Proveedor object, it will not be re-added.
+        if ($v !== null) {
+            $v->addDevolucion($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Proveedor object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Proveedor The associated Proveedor object.
+     * @throws PropelException
+     */
+    public function getProveedor(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aProveedor === null && ($this->idproveedor !== null) && $doQuery) {
+            $this->aProveedor = ProveedorQuery::create()->findPk($this->idproveedor, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aProveedor->addDevolucions($this);
+             */
+        }
+
+        return $this->aProveedor;
     }
 
     /**
@@ -2574,6 +2710,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $this->idusuario = null;
         $this->idauditor = null;
         $this->idalmacen = null;
+        $this->idproveedor = null;
         $this->devolucion_folio = null;
         $this->devolucion_revisada = null;
         $this->devolucion_factura = null;
@@ -2624,6 +2761,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             if ($this->aEmpresa instanceof Persistent) {
               $this->aEmpresa->clearAllReferences($deep);
             }
+            if ($this->aProveedor instanceof Persistent) {
+              $this->aProveedor->clearAllReferences($deep);
+            }
             if ($this->aSucursal instanceof Persistent) {
               $this->aSucursal->clearAllReferences($deep);
             }
@@ -2645,6 +2785,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $this->aAlmacen = null;
         $this->aUsuarioRelatedByIdauditor = null;
         $this->aEmpresa = null;
+        $this->aProveedor = null;
         $this->aSucursal = null;
         $this->aUsuarioRelatedByIdusuario = null;
     }

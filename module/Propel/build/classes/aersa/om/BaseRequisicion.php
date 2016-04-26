@@ -154,6 +154,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     protected $collRequisiciondetallesPartial;
 
     /**
+     * @var        PropelObjectCollection|Requisicionnota[] Collection to store aggregation of Requisicionnota objects.
+     */
+    protected $collRequisicionnotas;
+    protected $collRequisicionnotasPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -178,6 +184,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $requisiciondetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $requisicionnotasScheduledForDeletion = null;
 
     /**
      * Get the [idrequisicion] column value.
@@ -816,6 +828,8 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collRequisiciondetalles = null;
 
+            $this->collRequisicionnotas = null;
+
         } // if (deep)
     }
 
@@ -1012,6 +1026,23 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
 
             if ($this->collRequisiciondetalles !== null) {
                 foreach ($this->collRequisiciondetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->requisicionnotasScheduledForDeletion !== null) {
+                if (!$this->requisicionnotasScheduledForDeletion->isEmpty()) {
+                    RequisicionnotaQuery::create()
+                        ->filterByPrimaryKeys($this->requisicionnotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->requisicionnotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRequisicionnotas !== null) {
+                foreach ($this->collRequisicionnotas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1294,6 +1325,14 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collRequisicionnotas !== null) {
+                    foreach ($this->collRequisicionnotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1443,6 +1482,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             }
             if (null !== $this->collRequisiciondetalles) {
                 $result['Requisiciondetalles'] = $this->collRequisiciondetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collRequisicionnotas) {
+                $result['Requisicionnotas'] = $this->collRequisicionnotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1664,6 +1706,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             foreach ($this->getRequisiciondetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRequisiciondetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getRequisicionnotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRequisicionnota($relObj->copy($deepCopy));
                 }
             }
 
@@ -2147,6 +2195,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if ('Requisiciondetalle' == $relationName) {
             $this->initRequisiciondetalles();
         }
+        if ('Requisicionnota' == $relationName) {
+            $this->initRequisicionnotas();
+        }
     }
 
     /**
@@ -2400,6 +2451,256 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collRequisicionnotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Requisicion The current object (for fluent API support)
+     * @see        addRequisicionnotas()
+     */
+    public function clearRequisicionnotas()
+    {
+        $this->collRequisicionnotas = null; // important to set this to null since that means it is uninitialized
+        $this->collRequisicionnotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRequisicionnotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRequisicionnotas($v = true)
+    {
+        $this->collRequisicionnotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collRequisicionnotas collection.
+     *
+     * By default this just sets the collRequisicionnotas collection to an empty array (like clearcollRequisicionnotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRequisicionnotas($overrideExisting = true)
+    {
+        if (null !== $this->collRequisicionnotas && !$overrideExisting) {
+            return;
+        }
+        $this->collRequisicionnotas = new PropelObjectCollection();
+        $this->collRequisicionnotas->setModel('Requisicionnota');
+    }
+
+    /**
+     * Gets an array of Requisicionnota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Requisicion is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Requisicionnota[] List of Requisicionnota objects
+     * @throws PropelException
+     */
+    public function getRequisicionnotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionnotasPartial && !$this->isNew();
+        if (null === $this->collRequisicionnotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionnotas) {
+                // return empty collection
+                $this->initRequisicionnotas();
+            } else {
+                $collRequisicionnotas = RequisicionnotaQuery::create(null, $criteria)
+                    ->filterByRequisicion($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collRequisicionnotasPartial && count($collRequisicionnotas)) {
+                      $this->initRequisicionnotas(false);
+
+                      foreach ($collRequisicionnotas as $obj) {
+                        if (false == $this->collRequisicionnotas->contains($obj)) {
+                          $this->collRequisicionnotas->append($obj);
+                        }
+                      }
+
+                      $this->collRequisicionnotasPartial = true;
+                    }
+
+                    $collRequisicionnotas->getInternalIterator()->rewind();
+
+                    return $collRequisicionnotas;
+                }
+
+                if ($partial && $this->collRequisicionnotas) {
+                    foreach ($this->collRequisicionnotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collRequisicionnotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRequisicionnotas = $collRequisicionnotas;
+                $this->collRequisicionnotasPartial = false;
+            }
+        }
+
+        return $this->collRequisicionnotas;
+    }
+
+    /**
+     * Sets a collection of Requisicionnota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $requisicionnotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function setRequisicionnotas(PropelCollection $requisicionnotas, PropelPDO $con = null)
+    {
+        $requisicionnotasToDelete = $this->getRequisicionnotas(new Criteria(), $con)->diff($requisicionnotas);
+
+
+        $this->requisicionnotasScheduledForDeletion = $requisicionnotasToDelete;
+
+        foreach ($requisicionnotasToDelete as $requisicionnotaRemoved) {
+            $requisicionnotaRemoved->setRequisicion(null);
+        }
+
+        $this->collRequisicionnotas = null;
+        foreach ($requisicionnotas as $requisicionnota) {
+            $this->addRequisicionnota($requisicionnota);
+        }
+
+        $this->collRequisicionnotas = $requisicionnotas;
+        $this->collRequisicionnotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Requisicionnota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Requisicionnota objects.
+     * @throws PropelException
+     */
+    public function countRequisicionnotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisicionnotasPartial && !$this->isNew();
+        if (null === $this->collRequisicionnotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRequisicionnotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRequisicionnotas());
+            }
+            $query = RequisicionnotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByRequisicion($this)
+                ->count($con);
+        }
+
+        return count($this->collRequisicionnotas);
+    }
+
+    /**
+     * Method called to associate a Requisicionnota object to this object
+     * through the Requisicionnota foreign key attribute.
+     *
+     * @param    Requisicionnota $l Requisicionnota
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function addRequisicionnota(Requisicionnota $l)
+    {
+        if ($this->collRequisicionnotas === null) {
+            $this->initRequisicionnotas();
+            $this->collRequisicionnotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collRequisicionnotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRequisicionnota($l);
+
+            if ($this->requisicionnotasScheduledForDeletion and $this->requisicionnotasScheduledForDeletion->contains($l)) {
+                $this->requisicionnotasScheduledForDeletion->remove($this->requisicionnotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Requisicionnota $requisicionnota The requisicionnota object to add.
+     */
+    protected function doAddRequisicionnota($requisicionnota)
+    {
+        $this->collRequisicionnotas[]= $requisicionnota;
+        $requisicionnota->setRequisicion($this);
+    }
+
+    /**
+     * @param	Requisicionnota $requisicionnota The requisicionnota object to remove.
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function removeRequisicionnota($requisicionnota)
+    {
+        if ($this->getRequisicionnotas()->contains($requisicionnota)) {
+            $this->collRequisicionnotas->remove($this->collRequisicionnotas->search($requisicionnota));
+            if (null === $this->requisicionnotasScheduledForDeletion) {
+                $this->requisicionnotasScheduledForDeletion = clone $this->collRequisicionnotas;
+                $this->requisicionnotasScheduledForDeletion->clear();
+            }
+            $this->requisicionnotasScheduledForDeletion[]= clone $requisicionnota;
+            $requisicionnota->setRequisicion(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Requisicion is new, it will return
+     * an empty collection; or if this Requisicion has previously
+     * been saved, it will retrieve related Requisicionnotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Requisicion.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisicionnota[] List of Requisicionnota objects
+     */
+    public function getRequisicionnotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisicionnotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getRequisicionnotas($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -2444,6 +2745,11 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collRequisicionnotas) {
+                foreach ($this->collRequisicionnotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aAlmacenRelatedByIdalmacendestino instanceof Persistent) {
               $this->aAlmacenRelatedByIdalmacendestino->clearAllReferences($deep);
             }
@@ -2476,6 +2782,10 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $this->collRequisiciondetalles->clearIterator();
         }
         $this->collRequisiciondetalles = null;
+        if ($this->collRequisicionnotas instanceof PropelCollection) {
+            $this->collRequisicionnotas->clearIterator();
+        }
+        $this->collRequisicionnotas = null;
         $this->aAlmacenRelatedByIdalmacendestino = null;
         $this->aAlmacenRelatedByIdalmacenorigen = null;
         $this->aUsuarioRelatedByIdauditor = null;

@@ -24,13 +24,13 @@ abstract class BaseCompranotaPeer
     const TM_CLASS = 'CompranotaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the idcompranota field */
     const IDCOMPRANOTA = 'compranota.idcompranota';
@@ -43,6 +43,9 @@ abstract class BaseCompranotaPeer
 
     /** the column name for the compranota_nota field */
     const COMPRANOTA_NOTA = 'compranota.compranota_nota';
+
+    /** the column name for the compranota_fecha field */
+    const COMPRANOTA_FECHA = 'compranota.compranota_fecha';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -63,12 +66,12 @@ abstract class BaseCompranotaPeer
      * e.g. CompranotaPeer::$fieldNames[CompranotaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcompranota', 'Idcompra', 'Idusuario', 'CompranotaNota', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompranota', 'idcompra', 'idusuario', 'compranotaNota', ),
-        BasePeer::TYPE_COLNAME => array (CompranotaPeer::IDCOMPRANOTA, CompranotaPeer::IDCOMPRA, CompranotaPeer::IDUSUARIO, CompranotaPeer::COMPRANOTA_NOTA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRANOTA', 'IDCOMPRA', 'IDUSUARIO', 'COMPRANOTA_NOTA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcompranota', 'idcompra', 'idusuario', 'compranota_nota', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Idcompranota', 'Idcompra', 'Idusuario', 'CompranotaNota', 'CompranotaFecha', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompranota', 'idcompra', 'idusuario', 'compranotaNota', 'compranotaFecha', ),
+        BasePeer::TYPE_COLNAME => array (CompranotaPeer::IDCOMPRANOTA, CompranotaPeer::IDCOMPRA, CompranotaPeer::IDUSUARIO, CompranotaPeer::COMPRANOTA_NOTA, CompranotaPeer::COMPRANOTA_FECHA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRANOTA', 'IDCOMPRA', 'IDUSUARIO', 'COMPRANOTA_NOTA', 'COMPRANOTA_FECHA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcompranota', 'idcompra', 'idusuario', 'compranota_nota', 'compranota_fecha', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -78,12 +81,12 @@ abstract class BaseCompranotaPeer
      * e.g. CompranotaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcompranota' => 0, 'Idcompra' => 1, 'Idusuario' => 2, 'CompranotaNota' => 3, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompranota' => 0, 'idcompra' => 1, 'idusuario' => 2, 'compranotaNota' => 3, ),
-        BasePeer::TYPE_COLNAME => array (CompranotaPeer::IDCOMPRANOTA => 0, CompranotaPeer::IDCOMPRA => 1, CompranotaPeer::IDUSUARIO => 2, CompranotaPeer::COMPRANOTA_NOTA => 3, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRANOTA' => 0, 'IDCOMPRA' => 1, 'IDUSUARIO' => 2, 'COMPRANOTA_NOTA' => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcompranota' => 0, 'idcompra' => 1, 'idusuario' => 2, 'compranota_nota' => 3, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Idcompranota' => 0, 'Idcompra' => 1, 'Idusuario' => 2, 'CompranotaNota' => 3, 'CompranotaFecha' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompranota' => 0, 'idcompra' => 1, 'idusuario' => 2, 'compranotaNota' => 3, 'compranotaFecha' => 4, ),
+        BasePeer::TYPE_COLNAME => array (CompranotaPeer::IDCOMPRANOTA => 0, CompranotaPeer::IDCOMPRA => 1, CompranotaPeer::IDUSUARIO => 2, CompranotaPeer::COMPRANOTA_NOTA => 3, CompranotaPeer::COMPRANOTA_FECHA => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRANOTA' => 0, 'IDCOMPRA' => 1, 'IDUSUARIO' => 2, 'COMPRANOTA_NOTA' => 3, 'COMPRANOTA_FECHA' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcompranota' => 0, 'idcompra' => 1, 'idusuario' => 2, 'compranota_nota' => 3, 'compranota_fecha' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -161,11 +164,13 @@ abstract class BaseCompranotaPeer
             $criteria->addSelectColumn(CompranotaPeer::IDCOMPRA);
             $criteria->addSelectColumn(CompranotaPeer::IDUSUARIO);
             $criteria->addSelectColumn(CompranotaPeer::COMPRANOTA_NOTA);
+            $criteria->addSelectColumn(CompranotaPeer::COMPRANOTA_FECHA);
         } else {
             $criteria->addSelectColumn($alias . '.idcompranota');
             $criteria->addSelectColumn($alias . '.idcompra');
             $criteria->addSelectColumn($alias . '.idusuario');
             $criteria->addSelectColumn($alias . '.compranota_nota');
+            $criteria->addSelectColumn($alias . '.compranota_fecha');
         }
     }
 

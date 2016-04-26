@@ -398,6 +398,12 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in DevolucionnotaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionnotaPeer::clearInstancePool();
+        // Invalidate objects in IngresoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        IngresoPeer::clearInstancePool();
+        // Invalidate objects in IngresoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        IngresoPeer::clearInstancePool();
         // Invalidate objects in InventariomesPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         InventariomesPeer::clearInstancePool();
@@ -422,12 +428,18 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in OrdentablajeriaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         OrdentablajeriaPeer::clearInstancePool();
+        // Invalidate objects in OrdentablajerianotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        OrdentablajerianotaPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
+        // Invalidate objects in RequisicionnotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionnotaPeer::clearInstancePool();
         // Invalidate objects in UsuarioempresaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         UsuarioempresaPeer::clearInstancePool();
@@ -1048,6 +1060,18 @@ abstract class BaseUsuarioPeer
             $criteria->add(DevolucionnotaPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += DevolucionnotaPeer::doDelete($criteria, $con);
 
+            // delete related Ingreso objects
+            $criteria = new Criteria(IngresoPeer::DATABASE_NAME);
+
+            $criteria->add(IngresoPeer::IDAUDITOR, $obj->getIdusuario());
+            $affectedRows += IngresoPeer::doDelete($criteria, $con);
+
+            // delete related Ingreso objects
+            $criteria = new Criteria(IngresoPeer::DATABASE_NAME);
+
+            $criteria->add(IngresoPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += IngresoPeer::doDelete($criteria, $con);
+
             // delete related Inventariomes objects
             $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
 
@@ -1096,6 +1120,12 @@ abstract class BaseUsuarioPeer
             $criteria->add(OrdentablajeriaPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
 
+            // delete related Ordentablajerianota objects
+            $criteria = new Criteria(OrdentablajerianotaPeer::DATABASE_NAME);
+
+            $criteria->add(OrdentablajerianotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += OrdentablajerianotaPeer::doDelete($criteria, $con);
+
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
 
@@ -1107,6 +1137,12 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(RequisicionPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += RequisicionPeer::doDelete($criteria, $con);
+
+            // delete related Requisicionnota objects
+            $criteria = new Criteria(RequisicionnotaPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionnotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += RequisicionnotaPeer::doDelete($criteria, $con);
 
             // delete related Usuarioempresa objects
             $criteria = new Criteria(UsuarioempresaPeer::DATABASE_NAME);

@@ -24,13 +24,13 @@ abstract class BaseOrdentablajeriaPeer
     const TM_CLASS = 'OrdentablajeriaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 17;
+    const NUM_COLUMNS = 21;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 17;
+    const NUM_HYDRATE_COLUMNS = 21;
 
     /** the column name for the idordentablajeria field */
     const IDORDENTABLAJERIA = 'ordentablajeria.idordentablajeria';
@@ -83,6 +83,18 @@ abstract class BaseOrdentablajeriaPeer
     /** the column name for the ordentablajeria_folio field */
     const ORDENTABLAJERIA_FOLIO = 'ordentablajeria.ordentablajeria_folio';
 
+    /** the column name for the ordentablajeria_esporcion field */
+    const ORDENTABLAJERIA_ESPORCION = 'ordentablajeria.ordentablajeria_esporcion';
+
+    /** the column name for the ordentablajeria_numeroporciones field */
+    const ORDENTABLAJERIA_NUMEROPORCIONES = 'ordentablajeria.ordentablajeria_numeroporciones';
+
+    /** the column name for the ordentablajeria_fecha field */
+    const ORDENTABLAJERIA_FECHA = 'ordentablajeria.ordentablajeria_fecha';
+
+    /** the column name for the ordentablajeria_fechacreacion field */
+    const ORDENTABLAJERIA_FECHACREACION = 'ordentablajeria.ordentablajeria_fechacreacion';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -102,12 +114,12 @@ abstract class BaseOrdentablajeriaPeer
      * e.g. OrdentablajeriaPeer::$fieldNames[OrdentablajeriaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idordentablajeria', 'Idempresa', 'Idsucursal', 'Idalmacenorigen', 'Idalmacendestino', 'Idusuario', 'Idauditor', 'Idproducto', 'OrdentablajeriaPesobruto', 'OrdentablajeriaPreciokilo', 'OrdentablajeriaPesoneto', 'OrdentablajeriaPrecioneto', 'OrdentablajeriaInyeccion', 'OrdentablajeriaMerma', 'OrdentablajeriaAprovechamiento', 'OrdentablajeriaRevisada', 'OrdentablajeriaFolio', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeria', 'idempresa', 'idsucursal', 'idalmacenorigen', 'idalmacendestino', 'idusuario', 'idauditor', 'idproducto', 'ordentablajeriaPesobruto', 'ordentablajeriaPreciokilo', 'ordentablajeriaPesoneto', 'ordentablajeriaPrecioneto', 'ordentablajeriaInyeccion', 'ordentablajeriaMerma', 'ordentablajeriaAprovechamiento', 'ordentablajeriaRevisada', 'ordentablajeriaFolio', ),
-        BasePeer::TYPE_COLNAME => array (OrdentablajeriaPeer::IDORDENTABLAJERIA, OrdentablajeriaPeer::IDEMPRESA, OrdentablajeriaPeer::IDSUCURSAL, OrdentablajeriaPeer::IDALMACENORIGEN, OrdentablajeriaPeer::IDALMACENDESTINO, OrdentablajeriaPeer::IDUSUARIO, OrdentablajeriaPeer::IDAUDITOR, OrdentablajeriaPeer::IDPRODUCTO, OrdentablajeriaPeer::ORDENTABLAJERIA_PESOBRUTO, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIOKILO, OrdentablajeriaPeer::ORDENTABLAJERIA_PESONETO, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIONETO, OrdentablajeriaPeer::ORDENTABLAJERIA_INYECCION, OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA, OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO, OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA, OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIA', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACENORIGEN', 'IDALMACENDESTINO', 'IDUSUARIO', 'IDAUDITOR', 'IDPRODUCTO', 'ORDENTABLAJERIA_PESOBRUTO', 'ORDENTABLAJERIA_PRECIOKILO', 'ORDENTABLAJERIA_PESONETO', 'ORDENTABLAJERIA_PRECIONETO', 'ORDENTABLAJERIA_INYECCION', 'ORDENTABLAJERIA_MERMA', 'ORDENTABLAJERIA_APROVECHAMIENTO', 'ORDENTABLAJERIA_REVISADA', 'ORDENTABLAJERIA_FOLIO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idordentablajeria', 'idempresa', 'idsucursal', 'idalmacenorigen', 'idalmacendestino', 'idusuario', 'idauditor', 'idproducto', 'ordentablajeria_pesobruto', 'ordentablajeria_preciokilo', 'ordentablajeria_pesoneto', 'ordentablajeria_precioneto', 'ordentablajeria_inyeccion', 'ordentablajeria_merma', 'ordentablajeria_aprovechamiento', 'ordentablajeria_revisada', 'ordentablajeria_folio', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
+        BasePeer::TYPE_PHPNAME => array ('Idordentablajeria', 'Idempresa', 'Idsucursal', 'Idalmacenorigen', 'Idalmacendestino', 'Idusuario', 'Idauditor', 'Idproducto', 'OrdentablajeriaPesobruto', 'OrdentablajeriaPreciokilo', 'OrdentablajeriaPesoneto', 'OrdentablajeriaPrecioneto', 'OrdentablajeriaInyeccion', 'OrdentablajeriaMerma', 'OrdentablajeriaAprovechamiento', 'OrdentablajeriaRevisada', 'OrdentablajeriaFolio', 'OrdentablajeriaEsporcion', 'OrdentablajeriaNumeroporciones', 'OrdentablajeriaFecha', 'OrdentablajeriaFechacreacion', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeria', 'idempresa', 'idsucursal', 'idalmacenorigen', 'idalmacendestino', 'idusuario', 'idauditor', 'idproducto', 'ordentablajeriaPesobruto', 'ordentablajeriaPreciokilo', 'ordentablajeriaPesoneto', 'ordentablajeriaPrecioneto', 'ordentablajeriaInyeccion', 'ordentablajeriaMerma', 'ordentablajeriaAprovechamiento', 'ordentablajeriaRevisada', 'ordentablajeriaFolio', 'ordentablajeriaEsporcion', 'ordentablajeriaNumeroporciones', 'ordentablajeriaFecha', 'ordentablajeriaFechacreacion', ),
+        BasePeer::TYPE_COLNAME => array (OrdentablajeriaPeer::IDORDENTABLAJERIA, OrdentablajeriaPeer::IDEMPRESA, OrdentablajeriaPeer::IDSUCURSAL, OrdentablajeriaPeer::IDALMACENORIGEN, OrdentablajeriaPeer::IDALMACENDESTINO, OrdentablajeriaPeer::IDUSUARIO, OrdentablajeriaPeer::IDAUDITOR, OrdentablajeriaPeer::IDPRODUCTO, OrdentablajeriaPeer::ORDENTABLAJERIA_PESOBRUTO, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIOKILO, OrdentablajeriaPeer::ORDENTABLAJERIA_PESONETO, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIONETO, OrdentablajeriaPeer::ORDENTABLAJERIA_INYECCION, OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA, OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO, OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA, OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO, OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION, OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA, OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIA', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACENORIGEN', 'IDALMACENDESTINO', 'IDUSUARIO', 'IDAUDITOR', 'IDPRODUCTO', 'ORDENTABLAJERIA_PESOBRUTO', 'ORDENTABLAJERIA_PRECIOKILO', 'ORDENTABLAJERIA_PESONETO', 'ORDENTABLAJERIA_PRECIONETO', 'ORDENTABLAJERIA_INYECCION', 'ORDENTABLAJERIA_MERMA', 'ORDENTABLAJERIA_APROVECHAMIENTO', 'ORDENTABLAJERIA_REVISADA', 'ORDENTABLAJERIA_FOLIO', 'ORDENTABLAJERIA_ESPORCION', 'ORDENTABLAJERIA_NUMEROPORCIONES', 'ORDENTABLAJERIA_FECHA', 'ORDENTABLAJERIA_FECHACREACION', ),
+        BasePeer::TYPE_FIELDNAME => array ('idordentablajeria', 'idempresa', 'idsucursal', 'idalmacenorigen', 'idalmacendestino', 'idusuario', 'idauditor', 'idproducto', 'ordentablajeria_pesobruto', 'ordentablajeria_preciokilo', 'ordentablajeria_pesoneto', 'ordentablajeria_precioneto', 'ordentablajeria_inyeccion', 'ordentablajeria_merma', 'ordentablajeria_aprovechamiento', 'ordentablajeria_revisada', 'ordentablajeria_folio', 'ordentablajeria_esporcion', 'ordentablajeria_numeroporciones', 'ordentablajeria_fecha', 'ordentablajeria_fechacreacion', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
     /**
@@ -117,12 +129,12 @@ abstract class BaseOrdentablajeriaPeer
      * e.g. OrdentablajeriaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idordentablajeria' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacenorigen' => 3, 'Idalmacendestino' => 4, 'Idusuario' => 5, 'Idauditor' => 6, 'Idproducto' => 7, 'OrdentablajeriaPesobruto' => 8, 'OrdentablajeriaPreciokilo' => 9, 'OrdentablajeriaPesoneto' => 10, 'OrdentablajeriaPrecioneto' => 11, 'OrdentablajeriaInyeccion' => 12, 'OrdentablajeriaMerma' => 13, 'OrdentablajeriaAprovechamiento' => 14, 'OrdentablajeriaRevisada' => 15, 'OrdentablajeriaFolio' => 16, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeria' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacenorigen' => 3, 'idalmacendestino' => 4, 'idusuario' => 5, 'idauditor' => 6, 'idproducto' => 7, 'ordentablajeriaPesobruto' => 8, 'ordentablajeriaPreciokilo' => 9, 'ordentablajeriaPesoneto' => 10, 'ordentablajeriaPrecioneto' => 11, 'ordentablajeriaInyeccion' => 12, 'ordentablajeriaMerma' => 13, 'ordentablajeriaAprovechamiento' => 14, 'ordentablajeriaRevisada' => 15, 'ordentablajeriaFolio' => 16, ),
-        BasePeer::TYPE_COLNAME => array (OrdentablajeriaPeer::IDORDENTABLAJERIA => 0, OrdentablajeriaPeer::IDEMPRESA => 1, OrdentablajeriaPeer::IDSUCURSAL => 2, OrdentablajeriaPeer::IDALMACENORIGEN => 3, OrdentablajeriaPeer::IDALMACENDESTINO => 4, OrdentablajeriaPeer::IDUSUARIO => 5, OrdentablajeriaPeer::IDAUDITOR => 6, OrdentablajeriaPeer::IDPRODUCTO => 7, OrdentablajeriaPeer::ORDENTABLAJERIA_PESOBRUTO => 8, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIOKILO => 9, OrdentablajeriaPeer::ORDENTABLAJERIA_PESONETO => 10, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIONETO => 11, OrdentablajeriaPeer::ORDENTABLAJERIA_INYECCION => 12, OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA => 13, OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO => 14, OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA => 15, OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO => 16, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACENORIGEN' => 3, 'IDALMACENDESTINO' => 4, 'IDUSUARIO' => 5, 'IDAUDITOR' => 6, 'IDPRODUCTO' => 7, 'ORDENTABLAJERIA_PESOBRUTO' => 8, 'ORDENTABLAJERIA_PRECIOKILO' => 9, 'ORDENTABLAJERIA_PESONETO' => 10, 'ORDENTABLAJERIA_PRECIONETO' => 11, 'ORDENTABLAJERIA_INYECCION' => 12, 'ORDENTABLAJERIA_MERMA' => 13, 'ORDENTABLAJERIA_APROVECHAMIENTO' => 14, 'ORDENTABLAJERIA_REVISADA' => 15, 'ORDENTABLAJERIA_FOLIO' => 16, ),
-        BasePeer::TYPE_FIELDNAME => array ('idordentablajeria' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacenorigen' => 3, 'idalmacendestino' => 4, 'idusuario' => 5, 'idauditor' => 6, 'idproducto' => 7, 'ordentablajeria_pesobruto' => 8, 'ordentablajeria_preciokilo' => 9, 'ordentablajeria_pesoneto' => 10, 'ordentablajeria_precioneto' => 11, 'ordentablajeria_inyeccion' => 12, 'ordentablajeria_merma' => 13, 'ordentablajeria_aprovechamiento' => 14, 'ordentablajeria_revisada' => 15, 'ordentablajeria_folio' => 16, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, )
+        BasePeer::TYPE_PHPNAME => array ('Idordentablajeria' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacenorigen' => 3, 'Idalmacendestino' => 4, 'Idusuario' => 5, 'Idauditor' => 6, 'Idproducto' => 7, 'OrdentablajeriaPesobruto' => 8, 'OrdentablajeriaPreciokilo' => 9, 'OrdentablajeriaPesoneto' => 10, 'OrdentablajeriaPrecioneto' => 11, 'OrdentablajeriaInyeccion' => 12, 'OrdentablajeriaMerma' => 13, 'OrdentablajeriaAprovechamiento' => 14, 'OrdentablajeriaRevisada' => 15, 'OrdentablajeriaFolio' => 16, 'OrdentablajeriaEsporcion' => 17, 'OrdentablajeriaNumeroporciones' => 18, 'OrdentablajeriaFecha' => 19, 'OrdentablajeriaFechacreacion' => 20, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeria' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacenorigen' => 3, 'idalmacendestino' => 4, 'idusuario' => 5, 'idauditor' => 6, 'idproducto' => 7, 'ordentablajeriaPesobruto' => 8, 'ordentablajeriaPreciokilo' => 9, 'ordentablajeriaPesoneto' => 10, 'ordentablajeriaPrecioneto' => 11, 'ordentablajeriaInyeccion' => 12, 'ordentablajeriaMerma' => 13, 'ordentablajeriaAprovechamiento' => 14, 'ordentablajeriaRevisada' => 15, 'ordentablajeriaFolio' => 16, 'ordentablajeriaEsporcion' => 17, 'ordentablajeriaNumeroporciones' => 18, 'ordentablajeriaFecha' => 19, 'ordentablajeriaFechacreacion' => 20, ),
+        BasePeer::TYPE_COLNAME => array (OrdentablajeriaPeer::IDORDENTABLAJERIA => 0, OrdentablajeriaPeer::IDEMPRESA => 1, OrdentablajeriaPeer::IDSUCURSAL => 2, OrdentablajeriaPeer::IDALMACENORIGEN => 3, OrdentablajeriaPeer::IDALMACENDESTINO => 4, OrdentablajeriaPeer::IDUSUARIO => 5, OrdentablajeriaPeer::IDAUDITOR => 6, OrdentablajeriaPeer::IDPRODUCTO => 7, OrdentablajeriaPeer::ORDENTABLAJERIA_PESOBRUTO => 8, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIOKILO => 9, OrdentablajeriaPeer::ORDENTABLAJERIA_PESONETO => 10, OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIONETO => 11, OrdentablajeriaPeer::ORDENTABLAJERIA_INYECCION => 12, OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA => 13, OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO => 14, OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA => 15, OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO => 16, OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION => 17, OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES => 18, OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA => 19, OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION => 20, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACENORIGEN' => 3, 'IDALMACENDESTINO' => 4, 'IDUSUARIO' => 5, 'IDAUDITOR' => 6, 'IDPRODUCTO' => 7, 'ORDENTABLAJERIA_PESOBRUTO' => 8, 'ORDENTABLAJERIA_PRECIOKILO' => 9, 'ORDENTABLAJERIA_PESONETO' => 10, 'ORDENTABLAJERIA_PRECIONETO' => 11, 'ORDENTABLAJERIA_INYECCION' => 12, 'ORDENTABLAJERIA_MERMA' => 13, 'ORDENTABLAJERIA_APROVECHAMIENTO' => 14, 'ORDENTABLAJERIA_REVISADA' => 15, 'ORDENTABLAJERIA_FOLIO' => 16, 'ORDENTABLAJERIA_ESPORCION' => 17, 'ORDENTABLAJERIA_NUMEROPORCIONES' => 18, 'ORDENTABLAJERIA_FECHA' => 19, 'ORDENTABLAJERIA_FECHACREACION' => 20, ),
+        BasePeer::TYPE_FIELDNAME => array ('idordentablajeria' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacenorigen' => 3, 'idalmacendestino' => 4, 'idusuario' => 5, 'idauditor' => 6, 'idproducto' => 7, 'ordentablajeria_pesobruto' => 8, 'ordentablajeria_preciokilo' => 9, 'ordentablajeria_pesoneto' => 10, 'ordentablajeria_precioneto' => 11, 'ordentablajeria_inyeccion' => 12, 'ordentablajeria_merma' => 13, 'ordentablajeria_aprovechamiento' => 14, 'ordentablajeria_revisada' => 15, 'ordentablajeria_folio' => 16, 'ordentablajeria_esporcion' => 17, 'ordentablajeria_numeroporciones' => 18, 'ordentablajeria_fecha' => 19, 'ordentablajeria_fechacreacion' => 20, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
     /**
@@ -213,6 +225,10 @@ abstract class BaseOrdentablajeriaPeer
             $criteria->addSelectColumn(OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO);
             $criteria->addSelectColumn(OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA);
             $criteria->addSelectColumn(OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO);
+            $criteria->addSelectColumn(OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION);
+            $criteria->addSelectColumn(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES);
+            $criteria->addSelectColumn(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA);
+            $criteria->addSelectColumn(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION);
         } else {
             $criteria->addSelectColumn($alias . '.idordentablajeria');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -231,6 +247,10 @@ abstract class BaseOrdentablajeriaPeer
             $criteria->addSelectColumn($alias . '.ordentablajeria_aprovechamiento');
             $criteria->addSelectColumn($alias . '.ordentablajeria_revisada');
             $criteria->addSelectColumn($alias . '.ordentablajeria_folio');
+            $criteria->addSelectColumn($alias . '.ordentablajeria_esporcion');
+            $criteria->addSelectColumn($alias . '.ordentablajeria_numeroporciones');
+            $criteria->addSelectColumn($alias . '.ordentablajeria_fecha');
+            $criteria->addSelectColumn($alias . '.ordentablajeria_fechacreacion');
         }
     }
 
@@ -438,6 +458,9 @@ abstract class BaseOrdentablajeriaPeer
         // Invalidate objects in OrdentablajeriadetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         OrdentablajeriadetallePeer::clearInstancePool();
+        // Invalidate objects in OrdentablajerianotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        OrdentablajerianotaPeer::clearInstancePool();
     }
 
     /**
@@ -3554,6 +3577,12 @@ abstract class BaseOrdentablajeriaPeer
 
             $criteria->add(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, $obj->getIdordentablajeria());
             $affectedRows += OrdentablajeriadetallePeer::doDelete($criteria, $con);
+
+            // delete related Ordentablajerianota objects
+            $criteria = new Criteria(OrdentablajerianotaPeer::DATABASE_NAME);
+
+            $criteria->add(OrdentablajerianotaPeer::IDORDENTABLAJERIA, $obj->getIdordentablajeria());
+            $affectedRows += OrdentablajerianotaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

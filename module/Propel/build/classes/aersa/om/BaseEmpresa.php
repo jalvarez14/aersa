@@ -73,6 +73,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collDevolucionsPartial;
 
     /**
+     * @var        PropelObjectCollection|Ingreso[] Collection to store aggregation of Ingreso objects.
+     */
+    protected $collIngresos;
+    protected $collIngresosPartial;
+
+    /**
      * @var        PropelObjectCollection|Inventariomes[] Collection to store aggregation of Inventariomes objects.
      */
     protected $collInventariomess;
@@ -169,6 +175,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $devolucionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ingresosScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -549,6 +561,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             $this->collDevolucions = null;
 
+            $this->collIngresos = null;
+
             $this->collInventariomess = null;
 
             $this->collNotacreditos = null;
@@ -723,6 +737,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collDevolucions !== null) {
                 foreach ($this->collDevolucions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ingresosScheduledForDeletion !== null) {
+                if (!$this->ingresosScheduledForDeletion->isEmpty()) {
+                    IngresoQuery::create()
+                        ->filterByPrimaryKeys($this->ingresosScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ingresosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collIngresos !== null) {
+                foreach ($this->collIngresos as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1098,6 +1129,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collIngresos !== null) {
+                    foreach ($this->collIngresos as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collInventariomess !== null) {
                     foreach ($this->collInventariomess as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1282,6 +1321,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collDevolucions) {
                 $result['Devolucions'] = $this->collDevolucions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collIngresos) {
+                $result['Ingresos'] = $this->collIngresos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInventariomess) {
                 $result['Inventariomess'] = $this->collInventariomess->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1497,6 +1539,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getIngresos() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addIngreso($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getInventariomess() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addInventariomes($relObj->copy($deepCopy));
@@ -1629,6 +1677,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
         if ('Devolucion' == $relationName) {
             $this->initDevolucions();
+        }
+        if ('Ingreso' == $relationName) {
+            $this->initIngresos();
         }
         if ('Inventariomes' == $relationName) {
             $this->initInventariomess();
@@ -2307,6 +2358,31 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
      */
+    public function getDevolucionsJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = DevolucionQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getDevolucions($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Devolucions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Devolucion[] List of Devolucion objects
+     */
     public function getDevolucionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = DevolucionQuery::create(null, $criteria);
@@ -2338,6 +2414,306 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
 
         return $this->getDevolucions($query, $con);
+    }
+
+    /**
+     * Clears out the collIngresos collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addIngresos()
+     */
+    public function clearIngresos()
+    {
+        $this->collIngresos = null; // important to set this to null since that means it is uninitialized
+        $this->collIngresosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collIngresos collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialIngresos($v = true)
+    {
+        $this->collIngresosPartial = $v;
+    }
+
+    /**
+     * Initializes the collIngresos collection.
+     *
+     * By default this just sets the collIngresos collection to an empty array (like clearcollIngresos());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initIngresos($overrideExisting = true)
+    {
+        if (null !== $this->collIngresos && !$overrideExisting) {
+            return;
+        }
+        $this->collIngresos = new PropelObjectCollection();
+        $this->collIngresos->setModel('Ingreso');
+    }
+
+    /**
+     * Gets an array of Ingreso objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     * @throws PropelException
+     */
+    public function getIngresos($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresosPartial && !$this->isNew();
+        if (null === $this->collIngresos || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collIngresos) {
+                // return empty collection
+                $this->initIngresos();
+            } else {
+                $collIngresos = IngresoQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collIngresosPartial && count($collIngresos)) {
+                      $this->initIngresos(false);
+
+                      foreach ($collIngresos as $obj) {
+                        if (false == $this->collIngresos->contains($obj)) {
+                          $this->collIngresos->append($obj);
+                        }
+                      }
+
+                      $this->collIngresosPartial = true;
+                    }
+
+                    $collIngresos->getInternalIterator()->rewind();
+
+                    return $collIngresos;
+                }
+
+                if ($partial && $this->collIngresos) {
+                    foreach ($this->collIngresos as $obj) {
+                        if ($obj->isNew()) {
+                            $collIngresos[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collIngresos = $collIngresos;
+                $this->collIngresosPartial = false;
+            }
+        }
+
+        return $this->collIngresos;
+    }
+
+    /**
+     * Sets a collection of Ingreso objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ingresos A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setIngresos(PropelCollection $ingresos, PropelPDO $con = null)
+    {
+        $ingresosToDelete = $this->getIngresos(new Criteria(), $con)->diff($ingresos);
+
+
+        $this->ingresosScheduledForDeletion = $ingresosToDelete;
+
+        foreach ($ingresosToDelete as $ingresoRemoved) {
+            $ingresoRemoved->setEmpresa(null);
+        }
+
+        $this->collIngresos = null;
+        foreach ($ingresos as $ingreso) {
+            $this->addIngreso($ingreso);
+        }
+
+        $this->collIngresos = $ingresos;
+        $this->collIngresosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ingreso objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ingreso objects.
+     * @throws PropelException
+     */
+    public function countIngresos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresosPartial && !$this->isNew();
+        if (null === $this->collIngresos || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collIngresos) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getIngresos());
+            }
+            $query = IngresoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collIngresos);
+    }
+
+    /**
+     * Method called to associate a Ingreso object to this object
+     * through the Ingreso foreign key attribute.
+     *
+     * @param    Ingreso $l Ingreso
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addIngreso(Ingreso $l)
+    {
+        if ($this->collIngresos === null) {
+            $this->initIngresos();
+            $this->collIngresosPartial = true;
+        }
+
+        if (!in_array($l, $this->collIngresos->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddIngreso($l);
+
+            if ($this->ingresosScheduledForDeletion and $this->ingresosScheduledForDeletion->contains($l)) {
+                $this->ingresosScheduledForDeletion->remove($this->ingresosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ingreso $ingreso The ingreso object to add.
+     */
+    protected function doAddIngreso($ingreso)
+    {
+        $this->collIngresos[]= $ingreso;
+        $ingreso->setEmpresa($this);
+    }
+
+    /**
+     * @param	Ingreso $ingreso The ingreso object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeIngreso($ingreso)
+    {
+        if ($this->getIngresos()->contains($ingreso)) {
+            $this->collIngresos->remove($this->collIngresos->search($ingreso));
+            if (null === $this->ingresosScheduledForDeletion) {
+                $this->ingresosScheduledForDeletion = clone $this->collIngresos;
+                $this->ingresosScheduledForDeletion->clear();
+            }
+            $this->ingresosScheduledForDeletion[]= clone $ingreso;
+            $ingreso->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ingresos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     */
+    public function getIngresosJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresoQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getIngresos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ingresos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     */
+    public function getIngresosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresoQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getIngresos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Ingresos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingreso[] List of Ingreso objects
+     */
+    public function getIngresosJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresoQuery::create(null, $criteria);
+        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
+
+        return $this->getIngresos($query, $con);
     }
 
     /**
@@ -2936,6 +3312,31 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     {
         $query = NotacreditoQuery::create(null, $criteria);
         $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getNotacreditos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Notacreditos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notacredito[] List of Notacredito objects
+     */
+    public function getNotacreditosJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotacreditoQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
 
         return $this->getNotacreditos($query, $con);
     }
@@ -5633,6 +6034,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collIngresos) {
+                foreach ($this->collIngresos as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collInventariomess) {
                 foreach ($this->collInventariomess as $o) {
                     $o->clearAllReferences($deep);
@@ -5700,6 +6106,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collDevolucions->clearIterator();
         }
         $this->collDevolucions = null;
+        if ($this->collIngresos instanceof PropelCollection) {
+            $this->collIngresos->clearIterator();
+        }
+        $this->collIngresos = null;
         if ($this->collInventariomess instanceof PropelCollection) {
             $this->collInventariomess->clearIterator();
         }

@@ -48,6 +48,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     protected $idsucursal;
 
     /**
+     * The value for the idproveedor field.
+     * @var        int
+     */
+    protected $idproveedor;
+
+    /**
      * The value for the idusuario field.
      * @var        int
      */
@@ -115,6 +121,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     protected $notacredito_total;
 
     /**
+     * The value for the notacredito_subtotal field.
+     * @var        string
+     */
+    protected $notacredito_subtotal;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -128,6 +140,11 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
      * @var        Empresa
      */
     protected $aEmpresa;
+
+    /**
+     * @var        Proveedor
+     */
+    protected $aProveedor;
 
     /**
      * @var        Sucursal
@@ -238,6 +255,17 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [idproveedor] column value.
+     *
+     * @return int
+     */
+    public function getIdproveedor()
+    {
+
+        return $this->idproveedor;
+    }
+
+    /**
      * Get the [idusuario] column value.
      *
      * @return int
@@ -344,14 +372,43 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [notacredito_fechaentrega] column value.
+     * Get the [optionally formatted] temporal [notacredito_fechaentrega] column value.
      *
-     * @return string
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getNotacreditoFechaentrega()
+    public function getNotacreditoFechaentrega($format = 'Y-m-d H:i:s')
     {
+        if ($this->notacredito_fechaentrega === null) {
+            return null;
+        }
 
-        return $this->notacredito_fechaentrega;
+        if ($this->notacredito_fechaentrega === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->notacredito_fechaentrega);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->notacredito_fechaentrega, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -385,6 +442,17 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     {
 
         return $this->notacredito_total;
+    }
+
+    /**
+     * Get the [notacredito_subtotal] column value.
+     *
+     * @return string
+     */
+    public function getNotacreditoSubtotal()
+    {
+
+        return $this->notacredito_subtotal;
     }
 
     /**
@@ -457,6 +525,31 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
 
         return $this;
     } // setIdsucursal()
+
+    /**
+     * Set the value of [idproveedor] column.
+     *
+     * @param  int $v new value
+     * @return Notacredito The current object (for fluent API support)
+     */
+    public function setIdproveedor($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idproveedor !== $v) {
+            $this->idproveedor = $v;
+            $this->modifiedColumns[] = NotacreditoPeer::IDPROVEEDOR;
+        }
+
+        if ($this->aProveedor !== null && $this->aProveedor->getIdproveedor() !== $v) {
+            $this->aProveedor = null;
+        }
+
+
+        return $this;
+    } // setIdproveedor()
 
     /**
      * Set the value of [idusuario] column.
@@ -628,21 +721,23 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     } // setNotacreditoFechacreacion()
 
     /**
-     * Set the value of [notacredito_fechaentrega] column.
+     * Sets the value of [notacredito_fechaentrega] column to a normalized version of the date/time value specified.
      *
-     * @param  string $v new value
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
      * @return Notacredito The current object (for fluent API support)
      */
     public function setNotacreditoFechaentrega($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->notacredito_fechaentrega !== $v) {
-            $this->notacredito_fechaentrega = $v;
-            $this->modifiedColumns[] = NotacreditoPeer::NOTACREDITO_FECHAENTREGA;
-        }
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->notacredito_fechaentrega !== null || $dt !== null) {
+            $currentDateAsString = ($this->notacredito_fechaentrega !== null && $tmpDt = new DateTime($this->notacredito_fechaentrega)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->notacredito_fechaentrega = $newDateAsString;
+                $this->modifiedColumns[] = NotacreditoPeer::NOTACREDITO_FECHAENTREGA;
+            }
+        } // if either are not null
 
 
         return $this;
@@ -712,6 +807,27 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     } // setNotacreditoTotal()
 
     /**
+     * Set the value of [notacredito_subtotal] column.
+     *
+     * @param  string $v new value
+     * @return Notacredito The current object (for fluent API support)
+     */
+    public function setNotacreditoSubtotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->notacredito_subtotal !== $v) {
+            $this->notacredito_subtotal = $v;
+            $this->modifiedColumns[] = NotacreditoPeer::NOTACREDITO_SUBTOTAL;
+        }
+
+
+        return $this;
+    } // setNotacreditoSubtotal()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -750,17 +866,19 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $this->idnotacredito = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->idusuario = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->idauditor = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->idalmacen = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->notacredito_folio = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->notacredito_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
-            $this->notacredito_factura = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->notacredito_fechacreacion = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->notacredito_fechaentrega = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->notacredito_ieps = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->notacredito_iva = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-            $this->notacredito_total = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->idproveedor = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->idusuario = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->idauditor = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+            $this->idalmacen = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->notacredito_folio = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->notacredito_revisada = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->notacredito_factura = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->notacredito_fechacreacion = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->notacredito_fechaentrega = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->notacredito_ieps = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->notacredito_iva = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->notacredito_total = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->notacredito_subtotal = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -770,7 +888,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 14; // 14 = NotacreditoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 16; // 16 = NotacreditoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Notacredito object", $e);
@@ -798,6 +916,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         }
         if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
             $this->aSucursal = null;
+        }
+        if ($this->aProveedor !== null && $this->idproveedor !== $this->aProveedor->getIdproveedor()) {
+            $this->aProveedor = null;
         }
         if ($this->aUsuarioRelatedByIdusuario !== null && $this->idusuario !== $this->aUsuarioRelatedByIdusuario->getIdusuario()) {
             $this->aUsuarioRelatedByIdusuario = null;
@@ -850,6 +971,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $this->aAlmacen = null;
             $this->aUsuarioRelatedByIdauditor = null;
             $this->aEmpresa = null;
+            $this->aProveedor = null;
             $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collNotacreditodetalles = null;
@@ -995,6 +1117,13 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 $this->setEmpresa($this->aEmpresa);
             }
 
+            if ($this->aProveedor !== null) {
+                if ($this->aProveedor->isModified() || $this->aProveedor->isNew()) {
+                    $affectedRows += $this->aProveedor->save($con);
+                }
+                $this->setProveedor($this->aProveedor);
+            }
+
             if ($this->aSucursal !== null) {
                 if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
                     $affectedRows += $this->aSucursal->save($con);
@@ -1089,6 +1218,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::IDSUCURSAL)) {
             $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
+        if ($this->isColumnModified(NotacreditoPeer::IDPROVEEDOR)) {
+            $modifiedColumns[':p' . $index++]  = '`idproveedor`';
+        }
         if ($this->isColumnModified(NotacreditoPeer::IDUSUARIO)) {
             $modifiedColumns[':p' . $index++]  = '`idusuario`';
         }
@@ -1122,6 +1254,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_TOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`notacredito_total`';
         }
+        if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_SUBTOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`notacredito_subtotal`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `notacredito` (%s) VALUES (%s)',
@@ -1141,6 +1276,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                         break;
                     case '`idsucursal`':
                         $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
+                        break;
+                    case '`idproveedor`':
+                        $stmt->bindValue($identifier, $this->idproveedor, PDO::PARAM_INT);
                         break;
                     case '`idusuario`':
                         $stmt->bindValue($identifier, $this->idusuario, PDO::PARAM_INT);
@@ -1174,6 +1312,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                         break;
                     case '`notacredito_total`':
                         $stmt->bindValue($identifier, $this->notacredito_total, PDO::PARAM_STR);
+                        break;
+                    case '`notacredito_subtotal`':
+                        $stmt->bindValue($identifier, $this->notacredito_subtotal, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1292,6 +1433,12 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aProveedor !== null) {
+                if (!$this->aProveedor->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aProveedor->getValidationFailures());
+                }
+            }
+
             if ($this->aSucursal !== null) {
                 if (!$this->aSucursal->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
@@ -1371,37 +1518,43 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 return $this->getIdsucursal();
                 break;
             case 3:
-                return $this->getIdusuario();
+                return $this->getIdproveedor();
                 break;
             case 4:
-                return $this->getIdauditor();
+                return $this->getIdusuario();
                 break;
             case 5:
-                return $this->getIdalmacen();
+                return $this->getIdauditor();
                 break;
             case 6:
-                return $this->getNotacreditoFolio();
+                return $this->getIdalmacen();
                 break;
             case 7:
-                return $this->getNotacreditoRevisada();
+                return $this->getNotacreditoFolio();
                 break;
             case 8:
-                return $this->getNotacreditoFactura();
+                return $this->getNotacreditoRevisada();
                 break;
             case 9:
-                return $this->getNotacreditoFechacreacion();
+                return $this->getNotacreditoFactura();
                 break;
             case 10:
-                return $this->getNotacreditoFechaentrega();
+                return $this->getNotacreditoFechacreacion();
                 break;
             case 11:
-                return $this->getNotacreditoIeps();
+                return $this->getNotacreditoFechaentrega();
                 break;
             case 12:
-                return $this->getNotacreditoIva();
+                return $this->getNotacreditoIeps();
                 break;
             case 13:
+                return $this->getNotacreditoIva();
+                break;
+            case 14:
                 return $this->getNotacreditoTotal();
+                break;
+            case 15:
+                return $this->getNotacreditoSubtotal();
                 break;
             default:
                 return null;
@@ -1435,17 +1588,19 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $keys[0] => $this->getIdnotacredito(),
             $keys[1] => $this->getIdempresa(),
             $keys[2] => $this->getIdsucursal(),
-            $keys[3] => $this->getIdusuario(),
-            $keys[4] => $this->getIdauditor(),
-            $keys[5] => $this->getIdalmacen(),
-            $keys[6] => $this->getNotacreditoFolio(),
-            $keys[7] => $this->getNotacreditoRevisada(),
-            $keys[8] => $this->getNotacreditoFactura(),
-            $keys[9] => $this->getNotacreditoFechacreacion(),
-            $keys[10] => $this->getNotacreditoFechaentrega(),
-            $keys[11] => $this->getNotacreditoIeps(),
-            $keys[12] => $this->getNotacreditoIva(),
-            $keys[13] => $this->getNotacreditoTotal(),
+            $keys[3] => $this->getIdproveedor(),
+            $keys[4] => $this->getIdusuario(),
+            $keys[5] => $this->getIdauditor(),
+            $keys[6] => $this->getIdalmacen(),
+            $keys[7] => $this->getNotacreditoFolio(),
+            $keys[8] => $this->getNotacreditoRevisada(),
+            $keys[9] => $this->getNotacreditoFactura(),
+            $keys[10] => $this->getNotacreditoFechacreacion(),
+            $keys[11] => $this->getNotacreditoFechaentrega(),
+            $keys[12] => $this->getNotacreditoIeps(),
+            $keys[13] => $this->getNotacreditoIva(),
+            $keys[14] => $this->getNotacreditoTotal(),
+            $keys[15] => $this->getNotacreditoSubtotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1461,6 +1616,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             }
             if (null !== $this->aEmpresa) {
                 $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aProveedor) {
+                $result['Proveedor'] = $this->aProveedor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aSucursal) {
                 $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -1518,37 +1676,43 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 $this->setIdsucursal($value);
                 break;
             case 3:
-                $this->setIdusuario($value);
+                $this->setIdproveedor($value);
                 break;
             case 4:
-                $this->setIdauditor($value);
+                $this->setIdusuario($value);
                 break;
             case 5:
-                $this->setIdalmacen($value);
+                $this->setIdauditor($value);
                 break;
             case 6:
-                $this->setNotacreditoFolio($value);
+                $this->setIdalmacen($value);
                 break;
             case 7:
-                $this->setNotacreditoRevisada($value);
+                $this->setNotacreditoFolio($value);
                 break;
             case 8:
-                $this->setNotacreditoFactura($value);
+                $this->setNotacreditoRevisada($value);
                 break;
             case 9:
-                $this->setNotacreditoFechacreacion($value);
+                $this->setNotacreditoFactura($value);
                 break;
             case 10:
-                $this->setNotacreditoFechaentrega($value);
+                $this->setNotacreditoFechacreacion($value);
                 break;
             case 11:
-                $this->setNotacreditoIeps($value);
+                $this->setNotacreditoFechaentrega($value);
                 break;
             case 12:
-                $this->setNotacreditoIva($value);
+                $this->setNotacreditoIeps($value);
                 break;
             case 13:
+                $this->setNotacreditoIva($value);
+                break;
+            case 14:
                 $this->setNotacreditoTotal($value);
+                break;
+            case 15:
+                $this->setNotacreditoSubtotal($value);
                 break;
         } // switch()
     }
@@ -1577,17 +1741,19 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setIdnotacredito($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdusuario($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIdauditor($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setIdalmacen($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setNotacreditoFolio($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setNotacreditoRevisada($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setNotacreditoFactura($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setNotacreditoFechacreacion($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setNotacreditoFechaentrega($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setNotacreditoIeps($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setNotacreditoIva($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setNotacreditoTotal($arr[$keys[13]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdproveedor($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdusuario($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setIdauditor($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setIdalmacen($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setNotacreditoFolio($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setNotacreditoRevisada($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setNotacreditoFactura($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setNotacreditoFechacreacion($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setNotacreditoFechaentrega($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setNotacreditoIeps($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setNotacreditoIva($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setNotacreditoTotal($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setNotacreditoSubtotal($arr[$keys[15]]);
     }
 
     /**
@@ -1602,6 +1768,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::IDNOTACREDITO)) $criteria->add(NotacreditoPeer::IDNOTACREDITO, $this->idnotacredito);
         if ($this->isColumnModified(NotacreditoPeer::IDEMPRESA)) $criteria->add(NotacreditoPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(NotacreditoPeer::IDSUCURSAL)) $criteria->add(NotacreditoPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(NotacreditoPeer::IDPROVEEDOR)) $criteria->add(NotacreditoPeer::IDPROVEEDOR, $this->idproveedor);
         if ($this->isColumnModified(NotacreditoPeer::IDUSUARIO)) $criteria->add(NotacreditoPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(NotacreditoPeer::IDAUDITOR)) $criteria->add(NotacreditoPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(NotacreditoPeer::IDALMACEN)) $criteria->add(NotacreditoPeer::IDALMACEN, $this->idalmacen);
@@ -1613,6 +1780,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_IEPS)) $criteria->add(NotacreditoPeer::NOTACREDITO_IEPS, $this->notacredito_ieps);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_IVA)) $criteria->add(NotacreditoPeer::NOTACREDITO_IVA, $this->notacredito_iva);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_TOTAL)) $criteria->add(NotacreditoPeer::NOTACREDITO_TOTAL, $this->notacredito_total);
+        if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_SUBTOTAL)) $criteria->add(NotacreditoPeer::NOTACREDITO_SUBTOTAL, $this->notacredito_subtotal);
 
         return $criteria;
     }
@@ -1678,6 +1846,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     {
         $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setIdsucursal($this->getIdsucursal());
+        $copyObj->setIdproveedor($this->getIdproveedor());
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setIdalmacen($this->getIdalmacen());
@@ -1689,6 +1858,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $copyObj->setNotacreditoIeps($this->getNotacreditoIeps());
         $copyObj->setNotacreditoIva($this->getNotacreditoIva());
         $copyObj->setNotacreditoTotal($this->getNotacreditoTotal());
+        $copyObj->setNotacreditoSubtotal($this->getNotacreditoSubtotal());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1913,6 +2083,58 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         }
 
         return $this->aEmpresa;
+    }
+
+    /**
+     * Declares an association between this object and a Proveedor object.
+     *
+     * @param                  Proveedor $v
+     * @return Notacredito The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setProveedor(Proveedor $v = null)
+    {
+        if ($v === null) {
+            $this->setIdproveedor(NULL);
+        } else {
+            $this->setIdproveedor($v->getIdproveedor());
+        }
+
+        $this->aProveedor = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Proveedor object, it will not be re-added.
+        if ($v !== null) {
+            $v->addNotacredito($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Proveedor object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Proveedor The associated Proveedor object.
+     * @throws PropelException
+     */
+    public function getProveedor(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aProveedor === null && ($this->idproveedor !== null) && $doQuery) {
+            $this->aProveedor = ProveedorQuery::create()->findPk($this->idproveedor, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aProveedor->addNotacreditos($this);
+             */
+        }
+
+        return $this->aProveedor;
     }
 
     /**
@@ -2571,6 +2793,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $this->idnotacredito = null;
         $this->idempresa = null;
         $this->idsucursal = null;
+        $this->idproveedor = null;
         $this->idusuario = null;
         $this->idauditor = null;
         $this->idalmacen = null;
@@ -2582,6 +2805,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $this->notacredito_ieps = null;
         $this->notacredito_iva = null;
         $this->notacredito_total = null;
+        $this->notacredito_subtotal = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -2624,6 +2848,9 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             if ($this->aEmpresa instanceof Persistent) {
               $this->aEmpresa->clearAllReferences($deep);
             }
+            if ($this->aProveedor instanceof Persistent) {
+              $this->aProveedor->clearAllReferences($deep);
+            }
             if ($this->aSucursal instanceof Persistent) {
               $this->aSucursal->clearAllReferences($deep);
             }
@@ -2645,6 +2872,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $this->aAlmacen = null;
         $this->aUsuarioRelatedByIdauditor = null;
         $this->aEmpresa = null;
+        $this->aProveedor = null;
         $this->aSucursal = null;
         $this->aUsuarioRelatedByIdusuario = null;
     }

@@ -74,6 +74,10 @@
  * @method RequisicionQuery rightJoinRequisiciondetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Requisiciondetalle relation
  * @method RequisicionQuery innerJoinRequisiciondetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Requisiciondetalle relation
  *
+ * @method RequisicionQuery leftJoinRequisicionnota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Requisicionnota relation
+ * @method RequisicionQuery rightJoinRequisicionnota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Requisicionnota relation
+ * @method RequisicionQuery innerJoinRequisicionnota($relationAlias = null) Adds a INNER JOIN clause to the query using the Requisicionnota relation
+ *
  * @method Requisicion findOne(PropelPDO $con = null) Return the first Requisicion matching the query
  * @method Requisicion findOneOrCreate(PropelPDO $con = null) Return the first Requisicion matching the query, or a new Requisicion object populated from the query conditions when no match is found
  *
@@ -1514,6 +1518,80 @@ abstract class BaseRequisicionQuery extends ModelCriteria
         return $this
             ->joinRequisiciondetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Requisiciondetalle', 'RequisiciondetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisicionnota object
+     *
+     * @param   Requisicionnota|PropelObjectCollection $requisicionnota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 RequisicionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisicionnota($requisicionnota, $comparison = null)
+    {
+        if ($requisicionnota instanceof Requisicionnota) {
+            return $this
+                ->addUsingAlias(RequisicionPeer::IDREQUISICION, $requisicionnota->getIdrequisicion(), $comparison);
+        } elseif ($requisicionnota instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisicionnotaQuery()
+                ->filterByPrimaryKeys($requisicionnota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisicionnota() only accepts arguments of type Requisicionnota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Requisicionnota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function joinRequisicionnota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Requisicionnota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Requisicionnota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Requisicionnota relation Requisicionnota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisicionnotaQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisicionnotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinRequisicionnota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Requisicionnota', 'RequisicionnotaQuery');
     }
 
     /**

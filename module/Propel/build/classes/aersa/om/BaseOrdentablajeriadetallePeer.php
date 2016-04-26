@@ -24,13 +24,13 @@ abstract class BaseOrdentablajeriadetallePeer
     const TM_CLASS = 'OrdentablajeriadetalleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 9;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /** the column name for the idordentablajeriadetalle field */
     const IDORDENTABLAJERIADETALLE = 'ordentablajeriadetalle.idordentablajeriadetalle';
@@ -44,8 +44,20 @@ abstract class BaseOrdentablajeriadetallePeer
     /** the column name for the ordentablajeriadetalle_cantidad field */
     const ORDENTABLAJERIADETALLE_CANTIDAD = 'ordentablajeriadetalle.ordentablajeriadetalle_cantidad';
 
-    /** the column name for the ordentablajeriadetalle_porcion field */
-    const ORDENTABLAJERIADETALLE_PORCION = 'ordentablajeriadetalle.ordentablajeriadetalle_porcion';
+    /** the column name for the ordentablajeriadetalle_pesoporcion field */
+    const ORDENTABLAJERIADETALLE_PESOPORCION = 'ordentablajeriadetalle.ordentablajeriadetalle_pesoporcion';
+
+    /** the column name for the ordentablajeriadetalle_precioporcion field */
+    const ORDENTABLAJERIADETALLE_PRECIOPORCION = 'ordentablajeriadetalle.ordentablajeriadetalle_precioporcion';
+
+    /** the column name for the ordentablajeriadetalle_pesototal field */
+    const ORDENTABLAJERIADETALLE_PESOTOTAL = 'ordentablajeriadetalle.ordentablajeriadetalle_pesototal';
+
+    /** the column name for the ordentablajeriadetalle_subtotal field */
+    const ORDENTABLAJERIADETALLE_SUBTOTAL = 'ordentablajeriadetalle.ordentablajeriadetalle_subtotal';
+
+    /** the column name for the ordentablajeriadetalle_revisada field */
+    const ORDENTABLAJERIADETALLE_REVISADA = 'ordentablajeriadetalle.ordentablajeriadetalle_revisada';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -66,12 +78,12 @@ abstract class BaseOrdentablajeriadetallePeer
      * e.g. OrdentablajeriadetallePeer::$fieldNames[OrdentablajeriadetallePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idordentablajeriadetalle', 'Idordentablajeria', 'Idproducto', 'OrdentablajeriadetalleCantidad', 'OrdentablajeriadetallePorcion', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeriadetalle', 'idordentablajeria', 'idproducto', 'ordentablajeriadetalleCantidad', 'ordentablajeriadetallePorcion', ),
-        BasePeer::TYPE_COLNAME => array (OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE, OrdentablajeriadetallePeer::IDORDENTABLAJERIA, OrdentablajeriadetallePeer::IDPRODUCTO, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIADETALLE', 'IDORDENTABLAJERIA', 'IDPRODUCTO', 'ORDENTABLAJERIADETALLE_CANTIDAD', 'ORDENTABLAJERIADETALLE_PORCION', ),
-        BasePeer::TYPE_FIELDNAME => array ('idordentablajeriadetalle', 'idordentablajeria', 'idproducto', 'ordentablajeriadetalle_cantidad', 'ordentablajeriadetalle_porcion', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idordentablajeriadetalle', 'Idordentablajeria', 'Idproducto', 'OrdentablajeriadetalleCantidad', 'OrdentablajeriadetallePesoporcion', 'OrdentablajeriadetallePrecioporcion', 'OrdentablajeriadetallePesototal', 'OrdentablajeriadetalleSubtotal', 'OrdentablajeriadetalleRevisada', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeriadetalle', 'idordentablajeria', 'idproducto', 'ordentablajeriadetalleCantidad', 'ordentablajeriadetallePesoporcion', 'ordentablajeriadetallePrecioporcion', 'ordentablajeriadetallePesototal', 'ordentablajeriadetalleSubtotal', 'ordentablajeriadetalleRevisada', ),
+        BasePeer::TYPE_COLNAME => array (OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE, OrdentablajeriadetallePeer::IDORDENTABLAJERIA, OrdentablajeriadetallePeer::IDPRODUCTO, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIADETALLE', 'IDORDENTABLAJERIA', 'IDPRODUCTO', 'ORDENTABLAJERIADETALLE_CANTIDAD', 'ORDENTABLAJERIADETALLE_PESOPORCION', 'ORDENTABLAJERIADETALLE_PRECIOPORCION', 'ORDENTABLAJERIADETALLE_PESOTOTAL', 'ORDENTABLAJERIADETALLE_SUBTOTAL', 'ORDENTABLAJERIADETALLE_REVISADA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idordentablajeriadetalle', 'idordentablajeria', 'idproducto', 'ordentablajeriadetalle_cantidad', 'ordentablajeriadetalle_pesoporcion', 'ordentablajeriadetalle_precioporcion', 'ordentablajeriadetalle_pesototal', 'ordentablajeriadetalle_subtotal', 'ordentablajeriadetalle_revisada', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -81,12 +93,12 @@ abstract class BaseOrdentablajeriadetallePeer
      * e.g. OrdentablajeriadetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idordentablajeriadetalle' => 0, 'Idordentablajeria' => 1, 'Idproducto' => 2, 'OrdentablajeriadetalleCantidad' => 3, 'OrdentablajeriadetallePorcion' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeriadetalle' => 0, 'idordentablajeria' => 1, 'idproducto' => 2, 'ordentablajeriadetalleCantidad' => 3, 'ordentablajeriadetallePorcion' => 4, ),
-        BasePeer::TYPE_COLNAME => array (OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE => 0, OrdentablajeriadetallePeer::IDORDENTABLAJERIA => 1, OrdentablajeriadetallePeer::IDPRODUCTO => 2, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD => 3, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIADETALLE' => 0, 'IDORDENTABLAJERIA' => 1, 'IDPRODUCTO' => 2, 'ORDENTABLAJERIADETALLE_CANTIDAD' => 3, 'ORDENTABLAJERIADETALLE_PORCION' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('idordentablajeriadetalle' => 0, 'idordentablajeria' => 1, 'idproducto' => 2, 'ordentablajeriadetalle_cantidad' => 3, 'ordentablajeriadetalle_porcion' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idordentablajeriadetalle' => 0, 'Idordentablajeria' => 1, 'Idproducto' => 2, 'OrdentablajeriadetalleCantidad' => 3, 'OrdentablajeriadetallePesoporcion' => 4, 'OrdentablajeriadetallePrecioporcion' => 5, 'OrdentablajeriadetallePesototal' => 6, 'OrdentablajeriadetalleSubtotal' => 7, 'OrdentablajeriadetalleRevisada' => 8, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idordentablajeriadetalle' => 0, 'idordentablajeria' => 1, 'idproducto' => 2, 'ordentablajeriadetalleCantidad' => 3, 'ordentablajeriadetallePesoporcion' => 4, 'ordentablajeriadetallePrecioporcion' => 5, 'ordentablajeriadetallePesototal' => 6, 'ordentablajeriadetalleSubtotal' => 7, 'ordentablajeriadetalleRevisada' => 8, ),
+        BasePeer::TYPE_COLNAME => array (OrdentablajeriadetallePeer::IDORDENTABLAJERIADETALLE => 0, OrdentablajeriadetallePeer::IDORDENTABLAJERIA => 1, OrdentablajeriadetallePeer::IDPRODUCTO => 2, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD => 3, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION => 4, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION => 5, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL => 6, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL => 7, OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA => 8, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDORDENTABLAJERIADETALLE' => 0, 'IDORDENTABLAJERIA' => 1, 'IDPRODUCTO' => 2, 'ORDENTABLAJERIADETALLE_CANTIDAD' => 3, 'ORDENTABLAJERIADETALLE_PESOPORCION' => 4, 'ORDENTABLAJERIADETALLE_PRECIOPORCION' => 5, 'ORDENTABLAJERIADETALLE_PESOTOTAL' => 6, 'ORDENTABLAJERIADETALLE_SUBTOTAL' => 7, 'ORDENTABLAJERIADETALLE_REVISADA' => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('idordentablajeriadetalle' => 0, 'idordentablajeria' => 1, 'idproducto' => 2, 'ordentablajeriadetalle_cantidad' => 3, 'ordentablajeriadetalle_pesoporcion' => 4, 'ordentablajeriadetalle_precioporcion' => 5, 'ordentablajeriadetalle_pesototal' => 6, 'ordentablajeriadetalle_subtotal' => 7, 'ordentablajeriadetalle_revisada' => 8, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -164,13 +176,21 @@ abstract class BaseOrdentablajeriadetallePeer
             $criteria->addSelectColumn(OrdentablajeriadetallePeer::IDORDENTABLAJERIA);
             $criteria->addSelectColumn(OrdentablajeriadetallePeer::IDPRODUCTO);
             $criteria->addSelectColumn(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_CANTIDAD);
-            $criteria->addSelectColumn(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION);
+            $criteria->addSelectColumn(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION);
+            $criteria->addSelectColumn(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION);
+            $criteria->addSelectColumn(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL);
+            $criteria->addSelectColumn(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL);
+            $criteria->addSelectColumn(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA);
         } else {
             $criteria->addSelectColumn($alias . '.idordentablajeriadetalle');
             $criteria->addSelectColumn($alias . '.idordentablajeria');
             $criteria->addSelectColumn($alias . '.idproducto');
             $criteria->addSelectColumn($alias . '.ordentablajeriadetalle_cantidad');
-            $criteria->addSelectColumn($alias . '.ordentablajeriadetalle_porcion');
+            $criteria->addSelectColumn($alias . '.ordentablajeriadetalle_pesoporcion');
+            $criteria->addSelectColumn($alias . '.ordentablajeriadetalle_precioporcion');
+            $criteria->addSelectColumn($alias . '.ordentablajeriadetalle_pesototal');
+            $criteria->addSelectColumn($alias . '.ordentablajeriadetalle_subtotal');
+            $criteria->addSelectColumn($alias . '.ordentablajeriadetalle_revisada');
         }
     }
 
@@ -524,6 +544,57 @@ abstract class BaseOrdentablajeriadetallePeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Producto table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(OrdentablajeriadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            OrdentablajeriadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(OrdentablajeriadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(OrdentablajeriadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Selects a collection of Ordentablajeriadetalle objects pre-filled with their Ordentablajeria objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -591,6 +662,73 @@ abstract class BaseOrdentablajeriadetallePeer
 
 
     /**
+     * Selects a collection of Ordentablajeriadetalle objects pre-filled with their Producto objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ordentablajeriadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(OrdentablajeriadetallePeer::DATABASE_NAME);
+        }
+
+        OrdentablajeriadetallePeer::addSelectColumns($criteria);
+        $startcol = OrdentablajeriadetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductoPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = OrdentablajeriadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = OrdentablajeriadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = OrdentablajeriadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                OrdentablajeriadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = ProductoPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Ordentablajeriadetalle) to $obj2 (Producto)
+                $obj2->addOrdentablajeriadetalle($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining all related tables
      *
      * @param      Criteria $criteria
@@ -627,6 +765,8 @@ abstract class BaseOrdentablajeriadetallePeer
         }
 
         $criteria->addJoin(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, OrdentablajeriaPeer::IDORDENTABLAJERIA, $join_behavior);
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -665,7 +805,12 @@ abstract class BaseOrdentablajeriadetallePeer
         OrdentablajeriaPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS;
 
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
         $criteria->addJoin(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, OrdentablajeriaPeer::IDORDENTABLAJERIA, $join_behavior);
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
@@ -701,6 +846,274 @@ abstract class BaseOrdentablajeriadetallePeer
                 // Add the $obj1 (Ordentablajeriadetalle) to the collection in $obj2 (Ordentablajeria)
                 $obj2->addOrdentablajeriadetalle($obj1);
             } // if joined row not null
+
+            // Add objects for joined Producto rows
+
+            $key3 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = ProductoPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
+                    $cls = ProductoPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    ProductoPeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
+
+                // Add the $obj1 (Ordentablajeriadetalle) to the collection in $obj3 (Producto)
+                $obj3->addOrdentablajeriadetalle($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Ordentablajeria table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptOrdentablajeria(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(OrdentablajeriadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            OrdentablajeriadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(OrdentablajeriadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(OrdentablajeriadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Producto table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(OrdentablajeriadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            OrdentablajeriadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(OrdentablajeriadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(OrdentablajeriadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, OrdentablajeriaPeer::IDORDENTABLAJERIA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Ordentablajeriadetalle objects pre-filled with all related objects except Ordentablajeria.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ordentablajeriadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptOrdentablajeria(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(OrdentablajeriadetallePeer::DATABASE_NAME);
+        }
+
+        OrdentablajeriadetallePeer::addSelectColumns($criteria);
+        $startcol2 = OrdentablajeriadetallePeer::NUM_HYDRATE_COLUMNS;
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = OrdentablajeriadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = OrdentablajeriadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = OrdentablajeriadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                OrdentablajeriadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Producto rows
+
+                $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = ProductoPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Ordentablajeriadetalle) to the collection in $obj2 (Producto)
+                $obj2->addOrdentablajeriadetalle($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Ordentablajeriadetalle objects pre-filled with all related objects except Producto.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ordentablajeriadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(OrdentablajeriadetallePeer::DATABASE_NAME);
+        }
+
+        OrdentablajeriadetallePeer::addSelectColumns($criteria);
+        $startcol2 = OrdentablajeriadetallePeer::NUM_HYDRATE_COLUMNS;
+
+        OrdentablajeriaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, OrdentablajeriaPeer::IDORDENTABLAJERIA, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = OrdentablajeriadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = OrdentablajeriadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = OrdentablajeriadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                OrdentablajeriadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Ordentablajeria rows
+
+                $key2 = OrdentablajeriaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = OrdentablajeriaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = OrdentablajeriaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    OrdentablajeriaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Ordentablajeriadetalle) to the collection in $obj2 (Ordentablajeria)
+                $obj2->addOrdentablajeriadetalle($obj1);
+
+            } // if joined row is not null
 
             $results[] = $obj1;
         }

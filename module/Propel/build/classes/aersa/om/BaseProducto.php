@@ -67,7 +67,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
     /**
      * The value for the producto_rendimiento field.
-     * @var        int
+     * @var        double
      */
     protected $producto_rendimiento;
 
@@ -79,6 +79,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
     /**
      * The value for the producto_baja field.
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $producto_baja;
@@ -150,6 +151,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
      */
     protected $collOrdentablajerias;
     protected $collOrdentablajeriasPartial;
+
+    /**
+     * @var        PropelObjectCollection|Ordentablajeriadetalle[] Collection to store aggregation of Ordentablajeriadetalle objects.
+     */
+    protected $collOrdentablajeriadetalles;
+    protected $collOrdentablajeriadetallesPartial;
 
     /**
      * @var        PropelObjectCollection|Plantillatablajeria[] Collection to store aggregation of Plantillatablajeria objects.
@@ -235,6 +242,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $ordentablajeriadetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $plantillatablajeriasScheduledForDeletion = null;
 
     /**
@@ -260,6 +273,27 @@ abstract class BaseProducto extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $requisiciondetallesScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->producto_baja = false;
+    }
+
+    /**
+     * Initializes internal state of BaseProducto object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idproducto] column value.
@@ -330,7 +364,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
     /**
      * Get the [producto_rendimiento] column value.
      *
-     * @return int
+     * @return double
      */
     public function getProductoRendimiento()
     {
@@ -538,13 +572,13 @@ abstract class BaseProducto extends BaseObject implements Persistent
     /**
      * Set the value of [producto_rendimiento] column.
      *
-     * @param  int $v new value
+     * @param  double $v new value
      * @return Producto The current object (for fluent API support)
      */
     public function setProductoRendimiento($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+            $v = (double) $v;
         }
 
         if ($this->producto_rendimiento !== $v) {
@@ -687,6 +721,10 @@ abstract class BaseProducto extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->producto_baja !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -715,7 +753,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->producto_nombre = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
             $this->idcategoria = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
             $this->idsubcategoria = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->producto_rendimiento = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+            $this->producto_rendimiento = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
             $this->producto_ultimocosto = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
             $this->producto_baja = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
             $this->producto_tipo = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
@@ -817,6 +855,8 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collNotacreditodetalles = null;
 
             $this->collOrdentablajerias = null;
+
+            $this->collOrdentablajeriadetalles = null;
 
             $this->collPlantillatablajerias = null;
 
@@ -1070,6 +1110,23 @@ abstract class BaseProducto extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->ordentablajeriadetallesScheduledForDeletion !== null) {
+                if (!$this->ordentablajeriadetallesScheduledForDeletion->isEmpty()) {
+                    OrdentablajeriadetalleQuery::create()
+                        ->filterByPrimaryKeys($this->ordentablajeriadetallesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordentablajeriadetallesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdentablajeriadetalles !== null) {
+                foreach ($this->collOrdentablajeriadetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->plantillatablajeriasScheduledForDeletion !== null) {
                 if (!$this->plantillatablajeriasScheduledForDeletion->isEmpty()) {
                     PlantillatablajeriaQuery::create()
@@ -1247,7 +1304,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
                         $stmt->bindValue($identifier, $this->idsubcategoria, PDO::PARAM_INT);
                         break;
                     case '`producto_rendimiento`':
-                        $stmt->bindValue($identifier, $this->producto_rendimiento, PDO::PARAM_INT);
+                        $stmt->bindValue($identifier, $this->producto_rendimiento, PDO::PARAM_STR);
                         break;
                     case '`producto_ultimocosto`':
                         $stmt->bindValue($identifier, $this->producto_ultimocosto, PDO::PARAM_STR);
@@ -1427,6 +1484,14 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
                 if ($this->collOrdentablajerias !== null) {
                     foreach ($this->collOrdentablajerias as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collOrdentablajeriadetalles !== null) {
+                    foreach ($this->collOrdentablajeriadetalles as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1618,6 +1683,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             if (null !== $this->collOrdentablajerias) {
                 $result['Ordentablajerias'] = $this->collOrdentablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdentablajeriadetalles) {
+                $result['Ordentablajeriadetalles'] = $this->collOrdentablajeriadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPlantillatablajerias) {
                 $result['Plantillatablajerias'] = $this->collPlantillatablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1872,6 +1940,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
             foreach ($this->getOrdentablajerias() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addOrdentablajeria($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getOrdentablajeriadetalles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrdentablajeriadetalle($relObj->copy($deepCopy));
                 }
             }
 
@@ -2188,6 +2262,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         }
         if ('Ordentablajeria' == $relationName) {
             $this->initOrdentablajerias();
+        }
+        if ('Ordentablajeriadetalle' == $relationName) {
+            $this->initOrdentablajeriadetalles();
         }
         if ('Plantillatablajeria' == $relationName) {
             $this->initPlantillatablajerias();
@@ -3632,6 +3709,256 @@ abstract class BaseProducto extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collOrdentablajeriadetalles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Producto The current object (for fluent API support)
+     * @see        addOrdentablajeriadetalles()
+     */
+    public function clearOrdentablajeriadetalles()
+    {
+        $this->collOrdentablajeriadetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collOrdentablajeriadetallesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collOrdentablajeriadetalles collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialOrdentablajeriadetalles($v = true)
+    {
+        $this->collOrdentablajeriadetallesPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdentablajeriadetalles collection.
+     *
+     * By default this just sets the collOrdentablajeriadetalles collection to an empty array (like clearcollOrdentablajeriadetalles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdentablajeriadetalles($overrideExisting = true)
+    {
+        if (null !== $this->collOrdentablajeriadetalles && !$overrideExisting) {
+            return;
+        }
+        $this->collOrdentablajeriadetalles = new PropelObjectCollection();
+        $this->collOrdentablajeriadetalles->setModel('Ordentablajeriadetalle');
+    }
+
+    /**
+     * Gets an array of Ordentablajeriadetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Producto is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ordentablajeriadetalle[] List of Ordentablajeriadetalle objects
+     * @throws PropelException
+     */
+    public function getOrdentablajeriadetalles($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriadetallesPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriadetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriadetalles) {
+                // return empty collection
+                $this->initOrdentablajeriadetalles();
+            } else {
+                $collOrdentablajeriadetalles = OrdentablajeriadetalleQuery::create(null, $criteria)
+                    ->filterByProducto($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdentablajeriadetallesPartial && count($collOrdentablajeriadetalles)) {
+                      $this->initOrdentablajeriadetalles(false);
+
+                      foreach ($collOrdentablajeriadetalles as $obj) {
+                        if (false == $this->collOrdentablajeriadetalles->contains($obj)) {
+                          $this->collOrdentablajeriadetalles->append($obj);
+                        }
+                      }
+
+                      $this->collOrdentablajeriadetallesPartial = true;
+                    }
+
+                    $collOrdentablajeriadetalles->getInternalIterator()->rewind();
+
+                    return $collOrdentablajeriadetalles;
+                }
+
+                if ($partial && $this->collOrdentablajeriadetalles) {
+                    foreach ($this->collOrdentablajeriadetalles as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdentablajeriadetalles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdentablajeriadetalles = $collOrdentablajeriadetalles;
+                $this->collOrdentablajeriadetallesPartial = false;
+            }
+        }
+
+        return $this->collOrdentablajeriadetalles;
+    }
+
+    /**
+     * Sets a collection of Ordentablajeriadetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ordentablajeriadetalles A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setOrdentablajeriadetalles(PropelCollection $ordentablajeriadetalles, PropelPDO $con = null)
+    {
+        $ordentablajeriadetallesToDelete = $this->getOrdentablajeriadetalles(new Criteria(), $con)->diff($ordentablajeriadetalles);
+
+
+        $this->ordentablajeriadetallesScheduledForDeletion = $ordentablajeriadetallesToDelete;
+
+        foreach ($ordentablajeriadetallesToDelete as $ordentablajeriadetalleRemoved) {
+            $ordentablajeriadetalleRemoved->setProducto(null);
+        }
+
+        $this->collOrdentablajeriadetalles = null;
+        foreach ($ordentablajeriadetalles as $ordentablajeriadetalle) {
+            $this->addOrdentablajeriadetalle($ordentablajeriadetalle);
+        }
+
+        $this->collOrdentablajeriadetalles = $ordentablajeriadetalles;
+        $this->collOrdentablajeriadetallesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ordentablajeriadetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ordentablajeriadetalle objects.
+     * @throws PropelException
+     */
+    public function countOrdentablajeriadetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collOrdentablajeriadetallesPartial && !$this->isNew();
+        if (null === $this->collOrdentablajeriadetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdentablajeriadetalles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdentablajeriadetalles());
+            }
+            $query = OrdentablajeriadetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProducto($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdentablajeriadetalles);
+    }
+
+    /**
+     * Method called to associate a Ordentablajeriadetalle object to this object
+     * through the Ordentablajeriadetalle foreign key attribute.
+     *
+     * @param    Ordentablajeriadetalle $l Ordentablajeriadetalle
+     * @return Producto The current object (for fluent API support)
+     */
+    public function addOrdentablajeriadetalle(Ordentablajeriadetalle $l)
+    {
+        if ($this->collOrdentablajeriadetalles === null) {
+            $this->initOrdentablajeriadetalles();
+            $this->collOrdentablajeriadetallesPartial = true;
+        }
+
+        if (!in_array($l, $this->collOrdentablajeriadetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddOrdentablajeriadetalle($l);
+
+            if ($this->ordentablajeriadetallesScheduledForDeletion and $this->ordentablajeriadetallesScheduledForDeletion->contains($l)) {
+                $this->ordentablajeriadetallesScheduledForDeletion->remove($this->ordentablajeriadetallesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ordentablajeriadetalle $ordentablajeriadetalle The ordentablajeriadetalle object to add.
+     */
+    protected function doAddOrdentablajeriadetalle($ordentablajeriadetalle)
+    {
+        $this->collOrdentablajeriadetalles[]= $ordentablajeriadetalle;
+        $ordentablajeriadetalle->setProducto($this);
+    }
+
+    /**
+     * @param	Ordentablajeriadetalle $ordentablajeriadetalle The ordentablajeriadetalle object to remove.
+     * @return Producto The current object (for fluent API support)
+     */
+    public function removeOrdentablajeriadetalle($ordentablajeriadetalle)
+    {
+        if ($this->getOrdentablajeriadetalles()->contains($ordentablajeriadetalle)) {
+            $this->collOrdentablajeriadetalles->remove($this->collOrdentablajeriadetalles->search($ordentablajeriadetalle));
+            if (null === $this->ordentablajeriadetallesScheduledForDeletion) {
+                $this->ordentablajeriadetallesScheduledForDeletion = clone $this->collOrdentablajeriadetalles;
+                $this->ordentablajeriadetallesScheduledForDeletion->clear();
+            }
+            $this->ordentablajeriadetallesScheduledForDeletion[]= clone $ordentablajeriadetalle;
+            $ordentablajeriadetalle->setProducto(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Ordentablajeriadetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ordentablajeriadetalle[] List of Ordentablajeriadetalle objects
+     */
+    public function getOrdentablajeriadetallesJoinOrdentablajeria($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrdentablajeriadetalleQuery::create(null, $criteria);
+        $query->joinWith('Ordentablajeria', $join_behavior);
+
+        return $this->getOrdentablajeriadetalles($query, $con);
+    }
+
+    /**
      * Clears out the collPlantillatablajerias collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -4852,6 +5179,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -4892,6 +5220,11 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             if ($this->collOrdentablajerias) {
                 foreach ($this->collOrdentablajerias as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collOrdentablajeriadetalles) {
+                foreach ($this->collOrdentablajeriadetalles as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4956,6 +5289,10 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collOrdentablajerias->clearIterator();
         }
         $this->collOrdentablajerias = null;
+        if ($this->collOrdentablajeriadetalles instanceof PropelCollection) {
+            $this->collOrdentablajeriadetalles->clearIterator();
+        }
+        $this->collOrdentablajeriadetalles = null;
         if ($this->collPlantillatablajerias instanceof PropelCollection) {
             $this->collPlantillatablajerias->clearIterator();
         }

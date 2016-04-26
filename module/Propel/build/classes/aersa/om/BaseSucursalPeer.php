@@ -399,6 +399,9 @@ abstract class BaseSucursalPeer
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
+        // Invalidate objects in IngresoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        IngresoPeer::clearInstancePool();
         // Invalidate objects in InventariomesPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         InventariomesPeer::clearInstancePool();
@@ -1012,6 +1015,12 @@ abstract class BaseSucursalPeer
 
             $criteria->add(DevolucionPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Ingreso objects
+            $criteria = new Criteria(IngresoPeer::DATABASE_NAME);
+
+            $criteria->add(IngresoPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += IngresoPeer::doDelete($criteria, $con);
 
             // delete related Inventariomes objects
             $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);

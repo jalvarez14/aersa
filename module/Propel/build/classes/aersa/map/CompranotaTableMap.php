@@ -42,6 +42,7 @@ class CompranotaTableMap extends TableMap
         $this->addForeignKey('idcompra', 'Idcompra', 'INTEGER', 'compra', 'idcompra', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addColumn('compranota_nota', 'CompranotaNota', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('compranota_fecha', 'CompranotaFecha', 'TIMESTAMP', true, null, null);
         // validators
     } // initialize()
 

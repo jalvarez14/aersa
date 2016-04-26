@@ -418,6 +418,9 @@ abstract class BaseRequisicionPeer
         // Invalidate objects in RequisiciondetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisiciondetallePeer::clearInstancePool();
+        // Invalidate objects in RequisicionnotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        RequisicionnotaPeer::clearInstancePool();
     }
 
     /**
@@ -4088,6 +4091,12 @@ abstract class BaseRequisicionPeer
 
             $criteria->add(RequisiciondetallePeer::IDREQUISICION, $obj->getIdrequisicion());
             $affectedRows += RequisiciondetallePeer::doDelete($criteria, $con);
+
+            // delete related Requisicionnota objects
+            $criteria = new Criteria(RequisicionnotaPeer::DATABASE_NAME);
+
+            $criteria->add(RequisicionnotaPeer::IDREQUISICION, $obj->getIdrequisicion());
+            $affectedRows += RequisicionnotaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

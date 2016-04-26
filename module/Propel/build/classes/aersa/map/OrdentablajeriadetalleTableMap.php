@@ -40,9 +40,13 @@ class OrdentablajeriadetalleTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idordentablajeriadetalle', 'Idordentablajeriadetalle', 'INTEGER', true, null, null);
         $this->addForeignKey('idordentablajeria', 'Idordentablajeria', 'INTEGER', 'ordentablajeria', 'idordentablajeria', true, null, null);
-        $this->addColumn('idproducto', 'Idproducto', 'VARCHAR', true, 45, null);
+        $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
         $this->addColumn('ordentablajeriadetalle_cantidad', 'OrdentablajeriadetalleCantidad', 'FLOAT', true, null, null);
-        $this->addColumn('ordentablajeriadetalle_porcion', 'OrdentablajeriadetallePorcion', 'FLOAT', true, null, null);
+        $this->addColumn('ordentablajeriadetalle_pesoporcion', 'OrdentablajeriadetallePesoporcion', 'FLOAT', true, null, null);
+        $this->addColumn('ordentablajeriadetalle_precioporcion', 'OrdentablajeriadetallePrecioporcion', 'DECIMAL', true, 15, null);
+        $this->addColumn('ordentablajeriadetalle_pesototal', 'OrdentablajeriadetallePesototal', 'FLOAT', true, null, null);
+        $this->addColumn('ordentablajeriadetalle_subtotal', 'OrdentablajeriadetalleSubtotal', 'DECIMAL', true, 15, null);
+        $this->addColumn('ordentablajeriadetalle_revisada', 'OrdentablajeriadetalleRevisada', 'BOOLEAN', true, 1, false);
         // validators
     } // initialize()
 
@@ -52,6 +56,7 @@ class OrdentablajeriadetalleTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Ordentablajeria', 'Ordentablajeria', RelationMap::MANY_TO_ONE, array('idordentablajeria' => 'idordentablajeria', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
 } // OrdentablajeriadetalleTableMap

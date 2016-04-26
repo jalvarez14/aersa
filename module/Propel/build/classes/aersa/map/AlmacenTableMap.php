@@ -41,7 +41,7 @@ class AlmacenTableMap extends TableMap
         $this->addPrimaryKey('idalmacen', 'Idalmacen', 'INTEGER', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addColumn('almacen_nombre', 'AlmacenNombre', 'VARCHAR', true, 255, null);
-        $this->addColumn('almacen_encargado', 'AlmacenEncargado', 'VARCHAR', true, 45, null);
+        $this->addColumn('almacen_encargado', 'AlmacenEncargado', 'VARCHAR', false, 255, null);
         $this->addColumn('almacen_estatus', 'AlmacenEstatus', 'BOOLEAN', true, 1, null);
         // validators
     } // initialize()

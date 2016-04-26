@@ -21,6 +21,7 @@
  * @method CompraQuery orderByCompraFechaentrega($order = Criteria::ASC) Order by the compra_fechaentrega column
  * @method CompraQuery orderByCompraIeps($order = Criteria::ASC) Order by the compra_ieps column
  * @method CompraQuery orderByCompraIva($order = Criteria::ASC) Order by the compra_iva column
+ * @method CompraQuery orderByCompraSubtotal($order = Criteria::ASC) Order by the compra_subtotal column
  * @method CompraQuery orderByCompraTotal($order = Criteria::ASC) Order by the compra_total column
  * @method CompraQuery orderByCompraTipo($order = Criteria::ASC) Order by the compra_tipo column
  *
@@ -39,6 +40,7 @@
  * @method CompraQuery groupByCompraFechaentrega() Group by the compra_fechaentrega column
  * @method CompraQuery groupByCompraIeps() Group by the compra_ieps column
  * @method CompraQuery groupByCompraIva() Group by the compra_iva column
+ * @method CompraQuery groupByCompraSubtotal() Group by the compra_subtotal column
  * @method CompraQuery groupByCompraTotal() Group by the compra_total column
  * @method CompraQuery groupByCompraTipo() Group by the compra_tipo column
  *
@@ -95,6 +97,7 @@
  * @method Compra findOneByCompraFechaentrega(string $compra_fechaentrega) Return the first Compra filtered by the compra_fechaentrega column
  * @method Compra findOneByCompraIeps(string $compra_ieps) Return the first Compra filtered by the compra_ieps column
  * @method Compra findOneByCompraIva(string $compra_iva) Return the first Compra filtered by the compra_iva column
+ * @method Compra findOneByCompraSubtotal(string $compra_subtotal) Return the first Compra filtered by the compra_subtotal column
  * @method Compra findOneByCompraTotal(string $compra_total) Return the first Compra filtered by the compra_total column
  * @method Compra findOneByCompraTipo(string $compra_tipo) Return the first Compra filtered by the compra_tipo column
  *
@@ -113,6 +116,7 @@
  * @method array findByCompraFechaentrega(string $compra_fechaentrega) Return Compra objects filtered by the compra_fechaentrega column
  * @method array findByCompraIeps(string $compra_ieps) Return Compra objects filtered by the compra_ieps column
  * @method array findByCompraIva(string $compra_iva) Return Compra objects filtered by the compra_iva column
+ * @method array findByCompraSubtotal(string $compra_subtotal) Return Compra objects filtered by the compra_subtotal column
  * @method array findByCompraTotal(string $compra_total) Return Compra objects filtered by the compra_total column
  * @method array findByCompraTipo(string $compra_tipo) Return Compra objects filtered by the compra_tipo column
  *
@@ -222,7 +226,7 @@ abstract class BaseCompraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_total`, `compra_tipo` FROM `compra` WHERE `idcompra` = :p0';
+        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_subtotal`, `compra_total`, `compra_tipo` FROM `compra` WHERE `idcompra` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -913,6 +917,48 @@ abstract class BaseCompraQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompraPeer::COMPRA_IVA, $compraIva, $comparison);
+    }
+
+    /**
+     * Filter the query on the compra_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompraSubtotal(1234); // WHERE compra_subtotal = 1234
+     * $query->filterByCompraSubtotal(array(12, 34)); // WHERE compra_subtotal IN (12, 34)
+     * $query->filterByCompraSubtotal(array('min' => 12)); // WHERE compra_subtotal >= 12
+     * $query->filterByCompraSubtotal(array('max' => 12)); // WHERE compra_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $compraSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByCompraSubtotal($compraSubtotal = null, $comparison = null)
+    {
+        if (is_array($compraSubtotal)) {
+            $useMinMax = false;
+            if (isset($compraSubtotal['min'])) {
+                $this->addUsingAlias(CompraPeer::COMPRA_SUBTOTAL, $compraSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($compraSubtotal['max'])) {
+                $this->addUsingAlias(CompraPeer::COMPRA_SUBTOTAL, $compraSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompraPeer::COMPRA_SUBTOTAL, $compraSubtotal, $comparison);
     }
 
     /**

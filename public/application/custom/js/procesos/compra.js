@@ -47,7 +47,19 @@
         /*
         * Private methods
         */
+       
+        
+        var caluclator = function($tr){
+            
+            var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 0;
+            var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
+            var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat($tr.find('input[name*=descuento]').val()) : 0;
+            var ieps = $tr.find('input[name*=ieps]').val() != "" ? parseFloat($tr.find('input[name*=ieps]').val()) : 0;
 
+            
+            
+        }
+       
        
        /*
         * Public methods
@@ -131,14 +143,14 @@
                 var tipo = $('select[name=compra_tipo] option:selected').val();
                 
                 if(tipo == 'ordecompra'){
-                    console.log(almacenen_select.find('select'));
+                   
                     almacenen_select.find('select').attr('disabled',true);
                 }
 
                                
                 var tr = $('<tr>');
                 tr.append('<td><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
-                tr.append('<td><input type="text" name=productos['+count+'][canitdad]></td>');
+                tr.append('<td><input type="text" name=productos['+count+'][cantidad]></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][precio]></td>');
                 tr.append('<td>'+accounting.formatMoney(0)+'</td>');
                 tr.append('<td><input type="text" name=productos['+count+'][descuento]></td>');
@@ -150,6 +162,12 @@
                 
                 //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
                 tr.find('input').numeric();
+                
+                //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL,IEPS, ETC
+                tr.find('input').on('blur',function(){
+                    var $tr = $(this).closest(tr);
+                    caluclator($tr);
+                });
                 
                 //INSERTAMOS EN LA TABLA
                 $('#productos_table tbody').append(tr);
@@ -163,7 +181,6 @@
               count ++;          
               $('.fa-trash').on('click',function(){
                 var tr = $(this).closest('tr');
-                console.log(tr);
                 tr.remove();
             });         
               

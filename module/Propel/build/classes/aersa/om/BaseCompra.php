@@ -121,6 +121,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
     protected $compra_iva;
 
     /**
+     * The value for the compra_subtotal field.
+     * @var        string
+     */
+    protected $compra_subtotal;
+
+    /**
      * The value for the compra_total field.
      * @var        string
      */
@@ -477,6 +483,17 @@ abstract class BaseCompra extends BaseObject implements Persistent
     {
 
         return $this->compra_iva;
+    }
+
+    /**
+     * Get the [compra_subtotal] column value.
+     *
+     * @return string
+     */
+    public function getCompraSubtotal()
+    {
+
+        return $this->compra_subtotal;
     }
 
     /**
@@ -855,6 +872,27 @@ abstract class BaseCompra extends BaseObject implements Persistent
     } // setCompraIva()
 
     /**
+     * Set the value of [compra_subtotal] column.
+     *
+     * @param  string $v new value
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setCompraSubtotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->compra_subtotal !== $v) {
+            $this->compra_subtotal = $v;
+            $this->modifiedColumns[] = CompraPeer::COMPRA_SUBTOTAL;
+        }
+
+
+        return $this;
+    } // setCompraSubtotal()
+
+    /**
      * Set the value of [compra_total] column.
      *
      * @param  string $v new value
@@ -947,8 +985,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $this->compra_fechaentrega = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->compra_ieps = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->compra_iva = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
-            $this->compra_total = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
-            $this->compra_tipo = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->compra_subtotal = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->compra_total = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->compra_tipo = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -958,7 +997,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 17; // 17 = CompraPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 18; // 18 = CompraPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Compra object", $e);
@@ -1324,6 +1363,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::COMPRA_IVA)) {
             $modifiedColumns[':p' . $index++]  = '`compra_iva`';
         }
+        if ($this->isColumnModified(CompraPeer::COMPRA_SUBTOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`compra_subtotal`';
+        }
         if ($this->isColumnModified(CompraPeer::COMPRA_TOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`compra_total`';
         }
@@ -1385,6 +1427,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
                         break;
                     case '`compra_iva`':
                         $stmt->bindValue($identifier, $this->compra_iva, PDO::PARAM_STR);
+                        break;
+                    case '`compra_subtotal`':
+                        $stmt->bindValue($identifier, $this->compra_subtotal, PDO::PARAM_STR);
                         break;
                     case '`compra_total`':
                         $stmt->bindValue($identifier, $this->compra_total, PDO::PARAM_STR);
@@ -1630,9 +1675,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
                 return $this->getCompraIva();
                 break;
             case 15:
-                return $this->getCompraTotal();
+                return $this->getCompraSubtotal();
                 break;
             case 16:
+                return $this->getCompraTotal();
+                break;
+            case 17:
                 return $this->getCompraTipo();
                 break;
             default:
@@ -1679,8 +1727,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $keys[12] => $this->getCompraFechaentrega(),
             $keys[13] => $this->getCompraIeps(),
             $keys[14] => $this->getCompraIva(),
-            $keys[15] => $this->getCompraTotal(),
-            $keys[16] => $this->getCompraTipo(),
+            $keys[15] => $this->getCompraSubtotal(),
+            $keys[16] => $this->getCompraTotal(),
+            $keys[17] => $this->getCompraTipo(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1792,9 +1841,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
                 $this->setCompraIva($value);
                 break;
             case 15:
-                $this->setCompraTotal($value);
+                $this->setCompraSubtotal($value);
                 break;
             case 16:
+                $this->setCompraTotal($value);
+                break;
+            case 17:
                 $this->setCompraTipo($value);
                 break;
         } // switch()
@@ -1836,8 +1888,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if (array_key_exists($keys[12], $arr)) $this->setCompraFechaentrega($arr[$keys[12]]);
         if (array_key_exists($keys[13], $arr)) $this->setCompraIeps($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setCompraIva($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setCompraTotal($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setCompraTipo($arr[$keys[16]]);
+        if (array_key_exists($keys[15], $arr)) $this->setCompraSubtotal($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setCompraTotal($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setCompraTipo($arr[$keys[17]]);
     }
 
     /**
@@ -1864,6 +1917,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::COMPRA_FECHAENTREGA)) $criteria->add(CompraPeer::COMPRA_FECHAENTREGA, $this->compra_fechaentrega);
         if ($this->isColumnModified(CompraPeer::COMPRA_IEPS)) $criteria->add(CompraPeer::COMPRA_IEPS, $this->compra_ieps);
         if ($this->isColumnModified(CompraPeer::COMPRA_IVA)) $criteria->add(CompraPeer::COMPRA_IVA, $this->compra_iva);
+        if ($this->isColumnModified(CompraPeer::COMPRA_SUBTOTAL)) $criteria->add(CompraPeer::COMPRA_SUBTOTAL, $this->compra_subtotal);
         if ($this->isColumnModified(CompraPeer::COMPRA_TOTAL)) $criteria->add(CompraPeer::COMPRA_TOTAL, $this->compra_total);
         if ($this->isColumnModified(CompraPeer::COMPRA_TIPO)) $criteria->add(CompraPeer::COMPRA_TIPO, $this->compra_tipo);
 
@@ -1943,6 +1997,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $copyObj->setCompraFechaentrega($this->getCompraFechaentrega());
         $copyObj->setCompraIeps($this->getCompraIeps());
         $copyObj->setCompraIva($this->getCompraIva());
+        $copyObj->setCompraSubtotal($this->getCompraSubtotal());
         $copyObj->setCompraTotal($this->getCompraTotal());
         $copyObj->setCompraTipo($this->getCompraTipo());
 
@@ -2891,6 +2946,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $this->compra_fechaentrega = null;
         $this->compra_ieps = null;
         $this->compra_iva = null;
+        $this->compra_subtotal = null;
         $this->compra_total = null;
         $this->compra_tipo = null;
         $this->alreadyInSave = false;

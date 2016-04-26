@@ -10,11 +10,13 @@
  * @method DevolucionnotaQuery orderByIddevolucion($order = Criteria::ASC) Order by the iddevolucion column
  * @method DevolucionnotaQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method DevolucionnotaQuery orderByDevolucionnotaNota($order = Criteria::ASC) Order by the devolucionnota_nota column
+ * @method DevolucionnotaQuery orderByDevolucionnotaFecha($order = Criteria::ASC) Order by the devolucionnota_fecha column
  *
  * @method DevolucionnotaQuery groupByIddevolucionnota() Group by the iddevolucionnota column
  * @method DevolucionnotaQuery groupByIddevolucion() Group by the iddevolucion column
  * @method DevolucionnotaQuery groupByIdusuario() Group by the idusuario column
  * @method DevolucionnotaQuery groupByDevolucionnotaNota() Group by the devolucionnota_nota column
+ * @method DevolucionnotaQuery groupByDevolucionnotaFecha() Group by the devolucionnota_fecha column
  *
  * @method DevolucionnotaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method DevolucionnotaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -34,11 +36,13 @@
  * @method Devolucionnota findOneByIddevolucion(int $iddevolucion) Return the first Devolucionnota filtered by the iddevolucion column
  * @method Devolucionnota findOneByIdusuario(int $idusuario) Return the first Devolucionnota filtered by the idusuario column
  * @method Devolucionnota findOneByDevolucionnotaNota(string $devolucionnota_nota) Return the first Devolucionnota filtered by the devolucionnota_nota column
+ * @method Devolucionnota findOneByDevolucionnotaFecha(string $devolucionnota_fecha) Return the first Devolucionnota filtered by the devolucionnota_fecha column
  *
  * @method array findByIddevolucionnota(int $iddevolucionnota) Return Devolucionnota objects filtered by the iddevolucionnota column
  * @method array findByIddevolucion(int $iddevolucion) Return Devolucionnota objects filtered by the iddevolucion column
  * @method array findByIdusuario(int $idusuario) Return Devolucionnota objects filtered by the idusuario column
  * @method array findByDevolucionnotaNota(string $devolucionnota_nota) Return Devolucionnota objects filtered by the devolucionnota_nota column
+ * @method array findByDevolucionnotaFecha(string $devolucionnota_fecha) Return Devolucionnota objects filtered by the devolucionnota_fecha column
  *
  * @package    propel.generator.aersa.om
  */
@@ -146,7 +150,7 @@ abstract class BaseDevolucionnotaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevolucionnota`, `iddevolucion`, `idusuario`, `devolucionnota_nota` FROM `devolucionnota` WHERE `iddevolucionnota` = :p0';
+        $sql = 'SELECT `iddevolucionnota`, `iddevolucion`, `idusuario`, `devolucionnota_nota`, `devolucionnota_fecha` FROM `devolucionnota` WHERE `iddevolucionnota` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -392,6 +396,49 @@ abstract class BaseDevolucionnotaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DevolucionnotaPeer::DEVOLUCIONNOTA_NOTA, $devolucionnotaNota, $comparison);
+    }
+
+    /**
+     * Filter the query on the devolucionnota_fecha column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevolucionnotaFecha('2011-03-14'); // WHERE devolucionnota_fecha = '2011-03-14'
+     * $query->filterByDevolucionnotaFecha('now'); // WHERE devolucionnota_fecha = '2011-03-14'
+     * $query->filterByDevolucionnotaFecha(array('max' => 'yesterday')); // WHERE devolucionnota_fecha < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $devolucionnotaFecha The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionnotaQuery The current query, for fluid interface
+     */
+    public function filterByDevolucionnotaFecha($devolucionnotaFecha = null, $comparison = null)
+    {
+        if (is_array($devolucionnotaFecha)) {
+            $useMinMax = false;
+            if (isset($devolucionnotaFecha['min'])) {
+                $this->addUsingAlias(DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA, $devolucionnotaFecha['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devolucionnotaFecha['max'])) {
+                $this->addUsingAlias(DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA, $devolucionnotaFecha['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevolucionnotaPeer::DEVOLUCIONNOTA_FECHA, $devolucionnotaFecha, $comparison);
     }
 
     /**

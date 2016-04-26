@@ -58,6 +58,7 @@ class SucursalTableMap extends TableMap
         $this->addRelation('Almacen', 'Almacen', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Almacens');
         $this->addRelation('Compra', 'Compra', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Compras');
         $this->addRelation('Devolucion', 'Devolucion', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Devolucions');
+        $this->addRelation('Ingreso', 'Ingreso', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Ingresos');
         $this->addRelation('Inventariomes', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Inventariomess');
         $this->addRelation('Notacredito', 'Notacredito', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Notacreditos');
         $this->addRelation('Ordentablajeria', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Ordentablajerias');

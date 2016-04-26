@@ -24,13 +24,13 @@ abstract class BaseNotacreditoPeer
     const TM_CLASS = 'NotacreditoTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 14;
+    const NUM_COLUMNS = 16;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 14;
+    const NUM_HYDRATE_COLUMNS = 16;
 
     /** the column name for the idnotacredito field */
     const IDNOTACREDITO = 'notacredito.idnotacredito';
@@ -40,6 +40,9 @@ abstract class BaseNotacreditoPeer
 
     /** the column name for the idsucursal field */
     const IDSUCURSAL = 'notacredito.idsucursal';
+
+    /** the column name for the idproveedor field */
+    const IDPROVEEDOR = 'notacredito.idproveedor';
 
     /** the column name for the idusuario field */
     const IDUSUARIO = 'notacredito.idusuario';
@@ -74,6 +77,9 @@ abstract class BaseNotacreditoPeer
     /** the column name for the notacredito_total field */
     const NOTACREDITO_TOTAL = 'notacredito.notacredito_total';
 
+    /** the column name for the notacredito_subtotal field */
+    const NOTACREDITO_SUBTOTAL = 'notacredito.notacredito_subtotal';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -93,12 +99,12 @@ abstract class BaseNotacreditoPeer
      * e.g. NotacreditoPeer::$fieldNames[NotacreditoPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacredito', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'Idalmacen', 'NotacreditoFolio', 'NotacreditoRevisada', 'NotacreditoFactura', 'NotacreditoFechacreacion', 'NotacreditoFechaentrega', 'NotacreditoIeps', 'NotacreditoIva', 'NotacreditoTotal', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'notacreditoFolio', 'notacreditoRevisada', 'notacreditoFactura', 'notacreditoFechacreacion', 'notacreditoFechaentrega', 'notacreditoIeps', 'notacreditoIva', 'notacreditoTotal', ),
-        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO, NotacreditoPeer::IDEMPRESA, NotacreditoPeer::IDSUCURSAL, NotacreditoPeer::IDUSUARIO, NotacreditoPeer::IDAUDITOR, NotacreditoPeer::IDALMACEN, NotacreditoPeer::NOTACREDITO_FOLIO, NotacreditoPeer::NOTACREDITO_REVISADA, NotacreditoPeer::NOTACREDITO_FACTURA, NotacreditoPeer::NOTACREDITO_FECHACREACION, NotacreditoPeer::NOTACREDITO_FECHAENTREGA, NotacreditoPeer::NOTACREDITO_IEPS, NotacreditoPeer::NOTACREDITO_IVA, NotacreditoPeer::NOTACREDITO_TOTAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'NOTACREDITO_FOLIO', 'NOTACREDITO_REVISADA', 'NOTACREDITO_FACTURA', 'NOTACREDITO_FECHACREACION', 'NOTACREDITO_FECHAENTREGA', 'NOTACREDITO_IEPS', 'NOTACREDITO_IVA', 'NOTACREDITO_TOTAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'notacredito_folio', 'notacredito_revisada', 'notacredito_factura', 'notacredito_fechacreacion', 'notacredito_fechaentrega', 'notacredito_ieps', 'notacredito_iva', 'notacredito_total', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Idnotacredito', 'Idempresa', 'Idsucursal', 'Idproveedor', 'Idusuario', 'Idauditor', 'Idalmacen', 'NotacreditoFolio', 'NotacreditoRevisada', 'NotacreditoFactura', 'NotacreditoFechacreacion', 'NotacreditoFechaentrega', 'NotacreditoIeps', 'NotacreditoIva', 'NotacreditoTotal', 'NotacreditoSubtotal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'notacreditoFolio', 'notacreditoRevisada', 'notacreditoFactura', 'notacreditoFechacreacion', 'notacreditoFechaentrega', 'notacreditoIeps', 'notacreditoIva', 'notacreditoTotal', 'notacreditoSubtotal', ),
+        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO, NotacreditoPeer::IDEMPRESA, NotacreditoPeer::IDSUCURSAL, NotacreditoPeer::IDPROVEEDOR, NotacreditoPeer::IDUSUARIO, NotacreditoPeer::IDAUDITOR, NotacreditoPeer::IDALMACEN, NotacreditoPeer::NOTACREDITO_FOLIO, NotacreditoPeer::NOTACREDITO_REVISADA, NotacreditoPeer::NOTACREDITO_FACTURA, NotacreditoPeer::NOTACREDITO_FECHACREACION, NotacreditoPeer::NOTACREDITO_FECHAENTREGA, NotacreditoPeer::NOTACREDITO_IEPS, NotacreditoPeer::NOTACREDITO_IVA, NotacreditoPeer::NOTACREDITO_TOTAL, NotacreditoPeer::NOTACREDITO_SUBTOTAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'NOTACREDITO_FOLIO', 'NOTACREDITO_REVISADA', 'NOTACREDITO_FACTURA', 'NOTACREDITO_FECHACREACION', 'NOTACREDITO_FECHAENTREGA', 'NOTACREDITO_IEPS', 'NOTACREDITO_IVA', 'NOTACREDITO_TOTAL', 'NOTACREDITO_SUBTOTAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'notacredito_folio', 'notacredito_revisada', 'notacredito_factura', 'notacredito_fechacreacion', 'notacredito_fechaentrega', 'notacredito_ieps', 'notacredito_iva', 'notacredito_total', 'notacredito_subtotal', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -108,12 +114,12 @@ abstract class BaseNotacreditoPeer
      * e.g. NotacreditoPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacredito' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'Idalmacen' => 5, 'NotacreditoFolio' => 6, 'NotacreditoRevisada' => 7, 'NotacreditoFactura' => 8, 'NotacreditoFechacreacion' => 9, 'NotacreditoFechaentrega' => 10, 'NotacreditoIeps' => 11, 'NotacreditoIva' => 12, 'NotacreditoTotal' => 13, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'notacreditoFolio' => 6, 'notacreditoRevisada' => 7, 'notacreditoFactura' => 8, 'notacreditoFechacreacion' => 9, 'notacreditoFechaentrega' => 10, 'notacreditoIeps' => 11, 'notacreditoIva' => 12, 'notacreditoTotal' => 13, ),
-        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO => 0, NotacreditoPeer::IDEMPRESA => 1, NotacreditoPeer::IDSUCURSAL => 2, NotacreditoPeer::IDUSUARIO => 3, NotacreditoPeer::IDAUDITOR => 4, NotacreditoPeer::IDALMACEN => 5, NotacreditoPeer::NOTACREDITO_FOLIO => 6, NotacreditoPeer::NOTACREDITO_REVISADA => 7, NotacreditoPeer::NOTACREDITO_FACTURA => 8, NotacreditoPeer::NOTACREDITO_FECHACREACION => 9, NotacreditoPeer::NOTACREDITO_FECHAENTREGA => 10, NotacreditoPeer::NOTACREDITO_IEPS => 11, NotacreditoPeer::NOTACREDITO_IVA => 12, NotacreditoPeer::NOTACREDITO_TOTAL => 13, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'IDALMACEN' => 5, 'NOTACREDITO_FOLIO' => 6, 'NOTACREDITO_REVISADA' => 7, 'NOTACREDITO_FACTURA' => 8, 'NOTACREDITO_FECHACREACION' => 9, 'NOTACREDITO_FECHAENTREGA' => 10, 'NOTACREDITO_IEPS' => 11, 'NOTACREDITO_IVA' => 12, 'NOTACREDITO_TOTAL' => 13, ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'notacredito_folio' => 6, 'notacredito_revisada' => 7, 'notacredito_factura' => 8, 'notacredito_fechacreacion' => 9, 'notacredito_fechaentrega' => 10, 'notacredito_ieps' => 11, 'notacredito_iva' => 12, 'notacredito_total' => 13, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
+        BasePeer::TYPE_PHPNAME => array ('Idnotacredito' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'Idalmacen' => 6, 'NotacreditoFolio' => 7, 'NotacreditoRevisada' => 8, 'NotacreditoFactura' => 9, 'NotacreditoFechacreacion' => 10, 'NotacreditoFechaentrega' => 11, 'NotacreditoIeps' => 12, 'NotacreditoIva' => 13, 'NotacreditoTotal' => 14, 'NotacreditoSubtotal' => 15, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'notacreditoFolio' => 7, 'notacreditoRevisada' => 8, 'notacreditoFactura' => 9, 'notacreditoFechacreacion' => 10, 'notacreditoFechaentrega' => 11, 'notacreditoIeps' => 12, 'notacreditoIva' => 13, 'notacreditoTotal' => 14, 'notacreditoSubtotal' => 15, ),
+        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO => 0, NotacreditoPeer::IDEMPRESA => 1, NotacreditoPeer::IDSUCURSAL => 2, NotacreditoPeer::IDPROVEEDOR => 3, NotacreditoPeer::IDUSUARIO => 4, NotacreditoPeer::IDAUDITOR => 5, NotacreditoPeer::IDALMACEN => 6, NotacreditoPeer::NOTACREDITO_FOLIO => 7, NotacreditoPeer::NOTACREDITO_REVISADA => 8, NotacreditoPeer::NOTACREDITO_FACTURA => 9, NotacreditoPeer::NOTACREDITO_FECHACREACION => 10, NotacreditoPeer::NOTACREDITO_FECHAENTREGA => 11, NotacreditoPeer::NOTACREDITO_IEPS => 12, NotacreditoPeer::NOTACREDITO_IVA => 13, NotacreditoPeer::NOTACREDITO_TOTAL => 14, NotacreditoPeer::NOTACREDITO_SUBTOTAL => 15, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'IDALMACEN' => 6, 'NOTACREDITO_FOLIO' => 7, 'NOTACREDITO_REVISADA' => 8, 'NOTACREDITO_FACTURA' => 9, 'NOTACREDITO_FECHACREACION' => 10, 'NOTACREDITO_FECHAENTREGA' => 11, 'NOTACREDITO_IEPS' => 12, 'NOTACREDITO_IVA' => 13, 'NOTACREDITO_TOTAL' => 14, 'NOTACREDITO_SUBTOTAL' => 15, ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'notacredito_folio' => 7, 'notacredito_revisada' => 8, 'notacredito_factura' => 9, 'notacredito_fechacreacion' => 10, 'notacredito_fechaentrega' => 11, 'notacredito_ieps' => 12, 'notacredito_iva' => 13, 'notacredito_total' => 14, 'notacredito_subtotal' => 15, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
     );
 
     /**
@@ -190,6 +196,7 @@ abstract class BaseNotacreditoPeer
             $criteria->addSelectColumn(NotacreditoPeer::IDNOTACREDITO);
             $criteria->addSelectColumn(NotacreditoPeer::IDEMPRESA);
             $criteria->addSelectColumn(NotacreditoPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(NotacreditoPeer::IDPROVEEDOR);
             $criteria->addSelectColumn(NotacreditoPeer::IDUSUARIO);
             $criteria->addSelectColumn(NotacreditoPeer::IDAUDITOR);
             $criteria->addSelectColumn(NotacreditoPeer::IDALMACEN);
@@ -201,10 +208,12 @@ abstract class BaseNotacreditoPeer
             $criteria->addSelectColumn(NotacreditoPeer::NOTACREDITO_IEPS);
             $criteria->addSelectColumn(NotacreditoPeer::NOTACREDITO_IVA);
             $criteria->addSelectColumn(NotacreditoPeer::NOTACREDITO_TOTAL);
+            $criteria->addSelectColumn(NotacreditoPeer::NOTACREDITO_SUBTOTAL);
         } else {
             $criteria->addSelectColumn($alias . '.idnotacredito');
             $criteria->addSelectColumn($alias . '.idempresa');
             $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.idproveedor');
             $criteria->addSelectColumn($alias . '.idusuario');
             $criteria->addSelectColumn($alias . '.idauditor');
             $criteria->addSelectColumn($alias . '.idalmacen');
@@ -216,6 +225,7 @@ abstract class BaseNotacreditoPeer
             $criteria->addSelectColumn($alias . '.notacredito_ieps');
             $criteria->addSelectColumn($alias . '.notacredito_iva');
             $criteria->addSelectColumn($alias . '.notacredito_total');
+            $criteria->addSelectColumn($alias . '.notacredito_subtotal');
         }
     }
 
@@ -677,6 +687,57 @@ abstract class BaseNotacreditoPeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Proveedor table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinProveedor(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(NotacreditoPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            NotacreditoPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(NotacreditoPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(NotacreditoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related Sucursal table
      *
      * @param      Criteria $criteria
@@ -980,6 +1041,73 @@ abstract class BaseNotacreditoPeer
 
 
     /**
+     * Selects a collection of Notacredito objects pre-filled with their Proveedor objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Notacredito objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinProveedor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(NotacreditoPeer::DATABASE_NAME);
+        }
+
+        NotacreditoPeer::addSelectColumns($criteria);
+        $startcol = NotacreditoPeer::NUM_HYDRATE_COLUMNS;
+        ProveedorPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = NotacreditoPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = NotacreditoPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = NotacreditoPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                NotacreditoPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = ProveedorPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = ProveedorPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    ProveedorPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Notacredito) to $obj2 (Proveedor)
+                $obj2->addNotacredito($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
      * Selects a collection of Notacredito objects pre-filled with their Sucursal objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1155,6 +1283,8 @@ abstract class BaseNotacreditoPeer
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
@@ -1202,17 +1332,22 @@ abstract class BaseNotacreditoPeer
         EmpresaPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1289,40 +1424,58 @@ abstract class BaseNotacreditoPeer
                 $obj4->addNotacredito($obj1);
             } // if joined row not null
 
-            // Add objects for joined Sucursal rows
+            // Add objects for joined Proveedor rows
 
-            $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            $key5 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol5);
             if ($key5 !== null) {
-                $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                $obj5 = ProveedorPeer::getInstanceFromPool($key5);
                 if (!$obj5) {
 
-                    $cls = SucursalPeer::getOMClass();
+                    $cls = ProveedorPeer::getOMClass();
 
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                    ProveedorPeer::addInstanceToPool($obj5, $key5);
                 } // if obj5 loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj5 (Sucursal)
+                // Add the $obj1 (Notacredito) to the collection in $obj5 (Proveedor)
                 $obj5->addNotacredito($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Sucursal rows
+
+            $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+            if ($key6 !== null) {
+                $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                if (!$obj6) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if obj6 loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj6 (Sucursal)
+                $obj6->addNotacredito($obj1);
             } // if joined row not null
 
             // Add objects for joined Usuario rows
 
-            $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-            if ($key6 !== null) {
-                $obj6 = UsuarioPeer::getInstanceFromPool($key6);
-                if (!$obj6) {
+            $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+            if ($key7 !== null) {
+                $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                if (!$obj7) {
 
                     $cls = UsuarioPeer::getOMClass();
 
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UsuarioPeer::addInstanceToPool($obj6, $key6);
-                } // if obj6 loaded
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if obj7 loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj6 (Usuario)
-                $obj6->addNotacreditoRelatedByIdusuario($obj1);
+                // Add the $obj1 (Notacredito) to the collection in $obj7 (Usuario)
+                $obj7->addNotacreditoRelatedByIdusuario($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1372,6 +1525,8 @@ abstract class BaseNotacreditoPeer
         $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1430,6 +1585,8 @@ abstract class BaseNotacreditoPeer
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -1484,6 +1641,67 @@ abstract class BaseNotacreditoPeer
         $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Proveedor table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptProveedor(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(NotacreditoPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            NotacreditoPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(NotacreditoPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(NotacreditoPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1544,6 +1762,8 @@ abstract class BaseNotacreditoPeer
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
         $criteria->addJoin(NotacreditoPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -1599,6 +1819,8 @@ abstract class BaseNotacreditoPeer
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -1644,15 +1866,20 @@ abstract class BaseNotacreditoPeer
         EmpresaPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1714,41 +1941,60 @@ abstract class BaseNotacreditoPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Proveedor rows
 
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = ProveedorPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                    ProveedorPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj4 (Sucursal)
+                // Add the $obj1 (Notacredito) to the collection in $obj4 (Proveedor)
                 $obj4->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj5 (Sucursal)
+                $obj5->addNotacredito($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Usuario rows
 
-                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = UsuarioPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    UsuarioPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj5 (Usuario)
-                $obj5->addNotacreditoRelatedByIdusuario($obj1);
+                // Add the $obj1 (Notacredito) to the collection in $obj6 (Usuario)
+                $obj6->addNotacreditoRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -1790,12 +2036,17 @@ abstract class BaseNotacreditoPeer
         EmpresaPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1855,22 +2106,41 @@ abstract class BaseNotacreditoPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Proveedor rows
 
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = ProveedorPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                    ProveedorPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj4 (Sucursal)
+                // Add the $obj1 (Notacredito) to the collection in $obj4 (Proveedor)
                 $obj4->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj5 (Sucursal)
+                $obj5->addNotacredito($obj1);
 
             } // if joined row is not null
 
@@ -1912,15 +2182,20 @@ abstract class BaseNotacreditoPeer
         UsuarioPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -1982,41 +2257,60 @@ abstract class BaseNotacreditoPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Proveedor rows
 
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = ProveedorPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                    ProveedorPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj4 (Sucursal)
+                // Add the $obj1 (Notacredito) to the collection in $obj4 (Proveedor)
                 $obj4->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj5 (Sucursal)
+                $obj5->addNotacredito($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Usuario rows
 
-                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = UsuarioPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    UsuarioPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj5 (Usuario)
-                $obj5->addNotacreditoRelatedByIdusuario($obj1);
+                // Add the $obj1 (Notacredito) to the collection in $obj6 (Usuario)
+                $obj6->addNotacreditoRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -2029,7 +2323,7 @@ abstract class BaseNotacreditoPeer
 
 
     /**
-     * Selects a collection of Notacredito objects pre-filled with all related objects except Sucursal.
+     * Selects a collection of Notacredito objects pre-filled with all related objects except Proveedor.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -2038,7 +2332,7 @@ abstract class BaseNotacreditoPeer
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptProveedor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -2061,14 +2355,19 @@ abstract class BaseNotacreditoPeer
         EmpresaPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -2147,22 +2446,211 @@ abstract class BaseNotacreditoPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Usuario rows
+                // Add objects for joined Sucursal rows
 
-                $key5 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
                 if ($key5 !== null) {
-                    $obj5 = UsuarioPeer::getInstanceFromPool($key5);
+                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
                     if (!$obj5) {
 
-                        $cls = UsuarioPeer::getOMClass();
+                        $cls = SucursalPeer::getOMClass();
 
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    UsuarioPeer::addInstanceToPool($obj5, $key5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
                 } // if $obj5 already loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj5 (Usuario)
-                $obj5->addNotacreditoRelatedByIdusuario($obj1);
+                // Add the $obj1 (Notacredito) to the collection in $obj5 (Sucursal)
+                $obj5->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj6 (Usuario)
+                $obj6->addNotacreditoRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Notacredito objects pre-filled with all related objects except Sucursal.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Notacredito objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(NotacreditoPeer::DATABASE_NAME);
+        }
+
+        NotacreditoPeer::addSelectColumns($criteria);
+        $startcol2 = NotacreditoPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = NotacreditoPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = NotacreditoPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = NotacreditoPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                NotacreditoPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj2 (Almacen)
+                $obj2->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj3 (Usuario)
+                $obj3->addNotacreditoRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj4 (Empresa)
+                $obj4->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Proveedor rows
+
+                $key5 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = ProveedorPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = ProveedorPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    ProveedorPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj5 (Proveedor)
+                $obj5->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj6 (Usuario)
+                $obj6->addNotacreditoRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -2204,12 +2692,17 @@ abstract class BaseNotacreditoPeer
         EmpresaPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
         SucursalPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(NotacreditoPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(NotacreditoPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
         $criteria->addJoin(NotacreditoPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
@@ -2269,22 +2762,41 @@ abstract class BaseNotacreditoPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Proveedor rows
 
-                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
                 if ($key4 !== null) {
-                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
                     if (!$obj4) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = ProveedorPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                    ProveedorPeer::addInstanceToPool($obj4, $key4);
                 } // if $obj4 already loaded
 
-                // Add the $obj1 (Notacredito) to the collection in $obj4 (Sucursal)
+                // Add the $obj1 (Notacredito) to the collection in $obj4 (Proveedor)
                 $obj4->addNotacredito($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Notacredito) to the collection in $obj5 (Sucursal)
+                $obj5->addNotacredito($obj1);
 
             } // if joined row is not null
 

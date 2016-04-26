@@ -10,13 +10,21 @@
  * @method OrdentablajeriadetalleQuery orderByIdordentablajeria($order = Criteria::ASC) Order by the idordentablajeria column
  * @method OrdentablajeriadetalleQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
  * @method OrdentablajeriadetalleQuery orderByOrdentablajeriadetalleCantidad($order = Criteria::ASC) Order by the ordentablajeriadetalle_cantidad column
- * @method OrdentablajeriadetalleQuery orderByOrdentablajeriadetallePorcion($order = Criteria::ASC) Order by the ordentablajeriadetalle_porcion column
+ * @method OrdentablajeriadetalleQuery orderByOrdentablajeriadetallePesoporcion($order = Criteria::ASC) Order by the ordentablajeriadetalle_pesoporcion column
+ * @method OrdentablajeriadetalleQuery orderByOrdentablajeriadetallePrecioporcion($order = Criteria::ASC) Order by the ordentablajeriadetalle_precioporcion column
+ * @method OrdentablajeriadetalleQuery orderByOrdentablajeriadetallePesototal($order = Criteria::ASC) Order by the ordentablajeriadetalle_pesototal column
+ * @method OrdentablajeriadetalleQuery orderByOrdentablajeriadetalleSubtotal($order = Criteria::ASC) Order by the ordentablajeriadetalle_subtotal column
+ * @method OrdentablajeriadetalleQuery orderByOrdentablajeriadetalleRevisada($order = Criteria::ASC) Order by the ordentablajeriadetalle_revisada column
  *
  * @method OrdentablajeriadetalleQuery groupByIdordentablajeriadetalle() Group by the idordentablajeriadetalle column
  * @method OrdentablajeriadetalleQuery groupByIdordentablajeria() Group by the idordentablajeria column
  * @method OrdentablajeriadetalleQuery groupByIdproducto() Group by the idproducto column
  * @method OrdentablajeriadetalleQuery groupByOrdentablajeriadetalleCantidad() Group by the ordentablajeriadetalle_cantidad column
- * @method OrdentablajeriadetalleQuery groupByOrdentablajeriadetallePorcion() Group by the ordentablajeriadetalle_porcion column
+ * @method OrdentablajeriadetalleQuery groupByOrdentablajeriadetallePesoporcion() Group by the ordentablajeriadetalle_pesoporcion column
+ * @method OrdentablajeriadetalleQuery groupByOrdentablajeriadetallePrecioporcion() Group by the ordentablajeriadetalle_precioporcion column
+ * @method OrdentablajeriadetalleQuery groupByOrdentablajeriadetallePesototal() Group by the ordentablajeriadetalle_pesototal column
+ * @method OrdentablajeriadetalleQuery groupByOrdentablajeriadetalleSubtotal() Group by the ordentablajeriadetalle_subtotal column
+ * @method OrdentablajeriadetalleQuery groupByOrdentablajeriadetalleRevisada() Group by the ordentablajeriadetalle_revisada column
  *
  * @method OrdentablajeriadetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method OrdentablajeriadetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -26,19 +34,31 @@
  * @method OrdentablajeriadetalleQuery rightJoinOrdentablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeria relation
  * @method OrdentablajeriadetalleQuery innerJoinOrdentablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeria relation
  *
+ * @method OrdentablajeriadetalleQuery leftJoinProducto($relationAlias = null) Adds a LEFT JOIN clause to the query using the Producto relation
+ * @method OrdentablajeriadetalleQuery rightJoinProducto($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Producto relation
+ * @method OrdentablajeriadetalleQuery innerJoinProducto($relationAlias = null) Adds a INNER JOIN clause to the query using the Producto relation
+ *
  * @method Ordentablajeriadetalle findOne(PropelPDO $con = null) Return the first Ordentablajeriadetalle matching the query
  * @method Ordentablajeriadetalle findOneOrCreate(PropelPDO $con = null) Return the first Ordentablajeriadetalle matching the query, or a new Ordentablajeriadetalle object populated from the query conditions when no match is found
  *
  * @method Ordentablajeriadetalle findOneByIdordentablajeria(int $idordentablajeria) Return the first Ordentablajeriadetalle filtered by the idordentablajeria column
- * @method Ordentablajeriadetalle findOneByIdproducto(string $idproducto) Return the first Ordentablajeriadetalle filtered by the idproducto column
+ * @method Ordentablajeriadetalle findOneByIdproducto(int $idproducto) Return the first Ordentablajeriadetalle filtered by the idproducto column
  * @method Ordentablajeriadetalle findOneByOrdentablajeriadetalleCantidad(double $ordentablajeriadetalle_cantidad) Return the first Ordentablajeriadetalle filtered by the ordentablajeriadetalle_cantidad column
- * @method Ordentablajeriadetalle findOneByOrdentablajeriadetallePorcion(double $ordentablajeriadetalle_porcion) Return the first Ordentablajeriadetalle filtered by the ordentablajeriadetalle_porcion column
+ * @method Ordentablajeriadetalle findOneByOrdentablajeriadetallePesoporcion(double $ordentablajeriadetalle_pesoporcion) Return the first Ordentablajeriadetalle filtered by the ordentablajeriadetalle_pesoporcion column
+ * @method Ordentablajeriadetalle findOneByOrdentablajeriadetallePrecioporcion(string $ordentablajeriadetalle_precioporcion) Return the first Ordentablajeriadetalle filtered by the ordentablajeriadetalle_precioporcion column
+ * @method Ordentablajeriadetalle findOneByOrdentablajeriadetallePesototal(double $ordentablajeriadetalle_pesototal) Return the first Ordentablajeriadetalle filtered by the ordentablajeriadetalle_pesototal column
+ * @method Ordentablajeriadetalle findOneByOrdentablajeriadetalleSubtotal(string $ordentablajeriadetalle_subtotal) Return the first Ordentablajeriadetalle filtered by the ordentablajeriadetalle_subtotal column
+ * @method Ordentablajeriadetalle findOneByOrdentablajeriadetalleRevisada(boolean $ordentablajeriadetalle_revisada) Return the first Ordentablajeriadetalle filtered by the ordentablajeriadetalle_revisada column
  *
  * @method array findByIdordentablajeriadetalle(int $idordentablajeriadetalle) Return Ordentablajeriadetalle objects filtered by the idordentablajeriadetalle column
  * @method array findByIdordentablajeria(int $idordentablajeria) Return Ordentablajeriadetalle objects filtered by the idordentablajeria column
- * @method array findByIdproducto(string $idproducto) Return Ordentablajeriadetalle objects filtered by the idproducto column
+ * @method array findByIdproducto(int $idproducto) Return Ordentablajeriadetalle objects filtered by the idproducto column
  * @method array findByOrdentablajeriadetalleCantidad(double $ordentablajeriadetalle_cantidad) Return Ordentablajeriadetalle objects filtered by the ordentablajeriadetalle_cantidad column
- * @method array findByOrdentablajeriadetallePorcion(double $ordentablajeriadetalle_porcion) Return Ordentablajeriadetalle objects filtered by the ordentablajeriadetalle_porcion column
+ * @method array findByOrdentablajeriadetallePesoporcion(double $ordentablajeriadetalle_pesoporcion) Return Ordentablajeriadetalle objects filtered by the ordentablajeriadetalle_pesoporcion column
+ * @method array findByOrdentablajeriadetallePrecioporcion(string $ordentablajeriadetalle_precioporcion) Return Ordentablajeriadetalle objects filtered by the ordentablajeriadetalle_precioporcion column
+ * @method array findByOrdentablajeriadetallePesototal(double $ordentablajeriadetalle_pesototal) Return Ordentablajeriadetalle objects filtered by the ordentablajeriadetalle_pesototal column
+ * @method array findByOrdentablajeriadetalleSubtotal(string $ordentablajeriadetalle_subtotal) Return Ordentablajeriadetalle objects filtered by the ordentablajeriadetalle_subtotal column
+ * @method array findByOrdentablajeriadetalleRevisada(boolean $ordentablajeriadetalle_revisada) Return Ordentablajeriadetalle objects filtered by the ordentablajeriadetalle_revisada column
  *
  * @package    propel.generator.aersa.om
  */
@@ -146,7 +166,7 @@ abstract class BaseOrdentablajeriadetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idordentablajeriadetalle`, `idordentablajeria`, `idproducto`, `ordentablajeriadetalle_cantidad`, `ordentablajeriadetalle_porcion` FROM `ordentablajeriadetalle` WHERE `idordentablajeriadetalle` = :p0';
+        $sql = 'SELECT `idordentablajeriadetalle`, `idordentablajeria`, `idproducto`, `ordentablajeriadetalle_cantidad`, `ordentablajeriadetalle_pesoporcion`, `ordentablajeriadetalle_precioporcion`, `ordentablajeriadetalle_pesototal`, `ordentablajeriadetalle_subtotal`, `ordentablajeriadetalle_revisada` FROM `ordentablajeriadetalle` WHERE `idordentablajeriadetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -326,24 +346,39 @@ abstract class BaseOrdentablajeriadetalleQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByIdproducto('fooValue');   // WHERE idproducto = 'fooValue'
-     * $query->filterByIdproducto('%fooValue%'); // WHERE idproducto LIKE '%fooValue%'
+     * $query->filterByIdproducto(1234); // WHERE idproducto = 1234
+     * $query->filterByIdproducto(array(12, 34)); // WHERE idproducto IN (12, 34)
+     * $query->filterByIdproducto(array('min' => 12)); // WHERE idproducto >= 12
+     * $query->filterByIdproducto(array('max' => 12)); // WHERE idproducto <= 12
      * </code>
      *
-     * @param     string $idproducto The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @see       filterByProducto()
+     *
+     * @param     mixed $idproducto The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return OrdentablajeriadetalleQuery The current query, for fluid interface
      */
     public function filterByIdproducto($idproducto = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($idproducto)) {
+        if (is_array($idproducto)) {
+            $useMinMax = false;
+            if (isset($idproducto['min'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::IDPRODUCTO, $idproducto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idproducto['max'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::IDPRODUCTO, $idproducto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $idproducto)) {
-                $idproducto = str_replace('*', '%', $idproducto);
-                $comparison = Criteria::LIKE;
             }
         }
 
@@ -393,17 +428,17 @@ abstract class BaseOrdentablajeriadetalleQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the ordentablajeriadetalle_porcion column
+     * Filter the query on the ordentablajeriadetalle_pesoporcion column
      *
      * Example usage:
      * <code>
-     * $query->filterByOrdentablajeriadetallePorcion(1234); // WHERE ordentablajeriadetalle_porcion = 1234
-     * $query->filterByOrdentablajeriadetallePorcion(array(12, 34)); // WHERE ordentablajeriadetalle_porcion IN (12, 34)
-     * $query->filterByOrdentablajeriadetallePorcion(array('min' => 12)); // WHERE ordentablajeriadetalle_porcion >= 12
-     * $query->filterByOrdentablajeriadetallePorcion(array('max' => 12)); // WHERE ordentablajeriadetalle_porcion <= 12
+     * $query->filterByOrdentablajeriadetallePesoporcion(1234); // WHERE ordentablajeriadetalle_pesoporcion = 1234
+     * $query->filterByOrdentablajeriadetallePesoporcion(array(12, 34)); // WHERE ordentablajeriadetalle_pesoporcion IN (12, 34)
+     * $query->filterByOrdentablajeriadetallePesoporcion(array('min' => 12)); // WHERE ordentablajeriadetalle_pesoporcion >= 12
+     * $query->filterByOrdentablajeriadetallePesoporcion(array('max' => 12)); // WHERE ordentablajeriadetalle_pesoporcion <= 12
      * </code>
      *
-     * @param     mixed $ordentablajeriadetallePorcion The value to use as filter.
+     * @param     mixed $ordentablajeriadetallePesoporcion The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -411,16 +446,16 @@ abstract class BaseOrdentablajeriadetalleQuery extends ModelCriteria
      *
      * @return OrdentablajeriadetalleQuery The current query, for fluid interface
      */
-    public function filterByOrdentablajeriadetallePorcion($ordentablajeriadetallePorcion = null, $comparison = null)
+    public function filterByOrdentablajeriadetallePesoporcion($ordentablajeriadetallePesoporcion = null, $comparison = null)
     {
-        if (is_array($ordentablajeriadetallePorcion)) {
+        if (is_array($ordentablajeriadetallePesoporcion)) {
             $useMinMax = false;
-            if (isset($ordentablajeriadetallePorcion['min'])) {
-                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION, $ordentablajeriadetallePorcion['min'], Criteria::GREATER_EQUAL);
+            if (isset($ordentablajeriadetallePesoporcion['min'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION, $ordentablajeriadetallePesoporcion['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ordentablajeriadetallePorcion['max'])) {
-                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION, $ordentablajeriadetallePorcion['max'], Criteria::LESS_EQUAL);
+            if (isset($ordentablajeriadetallePesoporcion['max'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION, $ordentablajeriadetallePesoporcion['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -431,7 +466,160 @@ abstract class BaseOrdentablajeriadetalleQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PORCION, $ordentablajeriadetallePorcion, $comparison);
+        return $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOPORCION, $ordentablajeriadetallePesoporcion, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeriadetalle_precioporcion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriadetallePrecioporcion(1234); // WHERE ordentablajeriadetalle_precioporcion = 1234
+     * $query->filterByOrdentablajeriadetallePrecioporcion(array(12, 34)); // WHERE ordentablajeriadetalle_precioporcion IN (12, 34)
+     * $query->filterByOrdentablajeriadetallePrecioporcion(array('min' => 12)); // WHERE ordentablajeriadetalle_precioporcion >= 12
+     * $query->filterByOrdentablajeriadetallePrecioporcion(array('max' => 12)); // WHERE ordentablajeriadetalle_precioporcion <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriadetallePrecioporcion The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriadetalleQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriadetallePrecioporcion($ordentablajeriadetallePrecioporcion = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriadetallePrecioporcion)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriadetallePrecioporcion['min'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION, $ordentablajeriadetallePrecioporcion['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriadetallePrecioporcion['max'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION, $ordentablajeriadetallePrecioporcion['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PRECIOPORCION, $ordentablajeriadetallePrecioporcion, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeriadetalle_pesototal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriadetallePesototal(1234); // WHERE ordentablajeriadetalle_pesototal = 1234
+     * $query->filterByOrdentablajeriadetallePesototal(array(12, 34)); // WHERE ordentablajeriadetalle_pesototal IN (12, 34)
+     * $query->filterByOrdentablajeriadetallePesototal(array('min' => 12)); // WHERE ordentablajeriadetalle_pesototal >= 12
+     * $query->filterByOrdentablajeriadetallePesototal(array('max' => 12)); // WHERE ordentablajeriadetalle_pesototal <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriadetallePesototal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriadetalleQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriadetallePesototal($ordentablajeriadetallePesototal = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriadetallePesototal)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriadetallePesototal['min'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL, $ordentablajeriadetallePesototal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriadetallePesototal['max'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL, $ordentablajeriadetallePesototal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_PESOTOTAL, $ordentablajeriadetallePesototal, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeriadetalle_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriadetalleSubtotal(1234); // WHERE ordentablajeriadetalle_subtotal = 1234
+     * $query->filterByOrdentablajeriadetalleSubtotal(array(12, 34)); // WHERE ordentablajeriadetalle_subtotal IN (12, 34)
+     * $query->filterByOrdentablajeriadetalleSubtotal(array('min' => 12)); // WHERE ordentablajeriadetalle_subtotal >= 12
+     * $query->filterByOrdentablajeriadetalleSubtotal(array('max' => 12)); // WHERE ordentablajeriadetalle_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriadetalleSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriadetalleQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriadetalleSubtotal($ordentablajeriadetalleSubtotal = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriadetalleSubtotal)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriadetalleSubtotal['min'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL, $ordentablajeriadetalleSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriadetalleSubtotal['max'])) {
+                $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL, $ordentablajeriadetalleSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_SUBTOTAL, $ordentablajeriadetalleSubtotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeriadetalle_revisada column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriadetalleRevisada(true); // WHERE ordentablajeriadetalle_revisada = true
+     * $query->filterByOrdentablajeriadetalleRevisada('yes'); // WHERE ordentablajeriadetalle_revisada = true
+     * </code>
+     *
+     * @param     boolean|string $ordentablajeriadetalleRevisada The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriadetalleQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriadetalleRevisada($ordentablajeriadetalleRevisada = null, $comparison = null)
+    {
+        if (is_string($ordentablajeriadetalleRevisada)) {
+            $ordentablajeriadetalleRevisada = in_array(strtolower($ordentablajeriadetalleRevisada), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(OrdentablajeriadetallePeer::ORDENTABLAJERIADETALLE_REVISADA, $ordentablajeriadetalleRevisada, $comparison);
     }
 
     /**
@@ -508,6 +696,82 @@ abstract class BaseOrdentablajeriadetalleQuery extends ModelCriteria
         return $this
             ->joinOrdentablajeria($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ordentablajeria', 'OrdentablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Producto object
+     *
+     * @param   Producto|PropelObjectCollection $producto The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 OrdentablajeriadetalleQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProducto($producto, $comparison = null)
+    {
+        if ($producto instanceof Producto) {
+            return $this
+                ->addUsingAlias(OrdentablajeriadetallePeer::IDPRODUCTO, $producto->getIdproducto(), $comparison);
+        } elseif ($producto instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(OrdentablajeriadetallePeer::IDPRODUCTO, $producto->toKeyValue('PrimaryKey', 'Idproducto'), $comparison);
+        } else {
+            throw new PropelException('filterByProducto() only accepts arguments of type Producto or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Producto relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return OrdentablajeriadetalleQuery The current query, for fluid interface
+     */
+    public function joinProducto($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Producto');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Producto');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Producto relation Producto object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductoQuery A secondary query class using the current class as primary query
+     */
+    public function useProductoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProducto($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Producto', 'ProductoQuery');
     }
 
     /**

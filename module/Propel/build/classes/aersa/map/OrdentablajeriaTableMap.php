@@ -55,6 +55,10 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addColumn('ordentablajeria_aprovechamiento', 'OrdentablajeriaAprovechamiento', 'FLOAT', true, null, null);
         $this->addColumn('ordentablajeria_revisada', 'OrdentablajeriaRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('ordentablajeria_folio', 'OrdentablajeriaFolio', 'VARCHAR', true, 10, null);
+        $this->addColumn('ordentablajeria_esporcion', 'OrdentablajeriaEsporcion', 'BOOLEAN', true, 1, null);
+        $this->addColumn('ordentablajeria_numeroporciones', 'OrdentablajeriaNumeroporciones', 'FLOAT', false, null, null);
+        $this->addColumn('ordentablajeria_fecha', 'OrdentablajeriaFecha', 'TIMESTAMP', true, null, null);
+        $this->addColumn('ordentablajeria_fechacreacion', 'OrdentablajeriaFechacreacion', 'TIMESTAMP', true, null, null);
         // validators
     } // initialize()
 
@@ -71,6 +75,7 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Ordentablajeriadetalle', 'Ordentablajeriadetalle', RelationMap::ONE_TO_MANY, array('idordentablajeria' => 'idordentablajeria', ), 'CASCADE', 'CASCADE', 'Ordentablajeriadetalles');
+        $this->addRelation('Ordentablajerianota', 'Ordentablajerianota', RelationMap::ONE_TO_MANY, array('idordentablajeria' => 'idordentablajeria', ), 'CASCADE', 'CASCADE', 'Ordentablajerianotas');
     } // buildRelations()
 
 } // OrdentablajeriaTableMap

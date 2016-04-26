@@ -53,6 +53,7 @@ class EmpresaTableMap extends TableMap
     {
         $this->addRelation('Compra', 'Compra', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Compras');
         $this->addRelation('Devolucion', 'Devolucion', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Devolucions');
+        $this->addRelation('Ingreso', 'Ingreso', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Ingresos');
         $this->addRelation('Inventariomes', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Inventariomess');
         $this->addRelation('Notacredito', 'Notacredito', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Notacreditos');
         $this->addRelation('Ordentablajeria', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Ordentablajerias');

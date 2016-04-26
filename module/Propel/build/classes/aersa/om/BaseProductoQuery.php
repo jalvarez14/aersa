@@ -72,6 +72,10 @@
  * @method ProductoQuery rightJoinOrdentablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeria relation
  * @method ProductoQuery innerJoinOrdentablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeria relation
  *
+ * @method ProductoQuery leftJoinOrdentablajeriadetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajeriadetalle relation
+ * @method ProductoQuery rightJoinOrdentablajeriadetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeriadetalle relation
+ * @method ProductoQuery innerJoinOrdentablajeriadetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeriadetalle relation
+ *
  * @method ProductoQuery leftJoinPlantillatablajeria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Plantillatablajeria relation
  * @method ProductoQuery rightJoinPlantillatablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Plantillatablajeria relation
  * @method ProductoQuery innerJoinPlantillatablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Plantillatablajeria relation
@@ -100,7 +104,7 @@
  * @method Producto findOneByProductoNombre(string $producto_nombre) Return the first Producto filtered by the producto_nombre column
  * @method Producto findOneByIdcategoria(int $idcategoria) Return the first Producto filtered by the idcategoria column
  * @method Producto findOneByIdsubcategoria(int $idsubcategoria) Return the first Producto filtered by the idsubcategoria column
- * @method Producto findOneByProductoRendimiento(int $producto_rendimiento) Return the first Producto filtered by the producto_rendimiento column
+ * @method Producto findOneByProductoRendimiento(double $producto_rendimiento) Return the first Producto filtered by the producto_rendimiento column
  * @method Producto findOneByProductoUltimocosto(double $producto_ultimocosto) Return the first Producto filtered by the producto_ultimocosto column
  * @method Producto findOneByProductoBaja(boolean $producto_baja) Return the first Producto filtered by the producto_baja column
  * @method Producto findOneByProductoTipo(string $producto_tipo) Return the first Producto filtered by the producto_tipo column
@@ -113,7 +117,7 @@
  * @method array findByProductoNombre(string $producto_nombre) Return Producto objects filtered by the producto_nombre column
  * @method array findByIdcategoria(int $idcategoria) Return Producto objects filtered by the idcategoria column
  * @method array findByIdsubcategoria(int $idsubcategoria) Return Producto objects filtered by the idsubcategoria column
- * @method array findByProductoRendimiento(int $producto_rendimiento) Return Producto objects filtered by the producto_rendimiento column
+ * @method array findByProductoRendimiento(double $producto_rendimiento) Return Producto objects filtered by the producto_rendimiento column
  * @method array findByProductoUltimocosto(double $producto_ultimocosto) Return Producto objects filtered by the producto_ultimocosto column
  * @method array findByProductoBaja(boolean $producto_baja) Return Producto objects filtered by the producto_baja column
  * @method array findByProductoTipo(string $producto_tipo) Return Producto objects filtered by the producto_tipo column
@@ -1443,6 +1447,80 @@ abstract class BaseProductoQuery extends ModelCriteria
         return $this
             ->joinOrdentablajeria($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ordentablajeria', 'OrdentablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajeriadetalle object
+     *
+     * @param   Ordentablajeriadetalle|PropelObjectCollection $ordentablajeriadetalle  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajeriadetalle($ordentablajeriadetalle, $comparison = null)
+    {
+        if ($ordentablajeriadetalle instanceof Ordentablajeriadetalle) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDPRODUCTO, $ordentablajeriadetalle->getIdproducto(), $comparison);
+        } elseif ($ordentablajeriadetalle instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajeriadetalleQuery()
+                ->filterByPrimaryKeys($ordentablajeriadetalle->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajeriadetalle() only accepts arguments of type Ordentablajeriadetalle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ordentablajeriadetalle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajeriadetalle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ordentablajeriadetalle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ordentablajeriadetalle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ordentablajeriadetalle relation Ordentablajeriadetalle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajeriadetalleQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajeriadetalleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajeriadetalle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ordentablajeriadetalle', 'OrdentablajeriadetalleQuery');
     }
 
     /**

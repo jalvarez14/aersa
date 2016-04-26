@@ -54,6 +54,12 @@ abstract class BaseCompranota extends BaseObject implements Persistent
     protected $compranota_nota;
 
     /**
+     * The value for the compranota_fecha field.
+     * @var        string
+     */
+    protected $compranota_fecha;
+
+    /**
      * @var        Compra
      */
     protected $aCompra;
@@ -125,6 +131,46 @@ abstract class BaseCompranota extends BaseObject implements Persistent
     {
 
         return $this->compranota_nota;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [compranota_fecha] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getCompranotaFecha($format = 'Y-m-d H:i:s')
+    {
+        if ($this->compranota_fecha === null) {
+            return null;
+        }
+
+        if ($this->compranota_fecha === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->compranota_fecha);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->compranota_fecha, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -220,6 +266,29 @@ abstract class BaseCompranota extends BaseObject implements Persistent
     } // setCompranotaNota()
 
     /**
+     * Sets the value of [compranota_fecha] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Compranota The current object (for fluent API support)
+     */
+    public function setCompranotaFecha($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->compranota_fecha !== null || $dt !== null) {
+            $currentDateAsString = ($this->compranota_fecha !== null && $tmpDt = new DateTime($this->compranota_fecha)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->compranota_fecha = $newDateAsString;
+                $this->modifiedColumns[] = CompranotaPeer::COMPRANOTA_FECHA;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setCompranotaFecha()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -255,6 +324,7 @@ abstract class BaseCompranota extends BaseObject implements Persistent
             $this->idcompra = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->idusuario = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->compranota_nota = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->compranota_fecha = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -264,7 +334,7 @@ abstract class BaseCompranota extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 4; // 4 = CompranotaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = CompranotaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Compranota object", $e);
@@ -515,6 +585,9 @@ abstract class BaseCompranota extends BaseObject implements Persistent
         if ($this->isColumnModified(CompranotaPeer::COMPRANOTA_NOTA)) {
             $modifiedColumns[':p' . $index++]  = '`compranota_nota`';
         }
+        if ($this->isColumnModified(CompranotaPeer::COMPRANOTA_FECHA)) {
+            $modifiedColumns[':p' . $index++]  = '`compranota_fecha`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `compranota` (%s) VALUES (%s)',
@@ -537,6 +610,9 @@ abstract class BaseCompranota extends BaseObject implements Persistent
                         break;
                     case '`compranota_nota`':
                         $stmt->bindValue($identifier, $this->compranota_nota, PDO::PARAM_STR);
+                        break;
+                    case '`compranota_fecha`':
+                        $stmt->bindValue($identifier, $this->compranota_fecha, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -702,6 +778,9 @@ abstract class BaseCompranota extends BaseObject implements Persistent
             case 3:
                 return $this->getCompranotaNota();
                 break;
+            case 4:
+                return $this->getCompranotaFecha();
+                break;
             default:
                 return null;
                 break;
@@ -735,6 +814,7 @@ abstract class BaseCompranota extends BaseObject implements Persistent
             $keys[1] => $this->getIdcompra(),
             $keys[2] => $this->getIdusuario(),
             $keys[3] => $this->getCompranotaNota(),
+            $keys[4] => $this->getCompranotaFecha(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -794,6 +874,9 @@ abstract class BaseCompranota extends BaseObject implements Persistent
             case 3:
                 $this->setCompranotaNota($value);
                 break;
+            case 4:
+                $this->setCompranotaFecha($value);
+                break;
         } // switch()
     }
 
@@ -822,6 +905,7 @@ abstract class BaseCompranota extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setIdcompra($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdusuario($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setCompranotaNota($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setCompranotaFecha($arr[$keys[4]]);
     }
 
     /**
@@ -837,6 +921,7 @@ abstract class BaseCompranota extends BaseObject implements Persistent
         if ($this->isColumnModified(CompranotaPeer::IDCOMPRA)) $criteria->add(CompranotaPeer::IDCOMPRA, $this->idcompra);
         if ($this->isColumnModified(CompranotaPeer::IDUSUARIO)) $criteria->add(CompranotaPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(CompranotaPeer::COMPRANOTA_NOTA)) $criteria->add(CompranotaPeer::COMPRANOTA_NOTA, $this->compranota_nota);
+        if ($this->isColumnModified(CompranotaPeer::COMPRANOTA_FECHA)) $criteria->add(CompranotaPeer::COMPRANOTA_FECHA, $this->compranota_fecha);
 
         return $criteria;
     }
@@ -903,6 +988,7 @@ abstract class BaseCompranota extends BaseObject implements Persistent
         $copyObj->setIdcompra($this->getIdcompra());
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setCompranotaNota($this->getCompranotaNota());
+        $copyObj->setCompranotaFecha($this->getCompranotaFecha());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1074,6 +1160,7 @@ abstract class BaseCompranota extends BaseObject implements Persistent
         $this->idcompra = null;
         $this->idusuario = null;
         $this->compranota_nota = null;
+        $this->compranota_fecha = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
