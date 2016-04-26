@@ -7,6 +7,7 @@
         color:red;
     }
 </style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div id="form_container">
 <form class="form-horizontal" action="#">
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
@@ -82,6 +83,7 @@
                                         <i class="fa fa-search"></i>
                                     </span>
                                     <input id="idproducto" type="hidden">
+                                    <input id="producto_iva" type="hidden">
                                     <input id="producto_autocomplete" class="form-control" type="text">
                                 </div>
                             </div>
@@ -97,8 +99,8 @@
                                 <th>Cantidad</th>
                                 <th>Precio</th>
                                 <th>C.U. Neto</th>
-                                <th>Desc.</th>
-                                <th>IEPS</th>
+                                <th>Desc. (%)</th>
+                                <th>IEPS (%)</th>
                                 <th>Subtotal</th>
                                 <th>Revisada</th>
                                 <th>Almacen</th>
@@ -134,16 +136,19 @@
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IEPS</td>
+                                    <input type="hidden" name="compra_ieps">
                                     <td id="ieps">$0.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IVA</td>
+                                    <input type="hidden" name="compra_iva">
                                     <td id="iva">$0.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>TOTAL</td>
+                                    <input type="hidden" name="compra_total">
                                     <td id="total">$0.00</td>
                                 </tr>
                             </tfoot>

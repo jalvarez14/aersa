@@ -706,6 +706,16 @@ return array(
                                             ), 
                                         ), 
                                     ), 
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Compra', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
                                 ), 
                             ), 
                         ), 

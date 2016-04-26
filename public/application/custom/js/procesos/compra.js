@@ -39,6 +39,7 @@
         
         var settings;
         var $table;
+        var iva = 16.00;
         
         var defaults = {
            
@@ -51,13 +52,78 @@
         
         var caluclator = function($tr){
             
-            var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 0;
+            var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 1;
             var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
             var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat($tr.find('input[name*=descuento]').val()) : 0;
             var ieps = $tr.find('input[name*=ieps]').val() != "" ? parseFloat($tr.find('input[name*=ieps]').val()) : 0;
+ 
+            //COSTO UNITARIO
+            var row_ieps = (precio * ieps) / 100;
+            var costo_unitario = precio + row_ieps;
+            $tr.find('input[name=costo_unitario]').val(costo_unitario);
+            $tr.find('td.costo_unitario').text(accounting.formatMoney(costo_unitario));
 
+            //DESCUENTO
+            var row_desc = (costo_unitario * descuento) / 100
+            costo_unitario = costo_unitario - row_desc;
+            $tr.find('input[name*=costo_unitario]').val(costo_unitario);
+            $tr.find('td.costo_unitario').text(accounting.formatMoney(costo_unitario));
+            
+            //ROW SUBTOTAL
+            var row_subtotal = cantidad * costo_unitario;
+            $tr.find('input[name*=subtotal]').val(row_subtotal);
+            $tr.find('td.subtotal').text(accounting.formatMoney(row_subtotal));
+            
+            //COMPRA SUBTOTAL
+            var compra_subtotal = 0.00;
+            $('#productos_table tbody').find('input[name*=subtotal]').filter(function(){
+                compra_subtotal= compra_subtotal + parseFloat($(this).val());
+            });
+            $('#productos_table tfoot').find('#subtotal').text(accounting.formatMoney(compra_subtotal));
+            $('#productos_table tfoot').find('input[name=compra_subtotal]').val(compra_subtotal);
+            
+            //COMPRA IEPS
+
+            var compra_ieps = 0.00;
+            $('#productos_table tbody tr').filter(function(){
+                var precio = $(this).find('input[name*=precio]').val();
+                var ieps = $(this).find('input[name*=ieps]').val();
+                var cantidad = $(this).find('input[name*=cantidad]').val();
+                
+                var row_ieps = ((precio * ieps) / 100) * cantidad;
+                compra_ieps = compra_ieps + row_ieps;
+            });
+            
+            $('#productos_table tfoot').find('#ieps').text(accounting.formatMoney(compra_ieps));
+            $('#productos_table tfoot').find('input[name=compra_ieps]').val(compra_ieps);
+            
+            //COMPRA IVA
+            var compra_iva = 0.00;
+            $('#productos_table tbody tr').filter(function(){
+                
+                var has_iva = $(this).find('input[name*=producto_iva]').val(); 
+                if(has_iva == 'true'){
+                    
+                    var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
+                    var row_iva = (subtotal * iva) / 100;
+                    
+                    compra_iva = compra_iva + row_iva;
+                }
+                
+            });
+            
+            $('#productos_table tfoot').find('#iva').text(accounting.formatMoney(compra_iva));
+            $('#productos_table tfoot').find('input[name=compra_iva]').val(compra_iva);
+            
+            //COMPRA TOTAL
+            var compra_total = compra_subtotal + compra_iva;
+            $('#productos_table tfoot').find('#total').text(accounting.formatMoney(compra_total));
+            $('#productos_table tfoot').find('input[name=compra_total]').val(compra_total);
             
             
+            
+            
+       
         }
        
        
@@ -68,7 +134,7 @@
         plugin.init = function(){
             
             settings = plugin.settings = $.extend({}, defaults, options);
-            
+             ;
            
             
         }
@@ -82,6 +148,10 @@
             container.find('input[name=compra_fechacompra]').datepicker({
                 startDate:minDate,
                 endDate:maxDate,
+                format: 'dd/mm/yyyy',
+            });
+            
+            container.find('input[name=compra_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
             
@@ -105,6 +175,7 @@
             
             $('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
                 $('input[name=idproveedor]').val(suggestion.id);
+               
             });
             
             var data = new Bloodhound({
@@ -128,6 +199,8 @@
             $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
                 $('#producto_add').attr('disabled',false);
                 $('input#idproducto').val(suggestion.id);
+                $('input#producto_iva').val(suggestion.producto_iva);
+                
             });
             
             var count = 0;
@@ -149,13 +222,13 @@
 
                                
                 var tr = $('<tr>');
-                tr.append('<td><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
-                tr.append('<td><input type="text" name=productos['+count+'][cantidad]></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][precio]></td>');
-                tr.append('<td>'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="text" name=productos['+count+'][descuento]></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][ieps]></td>');
-                tr.append('<td>'+accounting.formatMoney(0)+'</td>');
+                tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
+                tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
+                tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
+                tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');
+                tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
+                tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
+                tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
                 tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
                 tr.append(almacenen_select);
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
@@ -174,7 +247,8 @@
                 
                 //LIMPIAMOS EL AUTOCOMPLETE
                 $('input#producto_autocomplete').typeahead('val', ''); 
-                $('input#idproducto').typeahead('val', ''); 
+                $('input#idproducto').val(''); 
+                $('input#producto_iva').val('');
                 $('#producto_add').attr('disabled',true);
                 
                 
@@ -202,6 +276,30 @@
                    $('#productos_table tbody select').attr('disabled',false);
                }
            });
+           
+           //VALIDAR FOLIO
+           $('input[name=compra_folio]').on('blur',function(){
+                var folio = $(this).val();
+                var $this = $(this);
+                $this.removeClass('valid');
+                $.ajax({
+                    url: "/procesos/compra/validatefolio",
+                    dataType: "json",
+                    data: {folio:folio},
+                    success: function (exist) {
+                        console.log(exist);
+                        if(exist){
+                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            $this.val('');
+                        }else{
+                            $this.addClass('valid');
+                        }
+                        
+                    },
+                });
+                         
+           });
+                         
            
            
 

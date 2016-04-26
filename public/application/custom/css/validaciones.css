@@ -4,3 +4,9 @@
     color: red;
     border-radius: 0px;
 }
+
+.valid{
+    border-color: green;
+    color: green;
+    border-radius: 0px;
+}

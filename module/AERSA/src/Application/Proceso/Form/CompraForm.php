@@ -24,7 +24,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Fecha'
+                'label' => 'Fecha *'
             )
         ));
         
@@ -119,7 +119,8 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Folio'
+                'label' => 'Folio *',
+                'required' => true,
             )
         ));
         $this->add(array(

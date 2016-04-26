@@ -28,10 +28,38 @@ class CompraController extends AbstractActionController {
         return $view_model;
 
     }
+    
+    public function validatefolioAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $folio = $this->params()->fromQuery('folio');
+        
+        $to = new \DateTime();
+        $from = date("Y-m-d", strtotime("-2 months")); $from = new \DateTime($from);
+
+        $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($folio,  \Criteria::LIKE)->exists();
+        
+        return $this->getResponse()->setContent(json_encode($exist));
+    }
+
+
     public function nuevoregistroAction() {
         
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            
+            $post_data = $request->getPost();
+            $post_files = $request->getFiles();
+            
+            echo '<pre>';var_dump($post_data);'</pre>';
+            echo '<pre>';var_dump($post_files);'</pre>';exit();
+        }
         
         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
         $anio_activo = $sucursal->getSucursalAnioactivo();
