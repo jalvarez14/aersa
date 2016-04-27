@@ -53,7 +53,7 @@
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idproveedor" phpName="Idproveedor" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="compra_folio" phpName="CompraFolio" type="VARCHAR" size="45" required="true"/>
     <column name="compra_revisada" phpName="CompraRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
@@ -112,6 +112,7 @@
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="compradetalle_cantidad" phpName="CompradetalleCantidad" type="FLOAT" required="true"/>
+    <column name="compradetalle_precio" phpName="CompradetallePrecio" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="compradetalle_revisada" phpName="CompradetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="compradetalle_costounitario" phpName="CompradetalleCostounitario" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="compradetalle_costounitarioneto" phpName="CompradetalleCostounitarioneto" type="DECIMAL" size="15" scale="5" required="false"/>
@@ -185,7 +186,7 @@
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="idproveedor" phpName="Idproveedor" type="INTEGER" required="true"/>
     <column name="devolucion_folio" phpName="DevolucionFolio" type="VARCHAR" size="10" required="true"/>
@@ -196,6 +197,7 @@
     <column name="devolucion_ieps" phpName="DevolucionIeps" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_iva" phpName="DevolucionIva" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_total" phpName="DevolucionTotal" type="DECIMAL" size="10" scale="5" required="false"/>
+    <column name="devolucion_subtotal" phpName="DevolucionSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <foreign-key foreignTable="almacen" name="idalmacen_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -305,7 +307,7 @@
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="ingreso_folio" phpName="IngresoFolio" type="VARCHAR" size="10" required="true"/>
     <column name="ingreso_revisada" phpName="IngresoRevisada" type="BOOLEAN" size="1" required="true"/>
     <column name="ingreso_factoralimento" phpName="IngresoFactoralimento" type="DECIMAL" size="15" scale="5" required="true"/>
@@ -470,7 +472,7 @@
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idproveedor" phpName="Idproveedor" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="notacredito_folio" phpName="NotacreditoFolio" type="VARCHAR" size="10" required="true"/>
     <column name="notacredito_revisada" phpName="NotacreditoRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
@@ -583,7 +585,7 @@
     <column name="idalmacenorigen" phpName="Idalmacenorigen" type="INTEGER" required="true"/>
     <column name="idalmacendestino" phpName="Idalmacendestino" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="ordentablajeria_pesobruto" phpName="OrdentablajeriaPesobruto" type="FLOAT" required="true"/>
     <column name="ordentablajeria_preciokilo" phpName="OrdentablajeriaPreciokilo" type="DECIMAL" size="15" scale="5" required="true"/>
@@ -828,7 +830,7 @@
     <column name="idsucursaldestino" phpName="Idsucursaldestino" type="INTEGER" required="true"/>
     <column name="idalmacendestino" phpName="Idalmacendestino" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="idconceptosalida" phpName="Idconceptosalida" type="INTEGER" required="true"/>
     <column name="requisicion_fecha" phpName="RequisicionFecha" type="TIMESTAMP" required="true"/>
     <column name="requisicion_revisada" phpName="RequisicionRevisada" type="BOOLEAN" size="1" required="true"/>
@@ -1067,8 +1069,10 @@
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
-    <column name="venta_revisada" phpName="VentaRevisada" type="BOOLEAN" size="1" required="true"/>
+    <column name="venta_revisada" phpName="VentaRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="venta_fecha" phpName="VentaFecha" type="TIMESTAMP" required="true"/>
+    <column name="venta_fechacreacion" phpName="VentaFechacreacion" type="TIMESTAMP" required="true"/>
+    <column name="venta_total" phpName="VentaTotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <foreign-key foreignTable="almacen" name="idalmacen_venta" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -1106,8 +1110,10 @@
   <table name="ventadetalle" phpName="Ventadetalle" idMethod="native">
     <column name="idventadetalle" phpName="Idventadetalle" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idventa" phpName="Idventa" type="INTEGER" required="true"/>
-    <column name="ventadetalle_revisada" phpName="VentadetalleRevisada" type="BOOLEAN" size="1" required="true"/>
-    <column name="idproducto" phpName="Idproducto" type="VARCHAR" size="45" required="false"/>
+    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="false"/>
+    <column name="idproducto" phpName="Idproducto" type="INTEGER" required="false"/>
+    <column name="ventadetalle_cantidad" phpName="VentadetalleCantidad" type="FLOAT" required="false"/>
+    <column name="ventadetalle_subtotal" phpName="VentadetalleSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <foreign-key foreignTable="venta" name="idventa_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idventa" foreign="idventa"/>
     </foreign-key>

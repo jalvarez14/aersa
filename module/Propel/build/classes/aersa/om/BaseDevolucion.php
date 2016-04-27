@@ -121,6 +121,12 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     protected $devolucion_total;
 
     /**
+     * The value for the devolucion_subtotal field.
+     * @var        string
+     */
+    protected $devolucion_subtotal;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -407,6 +413,17 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     {
 
         return $this->devolucion_total;
+    }
+
+    /**
+     * Get the [devolucion_subtotal] column value.
+     *
+     * @return string
+     */
+    public function getDevolucionSubtotal()
+    {
+
+        return $this->devolucion_subtotal;
     }
 
     /**
@@ -759,6 +776,27 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     } // setDevolucionTotal()
 
     /**
+     * Set the value of [devolucion_subtotal] column.
+     *
+     * @param  string $v new value
+     * @return Devolucion The current object (for fluent API support)
+     */
+    public function setDevolucionSubtotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->devolucion_subtotal !== $v) {
+            $this->devolucion_subtotal = $v;
+            $this->modifiedColumns[] = DevolucionPeer::DEVOLUCION_SUBTOTAL;
+        }
+
+
+        return $this;
+    } // setDevolucionSubtotal()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -809,6 +847,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $this->devolucion_ieps = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->devolucion_iva = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->devolucion_total = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
+            $this->devolucion_subtotal = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -818,7 +857,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 15; // 15 = DevolucionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 16; // 16 = DevolucionPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Devolucion object", $e);
@@ -1184,6 +1223,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_TOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`devolucion_total`';
         }
+        if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_SUBTOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`devolucion_subtotal`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `devolucion` (%s) VALUES (%s)',
@@ -1239,6 +1281,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                         break;
                     case '`devolucion_total`':
                         $stmt->bindValue($identifier, $this->devolucion_total, PDO::PARAM_STR);
+                        break;
+                    case '`devolucion_subtotal`':
+                        $stmt->bindValue($identifier, $this->devolucion_subtotal, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1477,6 +1522,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             case 14:
                 return $this->getDevolucionTotal();
                 break;
+            case 15:
+                return $this->getDevolucionSubtotal();
+                break;
             default:
                 return null;
                 break;
@@ -1521,6 +1569,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $keys[12] => $this->getDevolucionIeps(),
             $keys[13] => $this->getDevolucionIva(),
             $keys[14] => $this->getDevolucionTotal(),
+            $keys[15] => $this->getDevolucionSubtotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1631,6 +1680,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             case 14:
                 $this->setDevolucionTotal($value);
                 break;
+            case 15:
+                $this->setDevolucionSubtotal($value);
+                break;
         } // switch()
     }
 
@@ -1670,6 +1722,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if (array_key_exists($keys[12], $arr)) $this->setDevolucionIeps($arr[$keys[12]]);
         if (array_key_exists($keys[13], $arr)) $this->setDevolucionIva($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setDevolucionTotal($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setDevolucionSubtotal($arr[$keys[15]]);
     }
 
     /**
@@ -1696,6 +1749,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_IEPS)) $criteria->add(DevolucionPeer::DEVOLUCION_IEPS, $this->devolucion_ieps);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_IVA)) $criteria->add(DevolucionPeer::DEVOLUCION_IVA, $this->devolucion_iva);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_TOTAL)) $criteria->add(DevolucionPeer::DEVOLUCION_TOTAL, $this->devolucion_total);
+        if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_SUBTOTAL)) $criteria->add(DevolucionPeer::DEVOLUCION_SUBTOTAL, $this->devolucion_subtotal);
 
         return $criteria;
     }
@@ -1773,6 +1827,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $copyObj->setDevolucionIeps($this->getDevolucionIeps());
         $copyObj->setDevolucionIva($this->getDevolucionIva());
         $copyObj->setDevolucionTotal($this->getDevolucionTotal());
+        $copyObj->setDevolucionSubtotal($this->getDevolucionSubtotal());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2719,6 +2774,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $this->devolucion_ieps = null;
         $this->devolucion_iva = null;
         $this->devolucion_total = null;
+        $this->devolucion_subtotal = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

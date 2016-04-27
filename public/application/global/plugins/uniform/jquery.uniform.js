@@ -598,38 +598,7 @@ Enjoy!
 					};
 				}
 			},
-			{
-				// Checkboxes
-				match: function ($el) {
-					return $el.is(":checkbox");
-				},
-				apply: function ($el, options) {
-					var ds, $div, $span;
-					ds = divSpan($el, options, {
-						divClass: options.checkboxClass
-					});
-					$div = ds.div;
-					$span = ds.span;
-
-					// Add focus classes, toggling, active, etc.
-					bindUi($el, $div, options);
-					bindMany($el, options, {
-						"click touchend": function () {
-							classUpdateChecked($span, $el, options);
-						}
-					});
-					classUpdateChecked($span, $el, options);
-					return {
-						remove: unwrapUnwrapUnbindFunction($el, options),
-						update: function () {
-							classClearStandard($div, options);
-							$span.removeClass(options.checkedClass);
-							classUpdateChecked($span, $el, options);
-							classUpdateDisabled($div, $el, options);
-						}
-					};
-				}
-			},
+			
 			{
 				// File selection / uploads
 				match: function ($el) {

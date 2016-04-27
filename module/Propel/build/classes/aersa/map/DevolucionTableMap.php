@@ -42,7 +42,7 @@ class DevolucionTableMap extends TableMap
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idproveedor', 'Idproveedor', 'INTEGER', 'proveedor', 'idproveedor', true, null, null);
         $this->addColumn('devolucion_folio', 'DevolucionFolio', 'VARCHAR', true, 10, null);
@@ -53,6 +53,7 @@ class DevolucionTableMap extends TableMap
         $this->addColumn('devolucion_ieps', 'DevolucionIeps', 'DECIMAL', false, 10, null);
         $this->addColumn('devolucion_iva', 'DevolucionIva', 'DECIMAL', false, 10, null);
         $this->addColumn('devolucion_total', 'DevolucionTotal', 'DECIMAL', false, 10, null);
+        $this->addColumn('devolucion_subtotal', 'DevolucionSubtotal', 'DECIMAL', false, 15, null);
         // validators
     } // initialize()
 

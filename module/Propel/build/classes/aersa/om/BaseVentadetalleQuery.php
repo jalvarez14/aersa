@@ -8,13 +8,17 @@
  *
  * @method VentadetalleQuery orderByIdventadetalle($order = Criteria::ASC) Order by the idventadetalle column
  * @method VentadetalleQuery orderByIdventa($order = Criteria::ASC) Order by the idventa column
- * @method VentadetalleQuery orderByVentadetalleRevisada($order = Criteria::ASC) Order by the ventadetalle_revisada column
+ * @method VentadetalleQuery orderByIdalmacen($order = Criteria::ASC) Order by the idalmacen column
  * @method VentadetalleQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
+ * @method VentadetalleQuery orderByVentadetalleCantidad($order = Criteria::ASC) Order by the ventadetalle_cantidad column
+ * @method VentadetalleQuery orderByVentadetalleSubtotal($order = Criteria::ASC) Order by the ventadetalle_subtotal column
  *
  * @method VentadetalleQuery groupByIdventadetalle() Group by the idventadetalle column
  * @method VentadetalleQuery groupByIdventa() Group by the idventa column
- * @method VentadetalleQuery groupByVentadetalleRevisada() Group by the ventadetalle_revisada column
+ * @method VentadetalleQuery groupByIdalmacen() Group by the idalmacen column
  * @method VentadetalleQuery groupByIdproducto() Group by the idproducto column
+ * @method VentadetalleQuery groupByVentadetalleCantidad() Group by the ventadetalle_cantidad column
+ * @method VentadetalleQuery groupByVentadetalleSubtotal() Group by the ventadetalle_subtotal column
  *
  * @method VentadetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method VentadetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -28,13 +32,17 @@
  * @method Ventadetalle findOneOrCreate(PropelPDO $con = null) Return the first Ventadetalle matching the query, or a new Ventadetalle object populated from the query conditions when no match is found
  *
  * @method Ventadetalle findOneByIdventa(int $idventa) Return the first Ventadetalle filtered by the idventa column
- * @method Ventadetalle findOneByVentadetalleRevisada(boolean $ventadetalle_revisada) Return the first Ventadetalle filtered by the ventadetalle_revisada column
- * @method Ventadetalle findOneByIdproducto(string $idproducto) Return the first Ventadetalle filtered by the idproducto column
+ * @method Ventadetalle findOneByIdalmacen(int $idalmacen) Return the first Ventadetalle filtered by the idalmacen column
+ * @method Ventadetalle findOneByIdproducto(int $idproducto) Return the first Ventadetalle filtered by the idproducto column
+ * @method Ventadetalle findOneByVentadetalleCantidad(double $ventadetalle_cantidad) Return the first Ventadetalle filtered by the ventadetalle_cantidad column
+ * @method Ventadetalle findOneByVentadetalleSubtotal(string $ventadetalle_subtotal) Return the first Ventadetalle filtered by the ventadetalle_subtotal column
  *
  * @method array findByIdventadetalle(int $idventadetalle) Return Ventadetalle objects filtered by the idventadetalle column
  * @method array findByIdventa(int $idventa) Return Ventadetalle objects filtered by the idventa column
- * @method array findByVentadetalleRevisada(boolean $ventadetalle_revisada) Return Ventadetalle objects filtered by the ventadetalle_revisada column
- * @method array findByIdproducto(string $idproducto) Return Ventadetalle objects filtered by the idproducto column
+ * @method array findByIdalmacen(int $idalmacen) Return Ventadetalle objects filtered by the idalmacen column
+ * @method array findByIdproducto(int $idproducto) Return Ventadetalle objects filtered by the idproducto column
+ * @method array findByVentadetalleCantidad(double $ventadetalle_cantidad) Return Ventadetalle objects filtered by the ventadetalle_cantidad column
+ * @method array findByVentadetalleSubtotal(string $ventadetalle_subtotal) Return Ventadetalle objects filtered by the ventadetalle_subtotal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -142,7 +150,7 @@ abstract class BaseVentadetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idventadetalle`, `idventa`, `ventadetalle_revisada`, `idproducto` FROM `ventadetalle` WHERE `idventadetalle` = :p0';
+        $sql = 'SELECT `idventadetalle`, `idventa`, `idalmacen`, `idproducto`, `ventadetalle_cantidad`, `ventadetalle_subtotal` FROM `ventadetalle` WHERE `idventadetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -318,30 +326,45 @@ abstract class BaseVentadetalleQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the ventadetalle_revisada column
+     * Filter the query on the idalmacen column
      *
      * Example usage:
      * <code>
-     * $query->filterByVentadetalleRevisada(true); // WHERE ventadetalle_revisada = true
-     * $query->filterByVentadetalleRevisada('yes'); // WHERE ventadetalle_revisada = true
+     * $query->filterByIdalmacen(1234); // WHERE idalmacen = 1234
+     * $query->filterByIdalmacen(array(12, 34)); // WHERE idalmacen IN (12, 34)
+     * $query->filterByIdalmacen(array('min' => 12)); // WHERE idalmacen >= 12
+     * $query->filterByIdalmacen(array('max' => 12)); // WHERE idalmacen <= 12
      * </code>
      *
-     * @param     boolean|string $ventadetalleRevisada The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     mixed $idalmacen The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return VentadetalleQuery The current query, for fluid interface
      */
-    public function filterByVentadetalleRevisada($ventadetalleRevisada = null, $comparison = null)
+    public function filterByIdalmacen($idalmacen = null, $comparison = null)
     {
-        if (is_string($ventadetalleRevisada)) {
-            $ventadetalleRevisada = in_array(strtolower($ventadetalleRevisada), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_array($idalmacen)) {
+            $useMinMax = false;
+            if (isset($idalmacen['min'])) {
+                $this->addUsingAlias(VentadetallePeer::IDALMACEN, $idalmacen['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idalmacen['max'])) {
+                $this->addUsingAlias(VentadetallePeer::IDALMACEN, $idalmacen['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
         }
 
-        return $this->addUsingAlias(VentadetallePeer::VENTADETALLE_REVISADA, $ventadetalleRevisada, $comparison);
+        return $this->addUsingAlias(VentadetallePeer::IDALMACEN, $idalmacen, $comparison);
     }
 
     /**
@@ -349,28 +372,125 @@ abstract class BaseVentadetalleQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByIdproducto('fooValue');   // WHERE idproducto = 'fooValue'
-     * $query->filterByIdproducto('%fooValue%'); // WHERE idproducto LIKE '%fooValue%'
+     * $query->filterByIdproducto(1234); // WHERE idproducto = 1234
+     * $query->filterByIdproducto(array(12, 34)); // WHERE idproducto IN (12, 34)
+     * $query->filterByIdproducto(array('min' => 12)); // WHERE idproducto >= 12
+     * $query->filterByIdproducto(array('max' => 12)); // WHERE idproducto <= 12
      * </code>
      *
-     * @param     string $idproducto The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     mixed $idproducto The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return VentadetalleQuery The current query, for fluid interface
      */
     public function filterByIdproducto($idproducto = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($idproducto)) {
+        if (is_array($idproducto)) {
+            $useMinMax = false;
+            if (isset($idproducto['min'])) {
+                $this->addUsingAlias(VentadetallePeer::IDPRODUCTO, $idproducto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idproducto['max'])) {
+                $this->addUsingAlias(VentadetallePeer::IDPRODUCTO, $idproducto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $idproducto)) {
-                $idproducto = str_replace('*', '%', $idproducto);
-                $comparison = Criteria::LIKE;
             }
         }
 
         return $this->addUsingAlias(VentadetallePeer::IDPRODUCTO, $idproducto, $comparison);
+    }
+
+    /**
+     * Filter the query on the ventadetalle_cantidad column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByVentadetalleCantidad(1234); // WHERE ventadetalle_cantidad = 1234
+     * $query->filterByVentadetalleCantidad(array(12, 34)); // WHERE ventadetalle_cantidad IN (12, 34)
+     * $query->filterByVentadetalleCantidad(array('min' => 12)); // WHERE ventadetalle_cantidad >= 12
+     * $query->filterByVentadetalleCantidad(array('max' => 12)); // WHERE ventadetalle_cantidad <= 12
+     * </code>
+     *
+     * @param     mixed $ventadetalleCantidad The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VentadetalleQuery The current query, for fluid interface
+     */
+    public function filterByVentadetalleCantidad($ventadetalleCantidad = null, $comparison = null)
+    {
+        if (is_array($ventadetalleCantidad)) {
+            $useMinMax = false;
+            if (isset($ventadetalleCantidad['min'])) {
+                $this->addUsingAlias(VentadetallePeer::VENTADETALLE_CANTIDAD, $ventadetalleCantidad['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ventadetalleCantidad['max'])) {
+                $this->addUsingAlias(VentadetallePeer::VENTADETALLE_CANTIDAD, $ventadetalleCantidad['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(VentadetallePeer::VENTADETALLE_CANTIDAD, $ventadetalleCantidad, $comparison);
+    }
+
+    /**
+     * Filter the query on the ventadetalle_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByVentadetalleSubtotal(1234); // WHERE ventadetalle_subtotal = 1234
+     * $query->filterByVentadetalleSubtotal(array(12, 34)); // WHERE ventadetalle_subtotal IN (12, 34)
+     * $query->filterByVentadetalleSubtotal(array('min' => 12)); // WHERE ventadetalle_subtotal >= 12
+     * $query->filterByVentadetalleSubtotal(array('max' => 12)); // WHERE ventadetalle_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $ventadetalleSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VentadetalleQuery The current query, for fluid interface
+     */
+    public function filterByVentadetalleSubtotal($ventadetalleSubtotal = null, $comparison = null)
+    {
+        if (is_array($ventadetalleSubtotal)) {
+            $useMinMax = false;
+            if (isset($ventadetalleSubtotal['min'])) {
+                $this->addUsingAlias(VentadetallePeer::VENTADETALLE_SUBTOTAL, $ventadetalleSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ventadetalleSubtotal['max'])) {
+                $this->addUsingAlias(VentadetallePeer::VENTADETALLE_SUBTOTAL, $ventadetalleSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(VentadetallePeer::VENTADETALLE_SUBTOTAL, $ventadetalleSubtotal, $comparison);
     }
 
     /**

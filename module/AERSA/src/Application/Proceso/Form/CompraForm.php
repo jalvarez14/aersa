@@ -134,6 +134,38 @@ use Zend\Form\Form;
                 'label' => 'Factura'
             )
         ));
+        
+        $this->add(array(
+           'name'  => 'compra_subtotal',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
+        
+        $this->add(array(
+           'name'  => 'compra_iva',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
+        
+        $this->add(array(
+           'name'  => 'compra_ieps',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
+        
+        $this->add(array(
+           'name'  => 'compra_total',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
   
     }
 }

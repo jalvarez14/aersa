@@ -643,7 +643,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinCompraRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCompraRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('CompraRelatedByIdauditor');
@@ -678,7 +678,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   CompraQuery A secondary query class using the current class as primary query
      */
-    public function useCompraRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCompraRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinCompraRelatedByIdauditor($relationAlias, $joinType)
@@ -865,7 +865,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinDevolucionRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinDevolucionRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('DevolucionRelatedByIdauditor');
@@ -900,7 +900,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   DevolucionQuery A secondary query class using the current class as primary query
      */
-    public function useDevolucionRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useDevolucionRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinDevolucionRelatedByIdauditor($relationAlias, $joinType)
@@ -1087,7 +1087,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinIngresoRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinIngresoRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('IngresoRelatedByIdauditor');
@@ -1122,7 +1122,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   IngresoQuery A secondary query class using the current class as primary query
      */
-    public function useIngresoRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useIngresoRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinIngresoRelatedByIdauditor($relationAlias, $joinType)
@@ -1457,7 +1457,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinNotacreditoRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinNotacreditoRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('NotacreditoRelatedByIdauditor');
@@ -1492,7 +1492,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   NotacreditoQuery A secondary query class using the current class as primary query
      */
-    public function useNotacreditoRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useNotacreditoRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinNotacreditoRelatedByIdauditor($relationAlias, $joinType)
@@ -1679,7 +1679,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinOrdentablajeriaRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinOrdentablajeriaRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('OrdentablajeriaRelatedByIdauditor');
@@ -1714,7 +1714,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   OrdentablajeriaQuery A secondary query class using the current class as primary query
      */
-    public function useOrdentablajeriaRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useOrdentablajeriaRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinOrdentablajeriaRelatedByIdauditor($relationAlias, $joinType)
@@ -1901,7 +1901,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinRequisicionRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinRequisicionRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('RequisicionRelatedByIdauditor');
@@ -1936,7 +1936,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   RequisicionQuery A secondary query class using the current class as primary query
      */
-    public function useRequisicionRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useRequisicionRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinRequisicionRelatedByIdauditor($relationAlias, $joinType)

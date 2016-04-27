@@ -2557,7 +2557,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->comprasRelatedByIdauditorScheduledForDeletion = clone $this->collComprasRelatedByIdauditor;
                 $this->comprasRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->comprasRelatedByIdauditorScheduledForDeletion[]= clone $compraRelatedByIdauditor;
+            $this->comprasRelatedByIdauditorScheduledForDeletion[]= $compraRelatedByIdauditor;
             $compraRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 
@@ -3457,7 +3457,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->devolucionsRelatedByIdauditorScheduledForDeletion = clone $this->collDevolucionsRelatedByIdauditor;
                 $this->devolucionsRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->devolucionsRelatedByIdauditorScheduledForDeletion[]= clone $devolucionRelatedByIdauditor;
+            $this->devolucionsRelatedByIdauditorScheduledForDeletion[]= $devolucionRelatedByIdauditor;
             $devolucionRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 
@@ -4357,7 +4357,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->ingresosRelatedByIdauditorScheduledForDeletion = clone $this->collIngresosRelatedByIdauditor;
                 $this->ingresosRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->ingresosRelatedByIdauditorScheduledForDeletion[]= clone $ingresoRelatedByIdauditor;
+            $this->ingresosRelatedByIdauditorScheduledForDeletion[]= $ingresoRelatedByIdauditor;
             $ingresoRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 
@@ -5757,7 +5757,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->notacreditosRelatedByIdauditorScheduledForDeletion = clone $this->collNotacreditosRelatedByIdauditor;
                 $this->notacreditosRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->notacreditosRelatedByIdauditorScheduledForDeletion[]= clone $notacreditoRelatedByIdauditor;
+            $this->notacreditosRelatedByIdauditorScheduledForDeletion[]= $notacreditoRelatedByIdauditor;
             $notacreditoRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 
@@ -6657,7 +6657,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion = clone $this->collOrdentablajeriasRelatedByIdauditor;
                 $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion[]= clone $ordentablajeriaRelatedByIdauditor;
+            $this->ordentablajeriasRelatedByIdauditorScheduledForDeletion[]= $ordentablajeriaRelatedByIdauditor;
             $ordentablajeriaRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 
@@ -7607,7 +7607,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->requisicionsRelatedByIdauditorScheduledForDeletion = clone $this->collRequisicionsRelatedByIdauditor;
                 $this->requisicionsRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->requisicionsRelatedByIdauditorScheduledForDeletion[]= clone $requisicionRelatedByIdauditor;
+            $this->requisicionsRelatedByIdauditorScheduledForDeletion[]= $requisicionRelatedByIdauditor;
             $requisicionRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 

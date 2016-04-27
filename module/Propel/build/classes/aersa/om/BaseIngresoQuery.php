@@ -799,7 +799,7 @@ abstract class BaseIngresoQuery extends ModelCriteria
      *
      * @return IngresoQuery The current query, for fluid interface
      */
-    public function joinUsuarioRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUsuarioRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('UsuarioRelatedByIdauditor');
@@ -834,7 +834,7 @@ abstract class BaseIngresoQuery extends ModelCriteria
      *
      * @return   UsuarioQuery A secondary query class using the current class as primary query
      */
-    public function useUsuarioRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUsuarioRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinUsuarioRelatedByIdauditor($relationAlias, $joinType)

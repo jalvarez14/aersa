@@ -42,7 +42,7 @@ class IngresoTableMap extends TableMap
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addColumn('ingreso_folio', 'IngresoFolio', 'VARCHAR', true, 10, null);
         $this->addColumn('ingreso_revisada', 'IngresoRevisada', 'BOOLEAN', true, 1, null);
         $this->addColumn('ingreso_factoralimento', 'IngresoFactoralimento', 'DECIMAL', true, 15, null);

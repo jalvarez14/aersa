@@ -24,13 +24,13 @@ abstract class BaseVentadetallePeer
     const TM_CLASS = 'VentadetalleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the idventadetalle field */
     const IDVENTADETALLE = 'ventadetalle.idventadetalle';
@@ -38,11 +38,17 @@ abstract class BaseVentadetallePeer
     /** the column name for the idventa field */
     const IDVENTA = 'ventadetalle.idventa';
 
-    /** the column name for the ventadetalle_revisada field */
-    const VENTADETALLE_REVISADA = 'ventadetalle.ventadetalle_revisada';
+    /** the column name for the idalmacen field */
+    const IDALMACEN = 'ventadetalle.idalmacen';
 
     /** the column name for the idproducto field */
     const IDPRODUCTO = 'ventadetalle.idproducto';
+
+    /** the column name for the ventadetalle_cantidad field */
+    const VENTADETALLE_CANTIDAD = 'ventadetalle.ventadetalle_cantidad';
+
+    /** the column name for the ventadetalle_subtotal field */
+    const VENTADETALLE_SUBTOTAL = 'ventadetalle.ventadetalle_subtotal';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -63,12 +69,12 @@ abstract class BaseVentadetallePeer
      * e.g. VentadetallePeer::$fieldNames[VentadetallePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idventadetalle', 'Idventa', 'VentadetalleRevisada', 'Idproducto', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle', 'idventa', 'ventadetalleRevisada', 'idproducto', ),
-        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE, VentadetallePeer::IDVENTA, VentadetallePeer::VENTADETALLE_REVISADA, VentadetallePeer::IDPRODUCTO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE', 'IDVENTA', 'VENTADETALLE_REVISADA', 'IDPRODUCTO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idventadetalle', 'idventa', 'ventadetalle_revisada', 'idproducto', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Idventadetalle', 'Idventa', 'Idalmacen', 'Idproducto', 'VentadetalleCantidad', 'VentadetalleSubtotal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle', 'idventa', 'idalmacen', 'idproducto', 'ventadetalleCantidad', 'ventadetalleSubtotal', ),
+        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE, VentadetallePeer::IDVENTA, VentadetallePeer::IDALMACEN, VentadetallePeer::IDPRODUCTO, VentadetallePeer::VENTADETALLE_CANTIDAD, VentadetallePeer::VENTADETALLE_SUBTOTAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE', 'IDVENTA', 'IDALMACEN', 'IDPRODUCTO', 'VENTADETALLE_CANTIDAD', 'VENTADETALLE_SUBTOTAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('idventadetalle', 'idventa', 'idalmacen', 'idproducto', 'ventadetalle_cantidad', 'ventadetalle_subtotal', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -78,12 +84,12 @@ abstract class BaseVentadetallePeer
      * e.g. VentadetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idventadetalle' => 0, 'Idventa' => 1, 'VentadetalleRevisada' => 2, 'Idproducto' => 3, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'ventadetalleRevisada' => 2, 'idproducto' => 3, ),
-        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE => 0, VentadetallePeer::IDVENTA => 1, VentadetallePeer::VENTADETALLE_REVISADA => 2, VentadetallePeer::IDPRODUCTO => 3, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE' => 0, 'IDVENTA' => 1, 'VENTADETALLE_REVISADA' => 2, 'IDPRODUCTO' => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'ventadetalle_revisada' => 2, 'idproducto' => 3, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Idventadetalle' => 0, 'Idventa' => 1, 'Idalmacen' => 2, 'Idproducto' => 3, 'VentadetalleCantidad' => 4, 'VentadetalleSubtotal' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'idalmacen' => 2, 'idproducto' => 3, 'ventadetalleCantidad' => 4, 'ventadetalleSubtotal' => 5, ),
+        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE => 0, VentadetallePeer::IDVENTA => 1, VentadetallePeer::IDALMACEN => 2, VentadetallePeer::IDPRODUCTO => 3, VentadetallePeer::VENTADETALLE_CANTIDAD => 4, VentadetallePeer::VENTADETALLE_SUBTOTAL => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE' => 0, 'IDVENTA' => 1, 'IDALMACEN' => 2, 'IDPRODUCTO' => 3, 'VENTADETALLE_CANTIDAD' => 4, 'VENTADETALLE_SUBTOTAL' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'idalmacen' => 2, 'idproducto' => 3, 'ventadetalle_cantidad' => 4, 'ventadetalle_subtotal' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -159,13 +165,17 @@ abstract class BaseVentadetallePeer
         if (null === $alias) {
             $criteria->addSelectColumn(VentadetallePeer::IDVENTADETALLE);
             $criteria->addSelectColumn(VentadetallePeer::IDVENTA);
-            $criteria->addSelectColumn(VentadetallePeer::VENTADETALLE_REVISADA);
+            $criteria->addSelectColumn(VentadetallePeer::IDALMACEN);
             $criteria->addSelectColumn(VentadetallePeer::IDPRODUCTO);
+            $criteria->addSelectColumn(VentadetallePeer::VENTADETALLE_CANTIDAD);
+            $criteria->addSelectColumn(VentadetallePeer::VENTADETALLE_SUBTOTAL);
         } else {
             $criteria->addSelectColumn($alias . '.idventadetalle');
             $criteria->addSelectColumn($alias . '.idventa');
-            $criteria->addSelectColumn($alias . '.ventadetalle_revisada');
+            $criteria->addSelectColumn($alias . '.idalmacen');
             $criteria->addSelectColumn($alias . '.idproducto');
+            $criteria->addSelectColumn($alias . '.ventadetalle_cantidad');
+            $criteria->addSelectColumn($alias . '.ventadetalle_subtotal');
         }
     }
 

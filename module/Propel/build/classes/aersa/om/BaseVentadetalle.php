@@ -42,16 +42,28 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     protected $idventa;
 
     /**
-     * The value for the ventadetalle_revisada field.
-     * @var        boolean
+     * The value for the idalmacen field.
+     * @var        int
      */
-    protected $ventadetalle_revisada;
+    protected $idalmacen;
 
     /**
      * The value for the idproducto field.
-     * @var        string
+     * @var        int
      */
     protected $idproducto;
+
+    /**
+     * The value for the ventadetalle_cantidad field.
+     * @var        double
+     */
+    protected $ventadetalle_cantidad;
+
+    /**
+     * The value for the ventadetalle_subtotal field.
+     * @var        string
+     */
+    protected $ventadetalle_subtotal;
 
     /**
      * @var        Venta
@@ -101,25 +113,47 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [ventadetalle_revisada] column value.
+     * Get the [idalmacen] column value.
      *
-     * @return boolean
+     * @return int
      */
-    public function getVentadetalleRevisada()
+    public function getIdalmacen()
     {
 
-        return $this->ventadetalle_revisada;
+        return $this->idalmacen;
     }
 
     /**
      * Get the [idproducto] column value.
      *
-     * @return string
+     * @return int
      */
     public function getIdproducto()
     {
 
         return $this->idproducto;
+    }
+
+    /**
+     * Get the [ventadetalle_cantidad] column value.
+     *
+     * @return double
+     */
+    public function getVentadetalleCantidad()
+    {
+
+        return $this->ventadetalle_cantidad;
+    }
+
+    /**
+     * Get the [ventadetalle_subtotal] column value.
+     *
+     * @return string
+     */
+    public function getVentadetalleSubtotal()
+    {
+
+        return $this->ventadetalle_subtotal;
     }
 
     /**
@@ -169,44 +203,36 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     } // setIdventa()
 
     /**
-     * Sets the value of the [ventadetalle_revisada] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * Set the value of [idalmacen] column.
      *
-     * @param boolean|integer|string $v The new value
+     * @param  int $v new value
      * @return Ventadetalle The current object (for fluent API support)
      */
-    public function setVentadetalleRevisada($v)
+    public function setIdalmacen($v)
     {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
         }
 
-        if ($this->ventadetalle_revisada !== $v) {
-            $this->ventadetalle_revisada = $v;
-            $this->modifiedColumns[] = VentadetallePeer::VENTADETALLE_REVISADA;
+        if ($this->idalmacen !== $v) {
+            $this->idalmacen = $v;
+            $this->modifiedColumns[] = VentadetallePeer::IDALMACEN;
         }
 
 
         return $this;
-    } // setVentadetalleRevisada()
+    } // setIdalmacen()
 
     /**
      * Set the value of [idproducto] column.
      *
-     * @param  string $v new value
+     * @param  int $v new value
      * @return Ventadetalle The current object (for fluent API support)
      */
     public function setIdproducto($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
         }
 
         if ($this->idproducto !== $v) {
@@ -217,6 +243,48 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
 
         return $this;
     } // setIdproducto()
+
+    /**
+     * Set the value of [ventadetalle_cantidad] column.
+     *
+     * @param  double $v new value
+     * @return Ventadetalle The current object (for fluent API support)
+     */
+    public function setVentadetalleCantidad($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->ventadetalle_cantidad !== $v) {
+            $this->ventadetalle_cantidad = $v;
+            $this->modifiedColumns[] = VentadetallePeer::VENTADETALLE_CANTIDAD;
+        }
+
+
+        return $this;
+    } // setVentadetalleCantidad()
+
+    /**
+     * Set the value of [ventadetalle_subtotal] column.
+     *
+     * @param  string $v new value
+     * @return Ventadetalle The current object (for fluent API support)
+     */
+    public function setVentadetalleSubtotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->ventadetalle_subtotal !== $v) {
+            $this->ventadetalle_subtotal = $v;
+            $this->modifiedColumns[] = VentadetallePeer::VENTADETALLE_SUBTOTAL;
+        }
+
+
+        return $this;
+    } // setVentadetalleSubtotal()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -252,8 +320,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
 
             $this->idventadetalle = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->idventa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->ventadetalle_revisada = ($row[$startcol + 2] !== null) ? (boolean) $row[$startcol + 2] : null;
-            $this->idproducto = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->idalmacen = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idproducto = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->ventadetalle_cantidad = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
+            $this->ventadetalle_subtotal = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -263,7 +333,7 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 4; // 4 = VentadetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = VentadetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Ventadetalle object", $e);
@@ -497,11 +567,17 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(VentadetallePeer::IDVENTA)) {
             $modifiedColumns[':p' . $index++]  = '`idventa`';
         }
-        if ($this->isColumnModified(VentadetallePeer::VENTADETALLE_REVISADA)) {
-            $modifiedColumns[':p' . $index++]  = '`ventadetalle_revisada`';
+        if ($this->isColumnModified(VentadetallePeer::IDALMACEN)) {
+            $modifiedColumns[':p' . $index++]  = '`idalmacen`';
         }
         if ($this->isColumnModified(VentadetallePeer::IDPRODUCTO)) {
             $modifiedColumns[':p' . $index++]  = '`idproducto`';
+        }
+        if ($this->isColumnModified(VentadetallePeer::VENTADETALLE_CANTIDAD)) {
+            $modifiedColumns[':p' . $index++]  = '`ventadetalle_cantidad`';
+        }
+        if ($this->isColumnModified(VentadetallePeer::VENTADETALLE_SUBTOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`ventadetalle_subtotal`';
         }
 
         $sql = sprintf(
@@ -520,11 +596,17 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
                     case '`idventa`':
                         $stmt->bindValue($identifier, $this->idventa, PDO::PARAM_INT);
                         break;
-                    case '`ventadetalle_revisada`':
-                        $stmt->bindValue($identifier, (int) $this->ventadetalle_revisada, PDO::PARAM_INT);
+                    case '`idalmacen`':
+                        $stmt->bindValue($identifier, $this->idalmacen, PDO::PARAM_INT);
                         break;
                     case '`idproducto`':
-                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_INT);
+                        break;
+                    case '`ventadetalle_cantidad`':
+                        $stmt->bindValue($identifier, $this->ventadetalle_cantidad, PDO::PARAM_STR);
+                        break;
+                    case '`ventadetalle_subtotal`':
+                        $stmt->bindValue($identifier, $this->ventadetalle_subtotal, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -679,10 +761,16 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
                 return $this->getIdventa();
                 break;
             case 2:
-                return $this->getVentadetalleRevisada();
+                return $this->getIdalmacen();
                 break;
             case 3:
                 return $this->getIdproducto();
+                break;
+            case 4:
+                return $this->getVentadetalleCantidad();
+                break;
+            case 5:
+                return $this->getVentadetalleSubtotal();
                 break;
             default:
                 return null;
@@ -715,8 +803,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getIdventadetalle(),
             $keys[1] => $this->getIdventa(),
-            $keys[2] => $this->getVentadetalleRevisada(),
+            $keys[2] => $this->getIdalmacen(),
             $keys[3] => $this->getIdproducto(),
+            $keys[4] => $this->getVentadetalleCantidad(),
+            $keys[5] => $this->getVentadetalleSubtotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -768,10 +858,16 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
                 $this->setIdventa($value);
                 break;
             case 2:
-                $this->setVentadetalleRevisada($value);
+                $this->setIdalmacen($value);
                 break;
             case 3:
                 $this->setIdproducto($value);
+                break;
+            case 4:
+                $this->setVentadetalleCantidad($value);
+                break;
+            case 5:
+                $this->setVentadetalleSubtotal($value);
                 break;
         } // switch()
     }
@@ -799,8 +895,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setIdventadetalle($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setIdventa($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setVentadetalleRevisada($arr[$keys[2]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdalmacen($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setIdproducto($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setVentadetalleCantidad($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setVentadetalleSubtotal($arr[$keys[5]]);
     }
 
     /**
@@ -814,8 +912,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
 
         if ($this->isColumnModified(VentadetallePeer::IDVENTADETALLE)) $criteria->add(VentadetallePeer::IDVENTADETALLE, $this->idventadetalle);
         if ($this->isColumnModified(VentadetallePeer::IDVENTA)) $criteria->add(VentadetallePeer::IDVENTA, $this->idventa);
-        if ($this->isColumnModified(VentadetallePeer::VENTADETALLE_REVISADA)) $criteria->add(VentadetallePeer::VENTADETALLE_REVISADA, $this->ventadetalle_revisada);
+        if ($this->isColumnModified(VentadetallePeer::IDALMACEN)) $criteria->add(VentadetallePeer::IDALMACEN, $this->idalmacen);
         if ($this->isColumnModified(VentadetallePeer::IDPRODUCTO)) $criteria->add(VentadetallePeer::IDPRODUCTO, $this->idproducto);
+        if ($this->isColumnModified(VentadetallePeer::VENTADETALLE_CANTIDAD)) $criteria->add(VentadetallePeer::VENTADETALLE_CANTIDAD, $this->ventadetalle_cantidad);
+        if ($this->isColumnModified(VentadetallePeer::VENTADETALLE_SUBTOTAL)) $criteria->add(VentadetallePeer::VENTADETALLE_SUBTOTAL, $this->ventadetalle_subtotal);
 
         return $criteria;
     }
@@ -880,8 +980,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setIdventa($this->getIdventa());
-        $copyObj->setVentadetalleRevisada($this->getVentadetalleRevisada());
+        $copyObj->setIdalmacen($this->getIdalmacen());
         $copyObj->setIdproducto($this->getIdproducto());
+        $copyObj->setVentadetalleCantidad($this->getVentadetalleCantidad());
+        $copyObj->setVentadetalleSubtotal($this->getVentadetalleSubtotal());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -999,8 +1101,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     {
         $this->idventadetalle = null;
         $this->idventa = null;
-        $this->ventadetalle_revisada = null;
+        $this->idalmacen = null;
         $this->idproducto = null;
+        $this->ventadetalle_cantidad = null;
+        $this->ventadetalle_subtotal = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

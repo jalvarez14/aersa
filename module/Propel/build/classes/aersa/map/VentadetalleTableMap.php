@@ -40,8 +40,10 @@ class VentadetalleTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idventadetalle', 'Idventadetalle', 'INTEGER', true, null, null);
         $this->addForeignKey('idventa', 'Idventa', 'INTEGER', 'venta', 'idventa', true, null, null);
-        $this->addColumn('ventadetalle_revisada', 'VentadetalleRevisada', 'BOOLEAN', true, 1, null);
-        $this->addColumn('idproducto', 'Idproducto', 'VARCHAR', false, 45, null);
+        $this->addColumn('idalmacen', 'Idalmacen', 'INTEGER', false, null, null);
+        $this->addColumn('idproducto', 'Idproducto', 'INTEGER', false, null, null);
+        $this->addColumn('ventadetalle_cantidad', 'VentadetalleCantidad', 'FLOAT', false, null, null);
+        $this->addColumn('ventadetalle_subtotal', 'VentadetalleSubtotal', 'DECIMAL', false, 15, null);
         // validators
     } // initialize()
 

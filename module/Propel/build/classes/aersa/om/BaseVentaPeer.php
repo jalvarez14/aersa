@@ -24,13 +24,13 @@ abstract class BaseVentaPeer
     const TM_CLASS = 'VentaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the idventa field */
     const IDVENTA = 'venta.idventa';
@@ -56,6 +56,12 @@ abstract class BaseVentaPeer
     /** the column name for the venta_fecha field */
     const VENTA_FECHA = 'venta.venta_fecha';
 
+    /** the column name for the venta_fechacreacion field */
+    const VENTA_FECHACREACION = 'venta.venta_fechacreacion';
+
+    /** the column name for the venta_total field */
+    const VENTA_TOTAL = 'venta.venta_total';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -75,12 +81,12 @@ abstract class BaseVentaPeer
      * e.g. VentaPeer::$fieldNames[VentaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idventa', 'Idempresa', 'Idsucursal', 'Idalmacen', 'Idusuario', 'Idauditor', 'VentaRevisada', 'VentaFecha', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idventa', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'ventaRevisada', 'ventaFecha', ),
-        BasePeer::TYPE_COLNAME => array (VentaPeer::IDVENTA, VentaPeer::IDEMPRESA, VentaPeer::IDSUCURSAL, VentaPeer::IDALMACEN, VentaPeer::IDUSUARIO, VentaPeer::IDAUDITOR, VentaPeer::VENTA_REVISADA, VentaPeer::VENTA_FECHA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTA', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACEN', 'IDUSUARIO', 'IDAUDITOR', 'VENTA_REVISADA', 'VENTA_FECHA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idventa', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'venta_revisada', 'venta_fecha', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idventa', 'Idempresa', 'Idsucursal', 'Idalmacen', 'Idusuario', 'Idauditor', 'VentaRevisada', 'VentaFecha', 'VentaFechacreacion', 'VentaTotal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idventa', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'ventaRevisada', 'ventaFecha', 'ventaFechacreacion', 'ventaTotal', ),
+        BasePeer::TYPE_COLNAME => array (VentaPeer::IDVENTA, VentaPeer::IDEMPRESA, VentaPeer::IDSUCURSAL, VentaPeer::IDALMACEN, VentaPeer::IDUSUARIO, VentaPeer::IDAUDITOR, VentaPeer::VENTA_REVISADA, VentaPeer::VENTA_FECHA, VentaPeer::VENTA_FECHACREACION, VentaPeer::VENTA_TOTAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTA', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACEN', 'IDUSUARIO', 'IDAUDITOR', 'VENTA_REVISADA', 'VENTA_FECHA', 'VENTA_FECHACREACION', 'VENTA_TOTAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('idventa', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'venta_revisada', 'venta_fecha', 'venta_fechacreacion', 'venta_total', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -90,12 +96,12 @@ abstract class BaseVentaPeer
      * e.g. VentaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idventa' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacen' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'VentaRevisada' => 6, 'VentaFecha' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idventa' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'ventaRevisada' => 6, 'ventaFecha' => 7, ),
-        BasePeer::TYPE_COLNAME => array (VentaPeer::IDVENTA => 0, VentaPeer::IDEMPRESA => 1, VentaPeer::IDSUCURSAL => 2, VentaPeer::IDALMACEN => 3, VentaPeer::IDUSUARIO => 4, VentaPeer::IDAUDITOR => 5, VentaPeer::VENTA_REVISADA => 6, VentaPeer::VENTA_FECHA => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACEN' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'VENTA_REVISADA' => 6, 'VENTA_FECHA' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('idventa' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'venta_revisada' => 6, 'venta_fecha' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idventa' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacen' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'VentaRevisada' => 6, 'VentaFecha' => 7, 'VentaFechacreacion' => 8, 'VentaTotal' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idventa' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'ventaRevisada' => 6, 'ventaFecha' => 7, 'ventaFechacreacion' => 8, 'ventaTotal' => 9, ),
+        BasePeer::TYPE_COLNAME => array (VentaPeer::IDVENTA => 0, VentaPeer::IDEMPRESA => 1, VentaPeer::IDSUCURSAL => 2, VentaPeer::IDALMACEN => 3, VentaPeer::IDUSUARIO => 4, VentaPeer::IDAUDITOR => 5, VentaPeer::VENTA_REVISADA => 6, VentaPeer::VENTA_FECHA => 7, VentaPeer::VENTA_FECHACREACION => 8, VentaPeer::VENTA_TOTAL => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACEN' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'VENTA_REVISADA' => 6, 'VENTA_FECHA' => 7, 'VENTA_FECHACREACION' => 8, 'VENTA_TOTAL' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('idventa' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'venta_revisada' => 6, 'venta_fecha' => 7, 'venta_fechacreacion' => 8, 'venta_total' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -177,6 +183,8 @@ abstract class BaseVentaPeer
             $criteria->addSelectColumn(VentaPeer::IDAUDITOR);
             $criteria->addSelectColumn(VentaPeer::VENTA_REVISADA);
             $criteria->addSelectColumn(VentaPeer::VENTA_FECHA);
+            $criteria->addSelectColumn(VentaPeer::VENTA_FECHACREACION);
+            $criteria->addSelectColumn(VentaPeer::VENTA_TOTAL);
         } else {
             $criteria->addSelectColumn($alias . '.idventa');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -186,6 +194,8 @@ abstract class BaseVentaPeer
             $criteria->addSelectColumn($alias . '.idauditor');
             $criteria->addSelectColumn($alias . '.venta_revisada');
             $criteria->addSelectColumn($alias . '.venta_fecha');
+            $criteria->addSelectColumn($alias . '.venta_fechacreacion');
+            $criteria->addSelectColumn($alias . '.venta_total');
         }
     }
 

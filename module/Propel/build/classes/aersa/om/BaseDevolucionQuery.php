@@ -21,6 +21,7 @@
  * @method DevolucionQuery orderByDevolucionIeps($order = Criteria::ASC) Order by the devolucion_ieps column
  * @method DevolucionQuery orderByDevolucionIva($order = Criteria::ASC) Order by the devolucion_iva column
  * @method DevolucionQuery orderByDevolucionTotal($order = Criteria::ASC) Order by the devolucion_total column
+ * @method DevolucionQuery orderByDevolucionSubtotal($order = Criteria::ASC) Order by the devolucion_subtotal column
  *
  * @method DevolucionQuery groupByIddevolucion() Group by the iddevolucion column
  * @method DevolucionQuery groupByIdempresa() Group by the idempresa column
@@ -37,6 +38,7 @@
  * @method DevolucionQuery groupByDevolucionIeps() Group by the devolucion_ieps column
  * @method DevolucionQuery groupByDevolucionIva() Group by the devolucion_iva column
  * @method DevolucionQuery groupByDevolucionTotal() Group by the devolucion_total column
+ * @method DevolucionQuery groupByDevolucionSubtotal() Group by the devolucion_subtotal column
  *
  * @method DevolucionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method DevolucionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -91,6 +93,7 @@
  * @method Devolucion findOneByDevolucionIeps(string $devolucion_ieps) Return the first Devolucion filtered by the devolucion_ieps column
  * @method Devolucion findOneByDevolucionIva(string $devolucion_iva) Return the first Devolucion filtered by the devolucion_iva column
  * @method Devolucion findOneByDevolucionTotal(string $devolucion_total) Return the first Devolucion filtered by the devolucion_total column
+ * @method Devolucion findOneByDevolucionSubtotal(string $devolucion_subtotal) Return the first Devolucion filtered by the devolucion_subtotal column
  *
  * @method array findByIddevolucion(int $iddevolucion) Return Devolucion objects filtered by the iddevolucion column
  * @method array findByIdempresa(int $idempresa) Return Devolucion objects filtered by the idempresa column
@@ -107,6 +110,7 @@
  * @method array findByDevolucionIeps(string $devolucion_ieps) Return Devolucion objects filtered by the devolucion_ieps column
  * @method array findByDevolucionIva(string $devolucion_iva) Return Devolucion objects filtered by the devolucion_iva column
  * @method array findByDevolucionTotal(string $devolucion_total) Return Devolucion objects filtered by the devolucion_total column
+ * @method array findByDevolucionSubtotal(string $devolucion_subtotal) Return Devolucion objects filtered by the devolucion_subtotal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -214,7 +218,7 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `idproveedor`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechaentrega`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total` FROM `devolucion` WHERE `iddevolucion` = :p0';
+        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `idproveedor`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechaentrega`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total`, `devolucion_subtotal` FROM `devolucion` WHERE `iddevolucion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -893,6 +897,48 @@ abstract class BaseDevolucionQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the devolucion_subtotal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevolucionSubtotal(1234); // WHERE devolucion_subtotal = 1234
+     * $query->filterByDevolucionSubtotal(array(12, 34)); // WHERE devolucion_subtotal IN (12, 34)
+     * $query->filterByDevolucionSubtotal(array('min' => 12)); // WHERE devolucion_subtotal >= 12
+     * $query->filterByDevolucionSubtotal(array('max' => 12)); // WHERE devolucion_subtotal <= 12
+     * </code>
+     *
+     * @param     mixed $devolucionSubtotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function filterByDevolucionSubtotal($devolucionSubtotal = null, $comparison = null)
+    {
+        if (is_array($devolucionSubtotal)) {
+            $useMinMax = false;
+            if (isset($devolucionSubtotal['min'])) {
+                $this->addUsingAlias(DevolucionPeer::DEVOLUCION_SUBTOTAL, $devolucionSubtotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devolucionSubtotal['max'])) {
+                $this->addUsingAlias(DevolucionPeer::DEVOLUCION_SUBTOTAL, $devolucionSubtotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevolucionPeer::DEVOLUCION_SUBTOTAL, $devolucionSubtotal, $comparison);
+    }
+
+    /**
      * Filter the query by a related Almacen object
      *
      * @param   Almacen|PropelObjectCollection $almacen The related object(s) to use as filter
@@ -1002,7 +1048,7 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      *
      * @return DevolucionQuery The current query, for fluid interface
      */
-    public function joinUsuarioRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUsuarioRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('UsuarioRelatedByIdauditor');
@@ -1037,7 +1083,7 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      *
      * @return   UsuarioQuery A secondary query class using the current class as primary query
      */
-    public function useUsuarioRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUsuarioRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinUsuarioRelatedByIdauditor($relationAlias, $joinType)

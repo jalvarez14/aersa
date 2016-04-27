@@ -44,7 +44,7 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addForeignKey('idalmacenorigen', 'Idalmacenorigen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idalmacendestino', 'Idalmacendestino', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
         $this->addColumn('ordentablajeria_pesobruto', 'OrdentablajeriaPesobruto', 'FLOAT', true, null, null);
         $this->addColumn('ordentablajeria_preciokilo', 'OrdentablajeriaPreciokilo', 'DECIMAL', true, 15, null);
