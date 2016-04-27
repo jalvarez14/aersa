@@ -130,6 +130,22 @@
        /*
         * Public methods
         */
+        plugin.list = function(){
+        
+            //INICIALIZAMOS DATATABLES
+            var table = $container.find('#datatable');
+            $.ajax({
+                url:'/application/json/datatable/lang_es.json',
+                dataType:'json',
+                success:function(data){
+                   table.dataTable({
+                       "language":data,
+                       "order":[],
+                   });
+                },
+            });
+            
+        }
         
         plugin.init = function(){
             

@@ -4,6 +4,7 @@
  * to the application root now.
  */
 date_default_timezone_set ('America/Mexico_City');
+setlocale(LC_MONETARY, 'en_US');
 
 chdir(dirname(__DIR__));
 

@@ -94,7 +94,7 @@ use Zend\Form\Form;
         ));  
         
         $this->add(array(
-            'name' => 'compra_revision',
+            'name' => 'compra_revisada',
             'type' => 'Select',
             'options' => array(
                 'label' => 'Revisión *',

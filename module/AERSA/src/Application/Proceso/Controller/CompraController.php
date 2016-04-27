@@ -16,8 +16,11 @@ use Zend\Console\Request as ConsoleRequest;
 class CompraController extends AbstractActionController {
     
     public function indexAction() {
-
-        $collection = \CompraQuery::create()->find();
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
         
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/compra/index');
@@ -57,8 +60,72 @@ class CompraController extends AbstractActionController {
             $post_data = $request->getPost();
             $post_files = $request->getFiles();
             
-            echo '<pre>';var_dump($post_data);'</pre>';
-            echo '<pre>';var_dump($post_files);'</pre>';exit();
+            $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
+            $post_data["compra_fechaentrega"] = date_create_from_format('d/m/Y', $post_data["compra_fechaentrega"]);
+           
+            $entity = new \Compra();
+            foreach ($post_data as $key => $value){
+                if(\CompraPeer::getTableMap()->hasColumn($key)){
+                    $entity->setByName($key, $value,  \BasePeer::TYPE_FIELDNAME);
+                }
+            }
+            
+            
+            //SETEAMOS LA FECHA DE CREACION
+            $entity->setCompraFechacreacion(new \DateTime())
+                   ->setIdempresa($session['idempresa'])
+                   ->setIdsucursal($session['idsucursal'])
+                   ->setIdusuario($session['idusuario']);
+            
+            
+            if($post_data['compra_revisada']){
+                $entity->setIdauditor($session['idusuario']);
+            }
+            
+            $entity->save();
+            
+            //EL COMPROBANTE
+            if(!empty($post_files['compra_factura']['name'])){
+                
+                $type = $post_files['compra_factura']['type'];
+                $type = explode('/', $type);
+                $type = $type[1];
+               
+                $target_path = "/application/files/compras/";
+                $target_path = $target_path . 'compra_'.$entity->getIdcompra() .'.'.$type;
+                
+                if(move_uploaded_file($_FILES['compra_factura']['tmp_name'],$_SERVER['DOCUMENT_ROOT'].$target_path)){
+                    $entity->setCompraFactura($target_path);
+                    $entity->save();
+                }
+
+            }
+           
+            //COMPRA DETALLES
+            foreach ($post_data['productos'] as $producto){
+                
+                $compra_detalle = new \Compradetalle();
+                $compra_detalle->setIdcompra($entity->getIdcompra())
+                               ->setCompradetalleRevisada(0)
+                               ->setIdproducto($producto['idproducto'])
+                               ->setIdalmacen($producto['almacen'])
+                               ->setCompradetalleCantidad($producto['cantidad'])
+                               ->setCompradetalleCostounitario($producto['costo_unitario'])
+                               ->setCompradetalleDescuento($producto['descuento'])
+                               ->setCompradetalleIeps($producto['ieps'])
+                               ->setCompradetalleSubtotal($producto['subtotal']);
+                
+                if(isset($producto['revisada'])){
+                    $compra_detalle->setCompradetalleRevisada(1);
+                }
+                
+                $compra_detalle->save();
+                
+            }
+            
+            //REDIRECCIONAMOS AL LISTADO
+            $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+            return $this->redirect()->toUrl('/procesos/compra');
         }
         
         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
