@@ -562,7 +562,7 @@ abstract class BaseAlmacenQuery extends ModelCriteria
      *
      * @return AlmacenQuery The current query, for fluid interface
      */
-    public function joinCompra($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCompra($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Compra');
@@ -597,7 +597,7 @@ abstract class BaseAlmacenQuery extends ModelCriteria
      *
      * @return   CompraQuery A secondary query class using the current class as primary query
      */
-    public function useCompraQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCompraQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinCompra($relationAlias, $joinType)
@@ -636,7 +636,7 @@ abstract class BaseAlmacenQuery extends ModelCriteria
      *
      * @return AlmacenQuery The current query, for fluid interface
      */
-    public function joinCompradetalle($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinCompradetalle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Compradetalle');
@@ -671,7 +671,7 @@ abstract class BaseAlmacenQuery extends ModelCriteria
      *
      * @return   CompradetalleQuery A secondary query class using the current class as primary query
      */
-    public function useCompradetalleQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useCompradetalleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinCompradetalle($relationAlias, $joinType)

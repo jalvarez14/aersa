@@ -54,7 +54,6 @@ class CompraController extends AbstractActionController {
         return $this->getResponse()->setContent(json_encode($exist));
     }
 
-
     public function nuevoregistroAction() {
         
         $session = new \Shared\Session\AouthSession();
@@ -66,7 +65,7 @@ class CompraController extends AbstractActionController {
             
             $post_data = $request->getPost();
             $post_files = $request->getFiles();
-            
+           
             $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
             $post_data["compra_fechaentrega"] = date_create_from_format('d/m/Y', $post_data["compra_fechaentrega"]);
            
@@ -88,7 +87,7 @@ class CompraController extends AbstractActionController {
             if($post_data['compra_revisada']){
                 $entity->setIdauditor($session['idusuario']);
             }
-            
+           
             $entity->save();
             
             //EL COMPROBANTE
@@ -115,13 +114,16 @@ class CompraController extends AbstractActionController {
                 $compra_detalle->setIdcompra($entity->getIdcompra())
                                ->setCompradetalleRevisada(0)
                                ->setIdproducto($producto['idproducto'])
-                               ->setIdalmacen($producto['almacen'])
                                ->setCompradetalleCantidad($producto['cantidad'])
                                ->setCompradetallePrecio($producto['precio'])
                                ->setCompradetalleCostounitario($producto['costo_unitario'])
                                ->setCompradetalleDescuento($producto['descuento'])
                                ->setCompradetalleIeps($producto['ieps'])
                                ->setCompradetalleSubtotal($producto['subtotal']);
+                
+                if($entity->getCompraTipo() == 'compra'){
+                    $compra_detalle->setIdalmacen($producto['almacen']);
+                }
                 
                 if(isset($producto['revisada'])){
                     $compra_detalle->setCompradetalleRevisada(1);

@@ -44,7 +44,7 @@ class CompraTableMap extends TableMap
         $this->addForeignKey('idproveedor', 'Idproveedor', 'INTEGER', 'proveedor', 'idproveedor', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
-        $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
+        $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', false, null, null);
         $this->addColumn('compra_folio', 'CompraFolio', 'VARCHAR', true, 45, null);
         $this->addColumn('compra_revisada', 'CompraRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('compra_factura', 'CompraFactura', 'LONGVARCHAR', false, null, null);
