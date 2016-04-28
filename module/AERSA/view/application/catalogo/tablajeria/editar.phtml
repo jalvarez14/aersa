@@ -13,7 +13,7 @@
 <?php foreach ($messages->getSuccessMessages() as $message):?>
     <div class="alert alert-success alert-dismissable">
         <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-        <strong>Éxito!</strong>
+        <strong>Ã‰xito!</strong>
         <?php echo $message?>
     </div>
 <?php endforeach;?>
@@ -33,7 +33,7 @@
 <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
     <div class="portlet-body form">
         <div class="form-body">
-            <h3 class="form-section">Información general</h3>
+            <h3 class="form-section">InformaciÃ³n general</h3>
             <div class="row">
                     <?php echo  $this->formHidden($form->get('idempresa'));?>
                 <div class="col-md-6">
@@ -41,8 +41,14 @@
                     <?php echo  $this->formText($form->get('plantillatablajeria_nombre'));?>
                 </div>
                 <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('idproducto')) ?>  
-                    <?php echo  $this->formSelect($form->get('idproducto'))?>
+                    <?php echo $this->formHidden($form->get('idproducto')); ?>  
+                    <?php echo $this->formLabel($form->get('idproducto_autocomplete')); ?>  
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        <?php echo $this->formText($form->get('idproducto_autocomplete')); ?>  
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <?php echo $this->formLabel($form->get('plantillatablajeria_descripcion')) ?>  

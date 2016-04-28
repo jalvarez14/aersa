@@ -37,30 +37,41 @@ class PlantillatablajeriaController extends AbstractActionController {
     
     public function nuevoAction()
     {
-        $idempresa=1;
+        $idempresa = 1;
         //$idempresa=$session['idempresa'];
         $request = $this->getRequest();
-        if($request->isPost()){
-            
+        if ($request->isPost()) {
             $post_data = $request->getPost();
-
             $plantillatablajeria = new \Plantillatablajeria();
-            foreach ($post_data as $key => $data){
-                if($key != 'idempresa')
-                    $plantillatablajeria->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
-                else
-                    $plantillatablajeria->setByName($key, $idempresa, \BasePeer::TYPE_FIELDNAME);
+            unset($post_data['idproducto_autocomplete']);
+            if (isset($post_data['productos'])) {
+                $productos = $post_data['productos'];
+                unset($post_data['productos']);
+                foreach ($post_data as $key => $data) {
+                    if ($key != 'idempresa')
+                        $plantillatablajeria->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
+                    else
+                        $plantillatablajeria->setByName($key, $idempresa, \BasePeer::TYPE_FIELDNAME);
+                }
+                $plantillatablajeria->save();
+                $idplantillatablajeria = $plantillatablajeria->getIdplantillatablajeria();
+                foreach ($productos as $producto) {
+                    $plantillatablajeriadetalle = new \Plantillatablajeriadetalle();
+                    $producto['idplantillatablajeria'] = $idplantillatablajeria;
+                    foreach ($producto as $key => $data) {
+                        $plantillatablajeriadetalle->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
+                    }
+                    $plantillatablajeriadetalle->save();
+                }
+                return $this->redirect()->toUrl('/catalogo/tablajeria');
             }
-            $plantillatablajeria->save();
-            
-            return  $this->redirect()->toUrl('/catalogo/tablajeria');
-
         }
-        
+
+
 
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA
-        
-        
+
+
         $producto_array = array();
         $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
         foreach ($productos as $producto){
@@ -68,18 +79,13 @@ class PlantillatablajeriaController extends AbstractActionController {
             $id = $producto->getIdproducto();
             $producto_array[$id] = $producto->getProductoNombre();
         }
-
         //INTANCIAMOS NUESTRA VISTA
         $form = new \Application\Catalogo\Form\PlantillatablajeriaForm($producto_array);
-        
         $view_model = new ViewModel();
-        $view_model->setVariables(array
-        (
-
+        $view_model->setVariables(array(
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
-        ));
-        
+            ));
         $view_model->setTemplate('/application/catalogo/tablajeria/nuevo');
         return $view_model;
     }
@@ -134,20 +140,5 @@ class PlantillatablajeriaController extends AbstractActionController {
         return $this->redirect()->toUrl('/catalogo/tablajeria');       
         }
     }
-
-    
-    public function getproductsAction(){
-        
-        $session = new \Shared\Session\AouthSession();
-        $session = $session->getData();
-
-        $search = $this->params()->fromQuery('q');
-        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->find();
-
-        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre')));
-
-        
-    }
-
 
 }
