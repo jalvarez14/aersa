@@ -70,6 +70,15 @@
                   wildcard: '%QUERY'
                 }
               });
+              
+              var data = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                  url: '/autocomplete/getproductos?q=%QUERY',
+                  wildcard: '%QUERY'
+                }
+              });
            
               $('input[name=idproducto_autocomplete]').typeahead(null, {
                 name: 'best-pictures',
@@ -83,8 +92,50 @@
                   $('input[name=idproducto]').val(suggestion.id);
               });
               
-        
-
+            
+              
+            $('input#producto_autocomplete').typeahead(null, {
+                name: 'best-pictures',
+                display: 'value',
+                hint: true,
+                highlight: true,
+                source: data
+            });
+            
+            $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
+                $('#producto_add').attr('disabled',false);
+                $('input#idproducto').val(suggestion.id);
+            });
+            
+            var count = 0;
+            var exits = 0;
+            $('#producto_add').on('click',function(){
+                var tr = $('<tr>');
+                tr.append('<td><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
+                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                //INSERTAMOS EN LA TABLA
+                $('#productos_table tbody').append(tr);
+                //LIMPIAMOS EL AUTOCOMPLETE
+                $('input#producto_autocomplete').typeahead('val', ''); 
+                $('input#idproducto').typeahead('val', ''); 
+                $('#producto_add').attr('disabled',true);                
+                $('#plantilla_save').attr('disabled',false);                
+              count ++;
+              exits++;
+              $('.fa-trash').on('click',function(){
+                var tr = $(this).closest('tr');
+                console.log(tr);
+                tr.remove();
+                exits--;
+                    alert(exits);
+                if(exits==0)
+                {
+                    alert("entro");
+                    $('#plantilla_save').attr('disabled',true);                
+                }
+            });         
+              
+            });
         }
 
         /*
@@ -94,9 +145,6 @@
         plugin.init();
        
     }
-    
-    
-    
 })( jQuery );
 
 

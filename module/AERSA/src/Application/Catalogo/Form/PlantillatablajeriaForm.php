@@ -67,7 +67,7 @@ class PlantillatablajeriaForm extends Form {
                 'style' => 'resize: vertical',
             ),
             'options' => array(
-                'label' => 'Descripción',
+                'label' => 'DescripciÃ³n',
             ),
         ));
         
