@@ -121,21 +121,23 @@
                 $('#producto_add').attr('disabled',true);                
                 $('#plantilla_save').attr('disabled',false);                
               count ++;
-              exits++;
+              exits ++;
+
               $('.fa-trash').on('click',function(){
                 var tr = $(this).closest('tr');
-                console.log(tr);
                 tr.remove();
-                exits--;
-                    alert(exits);
-                if(exits==0)
+                alert($('#productos_table_tbody').length);
+                if($('#productos_table_tbody').empty())
+                    alert("Entro a empty");
+                if($('#productos_table_tbody').length==0)
                 {
                     alert("entro");
                     $('#plantilla_save').attr('disabled',true);                
+                    exits=0;
                 }
-            });         
-              
             });
+            });
+                          
         }
 
         /*
