@@ -108,7 +108,6 @@
             });
             
             var count = 0;
-            var exits = 0;
             $('#producto_add').on('click',function(){
                 var tr = $('<tr>');
                 tr.append('<td><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
@@ -121,21 +120,17 @@
                 $('#producto_add').attr('disabled',true);                
                 $('#plantilla_save').attr('disabled',false);                
               count ++;
-              exits++;
               $('.fa-trash').on('click',function(){
                 var tr = $(this).closest('tr');
-                console.log(tr);
                 tr.remove();
-                exits--;
-                    alert(exits);
-                if(exits==0)
+                if($('#productos_table tbody tr').length==1)
                 {
-                    alert("entro");
                     $('#plantilla_save').attr('disabled',true);                
+                    exits=0;
                 }
-            });         
-              
             });
+            });
+                          
         }
 
         /*
