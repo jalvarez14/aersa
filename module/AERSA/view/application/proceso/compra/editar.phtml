@@ -265,5 +265,5 @@
 <script type="text/javascript" src="/application/custom/js/procesos/compra.js"></script>
 <script>
     var $form = $('#form_container').compra();
-    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
+    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>,<?php echo json_encode($entity->getCompraTipo())?>);
 </script>

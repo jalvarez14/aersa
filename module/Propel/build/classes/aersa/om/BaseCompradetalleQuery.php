@@ -800,7 +800,7 @@ abstract class BaseCompradetalleQuery extends ModelCriteria
      *
      * @return CompradetalleQuery The current query, for fluid interface
      */
-    public function joinAlmacen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinAlmacen($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Almacen');
@@ -835,7 +835,7 @@ abstract class BaseCompradetalleQuery extends ModelCriteria
      *
      * @return   AlmacenQuery A secondary query class using the current class as primary query
      */
-    public function useAlmacenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useAlmacenQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinAlmacen($relationAlias, $joinType)

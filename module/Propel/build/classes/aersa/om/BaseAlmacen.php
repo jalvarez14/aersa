@@ -1890,7 +1890,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 $this->comprasScheduledForDeletion = clone $this->collCompras;
                 $this->comprasScheduledForDeletion->clear();
             }
-            $this->comprasScheduledForDeletion[]= clone $compra;
+            $this->comprasScheduledForDeletion[]= $compra;
             $compra->setAlmacen(null);
         }
 
@@ -2240,7 +2240,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 $this->compradetallesScheduledForDeletion = clone $this->collCompradetalles;
                 $this->compradetallesScheduledForDeletion->clear();
             }
-            $this->compradetallesScheduledForDeletion[]= clone $compradetalle;
+            $this->compradetallesScheduledForDeletion[]= $compradetalle;
             $compradetalle->setAlmacen(null);
         }
 

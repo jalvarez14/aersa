@@ -396,7 +396,13 @@
                          
         }
         
-        plugin.edit = function(anio,mes,almacenes,count){
+        plugin.edit = function(anio,mes,almacenes,count,compra_tipo){
+            
+            //SI ES ORDEN DE COMPRA DESHABILITAMOS LOS SELECT DE ALMACEN
+            if(compra_tipo == 'ordecompra'){
+                $container.find('select[name=idalmacen]').attr('disabled',true);
+                $container.find('select[name*=almacen]').attr('disabled',true);
+            }
 
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
