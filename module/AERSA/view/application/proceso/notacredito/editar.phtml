@@ -15,20 +15,20 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/devolucion">Compras</a>
+                <a href="/procesos/credito">Compras</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="javascript:;"><?php echo '#'.$form->get('iddevolucion')->getValue()?></a>
+                <a href="javascript:;"><?php echo '#'.$form->get('idnotacredito')->getValue()?></a>
             </li>
         </ul>
 </div>
 <div id="form_container">
-    <form class="form-horizontal" action="/procesos/devolucion/editar/<?php echo $form->get('iddevolucion')->getValue()?>" method="post" enctype="multipart/form-data">
+    <form class="form-horizontal" action="/procesos/credito/editar/<?php echo $form->get('idnotacredito')->getValue()?>" method="post" enctype="multipart/form-data">
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                 <h3 class="page-title">Devolucion - <?php echo '#'.$form->get('iddevolucion')->getValue()?></h3>
+                 <h3 class="page-title">Notacredito - <?php echo '#'.$form->get('idnotacredito')->getValue()?></h3>
                  <div class="row">
                     <div class="col-md-6">
                          <div class="form-group">
@@ -44,7 +44,7 @@
                              <div class="col-md-9">
                                  <?php 
                                    
-                                    if($entity->getDevolucionRevisada()){
+                                    if($entity->getNotacreditoRevisada()){
                                         $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
                                     }else{
                                         $auditor = 'N/D';
@@ -64,8 +64,8 @@
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('devolucion_fechacreacion')) ?>  
-                            <?php echo $this->formText($form->get('devolucion_fechacreacion')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_fechacreacion')) ?>  
+                            <?php echo $this->formText($form->get('notacredito_fechacreacion')) ?> 
                         </div>
                         <div class="col-md-6">
                             <?php echo $this->formHidden($form->get('idproveedor')); ?>  
@@ -84,12 +84,12 @@
                     <div class="form-group">
                         
                         <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('devolucion_folio')) ?>  
-                            <?php echo $this->formText($form->get('devolucion_folio')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_folio')) ?>  
+                            <?php echo $this->formText($form->get('notacredito_folio')) ?> 
                         </div>
                         <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('devolucion_factura')) ?>  
-                            <?php echo $this->formFile($form->get('devolucion_factura')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_factura')) ?>  
+                            <?php echo $this->formFile($form->get('notacredito_factura')) ?> 
                         </div>
                     </div>
                     
@@ -100,8 +100,8 @@
                             <?php echo $this->formSelect($form->get('idalmacen')) ?> 
                         </div>
                         <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('devolucion_revisada')) ?>  
-                            <?php echo $this->formSelect($form->get('devolucion_revisada')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('notacredito_revisada')) ?> 
                         </div>
                     </div>
                 </div>
@@ -145,46 +145,46 @@
                                 <th>Opciones</th>
                             </thead>
                             <tbody>
-                                <?php $detalle = new Devoluciondetalle()?>
-                                <?php foreach ($devolucion_detalle as $detalle) :?>
-                                <tr id="<?php echo $detalle->getIddevoluciondetalle()?>">
+                                <?php $detalle = new Notacreditodetalle()?>
+                                <?php foreach ($notacredito_detalle as $detalle) :?>
+                                <tr id="<?php echo $detalle->getIdnotacreditodetalle()?>">
                                     <td>
-                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][subtotal]" value="<?php echo $detalle->getDevoluciondetalleSubtotal()?>">
-                                        <!--<input type="hidden" name="productos[<?php //echo $detalle->getIddevoluciondetalle()?>][costo_unitario]" value="<?php //echo $detalle->getDevoluciondetalleCostounitario()?>">-->
-                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][producto_iva]" value="<?php echo $detalle->getProducto()->getProductoIva()?>">
-                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][subtotal]" value="<?php echo $detalle->getNotacreditodetalleSubtotal()?>">
+                                        <!--<input type="hidden" name="productos[<?php //echo $detalle->getIdnotacreditodetalle()?>][costo_unitario]" value="<?php //echo $detalle->getNotacreditodetalleCostounitario()?>">-->
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][producto_iva]" value="<?php echo $detalle->getProducto()->getProductoIva()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
                                         <?php echo $detalle->getProducto()->getProductoNombre()?>
                                     </td>
                                     <td>
-                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][cantidad]" value="<?php echo $detalle->getDevoluciondetalleCantidad()?>"> 
+                                        <input type="text" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][cantidad]" value="<?php echo $detalle->getNotacreditodetalleCantidad()?>"> 
                                     </td>
                                     <td>
-                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][precio]" value="<?php echo $detalle->getDevoluciondetalleCostounitario()?>"> 
-                                    </td>
-                                    
-                                    <td>
-                                        <?php echo money_format('%(#10n',$detalle->getDevoluciondetalleCostounitarioneto())?>
+                                        <input type="text" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][precio]" value="<?php echo $detalle->getNotacreditodetalleCostounitario()?>"> 
                                     </td>
                                     
                                     <td>
-                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][descuento]" value="<?php echo $detalle->getDevoluciondetalleDescuento()?>"> 
+                                        <?php echo money_format('%(#10n',$detalle->getNotacreditodetalleCostounitarioneto())?>
+                                    </td>
+                                    
+                                    <td>
+                                        <input type="text" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][descuento]" value="<?php echo $detalle->getNotacreditodetalleDescuento()?>"> 
                                     </td>
                                     <td>
-                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][ieps]" value="<?php echo $detalle->getDevoluciondetalleIeps()?>"> 
+                                        <input type="text" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][ieps]" value="<?php echo $detalle->getNotacreditodetalleIeps()?>"> 
                                     </td>
                                     <td>
-                                        <?php echo money_format('%(#10n',$detalle->getDevoluciondetalleSubtotal())?>
+                                        <?php echo money_format('%(#10n',$detalle->getNotacreditodetalleSubtotal())?>
                                     </td>
                                     <td>
-                                        <?php if($detalle->getDevoluciondetalleRevisada()) :?>
-                                            <input checked type="checkbox" name=productos[<?php echo $detalle->getIddevoluciondetalle()?>][revisada]>
+                                        <?php if($detalle->getNotacreditodetalleRevisada()) :?>
+                                            <input checked type="checkbox" name=productos[<?php echo $detalle->getIdnotacreditodetalle()?>][revisada]>
                                         <?php else :?>
-                                            <input type="checkbox" name=productos[<?php echo $detalle->getIddevoluciondetalle()?>][revisada]>
+                                            <input type="checkbox" name=productos[<?php echo $detalle->getIdnotacreditodetalle()?>][revisada]>
                                         <?php endif?>
                                     </td>
                                     <td>
    
-                                        <select class="form-control" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][almacen]">
+                                        <select class="form-control" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][almacen]">
                                             <?php foreach ($almacenes as $key => $value) :?>
                                                 <?php if($key == $detalle->getIdalmacen()) :?>
                                                     <option selected value="<?php echo $key?>"><?php echo $value?></option>
@@ -203,26 +203,26 @@
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>SUBTOTAL</td>
-                                    <?php echo $this->formHidden($form->get('devolucion_subtotal')) ?> 
-                                    <td id="subtotal"><?php echo money_format('%(#10n',$entity->getDevolucionSubtotal())?></td>
+                                    <?php echo $this->formHidden($form->get('notacredito_subtotal')) ?> 
+                                    <td id="subtotal"><?php echo money_format('%(#10n',$entity->getNotacreditoSubtotal())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IEPS</td>
-                                    <?php echo $this->formHidden($form->get('devolucion_ieps')) ?> 
-                                    <td id="ieps"><?php echo money_format('%(#10n',$entity->getDevolucionIeps())?></td>
+                                    <?php echo $this->formHidden($form->get('notacredito_ieps')) ?> 
+                                    <td id="ieps"><?php echo money_format('%(#10n',$entity->getNotacreditoIeps())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IVA</td>
-                                    <?php echo $this->formHidden($form->get('devolucion_iva')) ?> 
-                                    <td id="iva"><?php echo money_format('%(#10n',$entity->getDevolucionIva())?></td>
+                                    <?php echo $this->formHidden($form->get('notacredito_iva')) ?> 
+                                    <td id="iva"><?php echo money_format('%(#10n',$entity->getNotacreditoIva())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>TOTAL</td>
-                                    <?php echo $this->formHidden($form->get('devolucion_total')) ?> 
-                                    <td id="total"><?php echo money_format('%(#10n',$entity->getDevolucionTotal())?></td>
+                                    <?php echo $this->formHidden($form->get('notacredito_total')) ?> 
+                                    <td id="total"><?php echo money_format('%(#10n',$entity->getNotacreditoTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -231,7 +231,7 @@
                 <div class="form-actions right">
                     <button class="btn blue" type="submit">
                         <i class="fa fa-check"></i>
-                        Guardar
+                        Guardar 
                     </button>
                 </div>
             </div>
@@ -239,8 +239,8 @@
     </div>
 </form>
 </div>
-<script type="text/javascript" src="/application/custom/js/procesos/devolucion.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/notacredito.js"></script>
 <script>
     var $form = $('#form_container').compra();
-    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $mes_devolucion ?>,<?php echo $anio_devolucion ?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
+    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $mes_notacredito ?>,<?php echo $anio_notacredito ?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
 </script>

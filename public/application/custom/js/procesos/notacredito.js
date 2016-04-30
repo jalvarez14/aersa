@@ -75,30 +75,30 @@
             $tr.find('td.subtotal').text(accounting.formatMoney(row_subtotal));
             
             //COMPRA SUBTOTAL
-            var compra_subtotal = 0.00;
+            var notacredito_subtotal = 0.00;
             $('#productos_table tbody').find('input[name*=subtotal]').filter(function(){
-                compra_subtotal= compra_subtotal + parseFloat($(this).val());
+                notacredito_subtotal= notacredito_subtotal + parseFloat($(this).val());
             });
-            $('#productos_table tfoot').find('#subtotal').text(accounting.formatMoney(compra_subtotal));
-            $('#productos_table tfoot').find('input[name=compra_subtotal]').val(compra_subtotal);
+            $('#productos_table tfoot').find('#subtotal').text(accounting.formatMoney(notacredito_subtotal));
+            $('#productos_table tfoot').find('input[name=notacredito_subtotal]').val(notacredito_subtotal);
             
-            //COMPRA IEPS
+            //notacredito IEPS
 
-            var compra_ieps = 0.00;
+            var notacredito_ieps = 0.00;
             $('#productos_table tbody tr').filter(function(){
                 var precio = $(this).find('input[name*=precio]').val();
                 var ieps = $(this).find('input[name*=ieps]').val();
                 var cantidad = $(this).find('input[name*=cantidad]').val();
                 
                 var row_ieps = ((precio * ieps) / 100) * cantidad;
-                compra_ieps = compra_ieps + row_ieps;
+                notacredito_ieps = notacredito_ieps + row_ieps;
             });
             
-            $('#productos_table tfoot').find('#ieps').text(accounting.formatMoney(compra_ieps));
-            $('#productos_table tfoot').find('input[name=compra_ieps]').val(compra_ieps);
+            $('#productos_table tfoot').find('#ieps').text(accounting.formatMoney(notacredito_ieps));
+            $('#productos_table tfoot').find('input[name=notacredito_ieps]').val(notacredito_ieps);
             
-            //COMPRA IVA
-            var compra_iva = 0.00;
+            //notacredito IVA
+            var notacredito_iva = 0.00;
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
@@ -107,18 +107,18 @@
                     var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
                     var row_iva = (subtotal * iva) / 100;
                     
-                    compra_iva = compra_iva + row_iva;
+                    notacredito_iva = notacredito_iva + row_iva;
                 }
                 
             });
             
-            $('#productos_table tfoot').find('#iva').text(accounting.formatMoney(compra_iva));
-            $('#productos_table tfoot').find('input[name=compra_iva]').val(compra_iva);
+            $('#productos_table tfoot').find('#iva').text(accounting.formatMoney(notacredito_iva));
+            $('#productos_table tfoot').find('input[name=notacredito_iva]').val(notacredito_iva);
             
-            //COMPRA TOTAL
-            var compra_total = compra_subtotal + compra_iva;
-            $('#productos_table tfoot').find('#total').text(accounting.formatMoney(compra_total));
-            $('#productos_table tfoot').find('input[name=compra_total]').val(compra_total);
+            //notacredito TOTAL
+            var notacredito_total = notacredito_subtotal + notacredito_iva;
+            $('#productos_table tfoot').find('#total').text(accounting.formatMoney(notacredito_total));
+            $('#productos_table tfoot').find('input[name=notacredito_total]').val(notacredito_total);
             
             
             
@@ -128,9 +128,9 @@
         
         var revisadaControl = function () {
 
-            $('select[name=compra_revisada]').on('change', function () {
+            $('select[name=notacredito_revisada]').on('change', function () {
                
-                var selected = $('select[name=compra_revisada] option:selected').val();
+                var selected = $('select[name=notacredito_revisada] option:selected').val();
               
                 if (selected == 1) {
                     console.log( $('#productos_table tbody input[type=checkbox]'));
@@ -149,9 +149,9 @@
                     }
                 });
                if(!all_checked){
-                    $('select[name=compra_revisada]').val(0);
+                    $('select[name=notacredito_revisada]').val(0);
                }else{
-                    $('select[name=compra_revisada]').val(1);
+                    $('select[name=notacredito_revisada]').val(1);
                }
                 
                 
@@ -177,7 +177,7 @@
                 },
             });
 
-            //ELIMINAR COMPRA
+            //ELIMINAR notacredito
             $('.delete_modal').click(function(){
 
               var id = $(this).closest('tr').attr('id');
@@ -188,7 +188,7 @@
                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
                     '<h4 class="modal-title">ADVERTENCIA</h4>', 
                   '</div>',
-                  '<form method="post" action="/procesos/compra/eliminar/'+id+'">',
+                  '<form method="post" action="/procesos/notacredito/eliminar/'+id+'">',
                     '<div class="modal-body">',
                       '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
                     '</div>',
@@ -221,18 +221,17 @@
         }
         
         plugin.new = function(anio,mes,almacenes){
-
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
             
-            container.find('input[name=compra_fechacompra]').datepicker({
+            container.find('input[name=notacredito_fechacreacion]').datepicker({
                 startDate:minDate,
                 endDate:maxDate,
                 format: 'dd/mm/yyyy',
             });
             
-            container.find('input[name=compra_fechaentrega]').datepicker({
+            container.find('input[name=notacredito_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
             
@@ -294,12 +293,7 @@
                     almacenen_select.find('select').append(option);
                 });
                 
-                var tipo = $('select[name=compra_tipo] option:selected').val();
-                
-                if(tipo == 'ordecompra'){
-                   
-                    almacenen_select.find('select').attr('disabled',true);
-                }
+
 
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
@@ -311,7 +305,7 @@
                 tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
                 tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
                 tr.append(almacenen_select);
-                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                tr.append('<td class="text-center"><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
                 //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
                 tr.find('input').numeric();
@@ -322,7 +316,7 @@
                     caluclator($tr);
                 });
                 
-                var revisada = $('select[name=compra_revisada] option:selected').val();
+                var revisada = $('select[name=notacredito_revisada] option:selected').val();
                 if(revisada==1){
                     tr.find('input[type=checkbox]').prop('checked',true);
                 }
@@ -351,20 +345,7 @@
             
             });
             
-            //Si el tipo de entidad es orden de compra, el campo de almacén (entidad) y almacén (registro) se encuentra disable
-           $('select[name=compra_tipo]').on('change',function(){
-               
-               var selected = $('select[name=compra_tipo] option:selected').val();
-               if(selected == 'ordecompra'){
-                   $('select[name=idalmacen]').attr('disabled',true);
-                   $('select[name=idalmacen]').attr('required',false);
-                   $('#productos_table tbody select').attr('disabled',true);
-               }else{
-                   $('select[name=idalmacen]').attr('disabled',false);
-                   $('select[name=idalmacen]').attr('required',true);
-                   $('#productos_table tbody select').attr('disabled',false);
-               }
-           });
+
            
            //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
             revisadaControl();
@@ -372,12 +353,12 @@
            
            
            //VALIDAR FOLIO
-           $('input[name=compra_folio]').on('blur',function(){
+           $('input[name=notacredito_folio]').on('blur',function(){
                 var folio = $(this).val();
                 var $this = $(this);
                 $this.removeClass('valid');
                 $.ajax({
-                    url: "/procesos/compra/validatefolio",
+                    url: "/procesos/notacredito/validatefolio",
                     dataType: "json",
                     data: {folio:folio},
                     success: function (exist) {
@@ -396,25 +377,20 @@
                          
         }
         
-        plugin.edit = function(anio,mes,almacenes,count,compra_tipo){
-            
-            //SI ES ORDEN DE COMPRA DESHABILITAMOS LOS SELECT DE ALMACEN
-            if(compra_tipo == 'ordecompra'){
-                $container.find('select[name=idalmacen]').attr('disabled',true);
-                $container.find('select[name*=almacen]').attr('disabled',true);
-            }
+        plugin.edit = function(anio,mes,mes_notacredito,anio_notacredito,almacenes,count){
+
 
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
             
-            container.find('input[name=compra_fechacompra]').datepicker({
+            container.find('input[name=notacredito_fechacreacion]').datepicker({
                 startDate:minDate,
                 endDate:maxDate,
                 format: 'dd/mm/yyyy',
             });
             
-            container.find('input[name=compra_fechaentrega]').datepicker({
+            container.find('input[name=notacredito_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
             
@@ -478,13 +454,6 @@
                     almacenen_select.find('select').append(option);
                 });
                 
-                var tipo = $('select[name=compra_tipo] option:selected').val();
-                
-                if(tipo == 'ordecompra'){
-                   
-                    almacenen_select.find('select').attr('disabled',true);
-                }
-
                                
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
@@ -507,7 +476,7 @@
                     caluclator($tr);
                 });
                 
-                var revisada = $('select[name=compra_revisada] option:selected').val();
+                var revisada = $('select[name=notacredito_revisada] option:selected').val();
                 if(revisada==1){
                     tr.find('input[type=checkbox]').prop('checked',true);
                 }
@@ -542,11 +511,12 @@
                 tr.remove();
                 caluclator(tr);
              });
-
-            //Si el tipo de entidad es orden de compra, el campo de almacén (entidad) y almacén (registro) se encuentra disable
-           $('select[name=compra_tipo]').on('change',function(){
+             
+             /*
+            //Si el tipo de entidad es orden de notacredito, el campo de almacén (entidad) y almacén (registro) se encuentra disable
+           $('select[name=notacredito_tipo]').on('change',function(){
                
-               var selected = $('select[name=compra_tipo] option:selected').val();
+               var selected = $('select[name=notacredito_tipo] option:selected').val();
                if(selected == 'ordecompra'){
                    $('select[name=idalmacen]').attr('disabled',true);
                    $('select[name=idalmacen]').attr('required',false);
@@ -557,17 +527,18 @@
                    $('#productos_table tbody select').attr('disabled',false);
                }
            });
+            */
            
            //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
             revisadaControl();
            
            //VALIDAR FOLIO
-           $('input[name=compra_folio]').on('blur',function(){
+           $('input[name=notacredito_folio]').on('blur',function(){
                 var folio = $(this).val();
                 var $this = $(this);
                 $this.removeClass('valid');
                 $.ajax({
-                    url: "/procesos/compra/validatefolio",
+                    url: "/procesos/notacredito/validatefolio",
                     dataType: "json",
                     data: {folio:folio},
                     success: function (exist) {
@@ -586,8 +557,7 @@
            
            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
             var now = new Date();
-           
-            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
+            if(mes_notacredito != mes || anio_notacredito != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');

@@ -843,6 +843,57 @@ return array(
                                     ), 
                                 ), 
                             ),
+                            'notacredito' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/credito', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Notacredito', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevoregistro', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                'action' => 'nuevoregistro', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
+                                ), 
+                            ),
                         ), 
                     ), 
                 ),
@@ -913,6 +964,8 @@ return array(
             'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
             'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
             'Application\Proceso\Controller\Ingresos' => 'Application\Proceso\Controller\IngresosController',
+            'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
+
             /*
              * WEBSITE
              */

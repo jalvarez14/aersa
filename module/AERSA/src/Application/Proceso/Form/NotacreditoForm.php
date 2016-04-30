@@ -4,12 +4,13 @@ namespace Application\Proceso\Form;
 
 use Zend\Form\Form;
 
-    class DevolucionForm extends Form{
+class NotacreditoForm extends Form
+{
     public function __construct ($almacen_array = array()) {
         parent::__construct('DevolucionForm');
         
         $this->add(array(
-           'name'  => 'iddevolucion',
+           'name'  => 'idnotacredito',
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => true,
@@ -17,7 +18,7 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
-            'name' => 'devolucion_fechacreacion',
+            'name' => 'notacredito_fechacreacion',
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
@@ -64,7 +65,7 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
-            'name' => 'devolucion_revisada',
+            'name' => 'notacredito_revisada',
             'type' => 'Select',
             'options' => array(
                 'label' => 'Revisión *',
@@ -82,7 +83,7 @@ use Zend\Form\Form;
         
         
         $this->add(array(
-            'name' => 'devolucion_folio',
+            'name' => 'notacredito_folio',
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
@@ -94,7 +95,7 @@ use Zend\Form\Form;
             )
         ));
         $this->add(array(
-            'name' => 'devolucion_factura',
+            'name' => 'notacredito_factura',
             'type' => 'File',
             'attributes' => array(
                 'required' => false,
@@ -106,7 +107,7 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
-           'name'  => 'devolucion_subtotal',
+           'name'  => 'notacredito_subtotal',
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => false,
@@ -114,7 +115,7 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
-           'name'  => 'devolucion_iva',
+           'name'  => 'notacredito_iva',
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => false,
@@ -122,7 +123,7 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
-           'name'  => 'devolucion_ieps',
+           'name'  => 'notacredito_ieps',
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => false,
@@ -130,7 +131,7 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
-           'name'  => 'devolucion_total',
+           'name'  => 'notacredito_total',
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => false,

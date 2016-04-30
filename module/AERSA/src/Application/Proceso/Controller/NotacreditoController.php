@@ -6,7 +6,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class DevolucionController extends AbstractActionController {
+class NotacreditoController extends AbstractActionController {
     
     public function indexAction() {
         
@@ -16,12 +16,12 @@ class DevolucionController extends AbstractActionController {
         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
          
         $anio_activo = $sucursal->getSucursalAnioactivo();
-        $mes_activo = $sucursal->getSucursalMesactivo();
+        $mes_activo  = $sucursal->getSucursalMesactivo();
         
-        $collection = \DevolucionQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIddevolucion(\Criteria::DESC)->find();
+        $collection = \NotacreditoQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdnotacredito(\Criteria::DESC)->find();
         
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/proceso/devolucion/index');
+        $view_model->setTemplate('/application/proceso/notacredito/index');
             $view_model->setVariables(array(
             'messages'          => $this->flashMessenger(),
             'collection'        => $collection,
@@ -47,7 +47,8 @@ class DevolucionController extends AbstractActionController {
         return $this->getResponse()->setContent(json_encode($exist));
     }
 
-    public function nuevoregistroAction() {
+    public function nuevoregistroAction() 
+    {
         
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -61,43 +62,43 @@ class DevolucionController extends AbstractActionController {
             
             
             
-            $post_data["devolucion_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["devolucion_fechacreacion"]);
+            $post_data["notacredito_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["notacredito_fechacreacion"]);
                 
                 
-            $entity = new \Devolucion();
+            $entity = new \Notacredito();
             foreach ($post_data as $key => $value){
                 
-                if(\DevolucionPeer::getTableMap()->hasColumn($key)){
+                if(\NotacreditoPeer::getTableMap()->hasColumn($key)){
                     $entity->setByName($key, $value,  \BasePeer::TYPE_FIELDNAME);
                 }
             }
             
             
             //SETEAMOS LA FECHA DE CREACION
-            $entity->setDevolucionFechacreacion(new \DateTime())
+            $entity->setNotacreditoFechacreacion(new \DateTime())
                    ->setIdempresa($session['idempresa'])
                    ->setIdsucursal($session['idsucursal'])
                    ->setIdusuario($session['idusuario']);
             
             
-            if($post_data['devolucion_revisada']){
+            if($post_data['notacredito_revisada']){
                 $entity->setIdauditor($session['idusuario']);
             }
            
             $entity->save();
             
             //EL COMPROBANTE
-            if(!empty($post_files['devolucion_factura']['name'])){
+            if(!empty($post_files['notacredito_factura']['name'])){
                 
-                $type = $post_files['devolucion_factura']['type'];
+                $type = $post_files['notacredito_factura']['type'];
                 $type = explode('/', $type);
                 $type = $type[1];
                
-                $target_path = "/application/files/devoluciones/";
-                $target_path = $target_path . 'devolucion_'.$entity->getIddevolucion() .'.'.$type;
+                $target_path = "/application/files/notacredito/";
+                $target_path = $target_path . 'notacredito_'.$entity->getIdnotacredito() .'.'.$type;
                 
-                if(move_uploaded_file($_FILES['devolucion_factura']['tmp_name'],$_SERVER['DOCUMENT_ROOT'].$target_path)){
-                    $entity->setDevolucionFactura($target_path);
+                if(move_uploaded_file($_FILES['notacredito_factura']['tmp_name'],$_SERVER['DOCUMENT_ROOT'].$target_path)){
+                    $entity->setNotacreditoFactura($target_path);
                     $entity->save();
                 }
 
@@ -106,31 +107,31 @@ class DevolucionController extends AbstractActionController {
             //DEVOLUCION DETALLES
             foreach ($post_data['productos'] as $producto){
                 
-                $devolucion_detalle = new \Devoluciondetalle();
-                $devolucion_detalle->setIddevolucion($entity->getIddevolucion())
-                               ->setdevoluciondetalleRevisada(0)
-                               ->setIdproducto($producto['idproducto'])
-                               ->setDevoluciondetalleCantidad($producto['cantidad'])
-                               ->setDevoluciondetalleCostounitario($producto['precio'])
-                               ->setDevoluciondetalleCostounitarioneto($producto['costo_unitario'])
-                               ->setDevoluciondetalleDescuento($producto['descuento'])
-                               ->setDevoluciondetalleIeps($producto['ieps'])
-                               ->setDevoluciondetalleSubtotal($producto['subtotal']);
+                $notacredito_detalle = new \Notacreditodetalle();
+                $notacredito_detalle->setIdnotacredito($entity->getIdnotacredito())
+                                    ->setnotacreditodetalleRevisada(0)
+                                    ->setIdproducto($producto['idproducto'])
+                                    ->setNotacreditodetalleCantidad($producto['cantidad'])
+                                    ->setNotacreditodetalleCostounitario($producto['precio'])
+                                    ->setNotacreditodetalleCostounitarioneto($producto['costo_unitario'])
+                                    ->setNotacreditodetalleDescuento($producto['descuento'])
+                                    ->setNotacreditodetalleIeps($producto['ieps'])
+                                    ->setNotacreditodetalleSubtotal($producto['subtotal']);
                 
 
-                $devolucion_detalle->setIdalmacen($producto['almacen']);
+                $notacredito_detalle->setIdalmacen($producto['almacen']);
                 
                 if(isset($producto['revisada'])){
-                    $devolucion_detalle->setDevoluciondetalleRevisada(1);
+                    $notacredito_detalle->setNotacreditodetalleRevisada(1);
                 }
                 
-                $devolucion_detalle->save();
+                $notacredito_detalle->save();
                 
             }
             
             //REDIRECCIONAMOS AL LISTADO
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-            return $this->redirect()->toUrl('/procesos/devolucion');
+            return $this->redirect()->toUrl('/procesos/credito');
         }
         
         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
@@ -140,10 +141,10 @@ class DevolucionController extends AbstractActionController {
         $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Créditos al costo',  \Criteria::NOT_EQUAL)->find();
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
         
-        $form = new \Application\Proceso\Form\DevolucionForm($almecenes);
+        $form = new \Application\Proceso\Form\NotacreditoForm($almecenes);
         
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/proceso/devolucion/nuevoregistro');
+        $view_model->setTemplate('/application/proceso/notacredito/nuevoregistro');
         $view_model->setVariables(array(
             'form' => $form,
             'anio_activo' => $anio_activo,
@@ -164,7 +165,7 @@ class DevolucionController extends AbstractActionController {
         $id = $this->params()->fromRoute('id');
        
         //VERIFICAMOS SI EXISTE
-        $exist = \DevolucionQuery::create()->filterByIddevolucion($id)->exists();
+        $exist = \NotacreditoQuery::create()->filterByIdnotacredito($id)->exists();
         
         if($exist)
         {    
@@ -174,7 +175,7 @@ class DevolucionController extends AbstractActionController {
             $mes_activo = $sucursal->getSucursalMesactivo();
             
              //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \DevolucionQuery::create()->findPk($id);
+            $entity = \NotacreditoQuery::create()->findPk($id);
             
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) {
@@ -182,30 +183,30 @@ class DevolucionController extends AbstractActionController {
                 $post_data = $request->getPost();
                 $post_files = $request->getFiles();
 
-                $post_data["devolucion_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["decolucion_fechacreacion"]);
+                $post_data["notacredito_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["decolucion_fechacreacion"]);
                 //$post_data["compra_fechaentrega"] = date_create_from_format('d/m/Y', $post_data["compra_fechaentrega"]);
 
                 foreach ($post_data as $key => $value) {
-                    if (\DevolucionPeer::getTableMap()->hasColumn($key)) {
+                    if (\NotacreditoPeer::getTableMap()->hasColumn($key)) {
                         $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                     }
                 }
 
                 //SETEAMOS LA FECHA DE CREACION
-                $entity->setDevolucionFechacreacion(new \DateTime())
+                $entity->setNotacreditoFechacreacion(new \DateTime())
                         ->setIdempresa($session['idempresa'])
                         ->setIdsucursal($session['idsucursal']);
 
-                if ($post_data['devolucion_revisada']) {
+                if ($post_data['notacredito_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
                 }
 
                 $entity->save();
 
                 //EL COMPROBANTE
-                if (!empty($post_files['devolucion_factura']['name'])) {
+                if (!empty($post_files['notacredito_factura']['name'])) {
 
-                    $type = $post_files['devolucion_factura']['type'];
+                    $type = $post_files['notacredito_factura']['type'];
                     $type = explode('/', $type);
                     $type = $type[1];
 
@@ -213,38 +214,38 @@ class DevolucionController extends AbstractActionController {
                     $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
 
                     if (move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
-                        $entity->setDevolucionFactura($target_path);
+                        $entity->setNotacreditoFactura($target_path);
                         $entity->save();
                     }
                 }
 
-                //Devolucion DETALLES
-                $entity->getDevoluciondetalles()->delete();
+                //Notacredito DETALLES
+                $entity->getNotacreditodetalles()->delete();
                 foreach ($post_data['productos'] as $producto) 
                 {
 
-                    $devolucion_detalle = new \Devoluciondetalle();
-                    $devolucion_detalle->setIddevolucion($entity->getIddevolucion())
-                            ->setDevoluciondetalleRevisada(0)
+                    $notacredito_detalle = new \Notacreditodetalle();
+                    $notacredito_detalle->setIdnotacredito($entity->getIdnotacredito())
+                            ->setNotacreditodetalleRevisada(0)
                             ->setIdproducto($producto['idproducto'])
                             ->setIdalmacen($producto['almacen'])
-                            ->setDevoluciondetalleCantidad($producto['cantidad'])
-                            ->setDevoluciondetalleCostounitario($producto['precio'])
-                            ->setDevoluciondetalleCostounitarioneto($producto['costo_unitario'])
-                            ->setDevoluciondetalleDescuento($producto['descuento'])
-                            ->setDevoluciondetalleIeps($producto['ieps'])
-                            ->setDevoluciondetalleSubtotal($producto['subtotal']);
+                            ->setNotacreditodetalleCantidad($producto['cantidad'])
+                            ->setNotacreditodetalleCostounitario($producto['precio'])
+                            ->setNotacreditodetalleCostounitarioneto($producto['costo_unitario'])
+                            ->setNotacreditodetalleDescuento($producto['descuento'])
+                            ->setNotacreditodetalleIeps($producto['ieps'])
+                            ->setNotacreditodetalleSubtotal($producto['subtotal']);
 
                     if (isset($producto['revisada'])) {
-                        $devolucion_detalle->setDevoluciondetalleRevisada(1);
+                        $notacredito_detalle->setNotacreditodetalleRevisada(1);
                     }
 
-                    $devolucion_detalle->save();
+                    $notacredito_detalle->save();
                 }
 
                 //REDIRECCIONAMOS AL LISTADO
                 $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/procesos/devolucion');
+                return $this->redirect()->toUrl('/procesos/credito');
             }
 
             //NUESTROS ALMACENES
@@ -252,41 +253,40 @@ class DevolucionController extends AbstractActionController {
             $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
             
             //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Proceso\Form\DevolucionForm($almecenes);
+            $form = new \Application\Proceso\Form\NotacreditoForm($almecenes);
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
             
             //CAMBIAMOS LOS VALORES DE FECHAS
-            $form->get('devolucion_fechacreacion')->setValue($entity->getDevolucionFechacreacion('d/m/Y'));
+            $form->get('notacredito_fechacreacion')->setValue($entity->getNotacreditoFechacreacion('d/m/Y'));
             
             //SETEAMOS EL VALOR AUTOCOMPLETE
             $form->get('idproveedor_autocomplete')->setValue($entity->getProveedor()->getProveedorNombrecomercial());
             
             //LE PONEMOS LA CLASE VALID AL FOLIO
-            $form->get('devolucion_folio')->setAttribute('class', 'form-control valid');
+            $form->get('notacredito_folio')->setAttribute('class', 'form-control valid');
             
             //LOS DETALLES DE LA DEVOLUCION
-            $devolucion_detalle = \DevoluciondetalleQuery::create()->filterByIddevolucion($entity->getIddevolucion())->find();
-            
+            $notacredito_detalle = \NotacreditodetalleQuery::create()->filterByIdnotacredito($entity->getIdnotacredito())->find();
             
             //COUNT
-            $count = \DevoluciondetalleQuery::create()->orderByIddevoluciondetalle(\Criteria::DESC)->findOne();
-            $count = $count->getIddevoluciondetalle() + 1;
+            $count = \NotacreditoQuery::create()->orderByIdnotacredito(\Criteria::DESC)->findOne();
+            $count = $count->getIdnotacredito() + 1;
    
             
             $view_model = new ViewModel();
-            $view_model->setTemplate('/application/proceso/devolucion/editar');
+            $view_model->setTemplate('/application/proceso/notacredito/editar');
             $view_model->setVariables(array(
                 'form'                  => $form,
                 'entity'                => $entity,
-                'devolucion_detalle'    => $devolucion_detalle,
+                'notacredito_detalle'    => $notacredito_detalle,
                 'anio_activo'           => $anio_activo,
                 'mes_activo'            => $mes_activo,
                 'almacenes'             => $almecenes,
                 'count'                 => $count,
-                'mes_devolucion'        => $entity->getDevolucionFechacreacion('m'),
-                'anio_devolucion'       => $entity->getDevolucionFechacreacion('Y'),
+                'mes_notacredito'        => $entity->getNotacreditoFechacreacion('m'),
+                'anio_notacredito'       => $entity->getNotacreditoFechacreacion('Y'),
             ));
             
             return $view_model;
@@ -294,7 +294,7 @@ class DevolucionController extends AbstractActionController {
         }
         else
         {
-            return $this->redirect()->toUrl('/procesos/devolucion');
+            return $this->redirect()->toUrl('/procesos/credito');
         }
         
     }

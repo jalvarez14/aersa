@@ -15,7 +15,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/devolucion">Devolucion</a>
+                <a href="/procesos/notacredito">Devolucion</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -24,7 +24,7 @@
         </ul>
 </div>
 <div id="form_container">
-    <form class="form-horizontal" action="/procesos/devolucion/nuevoregistro" method="post" enctype="multipart/form-data">
+    <form class="form-horizontal" action="/procesos/credito/nuevoregistro" method="post" enctype="multipart/form-data">
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
@@ -33,8 +33,8 @@
                     <div class="form-group">
                         <div class="col-md-6">
 
-                            <?php echo $this->formLabel($form->get('devolucion_fechacreacion')) ?>  
-                            <?php echo $this->formText($form->get('devolucion_fechacreacion')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_fechacreacion')) ?>  
+                            <?php echo $this->formText($form->get('notacredito_fechacreacion')) ?> 
                         </div>
                         <div class="col-md-6">
                             <?php echo $this->formHidden($form->get('idproveedor')); ?>  
@@ -54,14 +54,14 @@
                     
                     <div class="form-group">
                         <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('devolucion_folio')) ?>  
-                            <?php echo $this->formText($form->get('devolucion_folio')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_folio')) ?>  
+                            <?php echo $this->formText($form->get('notacredito_folio')) ?> 
                         </div>
                         
                         
                         <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('devolucion_factura')) ?>  
-                            <?php echo $this->formFile($form->get('devolucion_factura')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_factura')) ?>  
+                            <?php echo $this->formFile($form->get('notacredito_factura')) ?> 
                         </div>
                         
                     </div>
@@ -72,8 +72,8 @@
                             <?php echo $this->formSelect($form->get('idalmacen')) ?> 
                         </div>
                         <div class="col-md-6">
-                            <?php echo $this->formLabel($form->get('devolucion_revisada')) ?>  
-                            <?php echo $this->formSelect($form->get('devolucion_revisada')) ?> 
+                            <?php echo $this->formLabel($form->get('notacredito_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('notacredito_revisada')) ?> 
                         </div>
                     </div>
                 </div>
@@ -140,25 +140,25 @@
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>SUBTOTAL</td>
-                                    <input type="hidden" name="devolucion_subtotal">
+                                    <input type="hidden" name="notacredito_subtotal">
                                     <td id="subtotal">$0.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IEPS</td>
-                                    <input type="hidden" name="devolucion_ieps">
+                                    <input type="hidden" name="notacredito_ieps">
                                     <td id="ieps">$0.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IVA</td>
-                                    <input type="hidden" name="devolucion_iva">
+                                    <input type="hidden" name="notacredito_iva">
                                     <td id="iva">$0.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>TOTAL</td>
-                                    <input type="hidden" name="devolucion_total">
+                                    <input type="hidden" name="notacredito_total">
                                     <td id="total">$0.00</td>
                                 </tr>
                             </tfoot>
@@ -176,7 +176,7 @@
     </div>
 </form>
 </div>
-<script type="text/javascript" src="/application/custom/js/procesos/devolucion.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/notacredito.js"></script>
 <script>
     var $form = $('#form_container').compra();
     $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $almacenes?>);
