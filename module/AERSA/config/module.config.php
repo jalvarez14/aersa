@@ -718,22 +718,41 @@ return array(
                                     ),
                                 ), 
                             ), 
+<<<<<<< HEAD
                             'requisicion' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
                                     'route' => '/requisicion', 
                                     'defaults' => array( 
                                         'controller' => 'Application\Proceso\Controller\Requisicion', 'action' => 'index', 
+=======
+                            
+                            'devolucion' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/devolucion', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Devolucion', 'action' => 'index', 
+>>>>>>> 2dec0bd407750e9bace7c6e7cc51984c91e7f5a0
                                     ), 
                                 ), 
                                 'may_terminate' => true, 
                                 'child_routes' => array( 
+<<<<<<< HEAD
                                     'nuevo' => array( 
                                         'type' => 'Literal', 'options' => array( 
                                             'route' => '/nuevo', 
                                             'defaults' => array( 
                                                 'controller' => 'Application\Proceso\Controller\Requisicion', 
                                                 'action' => 'nuevo', 
+=======
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevoregistro', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'nuevoregistro', 
+>>>>>>> 2dec0bd407750e9bace7c6e7cc51984c91e7f5a0
                                             ), 
                                         ), 
                                     ), 
@@ -742,7 +761,11 @@ return array(
                                         'options' => array( 
                                             'route' => '/editar[/:id]', 
                                              'defaults' => array( 
+<<<<<<< HEAD
                                                  'controller' => 'Application\Proceso\Controller\Requisicion', 
+=======
+                                                 'controller' => 'Application\Proceso\Controller\Devolucion', 
+>>>>>>> 2dec0bd407750e9bace7c6e7cc51984c91e7f5a0
                                                  'action' => 'editar', 
                                                  ), 
                                             ), 
@@ -752,13 +775,33 @@ return array(
                                         'options' => array( 
                                             'route' => '/eliminar[/:id]', 
                                             'defaults' => array( 
+<<<<<<< HEAD
                                                 'controller' => 'Application\Proceso\Controller\Requisicion', 
+=======
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+>>>>>>> 2dec0bd407750e9bace7c6e7cc51984c91e7f5a0
                                                 'action' => 'eliminar',
                                             ), 
                                         ), 
                                     ), 
+<<<<<<< HEAD
                                 ), 
                             ), 
+=======
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
+                                ), 
+                            ), 
+                            
+>>>>>>> 2dec0bd407750e9bace7c6e7cc51984c91e7f5a0
                         ), 
                     ), 
                 ),
@@ -825,8 +868,14 @@ return array(
              * PROCESO
              */
             
+<<<<<<< HEAD
             'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
             'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
+=======
+            'Application\Proceso\Controller\Compra'     => 'Application\Proceso\Controller\CompraController',
+            'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
+
+>>>>>>> 2dec0bd407750e9bace7c6e7cc51984c91e7f5a0
             /*
              * WEBSITE
              */

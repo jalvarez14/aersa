@@ -108,29 +108,7 @@
             });
             
             var count = 0;
-            $('#producto_add').on('click',function(){
-                var tr = $('<tr>');
-                tr.append('<td><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
-                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
-                //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
-                //LIMPIAMOS EL AUTOCOMPLETE
-                $('input#producto_autocomplete').typeahead('val', ''); 
-                $('input#idproducto').typeahead('val', ''); 
-                $('#producto_add').attr('disabled',true);                
-                $('#plantilla_save').attr('disabled',false);                
-              count ++;
-              $('.fa-trash').on('click',function(){
-                var tr = $(this).closest('tr');
-                tr.remove();
-                if($('#productos_table tbody tr').length==1)
-                {
-                    $('#plantilla_save').attr('disabled',true);                
-                    exits=0;
-                }
-            });
-            });
-                          
+
         }
 
         /*
