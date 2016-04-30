@@ -372,14 +372,43 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [devolucion_fechaentrega] column value.
+     * Get the [optionally formatted] temporal [devolucion_fechaentrega] column value.
      *
-     * @return string
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDevolucionFechaentrega()
+    public function getDevolucionFechaentrega($format = 'Y-m-d H:i:s')
     {
+        if ($this->devolucion_fechaentrega === null) {
+            return null;
+        }
 
-        return $this->devolucion_fechaentrega;
+        if ($this->devolucion_fechaentrega === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->devolucion_fechaentrega);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->devolucion_fechaentrega, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -692,21 +721,23 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     } // setDevolucionFechacreacion()
 
     /**
-     * Set the value of [devolucion_fechaentrega] column.
+     * Sets the value of [devolucion_fechaentrega] column to a normalized version of the date/time value specified.
      *
-     * @param  string $v new value
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
      * @return Devolucion The current object (for fluent API support)
      */
     public function setDevolucionFechaentrega($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->devolucion_fechaentrega !== $v) {
-            $this->devolucion_fechaentrega = $v;
-            $this->modifiedColumns[] = DevolucionPeer::DEVOLUCION_FECHAENTREGA;
-        }
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->devolucion_fechaentrega !== null || $dt !== null) {
+            $currentDateAsString = ($this->devolucion_fechaentrega !== null && $tmpDt = new DateTime($this->devolucion_fechaentrega)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->devolucion_fechaentrega = $newDateAsString;
+                $this->modifiedColumns[] = DevolucionPeer::DEVOLUCION_FECHAENTREGA;
+            }
+        } // if either are not null
 
 
         return $this;

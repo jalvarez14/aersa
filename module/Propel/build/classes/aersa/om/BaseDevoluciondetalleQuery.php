@@ -15,6 +15,8 @@
  * @method DevoluciondetalleQuery orderByDevoluciondetalleSubtotal($order = Criteria::ASC) Order by the devoluciondetalle_subtotal column
  * @method DevoluciondetalleQuery orderByDevoluciondetalleIeps($order = Criteria::ASC) Order by the devoluciondetalle_ieps column
  * @method DevoluciondetalleQuery orderByDevoluciondetalleDescuento($order = Criteria::ASC) Order by the devoluciondetalle_descuento column
+ * @method DevoluciondetalleQuery orderByDevoluciondetalleCostounitario($order = Criteria::ASC) Order by the devoluciondetalle_costounitario column
+ * @method DevoluciondetalleQuery orderByDevoluciondetalleCostounitarioneto($order = Criteria::ASC) Order by the devoluciondetalle_costounitarioneto column
  *
  * @method DevoluciondetalleQuery groupByIddevoluciondetalle() Group by the iddevoluciondetalle column
  * @method DevoluciondetalleQuery groupByIddevolucion() Group by the iddevolucion column
@@ -25,6 +27,8 @@
  * @method DevoluciondetalleQuery groupByDevoluciondetalleSubtotal() Group by the devoluciondetalle_subtotal column
  * @method DevoluciondetalleQuery groupByDevoluciondetalleIeps() Group by the devoluciondetalle_ieps column
  * @method DevoluciondetalleQuery groupByDevoluciondetalleDescuento() Group by the devoluciondetalle_descuento column
+ * @method DevoluciondetalleQuery groupByDevoluciondetalleCostounitario() Group by the devoluciondetalle_costounitario column
+ * @method DevoluciondetalleQuery groupByDevoluciondetalleCostounitarioneto() Group by the devoluciondetalle_costounitarioneto column
  *
  * @method DevoluciondetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method DevoluciondetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -53,6 +57,8 @@
  * @method Devoluciondetalle findOneByDevoluciondetalleSubtotal(string $devoluciondetalle_subtotal) Return the first Devoluciondetalle filtered by the devoluciondetalle_subtotal column
  * @method Devoluciondetalle findOneByDevoluciondetalleIeps(double $devoluciondetalle_ieps) Return the first Devoluciondetalle filtered by the devoluciondetalle_ieps column
  * @method Devoluciondetalle findOneByDevoluciondetalleDescuento(double $devoluciondetalle_descuento) Return the first Devoluciondetalle filtered by the devoluciondetalle_descuento column
+ * @method Devoluciondetalle findOneByDevoluciondetalleCostounitario(string $devoluciondetalle_costounitario) Return the first Devoluciondetalle filtered by the devoluciondetalle_costounitario column
+ * @method Devoluciondetalle findOneByDevoluciondetalleCostounitarioneto(string $devoluciondetalle_costounitarioneto) Return the first Devoluciondetalle filtered by the devoluciondetalle_costounitarioneto column
  *
  * @method array findByIddevoluciondetalle(int $iddevoluciondetalle) Return Devoluciondetalle objects filtered by the iddevoluciondetalle column
  * @method array findByIddevolucion(int $iddevolucion) Return Devoluciondetalle objects filtered by the iddevolucion column
@@ -63,6 +69,8 @@
  * @method array findByDevoluciondetalleSubtotal(string $devoluciondetalle_subtotal) Return Devoluciondetalle objects filtered by the devoluciondetalle_subtotal column
  * @method array findByDevoluciondetalleIeps(double $devoluciondetalle_ieps) Return Devoluciondetalle objects filtered by the devoluciondetalle_ieps column
  * @method array findByDevoluciondetalleDescuento(double $devoluciondetalle_descuento) Return Devoluciondetalle objects filtered by the devoluciondetalle_descuento column
+ * @method array findByDevoluciondetalleCostounitario(string $devoluciondetalle_costounitario) Return Devoluciondetalle objects filtered by the devoluciondetalle_costounitario column
+ * @method array findByDevoluciondetalleCostounitarioneto(string $devoluciondetalle_costounitarioneto) Return Devoluciondetalle objects filtered by the devoluciondetalle_costounitarioneto column
  *
  * @package    propel.generator.aersa.om
  */
@@ -170,7 +178,7 @@ abstract class BaseDevoluciondetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevoluciondetalle`, `iddevolucion`, `idproducto`, `idalmacen`, `devoluciondetalle_cantidad`, `devoluciondetalle_revisada`, `devoluciondetalle_subtotal`, `devoluciondetalle_ieps`, `devoluciondetalle_descuento` FROM `devoluciondetalle` WHERE `iddevoluciondetalle` = :p0';
+        $sql = 'SELECT `iddevoluciondetalle`, `iddevolucion`, `idproducto`, `idalmacen`, `devoluciondetalle_cantidad`, `devoluciondetalle_revisada`, `devoluciondetalle_subtotal`, `devoluciondetalle_ieps`, `devoluciondetalle_descuento`, `devoluciondetalle_costounitario`, `devoluciondetalle_costounitarioneto` FROM `devoluciondetalle` WHERE `iddevoluciondetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -626,6 +634,90 @@ abstract class BaseDevoluciondetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO, $devoluciondetalleDescuento, $comparison);
+    }
+
+    /**
+     * Filter the query on the devoluciondetalle_costounitario column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevoluciondetalleCostounitario(1234); // WHERE devoluciondetalle_costounitario = 1234
+     * $query->filterByDevoluciondetalleCostounitario(array(12, 34)); // WHERE devoluciondetalle_costounitario IN (12, 34)
+     * $query->filterByDevoluciondetalleCostounitario(array('min' => 12)); // WHERE devoluciondetalle_costounitario >= 12
+     * $query->filterByDevoluciondetalleCostounitario(array('max' => 12)); // WHERE devoluciondetalle_costounitario <= 12
+     * </code>
+     *
+     * @param     mixed $devoluciondetalleCostounitario The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevoluciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByDevoluciondetalleCostounitario($devoluciondetalleCostounitario = null, $comparison = null)
+    {
+        if (is_array($devoluciondetalleCostounitario)) {
+            $useMinMax = false;
+            if (isset($devoluciondetalleCostounitario['min'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO, $devoluciondetalleCostounitario['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devoluciondetalleCostounitario['max'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO, $devoluciondetalleCostounitario['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO, $devoluciondetalleCostounitario, $comparison);
+    }
+
+    /**
+     * Filter the query on the devoluciondetalle_costounitarioneto column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevoluciondetalleCostounitarioneto(1234); // WHERE devoluciondetalle_costounitarioneto = 1234
+     * $query->filterByDevoluciondetalleCostounitarioneto(array(12, 34)); // WHERE devoluciondetalle_costounitarioneto IN (12, 34)
+     * $query->filterByDevoluciondetalleCostounitarioneto(array('min' => 12)); // WHERE devoluciondetalle_costounitarioneto >= 12
+     * $query->filterByDevoluciondetalleCostounitarioneto(array('max' => 12)); // WHERE devoluciondetalle_costounitarioneto <= 12
+     * </code>
+     *
+     * @param     mixed $devoluciondetalleCostounitarioneto The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevoluciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByDevoluciondetalleCostounitarioneto($devoluciondetalleCostounitarioneto = null, $comparison = null)
+    {
+        if (is_array($devoluciondetalleCostounitarioneto)) {
+            $useMinMax = false;
+            if (isset($devoluciondetalleCostounitarioneto['min'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO, $devoluciondetalleCostounitarioneto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devoluciondetalleCostounitarioneto['max'])) {
+                $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO, $devoluciondetalleCostounitarioneto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO, $devoluciondetalleCostounitarioneto, $comparison);
     }
 
     /**

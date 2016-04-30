@@ -746,24 +746,38 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByDevolucionFechaentrega('fooValue');   // WHERE devolucion_fechaentrega = 'fooValue'
-     * $query->filterByDevolucionFechaentrega('%fooValue%'); // WHERE devolucion_fechaentrega LIKE '%fooValue%'
+     * $query->filterByDevolucionFechaentrega('2011-03-14'); // WHERE devolucion_fechaentrega = '2011-03-14'
+     * $query->filterByDevolucionFechaentrega('now'); // WHERE devolucion_fechaentrega = '2011-03-14'
+     * $query->filterByDevolucionFechaentrega(array('max' => 'yesterday')); // WHERE devolucion_fechaentrega < '2011-03-13'
      * </code>
      *
-     * @param     string $devolucionFechaentrega The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     mixed $devolucionFechaentrega The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return DevolucionQuery The current query, for fluid interface
      */
     public function filterByDevolucionFechaentrega($devolucionFechaentrega = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($devolucionFechaentrega)) {
+        if (is_array($devolucionFechaentrega)) {
+            $useMinMax = false;
+            if (isset($devolucionFechaentrega['min'])) {
+                $this->addUsingAlias(DevolucionPeer::DEVOLUCION_FECHAENTREGA, $devolucionFechaentrega['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devolucionFechaentrega['max'])) {
+                $this->addUsingAlias(DevolucionPeer::DEVOLUCION_FECHAENTREGA, $devolucionFechaentrega['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $devolucionFechaentrega)) {
-                $devolucionFechaentrega = str_replace('*', '%', $devolucionFechaentrega);
-                $comparison = Criteria::LIKE;
             }
         }
 

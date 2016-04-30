@@ -2,77 +2,59 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'devoluciondetalle' table.
+ * Base static class for performing query and update operations on the 'productosucursalalmacen' table.
  *
  *
  *
  * @package propel.generator.aersa.om
  */
-abstract class BaseDevoluciondetallePeer
+abstract class BaseProductosucursalalmacenPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'aersa';
 
     /** the table name for this class */
-    const TABLE_NAME = 'devoluciondetalle';
+    const TABLE_NAME = 'productosucursalalmacen';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'Devoluciondetalle';
+    const OM_CLASS = 'Productosucursalalmacen';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'DevoluciondetalleTableMap';
+    const TM_CLASS = 'ProductosucursalalmacenTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 11;
+    const NUM_HYDRATE_COLUMNS = 5;
 
-    /** the column name for the iddevoluciondetalle field */
-    const IDDEVOLUCIONDETALLE = 'devoluciondetalle.iddevoluciondetalle';
+    /** the column name for the idproductosucursalalmacen field */
+    const IDPRODUCTOSUCURSALALMACEN = 'productosucursalalmacen.idproductosucursalalmacen';
 
-    /** the column name for the iddevolucion field */
-    const IDDEVOLUCION = 'devoluciondetalle.iddevolucion';
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'productosucursalalmacen.idempresa';
 
-    /** the column name for the idproducto field */
-    const IDPRODUCTO = 'devoluciondetalle.idproducto';
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'productosucursalalmacen.idsucursal';
 
     /** the column name for the idalmacen field */
-    const IDALMACEN = 'devoluciondetalle.idalmacen';
+    const IDALMACEN = 'productosucursalalmacen.idalmacen';
 
-    /** the column name for the devoluciondetalle_cantidad field */
-    const DEVOLUCIONDETALLE_CANTIDAD = 'devoluciondetalle.devoluciondetalle_cantidad';
-
-    /** the column name for the devoluciondetalle_revisada field */
-    const DEVOLUCIONDETALLE_REVISADA = 'devoluciondetalle.devoluciondetalle_revisada';
-
-    /** the column name for the devoluciondetalle_subtotal field */
-    const DEVOLUCIONDETALLE_SUBTOTAL = 'devoluciondetalle.devoluciondetalle_subtotal';
-
-    /** the column name for the devoluciondetalle_ieps field */
-    const DEVOLUCIONDETALLE_IEPS = 'devoluciondetalle.devoluciondetalle_ieps';
-
-    /** the column name for the devoluciondetalle_descuento field */
-    const DEVOLUCIONDETALLE_DESCUENTO = 'devoluciondetalle.devoluciondetalle_descuento';
-
-    /** the column name for the devoluciondetalle_costounitario field */
-    const DEVOLUCIONDETALLE_COSTOUNITARIO = 'devoluciondetalle.devoluciondetalle_costounitario';
-
-    /** the column name for the devoluciondetalle_costounitarioneto field */
-    const DEVOLUCIONDETALLE_COSTOUNITARIONETO = 'devoluciondetalle.devoluciondetalle_costounitarioneto';
+    /** the column name for the idproducto field */
+    const IDPRODUCTO = 'productosucursalalmacen.idproducto';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of Devoluciondetalle objects.
+     * An identity map to hold any loaded instances of Productosucursalalmacen objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array Devoluciondetalle[]
+     * @var        array Productosucursalalmacen[]
      */
     public static $instances = array();
 
@@ -81,30 +63,30 @@ abstract class BaseDevoluciondetallePeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. DevoluciondetallePeer::$fieldNames[DevoluciondetallePeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. ProductosucursalalmacenPeer::$fieldNames[ProductosucursalalmacenPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevoluciondetalle', 'Iddevolucion', 'Idproducto', 'Idalmacen', 'DevoluciondetalleCantidad', 'DevoluciondetalleRevisada', 'DevoluciondetalleSubtotal', 'DevoluciondetalleIeps', 'DevoluciondetalleDescuento', 'DevoluciondetalleCostounitario', 'DevoluciondetalleCostounitarioneto', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevoluciondetalle', 'iddevolucion', 'idproducto', 'idalmacen', 'devoluciondetalleCantidad', 'devoluciondetalleRevisada', 'devoluciondetalleSubtotal', 'devoluciondetalleIeps', 'devoluciondetalleDescuento', 'devoluciondetalleCostounitario', 'devoluciondetalleCostounitarioneto', ),
-        BasePeer::TYPE_COLNAME => array (DevoluciondetallePeer::IDDEVOLUCIONDETALLE, DevoluciondetallePeer::IDDEVOLUCION, DevoluciondetallePeer::IDPRODUCTO, DevoluciondetallePeer::IDALMACEN, DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD, DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA, DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL, DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS, DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO, DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO, DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONDETALLE', 'IDDEVOLUCION', 'IDPRODUCTO', 'IDALMACEN', 'DEVOLUCIONDETALLE_CANTIDAD', 'DEVOLUCIONDETALLE_REVISADA', 'DEVOLUCIONDETALLE_SUBTOTAL', 'DEVOLUCIONDETALLE_IEPS', 'DEVOLUCIONDETALLE_DESCUENTO', 'DEVOLUCIONDETALLE_COSTOUNITARIO', 'DEVOLUCIONDETALLE_COSTOUNITARIONETO', ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevoluciondetalle', 'iddevolucion', 'idproducto', 'idalmacen', 'devoluciondetalle_cantidad', 'devoluciondetalle_revisada', 'devoluciondetalle_subtotal', 'devoluciondetalle_ieps', 'devoluciondetalle_descuento', 'devoluciondetalle_costounitario', 'devoluciondetalle_costounitarioneto', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('Idproductosucursalalmacen', 'Idempresa', 'Idsucursal', 'Idalmacen', 'Idproducto', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproductosucursalalmacen', 'idempresa', 'idsucursal', 'idalmacen', 'idproducto', ),
+        BasePeer::TYPE_COLNAME => array (ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN, ProductosucursalalmacenPeer::IDEMPRESA, ProductosucursalalmacenPeer::IDSUCURSAL, ProductosucursalalmacenPeer::IDALMACEN, ProductosucursalalmacenPeer::IDPRODUCTO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTOSUCURSALALMACEN', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACEN', 'IDPRODUCTO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idproductosucursalalmacen', 'idempresa', 'idsucursal', 'idalmacen', 'idproducto', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. DevoluciondetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. ProductosucursalalmacenPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevoluciondetalle' => 0, 'Iddevolucion' => 1, 'Idproducto' => 2, 'Idalmacen' => 3, 'DevoluciondetalleCantidad' => 4, 'DevoluciondetalleRevisada' => 5, 'DevoluciondetalleSubtotal' => 6, 'DevoluciondetalleIeps' => 7, 'DevoluciondetalleDescuento' => 8, 'DevoluciondetalleCostounitario' => 9, 'DevoluciondetalleCostounitarioneto' => 10, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevoluciondetalle' => 0, 'iddevolucion' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'devoluciondetalleCantidad' => 4, 'devoluciondetalleRevisada' => 5, 'devoluciondetalleSubtotal' => 6, 'devoluciondetalleIeps' => 7, 'devoluciondetalleDescuento' => 8, 'devoluciondetalleCostounitario' => 9, 'devoluciondetalleCostounitarioneto' => 10, ),
-        BasePeer::TYPE_COLNAME => array (DevoluciondetallePeer::IDDEVOLUCIONDETALLE => 0, DevoluciondetallePeer::IDDEVOLUCION => 1, DevoluciondetallePeer::IDPRODUCTO => 2, DevoluciondetallePeer::IDALMACEN => 3, DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD => 4, DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA => 5, DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL => 6, DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS => 7, DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO => 8, DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO => 9, DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO => 10, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCIONDETALLE' => 0, 'IDDEVOLUCION' => 1, 'IDPRODUCTO' => 2, 'IDALMACEN' => 3, 'DEVOLUCIONDETALLE_CANTIDAD' => 4, 'DEVOLUCIONDETALLE_REVISADA' => 5, 'DEVOLUCIONDETALLE_SUBTOTAL' => 6, 'DEVOLUCIONDETALLE_IEPS' => 7, 'DEVOLUCIONDETALLE_DESCUENTO' => 8, 'DEVOLUCIONDETALLE_COSTOUNITARIO' => 9, 'DEVOLUCIONDETALLE_COSTOUNITARIONETO' => 10, ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevoluciondetalle' => 0, 'iddevolucion' => 1, 'idproducto' => 2, 'idalmacen' => 3, 'devoluciondetalle_cantidad' => 4, 'devoluciondetalle_revisada' => 5, 'devoluciondetalle_subtotal' => 6, 'devoluciondetalle_ieps' => 7, 'devoluciondetalle_descuento' => 8, 'devoluciondetalle_costounitario' => 9, 'devoluciondetalle_costounitarioneto' => 10, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('Idproductosucursalalmacen' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacen' => 3, 'Idproducto' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproductosucursalalmacen' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idproducto' => 4, ),
+        BasePeer::TYPE_COLNAME => array (ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN => 0, ProductosucursalalmacenPeer::IDEMPRESA => 1, ProductosucursalalmacenPeer::IDSUCURSAL => 2, ProductosucursalalmacenPeer::IDALMACEN => 3, ProductosucursalalmacenPeer::IDPRODUCTO => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTOSUCURSALALMACEN' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACEN' => 3, 'IDPRODUCTO' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idproductosucursalalmacen' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idproducto' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -119,10 +101,10 @@ abstract class BaseDevoluciondetallePeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = DevoluciondetallePeer::getFieldNames($toType);
-        $key = isset(DevoluciondetallePeer::$fieldKeys[$fromType][$name]) ? DevoluciondetallePeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = ProductosucursalalmacenPeer::getFieldNames($toType);
+        $key = isset(ProductosucursalalmacenPeer::$fieldKeys[$fromType][$name]) ? ProductosucursalalmacenPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(DevoluciondetallePeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(ProductosucursalalmacenPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -139,11 +121,11 @@ abstract class BaseDevoluciondetallePeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, DevoluciondetallePeer::$fieldNames)) {
+        if (!array_key_exists($type, ProductosucursalalmacenPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return DevoluciondetallePeer::$fieldNames[$type];
+        return ProductosucursalalmacenPeer::$fieldNames[$type];
     }
 
     /**
@@ -155,12 +137,12 @@ abstract class BaseDevoluciondetallePeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. DevoluciondetallePeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. ProductosucursalalmacenPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(DevoluciondetallePeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(ProductosucursalalmacenPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -178,29 +160,17 @@ abstract class BaseDevoluciondetallePeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(DevoluciondetallePeer::IDDEVOLUCIONDETALLE);
-            $criteria->addSelectColumn(DevoluciondetallePeer::IDDEVOLUCION);
-            $criteria->addSelectColumn(DevoluciondetallePeer::IDPRODUCTO);
-            $criteria->addSelectColumn(DevoluciondetallePeer::IDALMACEN);
-            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD);
-            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA);
-            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL);
-            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS);
-            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO);
-            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO);
-            $criteria->addSelectColumn(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO);
+            $criteria->addSelectColumn(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN);
+            $criteria->addSelectColumn(ProductosucursalalmacenPeer::IDEMPRESA);
+            $criteria->addSelectColumn(ProductosucursalalmacenPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(ProductosucursalalmacenPeer::IDALMACEN);
+            $criteria->addSelectColumn(ProductosucursalalmacenPeer::IDPRODUCTO);
         } else {
-            $criteria->addSelectColumn($alias . '.iddevoluciondetalle');
-            $criteria->addSelectColumn($alias . '.iddevolucion');
-            $criteria->addSelectColumn($alias . '.idproducto');
+            $criteria->addSelectColumn($alias . '.idproductosucursalalmacen');
+            $criteria->addSelectColumn($alias . '.idempresa');
+            $criteria->addSelectColumn($alias . '.idsucursal');
             $criteria->addSelectColumn($alias . '.idalmacen');
-            $criteria->addSelectColumn($alias . '.devoluciondetalle_cantidad');
-            $criteria->addSelectColumn($alias . '.devoluciondetalle_revisada');
-            $criteria->addSelectColumn($alias . '.devoluciondetalle_subtotal');
-            $criteria->addSelectColumn($alias . '.devoluciondetalle_ieps');
-            $criteria->addSelectColumn($alias . '.devoluciondetalle_descuento');
-            $criteria->addSelectColumn($alias . '.devoluciondetalle_costounitario');
-            $criteria->addSelectColumn($alias . '.devoluciondetalle_costounitarioneto');
+            $criteria->addSelectColumn($alias . '.idproducto');
         }
     }
 
@@ -220,21 +190,21 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -253,7 +223,7 @@ abstract class BaseDevoluciondetallePeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return Devoluciondetalle
+     * @return Productosucursalalmacen
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -261,7 +231,7 @@ abstract class BaseDevoluciondetallePeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = DevoluciondetallePeer::doSelect($critcopy, $con);
+        $objects = ProductosucursalalmacenPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -279,7 +249,7 @@ abstract class BaseDevoluciondetallePeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return DevoluciondetallePeer::populateObjects(DevoluciondetallePeer::doSelectStmt($criteria, $con));
+        return ProductosucursalalmacenPeer::populateObjects(ProductosucursalalmacenPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -297,16 +267,16 @@ abstract class BaseDevoluciondetallePeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -320,16 +290,16 @@ abstract class BaseDevoluciondetallePeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param Devoluciondetalle $obj A Devoluciondetalle object.
+     * @param Productosucursalalmacen $obj A Productosucursalalmacen object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIddevoluciondetalle();
+                $key = (string) $obj->getIdproductosucursalalmacen();
             } // if key === null
-            DevoluciondetallePeer::$instances[$key] = $obj;
+            ProductosucursalalmacenPeer::$instances[$key] = $obj;
         }
     }
 
@@ -341,7 +311,7 @@ abstract class BaseDevoluciondetallePeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A Devoluciondetalle object or a primary key value.
+     * @param      mixed $value A Productosucursalalmacen object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -349,17 +319,17 @@ abstract class BaseDevoluciondetallePeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof Devoluciondetalle) {
-                $key = (string) $value->getIddevoluciondetalle();
+            if (is_object($value) && $value instanceof Productosucursalalmacen) {
+                $key = (string) $value->getIdproductosucursalalmacen();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Devoluciondetalle object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Productosucursalalmacen object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(DevoluciondetallePeer::$instances[$key]);
+            unset(ProductosucursalalmacenPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -370,14 +340,14 @@ abstract class BaseDevoluciondetallePeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return Devoluciondetalle Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return Productosucursalalmacen Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(DevoluciondetallePeer::$instances[$key])) {
-                return DevoluciondetallePeer::$instances[$key];
+            if (isset(ProductosucursalalmacenPeer::$instances[$key])) {
+                return ProductosucursalalmacenPeer::$instances[$key];
             }
         }
 
@@ -392,15 +362,15 @@ abstract class BaseDevoluciondetallePeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (DevoluciondetallePeer::$instances as $instance) {
+        foreach (ProductosucursalalmacenPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        DevoluciondetallePeer::$instances = array();
+        ProductosucursalalmacenPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to devoluciondetalle
+     * Method to invalidate the instance pool of all tables related to productosucursalalmacen
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -454,11 +424,11 @@ abstract class BaseDevoluciondetallePeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = DevoluciondetallePeer::getOMClass();
+        $cls = ProductosucursalalmacenPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = DevoluciondetallePeer::getInstanceFromPool($key))) {
+            $key = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = ProductosucursalalmacenPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -467,7 +437,7 @@ abstract class BaseDevoluciondetallePeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                DevoluciondetallePeer::addInstanceToPool($obj, $key);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -481,21 +451,21 @@ abstract class BaseDevoluciondetallePeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (Devoluciondetalle object, last column rank)
+     * @return array (Productosucursalalmacen object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = DevoluciondetallePeer::getInstanceFromPool($key))) {
+        $key = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = ProductosucursalalmacenPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = DevoluciondetallePeer::OM_CLASS;
+            $cls = ProductosucursalalmacenPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            DevoluciondetallePeer::addInstanceToPool($obj, $key);
+            ProductosucursalalmacenPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -519,26 +489,26 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -554,7 +524,7 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Devolucion table
+     * Returns the number of rows matching criteria, joining the related Empresa table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -562,7 +532,7 @@ abstract class BaseDevoluciondetallePeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinDevolucion(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -570,26 +540,26 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -621,26 +591,26 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -656,11 +626,62 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Selects a collection of Devoluciondetalle objects pre-filled with their Almacen objects.
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Productosucursalalmacen objects pre-filled with their Almacen objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Devoluciondetalle objects.
+     * @return array           Array of Productosucursalalmacen objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -670,31 +691,31 @@ abstract class BaseDevoluciondetallePeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
         }
 
-        DevoluciondetallePeer::addSelectColumns($criteria);
-        $startcol = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
         AlmacenPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DevoluciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = DevoluciondetallePeer::getOMClass();
+                $cls = ProductosucursalalmacenPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                DevoluciondetallePeer::addInstanceToPool($obj1, $key1);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -709,8 +730,8 @@ abstract class BaseDevoluciondetallePeer
                     AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to $obj2 (Almacen)
-                $obj2->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to $obj2 (Almacen)
+                $obj2->addProductosucursalalmacen($obj1);
 
             } // if joined row was not null
 
@@ -723,61 +744,61 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Selects a collection of Devoluciondetalle objects pre-filled with their Devolucion objects.
+     * Selects a collection of Productosucursalalmacen objects pre-filled with their Empresa objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Devoluciondetalle objects.
+     * @return array           Array of Productosucursalalmacen objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinDevolucion(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
         }
 
-        DevoluciondetallePeer::addSelectColumns($criteria);
-        $startcol = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
-        DevolucionPeer::addSelectColumns($criteria);
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DevoluciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = DevoluciondetallePeer::getOMClass();
+                $cls = ProductosucursalalmacenPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                DevoluciondetallePeer::addInstanceToPool($obj1, $key1);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
-            $key2 = DevolucionPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
             if ($key2 !== null) {
-                $obj2 = DevolucionPeer::getInstanceFromPool($key2);
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = DevolucionPeer::getOMClass();
+                    $cls = EmpresaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol);
-                    DevolucionPeer::addInstanceToPool($obj2, $key2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to $obj2 (Devolucion)
-                $obj2->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to $obj2 (Empresa)
+                $obj2->addProductosucursalalmacen($obj1);
 
             } // if joined row was not null
 
@@ -790,11 +811,11 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Selects a collection of Devoluciondetalle objects pre-filled with their Producto objects.
+     * Selects a collection of Productosucursalalmacen objects pre-filled with their Producto objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Devoluciondetalle objects.
+     * @return array           Array of Productosucursalalmacen objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -804,31 +825,31 @@ abstract class BaseDevoluciondetallePeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
         }
 
-        DevoluciondetallePeer::addSelectColumns($criteria);
-        $startcol = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
         ProductoPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DevoluciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = DevoluciondetallePeer::getOMClass();
+                $cls = ProductosucursalalmacenPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                DevoluciondetallePeer::addInstanceToPool($obj1, $key1);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -843,8 +864,75 @@ abstract class BaseDevoluciondetallePeer
                     ProductoPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to $obj2 (Producto)
-                $obj2->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to $obj2 (Producto)
+                $obj2->addProductosucursalalmacen($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Productosucursalalmacen objects pre-filled with their Sucursal objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Productosucursalalmacen objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
+        }
+
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = ProductosucursalalmacenPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to $obj2 (Sucursal)
+                $obj2->addProductosucursalalmacen($obj1);
 
             } // if joined row was not null
 
@@ -873,30 +961,32 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -911,12 +1001,12 @@ abstract class BaseDevoluciondetallePeer
     }
 
     /**
-     * Selects a collection of Devoluciondetalle objects pre-filled with all related objects.
+     * Selects a collection of Productosucursalalmacen objects pre-filled with all related objects.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Devoluciondetalle objects.
+     * @return array           Array of Productosucursalalmacen objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -926,42 +1016,47 @@ abstract class BaseDevoluciondetallePeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
         }
 
-        DevoluciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol2 = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
 
         AlmacenPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
 
-        DevolucionPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + DevolucionPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         ProductoPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + ProductoPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DevoluciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = DevoluciondetallePeer::getOMClass();
+                $cls = ProductosucursalalmacenPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                DevoluciondetallePeer::addInstanceToPool($obj1, $key1);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
             // Add objects for joined Almacen rows
@@ -978,26 +1073,26 @@ abstract class BaseDevoluciondetallePeer
                     AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj2 (Almacen)
-                $obj2->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj2 (Almacen)
+                $obj2->addProductosucursalalmacen($obj1);
             } // if joined row not null
 
-            // Add objects for joined Devolucion rows
+            // Add objects for joined Empresa rows
 
-            $key3 = DevolucionPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
             if ($key3 !== null) {
-                $obj3 = DevolucionPeer::getInstanceFromPool($key3);
+                $obj3 = EmpresaPeer::getInstanceFromPool($key3);
                 if (!$obj3) {
 
-                    $cls = DevolucionPeer::getOMClass();
+                    $cls = EmpresaPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    DevolucionPeer::addInstanceToPool($obj3, $key3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj3 (Devolucion)
-                $obj3->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj3 (Empresa)
+                $obj3->addProductosucursalalmacen($obj1);
             } // if joined row not null
 
             // Add objects for joined Producto rows
@@ -1014,8 +1109,26 @@ abstract class BaseDevoluciondetallePeer
                     ProductoPeer::addInstanceToPool($obj4, $key4);
                 } // if obj4 loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj4 (Producto)
-                $obj4->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj4 (Producto)
+                $obj4->addProductosucursalalmacen($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Sucursal rows
+
+            $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj5 (Sucursal)
+                $obj5->addProductosucursalalmacen($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1043,28 +1156,30 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1080,7 +1195,7 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Devolucion table
+     * Returns the number of rows matching criteria, joining the related Empresa table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1088,7 +1203,7 @@ abstract class BaseDevoluciondetallePeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptDevolucion(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -1096,28 +1211,30 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1149,28 +1266,30 @@ abstract class BaseDevoluciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            DevoluciondetallePeer::addSelectColumns($criteria);
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1186,12 +1305,67 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Selects a collection of Devoluciondetalle objects pre-filled with all related objects except Almacen.
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Productosucursalalmacen objects pre-filled with all related objects except Almacen.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Devoluciondetalle objects.
+     * @return array           Array of Productosucursalalmacen objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1203,56 +1377,61 @@ abstract class BaseDevoluciondetallePeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
         }
 
-        DevoluciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol2 = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
 
-        DevolucionPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + DevolucionPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         ProductoPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + ProductoPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DevoluciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = DevoluciondetallePeer::getOMClass();
+                $cls = ProductosucursalalmacenPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                DevoluciondetallePeer::addInstanceToPool($obj1, $key1);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined Devolucion rows
+                // Add objects for joined Empresa rows
 
-                $key2 = DevolucionPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = DevolucionPeer::getInstanceFromPool($key2);
+                    $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = DevolucionPeer::getOMClass();
+                        $cls = EmpresaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    DevolucionPeer::addInstanceToPool($obj2, $key2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj2 (Devolucion)
-                $obj2->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj2 (Empresa)
+                $obj2->addProductosucursalalmacen($obj1);
 
             } // if joined row is not null
 
@@ -1270,8 +1449,27 @@ abstract class BaseDevoluciondetallePeer
                     ProductoPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj3 (Producto)
-                $obj3->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj3 (Producto)
+                $obj3->addProductosucursalalmacen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj4 (Sucursal)
+                $obj4->addProductosucursalalmacen($obj1);
 
             } // if joined row is not null
 
@@ -1284,16 +1482,16 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Selects a collection of Devoluciondetalle objects pre-filled with all related objects except Devolucion.
+     * Selects a collection of Productosucursalalmacen objects pre-filled with all related objects except Empresa.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Devoluciondetalle objects.
+     * @return array           Array of Productosucursalalmacen objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptDevolucion(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1301,11 +1499,11 @@ abstract class BaseDevoluciondetallePeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
         }
 
-        DevoluciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol2 = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
 
         AlmacenPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
@@ -1313,26 +1511,31 @@ abstract class BaseDevoluciondetallePeer
         ProductoPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + ProductoPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DevoluciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = DevoluciondetallePeer::getOMClass();
+                $cls = ProductosucursalalmacenPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                DevoluciondetallePeer::addInstanceToPool($obj1, $key1);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
                 // Add objects for joined Almacen rows
@@ -1349,8 +1552,8 @@ abstract class BaseDevoluciondetallePeer
                     AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj2 (Almacen)
-                $obj2->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj2 (Almacen)
+                $obj2->addProductosucursalalmacen($obj1);
 
             } // if joined row is not null
 
@@ -1368,8 +1571,27 @@ abstract class BaseDevoluciondetallePeer
                     ProductoPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj3 (Producto)
-                $obj3->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj3 (Producto)
+                $obj3->addProductosucursalalmacen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj4 (Sucursal)
+                $obj4->addProductosucursalalmacen($obj1);
 
             } // if joined row is not null
 
@@ -1382,12 +1604,12 @@ abstract class BaseDevoluciondetallePeer
 
 
     /**
-     * Selects a collection of Devoluciondetalle objects pre-filled with all related objects except Producto.
+     * Selects a collection of Productosucursalalmacen objects pre-filled with all related objects except Producto.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Devoluciondetalle objects.
+     * @return array           Array of Productosucursalalmacen objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1399,38 +1621,43 @@ abstract class BaseDevoluciondetallePeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
         }
 
-        DevoluciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol2 = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
 
         AlmacenPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
 
-        DevolucionPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + DevolucionPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(DevoluciondetallePeer::IDDEVOLUCION, DevolucionPeer::IDDEVOLUCION, $join_behavior);
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = DevoluciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = DevoluciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = DevoluciondetallePeer::getOMClass();
+                $cls = ProductosucursalalmacenPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                DevoluciondetallePeer::addInstanceToPool($obj1, $key1);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
                 // Add objects for joined Almacen rows
@@ -1447,27 +1674,168 @@ abstract class BaseDevoluciondetallePeer
                     AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj2 (Almacen)
-                $obj2->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj2 (Almacen)
+                $obj2->addProductosucursalalmacen($obj1);
 
             } // if joined row is not null
 
-                // Add objects for joined Devolucion rows
+                // Add objects for joined Empresa rows
 
-                $key3 = DevolucionPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = DevolucionPeer::getInstanceFromPool($key3);
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = DevolucionPeer::getOMClass();
+                        $cls = EmpresaPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    DevolucionPeer::addInstanceToPool($obj3, $key3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Devoluciondetalle) to the collection in $obj3 (Devolucion)
-                $obj3->addDevoluciondetalle($obj1);
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj3 (Empresa)
+                $obj3->addProductosucursalalmacen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj4 (Sucursal)
+                $obj4->addProductosucursalalmacen($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Productosucursalalmacen objects pre-filled with all related objects except Sucursal.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Productosucursalalmacen objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
+        }
+
+        ProductosucursalalmacenPeer::addSelectColumns($criteria);
+        $startcol2 = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(ProductosucursalalmacenPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = ProductosucursalalmacenPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ProductosucursalalmacenPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = ProductosucursalalmacenPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                ProductosucursalalmacenPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj2 (Almacen)
+                $obj2->addProductosucursalalmacen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    EmpresaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj3 (Empresa)
+                $obj3->addProductosucursalalmacen($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Producto rows
+
+                $key4 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = ProductoPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = ProductoPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    ProductoPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Productosucursalalmacen) to the collection in $obj4 (Producto)
+                $obj4->addProductosucursalalmacen($obj1);
 
             } // if joined row is not null
 
@@ -1487,7 +1855,7 @@ abstract class BaseDevoluciondetallePeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(DevoluciondetallePeer::DATABASE_NAME)->getTable(DevoluciondetallePeer::TABLE_NAME);
+        return Propel::getDatabaseMap(ProductosucursalalmacenPeer::DATABASE_NAME)->getTable(ProductosucursalalmacenPeer::TABLE_NAME);
     }
 
     /**
@@ -1495,9 +1863,9 @@ abstract class BaseDevoluciondetallePeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseDevoluciondetallePeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseDevoluciondetallePeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \DevoluciondetalleTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseProductosucursalalmacenPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseProductosucursalalmacenPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \ProductosucursalalmacenTableMap());
       }
     }
 
@@ -1509,13 +1877,13 @@ abstract class BaseDevoluciondetallePeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return DevoluciondetallePeer::OM_CLASS;
+        return ProductosucursalalmacenPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a Devoluciondetalle or Criteria object.
+     * Performs an INSERT on the database, given a Productosucursalalmacen or Criteria object.
      *
-     * @param      mixed $values Criteria or Devoluciondetalle object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or Productosucursalalmacen object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1524,22 +1892,22 @@ abstract class BaseDevoluciondetallePeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from Devoluciondetalle object
+            $criteria = $values->buildCriteria(); // build Criteria from Productosucursalalmacen object
         }
 
-        if ($criteria->containsKey(DevoluciondetallePeer::IDDEVOLUCIONDETALLE) && $criteria->keyContainsValue(DevoluciondetallePeer::IDDEVOLUCIONDETALLE) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.DevoluciondetallePeer::IDDEVOLUCIONDETALLE.')');
+        if ($criteria->containsKey(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN) && $criteria->keyContainsValue(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -1556,9 +1924,9 @@ abstract class BaseDevoluciondetallePeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a Devoluciondetalle or Criteria object.
+     * Performs an UPDATE on the database, given a Productosucursalalmacen or Criteria object.
      *
-     * @param      mixed $values Criteria or Devoluciondetalle object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or Productosucursalalmacen object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -1567,35 +1935,35 @@ abstract class BaseDevoluciondetallePeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(DevoluciondetallePeer::IDDEVOLUCIONDETALLE);
-            $value = $criteria->remove(DevoluciondetallePeer::IDDEVOLUCIONDETALLE);
+            $comparison = $criteria->getComparison(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN);
+            $value = $criteria->remove(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN);
             if ($value) {
-                $selectCriteria->add(DevoluciondetallePeer::IDDEVOLUCIONDETALLE, $value, $comparison);
+                $selectCriteria->add(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(DevoluciondetallePeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(ProductosucursalalmacenPeer::TABLE_NAME);
             }
 
-        } else { // $values is Devoluciondetalle object
+        } else { // $values is Productosucursalalmacen object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the devoluciondetalle table.
+     * Deletes all rows from the productosucursalalmacen table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -1604,19 +1972,19 @@ abstract class BaseDevoluciondetallePeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += BasePeer::doDeleteAll(DevoluciondetallePeer::TABLE_NAME, $con, DevoluciondetallePeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(ProductosucursalalmacenPeer::TABLE_NAME, $con, ProductosucursalalmacenPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            DevoluciondetallePeer::clearInstancePool();
-            DevoluciondetallePeer::clearRelatedInstancePool();
+            ProductosucursalalmacenPeer::clearInstancePool();
+            ProductosucursalalmacenPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1627,9 +1995,9 @@ abstract class BaseDevoluciondetallePeer
     }
 
     /**
-     * Performs a DELETE on the database, given a Devoluciondetalle or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Productosucursalalmacen or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or Devoluciondetalle object or primary key or array of primary keys
+     * @param      mixed $values Criteria or Productosucursalalmacen object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1640,32 +2008,32 @@ abstract class BaseDevoluciondetallePeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             // invalidate the cache for all objects of this type, since we have no
             // way of knowing (without running a query) what objects should be invalidated
             // from the cache based on this Criteria.
-            DevoluciondetallePeer::clearInstancePool();
+            ProductosucursalalmacenPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof Devoluciondetalle) { // it's a model object
+        } elseif ($values instanceof Productosucursalalmacen) { // it's a model object
             // invalidate the cache for this single object
-            DevoluciondetallePeer::removeInstanceFromPool($values);
+            ProductosucursalalmacenPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
-            $criteria->add(DevoluciondetallePeer::IDDEVOLUCIONDETALLE, (array) $values, Criteria::IN);
+            $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
+            $criteria->add(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
-                DevoluciondetallePeer::removeInstanceFromPool($singleval);
+                ProductosucursalalmacenPeer::removeInstanceFromPool($singleval);
             }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(ProductosucursalalmacenPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -1675,7 +2043,7 @@ abstract class BaseDevoluciondetallePeer
             $con->beginTransaction();
 
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            DevoluciondetallePeer::clearRelatedInstancePool();
+            ProductosucursalalmacenPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1686,13 +2054,13 @@ abstract class BaseDevoluciondetallePeer
     }
 
     /**
-     * Validates all modified columns of given Devoluciondetalle object.
+     * Validates all modified columns of given Productosucursalalmacen object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param Devoluciondetalle $obj The object to validate.
+     * @param Productosucursalalmacen $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1702,8 +2070,8 @@ abstract class BaseDevoluciondetallePeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(DevoluciondetallePeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(DevoluciondetallePeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(ProductosucursalalmacenPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(ProductosucursalalmacenPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -1719,7 +2087,7 @@ abstract class BaseDevoluciondetallePeer
 
         }
 
-        return BasePeer::doValidate(DevoluciondetallePeer::DATABASE_NAME, DevoluciondetallePeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(ProductosucursalalmacenPeer::DATABASE_NAME, ProductosucursalalmacenPeer::TABLE_NAME, $columns);
     }
 
     /**
@@ -1727,23 +2095,23 @@ abstract class BaseDevoluciondetallePeer
      *
      * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
-     * @return Devoluciondetalle
+     * @return Productosucursalalmacen
      */
     public static function retrieveByPK($pk, PropelPDO $con = null)
     {
 
-        if (null !== ($obj = DevoluciondetallePeer::getInstanceFromPool((string) $pk))) {
+        if (null !== ($obj = ProductosucursalalmacenPeer::getInstanceFromPool((string) $pk))) {
             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
-        $criteria->add(DevoluciondetallePeer::IDDEVOLUCIONDETALLE, $pk);
+        $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
+        $criteria->add(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN, $pk);
 
-        $v = DevoluciondetallePeer::doSelect($criteria, $con);
+        $v = ProductosucursalalmacenPeer::doSelect($criteria, $con);
 
         return !empty($v) > 0 ? $v[0] : null;
     }
@@ -1753,31 +2121,31 @@ abstract class BaseDevoluciondetallePeer
      *
      * @param      array $pks List of primary keys
      * @param      PropelPDO $con the connection to use
-     * @return Devoluciondetalle[]
+     * @return Productosucursalalmacen[]
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
     public static function retrieveByPKs($pks, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         $objs = null;
         if (empty($pks)) {
             $objs = array();
         } else {
-            $criteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
-            $criteria->add(DevoluciondetallePeer::IDDEVOLUCIONDETALLE, $pks, Criteria::IN);
-            $objs = DevoluciondetallePeer::doSelect($criteria, $con);
+            $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
+            $criteria->add(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN, $pks, Criteria::IN);
+            $objs = ProductosucursalalmacenPeer::doSelect($criteria, $con);
         }
 
         return $objs;
     }
 
-} // BaseDevoluciondetallePeer
+} // BaseProductosucursalalmacenPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseDevoluciondetallePeer::buildTableMap();
+BaseProductosucursalalmacenPeer::buildTableMap();
 

@@ -61,6 +61,7 @@ class AlmacenTableMap extends TableMap
         $this->addRelation('Notacreditodetalle', 'Notacreditodetalle', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Notacreditodetalles');
         $this->addRelation('OrdentablajeriaRelatedByIdalmacendestino', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacendestino', ), 'CASCADE', 'CASCADE', 'OrdentablajeriasRelatedByIdalmacendestino');
         $this->addRelation('OrdentablajeriaRelatedByIdalmacenorigen', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacenorigen', ), 'CASCADE', 'CASCADE', 'OrdentablajeriasRelatedByIdalmacenorigen');
+        $this->addRelation('Productosucursalalmacen', 'Productosucursalalmacen', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Productosucursalalmacens');
         $this->addRelation('RequisicionRelatedByIdalmacendestino', 'Requisicion', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacendestino', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdalmacendestino');
         $this->addRelation('RequisicionRelatedByIdalmacenorigen', 'Requisicion', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacenorigen', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdalmacenorigen');
         $this->addRelation('Venta', 'Venta', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Ventas');

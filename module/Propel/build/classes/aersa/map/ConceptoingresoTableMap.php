@@ -40,7 +40,7 @@ class ConceptoingresoTableMap extends TableMap
         // columns
         $this->addPrimaryKey('idconceptoingreso', 'Idconceptoingreso', 'INTEGER', true, null, null);
         $this->addColumn('conceptoingreso_nombre', 'ConceptoingresoNombre', 'VARCHAR', true, 255, null);
-        $this->addColumn('conceptoingreso_descripcion', 'ConceptoingresoDescripcion', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('conceptoingreso_descripcion', 'ConceptoingresoDescripcion', 'LONGVARCHAR', false, null, null);
         // validators
     } // initialize()
 

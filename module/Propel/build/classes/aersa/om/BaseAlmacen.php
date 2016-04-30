@@ -119,6 +119,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $collOrdentablajeriasRelatedByIdalmacenorigenPartial;
 
     /**
+     * @var        PropelObjectCollection|Productosucursalalmacen[] Collection to store aggregation of Productosucursalalmacen objects.
+     */
+    protected $collProductosucursalalmacens;
+    protected $collProductosucursalalmacensPartial;
+
+    /**
      * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
      */
     protected $collRequisicionsRelatedByIdalmacendestino;
@@ -209,6 +215,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $ordentablajeriasRelatedByIdalmacenorigenScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $productosucursalalmacensScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -530,6 +542,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             $this->collOrdentablajeriasRelatedByIdalmacenorigen = null;
 
+            $this->collProductosucursalalmacens = null;
+
             $this->collRequisicionsRelatedByIdalmacendestino = null;
 
             $this->collRequisicionsRelatedByIdalmacenorigen = null;
@@ -819,6 +833,23 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             if ($this->collOrdentablajeriasRelatedByIdalmacenorigen !== null) {
                 foreach ($this->collOrdentablajeriasRelatedByIdalmacenorigen as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->productosucursalalmacensScheduledForDeletion !== null) {
+                if (!$this->productosucursalalmacensScheduledForDeletion->isEmpty()) {
+                    ProductosucursalalmacenQuery::create()
+                        ->filterByPrimaryKeys($this->productosucursalalmacensScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->productosucursalalmacensScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProductosucursalalmacens !== null) {
+                foreach ($this->collProductosucursalalmacens as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1126,6 +1157,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collProductosucursalalmacens !== null) {
+                    foreach ($this->collProductosucursalalmacens as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collRequisicionsRelatedByIdalmacendestino !== null) {
                     foreach ($this->collRequisicionsRelatedByIdalmacendestino as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1270,6 +1309,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             }
             if (null !== $this->collOrdentablajeriasRelatedByIdalmacenorigen) {
                 $result['OrdentablajeriasRelatedByIdalmacenorigen'] = $this->collOrdentablajeriasRelatedByIdalmacenorigen->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collProductosucursalalmacens) {
+                $result['Productosucursalalmacens'] = $this->collProductosucursalalmacens->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRequisicionsRelatedByIdalmacendestino) {
                 $result['RequisicionsRelatedByIdalmacendestino'] = $this->collRequisicionsRelatedByIdalmacendestino->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1503,6 +1545,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getProductosucursalalmacens() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProductosucursalalmacen($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getRequisicionsRelatedByIdalmacendestino() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addRequisicionRelatedByIdalmacendestino($relObj->copy($deepCopy));
@@ -1660,6 +1708,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         }
         if ('OrdentablajeriaRelatedByIdalmacenorigen' == $relationName) {
             $this->initOrdentablajeriasRelatedByIdalmacenorigen();
+        }
+        if ('Productosucursalalmacen' == $relationName) {
+            $this->initProductosucursalalmacens();
         }
         if ('RequisicionRelatedByIdalmacendestino' == $relationName) {
             $this->initRequisicionsRelatedByIdalmacendestino();
@@ -4573,6 +4624,306 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collProductosucursalalmacens collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addProductosucursalalmacens()
+     */
+    public function clearProductosucursalalmacens()
+    {
+        $this->collProductosucursalalmacens = null; // important to set this to null since that means it is uninitialized
+        $this->collProductosucursalalmacensPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProductosucursalalmacens collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProductosucursalalmacens($v = true)
+    {
+        $this->collProductosucursalalmacensPartial = $v;
+    }
+
+    /**
+     * Initializes the collProductosucursalalmacens collection.
+     *
+     * By default this just sets the collProductosucursalalmacens collection to an empty array (like clearcollProductosucursalalmacens());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProductosucursalalmacens($overrideExisting = true)
+    {
+        if (null !== $this->collProductosucursalalmacens && !$overrideExisting) {
+            return;
+        }
+        $this->collProductosucursalalmacens = new PropelObjectCollection();
+        $this->collProductosucursalalmacens->setModel('Productosucursalalmacen');
+    }
+
+    /**
+     * Gets an array of Productosucursalalmacen objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Productosucursalalmacen[] List of Productosucursalalmacen objects
+     * @throws PropelException
+     */
+    public function getProductosucursalalmacens($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosucursalalmacensPartial && !$this->isNew();
+        if (null === $this->collProductosucursalalmacens || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProductosucursalalmacens) {
+                // return empty collection
+                $this->initProductosucursalalmacens();
+            } else {
+                $collProductosucursalalmacens = ProductosucursalalmacenQuery::create(null, $criteria)
+                    ->filterByAlmacen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProductosucursalalmacensPartial && count($collProductosucursalalmacens)) {
+                      $this->initProductosucursalalmacens(false);
+
+                      foreach ($collProductosucursalalmacens as $obj) {
+                        if (false == $this->collProductosucursalalmacens->contains($obj)) {
+                          $this->collProductosucursalalmacens->append($obj);
+                        }
+                      }
+
+                      $this->collProductosucursalalmacensPartial = true;
+                    }
+
+                    $collProductosucursalalmacens->getInternalIterator()->rewind();
+
+                    return $collProductosucursalalmacens;
+                }
+
+                if ($partial && $this->collProductosucursalalmacens) {
+                    foreach ($this->collProductosucursalalmacens as $obj) {
+                        if ($obj->isNew()) {
+                            $collProductosucursalalmacens[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProductosucursalalmacens = $collProductosucursalalmacens;
+                $this->collProductosucursalalmacensPartial = false;
+            }
+        }
+
+        return $this->collProductosucursalalmacens;
+    }
+
+    /**
+     * Sets a collection of Productosucursalalmacen objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $productosucursalalmacens A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setProductosucursalalmacens(PropelCollection $productosucursalalmacens, PropelPDO $con = null)
+    {
+        $productosucursalalmacensToDelete = $this->getProductosucursalalmacens(new Criteria(), $con)->diff($productosucursalalmacens);
+
+
+        $this->productosucursalalmacensScheduledForDeletion = $productosucursalalmacensToDelete;
+
+        foreach ($productosucursalalmacensToDelete as $productosucursalalmacenRemoved) {
+            $productosucursalalmacenRemoved->setAlmacen(null);
+        }
+
+        $this->collProductosucursalalmacens = null;
+        foreach ($productosucursalalmacens as $productosucursalalmacen) {
+            $this->addProductosucursalalmacen($productosucursalalmacen);
+        }
+
+        $this->collProductosucursalalmacens = $productosucursalalmacens;
+        $this->collProductosucursalalmacensPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Productosucursalalmacen objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Productosucursalalmacen objects.
+     * @throws PropelException
+     */
+    public function countProductosucursalalmacens(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProductosucursalalmacensPartial && !$this->isNew();
+        if (null === $this->collProductosucursalalmacens || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProductosucursalalmacens) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProductosucursalalmacens());
+            }
+            $query = ProductosucursalalmacenQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacen($this)
+                ->count($con);
+        }
+
+        return count($this->collProductosucursalalmacens);
+    }
+
+    /**
+     * Method called to associate a Productosucursalalmacen object to this object
+     * through the Productosucursalalmacen foreign key attribute.
+     *
+     * @param    Productosucursalalmacen $l Productosucursalalmacen
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addProductosucursalalmacen(Productosucursalalmacen $l)
+    {
+        if ($this->collProductosucursalalmacens === null) {
+            $this->initProductosucursalalmacens();
+            $this->collProductosucursalalmacensPartial = true;
+        }
+
+        if (!in_array($l, $this->collProductosucursalalmacens->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProductosucursalalmacen($l);
+
+            if ($this->productosucursalalmacensScheduledForDeletion and $this->productosucursalalmacensScheduledForDeletion->contains($l)) {
+                $this->productosucursalalmacensScheduledForDeletion->remove($this->productosucursalalmacensScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Productosucursalalmacen $productosucursalalmacen The productosucursalalmacen object to add.
+     */
+    protected function doAddProductosucursalalmacen($productosucursalalmacen)
+    {
+        $this->collProductosucursalalmacens[]= $productosucursalalmacen;
+        $productosucursalalmacen->setAlmacen($this);
+    }
+
+    /**
+     * @param	Productosucursalalmacen $productosucursalalmacen The productosucursalalmacen object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeProductosucursalalmacen($productosucursalalmacen)
+    {
+        if ($this->getProductosucursalalmacens()->contains($productosucursalalmacen)) {
+            $this->collProductosucursalalmacens->remove($this->collProductosucursalalmacens->search($productosucursalalmacen));
+            if (null === $this->productosucursalalmacensScheduledForDeletion) {
+                $this->productosucursalalmacensScheduledForDeletion = clone $this->collProductosucursalalmacens;
+                $this->productosucursalalmacensScheduledForDeletion->clear();
+            }
+            $this->productosucursalalmacensScheduledForDeletion[]= clone $productosucursalalmacen;
+            $productosucursalalmacen->setAlmacen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Productosucursalalmacens from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Productosucursalalmacen[] List of Productosucursalalmacen objects
+     */
+    public function getProductosucursalalmacensJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductosucursalalmacenQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getProductosucursalalmacens($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Productosucursalalmacens from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Productosucursalalmacen[] List of Productosucursalalmacen objects
+     */
+    public function getProductosucursalalmacensJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductosucursalalmacenQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getProductosucursalalmacens($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Productosucursalalmacens from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Productosucursalalmacen[] List of Productosucursalalmacen objects
+     */
+    public function getProductosucursalalmacensJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductosucursalalmacenQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getProductosucursalalmacens($query, $con);
+    }
+
+    /**
      * Clears out the collRequisicionsRelatedByIdalmacendestino collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -5724,6 +6075,11 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collProductosucursalalmacens) {
+                foreach ($this->collProductosucursalalmacens as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRequisicionsRelatedByIdalmacendestino) {
                 foreach ($this->collRequisicionsRelatedByIdalmacendestino as $o) {
                     $o->clearAllReferences($deep);
@@ -5782,6 +6138,10 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $this->collOrdentablajeriasRelatedByIdalmacenorigen->clearIterator();
         }
         $this->collOrdentablajeriasRelatedByIdalmacenorigen = null;
+        if ($this->collProductosucursalalmacens instanceof PropelCollection) {
+            $this->collProductosucursalalmacens->clearIterator();
+        }
+        $this->collProductosucursalalmacens = null;
         if ($this->collRequisicionsRelatedByIdalmacendestino instanceof PropelCollection) {
             $this->collRequisicionsRelatedByIdalmacendestino->clearIterator();
         }

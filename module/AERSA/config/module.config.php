@@ -759,6 +759,57 @@ return array(
                                     ), 
                                 ), 
                             ), 
+                            'devolucion' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/devolucion', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Devolucion', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevoregistro', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'nuevoregistro', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
+                                ), 
+                            ),
                         ), 
                     ), 
                 ),
@@ -827,6 +878,7 @@ return array(
             
             'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
             'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
+            'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
             /*
              * WEBSITE
              */

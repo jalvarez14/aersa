@@ -60,6 +60,10 @@
  * @method SucursalQuery rightJoinOrdentablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeria relation
  * @method SucursalQuery innerJoinOrdentablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeria relation
  *
+ * @method SucursalQuery leftJoinProductosucursalalmacen($relationAlias = null) Adds a LEFT JOIN clause to the query using the Productosucursalalmacen relation
+ * @method SucursalQuery rightJoinProductosucursalalmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Productosucursalalmacen relation
+ * @method SucursalQuery innerJoinProductosucursalalmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Productosucursalalmacen relation
+ *
  * @method SucursalQuery leftJoinRequisicionRelatedByIdsucursaldestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdsucursaldestino relation
  * @method SucursalQuery rightJoinRequisicionRelatedByIdsucursaldestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdsucursaldestino relation
  * @method SucursalQuery innerJoinRequisicionRelatedByIdsucursaldestino($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdsucursaldestino relation
@@ -67,6 +71,10 @@
  * @method SucursalQuery leftJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
  * @method SucursalQuery rightJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
  * @method SucursalQuery innerJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
+ *
+ * @method SucursalQuery leftJoinTrabajadorespromedio($relationAlias = null) Adds a LEFT JOIN clause to the query using the Trabajadorespromedio relation
+ * @method SucursalQuery rightJoinTrabajadorespromedio($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Trabajadorespromedio relation
+ * @method SucursalQuery innerJoinTrabajadorespromedio($relationAlias = null) Adds a INNER JOIN clause to the query using the Trabajadorespromedio relation
  *
  * @method SucursalQuery leftJoinTrabajadorpromedio($relationAlias = null) Adds a LEFT JOIN clause to the query using the Trabajadorpromedio relation
  * @method SucursalQuery rightJoinTrabajadorpromedio($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Trabajadorpromedio relation
@@ -1170,6 +1178,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Productosucursalalmacen object
+     *
+     * @param   Productosucursalalmacen|PropelObjectCollection $productosucursalalmacen  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProductosucursalalmacen($productosucursalalmacen, $comparison = null)
+    {
+        if ($productosucursalalmacen instanceof Productosucursalalmacen) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $productosucursalalmacen->getIdsucursal(), $comparison);
+        } elseif ($productosucursalalmacen instanceof PropelObjectCollection) {
+            return $this
+                ->useProductosucursalalmacenQuery()
+                ->filterByPrimaryKeys($productosucursalalmacen->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProductosucursalalmacen() only accepts arguments of type Productosucursalalmacen or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Productosucursalalmacen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinProductosucursalalmacen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Productosucursalalmacen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Productosucursalalmacen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Productosucursalalmacen relation Productosucursalalmacen object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductosucursalalmacenQuery A secondary query class using the current class as primary query
+     */
+    public function useProductosucursalalmacenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProductosucursalalmacen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Productosucursalalmacen', 'ProductosucursalalmacenQuery');
+    }
+
+    /**
      * Filter the query by a related Requisicion object
      *
      * @param   Requisicion|PropelObjectCollection $requisicion  the related object to use as filter
@@ -1315,6 +1397,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinRequisicionRelatedByIdsucursalorigen($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdsucursalorigen', 'RequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Trabajadorespromedio object
+     *
+     * @param   Trabajadorespromedio|PropelObjectCollection $trabajadorespromedio  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByTrabajadorespromedio($trabajadorespromedio, $comparison = null)
+    {
+        if ($trabajadorespromedio instanceof Trabajadorespromedio) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $trabajadorespromedio->getIdsucursal(), $comparison);
+        } elseif ($trabajadorespromedio instanceof PropelObjectCollection) {
+            return $this
+                ->useTrabajadorespromedioQuery()
+                ->filterByPrimaryKeys($trabajadorespromedio->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTrabajadorespromedio() only accepts arguments of type Trabajadorespromedio or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Trabajadorespromedio relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinTrabajadorespromedio($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Trabajadorespromedio');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Trabajadorespromedio');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Trabajadorespromedio relation Trabajadorespromedio object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   TrabajadorespromedioQuery A secondary query class using the current class as primary query
+     */
+    public function useTrabajadorespromedioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTrabajadorespromedio($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Trabajadorespromedio', 'TrabajadorespromedioQuery');
     }
 
     /**

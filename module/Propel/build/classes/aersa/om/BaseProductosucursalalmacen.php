@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'devoluciondetalle' table.
+ * Base class that represents a row from the 'productosucursalalmacen' table.
  *
  *
  *
  * @package    propel.generator.aersa.om
  */
-abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
+abstract class BaseProductosucursalalmacen extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'DevoluciondetallePeer';
+    const PEER = 'ProductosucursalalmacenPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        DevoluciondetallePeer
+     * @var        ProductosucursalalmacenPeer
      */
     protected static $peer;
 
@@ -30,22 +30,22 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the iddevoluciondetalle field.
+     * The value for the idproductosucursalalmacen field.
      * @var        int
      */
-    protected $iddevoluciondetalle;
+    protected $idproductosucursalalmacen;
 
     /**
-     * The value for the iddevolucion field.
+     * The value for the idempresa field.
      * @var        int
      */
-    protected $iddevolucion;
+    protected $idempresa;
 
     /**
-     * The value for the idproducto field.
+     * The value for the idsucursal field.
      * @var        int
      */
-    protected $idproducto;
+    protected $idsucursal;
 
     /**
      * The value for the idalmacen field.
@@ -54,47 +54,10 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     protected $idalmacen;
 
     /**
-     * The value for the devoluciondetalle_cantidad field.
-     * @var        double
+     * The value for the idproducto field.
+     * @var        int
      */
-    protected $devoluciondetalle_cantidad;
-
-    /**
-     * The value for the devoluciondetalle_revisada field.
-     * Note: this column has a database default value of: false
-     * @var        boolean
-     */
-    protected $devoluciondetalle_revisada;
-
-    /**
-     * The value for the devoluciondetalle_subtotal field.
-     * @var        string
-     */
-    protected $devoluciondetalle_subtotal;
-
-    /**
-     * The value for the devoluciondetalle_ieps field.
-     * @var        double
-     */
-    protected $devoluciondetalle_ieps;
-
-    /**
-     * The value for the devoluciondetalle_descuento field.
-     * @var        double
-     */
-    protected $devoluciondetalle_descuento;
-
-    /**
-     * The value for the devoluciondetalle_costounitario field.
-     * @var        string
-     */
-    protected $devoluciondetalle_costounitario;
-
-    /**
-     * The value for the devoluciondetalle_costounitarioneto field.
-     * @var        string
-     */
-    protected $devoluciondetalle_costounitarioneto;
+    protected $idproducto;
 
     /**
      * @var        Almacen
@@ -102,14 +65,19 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     protected $aAlmacen;
 
     /**
-     * @var        Devolucion
+     * @var        Empresa
      */
-    protected $aDevolucion;
+    protected $aEmpresa;
 
     /**
      * @var        Producto
      */
     protected $aProducto;
+
+    /**
+     * @var        Sucursal
+     */
+    protected $aSucursal;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -132,57 +100,36 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see        __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->devoluciondetalle_revisada = false;
-    }
-
-    /**
-     * Initializes internal state of BaseDevoluciondetalle object.
-     * @see        applyDefaults()
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->applyDefaultValues();
-    }
-
-    /**
-     * Get the [iddevoluciondetalle] column value.
+     * Get the [idproductosucursalalmacen] column value.
      *
      * @return int
      */
-    public function getIddevoluciondetalle()
+    public function getIdproductosucursalalmacen()
     {
 
-        return $this->iddevoluciondetalle;
+        return $this->idproductosucursalalmacen;
     }
 
     /**
-     * Get the [iddevolucion] column value.
+     * Get the [idempresa] column value.
      *
      * @return int
      */
-    public function getIddevolucion()
+    public function getIdempresa()
     {
 
-        return $this->iddevolucion;
+        return $this->idempresa;
     }
 
     /**
-     * Get the [idproducto] column value.
+     * Get the [idsucursal] column value.
      *
      * @return int
      */
-    public function getIdproducto()
+    public function getIdsucursal()
     {
 
-        return $this->idproducto;
+        return $this->idsucursal;
     }
 
     /**
@@ -197,158 +144,92 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [devoluciondetalle_cantidad] column value.
+     * Get the [idproducto] column value.
      *
-     * @return double
+     * @return int
      */
-    public function getDevoluciondetalleCantidad()
+    public function getIdproducto()
     {
 
-        return $this->devoluciondetalle_cantidad;
+        return $this->idproducto;
     }
 
     /**
-     * Get the [devoluciondetalle_revisada] column value.
-     *
-     * @return boolean
-     */
-    public function getDevoluciondetalleRevisada()
-    {
-
-        return $this->devoluciondetalle_revisada;
-    }
-
-    /**
-     * Get the [devoluciondetalle_subtotal] column value.
-     *
-     * @return string
-     */
-    public function getDevoluciondetalleSubtotal()
-    {
-
-        return $this->devoluciondetalle_subtotal;
-    }
-
-    /**
-     * Get the [devoluciondetalle_ieps] column value.
-     *
-     * @return double
-     */
-    public function getDevoluciondetalleIeps()
-    {
-
-        return $this->devoluciondetalle_ieps;
-    }
-
-    /**
-     * Get the [devoluciondetalle_descuento] column value.
-     *
-     * @return double
-     */
-    public function getDevoluciondetalleDescuento()
-    {
-
-        return $this->devoluciondetalle_descuento;
-    }
-
-    /**
-     * Get the [devoluciondetalle_costounitario] column value.
-     *
-     * @return string
-     */
-    public function getDevoluciondetalleCostounitario()
-    {
-
-        return $this->devoluciondetalle_costounitario;
-    }
-
-    /**
-     * Get the [devoluciondetalle_costounitarioneto] column value.
-     *
-     * @return string
-     */
-    public function getDevoluciondetalleCostounitarioneto()
-    {
-
-        return $this->devoluciondetalle_costounitarioneto;
-    }
-
-    /**
-     * Set the value of [iddevoluciondetalle] column.
+     * Set the value of [idproductosucursalalmacen] column.
      *
      * @param  int $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @return Productosucursalalmacen The current object (for fluent API support)
      */
-    public function setIddevoluciondetalle($v)
+    public function setIdproductosucursalalmacen($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->iddevoluciondetalle !== $v) {
-            $this->iddevoluciondetalle = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::IDDEVOLUCIONDETALLE;
+        if ($this->idproductosucursalalmacen !== $v) {
+            $this->idproductosucursalalmacen = $v;
+            $this->modifiedColumns[] = ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN;
         }
 
 
         return $this;
-    } // setIddevoluciondetalle()
+    } // setIdproductosucursalalmacen()
 
     /**
-     * Set the value of [iddevolucion] column.
+     * Set the value of [idempresa] column.
      *
      * @param  int $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @return Productosucursalalmacen The current object (for fluent API support)
      */
-    public function setIddevolucion($v)
+    public function setIdempresa($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->iddevolucion !== $v) {
-            $this->iddevolucion = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::IDDEVOLUCION;
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = ProductosucursalalmacenPeer::IDEMPRESA;
         }
 
-        if ($this->aDevolucion !== null && $this->aDevolucion->getIddevolucion() !== $v) {
-            $this->aDevolucion = null;
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
         }
 
 
         return $this;
-    } // setIddevolucion()
+    } // setIdempresa()
 
     /**
-     * Set the value of [idproducto] column.
+     * Set the value of [idsucursal] column.
      *
      * @param  int $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @return Productosucursalalmacen The current object (for fluent API support)
      */
-    public function setIdproducto($v)
+    public function setIdsucursal($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idproducto !== $v) {
-            $this->idproducto = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::IDPRODUCTO;
+        if ($this->idsucursal !== $v) {
+            $this->idsucursal = $v;
+            $this->modifiedColumns[] = ProductosucursalalmacenPeer::IDSUCURSAL;
         }
 
-        if ($this->aProducto !== null && $this->aProducto->getIdproducto() !== $v) {
-            $this->aProducto = null;
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
         }
 
 
         return $this;
-    } // setIdproducto()
+    } // setIdsucursal()
 
     /**
      * Set the value of [idalmacen] column.
      *
      * @param  int $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @return Productosucursalalmacen The current object (for fluent API support)
      */
     public function setIdalmacen($v)
     {
@@ -358,7 +239,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
 
         if ($this->idalmacen !== $v) {
             $this->idalmacen = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::IDALMACEN;
+            $this->modifiedColumns[] = ProductosucursalalmacenPeer::IDALMACEN;
         }
 
         if ($this->aAlmacen !== null && $this->aAlmacen->getIdalmacen() !== $v) {
@@ -370,159 +251,29 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     } // setIdalmacen()
 
     /**
-     * Set the value of [devoluciondetalle_cantidad] column.
+     * Set the value of [idproducto] column.
      *
-     * @param  double $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @param  int $v new value
+     * @return Productosucursalalmacen The current object (for fluent API support)
      */
-    public function setDevoluciondetalleCantidad($v)
+    public function setIdproducto($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
+            $v = (int) $v;
         }
 
-        if ($this->devoluciondetalle_cantidad !== $v) {
-            $this->devoluciondetalle_cantidad = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD;
+        if ($this->idproducto !== $v) {
+            $this->idproducto = $v;
+            $this->modifiedColumns[] = ProductosucursalalmacenPeer::IDPRODUCTO;
         }
 
-
-        return $this;
-    } // setDevoluciondetalleCantidad()
-
-    /**
-     * Sets the value of the [devoluciondetalle_revisada] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param boolean|integer|string $v The new value
-     * @return Devoluciondetalle The current object (for fluent API support)
-     */
-    public function setDevoluciondetalleRevisada($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->devoluciondetalle_revisada !== $v) {
-            $this->devoluciondetalle_revisada = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA;
+        if ($this->aProducto !== null && $this->aProducto->getIdproducto() !== $v) {
+            $this->aProducto = null;
         }
 
 
         return $this;
-    } // setDevoluciondetalleRevisada()
-
-    /**
-     * Set the value of [devoluciondetalle_subtotal] column.
-     *
-     * @param  string $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
-     */
-    public function setDevoluciondetalleSubtotal($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->devoluciondetalle_subtotal !== $v) {
-            $this->devoluciondetalle_subtotal = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL;
-        }
-
-
-        return $this;
-    } // setDevoluciondetalleSubtotal()
-
-    /**
-     * Set the value of [devoluciondetalle_ieps] column.
-     *
-     * @param  double $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
-     */
-    public function setDevoluciondetalleIeps($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->devoluciondetalle_ieps !== $v) {
-            $this->devoluciondetalle_ieps = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS;
-        }
-
-
-        return $this;
-    } // setDevoluciondetalleIeps()
-
-    /**
-     * Set the value of [devoluciondetalle_descuento] column.
-     *
-     * @param  double $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
-     */
-    public function setDevoluciondetalleDescuento($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->devoluciondetalle_descuento !== $v) {
-            $this->devoluciondetalle_descuento = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO;
-        }
-
-
-        return $this;
-    } // setDevoluciondetalleDescuento()
-
-    /**
-     * Set the value of [devoluciondetalle_costounitario] column.
-     *
-     * @param  string $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
-     */
-    public function setDevoluciondetalleCostounitario($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->devoluciondetalle_costounitario !== $v) {
-            $this->devoluciondetalle_costounitario = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO;
-        }
-
-
-        return $this;
-    } // setDevoluciondetalleCostounitario()
-
-    /**
-     * Set the value of [devoluciondetalle_costounitarioneto] column.
-     *
-     * @param  string $v new value
-     * @return Devoluciondetalle The current object (for fluent API support)
-     */
-    public function setDevoluciondetalleCostounitarioneto($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->devoluciondetalle_costounitarioneto !== $v) {
-            $this->devoluciondetalle_costounitarioneto = $v;
-            $this->modifiedColumns[] = DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO;
-        }
-
-
-        return $this;
-    } // setDevoluciondetalleCostounitarioneto()
+    } // setIdproducto()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -534,10 +285,6 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->devoluciondetalle_revisada !== false) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -560,17 +307,11 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     {
         try {
 
-            $this->iddevoluciondetalle = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->iddevolucion = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idproducto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idproductosucursalalmacen = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->idalmacen = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->devoluciondetalle_cantidad = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
-            $this->devoluciondetalle_revisada = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
-            $this->devoluciondetalle_subtotal = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->devoluciondetalle_ieps = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
-            $this->devoluciondetalle_descuento = ($row[$startcol + 8] !== null) ? (double) $row[$startcol + 8] : null;
-            $this->devoluciondetalle_costounitario = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->devoluciondetalle_costounitarioneto = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->idproducto = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -580,10 +321,10 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 11; // 11 = DevoluciondetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = ProductosucursalalmacenPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Devoluciondetalle object", $e);
+            throw new PropelException("Error populating Productosucursalalmacen object", $e);
         }
     }
 
@@ -603,14 +344,17 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aDevolucion !== null && $this->iddevolucion !== $this->aDevolucion->getIddevolucion()) {
-            $this->aDevolucion = null;
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
         }
-        if ($this->aProducto !== null && $this->idproducto !== $this->aProducto->getIdproducto()) {
-            $this->aProducto = null;
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
         }
         if ($this->aAlmacen !== null && $this->idalmacen !== $this->aAlmacen->getIdalmacen()) {
             $this->aAlmacen = null;
+        }
+        if ($this->aProducto !== null && $this->idproducto !== $this->aProducto->getIdproducto()) {
+            $this->aProducto = null;
         }
     } // ensureConsistency
 
@@ -635,13 +379,13 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = DevoluciondetallePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = ProductosucursalalmacenPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -652,8 +396,9 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aAlmacen = null;
-            $this->aDevolucion = null;
+            $this->aEmpresa = null;
             $this->aProducto = null;
+            $this->aSucursal = null;
         } // if (deep)
     }
 
@@ -674,12 +419,12 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = DevoluciondetalleQuery::create()
+            $deleteQuery = ProductosucursalalmacenQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -717,7 +462,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(DevoluciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ProductosucursalalmacenPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -737,7 +482,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                DevoluciondetallePeer::addInstanceToPool($this);
+                ProductosucursalalmacenPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -779,11 +524,11 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
                 $this->setAlmacen($this->aAlmacen);
             }
 
-            if ($this->aDevolucion !== null) {
-                if ($this->aDevolucion->isModified() || $this->aDevolucion->isNew()) {
-                    $affectedRows += $this->aDevolucion->save($con);
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
                 }
-                $this->setDevolucion($this->aDevolucion);
+                $this->setEmpresa($this->aEmpresa);
             }
 
             if ($this->aProducto !== null) {
@@ -791,6 +536,13 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
                     $affectedRows += $this->aProducto->save($con);
                 }
                 $this->setProducto($this->aProducto);
+            }
+
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
+                }
+                $this->setSucursal($this->aSucursal);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -824,48 +576,30 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = DevoluciondetallePeer::IDDEVOLUCIONDETALLE;
-        if (null !== $this->iddevoluciondetalle) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . DevoluciondetallePeer::IDDEVOLUCIONDETALLE . ')');
+        $this->modifiedColumns[] = ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN;
+        if (null !== $this->idproductosucursalalmacen) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(DevoluciondetallePeer::IDDEVOLUCIONDETALLE)) {
-            $modifiedColumns[':p' . $index++]  = '`iddevoluciondetalle`';
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN)) {
+            $modifiedColumns[':p' . $index++]  = '`idproductosucursalalmacen`';
         }
-        if ($this->isColumnModified(DevoluciondetallePeer::IDDEVOLUCION)) {
-            $modifiedColumns[':p' . $index++]  = '`iddevolucion`';
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
         }
-        if ($this->isColumnModified(DevoluciondetallePeer::IDPRODUCTO)) {
-            $modifiedColumns[':p' . $index++]  = '`idproducto`';
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
-        if ($this->isColumnModified(DevoluciondetallePeer::IDALMACEN)) {
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDALMACEN)) {
             $modifiedColumns[':p' . $index++]  = '`idalmacen`';
         }
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD)) {
-            $modifiedColumns[':p' . $index++]  = '`devoluciondetalle_cantidad`';
-        }
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA)) {
-            $modifiedColumns[':p' . $index++]  = '`devoluciondetalle_revisada`';
-        }
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL)) {
-            $modifiedColumns[':p' . $index++]  = '`devoluciondetalle_subtotal`';
-        }
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS)) {
-            $modifiedColumns[':p' . $index++]  = '`devoluciondetalle_ieps`';
-        }
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO)) {
-            $modifiedColumns[':p' . $index++]  = '`devoluciondetalle_descuento`';
-        }
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO)) {
-            $modifiedColumns[':p' . $index++]  = '`devoluciondetalle_costounitario`';
-        }
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO)) {
-            $modifiedColumns[':p' . $index++]  = '`devoluciondetalle_costounitarioneto`';
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDPRODUCTO)) {
+            $modifiedColumns[':p' . $index++]  = '`idproducto`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `devoluciondetalle` (%s) VALUES (%s)',
+            'INSERT INTO `productosucursalalmacen` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -874,38 +608,20 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`iddevoluciondetalle`':
-                        $stmt->bindValue($identifier, $this->iddevoluciondetalle, PDO::PARAM_INT);
+                    case '`idproductosucursalalmacen`':
+                        $stmt->bindValue($identifier, $this->idproductosucursalalmacen, PDO::PARAM_INT);
                         break;
-                    case '`iddevolucion`':
-                        $stmt->bindValue($identifier, $this->iddevolucion, PDO::PARAM_INT);
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
-                    case '`idproducto`':
-                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_INT);
+                    case '`idsucursal`':
+                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
                         break;
                     case '`idalmacen`':
                         $stmt->bindValue($identifier, $this->idalmacen, PDO::PARAM_INT);
                         break;
-                    case '`devoluciondetalle_cantidad`':
-                        $stmt->bindValue($identifier, $this->devoluciondetalle_cantidad, PDO::PARAM_STR);
-                        break;
-                    case '`devoluciondetalle_revisada`':
-                        $stmt->bindValue($identifier, (int) $this->devoluciondetalle_revisada, PDO::PARAM_INT);
-                        break;
-                    case '`devoluciondetalle_subtotal`':
-                        $stmt->bindValue($identifier, $this->devoluciondetalle_subtotal, PDO::PARAM_STR);
-                        break;
-                    case '`devoluciondetalle_ieps`':
-                        $stmt->bindValue($identifier, $this->devoluciondetalle_ieps, PDO::PARAM_STR);
-                        break;
-                    case '`devoluciondetalle_descuento`':
-                        $stmt->bindValue($identifier, $this->devoluciondetalle_descuento, PDO::PARAM_STR);
-                        break;
-                    case '`devoluciondetalle_costounitario`':
-                        $stmt->bindValue($identifier, $this->devoluciondetalle_costounitario, PDO::PARAM_STR);
-                        break;
-                    case '`devoluciondetalle_costounitarioneto`':
-                        $stmt->bindValue($identifier, $this->devoluciondetalle_costounitarioneto, PDO::PARAM_STR);
+                    case '`idproducto`':
+                        $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -920,7 +636,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIddevoluciondetalle($pk);
+        $this->setIdproductosucursalalmacen($pk);
 
         $this->setNew(false);
     }
@@ -1012,9 +728,9 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->aDevolucion !== null) {
-                if (!$this->aDevolucion->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aDevolucion->getValidationFailures());
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
                 }
             }
 
@@ -1024,8 +740,14 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
+                }
+            }
 
-            if (($retval = DevoluciondetallePeer::doValidate($this, $columns)) !== true) {
+
+            if (($retval = ProductosucursalalmacenPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -1049,7 +771,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = DevoluciondetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ProductosucursalalmacenPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1066,37 +788,19 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIddevoluciondetalle();
+                return $this->getIdproductosucursalalmacen();
                 break;
             case 1:
-                return $this->getIddevolucion();
+                return $this->getIdempresa();
                 break;
             case 2:
-                return $this->getIdproducto();
+                return $this->getIdsucursal();
                 break;
             case 3:
                 return $this->getIdalmacen();
                 break;
             case 4:
-                return $this->getDevoluciondetalleCantidad();
-                break;
-            case 5:
-                return $this->getDevoluciondetalleRevisada();
-                break;
-            case 6:
-                return $this->getDevoluciondetalleSubtotal();
-                break;
-            case 7:
-                return $this->getDevoluciondetalleIeps();
-                break;
-            case 8:
-                return $this->getDevoluciondetalleDescuento();
-                break;
-            case 9:
-                return $this->getDevoluciondetalleCostounitario();
-                break;
-            case 10:
-                return $this->getDevoluciondetalleCostounitarioneto();
+                return $this->getIdproducto();
                 break;
             default:
                 return null;
@@ -1121,23 +825,17 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Devoluciondetalle'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Productosucursalalmacen'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Devoluciondetalle'][$this->getPrimaryKey()] = true;
-        $keys = DevoluciondetallePeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Productosucursalalmacen'][$this->getPrimaryKey()] = true;
+        $keys = ProductosucursalalmacenPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIddevoluciondetalle(),
-            $keys[1] => $this->getIddevolucion(),
-            $keys[2] => $this->getIdproducto(),
+            $keys[0] => $this->getIdproductosucursalalmacen(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getIdsucursal(),
             $keys[3] => $this->getIdalmacen(),
-            $keys[4] => $this->getDevoluciondetalleCantidad(),
-            $keys[5] => $this->getDevoluciondetalleRevisada(),
-            $keys[6] => $this->getDevoluciondetalleSubtotal(),
-            $keys[7] => $this->getDevoluciondetalleIeps(),
-            $keys[8] => $this->getDevoluciondetalleDescuento(),
-            $keys[9] => $this->getDevoluciondetalleCostounitario(),
-            $keys[10] => $this->getDevoluciondetalleCostounitarioneto(),
+            $keys[4] => $this->getIdproducto(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1148,11 +846,14 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
             if (null !== $this->aAlmacen) {
                 $result['Almacen'] = $this->aAlmacen->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aDevolucion) {
-                $result['Devolucion'] = $this->aDevolucion->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aProducto) {
                 $result['Producto'] = $this->aProducto->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1172,7 +873,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = DevoluciondetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ProductosucursalalmacenPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -1189,37 +890,19 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIddevoluciondetalle($value);
+                $this->setIdproductosucursalalmacen($value);
                 break;
             case 1:
-                $this->setIddevolucion($value);
+                $this->setIdempresa($value);
                 break;
             case 2:
-                $this->setIdproducto($value);
+                $this->setIdsucursal($value);
                 break;
             case 3:
                 $this->setIdalmacen($value);
                 break;
             case 4:
-                $this->setDevoluciondetalleCantidad($value);
-                break;
-            case 5:
-                $this->setDevoluciondetalleRevisada($value);
-                break;
-            case 6:
-                $this->setDevoluciondetalleSubtotal($value);
-                break;
-            case 7:
-                $this->setDevoluciondetalleIeps($value);
-                break;
-            case 8:
-                $this->setDevoluciondetalleDescuento($value);
-                break;
-            case 9:
-                $this->setDevoluciondetalleCostounitario($value);
-                break;
-            case 10:
-                $this->setDevoluciondetalleCostounitarioneto($value);
+                $this->setIdproducto($value);
                 break;
         } // switch()
     }
@@ -1243,19 +926,13 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = DevoluciondetallePeer::getFieldNames($keyType);
+        $keys = ProductosucursalalmacenPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIddevoluciondetalle($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIddevolucion($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdproducto($arr[$keys[2]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdproductosucursalalmacen($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setIdalmacen($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setDevoluciondetalleCantidad($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setDevoluciondetalleRevisada($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setDevoluciondetalleSubtotal($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setDevoluciondetalleIeps($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setDevoluciondetalleDescuento($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setDevoluciondetalleCostounitario($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setDevoluciondetalleCostounitarioneto($arr[$keys[10]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdproducto($arr[$keys[4]]);
     }
 
     /**
@@ -1265,19 +942,13 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
+        $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(DevoluciondetallePeer::IDDEVOLUCIONDETALLE)) $criteria->add(DevoluciondetallePeer::IDDEVOLUCIONDETALLE, $this->iddevoluciondetalle);
-        if ($this->isColumnModified(DevoluciondetallePeer::IDDEVOLUCION)) $criteria->add(DevoluciondetallePeer::IDDEVOLUCION, $this->iddevolucion);
-        if ($this->isColumnModified(DevoluciondetallePeer::IDPRODUCTO)) $criteria->add(DevoluciondetallePeer::IDPRODUCTO, $this->idproducto);
-        if ($this->isColumnModified(DevoluciondetallePeer::IDALMACEN)) $criteria->add(DevoluciondetallePeer::IDALMACEN, $this->idalmacen);
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD)) $criteria->add(DevoluciondetallePeer::DEVOLUCIONDETALLE_CANTIDAD, $this->devoluciondetalle_cantidad);
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA)) $criteria->add(DevoluciondetallePeer::DEVOLUCIONDETALLE_REVISADA, $this->devoluciondetalle_revisada);
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL)) $criteria->add(DevoluciondetallePeer::DEVOLUCIONDETALLE_SUBTOTAL, $this->devoluciondetalle_subtotal);
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS)) $criteria->add(DevoluciondetallePeer::DEVOLUCIONDETALLE_IEPS, $this->devoluciondetalle_ieps);
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO)) $criteria->add(DevoluciondetallePeer::DEVOLUCIONDETALLE_DESCUENTO, $this->devoluciondetalle_descuento);
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO)) $criteria->add(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIO, $this->devoluciondetalle_costounitario);
-        if ($this->isColumnModified(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO)) $criteria->add(DevoluciondetallePeer::DEVOLUCIONDETALLE_COSTOUNITARIONETO, $this->devoluciondetalle_costounitarioneto);
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN)) $criteria->add(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN, $this->idproductosucursalalmacen);
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDEMPRESA)) $criteria->add(ProductosucursalalmacenPeer::IDEMPRESA, $this->idempresa);
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDSUCURSAL)) $criteria->add(ProductosucursalalmacenPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDALMACEN)) $criteria->add(ProductosucursalalmacenPeer::IDALMACEN, $this->idalmacen);
+        if ($this->isColumnModified(ProductosucursalalmacenPeer::IDPRODUCTO)) $criteria->add(ProductosucursalalmacenPeer::IDPRODUCTO, $this->idproducto);
 
         return $criteria;
     }
@@ -1292,8 +963,8 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(DevoluciondetallePeer::DATABASE_NAME);
-        $criteria->add(DevoluciondetallePeer::IDDEVOLUCIONDETALLE, $this->iddevoluciondetalle);
+        $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
+        $criteria->add(ProductosucursalalmacenPeer::IDPRODUCTOSUCURSALALMACEN, $this->idproductosucursalalmacen);
 
         return $criteria;
     }
@@ -1304,18 +975,18 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIddevoluciondetalle();
+        return $this->getIdproductosucursalalmacen();
     }
 
     /**
-     * Generic method to set the primary key (iddevoluciondetalle column).
+     * Generic method to set the primary key (idproductosucursalalmacen column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIddevoluciondetalle($key);
+        $this->setIdproductosucursalalmacen($key);
     }
 
     /**
@@ -1325,7 +996,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIddevoluciondetalle();
+        return null === $this->getIdproductosucursalalmacen();
     }
 
     /**
@@ -1334,23 +1005,17 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Devoluciondetalle (or compatible) type.
+     * @param object $copyObj An object of Productosucursalalmacen (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setIddevolucion($this->getIddevolucion());
-        $copyObj->setIdproducto($this->getIdproducto());
+        $copyObj->setIdempresa($this->getIdempresa());
+        $copyObj->setIdsucursal($this->getIdsucursal());
         $copyObj->setIdalmacen($this->getIdalmacen());
-        $copyObj->setDevoluciondetalleCantidad($this->getDevoluciondetalleCantidad());
-        $copyObj->setDevoluciondetalleRevisada($this->getDevoluciondetalleRevisada());
-        $copyObj->setDevoluciondetalleSubtotal($this->getDevoluciondetalleSubtotal());
-        $copyObj->setDevoluciondetalleIeps($this->getDevoluciondetalleIeps());
-        $copyObj->setDevoluciondetalleDescuento($this->getDevoluciondetalleDescuento());
-        $copyObj->setDevoluciondetalleCostounitario($this->getDevoluciondetalleCostounitario());
-        $copyObj->setDevoluciondetalleCostounitarioneto($this->getDevoluciondetalleCostounitarioneto());
+        $copyObj->setIdproducto($this->getIdproducto());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1365,7 +1030,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIddevoluciondetalle(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdproductosucursalalmacen(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1378,7 +1043,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Devoluciondetalle Clone of current object.
+     * @return Productosucursalalmacen Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1398,12 +1063,12 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return DevoluciondetallePeer
+     * @return ProductosucursalalmacenPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new DevoluciondetallePeer();
+            self::$peer = new ProductosucursalalmacenPeer();
         }
 
         return self::$peer;
@@ -1413,7 +1078,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      * Declares an association between this object and a Almacen object.
      *
      * @param                  Almacen $v
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @return Productosucursalalmacen The current object (for fluent API support)
      * @throws PropelException
      */
     public function setAlmacen(Almacen $v = null)
@@ -1429,7 +1094,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the Almacen object, it will not be re-added.
         if ($v !== null) {
-            $v->addDevoluciondetalle($this);
+            $v->addProductosucursalalmacen($this);
         }
 
 
@@ -1454,7 +1119,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aAlmacen->addDevoluciondetalles($this);
+                $this->aAlmacen->addProductosucursalalmacens($this);
              */
         }
 
@@ -1462,26 +1127,26 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     }
 
     /**
-     * Declares an association between this object and a Devolucion object.
+     * Declares an association between this object and a Empresa object.
      *
-     * @param                  Devolucion $v
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @param                  Empresa $v
+     * @return Productosucursalalmacen The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setDevolucion(Devolucion $v = null)
+    public function setEmpresa(Empresa $v = null)
     {
         if ($v === null) {
-            $this->setIddevolucion(NULL);
+            $this->setIdempresa(NULL);
         } else {
-            $this->setIddevolucion($v->getIddevolucion());
+            $this->setIdempresa($v->getIdempresa());
         }
 
-        $this->aDevolucion = $v;
+        $this->aEmpresa = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Devolucion object, it will not be re-added.
+        // If this object has already been added to the Empresa object, it will not be re-added.
         if ($v !== null) {
-            $v->addDevoluciondetalle($this);
+            $v->addProductosucursalalmacen($this);
         }
 
 
@@ -1490,34 +1155,34 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated Devolucion object
+     * Get the associated Empresa object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return Devolucion The associated Devolucion object.
+     * @return Empresa The associated Empresa object.
      * @throws PropelException
      */
-    public function getDevolucion(PropelPDO $con = null, $doQuery = true)
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aDevolucion === null && ($this->iddevolucion !== null) && $doQuery) {
-            $this->aDevolucion = DevolucionQuery::create()->findPk($this->iddevolucion, $con);
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aDevolucion->addDevoluciondetalles($this);
+                $this->aEmpresa->addProductosucursalalmacens($this);
              */
         }
 
-        return $this->aDevolucion;
+        return $this->aEmpresa;
     }
 
     /**
      * Declares an association between this object and a Producto object.
      *
      * @param                  Producto $v
-     * @return Devoluciondetalle The current object (for fluent API support)
+     * @return Productosucursalalmacen The current object (for fluent API support)
      * @throws PropelException
      */
     public function setProducto(Producto $v = null)
@@ -1533,7 +1198,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the Producto object, it will not be re-added.
         if ($v !== null) {
-            $v->addDevoluciondetalle($this);
+            $v->addProductosucursalalmacen($this);
         }
 
 
@@ -1558,7 +1223,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aProducto->addDevoluciondetalles($this);
+                $this->aProducto->addProductosucursalalmacens($this);
              */
         }
 
@@ -1566,26 +1231,71 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Sucursal object.
+     *
+     * @param                  Sucursal $v
+     * @return Productosucursalalmacen The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSucursal(Sucursal $v = null)
+    {
+        if ($v === null) {
+            $this->setIdsucursal(NULL);
+        } else {
+            $this->setIdsucursal($v->getIdsucursal());
+        }
+
+        $this->aSucursal = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
+        if ($v !== null) {
+            $v->addProductosucursalalmacen($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Sucursal object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Sucursal The associated Sucursal object.
+     * @throws PropelException
+     */
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSucursal->addProductosucursalalmacens($this);
+             */
+        }
+
+        return $this->aSucursal;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
-        $this->iddevoluciondetalle = null;
-        $this->iddevolucion = null;
-        $this->idproducto = null;
+        $this->idproductosucursalalmacen = null;
+        $this->idempresa = null;
+        $this->idsucursal = null;
         $this->idalmacen = null;
-        $this->devoluciondetalle_cantidad = null;
-        $this->devoluciondetalle_revisada = null;
-        $this->devoluciondetalle_subtotal = null;
-        $this->devoluciondetalle_ieps = null;
-        $this->devoluciondetalle_descuento = null;
-        $this->devoluciondetalle_costounitario = null;
-        $this->devoluciondetalle_costounitarioneto = null;
+        $this->idproducto = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1607,19 +1317,23 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
             if ($this->aAlmacen instanceof Persistent) {
               $this->aAlmacen->clearAllReferences($deep);
             }
-            if ($this->aDevolucion instanceof Persistent) {
-              $this->aDevolucion->clearAllReferences($deep);
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
             }
             if ($this->aProducto instanceof Persistent) {
               $this->aProducto->clearAllReferences($deep);
+            }
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
         $this->aAlmacen = null;
-        $this->aDevolucion = null;
+        $this->aEmpresa = null;
         $this->aProducto = null;
+        $this->aSucursal = null;
     }
 
     /**
@@ -1629,7 +1343,7 @@ abstract class BaseDevoluciondetalle extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(DevoluciondetallePeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(ProductosucursalalmacenPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**

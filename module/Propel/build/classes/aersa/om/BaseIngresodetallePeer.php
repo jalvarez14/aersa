@@ -24,13 +24,13 @@ abstract class BaseIngresodetallePeer
     const TM_CLASS = 'IngresodetalleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the idingresodetalle field */
     const IDINGRESODETALLE = 'ingresodetalle.idingresodetalle';
@@ -52,9 +52,6 @@ abstract class BaseIngresodetallePeer
 
     /** the column name for the ingresodetalle_total field */
     const INGRESODETALLE_TOTAL = 'ingresodetalle.ingresodetalle_total';
-
-    /** the column name for the ingresodetalle_credfact field */
-    const INGRESODETALLE_CREDFACT = 'ingresodetalle.ingresodetalle_credfact';
 
     /** the column name for the ingresodetalle_revisada field */
     const INGRESODETALLE_REVISADA = 'ingresodetalle.ingresodetalle_revisada';
@@ -78,12 +75,12 @@ abstract class BaseIngresodetallePeer
      * e.g. IngresodetallePeer::$fieldNames[IngresodetallePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idingresodetalle', 'Idingreso', 'Idrubroingreso', 'Idconceptoingreso', 'IngresodetalleSub', 'IngresodetalleIva', 'IngresodetalleTotal', 'IngresodetalleCredfact', 'IngresodetalleRevisada', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idingresodetalle', 'idingreso', 'idrubroingreso', 'idconceptoingreso', 'ingresodetalleSub', 'ingresodetalleIva', 'ingresodetalleTotal', 'ingresodetalleCredfact', 'ingresodetalleRevisada', ),
-        BasePeer::TYPE_COLNAME => array (IngresodetallePeer::IDINGRESODETALLE, IngresodetallePeer::IDINGRESO, IngresodetallePeer::IDRUBROINGRESO, IngresodetallePeer::IDCONCEPTOINGRESO, IngresodetallePeer::INGRESODETALLE_SUB, IngresodetallePeer::INGRESODETALLE_IVA, IngresodetallePeer::INGRESODETALLE_TOTAL, IngresodetallePeer::INGRESODETALLE_CREDFACT, IngresodetallePeer::INGRESODETALLE_REVISADA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESODETALLE', 'IDINGRESO', 'IDRUBROINGRESO', 'IDCONCEPTOINGRESO', 'INGRESODETALLE_SUB', 'INGRESODETALLE_IVA', 'INGRESODETALLE_TOTAL', 'INGRESODETALLE_CREDFACT', 'INGRESODETALLE_REVISADA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idingresodetalle', 'idingreso', 'idrubroingreso', 'idconceptoingreso', 'ingresodetalle_sub', 'ingresodetalle_IVA', 'ingresodetalle_total', 'ingresodetalle_credfact', 'ingresodetalle_revisada', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Idingresodetalle', 'Idingreso', 'Idrubroingreso', 'Idconceptoingreso', 'IngresodetalleSub', 'IngresodetalleIva', 'IngresodetalleTotal', 'IngresodetalleRevisada', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idingresodetalle', 'idingreso', 'idrubroingreso', 'idconceptoingreso', 'ingresodetalleSub', 'ingresodetalleIva', 'ingresodetalleTotal', 'ingresodetalleRevisada', ),
+        BasePeer::TYPE_COLNAME => array (IngresodetallePeer::IDINGRESODETALLE, IngresodetallePeer::IDINGRESO, IngresodetallePeer::IDRUBROINGRESO, IngresodetallePeer::IDCONCEPTOINGRESO, IngresodetallePeer::INGRESODETALLE_SUB, IngresodetallePeer::INGRESODETALLE_IVA, IngresodetallePeer::INGRESODETALLE_TOTAL, IngresodetallePeer::INGRESODETALLE_REVISADA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESODETALLE', 'IDINGRESO', 'IDRUBROINGRESO', 'IDCONCEPTOINGRESO', 'INGRESODETALLE_SUB', 'INGRESODETALLE_IVA', 'INGRESODETALLE_TOTAL', 'INGRESODETALLE_REVISADA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idingresodetalle', 'idingreso', 'idrubroingreso', 'idconceptoingreso', 'ingresodetalle_sub', 'ingresodetalle_IVA', 'ingresodetalle_total', 'ingresodetalle_revisada', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -93,12 +90,12 @@ abstract class BaseIngresodetallePeer
      * e.g. IngresodetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idingresodetalle' => 0, 'Idingreso' => 1, 'Idrubroingreso' => 2, 'Idconceptoingreso' => 3, 'IngresodetalleSub' => 4, 'IngresodetalleIva' => 5, 'IngresodetalleTotal' => 6, 'IngresodetalleCredfact' => 7, 'IngresodetalleRevisada' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idingresodetalle' => 0, 'idingreso' => 1, 'idrubroingreso' => 2, 'idconceptoingreso' => 3, 'ingresodetalleSub' => 4, 'ingresodetalleIva' => 5, 'ingresodetalleTotal' => 6, 'ingresodetalleCredfact' => 7, 'ingresodetalleRevisada' => 8, ),
-        BasePeer::TYPE_COLNAME => array (IngresodetallePeer::IDINGRESODETALLE => 0, IngresodetallePeer::IDINGRESO => 1, IngresodetallePeer::IDRUBROINGRESO => 2, IngresodetallePeer::IDCONCEPTOINGRESO => 3, IngresodetallePeer::INGRESODETALLE_SUB => 4, IngresodetallePeer::INGRESODETALLE_IVA => 5, IngresodetallePeer::INGRESODETALLE_TOTAL => 6, IngresodetallePeer::INGRESODETALLE_CREDFACT => 7, IngresodetallePeer::INGRESODETALLE_REVISADA => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESODETALLE' => 0, 'IDINGRESO' => 1, 'IDRUBROINGRESO' => 2, 'IDCONCEPTOINGRESO' => 3, 'INGRESODETALLE_SUB' => 4, 'INGRESODETALLE_IVA' => 5, 'INGRESODETALLE_TOTAL' => 6, 'INGRESODETALLE_CREDFACT' => 7, 'INGRESODETALLE_REVISADA' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('idingresodetalle' => 0, 'idingreso' => 1, 'idrubroingreso' => 2, 'idconceptoingreso' => 3, 'ingresodetalle_sub' => 4, 'ingresodetalle_IVA' => 5, 'ingresodetalle_total' => 6, 'ingresodetalle_credfact' => 7, 'ingresodetalle_revisada' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Idingresodetalle' => 0, 'Idingreso' => 1, 'Idrubroingreso' => 2, 'Idconceptoingreso' => 3, 'IngresodetalleSub' => 4, 'IngresodetalleIva' => 5, 'IngresodetalleTotal' => 6, 'IngresodetalleRevisada' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idingresodetalle' => 0, 'idingreso' => 1, 'idrubroingreso' => 2, 'idconceptoingreso' => 3, 'ingresodetalleSub' => 4, 'ingresodetalleIva' => 5, 'ingresodetalleTotal' => 6, 'ingresodetalleRevisada' => 7, ),
+        BasePeer::TYPE_COLNAME => array (IngresodetallePeer::IDINGRESODETALLE => 0, IngresodetallePeer::IDINGRESO => 1, IngresodetallePeer::IDRUBROINGRESO => 2, IngresodetallePeer::IDCONCEPTOINGRESO => 3, IngresodetallePeer::INGRESODETALLE_SUB => 4, IngresodetallePeer::INGRESODETALLE_IVA => 5, IngresodetallePeer::INGRESODETALLE_TOTAL => 6, IngresodetallePeer::INGRESODETALLE_REVISADA => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESODETALLE' => 0, 'IDINGRESO' => 1, 'IDRUBROINGRESO' => 2, 'IDCONCEPTOINGRESO' => 3, 'INGRESODETALLE_SUB' => 4, 'INGRESODETALLE_IVA' => 5, 'INGRESODETALLE_TOTAL' => 6, 'INGRESODETALLE_REVISADA' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('idingresodetalle' => 0, 'idingreso' => 1, 'idrubroingreso' => 2, 'idconceptoingreso' => 3, 'ingresodetalle_sub' => 4, 'ingresodetalle_IVA' => 5, 'ingresodetalle_total' => 6, 'ingresodetalle_revisada' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -179,7 +176,6 @@ abstract class BaseIngresodetallePeer
             $criteria->addSelectColumn(IngresodetallePeer::INGRESODETALLE_SUB);
             $criteria->addSelectColumn(IngresodetallePeer::INGRESODETALLE_IVA);
             $criteria->addSelectColumn(IngresodetallePeer::INGRESODETALLE_TOTAL);
-            $criteria->addSelectColumn(IngresodetallePeer::INGRESODETALLE_CREDFACT);
             $criteria->addSelectColumn(IngresodetallePeer::INGRESODETALLE_REVISADA);
         } else {
             $criteria->addSelectColumn($alias . '.idingresodetalle');
@@ -189,7 +185,6 @@ abstract class BaseIngresodetallePeer
             $criteria->addSelectColumn($alias . '.ingresodetalle_sub');
             $criteria->addSelectColumn($alias . '.ingresodetalle_IVA');
             $criteria->addSelectColumn($alias . '.ingresodetalle_total');
-            $criteria->addSelectColumn($alias . '.ingresodetalle_credfact');
             $criteria->addSelectColumn($alias . '.ingresodetalle_revisada');
         }
     }

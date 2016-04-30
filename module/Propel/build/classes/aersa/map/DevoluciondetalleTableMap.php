@@ -47,6 +47,8 @@ class DevoluciondetalleTableMap extends TableMap
         $this->addColumn('devoluciondetalle_subtotal', 'DevoluciondetalleSubtotal', 'DECIMAL', false, 15, null);
         $this->addColumn('devoluciondetalle_ieps', 'DevoluciondetalleIeps', 'FLOAT', false, null, null);
         $this->addColumn('devoluciondetalle_descuento', 'DevoluciondetalleDescuento', 'FLOAT', false, null, null);
+        $this->addColumn('devoluciondetalle_costounitario', 'DevoluciondetalleCostounitario', 'DECIMAL', true, 15, null);
+        $this->addColumn('devoluciondetalle_costounitarioneto', 'DevoluciondetalleCostounitarioneto', 'DECIMAL', false, 15, null);
         // validators
     } // initialize()
 
