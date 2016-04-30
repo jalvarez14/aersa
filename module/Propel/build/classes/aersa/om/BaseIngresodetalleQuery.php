@@ -13,7 +13,6 @@
  * @method IngresodetalleQuery orderByIngresodetalleSub($order = Criteria::ASC) Order by the ingresodetalle_sub column
  * @method IngresodetalleQuery orderByIngresodetalleIva($order = Criteria::ASC) Order by the ingresodetalle_IVA column
  * @method IngresodetalleQuery orderByIngresodetalleTotal($order = Criteria::ASC) Order by the ingresodetalle_total column
- * @method IngresodetalleQuery orderByIngresodetalleCredfact($order = Criteria::ASC) Order by the ingresodetalle_credfact column
  * @method IngresodetalleQuery orderByIngresodetalleRevisada($order = Criteria::ASC) Order by the ingresodetalle_revisada column
  *
  * @method IngresodetalleQuery groupByIdingresodetalle() Group by the idingresodetalle column
@@ -23,7 +22,6 @@
  * @method IngresodetalleQuery groupByIngresodetalleSub() Group by the ingresodetalle_sub column
  * @method IngresodetalleQuery groupByIngresodetalleIva() Group by the ingresodetalle_IVA column
  * @method IngresodetalleQuery groupByIngresodetalleTotal() Group by the ingresodetalle_total column
- * @method IngresodetalleQuery groupByIngresodetalleCredfact() Group by the ingresodetalle_credfact column
  * @method IngresodetalleQuery groupByIngresodetalleRevisada() Group by the ingresodetalle_revisada column
  *
  * @method IngresodetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -51,7 +49,6 @@
  * @method Ingresodetalle findOneByIngresodetalleSub(string $ingresodetalle_sub) Return the first Ingresodetalle filtered by the ingresodetalle_sub column
  * @method Ingresodetalle findOneByIngresodetalleIva(string $ingresodetalle_IVA) Return the first Ingresodetalle filtered by the ingresodetalle_IVA column
  * @method Ingresodetalle findOneByIngresodetalleTotal(string $ingresodetalle_total) Return the first Ingresodetalle filtered by the ingresodetalle_total column
- * @method Ingresodetalle findOneByIngresodetalleCredfact(string $ingresodetalle_credfact) Return the first Ingresodetalle filtered by the ingresodetalle_credfact column
  * @method Ingresodetalle findOneByIngresodetalleRevisada(boolean $ingresodetalle_revisada) Return the first Ingresodetalle filtered by the ingresodetalle_revisada column
  *
  * @method array findByIdingresodetalle(int $idingresodetalle) Return Ingresodetalle objects filtered by the idingresodetalle column
@@ -61,7 +58,6 @@
  * @method array findByIngresodetalleSub(string $ingresodetalle_sub) Return Ingresodetalle objects filtered by the ingresodetalle_sub column
  * @method array findByIngresodetalleIva(string $ingresodetalle_IVA) Return Ingresodetalle objects filtered by the ingresodetalle_IVA column
  * @method array findByIngresodetalleTotal(string $ingresodetalle_total) Return Ingresodetalle objects filtered by the ingresodetalle_total column
- * @method array findByIngresodetalleCredfact(string $ingresodetalle_credfact) Return Ingresodetalle objects filtered by the ingresodetalle_credfact column
  * @method array findByIngresodetalleRevisada(boolean $ingresodetalle_revisada) Return Ingresodetalle objects filtered by the ingresodetalle_revisada column
  *
  * @package    propel.generator.aersa.om
@@ -170,7 +166,7 @@ abstract class BaseIngresodetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idingresodetalle`, `idingreso`, `idrubroingreso`, `idconceptoingreso`, `ingresodetalle_sub`, `ingresodetalle_IVA`, `ingresodetalle_total`, `ingresodetalle_credfact`, `ingresodetalle_revisada` FROM `ingresodetalle` WHERE `idingresodetalle` = :p0';
+        $sql = 'SELECT `idingresodetalle`, `idingreso`, `idrubroingreso`, `idconceptoingreso`, `ingresodetalle_sub`, `ingresodetalle_IVA`, `ingresodetalle_total`, `ingresodetalle_revisada` FROM `ingresodetalle` WHERE `idingresodetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -557,48 +553,6 @@ abstract class BaseIngresodetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(IngresodetallePeer::INGRESODETALLE_TOTAL, $ingresodetalleTotal, $comparison);
-    }
-
-    /**
-     * Filter the query on the ingresodetalle_credfact column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByIngresodetalleCredfact(1234); // WHERE ingresodetalle_credfact = 1234
-     * $query->filterByIngresodetalleCredfact(array(12, 34)); // WHERE ingresodetalle_credfact IN (12, 34)
-     * $query->filterByIngresodetalleCredfact(array('min' => 12)); // WHERE ingresodetalle_credfact >= 12
-     * $query->filterByIngresodetalleCredfact(array('max' => 12)); // WHERE ingresodetalle_credfact <= 12
-     * </code>
-     *
-     * @param     mixed $ingresodetalleCredfact The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return IngresodetalleQuery The current query, for fluid interface
-     */
-    public function filterByIngresodetalleCredfact($ingresodetalleCredfact = null, $comparison = null)
-    {
-        if (is_array($ingresodetalleCredfact)) {
-            $useMinMax = false;
-            if (isset($ingresodetalleCredfact['min'])) {
-                $this->addUsingAlias(IngresodetallePeer::INGRESODETALLE_CREDFACT, $ingresodetalleCredfact['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($ingresodetalleCredfact['max'])) {
-                $this->addUsingAlias(IngresodetallePeer::INGRESODETALLE_CREDFACT, $ingresodetalleCredfact['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(IngresodetallePeer::INGRESODETALLE_CREDFACT, $ingresodetalleCredfact, $comparison);
     }
 
     /**

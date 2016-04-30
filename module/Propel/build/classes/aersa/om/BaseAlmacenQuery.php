@@ -62,6 +62,10 @@
  * @method AlmacenQuery rightJoinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacenorigen relation
  * @method AlmacenQuery innerJoinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the OrdentablajeriaRelatedByIdalmacenorigen relation
  *
+ * @method AlmacenQuery leftJoinProductosucursalalmacen($relationAlias = null) Adds a LEFT JOIN clause to the query using the Productosucursalalmacen relation
+ * @method AlmacenQuery rightJoinProductosucursalalmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Productosucursalalmacen relation
+ * @method AlmacenQuery innerJoinProductosucursalalmacen($relationAlias = null) Adds a INNER JOIN clause to the query using the Productosucursalalmacen relation
+ *
  * @method AlmacenQuery leftJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
  * @method AlmacenQuery rightJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
  * @method AlmacenQuery innerJoinRequisicionRelatedByIdalmacendestino($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdalmacendestino relation
@@ -1194,6 +1198,80 @@ abstract class BaseAlmacenQuery extends ModelCriteria
         return $this
             ->joinOrdentablajeriaRelatedByIdalmacenorigen($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'OrdentablajeriaRelatedByIdalmacenorigen', 'OrdentablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Productosucursalalmacen object
+     *
+     * @param   Productosucursalalmacen|PropelObjectCollection $productosucursalalmacen  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 AlmacenQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProductosucursalalmacen($productosucursalalmacen, $comparison = null)
+    {
+        if ($productosucursalalmacen instanceof Productosucursalalmacen) {
+            return $this
+                ->addUsingAlias(AlmacenPeer::IDALMACEN, $productosucursalalmacen->getIdalmacen(), $comparison);
+        } elseif ($productosucursalalmacen instanceof PropelObjectCollection) {
+            return $this
+                ->useProductosucursalalmacenQuery()
+                ->filterByPrimaryKeys($productosucursalalmacen->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProductosucursalalmacen() only accepts arguments of type Productosucursalalmacen or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Productosucursalalmacen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return AlmacenQuery The current query, for fluid interface
+     */
+    public function joinProductosucursalalmacen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Productosucursalalmacen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Productosucursalalmacen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Productosucursalalmacen relation Productosucursalalmacen object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductosucursalalmacenQuery A secondary query class using the current class as primary query
+     */
+    public function useProductosucursalalmacenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProductosucursalalmacen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Productosucursalalmacen', 'ProductosucursalalmacenQuery');
     }
 
     /**

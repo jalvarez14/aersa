@@ -1,18 +1,18 @@
 <link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
 <link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 <div id="my_container">
-    <h3 class="page-title">Tablajeria</h3>
+    <h3 class="page-title">Requisicion</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="/catalogo/tablajeria">Tablajeria</a>
+                <a href="/procesos/requisicion">Requisicion</a>
             </li>
         </ul>
     </div>
     <?php foreach ($messages->getSuccessMessages() as $message):?>
         <div class="alert alert-success alert-dismissable">
             <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-            <strong>Éxito!</strong>
+            <strong>Exito!</strong>
             <?php echo $message?>
         </div>
     <?php endforeach;?>
@@ -20,26 +20,25 @@
         <div class="portlet-body form">
             <div class="form-body">
                 <div class="btn-set pull-right">
-                    <a href="/catalogo/tablajeria/nuevo"><button class="btn default" type="button" style="margin-bottom: 15px;">Nueva tablajerÃ­a</button></a>
+                    <a href="/procesos/requisicion/nuevo"><button class="btn default" type="button" style="margin-bottom: 15px;">Nueva requisicion</button></a>
                 </div>
-                <h2>Plantillas tablajeria</h2><br>
+                <h2>Requisiciones</h2><br>
                 
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable"  style="border-bottom-width: 0px;">
                     <thead>
                         <tr>
-                            <th class="text-center"> Nombre </th>
-                            <th class="text-center"> Producto </th>
-                            <th class="text-center"> Descripción </th>
+                            <th class="text-center"> Folio </th>
+                            <th class="text-center"> Fecha </th>
+                            <th class="text-center"> Revisada </th>
                             <th class="text-center"> Opciones </th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
-                        
                         <?php foreach ($collection as $entity) : ?>
-                            <tr id="<?php echo $entity->getIdplantillatablajeria() ?>">
-                                <td><?php echo $entity->getPlantillatablajeriaNombre() ?></td>
-                                <td><?php echo $entity->getProducto()->getProductoNombre() ?></td>
-                                <td><?php echo $entity->getPlantillatablajeriaDescripcion() ?></td>
+                            <tr id="<?php echo $entity->getIdrequisicion() ?>">
+                                <td><?php echo $entity->getRequisicionFolio() ?></td>
+                                <td><?php echo $entity->getRequisicionFecha() ?></td>
+                                <td><?php if($entity->getRequisicionRevisada()) { echo "Revisada"; } else { echo "No revisada"; } ?></td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones

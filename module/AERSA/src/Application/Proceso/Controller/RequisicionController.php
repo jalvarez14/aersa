@@ -1,12 +1,12 @@
 <?php
 
-namespace Application\Catalogo\Controller;
+namespace Application\Proceso\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class PlantillatablajeriaController extends AbstractActionController {
+class RequisicionController extends AbstractActionController {
     public function indexAction()
     {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
@@ -18,16 +18,10 @@ class PlantillatablajeriaController extends AbstractActionController {
 //            $collection = \CategoriaQuery::create()->find();
 //        }
         $idempresa=$session['idempresa'];
-
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA ---
-        
-        //$idempresa=1;
-        $collection = \PlantillatablajeriaQuery::create()->filterByIdempresa($idempresa)->find();
-
-        
+        $collection = \RequisicionQuery::create()->filterByIdempresa($idempresa)->find();
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/catalogo/tablajeria/index');
+        $view_model->setTemplate('/application/proceso/requisicion/index');
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
@@ -37,47 +31,10 @@ class PlantillatablajeriaController extends AbstractActionController {
     
     public function nuevoAction()
     {
-        $idempresa = 1;
-        //$idempresa=$session['idempresa'];
+        $idempresa=$session['idempresa'];
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
-            $plantillatablajeria = new \Plantillatablajeria();
-            unset($post_data['idproducto_autocomplete']);
-            if (isset($post_data['productos'])) {
-                $productos = $post_data['productos'];
-                unset($post_data['productos']);
-                foreach ($post_data as $key => $data) {
-                    if ($key != 'idempresa')
-                        $plantillatablajeria->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
-                    else
-                        $plantillatablajeria->setByName($key, $idempresa, \BasePeer::TYPE_FIELDNAME);
-                }
-                $plantillatablajeria->save();
-                $idplantillatablajeria = $plantillatablajeria->getIdplantillatablajeria();
-                foreach ($productos as $producto) {
-                    $plantillatablajeriadetalle = new \Plantillatablajeriadetalle();
-                    $producto['idplantillatablajeria'] = $idplantillatablajeria;
-                    foreach ($producto as $key => $data) {
-                        $plantillatablajeriadetalle->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
-                    }
-                    $plantillatablajeriadetalle->save();
-                }
-                return $this->redirect()->toUrl('/catalogo/tablajeria');
-            }
-        }
-
-
-
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA
-
-
-        $producto_array = array();
-        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
-        foreach ($productos as $producto){
-            
-            $id = $producto->getIdproducto();
-            $producto_array[$id] = $producto->getProductoNombre();
         }
         //INTANCIAMOS NUESTRA VISTA
         $form = new \Application\Catalogo\Form\PlantillatablajeriaForm($producto_array);
@@ -86,7 +43,7 @@ class PlantillatablajeriaController extends AbstractActionController {
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
             ));
-        $view_model->setTemplate('/application/catalogo/tablajeria/nuevo');
+        $view_model->setTemplate('/application/proceso/requisicion/nuevo');
         return $view_model;
     }
     
@@ -96,7 +53,7 @@ class PlantillatablajeriaController extends AbstractActionController {
         $id = $this->params()->fromRoute('id');
         $exist = \PlantillatablajeriaQuery::create()->filterByIdplantillatablajeria($id)->exists(); 
         if($exist){
-            $plantillatablajeria = \PlantillatablajeriaQuery::create()->findPk($id);
+            
             if($request->isPost()){
                 $post_data =  $request->getPost();
                 foreach ($post_data as $key => $data){
@@ -121,7 +78,7 @@ class PlantillatablajeriaController extends AbstractActionController {
                 'form'      => $form,
                 'messages'  => $this->flashMessenger(),
                 ));
-            $view_model->setTemplate('/application/catalogo/tablajeria/editar');
+            $view_model->setTemplate('/application/proceso/requisicion/editar');
             return $view_model;
         }else{
             return $this->redirect()->toUrl('/catalogo/tablajeria');

@@ -166,7 +166,7 @@
   <table name="conceptoingreso" phpName="Conceptoingreso" idMethod="native">
     <column name="idconceptoingreso" phpName="Idconceptoingreso" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="conceptoingreso_nombre" phpName="ConceptoingresoNombre" type="VARCHAR" size="255" required="true"/>
-    <column name="conceptoingreso_descripcion" phpName="ConceptoingresoDescripcion" type="LONGVARCHAR" required="true"/>
+    <column name="conceptoingreso_descripcion" phpName="ConceptoingresoDescripcion" type="LONGVARCHAR" required="false"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -193,7 +193,7 @@
     <column name="devolucion_revisada" phpName="DevolucionRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="devolucion_factura" phpName="DevolucionFactura" type="LONGVARCHAR" required="false"/>
     <column name="devolucion_fechacreacion" phpName="DevolucionFechacreacion" type="TIMESTAMP" required="false"/>
-    <column name="devolucion_fechaentrega" phpName="DevolucionFechaentrega" type="VARCHAR" size="45" required="false"/>
+    <column name="devolucion_fechaentrega" phpName="DevolucionFechaentrega" type="TIMESTAMP" required="false"/>
     <column name="devolucion_ieps" phpName="DevolucionIeps" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_iva" phpName="DevolucionIva" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_total" phpName="DevolucionTotal" type="DECIMAL" size="10" scale="5" required="false"/>
@@ -248,6 +248,8 @@
     <column name="devoluciondetalle_subtotal" phpName="DevoluciondetalleSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="devoluciondetalle_ieps" phpName="DevoluciondetalleIeps" type="FLOAT" required="false"/>
     <column name="devoluciondetalle_descuento" phpName="DevoluciondetalleDescuento" type="FLOAT" required="false"/>
+    <column name="devoluciondetalle_costounitario" phpName="DevoluciondetalleCostounitario" type="DECIMAL" size="15" scale="5" required="true"/>
+    <column name="devoluciondetalle_costounitarioneto" phpName="DevoluciondetalleCostounitarioneto" type="DECIMAL" size="15" scale="5" required="false"/>
     <foreign-key foreignTable="almacen" name="idalmacen_devoluciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -310,9 +312,9 @@
     <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="ingreso_folio" phpName="IngresoFolio" type="VARCHAR" size="10" required="true"/>
     <column name="ingreso_revisada" phpName="IngresoRevisada" type="BOOLEAN" size="1" required="true"/>
-    <column name="ingreso_factoralimento" phpName="IngresoFactoralimento" type="DECIMAL" size="15" scale="5" required="true"/>
-    <column name="ingreso_factorbebida" phpName="IngresoFactorbebida" type="DECIMAL" size="15" scale="5" required="true"/>
-    <column name="ingreso_factormiscelanea" phpName="IngresoFactormiscelanea" type="DECIMAL" size="15" scale="5" required="true"/>
+    <column name="ingreso_totalalimento" phpName="IngresoTotalalimento" type="DECIMAL" size="15" scale="5" required="true"/>
+    <column name="ingreso_totalbebida" phpName="IngresoTotalbebida" type="DECIMAL" size="15" scale="5" required="true"/>
+    <column name="ingreso_totalmiscelanea" phpName="IngresoTotalmiscelanea" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="ingreso_fecha" phpName="IngresoFecha" type="TIMESTAMP" required="true"/>
     <column name="ingreso_fechacreacion" phpName="IngresoFechacreacion" type="TIMESTAMP" required="true"/>
     <foreign-key foreignTable="usuario" name="idauditor_ingreso" onDelete="CASCADE" onUpdate="CASCADE">
@@ -351,7 +353,6 @@
     <column name="ingresodetalle_sub" phpName="IngresodetalleSub" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="ingresodetalle_IVA" phpName="IngresodetalleIva" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="ingresodetalle_total" phpName="IngresodetalleTotal" type="DECIMAL" size="15" scale="5" required="false"/>
-    <column name="ingresodetalle_credfact" phpName="IngresodetalleCredfact" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="ingresodetalle_revisada" phpName="IngresodetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <foreign-key foreignTable="conceptoingreso" name="idconceptoingreso_ingresodetalle" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idconceptoingreso" foreign="idconceptoingreso"/>
@@ -777,6 +778,40 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="productosucursalalmacen" phpName="Productosucursalalmacen" idMethod="native">
+    <column name="idproductosucursalalmacen" phpName="Idproductosucursalalmacen" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
+    <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
+    </index>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
+    </index>
+    <index name="idalmacen">
+      <index-column name="idalmacen"/>
+    </index>
+    <index name="idproducto">
+      <index-column name="idproducto"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="proveedor" phpName="Proveedor" idMethod="native">
     <column name="idproveedor" phpName="Idproveedor" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
@@ -971,6 +1006,29 @@
   <table name="tasaiva" phpName="Tasaiva" idMethod="native">
     <column name="idtasaiva" phpName="Idtasaiva" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="tasaiva_valor" phpName="TasaivaValor" type="FLOAT" required="true"/>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="trabajadorespromedio" phpName="Trabajadorespromedio" idMethod="native">
+    <column name="idtrabajadorespromedio" phpName="Idtrabajadorespromedio" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <column name="trabajadorespromedio_anio" phpName="TrabajadorespromedioAnio" type="INTEGER" required="true"/>
+    <column name="trabajadorespromedio_mes" phpName="TrabajadorespromedioMes" type="INTEGER" required="true"/>
+    <column name="trabajadorespromedio_cantidad" phpName="TrabajadorespromedioCantidad" type="FLOAT" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_trabajadorespromedio" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_trabajadorespromedio" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
+    </index>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
+    </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>

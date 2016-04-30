@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'ingresodetalle' table.
+ * Base class that represents a row from the 'trabajadorespromedio' table.
  *
  *
  *
  * @package    propel.generator.aersa.om
  */
-abstract class BaseIngresodetalle extends BaseObject implements Persistent
+abstract class BaseTrabajadorespromedio extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'IngresodetallePeer';
+    const PEER = 'TrabajadorespromedioPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        IngresodetallePeer
+     * @var        TrabajadorespromedioPeer
      */
     protected static $peer;
 
@@ -30,68 +30,50 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the idingresodetalle field.
+     * The value for the idtrabajadorespromedio field.
      * @var        int
      */
-    protected $idingresodetalle;
+    protected $idtrabajadorespromedio;
 
     /**
-     * The value for the idingreso field.
+     * The value for the idempresa field.
      * @var        int
      */
-    protected $idingreso;
+    protected $idempresa;
 
     /**
-     * The value for the idrubroingreso field.
+     * The value for the idsucursal field.
      * @var        int
      */
-    protected $idrubroingreso;
+    protected $idsucursal;
 
     /**
-     * The value for the idconceptoingreso field.
+     * The value for the trabajadorespromedio_anio field.
      * @var        int
      */
-    protected $idconceptoingreso;
+    protected $trabajadorespromedio_anio;
 
     /**
-     * The value for the ingresodetalle_sub field.
-     * @var        string
+     * The value for the trabajadorespromedio_mes field.
+     * @var        int
      */
-    protected $ingresodetalle_sub;
+    protected $trabajadorespromedio_mes;
 
     /**
-     * The value for the ingresodetalle_iva field.
-     * @var        string
+     * The value for the trabajadorespromedio_cantidad field.
+     * @var        double
      */
-    protected $ingresodetalle_iva;
+    protected $trabajadorespromedio_cantidad;
 
     /**
-     * The value for the ingresodetalle_total field.
-     * @var        string
+     * @var        Empresa
      */
-    protected $ingresodetalle_total;
+    protected $aEmpresa;
 
     /**
-     * The value for the ingresodetalle_revisada field.
-     * Note: this column has a database default value of: false
-     * @var        boolean
+     * @var        Sucursal
      */
-    protected $ingresodetalle_revisada;
-
-    /**
-     * @var        Conceptoingreso
-     */
-    protected $aConceptoingreso;
-
-    /**
-     * @var        Ingreso
-     */
-    protected $aIngreso;
-
-    /**
-     * @var        Rubroingreso
-     */
-    protected $aRubroingreso;
+    protected $aSucursal;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -114,301 +96,204 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see        __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->ingresodetalle_revisada = false;
-    }
-
-    /**
-     * Initializes internal state of BaseIngresodetalle object.
-     * @see        applyDefaults()
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->applyDefaultValues();
-    }
-
-    /**
-     * Get the [idingresodetalle] column value.
+     * Get the [idtrabajadorespromedio] column value.
      *
      * @return int
      */
-    public function getIdingresodetalle()
+    public function getIdtrabajadorespromedio()
     {
 
-        return $this->idingresodetalle;
+        return $this->idtrabajadorespromedio;
     }
 
     /**
-     * Get the [idingreso] column value.
+     * Get the [idempresa] column value.
      *
      * @return int
      */
-    public function getIdingreso()
+    public function getIdempresa()
     {
 
-        return $this->idingreso;
+        return $this->idempresa;
     }
 
     /**
-     * Get the [idrubroingreso] column value.
+     * Get the [idsucursal] column value.
      *
      * @return int
      */
-    public function getIdrubroingreso()
+    public function getIdsucursal()
     {
 
-        return $this->idrubroingreso;
+        return $this->idsucursal;
     }
 
     /**
-     * Get the [idconceptoingreso] column value.
+     * Get the [trabajadorespromedio_anio] column value.
      *
      * @return int
      */
-    public function getIdconceptoingreso()
+    public function getTrabajadorespromedioAnio()
     {
 
-        return $this->idconceptoingreso;
+        return $this->trabajadorespromedio_anio;
     }
 
     /**
-     * Get the [ingresodetalle_sub] column value.
+     * Get the [trabajadorespromedio_mes] column value.
      *
-     * @return string
+     * @return int
      */
-    public function getIngresodetalleSub()
+    public function getTrabajadorespromedioMes()
     {
 
-        return $this->ingresodetalle_sub;
+        return $this->trabajadorespromedio_mes;
     }
 
     /**
-     * Get the [ingresodetalle_iva] column value.
+     * Get the [trabajadorespromedio_cantidad] column value.
      *
-     * @return string
+     * @return double
      */
-    public function getIngresodetalleIva()
+    public function getTrabajadorespromedioCantidad()
     {
 
-        return $this->ingresodetalle_iva;
+        return $this->trabajadorespromedio_cantidad;
     }
 
     /**
-     * Get the [ingresodetalle_total] column value.
-     *
-     * @return string
-     */
-    public function getIngresodetalleTotal()
-    {
-
-        return $this->ingresodetalle_total;
-    }
-
-    /**
-     * Get the [ingresodetalle_revisada] column value.
-     *
-     * @return boolean
-     */
-    public function getIngresodetalleRevisada()
-    {
-
-        return $this->ingresodetalle_revisada;
-    }
-
-    /**
-     * Set the value of [idingresodetalle] column.
+     * Set the value of [idtrabajadorespromedio] column.
      *
      * @param  int $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @return Trabajadorespromedio The current object (for fluent API support)
      */
-    public function setIdingresodetalle($v)
+    public function setIdtrabajadorespromedio($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idingresodetalle !== $v) {
-            $this->idingresodetalle = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::IDINGRESODETALLE;
+        if ($this->idtrabajadorespromedio !== $v) {
+            $this->idtrabajadorespromedio = $v;
+            $this->modifiedColumns[] = TrabajadorespromedioPeer::IDTRABAJADORESPROMEDIO;
         }
 
 
         return $this;
-    } // setIdingresodetalle()
+    } // setIdtrabajadorespromedio()
 
     /**
-     * Set the value of [idingreso] column.
+     * Set the value of [idempresa] column.
      *
      * @param  int $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @return Trabajadorespromedio The current object (for fluent API support)
      */
-    public function setIdingreso($v)
+    public function setIdempresa($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idingreso !== $v) {
-            $this->idingreso = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::IDINGRESO;
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = TrabajadorespromedioPeer::IDEMPRESA;
         }
 
-        if ($this->aIngreso !== null && $this->aIngreso->getIdingreso() !== $v) {
-            $this->aIngreso = null;
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
         }
 
 
         return $this;
-    } // setIdingreso()
+    } // setIdempresa()
 
     /**
-     * Set the value of [idrubroingreso] column.
+     * Set the value of [idsucursal] column.
      *
      * @param  int $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @return Trabajadorespromedio The current object (for fluent API support)
      */
-    public function setIdrubroingreso($v)
+    public function setIdsucursal($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idrubroingreso !== $v) {
-            $this->idrubroingreso = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::IDRUBROINGRESO;
+        if ($this->idsucursal !== $v) {
+            $this->idsucursal = $v;
+            $this->modifiedColumns[] = TrabajadorespromedioPeer::IDSUCURSAL;
         }
 
-        if ($this->aRubroingreso !== null && $this->aRubroingreso->getIdrubroingreso() !== $v) {
-            $this->aRubroingreso = null;
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
         }
 
 
         return $this;
-    } // setIdrubroingreso()
+    } // setIdsucursal()
 
     /**
-     * Set the value of [idconceptoingreso] column.
+     * Set the value of [trabajadorespromedio_anio] column.
      *
      * @param  int $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @return Trabajadorespromedio The current object (for fluent API support)
      */
-    public function setIdconceptoingreso($v)
+    public function setTrabajadorespromedioAnio($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idconceptoingreso !== $v) {
-            $this->idconceptoingreso = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::IDCONCEPTOINGRESO;
-        }
-
-        if ($this->aConceptoingreso !== null && $this->aConceptoingreso->getIdconceptoingreso() !== $v) {
-            $this->aConceptoingreso = null;
+        if ($this->trabajadorespromedio_anio !== $v) {
+            $this->trabajadorespromedio_anio = $v;
+            $this->modifiedColumns[] = TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_ANIO;
         }
 
 
         return $this;
-    } // setIdconceptoingreso()
+    } // setTrabajadorespromedioAnio()
 
     /**
-     * Set the value of [ingresodetalle_sub] column.
+     * Set the value of [trabajadorespromedio_mes] column.
      *
-     * @param  string $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @param  int $v new value
+     * @return Trabajadorespromedio The current object (for fluent API support)
      */
-    public function setIngresodetalleSub($v)
+    public function setTrabajadorespromedioMes($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
-        if ($this->ingresodetalle_sub !== $v) {
-            $this->ingresodetalle_sub = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::INGRESODETALLE_SUB;
+        if ($this->trabajadorespromedio_mes !== $v) {
+            $this->trabajadorespromedio_mes = $v;
+            $this->modifiedColumns[] = TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_MES;
         }
 
 
         return $this;
-    } // setIngresodetalleSub()
+    } // setTrabajadorespromedioMes()
 
     /**
-     * Set the value of [ingresodetalle_iva] column.
+     * Set the value of [trabajadorespromedio_cantidad] column.
      *
-     * @param  string $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @param  double $v new value
+     * @return Trabajadorespromedio The current object (for fluent API support)
      */
-    public function setIngresodetalleIva($v)
+    public function setTrabajadorespromedioCantidad($v)
     {
         if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
+            $v = (double) $v;
         }
 
-        if ($this->ingresodetalle_iva !== $v) {
-            $this->ingresodetalle_iva = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::INGRESODETALLE_IVA;
-        }
-
-
-        return $this;
-    } // setIngresodetalleIva()
-
-    /**
-     * Set the value of [ingresodetalle_total] column.
-     *
-     * @param  string $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
-     */
-    public function setIngresodetalleTotal($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->ingresodetalle_total !== $v) {
-            $this->ingresodetalle_total = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::INGRESODETALLE_TOTAL;
+        if ($this->trabajadorespromedio_cantidad !== $v) {
+            $this->trabajadorespromedio_cantidad = $v;
+            $this->modifiedColumns[] = TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_CANTIDAD;
         }
 
 
         return $this;
-    } // setIngresodetalleTotal()
-
-    /**
-     * Sets the value of the [ingresodetalle_revisada] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param boolean|integer|string $v The new value
-     * @return Ingresodetalle The current object (for fluent API support)
-     */
-    public function setIngresodetalleRevisada($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->ingresodetalle_revisada !== $v) {
-            $this->ingresodetalle_revisada = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::INGRESODETALLE_REVISADA;
-        }
-
-
-        return $this;
-    } // setIngresodetalleRevisada()
+    } // setTrabajadorespromedioCantidad()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -420,10 +305,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->ingresodetalle_revisada !== false) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -446,14 +327,12 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     {
         try {
 
-            $this->idingresodetalle = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idingreso = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idrubroingreso = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->idconceptoingreso = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->ingresodetalle_sub = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-            $this->ingresodetalle_iva = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-            $this->ingresodetalle_total = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->ingresodetalle_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->idtrabajadorespromedio = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->trabajadorespromedio_anio = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->trabajadorespromedio_mes = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->trabajadorespromedio_cantidad = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -463,10 +342,10 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = IngresodetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = TrabajadorespromedioPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Ingresodetalle object", $e);
+            throw new PropelException("Error populating Trabajadorespromedio object", $e);
         }
     }
 
@@ -486,14 +365,11 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aIngreso !== null && $this->idingreso !== $this->aIngreso->getIdingreso()) {
-            $this->aIngreso = null;
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
         }
-        if ($this->aRubroingreso !== null && $this->idrubroingreso !== $this->aRubroingreso->getIdrubroingreso()) {
-            $this->aRubroingreso = null;
-        }
-        if ($this->aConceptoingreso !== null && $this->idconceptoingreso !== $this->aConceptoingreso->getIdconceptoingreso()) {
-            $this->aConceptoingreso = null;
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
         }
     } // ensureConsistency
 
@@ -518,13 +394,13 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(IngresodetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(TrabajadorespromedioPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = IngresodetallePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = TrabajadorespromedioPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -534,9 +410,8 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aConceptoingreso = null;
-            $this->aIngreso = null;
-            $this->aRubroingreso = null;
+            $this->aEmpresa = null;
+            $this->aSucursal = null;
         } // if (deep)
     }
 
@@ -557,12 +432,12 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(IngresodetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TrabajadorespromedioPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = IngresodetalleQuery::create()
+            $deleteQuery = TrabajadorespromedioQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -600,7 +475,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(IngresodetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(TrabajadorespromedioPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -620,7 +495,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                IngresodetallePeer::addInstanceToPool($this);
+                TrabajadorespromedioPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -655,25 +530,18 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aConceptoingreso !== null) {
-                if ($this->aConceptoingreso->isModified() || $this->aConceptoingreso->isNew()) {
-                    $affectedRows += $this->aConceptoingreso->save($con);
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
                 }
-                $this->setConceptoingreso($this->aConceptoingreso);
+                $this->setEmpresa($this->aEmpresa);
             }
 
-            if ($this->aIngreso !== null) {
-                if ($this->aIngreso->isModified() || $this->aIngreso->isNew()) {
-                    $affectedRows += $this->aIngreso->save($con);
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
                 }
-                $this->setIngreso($this->aIngreso);
-            }
-
-            if ($this->aRubroingreso !== null) {
-                if ($this->aRubroingreso->isModified() || $this->aRubroingreso->isNew()) {
-                    $affectedRows += $this->aRubroingreso->save($con);
-                }
-                $this->setRubroingreso($this->aRubroingreso);
+                $this->setSucursal($this->aSucursal);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -707,39 +575,33 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = IngresodetallePeer::IDINGRESODETALLE;
-        if (null !== $this->idingresodetalle) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . IngresodetallePeer::IDINGRESODETALLE . ')');
+        $this->modifiedColumns[] = TrabajadorespromedioPeer::IDTRABAJADORESPROMEDIO;
+        if (null !== $this->idtrabajadorespromedio) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . TrabajadorespromedioPeer::IDTRABAJADORESPROMEDIO . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(IngresodetallePeer::IDINGRESODETALLE)) {
-            $modifiedColumns[':p' . $index++]  = '`idingresodetalle`';
+        if ($this->isColumnModified(TrabajadorespromedioPeer::IDTRABAJADORESPROMEDIO)) {
+            $modifiedColumns[':p' . $index++]  = '`idtrabajadorespromedio`';
         }
-        if ($this->isColumnModified(IngresodetallePeer::IDINGRESO)) {
-            $modifiedColumns[':p' . $index++]  = '`idingreso`';
+        if ($this->isColumnModified(TrabajadorespromedioPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
         }
-        if ($this->isColumnModified(IngresodetallePeer::IDRUBROINGRESO)) {
-            $modifiedColumns[':p' . $index++]  = '`idrubroingreso`';
+        if ($this->isColumnModified(TrabajadorespromedioPeer::IDSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
-        if ($this->isColumnModified(IngresodetallePeer::IDCONCEPTOINGRESO)) {
-            $modifiedColumns[':p' . $index++]  = '`idconceptoingreso`';
+        if ($this->isColumnModified(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_ANIO)) {
+            $modifiedColumns[':p' . $index++]  = '`trabajadorespromedio_anio`';
         }
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_SUB)) {
-            $modifiedColumns[':p' . $index++]  = '`ingresodetalle_sub`';
+        if ($this->isColumnModified(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_MES)) {
+            $modifiedColumns[':p' . $index++]  = '`trabajadorespromedio_mes`';
         }
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_IVA)) {
-            $modifiedColumns[':p' . $index++]  = '`ingresodetalle_IVA`';
-        }
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_TOTAL)) {
-            $modifiedColumns[':p' . $index++]  = '`ingresodetalle_total`';
-        }
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_REVISADA)) {
-            $modifiedColumns[':p' . $index++]  = '`ingresodetalle_revisada`';
+        if ($this->isColumnModified(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_CANTIDAD)) {
+            $modifiedColumns[':p' . $index++]  = '`trabajadorespromedio_cantidad`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `ingresodetalle` (%s) VALUES (%s)',
+            'INSERT INTO `trabajadorespromedio` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -748,29 +610,23 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`idingresodetalle`':
-                        $stmt->bindValue($identifier, $this->idingresodetalle, PDO::PARAM_INT);
+                    case '`idtrabajadorespromedio`':
+                        $stmt->bindValue($identifier, $this->idtrabajadorespromedio, PDO::PARAM_INT);
                         break;
-                    case '`idingreso`':
-                        $stmt->bindValue($identifier, $this->idingreso, PDO::PARAM_INT);
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
-                    case '`idrubroingreso`':
-                        $stmt->bindValue($identifier, $this->idrubroingreso, PDO::PARAM_INT);
+                    case '`idsucursal`':
+                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
                         break;
-                    case '`idconceptoingreso`':
-                        $stmt->bindValue($identifier, $this->idconceptoingreso, PDO::PARAM_INT);
+                    case '`trabajadorespromedio_anio`':
+                        $stmt->bindValue($identifier, $this->trabajadorespromedio_anio, PDO::PARAM_INT);
                         break;
-                    case '`ingresodetalle_sub`':
-                        $stmt->bindValue($identifier, $this->ingresodetalle_sub, PDO::PARAM_STR);
+                    case '`trabajadorespromedio_mes`':
+                        $stmt->bindValue($identifier, $this->trabajadorespromedio_mes, PDO::PARAM_INT);
                         break;
-                    case '`ingresodetalle_IVA`':
-                        $stmt->bindValue($identifier, $this->ingresodetalle_iva, PDO::PARAM_STR);
-                        break;
-                    case '`ingresodetalle_total`':
-                        $stmt->bindValue($identifier, $this->ingresodetalle_total, PDO::PARAM_STR);
-                        break;
-                    case '`ingresodetalle_revisada`':
-                        $stmt->bindValue($identifier, (int) $this->ingresodetalle_revisada, PDO::PARAM_INT);
+                    case '`trabajadorespromedio_cantidad`':
+                        $stmt->bindValue($identifier, $this->trabajadorespromedio_cantidad, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -785,7 +641,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdingresodetalle($pk);
+        $this->setIdtrabajadorespromedio($pk);
 
         $this->setNew(false);
     }
@@ -871,26 +727,20 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aConceptoingreso !== null) {
-                if (!$this->aConceptoingreso->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aConceptoingreso->getValidationFailures());
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
                 }
             }
 
-            if ($this->aIngreso !== null) {
-                if (!$this->aIngreso->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aIngreso->getValidationFailures());
-                }
-            }
-
-            if ($this->aRubroingreso !== null) {
-                if (!$this->aRubroingreso->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aRubroingreso->getValidationFailures());
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
                 }
             }
 
 
-            if (($retval = IngresodetallePeer::doValidate($this, $columns)) !== true) {
+            if (($retval = TrabajadorespromedioPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -914,7 +764,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = IngresodetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = TrabajadorespromedioPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -931,28 +781,22 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdingresodetalle();
+                return $this->getIdtrabajadorespromedio();
                 break;
             case 1:
-                return $this->getIdingreso();
+                return $this->getIdempresa();
                 break;
             case 2:
-                return $this->getIdrubroingreso();
+                return $this->getIdsucursal();
                 break;
             case 3:
-                return $this->getIdconceptoingreso();
+                return $this->getTrabajadorespromedioAnio();
                 break;
             case 4:
-                return $this->getIngresodetalleSub();
+                return $this->getTrabajadorespromedioMes();
                 break;
             case 5:
-                return $this->getIngresodetalleIva();
-                break;
-            case 6:
-                return $this->getIngresodetalleTotal();
-                break;
-            case 7:
-                return $this->getIngresodetalleRevisada();
+                return $this->getTrabajadorespromedioCantidad();
                 break;
             default:
                 return null;
@@ -977,20 +821,18 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Ingresodetalle'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Trabajadorespromedio'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Ingresodetalle'][$this->getPrimaryKey()] = true;
-        $keys = IngresodetallePeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Trabajadorespromedio'][$this->getPrimaryKey()] = true;
+        $keys = TrabajadorespromedioPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdingresodetalle(),
-            $keys[1] => $this->getIdingreso(),
-            $keys[2] => $this->getIdrubroingreso(),
-            $keys[3] => $this->getIdconceptoingreso(),
-            $keys[4] => $this->getIngresodetalleSub(),
-            $keys[5] => $this->getIngresodetalleIva(),
-            $keys[6] => $this->getIngresodetalleTotal(),
-            $keys[7] => $this->getIngresodetalleRevisada(),
+            $keys[0] => $this->getIdtrabajadorespromedio(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getIdsucursal(),
+            $keys[3] => $this->getTrabajadorespromedioAnio(),
+            $keys[4] => $this->getTrabajadorespromedioMes(),
+            $keys[5] => $this->getTrabajadorespromedioCantidad(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -998,14 +840,11 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aConceptoingreso) {
-                $result['Conceptoingreso'] = $this->aConceptoingreso->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aIngreso) {
-                $result['Ingreso'] = $this->aIngreso->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aRubroingreso) {
-                $result['Rubroingreso'] = $this->aRubroingreso->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -1025,7 +864,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = IngresodetallePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = TrabajadorespromedioPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -1042,28 +881,22 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdingresodetalle($value);
+                $this->setIdtrabajadorespromedio($value);
                 break;
             case 1:
-                $this->setIdingreso($value);
+                $this->setIdempresa($value);
                 break;
             case 2:
-                $this->setIdrubroingreso($value);
+                $this->setIdsucursal($value);
                 break;
             case 3:
-                $this->setIdconceptoingreso($value);
+                $this->setTrabajadorespromedioAnio($value);
                 break;
             case 4:
-                $this->setIngresodetalleSub($value);
+                $this->setTrabajadorespromedioMes($value);
                 break;
             case 5:
-                $this->setIngresodetalleIva($value);
-                break;
-            case 6:
-                $this->setIngresodetalleTotal($value);
-                break;
-            case 7:
-                $this->setIngresodetalleRevisada($value);
+                $this->setTrabajadorespromedioCantidad($value);
                 break;
         } // switch()
     }
@@ -1087,16 +920,14 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = IngresodetallePeer::getFieldNames($keyType);
+        $keys = TrabajadorespromedioPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdingresodetalle($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdingreso($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdrubroingreso($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdconceptoingreso($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIngresodetalleSub($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setIngresodetalleIva($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setIngresodetalleTotal($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setIngresodetalleRevisada($arr[$keys[7]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdtrabajadorespromedio($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setTrabajadorespromedioAnio($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setTrabajadorespromedioMes($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setTrabajadorespromedioCantidad($arr[$keys[5]]);
     }
 
     /**
@@ -1106,16 +937,14 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(IngresodetallePeer::DATABASE_NAME);
+        $criteria = new Criteria(TrabajadorespromedioPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(IngresodetallePeer::IDINGRESODETALLE)) $criteria->add(IngresodetallePeer::IDINGRESODETALLE, $this->idingresodetalle);
-        if ($this->isColumnModified(IngresodetallePeer::IDINGRESO)) $criteria->add(IngresodetallePeer::IDINGRESO, $this->idingreso);
-        if ($this->isColumnModified(IngresodetallePeer::IDRUBROINGRESO)) $criteria->add(IngresodetallePeer::IDRUBROINGRESO, $this->idrubroingreso);
-        if ($this->isColumnModified(IngresodetallePeer::IDCONCEPTOINGRESO)) $criteria->add(IngresodetallePeer::IDCONCEPTOINGRESO, $this->idconceptoingreso);
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_SUB)) $criteria->add(IngresodetallePeer::INGRESODETALLE_SUB, $this->ingresodetalle_sub);
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_IVA)) $criteria->add(IngresodetallePeer::INGRESODETALLE_IVA, $this->ingresodetalle_iva);
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_TOTAL)) $criteria->add(IngresodetallePeer::INGRESODETALLE_TOTAL, $this->ingresodetalle_total);
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_REVISADA)) $criteria->add(IngresodetallePeer::INGRESODETALLE_REVISADA, $this->ingresodetalle_revisada);
+        if ($this->isColumnModified(TrabajadorespromedioPeer::IDTRABAJADORESPROMEDIO)) $criteria->add(TrabajadorespromedioPeer::IDTRABAJADORESPROMEDIO, $this->idtrabajadorespromedio);
+        if ($this->isColumnModified(TrabajadorespromedioPeer::IDEMPRESA)) $criteria->add(TrabajadorespromedioPeer::IDEMPRESA, $this->idempresa);
+        if ($this->isColumnModified(TrabajadorespromedioPeer::IDSUCURSAL)) $criteria->add(TrabajadorespromedioPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_ANIO)) $criteria->add(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_ANIO, $this->trabajadorespromedio_anio);
+        if ($this->isColumnModified(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_MES)) $criteria->add(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_MES, $this->trabajadorespromedio_mes);
+        if ($this->isColumnModified(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_CANTIDAD)) $criteria->add(TrabajadorespromedioPeer::TRABAJADORESPROMEDIO_CANTIDAD, $this->trabajadorespromedio_cantidad);
 
         return $criteria;
     }
@@ -1130,8 +959,8 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(IngresodetallePeer::DATABASE_NAME);
-        $criteria->add(IngresodetallePeer::IDINGRESODETALLE, $this->idingresodetalle);
+        $criteria = new Criteria(TrabajadorespromedioPeer::DATABASE_NAME);
+        $criteria->add(TrabajadorespromedioPeer::IDTRABAJADORESPROMEDIO, $this->idtrabajadorespromedio);
 
         return $criteria;
     }
@@ -1142,18 +971,18 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdingresodetalle();
+        return $this->getIdtrabajadorespromedio();
     }
 
     /**
-     * Generic method to set the primary key (idingresodetalle column).
+     * Generic method to set the primary key (idtrabajadorespromedio column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdingresodetalle($key);
+        $this->setIdtrabajadorespromedio($key);
     }
 
     /**
@@ -1163,7 +992,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdingresodetalle();
+        return null === $this->getIdtrabajadorespromedio();
     }
 
     /**
@@ -1172,20 +1001,18 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Ingresodetalle (or compatible) type.
+     * @param object $copyObj An object of Trabajadorespromedio (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setIdingreso($this->getIdingreso());
-        $copyObj->setIdrubroingreso($this->getIdrubroingreso());
-        $copyObj->setIdconceptoingreso($this->getIdconceptoingreso());
-        $copyObj->setIngresodetalleSub($this->getIngresodetalleSub());
-        $copyObj->setIngresodetalleIva($this->getIngresodetalleIva());
-        $copyObj->setIngresodetalleTotal($this->getIngresodetalleTotal());
-        $copyObj->setIngresodetalleRevisada($this->getIngresodetalleRevisada());
+        $copyObj->setIdempresa($this->getIdempresa());
+        $copyObj->setIdsucursal($this->getIdsucursal());
+        $copyObj->setTrabajadorespromedioAnio($this->getTrabajadorespromedioAnio());
+        $copyObj->setTrabajadorespromedioMes($this->getTrabajadorespromedioMes());
+        $copyObj->setTrabajadorespromedioCantidad($this->getTrabajadorespromedioCantidad());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1200,7 +1027,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdingresodetalle(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdtrabajadorespromedio(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1213,7 +1040,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Ingresodetalle Clone of current object.
+     * @return Trabajadorespromedio Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1233,38 +1060,38 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return IngresodetallePeer
+     * @return TrabajadorespromedioPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new IngresodetallePeer();
+            self::$peer = new TrabajadorespromedioPeer();
         }
 
         return self::$peer;
     }
 
     /**
-     * Declares an association between this object and a Conceptoingreso object.
+     * Declares an association between this object and a Empresa object.
      *
-     * @param                  Conceptoingreso $v
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @param                  Empresa $v
+     * @return Trabajadorespromedio The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setConceptoingreso(Conceptoingreso $v = null)
+    public function setEmpresa(Empresa $v = null)
     {
         if ($v === null) {
-            $this->setIdconceptoingreso(NULL);
+            $this->setIdempresa(NULL);
         } else {
-            $this->setIdconceptoingreso($v->getIdconceptoingreso());
+            $this->setIdempresa($v->getIdempresa());
         }
 
-        $this->aConceptoingreso = $v;
+        $this->aEmpresa = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Conceptoingreso object, it will not be re-added.
+        // If this object has already been added to the Empresa object, it will not be re-added.
         if ($v !== null) {
-            $v->addIngresodetalle($this);
+            $v->addTrabajadorespromedio($this);
         }
 
 
@@ -1273,50 +1100,50 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated Conceptoingreso object
+     * Get the associated Empresa object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return Conceptoingreso The associated Conceptoingreso object.
+     * @return Empresa The associated Empresa object.
      * @throws PropelException
      */
-    public function getConceptoingreso(PropelPDO $con = null, $doQuery = true)
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aConceptoingreso === null && ($this->idconceptoingreso !== null) && $doQuery) {
-            $this->aConceptoingreso = ConceptoingresoQuery::create()->findPk($this->idconceptoingreso, $con);
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aConceptoingreso->addIngresodetalles($this);
+                $this->aEmpresa->addTrabajadorespromedios($this);
              */
         }
 
-        return $this->aConceptoingreso;
+        return $this->aEmpresa;
     }
 
     /**
-     * Declares an association between this object and a Ingreso object.
+     * Declares an association between this object and a Sucursal object.
      *
-     * @param                  Ingreso $v
-     * @return Ingresodetalle The current object (for fluent API support)
+     * @param                  Sucursal $v
+     * @return Trabajadorespromedio The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setIngreso(Ingreso $v = null)
+    public function setSucursal(Sucursal $v = null)
     {
         if ($v === null) {
-            $this->setIdingreso(NULL);
+            $this->setIdsucursal(NULL);
         } else {
-            $this->setIdingreso($v->getIdingreso());
+            $this->setIdsucursal($v->getIdsucursal());
         }
 
-        $this->aIngreso = $v;
+        $this->aSucursal = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Ingreso object, it will not be re-added.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
         if ($v !== null) {
-            $v->addIngresodetalle($this);
+            $v->addTrabajadorespromedio($this);
         }
 
 
@@ -1325,79 +1152,27 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated Ingreso object
+     * Get the associated Sucursal object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return Ingreso The associated Ingreso object.
+     * @return Sucursal The associated Sucursal object.
      * @throws PropelException
      */
-    public function getIngreso(PropelPDO $con = null, $doQuery = true)
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aIngreso === null && ($this->idingreso !== null) && $doQuery) {
-            $this->aIngreso = IngresoQuery::create()->findPk($this->idingreso, $con);
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aIngreso->addIngresodetalles($this);
+                $this->aSucursal->addTrabajadorespromedios($this);
              */
         }
 
-        return $this->aIngreso;
-    }
-
-    /**
-     * Declares an association between this object and a Rubroingreso object.
-     *
-     * @param                  Rubroingreso $v
-     * @return Ingresodetalle The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setRubroingreso(Rubroingreso $v = null)
-    {
-        if ($v === null) {
-            $this->setIdrubroingreso(NULL);
-        } else {
-            $this->setIdrubroingreso($v->getIdrubroingreso());
-        }
-
-        $this->aRubroingreso = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Rubroingreso object, it will not be re-added.
-        if ($v !== null) {
-            $v->addIngresodetalle($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Rubroingreso object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Rubroingreso The associated Rubroingreso object.
-     * @throws PropelException
-     */
-    public function getRubroingreso(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aRubroingreso === null && ($this->idrubroingreso !== null) && $doQuery) {
-            $this->aRubroingreso = RubroingresoQuery::create()->findPk($this->idrubroingreso, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aRubroingreso->addIngresodetalles($this);
-             */
-        }
-
-        return $this->aRubroingreso;
+        return $this->aSucursal;
     }
 
     /**
@@ -1405,19 +1180,16 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->idingresodetalle = null;
-        $this->idingreso = null;
-        $this->idrubroingreso = null;
-        $this->idconceptoingreso = null;
-        $this->ingresodetalle_sub = null;
-        $this->ingresodetalle_iva = null;
-        $this->ingresodetalle_total = null;
-        $this->ingresodetalle_revisada = null;
+        $this->idtrabajadorespromedio = null;
+        $this->idempresa = null;
+        $this->idsucursal = null;
+        $this->trabajadorespromedio_anio = null;
+        $this->trabajadorespromedio_mes = null;
+        $this->trabajadorespromedio_cantidad = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -1436,22 +1208,18 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aConceptoingreso instanceof Persistent) {
-              $this->aConceptoingreso->clearAllReferences($deep);
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
             }
-            if ($this->aIngreso instanceof Persistent) {
-              $this->aIngreso->clearAllReferences($deep);
-            }
-            if ($this->aRubroingreso instanceof Persistent) {
-              $this->aRubroingreso->clearAllReferences($deep);
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aConceptoingreso = null;
-        $this->aIngreso = null;
-        $this->aRubroingreso = null;
+        $this->aEmpresa = null;
+        $this->aSucursal = null;
     }
 
     /**
@@ -1461,7 +1229,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(IngresodetallePeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(TrabajadorespromedioPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**

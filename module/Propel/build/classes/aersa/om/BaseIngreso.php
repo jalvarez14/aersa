@@ -72,22 +72,22 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     protected $ingreso_revisada;
 
     /**
-     * The value for the ingreso_factoralimento field.
+     * The value for the ingreso_totalalimento field.
      * @var        string
      */
-    protected $ingreso_factoralimento;
+    protected $ingreso_totalalimento;
 
     /**
-     * The value for the ingreso_factorbebida field.
+     * The value for the ingreso_totalbebida field.
      * @var        string
      */
-    protected $ingreso_factorbebida;
+    protected $ingreso_totalbebida;
 
     /**
-     * The value for the ingreso_factormiscelanea field.
+     * The value for the ingreso_totalmiscelanea field.
      * @var        string
      */
-    protected $ingreso_factormiscelanea;
+    protected $ingreso_totalmiscelanea;
 
     /**
      * The value for the ingreso_fecha field.
@@ -231,36 +231,36 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [ingreso_factoralimento] column value.
+     * Get the [ingreso_totalalimento] column value.
      *
      * @return string
      */
-    public function getIngresoFactoralimento()
+    public function getIngresoTotalalimento()
     {
 
-        return $this->ingreso_factoralimento;
+        return $this->ingreso_totalalimento;
     }
 
     /**
-     * Get the [ingreso_factorbebida] column value.
+     * Get the [ingreso_totalbebida] column value.
      *
      * @return string
      */
-    public function getIngresoFactorbebida()
+    public function getIngresoTotalbebida()
     {
 
-        return $this->ingreso_factorbebida;
+        return $this->ingreso_totalbebida;
     }
 
     /**
-     * Get the [ingreso_factormiscelanea] column value.
+     * Get the [ingreso_totalmiscelanea] column value.
      *
      * @return string
      */
-    public function getIngresoFactormiscelanea()
+    public function getIngresoTotalmiscelanea()
     {
 
-        return $this->ingreso_factormiscelanea;
+        return $this->ingreso_totalmiscelanea;
     }
 
     /**
@@ -515,67 +515,67 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     } // setIngresoRevisada()
 
     /**
-     * Set the value of [ingreso_factoralimento] column.
+     * Set the value of [ingreso_totalalimento] column.
      *
      * @param  string $v new value
      * @return Ingreso The current object (for fluent API support)
      */
-    public function setIngresoFactoralimento($v)
+    public function setIngresoTotalalimento($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
         }
 
-        if ($this->ingreso_factoralimento !== $v) {
-            $this->ingreso_factoralimento = $v;
-            $this->modifiedColumns[] = IngresoPeer::INGRESO_FACTORALIMENTO;
+        if ($this->ingreso_totalalimento !== $v) {
+            $this->ingreso_totalalimento = $v;
+            $this->modifiedColumns[] = IngresoPeer::INGRESO_TOTALALIMENTO;
         }
 
 
         return $this;
-    } // setIngresoFactoralimento()
+    } // setIngresoTotalalimento()
 
     /**
-     * Set the value of [ingreso_factorbebida] column.
+     * Set the value of [ingreso_totalbebida] column.
      *
      * @param  string $v new value
      * @return Ingreso The current object (for fluent API support)
      */
-    public function setIngresoFactorbebida($v)
+    public function setIngresoTotalbebida($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
         }
 
-        if ($this->ingreso_factorbebida !== $v) {
-            $this->ingreso_factorbebida = $v;
-            $this->modifiedColumns[] = IngresoPeer::INGRESO_FACTORBEBIDA;
+        if ($this->ingreso_totalbebida !== $v) {
+            $this->ingreso_totalbebida = $v;
+            $this->modifiedColumns[] = IngresoPeer::INGRESO_TOTALBEBIDA;
         }
 
 
         return $this;
-    } // setIngresoFactorbebida()
+    } // setIngresoTotalbebida()
 
     /**
-     * Set the value of [ingreso_factormiscelanea] column.
+     * Set the value of [ingreso_totalmiscelanea] column.
      *
      * @param  string $v new value
      * @return Ingreso The current object (for fluent API support)
      */
-    public function setIngresoFactormiscelanea($v)
+    public function setIngresoTotalmiscelanea($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (string) $v;
         }
 
-        if ($this->ingreso_factormiscelanea !== $v) {
-            $this->ingreso_factormiscelanea = $v;
-            $this->modifiedColumns[] = IngresoPeer::INGRESO_FACTORMISCELANEA;
+        if ($this->ingreso_totalmiscelanea !== $v) {
+            $this->ingreso_totalmiscelanea = $v;
+            $this->modifiedColumns[] = IngresoPeer::INGRESO_TOTALMISCELANEA;
         }
 
 
         return $this;
-    } // setIngresoFactormiscelanea()
+    } // setIngresoTotalmiscelanea()
 
     /**
      * Sets the value of [ingreso_fecha] column to a normalized version of the date/time value specified.
@@ -662,9 +662,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $this->idauditor = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
             $this->ingreso_folio = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->ingreso_revisada = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
-            $this->ingreso_factoralimento = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->ingreso_factorbebida = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->ingreso_factormiscelanea = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->ingreso_totalalimento = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->ingreso_totalbebida = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->ingreso_totalmiscelanea = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->ingreso_fecha = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->ingreso_fechacreacion = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->resetModified();
@@ -977,14 +977,14 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         if ($this->isColumnModified(IngresoPeer::INGRESO_REVISADA)) {
             $modifiedColumns[':p' . $index++]  = '`ingreso_revisada`';
         }
-        if ($this->isColumnModified(IngresoPeer::INGRESO_FACTORALIMENTO)) {
-            $modifiedColumns[':p' . $index++]  = '`ingreso_factoralimento`';
+        if ($this->isColumnModified(IngresoPeer::INGRESO_TOTALALIMENTO)) {
+            $modifiedColumns[':p' . $index++]  = '`ingreso_totalalimento`';
         }
-        if ($this->isColumnModified(IngresoPeer::INGRESO_FACTORBEBIDA)) {
-            $modifiedColumns[':p' . $index++]  = '`ingreso_factorbebida`';
+        if ($this->isColumnModified(IngresoPeer::INGRESO_TOTALBEBIDA)) {
+            $modifiedColumns[':p' . $index++]  = '`ingreso_totalbebida`';
         }
-        if ($this->isColumnModified(IngresoPeer::INGRESO_FACTORMISCELANEA)) {
-            $modifiedColumns[':p' . $index++]  = '`ingreso_factormiscelanea`';
+        if ($this->isColumnModified(IngresoPeer::INGRESO_TOTALMISCELANEA)) {
+            $modifiedColumns[':p' . $index++]  = '`ingreso_totalmiscelanea`';
         }
         if ($this->isColumnModified(IngresoPeer::INGRESO_FECHA)) {
             $modifiedColumns[':p' . $index++]  = '`ingreso_fecha`';
@@ -1024,14 +1024,14 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                     case '`ingreso_revisada`':
                         $stmt->bindValue($identifier, (int) $this->ingreso_revisada, PDO::PARAM_INT);
                         break;
-                    case '`ingreso_factoralimento`':
-                        $stmt->bindValue($identifier, $this->ingreso_factoralimento, PDO::PARAM_STR);
+                    case '`ingreso_totalalimento`':
+                        $stmt->bindValue($identifier, $this->ingreso_totalalimento, PDO::PARAM_STR);
                         break;
-                    case '`ingreso_factorbebida`':
-                        $stmt->bindValue($identifier, $this->ingreso_factorbebida, PDO::PARAM_STR);
+                    case '`ingreso_totalbebida`':
+                        $stmt->bindValue($identifier, $this->ingreso_totalbebida, PDO::PARAM_STR);
                         break;
-                    case '`ingreso_factormiscelanea`':
-                        $stmt->bindValue($identifier, $this->ingreso_factormiscelanea, PDO::PARAM_STR);
+                    case '`ingreso_totalmiscelanea`':
+                        $stmt->bindValue($identifier, $this->ingreso_totalmiscelanea, PDO::PARAM_STR);
                         break;
                     case '`ingreso_fecha`':
                         $stmt->bindValue($identifier, $this->ingreso_fecha, PDO::PARAM_STR);
@@ -1233,13 +1233,13 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                 return $this->getIngresoRevisada();
                 break;
             case 7:
-                return $this->getIngresoFactoralimento();
+                return $this->getIngresoTotalalimento();
                 break;
             case 8:
-                return $this->getIngresoFactorbebida();
+                return $this->getIngresoTotalbebida();
                 break;
             case 9:
-                return $this->getIngresoFactormiscelanea();
+                return $this->getIngresoTotalmiscelanea();
                 break;
             case 10:
                 return $this->getIngresoFecha();
@@ -1283,9 +1283,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $keys[4] => $this->getIdauditor(),
             $keys[5] => $this->getIngresoFolio(),
             $keys[6] => $this->getIngresoRevisada(),
-            $keys[7] => $this->getIngresoFactoralimento(),
-            $keys[8] => $this->getIngresoFactorbebida(),
-            $keys[9] => $this->getIngresoFactormiscelanea(),
+            $keys[7] => $this->getIngresoTotalalimento(),
+            $keys[8] => $this->getIngresoTotalbebida(),
+            $keys[9] => $this->getIngresoTotalmiscelanea(),
             $keys[10] => $this->getIngresoFecha(),
             $keys[11] => $this->getIngresoFechacreacion(),
         );
@@ -1366,13 +1366,13 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                 $this->setIngresoRevisada($value);
                 break;
             case 7:
-                $this->setIngresoFactoralimento($value);
+                $this->setIngresoTotalalimento($value);
                 break;
             case 8:
-                $this->setIngresoFactorbebida($value);
+                $this->setIngresoTotalbebida($value);
                 break;
             case 9:
-                $this->setIngresoFactormiscelanea($value);
+                $this->setIngresoTotalmiscelanea($value);
                 break;
             case 10:
                 $this->setIngresoFecha($value);
@@ -1411,9 +1411,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setIdauditor($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setIngresoFolio($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setIngresoRevisada($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setIngresoFactoralimento($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setIngresoFactorbebida($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setIngresoFactormiscelanea($arr[$keys[9]]);
+        if (array_key_exists($keys[7], $arr)) $this->setIngresoTotalalimento($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setIngresoTotalbebida($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setIngresoTotalmiscelanea($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setIngresoFecha($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setIngresoFechacreacion($arr[$keys[11]]);
     }
@@ -1434,9 +1434,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         if ($this->isColumnModified(IngresoPeer::IDAUDITOR)) $criteria->add(IngresoPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(IngresoPeer::INGRESO_FOLIO)) $criteria->add(IngresoPeer::INGRESO_FOLIO, $this->ingreso_folio);
         if ($this->isColumnModified(IngresoPeer::INGRESO_REVISADA)) $criteria->add(IngresoPeer::INGRESO_REVISADA, $this->ingreso_revisada);
-        if ($this->isColumnModified(IngresoPeer::INGRESO_FACTORALIMENTO)) $criteria->add(IngresoPeer::INGRESO_FACTORALIMENTO, $this->ingreso_factoralimento);
-        if ($this->isColumnModified(IngresoPeer::INGRESO_FACTORBEBIDA)) $criteria->add(IngresoPeer::INGRESO_FACTORBEBIDA, $this->ingreso_factorbebida);
-        if ($this->isColumnModified(IngresoPeer::INGRESO_FACTORMISCELANEA)) $criteria->add(IngresoPeer::INGRESO_FACTORMISCELANEA, $this->ingreso_factormiscelanea);
+        if ($this->isColumnModified(IngresoPeer::INGRESO_TOTALALIMENTO)) $criteria->add(IngresoPeer::INGRESO_TOTALALIMENTO, $this->ingreso_totalalimento);
+        if ($this->isColumnModified(IngresoPeer::INGRESO_TOTALBEBIDA)) $criteria->add(IngresoPeer::INGRESO_TOTALBEBIDA, $this->ingreso_totalbebida);
+        if ($this->isColumnModified(IngresoPeer::INGRESO_TOTALMISCELANEA)) $criteria->add(IngresoPeer::INGRESO_TOTALMISCELANEA, $this->ingreso_totalmiscelanea);
         if ($this->isColumnModified(IngresoPeer::INGRESO_FECHA)) $criteria->add(IngresoPeer::INGRESO_FECHA, $this->ingreso_fecha);
         if ($this->isColumnModified(IngresoPeer::INGRESO_FECHACREACION)) $criteria->add(IngresoPeer::INGRESO_FECHACREACION, $this->ingreso_fechacreacion);
 
@@ -1508,9 +1508,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setIngresoFolio($this->getIngresoFolio());
         $copyObj->setIngresoRevisada($this->getIngresoRevisada());
-        $copyObj->setIngresoFactoralimento($this->getIngresoFactoralimento());
-        $copyObj->setIngresoFactorbebida($this->getIngresoFactorbebida());
-        $copyObj->setIngresoFactormiscelanea($this->getIngresoFactormiscelanea());
+        $copyObj->setIngresoTotalalimento($this->getIngresoTotalalimento());
+        $copyObj->setIngresoTotalbebida($this->getIngresoTotalbebida());
+        $copyObj->setIngresoTotalmiscelanea($this->getIngresoTotalmiscelanea());
         $copyObj->setIngresoFecha($this->getIngresoFecha());
         $copyObj->setIngresoFechacreacion($this->getIngresoFechacreacion());
 
@@ -2088,9 +2088,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         $this->idauditor = null;
         $this->ingreso_folio = null;
         $this->ingreso_revisada = null;
-        $this->ingreso_factoralimento = null;
-        $this->ingreso_factorbebida = null;
-        $this->ingreso_factormiscelanea = null;
+        $this->ingreso_totalalimento = null;
+        $this->ingreso_totalbebida = null;
+        $this->ingreso_totalmiscelanea = null;
         $this->ingreso_fecha = null;
         $this->ingreso_fechacreacion = null;
         $this->alreadyInSave = false;
