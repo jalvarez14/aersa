@@ -718,6 +718,47 @@ return array(
                                     ),
                                 ), 
                             ), 
+                            'requisicion' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/requisicion', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Requisicion', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevo' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                ), 
+                            ), 
                         ), 
                     ), 
                 ),
@@ -785,7 +826,7 @@ return array(
              */
             
             'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
-
+            'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
             /*
              * WEBSITE
              */
