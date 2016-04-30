@@ -193,6 +193,7 @@
     <column name="devolucion_revisada" phpName="DevolucionRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="devolucion_factura" phpName="DevolucionFactura" type="LONGVARCHAR" required="false"/>
     <column name="devolucion_fechacreacion" phpName="DevolucionFechacreacion" type="TIMESTAMP" required="false"/>
+    <column name="devolucion_fechadevolucion" phpName="DevolucionFechadevolucion" type="TIMESTAMP" required="false"/>
     <column name="devolucion_ieps" phpName="DevolucionIeps" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_iva" phpName="DevolucionIva" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_total" phpName="DevolucionTotal" type="DECIMAL" size="10" scale="5" required="false"/>
@@ -478,7 +479,7 @@
     <column name="notacredito_revisada" phpName="NotacreditoRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="notacredito_factura" phpName="NotacreditoFactura" type="LONGVARCHAR" required="false"/>
     <column name="notacredito_fechacreacion" phpName="NotacreditoFechacreacion" type="TIMESTAMP" required="true"/>
-    <column name="notacredito_fechaentrega" phpName="NotacreditoFechaentrega" type="TIMESTAMP" required="false"/>
+    <column name="notacredito_fechanotacredito" phpName="NotacreditoFechanotacredito" type="TIMESTAMP" required="false"/>
     <column name="notacredito_ieps" phpName="NotacreditoIeps" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacredito_iva" phpName="NotacreditoIva" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacredito_total" phpName="NotacreditoTotal" type="DECIMAL" size="15" scale="5" required="false"/>
@@ -867,6 +868,7 @@
     <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="idconceptosalida" phpName="Idconceptosalida" type="INTEGER" required="true"/>
     <column name="requisicion_fecha" phpName="RequisicionFecha" type="TIMESTAMP" required="true"/>
+    <column name="requisicion_fechacreacion" phpName="RequisicionFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="requisicion_revisada" phpName="RequisicionRevisada" type="BOOLEAN" size="1" required="true"/>
     <column name="requisicion_folio" phpName="RequisicionFolio" type="VARCHAR" size="10" required="true"/>
     <column name="requisicion_total" phpName="RequisicionTotal" type="DECIMAL" size="15" scale="5" required="false"/>

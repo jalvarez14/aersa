@@ -17,6 +17,7 @@
  * @method DevolucionQuery orderByDevolucionRevisada($order = Criteria::ASC) Order by the devolucion_revisada column
  * @method DevolucionQuery orderByDevolucionFactura($order = Criteria::ASC) Order by the devolucion_factura column
  * @method DevolucionQuery orderByDevolucionFechacreacion($order = Criteria::ASC) Order by the devolucion_fechacreacion column
+ * @method DevolucionQuery orderByDevolucionFechadevolucion($order = Criteria::ASC) Order by the devolucion_fechadevolucion column
  * @method DevolucionQuery orderByDevolucionIeps($order = Criteria::ASC) Order by the devolucion_ieps column
  * @method DevolucionQuery orderByDevolucionIva($order = Criteria::ASC) Order by the devolucion_iva column
  * @method DevolucionQuery orderByDevolucionTotal($order = Criteria::ASC) Order by the devolucion_total column
@@ -33,6 +34,7 @@
  * @method DevolucionQuery groupByDevolucionRevisada() Group by the devolucion_revisada column
  * @method DevolucionQuery groupByDevolucionFactura() Group by the devolucion_factura column
  * @method DevolucionQuery groupByDevolucionFechacreacion() Group by the devolucion_fechacreacion column
+ * @method DevolucionQuery groupByDevolucionFechadevolucion() Group by the devolucion_fechadevolucion column
  * @method DevolucionQuery groupByDevolucionIeps() Group by the devolucion_ieps column
  * @method DevolucionQuery groupByDevolucionIva() Group by the devolucion_iva column
  * @method DevolucionQuery groupByDevolucionTotal() Group by the devolucion_total column
@@ -87,6 +89,7 @@
  * @method Devolucion findOneByDevolucionRevisada(boolean $devolucion_revisada) Return the first Devolucion filtered by the devolucion_revisada column
  * @method Devolucion findOneByDevolucionFactura(string $devolucion_factura) Return the first Devolucion filtered by the devolucion_factura column
  * @method Devolucion findOneByDevolucionFechacreacion(string $devolucion_fechacreacion) Return the first Devolucion filtered by the devolucion_fechacreacion column
+ * @method Devolucion findOneByDevolucionFechadevolucion(string $devolucion_fechadevolucion) Return the first Devolucion filtered by the devolucion_fechadevolucion column
  * @method Devolucion findOneByDevolucionIeps(string $devolucion_ieps) Return the first Devolucion filtered by the devolucion_ieps column
  * @method Devolucion findOneByDevolucionIva(string $devolucion_iva) Return the first Devolucion filtered by the devolucion_iva column
  * @method Devolucion findOneByDevolucionTotal(string $devolucion_total) Return the first Devolucion filtered by the devolucion_total column
@@ -103,6 +106,7 @@
  * @method array findByDevolucionRevisada(boolean $devolucion_revisada) Return Devolucion objects filtered by the devolucion_revisada column
  * @method array findByDevolucionFactura(string $devolucion_factura) Return Devolucion objects filtered by the devolucion_factura column
  * @method array findByDevolucionFechacreacion(string $devolucion_fechacreacion) Return Devolucion objects filtered by the devolucion_fechacreacion column
+ * @method array findByDevolucionFechadevolucion(string $devolucion_fechadevolucion) Return Devolucion objects filtered by the devolucion_fechadevolucion column
  * @method array findByDevolucionIeps(string $devolucion_ieps) Return Devolucion objects filtered by the devolucion_ieps column
  * @method array findByDevolucionIva(string $devolucion_iva) Return Devolucion objects filtered by the devolucion_iva column
  * @method array findByDevolucionTotal(string $devolucion_total) Return Devolucion objects filtered by the devolucion_total column
@@ -214,7 +218,7 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `idproveedor`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total`, `devolucion_subtotal` FROM `devolucion` WHERE `iddevolucion` = :p0';
+        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `idproveedor`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechadevolucion`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total`, `devolucion_subtotal` FROM `devolucion` WHERE `iddevolucion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -735,6 +739,49 @@ abstract class BaseDevolucionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DevolucionPeer::DEVOLUCION_FECHACREACION, $devolucionFechacreacion, $comparison);
+    }
+
+    /**
+     * Filter the query on the devolucion_fechadevolucion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDevolucionFechadevolucion('2011-03-14'); // WHERE devolucion_fechadevolucion = '2011-03-14'
+     * $query->filterByDevolucionFechadevolucion('now'); // WHERE devolucion_fechadevolucion = '2011-03-14'
+     * $query->filterByDevolucionFechadevolucion(array('max' => 'yesterday')); // WHERE devolucion_fechadevolucion < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $devolucionFechadevolucion The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function filterByDevolucionFechadevolucion($devolucionFechadevolucion = null, $comparison = null)
+    {
+        if (is_array($devolucionFechadevolucion)) {
+            $useMinMax = false;
+            if (isset($devolucionFechadevolucion['min'])) {
+                $this->addUsingAlias(DevolucionPeer::DEVOLUCION_FECHADEVOLUCION, $devolucionFechadevolucion['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($devolucionFechadevolucion['max'])) {
+                $this->addUsingAlias(DevolucionPeer::DEVOLUCION_FECHADEVOLUCION, $devolucionFechadevolucion['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DevolucionPeer::DEVOLUCION_FECHADEVOLUCION, $devolucionFechadevolucion, $comparison);
     }
 
     /**

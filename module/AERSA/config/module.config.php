@@ -798,16 +798,49 @@ return array(
                                             ), 
                                         ), 
                                     ), 
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
+                                ), 
+                            ),
+                            'ingresos' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/ingresos', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                        'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevo' => array( 
+                                        'type' => 'Literal', 
                                         'options' => array( 
-                                            'route' => '/validatefolio', 
+                                            'route' => '/nuevo', 
                                             'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
-                                                'action' => 'validatefolio',
+                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                                'action' => 'nuevo', 
                                             ), 
                                         ), 
-                                    ),
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
                                 ), 
                             ),
                         ), 
@@ -879,6 +912,7 @@ return array(
             'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
             'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
             'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
+            'Application\Proceso\Controller\Ingresos' => 'Application\Proceso\Controller\IngresosController',
             /*
              * WEBSITE
              */

@@ -90,6 +90,12 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     protected $requisicion_fecha;
 
     /**
+     * The value for the requisicion_fechacreacion field.
+     * @var        string
+     */
+    protected $requisicion_fechacreacion;
+
+    /**
      * The value for the requisicion_revisada field.
      * @var        boolean
      */
@@ -315,6 +321,46 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $dt = new DateTime($this->requisicion_fecha);
         } catch (Exception $x) {
             throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->requisicion_fecha, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [requisicion_fechacreacion] column value.
+     *
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getRequisicionFechacreacion($format = 'Y-m-d H:i:s')
+    {
+        if ($this->requisicion_fechacreacion === null) {
+            return null;
+        }
+
+        if ($this->requisicion_fechacreacion === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->requisicion_fechacreacion);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->requisicion_fechacreacion, true), $x);
         }
 
         if ($format === null) {
@@ -608,6 +654,29 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     } // setRequisicionFecha()
 
     /**
+     * Sets the value of [requisicion_fechacreacion] column to a normalized version of the date/time value specified.
+     *
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function setRequisicionFechacreacion($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->requisicion_fechacreacion !== null || $dt !== null) {
+            $currentDateAsString = ($this->requisicion_fechacreacion !== null && $tmpDt = new DateTime($this->requisicion_fechacreacion)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->requisicion_fechacreacion = $newDateAsString;
+                $this->modifiedColumns[] = RequisicionPeer::REQUISICION_FECHACREACION;
+            }
+        } // if either are not null
+
+
+        return $this;
+    } // setRequisicionFechacreacion()
+
+    /**
      * Sets the value of the [requisicion_revisada] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -720,9 +789,10 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $this->idauditor = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
             $this->idconceptosalida = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
             $this->requisicion_fecha = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-            $this->requisicion_revisada = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
-            $this->requisicion_folio = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
-            $this->requisicion_total = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->requisicion_fechacreacion = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->requisicion_revisada = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
+            $this->requisicion_folio = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->requisicion_total = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -732,7 +802,7 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = RequisicionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = RequisicionPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Requisicion object", $e);
@@ -1105,6 +1175,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_FECHA)) {
             $modifiedColumns[':p' . $index++]  = '`requisicion_fecha`';
         }
+        if ($this->isColumnModified(RequisicionPeer::REQUISICION_FECHACREACION)) {
+            $modifiedColumns[':p' . $index++]  = '`requisicion_fechacreacion`';
+        }
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_REVISADA)) {
             $modifiedColumns[':p' . $index++]  = '`requisicion_revisada`';
         }
@@ -1154,6 +1227,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                         break;
                     case '`requisicion_fecha`':
                         $stmt->bindValue($identifier, $this->requisicion_fecha, PDO::PARAM_STR);
+                        break;
+                    case '`requisicion_fechacreacion`':
+                        $stmt->bindValue($identifier, $this->requisicion_fechacreacion, PDO::PARAM_STR);
                         break;
                     case '`requisicion_revisada`':
                         $stmt->bindValue($identifier, (int) $this->requisicion_revisada, PDO::PARAM_INT);
@@ -1399,12 +1475,15 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                 return $this->getRequisicionFecha();
                 break;
             case 10:
-                return $this->getRequisicionRevisada();
+                return $this->getRequisicionFechacreacion();
                 break;
             case 11:
-                return $this->getRequisicionFolio();
+                return $this->getRequisicionRevisada();
                 break;
             case 12:
+                return $this->getRequisicionFolio();
+                break;
+            case 13:
                 return $this->getRequisicionTotal();
                 break;
             default:
@@ -1446,9 +1525,10 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $keys[7] => $this->getIdauditor(),
             $keys[8] => $this->getIdconceptosalida(),
             $keys[9] => $this->getRequisicionFecha(),
-            $keys[10] => $this->getRequisicionRevisada(),
-            $keys[11] => $this->getRequisicionFolio(),
-            $keys[12] => $this->getRequisicionTotal(),
+            $keys[10] => $this->getRequisicionFechacreacion(),
+            $keys[11] => $this->getRequisicionRevisada(),
+            $keys[12] => $this->getRequisicionFolio(),
+            $keys[13] => $this->getRequisicionTotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1551,12 +1631,15 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                 $this->setRequisicionFecha($value);
                 break;
             case 10:
-                $this->setRequisicionRevisada($value);
+                $this->setRequisicionFechacreacion($value);
                 break;
             case 11:
-                $this->setRequisicionFolio($value);
+                $this->setRequisicionRevisada($value);
                 break;
             case 12:
+                $this->setRequisicionFolio($value);
+                break;
+            case 13:
                 $this->setRequisicionTotal($value);
                 break;
         } // switch()
@@ -1593,9 +1676,10 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if (array_key_exists($keys[7], $arr)) $this->setIdauditor($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setIdconceptosalida($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setRequisicionFecha($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setRequisicionRevisada($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setRequisicionFolio($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setRequisicionTotal($arr[$keys[12]]);
+        if (array_key_exists($keys[10], $arr)) $this->setRequisicionFechacreacion($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setRequisicionRevisada($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setRequisicionFolio($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setRequisicionTotal($arr[$keys[13]]);
     }
 
     /**
@@ -1617,6 +1701,7 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisicionPeer::IDAUDITOR)) $criteria->add(RequisicionPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(RequisicionPeer::IDCONCEPTOSALIDA)) $criteria->add(RequisicionPeer::IDCONCEPTOSALIDA, $this->idconceptosalida);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_FECHA)) $criteria->add(RequisicionPeer::REQUISICION_FECHA, $this->requisicion_fecha);
+        if ($this->isColumnModified(RequisicionPeer::REQUISICION_FECHACREACION)) $criteria->add(RequisicionPeer::REQUISICION_FECHACREACION, $this->requisicion_fechacreacion);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_REVISADA)) $criteria->add(RequisicionPeer::REQUISICION_REVISADA, $this->requisicion_revisada);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_FOLIO)) $criteria->add(RequisicionPeer::REQUISICION_FOLIO, $this->requisicion_folio);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_TOTAL)) $criteria->add(RequisicionPeer::REQUISICION_TOTAL, $this->requisicion_total);
@@ -1692,6 +1777,7 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setIdconceptosalida($this->getIdconceptosalida());
         $copyObj->setRequisicionFecha($this->getRequisicionFecha());
+        $copyObj->setRequisicionFechacreacion($this->getRequisicionFechacreacion());
         $copyObj->setRequisicionRevisada($this->getRequisicionRevisada());
         $copyObj->setRequisicionFolio($this->getRequisicionFolio());
         $copyObj->setRequisicionTotal($this->getRequisicionTotal());
@@ -2715,6 +2801,7 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         $this->idauditor = null;
         $this->idconceptosalida = null;
         $this->requisicion_fecha = null;
+        $this->requisicion_fechacreacion = null;
         $this->requisicion_revisada = null;
         $this->requisicion_folio = null;
         $this->requisicion_total = null;

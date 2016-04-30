@@ -24,13 +24,13 @@ abstract class BaseRequisicionPeer
     const TM_CLASS = 'RequisicionTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 14;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /** the column name for the idrequisicion field */
     const IDREQUISICION = 'requisicion.idrequisicion';
@@ -62,6 +62,9 @@ abstract class BaseRequisicionPeer
     /** the column name for the requisicion_fecha field */
     const REQUISICION_FECHA = 'requisicion.requisicion_fecha';
 
+    /** the column name for the requisicion_fechacreacion field */
+    const REQUISICION_FECHACREACION = 'requisicion.requisicion_fechacreacion';
+
     /** the column name for the requisicion_revisada field */
     const REQUISICION_REVISADA = 'requisicion.requisicion_revisada';
 
@@ -90,12 +93,12 @@ abstract class BaseRequisicionPeer
      * e.g. RequisicionPeer::$fieldNames[RequisicionPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisicion', 'Idempresa', 'Idsucursalorigen', 'Idalmacenorigen', 'Idsucursaldestino', 'Idalmacendestino', 'Idusuario', 'Idauditor', 'Idconceptosalida', 'RequisicionFecha', 'RequisicionRevisada', 'RequisicionFolio', 'RequisicionTotal', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion', 'idempresa', 'idsucursalorigen', 'idalmacenorigen', 'idsucursaldestino', 'idalmacendestino', 'idusuario', 'idauditor', 'idconceptosalida', 'requisicionFecha', 'requisicionRevisada', 'requisicionFolio', 'requisicionTotal', ),
-        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION, RequisicionPeer::IDEMPRESA, RequisicionPeer::IDSUCURSALORIGEN, RequisicionPeer::IDALMACENORIGEN, RequisicionPeer::IDSUCURSALDESTINO, RequisicionPeer::IDALMACENDESTINO, RequisicionPeer::IDUSUARIO, RequisicionPeer::IDAUDITOR, RequisicionPeer::IDCONCEPTOSALIDA, RequisicionPeer::REQUISICION_FECHA, RequisicionPeer::REQUISICION_REVISADA, RequisicionPeer::REQUISICION_FOLIO, RequisicionPeer::REQUISICION_TOTAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION', 'IDEMPRESA', 'IDSUCURSALORIGEN', 'IDALMACENORIGEN', 'IDSUCURSALDESTINO', 'IDALMACENDESTINO', 'IDUSUARIO', 'IDAUDITOR', 'IDCONCEPTOSALIDA', 'REQUISICION_FECHA', 'REQUISICION_REVISADA', 'REQUISICION_FOLIO', 'REQUISICION_TOTAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisicion', 'idempresa', 'idsucursalorigen', 'idalmacenorigen', 'idsucursaldestino', 'idalmacendestino', 'idusuario', 'idauditor', 'idconceptosalida', 'requisicion_fecha', 'requisicion_revisada', 'requisicion_folio', 'requisicion_total', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Idrequisicion', 'Idempresa', 'Idsucursalorigen', 'Idalmacenorigen', 'Idsucursaldestino', 'Idalmacendestino', 'Idusuario', 'Idauditor', 'Idconceptosalida', 'RequisicionFecha', 'RequisicionFechacreacion', 'RequisicionRevisada', 'RequisicionFolio', 'RequisicionTotal', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion', 'idempresa', 'idsucursalorigen', 'idalmacenorigen', 'idsucursaldestino', 'idalmacendestino', 'idusuario', 'idauditor', 'idconceptosalida', 'requisicionFecha', 'requisicionFechacreacion', 'requisicionRevisada', 'requisicionFolio', 'requisicionTotal', ),
+        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION, RequisicionPeer::IDEMPRESA, RequisicionPeer::IDSUCURSALORIGEN, RequisicionPeer::IDALMACENORIGEN, RequisicionPeer::IDSUCURSALDESTINO, RequisicionPeer::IDALMACENDESTINO, RequisicionPeer::IDUSUARIO, RequisicionPeer::IDAUDITOR, RequisicionPeer::IDCONCEPTOSALIDA, RequisicionPeer::REQUISICION_FECHA, RequisicionPeer::REQUISICION_FECHACREACION, RequisicionPeer::REQUISICION_REVISADA, RequisicionPeer::REQUISICION_FOLIO, RequisicionPeer::REQUISICION_TOTAL, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION', 'IDEMPRESA', 'IDSUCURSALORIGEN', 'IDALMACENORIGEN', 'IDSUCURSALDESTINO', 'IDALMACENDESTINO', 'IDUSUARIO', 'IDAUDITOR', 'IDCONCEPTOSALIDA', 'REQUISICION_FECHA', 'REQUISICION_FECHACREACION', 'REQUISICION_REVISADA', 'REQUISICION_FOLIO', 'REQUISICION_TOTAL', ),
+        BasePeer::TYPE_FIELDNAME => array ('idrequisicion', 'idempresa', 'idsucursalorigen', 'idalmacenorigen', 'idsucursaldestino', 'idalmacendestino', 'idusuario', 'idauditor', 'idconceptosalida', 'requisicion_fecha', 'requisicion_fechacreacion', 'requisicion_revisada', 'requisicion_folio', 'requisicion_total', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -105,12 +108,12 @@ abstract class BaseRequisicionPeer
      * e.g. RequisicionPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisicion' => 0, 'Idempresa' => 1, 'Idsucursalorigen' => 2, 'Idalmacenorigen' => 3, 'Idsucursaldestino' => 4, 'Idalmacendestino' => 5, 'Idusuario' => 6, 'Idauditor' => 7, 'Idconceptosalida' => 8, 'RequisicionFecha' => 9, 'RequisicionRevisada' => 10, 'RequisicionFolio' => 11, 'RequisicionTotal' => 12, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursalorigen' => 2, 'idalmacenorigen' => 3, 'idsucursaldestino' => 4, 'idalmacendestino' => 5, 'idusuario' => 6, 'idauditor' => 7, 'idconceptosalida' => 8, 'requisicionFecha' => 9, 'requisicionRevisada' => 10, 'requisicionFolio' => 11, 'requisicionTotal' => 12, ),
-        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION => 0, RequisicionPeer::IDEMPRESA => 1, RequisicionPeer::IDSUCURSALORIGEN => 2, RequisicionPeer::IDALMACENORIGEN => 3, RequisicionPeer::IDSUCURSALDESTINO => 4, RequisicionPeer::IDALMACENDESTINO => 5, RequisicionPeer::IDUSUARIO => 6, RequisicionPeer::IDAUDITOR => 7, RequisicionPeer::IDCONCEPTOSALIDA => 8, RequisicionPeer::REQUISICION_FECHA => 9, RequisicionPeer::REQUISICION_REVISADA => 10, RequisicionPeer::REQUISICION_FOLIO => 11, RequisicionPeer::REQUISICION_TOTAL => 12, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION' => 0, 'IDEMPRESA' => 1, 'IDSUCURSALORIGEN' => 2, 'IDALMACENORIGEN' => 3, 'IDSUCURSALDESTINO' => 4, 'IDALMACENDESTINO' => 5, 'IDUSUARIO' => 6, 'IDAUDITOR' => 7, 'IDCONCEPTOSALIDA' => 8, 'REQUISICION_FECHA' => 9, 'REQUISICION_REVISADA' => 10, 'REQUISICION_FOLIO' => 11, 'REQUISICION_TOTAL' => 12, ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursalorigen' => 2, 'idalmacenorigen' => 3, 'idsucursaldestino' => 4, 'idalmacendestino' => 5, 'idusuario' => 6, 'idauditor' => 7, 'idconceptosalida' => 8, 'requisicion_fecha' => 9, 'requisicion_revisada' => 10, 'requisicion_folio' => 11, 'requisicion_total' => 12, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        BasePeer::TYPE_PHPNAME => array ('Idrequisicion' => 0, 'Idempresa' => 1, 'Idsucursalorigen' => 2, 'Idalmacenorigen' => 3, 'Idsucursaldestino' => 4, 'Idalmacendestino' => 5, 'Idusuario' => 6, 'Idauditor' => 7, 'Idconceptosalida' => 8, 'RequisicionFecha' => 9, 'RequisicionFechacreacion' => 10, 'RequisicionRevisada' => 11, 'RequisicionFolio' => 12, 'RequisicionTotal' => 13, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursalorigen' => 2, 'idalmacenorigen' => 3, 'idsucursaldestino' => 4, 'idalmacendestino' => 5, 'idusuario' => 6, 'idauditor' => 7, 'idconceptosalida' => 8, 'requisicionFecha' => 9, 'requisicionFechacreacion' => 10, 'requisicionRevisada' => 11, 'requisicionFolio' => 12, 'requisicionTotal' => 13, ),
+        BasePeer::TYPE_COLNAME => array (RequisicionPeer::IDREQUISICION => 0, RequisicionPeer::IDEMPRESA => 1, RequisicionPeer::IDSUCURSALORIGEN => 2, RequisicionPeer::IDALMACENORIGEN => 3, RequisicionPeer::IDSUCURSALDESTINO => 4, RequisicionPeer::IDALMACENDESTINO => 5, RequisicionPeer::IDUSUARIO => 6, RequisicionPeer::IDAUDITOR => 7, RequisicionPeer::IDCONCEPTOSALIDA => 8, RequisicionPeer::REQUISICION_FECHA => 9, RequisicionPeer::REQUISICION_FECHACREACION => 10, RequisicionPeer::REQUISICION_REVISADA => 11, RequisicionPeer::REQUISICION_FOLIO => 12, RequisicionPeer::REQUISICION_TOTAL => 13, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICION' => 0, 'IDEMPRESA' => 1, 'IDSUCURSALORIGEN' => 2, 'IDALMACENORIGEN' => 3, 'IDSUCURSALDESTINO' => 4, 'IDALMACENDESTINO' => 5, 'IDUSUARIO' => 6, 'IDAUDITOR' => 7, 'IDCONCEPTOSALIDA' => 8, 'REQUISICION_FECHA' => 9, 'REQUISICION_FECHACREACION' => 10, 'REQUISICION_REVISADA' => 11, 'REQUISICION_FOLIO' => 12, 'REQUISICION_TOTAL' => 13, ),
+        BasePeer::TYPE_FIELDNAME => array ('idrequisicion' => 0, 'idempresa' => 1, 'idsucursalorigen' => 2, 'idalmacenorigen' => 3, 'idsucursaldestino' => 4, 'idalmacendestino' => 5, 'idusuario' => 6, 'idauditor' => 7, 'idconceptosalida' => 8, 'requisicion_fecha' => 9, 'requisicion_fechacreacion' => 10, 'requisicion_revisada' => 11, 'requisicion_folio' => 12, 'requisicion_total' => 13, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -194,6 +197,7 @@ abstract class BaseRequisicionPeer
             $criteria->addSelectColumn(RequisicionPeer::IDAUDITOR);
             $criteria->addSelectColumn(RequisicionPeer::IDCONCEPTOSALIDA);
             $criteria->addSelectColumn(RequisicionPeer::REQUISICION_FECHA);
+            $criteria->addSelectColumn(RequisicionPeer::REQUISICION_FECHACREACION);
             $criteria->addSelectColumn(RequisicionPeer::REQUISICION_REVISADA);
             $criteria->addSelectColumn(RequisicionPeer::REQUISICION_FOLIO);
             $criteria->addSelectColumn(RequisicionPeer::REQUISICION_TOTAL);
@@ -208,6 +212,7 @@ abstract class BaseRequisicionPeer
             $criteria->addSelectColumn($alias . '.idauditor');
             $criteria->addSelectColumn($alias . '.idconceptosalida');
             $criteria->addSelectColumn($alias . '.requisicion_fecha');
+            $criteria->addSelectColumn($alias . '.requisicion_fechacreacion');
             $criteria->addSelectColumn($alias . '.requisicion_revisada');
             $criteria->addSelectColumn($alias . '.requisicion_folio');
             $criteria->addSelectColumn($alias . '.requisicion_total');
