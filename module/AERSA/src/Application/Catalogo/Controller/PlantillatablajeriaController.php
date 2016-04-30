@@ -136,6 +136,10 @@ class PlantillatablajeriaController extends AbstractActionController {
         $id = $this->params()->fromRoute('id');
         $plantilla = \PlantillatablajeriaQuery::create()->findPk($id);
         $plantilla->delete();
+        $plantilladetalles = \PlantillatablajeriadetalleQuery::create()->filterByIdplantillatablajeria($id)->find();
+        foreach ($plantilladetalles as $plantilladetalle) {
+            $plantilladetalle->delete();
+        }
         $this->flashMessenger()->addSuccessMessage('Plantilla de tablajeria eliminada satisfactoriamente!');
         return $this->redirect()->toUrl('/catalogo/tablajeria');       
         }
