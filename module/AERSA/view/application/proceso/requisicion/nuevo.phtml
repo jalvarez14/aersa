@@ -8,11 +8,11 @@
     }
 </style>
 <div id="form_container">
-    <h3 class="page-title">Registro plantilla tablajeria</h3>
+    <h3 class="page-title">Requisición - Registro</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="/catalogo/tablajeria">Tablajerias</a>
+                <a href="/procesos/requisicion">Requisición</a>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -36,7 +36,7 @@
         </div>
     <?php endforeach; ?>
     <?php
-    $form->setAttribute('action', '/catalogo/tablajeria/nuevo');
+    $form->setAttribute('action', '/procesos/requisicion/nuevo');
     echo $this->form()->openTag($form);
     ?>
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
@@ -46,28 +46,43 @@
                 <div class="row">
                     <?php echo $this->formHidden($form->get('idempresa')); ?>
                     <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('plantillatablajeria_nombre')); ?>  
-                    <?php echo  $this->formText($form->get('plantillatablajeria_nombre'));?>
+                        <?php echo $this->formLabel($form->get('requisicion_fecha')) ?>  
+                        <?php echo $this->formText($form->get('requisicion_fecha')) ?> 
                     </div>
                     <div class="col-md-6">
-                        <?php echo $this->formHidden($form->get('idproducto')); ?>  
-                        <?php echo $this->formLabel($form->get('idproducto_autocomplete')); ?>  
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                                <i class="fa fa-search"></i>
-                            </span>
-                            <?php echo $this->formText($form->get('idproducto_autocomplete')); ?>  
-                        </div>
+                        <?php echo $this->formLabel($form->get('requisicion_folio')) ?>  
+                        <?php echo $this->formText($form->get('requisicion_folio')) ?> 
                     </div>
-                    <div class="col-md-12">
-                        <?php echo $this->formLabel($form->get('plantillatablajeria_descripcion')) ?>  
-                        <?php echo $this->formTextarea($form->get('plantillatablajeria_descripcion')) ?>
+                    <?php echo $this->formHidden($form->get('idsucursalorigen')); ?>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('sucursal_nombre')) ?>  
+                        <?php echo $this->formText($form->get('sucursal_nombre')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('idalmacenorigen')) ?>  
+                        <?php echo $this->formSelect($form->get('idalmacenorigen')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('idsucursaldestino')) ?>  
+                        <?php echo $this->formSelect($form->get('idsucursaldestino')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('idalmacendestino')) ?>  
+                        <?php echo $this->formSelect($form->get('idalmacendestino')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('idconceptosalida')) ?>  
+                        <?php echo $this->formSelect($form->get('idconceptosalida')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('requisicion_revisada')) ?>  
+                        <?php echo $this->formSelect($form->get('requisicion_revisada')) ?> 
                     </div>
                 </div>
                 <h3 class="form-section">Productos *</h3><br><br>
                 <div class="row">
                     <div class="form-group">
-                        <div class="col-md-4 col-md-offset-3">
+                        <div class="col-md-4 col-md-offset-6">
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="fa fa-search"></i>
@@ -82,18 +97,27 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-md-offset-3">
+                    <div class="col-md-12">
                         <table class="table" id="productos_table">
                             <thead>
-                            <th>Nombre</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio unitario</th>
+                            <th>subtotal</th>
+                            <th>Revisada</th>
                             <th>Opcion</th>
                             </thead>
                             <tbody id="productos_table_tbody">
-                                <tr>
-<!--                                    <td>Producto 1</td>
-                                    <td><i class="fa fa-trash"></i></td>-->
-                                </tr>
+
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>TOTAL</td>
+                                    <input type="hidden" name="requisicion_total">
+                                    <td id="total">$0.00</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -105,7 +129,7 @@
                 </div>
             </div>
             <div class="form-actions right">
-                <button disabled class="btn blue" id="plantilla_save" type="submit">
+                <button disabled class="btn blue" id="requisicion_save" type="submit">
                     <i class="fa fa-check"></i>
                     Guardar
                 </button>
@@ -113,8 +137,8 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/application/custom/js/catalogo/tablajeria.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/requisicion.js"></script>
 <script>
-    var $form = $('#form_container').tablajeria({});
-    $form.formBind({});
+    var $form = $('#form_container').requisicion();
+    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>
