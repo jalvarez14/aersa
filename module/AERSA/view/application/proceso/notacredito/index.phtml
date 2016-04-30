@@ -1,7 +1,7 @@
 <link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
 <link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 <div id="my_container">
-    <h3 class="page-title">Devolucion</h3>
+    <h3 class="page-title">Nota de crédito</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
@@ -9,7 +9,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/Devolucion">Devolucion</a>
+                <a href="/procesos/Devolucion">Nota crédito</a>
             </li>
         </ul>
     </div>
@@ -55,7 +55,7 @@
                             }
                             ?>
                         <tr date="<?php echo $entity->getNotacreditoFechacreacion('Y/m/d') ?>" id="<?php echo $entity->getIdnotacredito() ?>">
-                                <td><?php echo $entity->getNotacreditoFechacreacion('d/m/Y') ?></td>
+                            <td><?php echo $entity->getNotacreditoFechanotacredito('d/m/Y') ?></td>
                                 <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
                                 <td><?php echo money_format('%(#10n',$entity->getNotacreditoTotal()) ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>

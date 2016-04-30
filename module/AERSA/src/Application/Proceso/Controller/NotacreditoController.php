@@ -80,6 +80,7 @@ class NotacreditoController extends AbstractActionController {
                    ->setIdsucursal($session['idsucursal'])
                    ->setIdusuario($session['idusuario']);
             
+            $entity->setNotacreditoFechanotacredito($post_data["notacredito_fechacreacion"]);
             
             if($post_data['notacredito_revisada']){
                 $entity->setIdauditor($session['idusuario']);

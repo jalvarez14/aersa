@@ -79,6 +79,8 @@ class DevolucionController extends AbstractActionController {
                    ->setIdsucursal($session['idsucursal'])
                    ->setIdusuario($session['idusuario']);
             
+            $entity->setDevolucionFechadevolucion($post_data["devolucion_fechacreacion"]);
+            
             
             if($post_data['devolucion_revisada']){
                 $entity->setIdauditor($session['idusuario']);
