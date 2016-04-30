@@ -76,13 +76,6 @@
                             <?php echo $this->formSelect($form->get('devolucion_revisada')) ?> 
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-6">
-
-                            <?php echo $this->formLabel($form->get('devolucion_fechaentrega')) ?>  
-                            <?php echo $this->formText($form->get('devolucion_fechaentrega')) ?> 
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -173,7 +166,7 @@
                     </div>
                 </div>
                 <div class="form-actions right">
-                    <button class="btn blue" type="submit">
+                    <button class="btn blue" disabled="disabled" id="btnSubmit" type="submit">
                         <i class="fa fa-check"></i>
                         Guardar
                     </button>
@@ -187,4 +180,13 @@
 <script>
     var $form = $('#form_container').compra();
     $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $almacenes?>);
+
+    $(document).ready(function(){
+        
+        $("#producto_add").click(function()
+        {
+            $("#btnSubmit").attr('disabled',false);
+        });
+    
+    }); 
 </script>

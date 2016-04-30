@@ -13,20 +13,20 @@ class DevolucionController extends AbstractActionController {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         
-         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+        $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
          
-         $anio_activo = $sucursal->getSucursalAnioactivo();
-         $mes_activo = $sucursal->getSucursalMesactivo();
+        $anio_activo = $sucursal->getSucursalAnioactivo();
+        $mes_activo = $sucursal->getSucursalMesactivo();
         
-        $collection = \DevolucionQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+        $collection = \DevolucionQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIddevolucion(\Criteria::DESC)->find();
         
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/devolucion/index');
             $view_model->setVariables(array(
-            'messages' => $this->flashMessenger(),
-            'collection' => $collection,
-            'anio_activo' => $anio_activo,
-            'mes_activo' => $mes_activo,
+            'messages'          => $this->flashMessenger(),
+            'collection'        => $collection,
+            'anio_activo'       => $anio_activo,
+            'mes_activo'        => $mes_activo,
         ));
         return $view_model;
 
@@ -60,7 +60,6 @@ class DevolucionController extends AbstractActionController {
             $post_files = $request->getFiles();
            
             $post_data["devolucion_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["devolucion_fechacreacion"]);
-            //$post_data["devolucion_fechaentrega"] = date_create_from_format('d/m/Y', $post_data["devolucion_fechaentrega"]);
            
             $entity = new \Devolucion();
             foreach ($post_data as $key => $value){
@@ -108,8 +107,8 @@ class DevolucionController extends AbstractActionController {
                                ->setdevoluciondetalleRevisada(0)
                                ->setIdproducto($producto['idproducto'])
                                ->setDevoluciondetalleCantidad($producto['cantidad'])
-                               //->setDevoluciondetalleCosto($producto['precio'])
-                               //->setDevoluciondetalleCostounitario($producto['costo_unitario'])
+                               ->setDevoluciondetalleCostounitario($producto['precio'])
+                               ->setDevoluciondetalleCostounitarioneto($producto['costo_unitario'])
                                ->setDevoluciondetalleDescuento($producto['descuento'])
                                ->setDevoluciondetalleIeps($producto['ieps'])
                                ->setDevoluciondetalleSubtotal($producto['subtotal']);
@@ -163,8 +162,8 @@ class DevolucionController extends AbstractActionController {
         //VERIFICAMOS SI EXISTE
         $exist = \DevolucionQuery::create()->filterByIddevolucion($id)->exists();
         
-        if($exist){
-            
+        if($exist)
+        {    
             // OBTENEMOS EL MES Y EL ANIO ACTIVO DE LA SUCURSAL
             $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
             $anio_activo = $sucursal->getSucursalAnioactivo();
@@ -217,8 +216,8 @@ class DevolucionController extends AbstractActionController {
 
                 //Devolucion DETALLES
                 $entity->getDevoluciondetalles()->delete();
-                
-                foreach ($post_data['productos'] as $producto) {
+                foreach ($post_data['productos'] as $producto) 
+                {
 
                     $devolucion_detalle = new \Devoluciondetalle();
                     $devolucion_detalle->setIddevolucion($entity->getIddevolucion())
@@ -226,8 +225,8 @@ class DevolucionController extends AbstractActionController {
                             ->setIdproducto($producto['idproducto'])
                             ->setIdalmacen($producto['almacen'])
                             ->setDevoluciondetalleCantidad($producto['cantidad'])
-                            ->setDevoluciondetallePrecio($producto['precio'])
-                            ->setDevoluciondetalleCostounitario($producto['costo_unitario'])
+                            ->setDevoluciondetalleCostounitario($producto['precio'])
+                            ->setDevoluciondetalleCostounitarioneto($producto['costo_unitario'])
                             ->setDevoluciondetalleDescuento($producto['descuento'])
                             ->setDevoluciondetalleIeps($producto['ieps'])
                             ->setDevoluciondetalleSubtotal($producto['subtotal']);
@@ -256,7 +255,6 @@ class DevolucionController extends AbstractActionController {
             
             //CAMBIAMOS LOS VALORES DE FECHAS
             $form->get('devolucion_fechacreacion')->setValue($entity->getDevolucionFechacreacion('d/m/Y'));
-            //$form->get('compra_fechaentrega')->setValue($entity->getCompraFechaentrega('d/m/Y'));
             
             //SETEAMOS EL VALOR AUTOCOMPLETE
             $form->get('idproveedor_autocomplete')->setValue($entity->getProveedor()->getProveedorNombrecomercial());
@@ -267,6 +265,7 @@ class DevolucionController extends AbstractActionController {
             //LOS DETALLES DE LA DEVOLUCION
             $devolucion_detalle = \DevoluciondetalleQuery::create()->filterByIddevolucion($entity->getIddevolucion())->find();
             
+            
             //COUNT
             $count = \DevoluciondetalleQuery::create()->orderByIddevoluciondetalle(\Criteria::DESC)->findOne();
             $count = $count->getIddevoluciondetalle() + 1;
@@ -275,19 +274,23 @@ class DevolucionController extends AbstractActionController {
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/proceso/devolucion/editar');
             $view_model->setVariables(array(
-                'form' => $form,
-                'entity' => $entity,
-                'devolucion_detalle' => $devolucion_detalle,
-                'anio_activo' => $anio_activo,
-                'mes_activo' => $mes_activo,
-                'almacenes' => $almecenes,
-                'count' => $count
+                'form'                  => $form,
+                'entity'                => $entity,
+                'devolucion_detalle'    => $devolucion_detalle,
+                'anio_activo'           => $anio_activo,
+                'mes_activo'            => $mes_activo,
+                'almacenes'             => $almecenes,
+                'count'                 => $count,
+                'mes_devolucion'        => $entity->getDevolucionFechacreacion('m'),
+                'anio_devolucion'       => $entity->getDevolucionFechacreacion('Y'),
             ));
             
             return $view_model;
 
-        }else{
-            return $this->redirect()->toUrl('/procesos/compra');
+        }
+        else
+        {
+            return $this->redirect()->toUrl('/procesos/devolucion');
         }
         
     }

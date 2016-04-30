@@ -28,11 +28,11 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                 <h3 class="page-title">Compras - <?php echo '#'.$form->get('iddevolucion')->getValue()?></h3><br><br>
+                 <h3 class="page-title">Devolucion - <?php echo '#'.$form->get('iddevolucion')->getValue()?></h3>
                  <div class="row">
                     <div class="col-md-6">
                          <div class="form-group">
-                             <label class="control-label col-md-3">Creado por:</label>
+                             <label class="control-label col-md-3">Creado por: </label>
                              <div class="col-md-9">
                                  <p class="form-control-static"><?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre()?></p>
                              </div>
@@ -67,9 +67,6 @@
                             <?php echo $this->formLabel($form->get('devolucion_fechacreacion')) ?>  
                             <?php echo $this->formText($form->get('devolucion_fechacreacion')) ?> 
                         </div>
-                        
-                    </div>
-                    <div class="form-group">
                         <div class="col-md-6">
                             <?php echo $this->formHidden($form->get('idproveedor')); ?>  
                             <?php echo $this->formLabel($form->get('idproveedor_autocomplete')); ?>  
@@ -82,22 +79,20 @@
                             </div>
 
                         </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('devolucion_folio')) ?>  
                             <?php echo $this->formText($form->get('devolucion_folio')) ?> 
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-6">
-
-                            <?php echo $this->formLabel($form->get('devolucion_fechaentrega')) ?>  
-                            <?php echo $this->formText($form->get('devolucion_fechaentrega')) ?> 
                         </div>
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('devolucion_factura')) ?>  
                             <?php echo $this->formFile($form->get('devolucion_factura')) ?> 
                         </div>
                     </div>
+                    
                     <div class="form-group">
                         <div class="col-md-6">
 
@@ -164,13 +159,13 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][cantidad]" value="<?php echo $detalle->getDevoluciondetalleCantidad()?>"> 
                                     </td>
                                     <td>
-                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][precio]" value="<?php //echo $detalle->getDevoluciondetallePrecio()?>"> 
+                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][precio]" value="<?php echo $detalle->getDevoluciondetalleCostounitario()?>"> 
                                     </td>
-                                    <!--
+                                    
                                     <td>
-                                        <?php //echo money_format('%(#10n',$detalle->getDevoluciondetalleCostounitario())?>
+                                        <?php echo money_format('%(#10n',$detalle->getDevoluciondetalleCostounitarioneto())?>
                                     </td>
-                                    -->
+                                    
                                     <td>
                                         <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][descuento]" value="<?php echo $detalle->getDevoluciondetalleDescuento()?>"> 
                                     </td>
@@ -199,27 +194,10 @@
                                             <?php endforeach; ?>
                                         </select> 
                                     </td>
-                                    <td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
+                                    <td class="text-center"><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
                                 </tr>
                                 <?php endforeach?>
-<!--                                <tr>
-                                    <td>Producto 1</td>
-                                    <td><input type="text"></td>
-                                    <td><input type="text"></td>
-                                    <td>$ 100.00</td>
-                                    <td><input type="text"></td>
-                                    <td><input type="text"></td>
-                                    <td>$ 100.00</td>
-                                    <td><input type="checkbox"></td>
-                                    <td>
-                                        <select class="form-control">
-                                            <option>almacen 1</option>
-                                            <option>almacen 2</option>
-                                            <option>almacen 3</option>
-                                        </select>
-                                    </td>
-                                    <td><i class="fa fa-trash"></i></td>
-                                </tr>-->
+
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -253,7 +231,7 @@
                 <div class="form-actions right">
                     <button class="btn blue" type="submit">
                         <i class="fa fa-check"></i>
-                        Guardar
+                        Guardar <?php echo ($mes_devolucion) ?><?php echo ($anio_devolucion) ?>
                     </button>
                 </div>
             </div>
@@ -263,6 +241,6 @@
 </div>
 <script type="text/javascript" src="/application/custom/js/procesos/devolucion.js"></script>
 <script>
-    var $form = $('#form_container').devolucion();
-    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
+    var $form = $('#form_container').compra();
+    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $mes_devolucion ?>,<?php echo $anio_devolucion ?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
 </script>

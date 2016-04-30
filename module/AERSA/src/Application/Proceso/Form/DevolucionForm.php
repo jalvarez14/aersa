@@ -50,19 +50,6 @@ use Zend\Form\Form;
         
         
         $this->add(array(
-            'name' => 'devolucion_fechaentrega',
-            'type' => 'Text',
-            'attributes' => array(
-                'required' => false,
-                'class' => 'form-control',
-            ),
-            'options' => array(
-                'label' => 'Fecha de entrega'
-            )
-        ));
-        
-        
-        $this->add(array(
             'name' => 'idalmacen',
             'type' => 'Select',
             'options' => array(

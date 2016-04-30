@@ -9,7 +9,7 @@ $conf = array (
       'adapter' => 'mysql',
       'connection' => 
       array (
-        'dsn' => 'mysql:host=l;dbname=aersa_system',
+        'dsn' => 'mysql:host=localhost;dbname=aersa_system',
         'user' => 'aersa_admin',
         'password' => '2Wu75TqdtVA5V9nt',
       ),

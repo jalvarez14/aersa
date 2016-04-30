@@ -33,6 +33,7 @@
                             <th> Proveedor </th>
                             <th> Total </th>
                             <th> Revisada </th>
+                            <th> Comprobante </th>
                             <th> Acciones </th>
                         </tr>
                     </thead>
@@ -47,12 +48,18 @@
                                 $class = 'danger';
                                 $revisada = 'No revisada';
                             }
+                            if(!is_null($entity->getDevolucionFactura())) {
+                                $comprobante = '<a target="_blank" href="'.$entity->getCompraFactura().'"><i class="fa fa-file"></i></a>';
+                            } else {
+                                $comprobante = 'N/D';
+                            }
                             ?>
                         <tr date="<?php echo $entity->getDevolucionFechacreacion('Y/m/d') ?>" id="<?php echo $entity->getIddevolucion() ?>">
                                 <td><?php echo $entity->getDevolucionFechacreacion('d/m/Y') ?></td>
                                 <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
                                 <td><?php echo money_format('%(#10n',$entity->getDevolucionTotal()) ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
+                                <td><?php echo $comprobante ?></td>
                                 <td>                                    
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
