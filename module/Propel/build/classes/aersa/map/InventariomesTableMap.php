@@ -43,7 +43,7 @@ class InventariomesTableMap extends TableMap
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addColumn('inventariomes_fecha', 'InventariomesFecha', 'DATE', true, null, null);
         $this->addColumn('inventariomes_revisada', 'InventariomesRevisada', 'BOOLEAN', true, 1, false);
         // validators

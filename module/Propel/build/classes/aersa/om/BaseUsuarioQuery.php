@@ -1235,7 +1235,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinInventariomesRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinInventariomesRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('InventariomesRelatedByIdauditor');
@@ -1270,7 +1270,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   InventariomesQuery A secondary query class using the current class as primary query
      */
-    public function useInventariomesRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useInventariomesRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinInventariomesRelatedByIdauditor($relationAlias, $joinType)
