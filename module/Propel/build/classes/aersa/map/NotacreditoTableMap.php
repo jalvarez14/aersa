@@ -49,7 +49,7 @@ class NotacreditoTableMap extends TableMap
         $this->addColumn('notacredito_revisada', 'NotacreditoRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('notacredito_factura', 'NotacreditoFactura', 'LONGVARCHAR', false, null, null);
         $this->addColumn('notacredito_fechacreacion', 'NotacreditoFechacreacion', 'TIMESTAMP', true, null, null);
-        $this->addColumn('notacredito_fechaentrega', 'NotacreditoFechaentrega', 'TIMESTAMP', false, null, null);
+        $this->addColumn('notacredito_fechanotacredito', 'NotacreditoFechanotacredito', 'TIMESTAMP', false, null, null);
         $this->addColumn('notacredito_ieps', 'NotacreditoIeps', 'DECIMAL', false, 15, null);
         $this->addColumn('notacredito_iva', 'NotacreditoIva', 'DECIMAL', false, 15, null);
         $this->addColumn('notacredito_total', 'NotacreditoTotal', 'DECIMAL', false, 15, null);

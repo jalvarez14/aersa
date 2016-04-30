@@ -45,7 +45,6 @@ class IngresodetalleTableMap extends TableMap
         $this->addColumn('ingresodetalle_sub', 'IngresodetalleSub', 'DECIMAL', false, 15, null);
         $this->addColumn('ingresodetalle_IVA', 'IngresodetalleIva', 'DECIMAL', false, 15, null);
         $this->addColumn('ingresodetalle_total', 'IngresodetalleTotal', 'DECIMAL', false, 15, null);
-        $this->addColumn('ingresodetalle_credfact', 'IngresodetalleCredfact', 'DECIMAL', false, 15, null);
         $this->addColumn('ingresodetalle_revisada', 'IngresodetalleRevisada', 'BOOLEAN', true, 1, false);
         // validators
     } // initialize()

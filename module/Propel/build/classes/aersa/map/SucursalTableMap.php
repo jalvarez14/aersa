@@ -62,8 +62,10 @@ class SucursalTableMap extends TableMap
         $this->addRelation('Inventariomes', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Inventariomess');
         $this->addRelation('Notacredito', 'Notacredito', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Notacreditos');
         $this->addRelation('Ordentablajeria', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Ordentablajerias');
+        $this->addRelation('Productosucursalalmacen', 'Productosucursalalmacen', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Productosucursalalmacens');
         $this->addRelation('RequisicionRelatedByIdsucursaldestino', 'Requisicion', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursaldestino', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdsucursaldestino');
         $this->addRelation('RequisicionRelatedByIdsucursalorigen', 'Requisicion', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursalorigen', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdsucursalorigen');
+        $this->addRelation('Trabajadorespromedio', 'Trabajadorespromedio', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Trabajadorespromedios');
         $this->addRelation('Trabajadorpromedio', 'Trabajadorpromedio', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Trabajadorpromedios');
         $this->addRelation('Usuariosucursal', 'Usuariosucursal', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Usuariosucursals');
         $this->addRelation('Venta', 'Venta', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Ventas');

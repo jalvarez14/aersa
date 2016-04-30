@@ -1,0 +1,246 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+    #productos_table .fa-trash{
+        color:red;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:;">Procesos</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/devolucion">Devolución</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="javascript:;"><?php echo '#'.$form->get('iddevolucion')->getValue()?></a>
+            </li>
+        </ul>
+</div>
+<div id="form_container">
+    <form class="form-horizontal" action="/procesos/devolucion/editar/<?php echo $form->get('iddevolucion')->getValue()?>" method="post" enctype="multipart/form-data">
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                 <h3 class="page-title">Devolucion - <?php echo '#'.$form->get('iddevolucion')->getValue()?></h3>
+                 <div class="row">
+                    <div class="col-md-6">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">Creado por: </label>
+                             <div class="col-md-9">
+                                 <p class="form-control-static"><?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre()?></p>
+                             </div>
+                         </div>
+                    </div>
+                     <div class="col-md-6">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">Auditor:</label>
+                             <div class="col-md-9">
+                                 <?php 
+                                   
+                                    if($entity->getDevolucionRevisada()){
+                                        $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                    }else{
+                                        $auditor = 'N/D';
+                                    } 
+                                ?>
+                                 <p class="form-control-static"><?php echo $auditor?></p>
+                             </div>
+                         </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('devolucion_fechacreacion')) ?>  
+                            <?php echo $this->formText($form->get('devolucion_fechacreacion')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formHidden($form->get('idproveedor')); ?>  
+                            <?php echo $this->formLabel($form->get('idproveedor_autocomplete')); ?>  
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                 <?php echo $this->formText($form->get('idproveedor_autocomplete')); ?>  
+
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('devolucion_folio')) ?>  
+                            <?php echo $this->formText($form->get('devolucion_folio')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('devolucion_factura')) ?>  
+                            <?php echo $this->formFile($form->get('devolucion_factura')) ?> 
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="col-md-6">
+
+                            <?php echo $this->formLabel($form->get('idalmacen')) ?>  
+                            <?php echo $this->formSelect($form->get('idalmacen')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('devolucion_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('devolucion_revisada')) ?> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <h3 class="page-title">Productos</h3><br><br>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-5 col-md-offset-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                    <input id="idproducto" type="hidden">
+                                    <input id="producto_iva" type="hidden">
+                                    <input id="producto_autocomplete" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button disabled id="producto_add" class="btn grey-mint" type="button">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table" id="productos_table">
+                            <thead>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>C.U. Neto</th>
+                                <th>Desc. (%)</th>
+                                <th>IEPS (%)</th>
+                                <th>Subtotal</th>
+                                <th>Revisada</th>
+                                <th>Almacen</th>
+                                <th>Opciones</th>
+                            </thead>
+                            <tbody>
+                                <?php $detalle = new Devoluciondetalle()?>
+                                <?php foreach ($devolucion_detalle as $detalle) :?>
+                                <tr id="<?php echo $detalle->getIddevoluciondetalle()?>">
+                                    <td>
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][subtotal]" value="<?php echo $detalle->getDevoluciondetalleSubtotal()?>">
+                                        <!--<input type="hidden" name="productos[<?php //echo $detalle->getIddevoluciondetalle()?>][costo_unitario]" value="<?php //echo $detalle->getDevoluciondetalleCostounitario()?>">-->
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][producto_iva]" value="<?php echo $detalle->getProducto()->getProductoIva()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
+                                        <?php echo $detalle->getProducto()->getProductoNombre()?>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][cantidad]" value="<?php echo $detalle->getDevoluciondetalleCantidad()?>"> 
+                                    </td>
+                                    <td>
+                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][precio]" value="<?php echo $detalle->getDevoluciondetalleCostounitario()?>"> 
+                                    </td>
+                                    
+                                    <td>
+                                        <?php echo money_format('%(#10n',$detalle->getDevoluciondetalleCostounitarioneto())?>
+                                    </td>
+                                    
+                                    <td>
+                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][descuento]" value="<?php echo $detalle->getDevoluciondetalleDescuento()?>"> 
+                                    </td>
+                                    <td>
+                                        <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][ieps]" value="<?php echo $detalle->getDevoluciondetalleIeps()?>"> 
+                                    </td>
+                                    <td>
+                                        <?php echo money_format('%(#10n',$detalle->getDevoluciondetalleSubtotal())?>
+                                    </td>
+                                    <td>
+                                        <?php if($detalle->getDevoluciondetalleRevisada()) :?>
+                                            <input checked type="checkbox" name=productos[<?php echo $detalle->getIddevoluciondetalle()?>][revisada]>
+                                        <?php else :?>
+                                            <input type="checkbox" name=productos[<?php echo $detalle->getIddevoluciondetalle()?>][revisada]>
+                                        <?php endif?>
+                                    </td>
+                                    <td>
+   
+                                        <select class="form-control" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][almacen]">
+                                            <?php foreach ($almacenes as $key => $value) :?>
+                                                <?php if($key == $detalle->getIdalmacen()) :?>
+                                                    <option selected value="<?php echo $key?>"><?php echo $value?></option>
+                                                <?php else :?>
+                                                     <option value="<?php echo $key?>"><?php echo $value?></option>
+                                                <?php endif;?>
+                                            <?php endforeach; ?>
+                                        </select> 
+                                    </td>
+                                    <td class="text-center"><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
+                                </tr>
+                                <?php endforeach?>
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>SUBTOTAL</td>
+                                    <?php echo $this->formHidden($form->get('devolucion_subtotal')) ?> 
+                                    <td id="subtotal"><?php echo money_format('%(#10n',$entity->getDevolucionSubtotal())?></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>IEPS</td>
+                                    <?php echo $this->formHidden($form->get('devolucion_ieps')) ?> 
+                                    <td id="ieps"><?php echo money_format('%(#10n',$entity->getDevolucionIeps())?></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>IVA</td>
+                                    <?php echo $this->formHidden($form->get('devolucion_iva')) ?> 
+                                    <td id="iva"><?php echo money_format('%(#10n',$entity->getDevolucionIva())?></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>TOTAL</td>
+                                    <?php echo $this->formHidden($form->get('devolucion_total')) ?> 
+                                    <td id="total"><?php echo money_format('%(#10n',$entity->getDevolucionTotal())?></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript" src="/application/custom/js/procesos/devolucion.js"></script>
+<script>
+    var $form = $('#form_container').compra();
+    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $mes_devolucion ?>,<?php echo $anio_devolucion ?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
+</script>

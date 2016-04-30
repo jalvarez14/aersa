@@ -493,6 +493,9 @@ abstract class BaseProductoPeer
         // Invalidate objects in PlantillatablajeriadetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         PlantillatablajeriadetallePeer::clearInstancePool();
+        // Invalidate objects in ProductosucursalalmacenPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductosucursalalmacenPeer::clearInstancePool();
         // Invalidate objects in RecetaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RecetaPeer::clearInstancePool();
@@ -2206,6 +2209,12 @@ abstract class BaseProductoPeer
 
             $criteria->add(PlantillatablajeriadetallePeer::IDPRODUCTO, $obj->getIdproducto());
             $affectedRows += PlantillatablajeriadetallePeer::doDelete($criteria, $con);
+
+            // delete related Productosucursalalmacen objects
+            $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
+
+            $criteria->add(ProductosucursalalmacenPeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += ProductosucursalalmacenPeer::doDelete($criteria, $con);
 
             // delete related Receta objects
             $criteria = new Criteria(RecetaPeer::DATABASE_NAME);

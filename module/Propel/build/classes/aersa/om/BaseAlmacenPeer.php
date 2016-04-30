@@ -402,6 +402,9 @@ abstract class BaseAlmacenPeer
         // Invalidate objects in OrdentablajeriaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         OrdentablajeriaPeer::clearInstancePool();
+        // Invalidate objects in ProductosucursalalmacenPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductosucursalalmacenPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -1036,6 +1039,12 @@ abstract class BaseAlmacenPeer
 
             $criteria->add(OrdentablajeriaPeer::IDALMACENORIGEN, $obj->getIdalmacen());
             $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
+
+            // delete related Productosucursalalmacen objects
+            $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
+
+            $criteria->add(ProductosucursalalmacenPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += ProductosucursalalmacenPeer::doDelete($criteria, $con);
 
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);

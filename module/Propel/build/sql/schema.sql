@@ -211,7 +211,7 @@ CREATE TABLE `conceptoingreso`
 (
     `idconceptoingreso` INTEGER NOT NULL AUTO_INCREMENT,
     `conceptoingreso_nombre` VARCHAR(255) NOT NULL,
-    `conceptoingreso_descripcion` TEXT NOT NULL,
+    `conceptoingreso_descripcion` TEXT,
     PRIMARY KEY (`idconceptoingreso`)
 ) ENGINE=InnoDB;
 
@@ -250,7 +250,7 @@ CREATE TABLE `devolucion`
     `devolucion_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `devolucion_factura` TEXT,
     `devolucion_fechacreacion` DATETIME,
-    `devolucion_fechaentrega` VARCHAR(45),
+    `devolucion_fechadevolucion` DATETIME,
     `devolucion_ieps` DECIMAL(10,5),
     `devolucion_iva` DECIMAL(10,5),
     `devolucion_total` DECIMAL(10,5),
@@ -311,6 +311,8 @@ CREATE TABLE `devoluciondetalle`
     `devoluciondetalle_subtotal` DECIMAL(15,5),
     `devoluciondetalle_ieps` FLOAT,
     `devoluciondetalle_descuento` FLOAT,
+    `devoluciondetalle_costounitario` DECIMAL(15,5) NOT NULL,
+    `devoluciondetalle_costounitarioneto` DECIMAL(15,5),
     PRIMARY KEY (`iddevoluciondetalle`),
     INDEX `iddevolucion` (`iddevolucion`),
     INDEX `idproducto` (`idproducto`),
@@ -391,9 +393,9 @@ CREATE TABLE `ingreso`
     `idauditor` INTEGER,
     `ingreso_folio` VARCHAR(10) NOT NULL,
     `ingreso_revisada` TINYINT(1) NOT NULL,
-    `ingreso_factoralimento` DECIMAL(15,5) NOT NULL,
-    `ingreso_factorbebida` DECIMAL(15,5) NOT NULL,
-    `ingreso_factormiscelanea` DECIMAL(15,5) NOT NULL,
+    `ingreso_totalalimento` DECIMAL(15,5) NOT NULL,
+    `ingreso_totalbebida` DECIMAL(15,5) NOT NULL,
+    `ingreso_totalmiscelanea` DECIMAL(15,5) NOT NULL,
     `ingreso_fecha` DATETIME NOT NULL,
     `ingreso_fechacreacion` DATETIME NOT NULL,
     PRIMARY KEY (`idingreso`),
@@ -438,7 +440,6 @@ CREATE TABLE `ingresodetalle`
     `ingresodetalle_sub` DECIMAL(15,5),
     `ingresodetalle_IVA` DECIMAL(15,5),
     `ingresodetalle_total` DECIMAL(15,5),
-    `ingresodetalle_credfact` DECIMAL(15,5),
     `ingresodetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`idingresodetalle`),
     INDEX `idingreso` (`idingreso`),
@@ -474,7 +475,7 @@ CREATE TABLE `inventariomes`
     `idsucursal` INTEGER NOT NULL,
     `idalmacen` INTEGER NOT NULL,
     `idusuario` INTEGER NOT NULL,
-    `idauditor` INTEGER NOT NULL,
+    `idauditor` INTEGER,
     `inventariomes_fecha` DATE NOT NULL,
     `inventariomes_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`idinventariomes`),
@@ -589,7 +590,7 @@ CREATE TABLE `notacredito`
     `notacredito_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `notacredito_factura` TEXT,
     `notacredito_fechacreacion` DATETIME NOT NULL,
-    `notacredito_fechaentrega` DATETIME,
+    `notacredito_fechanotacredito` DATETIME,
     `notacredito_ieps` DECIMAL(15,5),
     `notacredito_iva` DECIMAL(15,5),
     `notacredito_total` DECIMAL(15,5),
@@ -936,6 +937,46 @@ CREATE TABLE `producto`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- productosucursalalmacen
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `productosucursalalmacen`;
+
+CREATE TABLE `productosucursalalmacen`
+(
+    `idproductosucursalalmacen` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `idalmacen` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    PRIMARY KEY (`idproductosucursalalmacen`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    INDEX `idalmacen` (`idalmacen`),
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idalmacen_productosucursalalmacen`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_productosucursalalmacen`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_productosucursalalmacen`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_productosucursalalmacen`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- proveedor
 -- ---------------------------------------------------------------------
 
@@ -1010,6 +1051,7 @@ CREATE TABLE `requisicion`
     `idauditor` INTEGER,
     `idconceptosalida` INTEGER NOT NULL,
     `requisicion_fecha` DATETIME NOT NULL,
+    `requisicion_fechacreacion` DATETIME NOT NULL,
     `requisicion_revisada` TINYINT(1) NOT NULL,
     `requisicion_folio` VARCHAR(10) NOT NULL,
     `requisicion_total` DECIMAL(15,5),
@@ -1185,6 +1227,35 @@ CREATE TABLE `tasaiva`
     `idtasaiva` INTEGER NOT NULL AUTO_INCREMENT,
     `tasaiva_valor` FLOAT NOT NULL,
     PRIMARY KEY (`idtasaiva`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- trabajadorespromedio
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `trabajadorespromedio`;
+
+CREATE TABLE `trabajadorespromedio`
+(
+    `idtrabajadorespromedio` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `trabajadorespromedio_anio` INTEGER NOT NULL,
+    `trabajadorespromedio_mes` INTEGER NOT NULL,
+    `trabajadorespromedio_cantidad` FLOAT NOT NULL,
+    PRIMARY KEY (`idtrabajadorespromedio`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_trabajadorespromedio`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_trabajadorespromedio`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

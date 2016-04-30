@@ -16,6 +16,7 @@
  * @method RequisicionQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method RequisicionQuery orderByIdconceptosalida($order = Criteria::ASC) Order by the idconceptosalida column
  * @method RequisicionQuery orderByRequisicionFecha($order = Criteria::ASC) Order by the requisicion_fecha column
+ * @method RequisicionQuery orderByRequisicionFechacreacion($order = Criteria::ASC) Order by the requisicion_fechacreacion column
  * @method RequisicionQuery orderByRequisicionRevisada($order = Criteria::ASC) Order by the requisicion_revisada column
  * @method RequisicionQuery orderByRequisicionFolio($order = Criteria::ASC) Order by the requisicion_folio column
  * @method RequisicionQuery orderByRequisicionTotal($order = Criteria::ASC) Order by the requisicion_total column
@@ -30,6 +31,7 @@
  * @method RequisicionQuery groupByIdauditor() Group by the idauditor column
  * @method RequisicionQuery groupByIdconceptosalida() Group by the idconceptosalida column
  * @method RequisicionQuery groupByRequisicionFecha() Group by the requisicion_fecha column
+ * @method RequisicionQuery groupByRequisicionFechacreacion() Group by the requisicion_fechacreacion column
  * @method RequisicionQuery groupByRequisicionRevisada() Group by the requisicion_revisada column
  * @method RequisicionQuery groupByRequisicionFolio() Group by the requisicion_folio column
  * @method RequisicionQuery groupByRequisicionTotal() Group by the requisicion_total column
@@ -90,6 +92,7 @@
  * @method Requisicion findOneByIdauditor(int $idauditor) Return the first Requisicion filtered by the idauditor column
  * @method Requisicion findOneByIdconceptosalida(int $idconceptosalida) Return the first Requisicion filtered by the idconceptosalida column
  * @method Requisicion findOneByRequisicionFecha(string $requisicion_fecha) Return the first Requisicion filtered by the requisicion_fecha column
+ * @method Requisicion findOneByRequisicionFechacreacion(string $requisicion_fechacreacion) Return the first Requisicion filtered by the requisicion_fechacreacion column
  * @method Requisicion findOneByRequisicionRevisada(boolean $requisicion_revisada) Return the first Requisicion filtered by the requisicion_revisada column
  * @method Requisicion findOneByRequisicionFolio(string $requisicion_folio) Return the first Requisicion filtered by the requisicion_folio column
  * @method Requisicion findOneByRequisicionTotal(string $requisicion_total) Return the first Requisicion filtered by the requisicion_total column
@@ -104,6 +107,7 @@
  * @method array findByIdauditor(int $idauditor) Return Requisicion objects filtered by the idauditor column
  * @method array findByIdconceptosalida(int $idconceptosalida) Return Requisicion objects filtered by the idconceptosalida column
  * @method array findByRequisicionFecha(string $requisicion_fecha) Return Requisicion objects filtered by the requisicion_fecha column
+ * @method array findByRequisicionFechacreacion(string $requisicion_fechacreacion) Return Requisicion objects filtered by the requisicion_fechacreacion column
  * @method array findByRequisicionRevisada(boolean $requisicion_revisada) Return Requisicion objects filtered by the requisicion_revisada column
  * @method array findByRequisicionFolio(string $requisicion_folio) Return Requisicion objects filtered by the requisicion_folio column
  * @method array findByRequisicionTotal(string $requisicion_total) Return Requisicion objects filtered by the requisicion_total column
@@ -214,7 +218,7 @@ abstract class BaseRequisicionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursalorigen`, `idalmacenorigen`, `idsucursaldestino`, `idalmacendestino`, `idusuario`, `idauditor`, `idconceptosalida`, `requisicion_fecha`, `requisicion_revisada`, `requisicion_folio`, `requisicion_total` FROM `requisicion` WHERE `idrequisicion` = :p0';
+        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursalorigen`, `idalmacenorigen`, `idsucursaldestino`, `idalmacendestino`, `idusuario`, `idauditor`, `idconceptosalida`, `requisicion_fecha`, `requisicion_fechacreacion`, `requisicion_revisada`, `requisicion_folio`, `requisicion_total` FROM `requisicion` WHERE `idrequisicion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -738,6 +742,49 @@ abstract class BaseRequisicionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisicionPeer::REQUISICION_FECHA, $requisicionFecha, $comparison);
+    }
+
+    /**
+     * Filter the query on the requisicion_fechacreacion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRequisicionFechacreacion('2011-03-14'); // WHERE requisicion_fechacreacion = '2011-03-14'
+     * $query->filterByRequisicionFechacreacion('now'); // WHERE requisicion_fechacreacion = '2011-03-14'
+     * $query->filterByRequisicionFechacreacion(array('max' => 'yesterday')); // WHERE requisicion_fechacreacion < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $requisicionFechacreacion The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByRequisicionFechacreacion($requisicionFechacreacion = null, $comparison = null)
+    {
+        if (is_array($requisicionFechacreacion)) {
+            $useMinMax = false;
+            if (isset($requisicionFechacreacion['min'])) {
+                $this->addUsingAlias(RequisicionPeer::REQUISICION_FECHACREACION, $requisicionFechacreacion['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($requisicionFechacreacion['max'])) {
+                $this->addUsingAlias(RequisicionPeer::REQUISICION_FECHACREACION, $requisicionFechacreacion['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::REQUISICION_FECHACREACION, $requisicionFechacreacion, $comparison);
     }
 
     /**

@@ -53,14 +53,14 @@ abstract class BaseIngresoPeer
     /** the column name for the ingreso_revisada field */
     const INGRESO_REVISADA = 'ingreso.ingreso_revisada';
 
-    /** the column name for the ingreso_factoralimento field */
-    const INGRESO_FACTORALIMENTO = 'ingreso.ingreso_factoralimento';
+    /** the column name for the ingreso_totalalimento field */
+    const INGRESO_TOTALALIMENTO = 'ingreso.ingreso_totalalimento';
 
-    /** the column name for the ingreso_factorbebida field */
-    const INGRESO_FACTORBEBIDA = 'ingreso.ingreso_factorbebida';
+    /** the column name for the ingreso_totalbebida field */
+    const INGRESO_TOTALBEBIDA = 'ingreso.ingreso_totalbebida';
 
-    /** the column name for the ingreso_factormiscelanea field */
-    const INGRESO_FACTORMISCELANEA = 'ingreso.ingreso_factormiscelanea';
+    /** the column name for the ingreso_totalmiscelanea field */
+    const INGRESO_TOTALMISCELANEA = 'ingreso.ingreso_totalmiscelanea';
 
     /** the column name for the ingreso_fecha field */
     const INGRESO_FECHA = 'ingreso.ingreso_fecha';
@@ -87,11 +87,11 @@ abstract class BaseIngresoPeer
      * e.g. IngresoPeer::$fieldNames[IngresoPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idingreso', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'IngresoFolio', 'IngresoRevisada', 'IngresoFactoralimento', 'IngresoFactorbebida', 'IngresoFactormiscelanea', 'IngresoFecha', 'IngresoFechacreacion', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idingreso', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'ingresoFolio', 'ingresoRevisada', 'ingresoFactoralimento', 'ingresoFactorbebida', 'ingresoFactormiscelanea', 'ingresoFecha', 'ingresoFechacreacion', ),
-        BasePeer::TYPE_COLNAME => array (IngresoPeer::IDINGRESO, IngresoPeer::IDEMPRESA, IngresoPeer::IDSUCURSAL, IngresoPeer::IDUSUARIO, IngresoPeer::IDAUDITOR, IngresoPeer::INGRESO_FOLIO, IngresoPeer::INGRESO_REVISADA, IngresoPeer::INGRESO_FACTORALIMENTO, IngresoPeer::INGRESO_FACTORBEBIDA, IngresoPeer::INGRESO_FACTORMISCELANEA, IngresoPeer::INGRESO_FECHA, IngresoPeer::INGRESO_FECHACREACION, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESO', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'INGRESO_FOLIO', 'INGRESO_REVISADA', 'INGRESO_FACTORALIMENTO', 'INGRESO_FACTORBEBIDA', 'INGRESO_FACTORMISCELANEA', 'INGRESO_FECHA', 'INGRESO_FECHACREACION', ),
-        BasePeer::TYPE_FIELDNAME => array ('idingreso', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'ingreso_folio', 'ingreso_revisada', 'ingreso_factoralimento', 'ingreso_factorbebida', 'ingreso_factormiscelanea', 'ingreso_fecha', 'ingreso_fechacreacion', ),
+        BasePeer::TYPE_PHPNAME => array ('Idingreso', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'IngresoFolio', 'IngresoRevisada', 'IngresoTotalalimento', 'IngresoTotalbebida', 'IngresoTotalmiscelanea', 'IngresoFecha', 'IngresoFechacreacion', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idingreso', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'ingresoFolio', 'ingresoRevisada', 'ingresoTotalalimento', 'ingresoTotalbebida', 'ingresoTotalmiscelanea', 'ingresoFecha', 'ingresoFechacreacion', ),
+        BasePeer::TYPE_COLNAME => array (IngresoPeer::IDINGRESO, IngresoPeer::IDEMPRESA, IngresoPeer::IDSUCURSAL, IngresoPeer::IDUSUARIO, IngresoPeer::IDAUDITOR, IngresoPeer::INGRESO_FOLIO, IngresoPeer::INGRESO_REVISADA, IngresoPeer::INGRESO_TOTALALIMENTO, IngresoPeer::INGRESO_TOTALBEBIDA, IngresoPeer::INGRESO_TOTALMISCELANEA, IngresoPeer::INGRESO_FECHA, IngresoPeer::INGRESO_FECHACREACION, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESO', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'INGRESO_FOLIO', 'INGRESO_REVISADA', 'INGRESO_TOTALALIMENTO', 'INGRESO_TOTALBEBIDA', 'INGRESO_TOTALMISCELANEA', 'INGRESO_FECHA', 'INGRESO_FECHACREACION', ),
+        BasePeer::TYPE_FIELDNAME => array ('idingreso', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'ingreso_folio', 'ingreso_revisada', 'ingreso_totalalimento', 'ingreso_totalbebida', 'ingreso_totalmiscelanea', 'ingreso_fecha', 'ingreso_fechacreacion', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
@@ -102,11 +102,11 @@ abstract class BaseIngresoPeer
      * e.g. IngresoPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idingreso' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'IngresoFolio' => 5, 'IngresoRevisada' => 6, 'IngresoFactoralimento' => 7, 'IngresoFactorbebida' => 8, 'IngresoFactormiscelanea' => 9, 'IngresoFecha' => 10, 'IngresoFechacreacion' => 11, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idingreso' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'ingresoFolio' => 5, 'ingresoRevisada' => 6, 'ingresoFactoralimento' => 7, 'ingresoFactorbebida' => 8, 'ingresoFactormiscelanea' => 9, 'ingresoFecha' => 10, 'ingresoFechacreacion' => 11, ),
-        BasePeer::TYPE_COLNAME => array (IngresoPeer::IDINGRESO => 0, IngresoPeer::IDEMPRESA => 1, IngresoPeer::IDSUCURSAL => 2, IngresoPeer::IDUSUARIO => 3, IngresoPeer::IDAUDITOR => 4, IngresoPeer::INGRESO_FOLIO => 5, IngresoPeer::INGRESO_REVISADA => 6, IngresoPeer::INGRESO_FACTORALIMENTO => 7, IngresoPeer::INGRESO_FACTORBEBIDA => 8, IngresoPeer::INGRESO_FACTORMISCELANEA => 9, IngresoPeer::INGRESO_FECHA => 10, IngresoPeer::INGRESO_FECHACREACION => 11, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESO' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'INGRESO_FOLIO' => 5, 'INGRESO_REVISADA' => 6, 'INGRESO_FACTORALIMENTO' => 7, 'INGRESO_FACTORBEBIDA' => 8, 'INGRESO_FACTORMISCELANEA' => 9, 'INGRESO_FECHA' => 10, 'INGRESO_FECHACREACION' => 11, ),
-        BasePeer::TYPE_FIELDNAME => array ('idingreso' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'ingreso_folio' => 5, 'ingreso_revisada' => 6, 'ingreso_factoralimento' => 7, 'ingreso_factorbebida' => 8, 'ingreso_factormiscelanea' => 9, 'ingreso_fecha' => 10, 'ingreso_fechacreacion' => 11, ),
+        BasePeer::TYPE_PHPNAME => array ('Idingreso' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'IngresoFolio' => 5, 'IngresoRevisada' => 6, 'IngresoTotalalimento' => 7, 'IngresoTotalbebida' => 8, 'IngresoTotalmiscelanea' => 9, 'IngresoFecha' => 10, 'IngresoFechacreacion' => 11, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idingreso' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'ingresoFolio' => 5, 'ingresoRevisada' => 6, 'ingresoTotalalimento' => 7, 'ingresoTotalbebida' => 8, 'ingresoTotalmiscelanea' => 9, 'ingresoFecha' => 10, 'ingresoFechacreacion' => 11, ),
+        BasePeer::TYPE_COLNAME => array (IngresoPeer::IDINGRESO => 0, IngresoPeer::IDEMPRESA => 1, IngresoPeer::IDSUCURSAL => 2, IngresoPeer::IDUSUARIO => 3, IngresoPeer::IDAUDITOR => 4, IngresoPeer::INGRESO_FOLIO => 5, IngresoPeer::INGRESO_REVISADA => 6, IngresoPeer::INGRESO_TOTALALIMENTO => 7, IngresoPeer::INGRESO_TOTALBEBIDA => 8, IngresoPeer::INGRESO_TOTALMISCELANEA => 9, IngresoPeer::INGRESO_FECHA => 10, IngresoPeer::INGRESO_FECHACREACION => 11, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESO' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'INGRESO_FOLIO' => 5, 'INGRESO_REVISADA' => 6, 'INGRESO_TOTALALIMENTO' => 7, 'INGRESO_TOTALBEBIDA' => 8, 'INGRESO_TOTALMISCELANEA' => 9, 'INGRESO_FECHA' => 10, 'INGRESO_FECHACREACION' => 11, ),
+        BasePeer::TYPE_FIELDNAME => array ('idingreso' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'ingreso_folio' => 5, 'ingreso_revisada' => 6, 'ingreso_totalalimento' => 7, 'ingreso_totalbebida' => 8, 'ingreso_totalmiscelanea' => 9, 'ingreso_fecha' => 10, 'ingreso_fechacreacion' => 11, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
@@ -188,9 +188,9 @@ abstract class BaseIngresoPeer
             $criteria->addSelectColumn(IngresoPeer::IDAUDITOR);
             $criteria->addSelectColumn(IngresoPeer::INGRESO_FOLIO);
             $criteria->addSelectColumn(IngresoPeer::INGRESO_REVISADA);
-            $criteria->addSelectColumn(IngresoPeer::INGRESO_FACTORALIMENTO);
-            $criteria->addSelectColumn(IngresoPeer::INGRESO_FACTORBEBIDA);
-            $criteria->addSelectColumn(IngresoPeer::INGRESO_FACTORMISCELANEA);
+            $criteria->addSelectColumn(IngresoPeer::INGRESO_TOTALALIMENTO);
+            $criteria->addSelectColumn(IngresoPeer::INGRESO_TOTALBEBIDA);
+            $criteria->addSelectColumn(IngresoPeer::INGRESO_TOTALMISCELANEA);
             $criteria->addSelectColumn(IngresoPeer::INGRESO_FECHA);
             $criteria->addSelectColumn(IngresoPeer::INGRESO_FECHACREACION);
         } else {
@@ -201,9 +201,9 @@ abstract class BaseIngresoPeer
             $criteria->addSelectColumn($alias . '.idauditor');
             $criteria->addSelectColumn($alias . '.ingreso_folio');
             $criteria->addSelectColumn($alias . '.ingreso_revisada');
-            $criteria->addSelectColumn($alias . '.ingreso_factoralimento');
-            $criteria->addSelectColumn($alias . '.ingreso_factorbebida');
-            $criteria->addSelectColumn($alias . '.ingreso_factormiscelanea');
+            $criteria->addSelectColumn($alias . '.ingreso_totalalimento');
+            $criteria->addSelectColumn($alias . '.ingreso_totalbebida');
+            $criteria->addSelectColumn($alias . '.ingreso_totalmiscelanea');
             $criteria->addSelectColumn($alias . '.ingreso_fecha');
             $criteria->addSelectColumn($alias . '.ingreso_fechacreacion');
         }

@@ -97,10 +97,10 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     protected $devolucion_fechacreacion;
 
     /**
-     * The value for the devolucion_fechaentrega field.
+     * The value for the devolucion_fechadevolucion field.
      * @var        string
      */
-    protected $devolucion_fechaentrega;
+    protected $devolucion_fechadevolucion;
 
     /**
      * The value for the devolucion_ieps field.
@@ -372,14 +372,43 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [devolucion_fechaentrega] column value.
+     * Get the [optionally formatted] temporal [devolucion_fechadevolucion] column value.
      *
-     * @return string
+     *
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
+     *				 If format is null, then the raw DateTime object will be returned.
+     * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDevolucionFechaentrega()
+    public function getDevolucionFechadevolucion($format = 'Y-m-d H:i:s')
     {
+        if ($this->devolucion_fechadevolucion === null) {
+            return null;
+        }
 
-        return $this->devolucion_fechaentrega;
+        if ($this->devolucion_fechadevolucion === '0000-00-00 00:00:00') {
+            // while technically this is not a default value of null,
+            // this seems to be closest in meaning.
+            return null;
+        }
+
+        try {
+            $dt = new DateTime($this->devolucion_fechadevolucion);
+        } catch (Exception $x) {
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->devolucion_fechadevolucion, true), $x);
+        }
+
+        if ($format === null) {
+            // Because propel.useDateTimeClass is true, we return a DateTime object.
+            return $dt;
+        }
+
+        if (strpos($format, '%') !== false) {
+            return strftime($format, $dt->format('U'));
+        }
+
+        return $dt->format($format);
+
     }
 
     /**
@@ -692,25 +721,27 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     } // setDevolucionFechacreacion()
 
     /**
-     * Set the value of [devolucion_fechaentrega] column.
+     * Sets the value of [devolucion_fechadevolucion] column to a normalized version of the date/time value specified.
      *
-     * @param  string $v new value
+     * @param mixed $v string, integer (timestamp), or DateTime value.
+     *               Empty strings are treated as null.
      * @return Devolucion The current object (for fluent API support)
      */
-    public function setDevolucionFechaentrega($v)
+    public function setDevolucionFechadevolucion($v)
     {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->devolucion_fechaentrega !== $v) {
-            $this->devolucion_fechaentrega = $v;
-            $this->modifiedColumns[] = DevolucionPeer::DEVOLUCION_FECHAENTREGA;
-        }
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->devolucion_fechadevolucion !== null || $dt !== null) {
+            $currentDateAsString = ($this->devolucion_fechadevolucion !== null && $tmpDt = new DateTime($this->devolucion_fechadevolucion)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+            $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+            if ($currentDateAsString !== $newDateAsString) {
+                $this->devolucion_fechadevolucion = $newDateAsString;
+                $this->modifiedColumns[] = DevolucionPeer::DEVOLUCION_FECHADEVOLUCION;
+            }
+        } // if either are not null
 
 
         return $this;
-    } // setDevolucionFechaentrega()
+    } // setDevolucionFechadevolucion()
 
     /**
      * Set the value of [devolucion_ieps] column.
@@ -843,7 +874,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $this->devolucion_revisada = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
             $this->devolucion_factura = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->devolucion_fechacreacion = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->devolucion_fechaentrega = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->devolucion_fechadevolucion = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->devolucion_ieps = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->devolucion_iva = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->devolucion_total = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
@@ -1211,8 +1242,8 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FECHACREACION)) {
             $modifiedColumns[':p' . $index++]  = '`devolucion_fechacreacion`';
         }
-        if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FECHAENTREGA)) {
-            $modifiedColumns[':p' . $index++]  = '`devolucion_fechaentrega`';
+        if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FECHADEVOLUCION)) {
+            $modifiedColumns[':p' . $index++]  = '`devolucion_fechadevolucion`';
         }
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_IEPS)) {
             $modifiedColumns[':p' . $index++]  = '`devolucion_ieps`';
@@ -1270,8 +1301,8 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                     case '`devolucion_fechacreacion`':
                         $stmt->bindValue($identifier, $this->devolucion_fechacreacion, PDO::PARAM_STR);
                         break;
-                    case '`devolucion_fechaentrega`':
-                        $stmt->bindValue($identifier, $this->devolucion_fechaentrega, PDO::PARAM_STR);
+                    case '`devolucion_fechadevolucion`':
+                        $stmt->bindValue($identifier, $this->devolucion_fechadevolucion, PDO::PARAM_STR);
                         break;
                     case '`devolucion_ieps`':
                         $stmt->bindValue($identifier, $this->devolucion_ieps, PDO::PARAM_STR);
@@ -1511,7 +1542,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                 return $this->getDevolucionFechacreacion();
                 break;
             case 11:
-                return $this->getDevolucionFechaentrega();
+                return $this->getDevolucionFechadevolucion();
                 break;
             case 12:
                 return $this->getDevolucionIeps();
@@ -1565,7 +1596,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $keys[8] => $this->getDevolucionRevisada(),
             $keys[9] => $this->getDevolucionFactura(),
             $keys[10] => $this->getDevolucionFechacreacion(),
-            $keys[11] => $this->getDevolucionFechaentrega(),
+            $keys[11] => $this->getDevolucionFechadevolucion(),
             $keys[12] => $this->getDevolucionIeps(),
             $keys[13] => $this->getDevolucionIva(),
             $keys[14] => $this->getDevolucionTotal(),
@@ -1669,7 +1700,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                 $this->setDevolucionFechacreacion($value);
                 break;
             case 11:
-                $this->setDevolucionFechaentrega($value);
+                $this->setDevolucionFechadevolucion($value);
                 break;
             case 12:
                 $this->setDevolucionIeps($value);
@@ -1718,7 +1749,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if (array_key_exists($keys[8], $arr)) $this->setDevolucionRevisada($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setDevolucionFactura($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setDevolucionFechacreacion($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setDevolucionFechaentrega($arr[$keys[11]]);
+        if (array_key_exists($keys[11], $arr)) $this->setDevolucionFechadevolucion($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setDevolucionIeps($arr[$keys[12]]);
         if (array_key_exists($keys[13], $arr)) $this->setDevolucionIva($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setDevolucionTotal($arr[$keys[14]]);
@@ -1745,7 +1776,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_REVISADA)) $criteria->add(DevolucionPeer::DEVOLUCION_REVISADA, $this->devolucion_revisada);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FACTURA)) $criteria->add(DevolucionPeer::DEVOLUCION_FACTURA, $this->devolucion_factura);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FECHACREACION)) $criteria->add(DevolucionPeer::DEVOLUCION_FECHACREACION, $this->devolucion_fechacreacion);
-        if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FECHAENTREGA)) $criteria->add(DevolucionPeer::DEVOLUCION_FECHAENTREGA, $this->devolucion_fechaentrega);
+        if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_FECHADEVOLUCION)) $criteria->add(DevolucionPeer::DEVOLUCION_FECHADEVOLUCION, $this->devolucion_fechadevolucion);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_IEPS)) $criteria->add(DevolucionPeer::DEVOLUCION_IEPS, $this->devolucion_ieps);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_IVA)) $criteria->add(DevolucionPeer::DEVOLUCION_IVA, $this->devolucion_iva);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_TOTAL)) $criteria->add(DevolucionPeer::DEVOLUCION_TOTAL, $this->devolucion_total);
@@ -1823,7 +1854,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $copyObj->setDevolucionRevisada($this->getDevolucionRevisada());
         $copyObj->setDevolucionFactura($this->getDevolucionFactura());
         $copyObj->setDevolucionFechacreacion($this->getDevolucionFechacreacion());
-        $copyObj->setDevolucionFechaentrega($this->getDevolucionFechaentrega());
+        $copyObj->setDevolucionFechadevolucion($this->getDevolucionFechadevolucion());
         $copyObj->setDevolucionIeps($this->getDevolucionIeps());
         $copyObj->setDevolucionIva($this->getDevolucionIva());
         $copyObj->setDevolucionTotal($this->getDevolucionTotal());
@@ -2770,7 +2801,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $this->devolucion_revisada = null;
         $this->devolucion_factura = null;
         $this->devolucion_fechacreacion = null;
-        $this->devolucion_fechaentrega = null;
+        $this->devolucion_fechadevolucion = null;
         $this->devolucion_ieps = null;
         $this->devolucion_iva = null;
         $this->devolucion_total = null;

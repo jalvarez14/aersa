@@ -4907,7 +4907,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->inventariomessRelatedByIdauditorScheduledForDeletion = clone $this->collInventariomessRelatedByIdauditor;
                 $this->inventariomessRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->inventariomessRelatedByIdauditorScheduledForDeletion[]= clone $inventariomesRelatedByIdauditor;
+            $this->inventariomessRelatedByIdauditorScheduledForDeletion[]= $inventariomesRelatedByIdauditor;
             $inventariomesRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 

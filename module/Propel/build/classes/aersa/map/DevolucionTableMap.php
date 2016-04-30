@@ -49,7 +49,7 @@ class DevolucionTableMap extends TableMap
         $this->addColumn('devolucion_revisada', 'DevolucionRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('devolucion_factura', 'DevolucionFactura', 'LONGVARCHAR', false, null, null);
         $this->addColumn('devolucion_fechacreacion', 'DevolucionFechacreacion', 'TIMESTAMP', false, null, null);
-        $this->addColumn('devolucion_fechaentrega', 'DevolucionFechaentrega', 'VARCHAR', false, 45, null);
+        $this->addColumn('devolucion_fechadevolucion', 'DevolucionFechadevolucion', 'TIMESTAMP', false, null, null);
         $this->addColumn('devolucion_ieps', 'DevolucionIeps', 'DECIMAL', false, 10, null);
         $this->addColumn('devolucion_iva', 'DevolucionIva', 'DECIMAL', false, 10, null);
         $this->addColumn('devolucion_total', 'DevolucionTotal', 'DECIMAL', false, 10, null);

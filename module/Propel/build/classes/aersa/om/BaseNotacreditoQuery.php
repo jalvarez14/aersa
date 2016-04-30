@@ -17,7 +17,7 @@
  * @method NotacreditoQuery orderByNotacreditoRevisada($order = Criteria::ASC) Order by the notacredito_revisada column
  * @method NotacreditoQuery orderByNotacreditoFactura($order = Criteria::ASC) Order by the notacredito_factura column
  * @method NotacreditoQuery orderByNotacreditoFechacreacion($order = Criteria::ASC) Order by the notacredito_fechacreacion column
- * @method NotacreditoQuery orderByNotacreditoFechaentrega($order = Criteria::ASC) Order by the notacredito_fechaentrega column
+ * @method NotacreditoQuery orderByNotacreditoFechanotacredito($order = Criteria::ASC) Order by the notacredito_fechanotacredito column
  * @method NotacreditoQuery orderByNotacreditoIeps($order = Criteria::ASC) Order by the notacredito_ieps column
  * @method NotacreditoQuery orderByNotacreditoIva($order = Criteria::ASC) Order by the notacredito_iva column
  * @method NotacreditoQuery orderByNotacreditoTotal($order = Criteria::ASC) Order by the notacredito_total column
@@ -34,7 +34,7 @@
  * @method NotacreditoQuery groupByNotacreditoRevisada() Group by the notacredito_revisada column
  * @method NotacreditoQuery groupByNotacreditoFactura() Group by the notacredito_factura column
  * @method NotacreditoQuery groupByNotacreditoFechacreacion() Group by the notacredito_fechacreacion column
- * @method NotacreditoQuery groupByNotacreditoFechaentrega() Group by the notacredito_fechaentrega column
+ * @method NotacreditoQuery groupByNotacreditoFechanotacredito() Group by the notacredito_fechanotacredito column
  * @method NotacreditoQuery groupByNotacreditoIeps() Group by the notacredito_ieps column
  * @method NotacreditoQuery groupByNotacreditoIva() Group by the notacredito_iva column
  * @method NotacreditoQuery groupByNotacreditoTotal() Group by the notacredito_total column
@@ -89,7 +89,7 @@
  * @method Notacredito findOneByNotacreditoRevisada(boolean $notacredito_revisada) Return the first Notacredito filtered by the notacredito_revisada column
  * @method Notacredito findOneByNotacreditoFactura(string $notacredito_factura) Return the first Notacredito filtered by the notacredito_factura column
  * @method Notacredito findOneByNotacreditoFechacreacion(string $notacredito_fechacreacion) Return the first Notacredito filtered by the notacredito_fechacreacion column
- * @method Notacredito findOneByNotacreditoFechaentrega(string $notacredito_fechaentrega) Return the first Notacredito filtered by the notacredito_fechaentrega column
+ * @method Notacredito findOneByNotacreditoFechanotacredito(string $notacredito_fechanotacredito) Return the first Notacredito filtered by the notacredito_fechanotacredito column
  * @method Notacredito findOneByNotacreditoIeps(string $notacredito_ieps) Return the first Notacredito filtered by the notacredito_ieps column
  * @method Notacredito findOneByNotacreditoIva(string $notacredito_iva) Return the first Notacredito filtered by the notacredito_iva column
  * @method Notacredito findOneByNotacreditoTotal(string $notacredito_total) Return the first Notacredito filtered by the notacredito_total column
@@ -106,7 +106,7 @@
  * @method array findByNotacreditoRevisada(boolean $notacredito_revisada) Return Notacredito objects filtered by the notacredito_revisada column
  * @method array findByNotacreditoFactura(string $notacredito_factura) Return Notacredito objects filtered by the notacredito_factura column
  * @method array findByNotacreditoFechacreacion(string $notacredito_fechacreacion) Return Notacredito objects filtered by the notacredito_fechacreacion column
- * @method array findByNotacreditoFechaentrega(string $notacredito_fechaentrega) Return Notacredito objects filtered by the notacredito_fechaentrega column
+ * @method array findByNotacreditoFechanotacredito(string $notacredito_fechanotacredito) Return Notacredito objects filtered by the notacredito_fechanotacredito column
  * @method array findByNotacreditoIeps(string $notacredito_ieps) Return Notacredito objects filtered by the notacredito_ieps column
  * @method array findByNotacreditoIva(string $notacredito_iva) Return Notacredito objects filtered by the notacredito_iva column
  * @method array findByNotacreditoTotal(string $notacredito_total) Return Notacredito objects filtered by the notacredito_total column
@@ -218,7 +218,7 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idnotacredito`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechaentrega`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total`, `notacredito_subtotal` FROM `notacredito` WHERE `idnotacredito` = :p0';
+        $sql = 'SELECT `idnotacredito`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechanotacredito`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total`, `notacredito_subtotal` FROM `notacredito` WHERE `idnotacredito` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -742,16 +742,16 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the notacredito_fechaentrega column
+     * Filter the query on the notacredito_fechanotacredito column
      *
      * Example usage:
      * <code>
-     * $query->filterByNotacreditoFechaentrega('2011-03-14'); // WHERE notacredito_fechaentrega = '2011-03-14'
-     * $query->filterByNotacreditoFechaentrega('now'); // WHERE notacredito_fechaentrega = '2011-03-14'
-     * $query->filterByNotacreditoFechaentrega(array('max' => 'yesterday')); // WHERE notacredito_fechaentrega < '2011-03-13'
+     * $query->filterByNotacreditoFechanotacredito('2011-03-14'); // WHERE notacredito_fechanotacredito = '2011-03-14'
+     * $query->filterByNotacreditoFechanotacredito('now'); // WHERE notacredito_fechanotacredito = '2011-03-14'
+     * $query->filterByNotacreditoFechanotacredito(array('max' => 'yesterday')); // WHERE notacredito_fechanotacredito < '2011-03-13'
      * </code>
      *
-     * @param     mixed $notacreditoFechaentrega The value to use as filter.
+     * @param     mixed $notacreditoFechanotacredito The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -761,16 +761,16 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      *
      * @return NotacreditoQuery The current query, for fluid interface
      */
-    public function filterByNotacreditoFechaentrega($notacreditoFechaentrega = null, $comparison = null)
+    public function filterByNotacreditoFechanotacredito($notacreditoFechanotacredito = null, $comparison = null)
     {
-        if (is_array($notacreditoFechaentrega)) {
+        if (is_array($notacreditoFechanotacredito)) {
             $useMinMax = false;
-            if (isset($notacreditoFechaentrega['min'])) {
-                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHAENTREGA, $notacreditoFechaentrega['min'], Criteria::GREATER_EQUAL);
+            if (isset($notacreditoFechanotacredito['min'])) {
+                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO, $notacreditoFechanotacredito['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($notacreditoFechaentrega['max'])) {
-                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHAENTREGA, $notacreditoFechaentrega['max'], Criteria::LESS_EQUAL);
+            if (isset($notacreditoFechanotacredito['max'])) {
+                $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO, $notacreditoFechanotacredito['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -781,7 +781,7 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHAENTREGA, $notacreditoFechaentrega, $comparison);
+        return $this->addUsingAlias(NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO, $notacreditoFechanotacredito, $comparison);
     }
 
     /**

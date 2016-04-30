@@ -759,6 +759,141 @@ return array(
                                     ), 
                                 ), 
                             ), 
+                            'devolucion' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/devolucion', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Devolucion', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevoregistro', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'nuevoregistro', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                ), 
+                            ),
+                            'ingresos' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/ingresos', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                        'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevo' => array( 
+                                        'type' => 'Literal', 
+                                        'options' => array( 
+                                            'route' => '/nuevo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                ), 
+                            ),
+                            'notacredito' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/credito', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Notacredito', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevoregistro', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                'action' => 'nuevoregistro', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
+                                ), 
+                            ),
                         ), 
                     ), 
                 ),
@@ -827,6 +962,10 @@ return array(
             
             'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
             'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
+            'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
+            'Application\Proceso\Controller\Ingresos' => 'Application\Proceso\Controller\IngresosController',
+            'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
+
             /*
              * WEBSITE
              */

@@ -72,12 +72,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     protected $ingresodetalle_total;
 
     /**
-     * The value for the ingresodetalle_credfact field.
-     * @var        string
-     */
-    protected $ingresodetalle_credfact;
-
-    /**
      * The value for the ingresodetalle_revisada field.
      * Note: this column has a database default value of: false
      * @var        boolean
@@ -215,17 +209,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     {
 
         return $this->ingresodetalle_total;
-    }
-
-    /**
-     * Get the [ingresodetalle_credfact] column value.
-     *
-     * @return string
-     */
-    public function getIngresodetalleCredfact()
-    {
-
-        return $this->ingresodetalle_credfact;
     }
 
     /**
@@ -399,27 +382,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
     } // setIngresodetalleTotal()
 
     /**
-     * Set the value of [ingresodetalle_credfact] column.
-     *
-     * @param  string $v new value
-     * @return Ingresodetalle The current object (for fluent API support)
-     */
-    public function setIngresodetalleCredfact($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->ingresodetalle_credfact !== $v) {
-            $this->ingresodetalle_credfact = $v;
-            $this->modifiedColumns[] = IngresodetallePeer::INGRESODETALLE_CREDFACT;
-        }
-
-
-        return $this;
-    } // setIngresodetalleCredfact()
-
-    /**
      * Sets the value of the [ingresodetalle_revisada] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
@@ -491,8 +453,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
             $this->ingresodetalle_sub = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->ingresodetalle_iva = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->ingresodetalle_total = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->ingresodetalle_credfact = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->ingresodetalle_revisada = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->ingresodetalle_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -502,7 +463,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = IngresodetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = IngresodetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Ingresodetalle object", $e);
@@ -773,9 +734,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_TOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`ingresodetalle_total`';
         }
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_CREDFACT)) {
-            $modifiedColumns[':p' . $index++]  = '`ingresodetalle_credfact`';
-        }
         if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_REVISADA)) {
             $modifiedColumns[':p' . $index++]  = '`ingresodetalle_revisada`';
         }
@@ -810,9 +768,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
                         break;
                     case '`ingresodetalle_total`':
                         $stmt->bindValue($identifier, $this->ingresodetalle_total, PDO::PARAM_STR);
-                        break;
-                    case '`ingresodetalle_credfact`':
-                        $stmt->bindValue($identifier, $this->ingresodetalle_credfact, PDO::PARAM_STR);
                         break;
                     case '`ingresodetalle_revisada`':
                         $stmt->bindValue($identifier, (int) $this->ingresodetalle_revisada, PDO::PARAM_INT);
@@ -997,9 +952,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
                 return $this->getIngresodetalleTotal();
                 break;
             case 7:
-                return $this->getIngresodetalleCredfact();
-                break;
-            case 8:
                 return $this->getIngresodetalleRevisada();
                 break;
             default:
@@ -1038,8 +990,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
             $keys[4] => $this->getIngresodetalleSub(),
             $keys[5] => $this->getIngresodetalleIva(),
             $keys[6] => $this->getIngresodetalleTotal(),
-            $keys[7] => $this->getIngresodetalleCredfact(),
-            $keys[8] => $this->getIngresodetalleRevisada(),
+            $keys[7] => $this->getIngresodetalleRevisada(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1112,9 +1063,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
                 $this->setIngresodetalleTotal($value);
                 break;
             case 7:
-                $this->setIngresodetalleCredfact($value);
-                break;
-            case 8:
                 $this->setIngresodetalleRevisada($value);
                 break;
         } // switch()
@@ -1148,8 +1096,7 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setIngresodetalleSub($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setIngresodetalleIva($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setIngresodetalleTotal($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setIngresodetalleCredfact($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setIngresodetalleRevisada($arr[$keys[8]]);
+        if (array_key_exists($keys[7], $arr)) $this->setIngresodetalleRevisada($arr[$keys[7]]);
     }
 
     /**
@@ -1168,7 +1115,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_SUB)) $criteria->add(IngresodetallePeer::INGRESODETALLE_SUB, $this->ingresodetalle_sub);
         if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_IVA)) $criteria->add(IngresodetallePeer::INGRESODETALLE_IVA, $this->ingresodetalle_iva);
         if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_TOTAL)) $criteria->add(IngresodetallePeer::INGRESODETALLE_TOTAL, $this->ingresodetalle_total);
-        if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_CREDFACT)) $criteria->add(IngresodetallePeer::INGRESODETALLE_CREDFACT, $this->ingresodetalle_credfact);
         if ($this->isColumnModified(IngresodetallePeer::INGRESODETALLE_REVISADA)) $criteria->add(IngresodetallePeer::INGRESODETALLE_REVISADA, $this->ingresodetalle_revisada);
 
         return $criteria;
@@ -1239,7 +1185,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         $copyObj->setIngresodetalleSub($this->getIngresodetalleSub());
         $copyObj->setIngresodetalleIva($this->getIngresodetalleIva());
         $copyObj->setIngresodetalleTotal($this->getIngresodetalleTotal());
-        $copyObj->setIngresodetalleCredfact($this->getIngresodetalleCredfact());
         $copyObj->setIngresodetalleRevisada($this->getIngresodetalleRevisada());
 
         if ($deepCopy && !$this->startCopy) {
@@ -1467,7 +1412,6 @@ abstract class BaseIngresodetalle extends BaseObject implements Persistent
         $this->ingresodetalle_sub = null;
         $this->ingresodetalle_iva = null;
         $this->ingresodetalle_total = null;
-        $this->ingresodetalle_credfact = null;
         $this->ingresodetalle_revisada = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;

@@ -97,10 +97,10 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     protected $notacredito_fechacreacion;
 
     /**
-     * The value for the notacredito_fechaentrega field.
+     * The value for the notacredito_fechanotacredito field.
      * @var        string
      */
-    protected $notacredito_fechaentrega;
+    protected $notacredito_fechanotacredito;
 
     /**
      * The value for the notacredito_ieps field.
@@ -372,7 +372,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [optionally formatted] temporal [notacredito_fechaentrega] column value.
+     * Get the [optionally formatted] temporal [notacredito_fechanotacredito] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -380,22 +380,22 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getNotacreditoFechaentrega($format = 'Y-m-d H:i:s')
+    public function getNotacreditoFechanotacredito($format = 'Y-m-d H:i:s')
     {
-        if ($this->notacredito_fechaentrega === null) {
+        if ($this->notacredito_fechanotacredito === null) {
             return null;
         }
 
-        if ($this->notacredito_fechaentrega === '0000-00-00 00:00:00') {
+        if ($this->notacredito_fechanotacredito === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->notacredito_fechaentrega);
+            $dt = new DateTime($this->notacredito_fechanotacredito);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->notacredito_fechaentrega, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->notacredito_fechanotacredito, true), $x);
         }
 
         if ($format === null) {
@@ -721,27 +721,27 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     } // setNotacreditoFechacreacion()
 
     /**
-     * Sets the value of [notacredito_fechaentrega] column to a normalized version of the date/time value specified.
+     * Sets the value of [notacredito_fechanotacredito] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
      * @return Notacredito The current object (for fluent API support)
      */
-    public function setNotacreditoFechaentrega($v)
+    public function setNotacreditoFechanotacredito($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->notacredito_fechaentrega !== null || $dt !== null) {
-            $currentDateAsString = ($this->notacredito_fechaentrega !== null && $tmpDt = new DateTime($this->notacredito_fechaentrega)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->notacredito_fechanotacredito !== null || $dt !== null) {
+            $currentDateAsString = ($this->notacredito_fechanotacredito !== null && $tmpDt = new DateTime($this->notacredito_fechanotacredito)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->notacredito_fechaentrega = $newDateAsString;
-                $this->modifiedColumns[] = NotacreditoPeer::NOTACREDITO_FECHAENTREGA;
+                $this->notacredito_fechanotacredito = $newDateAsString;
+                $this->modifiedColumns[] = NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO;
             }
         } // if either are not null
 
 
         return $this;
-    } // setNotacreditoFechaentrega()
+    } // setNotacreditoFechanotacredito()
 
     /**
      * Set the value of [notacredito_ieps] column.
@@ -874,7 +874,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $this->notacredito_revisada = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
             $this->notacredito_factura = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->notacredito_fechacreacion = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-            $this->notacredito_fechaentrega = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->notacredito_fechanotacredito = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->notacredito_ieps = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->notacredito_iva = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->notacredito_total = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
@@ -1242,8 +1242,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_FECHACREACION)) {
             $modifiedColumns[':p' . $index++]  = '`notacredito_fechacreacion`';
         }
-        if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_FECHAENTREGA)) {
-            $modifiedColumns[':p' . $index++]  = '`notacredito_fechaentrega`';
+        if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO)) {
+            $modifiedColumns[':p' . $index++]  = '`notacredito_fechanotacredito`';
         }
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_IEPS)) {
             $modifiedColumns[':p' . $index++]  = '`notacredito_ieps`';
@@ -1301,8 +1301,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                     case '`notacredito_fechacreacion`':
                         $stmt->bindValue($identifier, $this->notacredito_fechacreacion, PDO::PARAM_STR);
                         break;
-                    case '`notacredito_fechaentrega`':
-                        $stmt->bindValue($identifier, $this->notacredito_fechaentrega, PDO::PARAM_STR);
+                    case '`notacredito_fechanotacredito`':
+                        $stmt->bindValue($identifier, $this->notacredito_fechanotacredito, PDO::PARAM_STR);
                         break;
                     case '`notacredito_ieps`':
                         $stmt->bindValue($identifier, $this->notacredito_ieps, PDO::PARAM_STR);
@@ -1542,7 +1542,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 return $this->getNotacreditoFechacreacion();
                 break;
             case 11:
-                return $this->getNotacreditoFechaentrega();
+                return $this->getNotacreditoFechanotacredito();
                 break;
             case 12:
                 return $this->getNotacreditoIeps();
@@ -1596,7 +1596,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $keys[8] => $this->getNotacreditoRevisada(),
             $keys[9] => $this->getNotacreditoFactura(),
             $keys[10] => $this->getNotacreditoFechacreacion(),
-            $keys[11] => $this->getNotacreditoFechaentrega(),
+            $keys[11] => $this->getNotacreditoFechanotacredito(),
             $keys[12] => $this->getNotacreditoIeps(),
             $keys[13] => $this->getNotacreditoIva(),
             $keys[14] => $this->getNotacreditoTotal(),
@@ -1700,7 +1700,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 $this->setNotacreditoFechacreacion($value);
                 break;
             case 11:
-                $this->setNotacreditoFechaentrega($value);
+                $this->setNotacreditoFechanotacredito($value);
                 break;
             case 12:
                 $this->setNotacreditoIeps($value);
@@ -1749,7 +1749,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if (array_key_exists($keys[8], $arr)) $this->setNotacreditoRevisada($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setNotacreditoFactura($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setNotacreditoFechacreacion($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setNotacreditoFechaentrega($arr[$keys[11]]);
+        if (array_key_exists($keys[11], $arr)) $this->setNotacreditoFechanotacredito($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setNotacreditoIeps($arr[$keys[12]]);
         if (array_key_exists($keys[13], $arr)) $this->setNotacreditoIva($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setNotacreditoTotal($arr[$keys[14]]);
@@ -1776,7 +1776,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_REVISADA)) $criteria->add(NotacreditoPeer::NOTACREDITO_REVISADA, $this->notacredito_revisada);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_FACTURA)) $criteria->add(NotacreditoPeer::NOTACREDITO_FACTURA, $this->notacredito_factura);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_FECHACREACION)) $criteria->add(NotacreditoPeer::NOTACREDITO_FECHACREACION, $this->notacredito_fechacreacion);
-        if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_FECHAENTREGA)) $criteria->add(NotacreditoPeer::NOTACREDITO_FECHAENTREGA, $this->notacredito_fechaentrega);
+        if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO)) $criteria->add(NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO, $this->notacredito_fechanotacredito);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_IEPS)) $criteria->add(NotacreditoPeer::NOTACREDITO_IEPS, $this->notacredito_ieps);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_IVA)) $criteria->add(NotacreditoPeer::NOTACREDITO_IVA, $this->notacredito_iva);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_TOTAL)) $criteria->add(NotacreditoPeer::NOTACREDITO_TOTAL, $this->notacredito_total);
@@ -1854,7 +1854,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $copyObj->setNotacreditoRevisada($this->getNotacreditoRevisada());
         $copyObj->setNotacreditoFactura($this->getNotacreditoFactura());
         $copyObj->setNotacreditoFechacreacion($this->getNotacreditoFechacreacion());
-        $copyObj->setNotacreditoFechaentrega($this->getNotacreditoFechaentrega());
+        $copyObj->setNotacreditoFechanotacredito($this->getNotacreditoFechanotacredito());
         $copyObj->setNotacreditoIeps($this->getNotacreditoIeps());
         $copyObj->setNotacreditoIva($this->getNotacreditoIva());
         $copyObj->setNotacreditoTotal($this->getNotacreditoTotal());
@@ -2801,7 +2801,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $this->notacredito_revisada = null;
         $this->notacredito_factura = null;
         $this->notacredito_fechacreacion = null;
-        $this->notacredito_fechaentrega = null;
+        $this->notacredito_fechanotacredito = null;
         $this->notacredito_ieps = null;
         $this->notacredito_iva = null;
         $this->notacredito_total = null;

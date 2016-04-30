@@ -45,9 +45,9 @@ class IngresoTableMap extends TableMap
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addColumn('ingreso_folio', 'IngresoFolio', 'VARCHAR', true, 10, null);
         $this->addColumn('ingreso_revisada', 'IngresoRevisada', 'BOOLEAN', true, 1, null);
-        $this->addColumn('ingreso_factoralimento', 'IngresoFactoralimento', 'DECIMAL', true, 15, null);
-        $this->addColumn('ingreso_factorbebida', 'IngresoFactorbebida', 'DECIMAL', true, 15, null);
-        $this->addColumn('ingreso_factormiscelanea', 'IngresoFactormiscelanea', 'DECIMAL', true, 15, null);
+        $this->addColumn('ingreso_totalalimento', 'IngresoTotalalimento', 'DECIMAL', true, 15, null);
+        $this->addColumn('ingreso_totalbebida', 'IngresoTotalbebida', 'DECIMAL', true, 15, null);
+        $this->addColumn('ingreso_totalmiscelanea', 'IngresoTotalmiscelanea', 'DECIMAL', true, 15, null);
         $this->addColumn('ingreso_fecha', 'IngresoFecha', 'TIMESTAMP', true, null, null);
         $this->addColumn('ingreso_fechacreacion', 'IngresoFechacreacion', 'TIMESTAMP', true, null, null);
         // validators

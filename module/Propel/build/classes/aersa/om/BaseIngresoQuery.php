@@ -13,9 +13,9 @@
  * @method IngresoQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method IngresoQuery orderByIngresoFolio($order = Criteria::ASC) Order by the ingreso_folio column
  * @method IngresoQuery orderByIngresoRevisada($order = Criteria::ASC) Order by the ingreso_revisada column
- * @method IngresoQuery orderByIngresoFactoralimento($order = Criteria::ASC) Order by the ingreso_factoralimento column
- * @method IngresoQuery orderByIngresoFactorbebida($order = Criteria::ASC) Order by the ingreso_factorbebida column
- * @method IngresoQuery orderByIngresoFactormiscelanea($order = Criteria::ASC) Order by the ingreso_factormiscelanea column
+ * @method IngresoQuery orderByIngresoTotalalimento($order = Criteria::ASC) Order by the ingreso_totalalimento column
+ * @method IngresoQuery orderByIngresoTotalbebida($order = Criteria::ASC) Order by the ingreso_totalbebida column
+ * @method IngresoQuery orderByIngresoTotalmiscelanea($order = Criteria::ASC) Order by the ingreso_totalmiscelanea column
  * @method IngresoQuery orderByIngresoFecha($order = Criteria::ASC) Order by the ingreso_fecha column
  * @method IngresoQuery orderByIngresoFechacreacion($order = Criteria::ASC) Order by the ingreso_fechacreacion column
  *
@@ -26,9 +26,9 @@
  * @method IngresoQuery groupByIdauditor() Group by the idauditor column
  * @method IngresoQuery groupByIngresoFolio() Group by the ingreso_folio column
  * @method IngresoQuery groupByIngresoRevisada() Group by the ingreso_revisada column
- * @method IngresoQuery groupByIngresoFactoralimento() Group by the ingreso_factoralimento column
- * @method IngresoQuery groupByIngresoFactorbebida() Group by the ingreso_factorbebida column
- * @method IngresoQuery groupByIngresoFactormiscelanea() Group by the ingreso_factormiscelanea column
+ * @method IngresoQuery groupByIngresoTotalalimento() Group by the ingreso_totalalimento column
+ * @method IngresoQuery groupByIngresoTotalbebida() Group by the ingreso_totalbebida column
+ * @method IngresoQuery groupByIngresoTotalmiscelanea() Group by the ingreso_totalmiscelanea column
  * @method IngresoQuery groupByIngresoFecha() Group by the ingreso_fecha column
  * @method IngresoQuery groupByIngresoFechacreacion() Group by the ingreso_fechacreacion column
  *
@@ -65,9 +65,9 @@
  * @method Ingreso findOneByIdauditor(int $idauditor) Return the first Ingreso filtered by the idauditor column
  * @method Ingreso findOneByIngresoFolio(string $ingreso_folio) Return the first Ingreso filtered by the ingreso_folio column
  * @method Ingreso findOneByIngresoRevisada(boolean $ingreso_revisada) Return the first Ingreso filtered by the ingreso_revisada column
- * @method Ingreso findOneByIngresoFactoralimento(string $ingreso_factoralimento) Return the first Ingreso filtered by the ingreso_factoralimento column
- * @method Ingreso findOneByIngresoFactorbebida(string $ingreso_factorbebida) Return the first Ingreso filtered by the ingreso_factorbebida column
- * @method Ingreso findOneByIngresoFactormiscelanea(string $ingreso_factormiscelanea) Return the first Ingreso filtered by the ingreso_factormiscelanea column
+ * @method Ingreso findOneByIngresoTotalalimento(string $ingreso_totalalimento) Return the first Ingreso filtered by the ingreso_totalalimento column
+ * @method Ingreso findOneByIngresoTotalbebida(string $ingreso_totalbebida) Return the first Ingreso filtered by the ingreso_totalbebida column
+ * @method Ingreso findOneByIngresoTotalmiscelanea(string $ingreso_totalmiscelanea) Return the first Ingreso filtered by the ingreso_totalmiscelanea column
  * @method Ingreso findOneByIngresoFecha(string $ingreso_fecha) Return the first Ingreso filtered by the ingreso_fecha column
  * @method Ingreso findOneByIngresoFechacreacion(string $ingreso_fechacreacion) Return the first Ingreso filtered by the ingreso_fechacreacion column
  *
@@ -78,9 +78,9 @@
  * @method array findByIdauditor(int $idauditor) Return Ingreso objects filtered by the idauditor column
  * @method array findByIngresoFolio(string $ingreso_folio) Return Ingreso objects filtered by the ingreso_folio column
  * @method array findByIngresoRevisada(boolean $ingreso_revisada) Return Ingreso objects filtered by the ingreso_revisada column
- * @method array findByIngresoFactoralimento(string $ingreso_factoralimento) Return Ingreso objects filtered by the ingreso_factoralimento column
- * @method array findByIngresoFactorbebida(string $ingreso_factorbebida) Return Ingreso objects filtered by the ingreso_factorbebida column
- * @method array findByIngresoFactormiscelanea(string $ingreso_factormiscelanea) Return Ingreso objects filtered by the ingreso_factormiscelanea column
+ * @method array findByIngresoTotalalimento(string $ingreso_totalalimento) Return Ingreso objects filtered by the ingreso_totalalimento column
+ * @method array findByIngresoTotalbebida(string $ingreso_totalbebida) Return Ingreso objects filtered by the ingreso_totalbebida column
+ * @method array findByIngresoTotalmiscelanea(string $ingreso_totalmiscelanea) Return Ingreso objects filtered by the ingreso_totalmiscelanea column
  * @method array findByIngresoFecha(string $ingreso_fecha) Return Ingreso objects filtered by the ingreso_fecha column
  * @method array findByIngresoFechacreacion(string $ingreso_fechacreacion) Return Ingreso objects filtered by the ingreso_fechacreacion column
  *
@@ -190,7 +190,7 @@ abstract class BaseIngresoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idingreso`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `ingreso_folio`, `ingreso_revisada`, `ingreso_factoralimento`, `ingreso_factorbebida`, `ingreso_factormiscelanea`, `ingreso_fecha`, `ingreso_fechacreacion` FROM `ingreso` WHERE `idingreso` = :p0';
+        $sql = 'SELECT `idingreso`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `ingreso_folio`, `ingreso_revisada`, `ingreso_totalalimento`, `ingreso_totalbebida`, `ingreso_totalmiscelanea`, `ingreso_fecha`, `ingreso_fechacreacion` FROM `ingreso` WHERE `idingreso` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -554,17 +554,17 @@ abstract class BaseIngresoQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the ingreso_factoralimento column
+     * Filter the query on the ingreso_totalalimento column
      *
      * Example usage:
      * <code>
-     * $query->filterByIngresoFactoralimento(1234); // WHERE ingreso_factoralimento = 1234
-     * $query->filterByIngresoFactoralimento(array(12, 34)); // WHERE ingreso_factoralimento IN (12, 34)
-     * $query->filterByIngresoFactoralimento(array('min' => 12)); // WHERE ingreso_factoralimento >= 12
-     * $query->filterByIngresoFactoralimento(array('max' => 12)); // WHERE ingreso_factoralimento <= 12
+     * $query->filterByIngresoTotalalimento(1234); // WHERE ingreso_totalalimento = 1234
+     * $query->filterByIngresoTotalalimento(array(12, 34)); // WHERE ingreso_totalalimento IN (12, 34)
+     * $query->filterByIngresoTotalalimento(array('min' => 12)); // WHERE ingreso_totalalimento >= 12
+     * $query->filterByIngresoTotalalimento(array('max' => 12)); // WHERE ingreso_totalalimento <= 12
      * </code>
      *
-     * @param     mixed $ingresoFactoralimento The value to use as filter.
+     * @param     mixed $ingresoTotalalimento The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -572,16 +572,16 @@ abstract class BaseIngresoQuery extends ModelCriteria
      *
      * @return IngresoQuery The current query, for fluid interface
      */
-    public function filterByIngresoFactoralimento($ingresoFactoralimento = null, $comparison = null)
+    public function filterByIngresoTotalalimento($ingresoTotalalimento = null, $comparison = null)
     {
-        if (is_array($ingresoFactoralimento)) {
+        if (is_array($ingresoTotalalimento)) {
             $useMinMax = false;
-            if (isset($ingresoFactoralimento['min'])) {
-                $this->addUsingAlias(IngresoPeer::INGRESO_FACTORALIMENTO, $ingresoFactoralimento['min'], Criteria::GREATER_EQUAL);
+            if (isset($ingresoTotalalimento['min'])) {
+                $this->addUsingAlias(IngresoPeer::INGRESO_TOTALALIMENTO, $ingresoTotalalimento['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ingresoFactoralimento['max'])) {
-                $this->addUsingAlias(IngresoPeer::INGRESO_FACTORALIMENTO, $ingresoFactoralimento['max'], Criteria::LESS_EQUAL);
+            if (isset($ingresoTotalalimento['max'])) {
+                $this->addUsingAlias(IngresoPeer::INGRESO_TOTALALIMENTO, $ingresoTotalalimento['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -592,21 +592,21 @@ abstract class BaseIngresoQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(IngresoPeer::INGRESO_FACTORALIMENTO, $ingresoFactoralimento, $comparison);
+        return $this->addUsingAlias(IngresoPeer::INGRESO_TOTALALIMENTO, $ingresoTotalalimento, $comparison);
     }
 
     /**
-     * Filter the query on the ingreso_factorbebida column
+     * Filter the query on the ingreso_totalbebida column
      *
      * Example usage:
      * <code>
-     * $query->filterByIngresoFactorbebida(1234); // WHERE ingreso_factorbebida = 1234
-     * $query->filterByIngresoFactorbebida(array(12, 34)); // WHERE ingreso_factorbebida IN (12, 34)
-     * $query->filterByIngresoFactorbebida(array('min' => 12)); // WHERE ingreso_factorbebida >= 12
-     * $query->filterByIngresoFactorbebida(array('max' => 12)); // WHERE ingreso_factorbebida <= 12
+     * $query->filterByIngresoTotalbebida(1234); // WHERE ingreso_totalbebida = 1234
+     * $query->filterByIngresoTotalbebida(array(12, 34)); // WHERE ingreso_totalbebida IN (12, 34)
+     * $query->filterByIngresoTotalbebida(array('min' => 12)); // WHERE ingreso_totalbebida >= 12
+     * $query->filterByIngresoTotalbebida(array('max' => 12)); // WHERE ingreso_totalbebida <= 12
      * </code>
      *
-     * @param     mixed $ingresoFactorbebida The value to use as filter.
+     * @param     mixed $ingresoTotalbebida The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -614,16 +614,16 @@ abstract class BaseIngresoQuery extends ModelCriteria
      *
      * @return IngresoQuery The current query, for fluid interface
      */
-    public function filterByIngresoFactorbebida($ingresoFactorbebida = null, $comparison = null)
+    public function filterByIngresoTotalbebida($ingresoTotalbebida = null, $comparison = null)
     {
-        if (is_array($ingresoFactorbebida)) {
+        if (is_array($ingresoTotalbebida)) {
             $useMinMax = false;
-            if (isset($ingresoFactorbebida['min'])) {
-                $this->addUsingAlias(IngresoPeer::INGRESO_FACTORBEBIDA, $ingresoFactorbebida['min'], Criteria::GREATER_EQUAL);
+            if (isset($ingresoTotalbebida['min'])) {
+                $this->addUsingAlias(IngresoPeer::INGRESO_TOTALBEBIDA, $ingresoTotalbebida['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ingresoFactorbebida['max'])) {
-                $this->addUsingAlias(IngresoPeer::INGRESO_FACTORBEBIDA, $ingresoFactorbebida['max'], Criteria::LESS_EQUAL);
+            if (isset($ingresoTotalbebida['max'])) {
+                $this->addUsingAlias(IngresoPeer::INGRESO_TOTALBEBIDA, $ingresoTotalbebida['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -634,21 +634,21 @@ abstract class BaseIngresoQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(IngresoPeer::INGRESO_FACTORBEBIDA, $ingresoFactorbebida, $comparison);
+        return $this->addUsingAlias(IngresoPeer::INGRESO_TOTALBEBIDA, $ingresoTotalbebida, $comparison);
     }
 
     /**
-     * Filter the query on the ingreso_factormiscelanea column
+     * Filter the query on the ingreso_totalmiscelanea column
      *
      * Example usage:
      * <code>
-     * $query->filterByIngresoFactormiscelanea(1234); // WHERE ingreso_factormiscelanea = 1234
-     * $query->filterByIngresoFactormiscelanea(array(12, 34)); // WHERE ingreso_factormiscelanea IN (12, 34)
-     * $query->filterByIngresoFactormiscelanea(array('min' => 12)); // WHERE ingreso_factormiscelanea >= 12
-     * $query->filterByIngresoFactormiscelanea(array('max' => 12)); // WHERE ingreso_factormiscelanea <= 12
+     * $query->filterByIngresoTotalmiscelanea(1234); // WHERE ingreso_totalmiscelanea = 1234
+     * $query->filterByIngresoTotalmiscelanea(array(12, 34)); // WHERE ingreso_totalmiscelanea IN (12, 34)
+     * $query->filterByIngresoTotalmiscelanea(array('min' => 12)); // WHERE ingreso_totalmiscelanea >= 12
+     * $query->filterByIngresoTotalmiscelanea(array('max' => 12)); // WHERE ingreso_totalmiscelanea <= 12
      * </code>
      *
-     * @param     mixed $ingresoFactormiscelanea The value to use as filter.
+     * @param     mixed $ingresoTotalmiscelanea The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -656,16 +656,16 @@ abstract class BaseIngresoQuery extends ModelCriteria
      *
      * @return IngresoQuery The current query, for fluid interface
      */
-    public function filterByIngresoFactormiscelanea($ingresoFactormiscelanea = null, $comparison = null)
+    public function filterByIngresoTotalmiscelanea($ingresoTotalmiscelanea = null, $comparison = null)
     {
-        if (is_array($ingresoFactormiscelanea)) {
+        if (is_array($ingresoTotalmiscelanea)) {
             $useMinMax = false;
-            if (isset($ingresoFactormiscelanea['min'])) {
-                $this->addUsingAlias(IngresoPeer::INGRESO_FACTORMISCELANEA, $ingresoFactormiscelanea['min'], Criteria::GREATER_EQUAL);
+            if (isset($ingresoTotalmiscelanea['min'])) {
+                $this->addUsingAlias(IngresoPeer::INGRESO_TOTALMISCELANEA, $ingresoTotalmiscelanea['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ingresoFactormiscelanea['max'])) {
-                $this->addUsingAlias(IngresoPeer::INGRESO_FACTORMISCELANEA, $ingresoFactormiscelanea['max'], Criteria::LESS_EQUAL);
+            if (isset($ingresoTotalmiscelanea['max'])) {
+                $this->addUsingAlias(IngresoPeer::INGRESO_TOTALMISCELANEA, $ingresoTotalmiscelanea['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -676,7 +676,7 @@ abstract class BaseIngresoQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(IngresoPeer::INGRESO_FACTORMISCELANEA, $ingresoFactormiscelanea, $comparison);
+        return $this->addUsingAlias(IngresoPeer::INGRESO_TOTALMISCELANEA, $ingresoTotalmiscelanea, $comparison);
     }
 
     /**

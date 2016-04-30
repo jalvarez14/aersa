@@ -48,6 +48,7 @@ class RequisicionTableMap extends TableMap
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addForeignKey('idconceptosalida', 'Idconceptosalida', 'INTEGER', 'conceptosalida', 'idconceptosalida', true, null, null);
         $this->addColumn('requisicion_fecha', 'RequisicionFecha', 'TIMESTAMP', true, null, null);
+        $this->addColumn('requisicion_fechacreacion', 'RequisicionFechacreacion', 'TIMESTAMP', true, null, null);
         $this->addColumn('requisicion_revisada', 'RequisicionRevisada', 'BOOLEAN', true, 1, null);
         $this->addColumn('requisicion_folio', 'RequisicionFolio', 'VARCHAR', true, 10, null);
         $this->addColumn('requisicion_total', 'RequisicionTotal', 'DECIMAL', false, 15, null);
