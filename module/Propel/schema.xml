@@ -193,7 +193,6 @@
     <column name="devolucion_revisada" phpName="DevolucionRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="devolucion_factura" phpName="DevolucionFactura" type="LONGVARCHAR" required="false"/>
     <column name="devolucion_fechacreacion" phpName="DevolucionFechacreacion" type="TIMESTAMP" required="false"/>
-    <column name="devolucion_fechaentrega" phpName="DevolucionFechaentrega" type="TIMESTAMP" required="false"/>
     <column name="devolucion_ieps" phpName="DevolucionIeps" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_iva" phpName="DevolucionIva" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_total" phpName="DevolucionTotal" type="DECIMAL" size="10" scale="5" required="false"/>
@@ -382,7 +381,7 @@
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="inventariomes_fecha" phpName="InventariomesFecha" type="DATE" required="true"/>
     <column name="inventariomes_revisada" phpName="InventariomesRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <foreign-key foreignTable="almacen" name="idalmacen_inventariomes" onDelete="CASCADE" onUpdate="CASCADE">
