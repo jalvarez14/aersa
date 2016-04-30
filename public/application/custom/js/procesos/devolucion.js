@@ -221,7 +221,6 @@
         }
         
         plugin.new = function(anio,mes,almacenes){
-
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
@@ -346,20 +345,7 @@
             
             });
             
-            //Si el tipo de entidad es orden de devolucion, el campo de almacén (entidad) y almacén (registro) se encuentra disable
-           $('select[name=devolucion_tipo]').on('change',function(){
-               
-               var selected = $('select[name=devolucion_tipo] option:selected').val();
-               if(selected == 'ordedevolucion'){
-                   $('select[name=idalmacen]').attr('disabled',true);
-                   $('select[name=idalmacen]').attr('required',false);
-                   $('#productos_table tbody select').attr('disabled',true);
-               }else{
-                   $('select[name=idalmacen]').attr('disabled',false);
-                   $('select[name=idalmacen]').attr('required',true);
-                   $('#productos_table tbody select').attr('disabled',false);
-               }
-           });
+
            
            //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
             revisadaControl();
@@ -391,13 +377,8 @@
                          
         }
         
-        plugin.edit = function(anio,mes,almacenes,count){
-            
-            //SI ES ORDEN DE devolucion DESHABILITAMOS LOS SELECT DE ALMACEN
-            if(devolucion_tipo == 'ordedevolucion'){
-                $container.find('select[name=idalmacen]').attr('disabled',true);
-                $container.find('select[name*=almacen]').attr('disabled',true);
-            }
+        plugin.edit = function(anio,mes,mes_devolucion,anio_devolucion,almacenes,count){
+
 
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
@@ -576,8 +557,7 @@
            
            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
             var now = new Date();
-           
-            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
+            if(mes_devolucion != mes || anio_devolucion != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');

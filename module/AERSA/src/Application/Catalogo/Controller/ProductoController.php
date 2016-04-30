@@ -37,7 +37,6 @@ class ProductoController extends AbstractActionController
     
     public function nuevoAction()
     {
-        
         $request = $this->getRequest();
         
         $categorias = array();
@@ -66,6 +65,7 @@ class ProductoController extends AbstractActionController
             $entity = new \Producto();
 
             foreach ($post_data as $key => $value) {
+                if( $value != '')
                     $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
             $entity->setIdempresa($session['idempresa']);
