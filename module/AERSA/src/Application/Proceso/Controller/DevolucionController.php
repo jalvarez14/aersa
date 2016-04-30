@@ -108,7 +108,7 @@ class DevolucionController extends AbstractActionController {
                                ->setdevoluciondetalleRevisada(0)
                                ->setIdproducto($producto['idproducto'])
                                ->setDevoluciondetalleCantidad($producto['cantidad'])
-                               //->setDevoluciondetallePrecio($producto['precio'])
+                               //->setDevoluciondetalleCosto($producto['precio'])
                                //->setDevoluciondetalleCostounitario($producto['costo_unitario'])
                                ->setDevoluciondetalleDescuento($producto['descuento'])
                                ->setDevoluciondetalleIeps($producto['ieps'])
