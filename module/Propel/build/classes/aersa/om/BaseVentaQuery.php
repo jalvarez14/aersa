@@ -13,7 +13,7 @@
  * @method VentaQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method VentaQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method VentaQuery orderByVentaRevisada($order = Criteria::ASC) Order by the venta_revisada column
- * @method VentaQuery orderByVentaFecha($order = Criteria::ASC) Order by the venta_fecha column
+ * @method VentaQuery orderByVentaFechaventa($order = Criteria::ASC) Order by the venta_fechaventa column
  * @method VentaQuery orderByVentaFechacreacion($order = Criteria::ASC) Order by the venta_fechacreacion column
  * @method VentaQuery orderByVentaTotal($order = Criteria::ASC) Order by the venta_total column
  *
@@ -24,7 +24,7 @@
  * @method VentaQuery groupByIdusuario() Group by the idusuario column
  * @method VentaQuery groupByIdauditor() Group by the idauditor column
  * @method VentaQuery groupByVentaRevisada() Group by the venta_revisada column
- * @method VentaQuery groupByVentaFecha() Group by the venta_fecha column
+ * @method VentaQuery groupByVentaFechaventa() Group by the venta_fechaventa column
  * @method VentaQuery groupByVentaFechacreacion() Group by the venta_fechacreacion column
  * @method VentaQuery groupByVentaTotal() Group by the venta_total column
  *
@@ -65,7 +65,7 @@
  * @method Venta findOneByIdusuario(int $idusuario) Return the first Venta filtered by the idusuario column
  * @method Venta findOneByIdauditor(int $idauditor) Return the first Venta filtered by the idauditor column
  * @method Venta findOneByVentaRevisada(boolean $venta_revisada) Return the first Venta filtered by the venta_revisada column
- * @method Venta findOneByVentaFecha(string $venta_fecha) Return the first Venta filtered by the venta_fecha column
+ * @method Venta findOneByVentaFechaventa(string $venta_fechaventa) Return the first Venta filtered by the venta_fechaventa column
  * @method Venta findOneByVentaFechacreacion(string $venta_fechacreacion) Return the first Venta filtered by the venta_fechacreacion column
  * @method Venta findOneByVentaTotal(string $venta_total) Return the first Venta filtered by the venta_total column
  *
@@ -76,7 +76,7 @@
  * @method array findByIdusuario(int $idusuario) Return Venta objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Venta objects filtered by the idauditor column
  * @method array findByVentaRevisada(boolean $venta_revisada) Return Venta objects filtered by the venta_revisada column
- * @method array findByVentaFecha(string $venta_fecha) Return Venta objects filtered by the venta_fecha column
+ * @method array findByVentaFechaventa(string $venta_fechaventa) Return Venta objects filtered by the venta_fechaventa column
  * @method array findByVentaFechacreacion(string $venta_fechacreacion) Return Venta objects filtered by the venta_fechacreacion column
  * @method array findByVentaTotal(string $venta_total) Return Venta objects filtered by the venta_total column
  *
@@ -186,7 +186,7 @@ abstract class BaseVentaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idventa`, `idempresa`, `idsucursal`, `idalmacen`, `idusuario`, `idauditor`, `venta_revisada`, `venta_fecha`, `venta_fechacreacion`, `venta_total` FROM `venta` WHERE `idventa` = :p0';
+        $sql = 'SELECT `idventa`, `idempresa`, `idsucursal`, `idalmacen`, `idusuario`, `idauditor`, `venta_revisada`, `venta_fechaventa`, `venta_fechacreacion`, `venta_total` FROM `venta` WHERE `idventa` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -565,16 +565,16 @@ abstract class BaseVentaQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the venta_fecha column
+     * Filter the query on the venta_fechaventa column
      *
      * Example usage:
      * <code>
-     * $query->filterByVentaFecha('2011-03-14'); // WHERE venta_fecha = '2011-03-14'
-     * $query->filterByVentaFecha('now'); // WHERE venta_fecha = '2011-03-14'
-     * $query->filterByVentaFecha(array('max' => 'yesterday')); // WHERE venta_fecha < '2011-03-13'
+     * $query->filterByVentaFechaventa('2011-03-14'); // WHERE venta_fechaventa = '2011-03-14'
+     * $query->filterByVentaFechaventa('now'); // WHERE venta_fechaventa = '2011-03-14'
+     * $query->filterByVentaFechaventa(array('max' => 'yesterday')); // WHERE venta_fechaventa < '2011-03-13'
      * </code>
      *
-     * @param     mixed $ventaFecha The value to use as filter.
+     * @param     mixed $ventaFechaventa The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -584,16 +584,16 @@ abstract class BaseVentaQuery extends ModelCriteria
      *
      * @return VentaQuery The current query, for fluid interface
      */
-    public function filterByVentaFecha($ventaFecha = null, $comparison = null)
+    public function filterByVentaFechaventa($ventaFechaventa = null, $comparison = null)
     {
-        if (is_array($ventaFecha)) {
+        if (is_array($ventaFechaventa)) {
             $useMinMax = false;
-            if (isset($ventaFecha['min'])) {
-                $this->addUsingAlias(VentaPeer::VENTA_FECHA, $ventaFecha['min'], Criteria::GREATER_EQUAL);
+            if (isset($ventaFechaventa['min'])) {
+                $this->addUsingAlias(VentaPeer::VENTA_FECHAVENTA, $ventaFechaventa['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($ventaFecha['max'])) {
-                $this->addUsingAlias(VentaPeer::VENTA_FECHA, $ventaFecha['max'], Criteria::LESS_EQUAL);
+            if (isset($ventaFechaventa['max'])) {
+                $this->addUsingAlias(VentaPeer::VENTA_FECHAVENTA, $ventaFechaventa['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -604,7 +604,7 @@ abstract class BaseVentaQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(VentaPeer::VENTA_FECHA, $ventaFecha, $comparison);
+        return $this->addUsingAlias(VentaPeer::VENTA_FECHAVENTA, $ventaFechaventa, $comparison);
     }
 
     /**

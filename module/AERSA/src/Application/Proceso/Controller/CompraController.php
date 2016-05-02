@@ -196,11 +196,7 @@ class CompraController extends AbstractActionController {
                     }
                 }
 
-                //SETEAMOS LA FECHA DE CREACION
-                $entity->setCompraFechacreacion(new \DateTime())
-                        ->setIdempresa($session['idempresa'])
-                        ->setIdsucursal($session['idsucursal']);
-
+                
                 if ($post_data['compra_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
                 }
@@ -265,7 +261,7 @@ class CompraController extends AbstractActionController {
             //CAMBIAMOS LOS VALORES DE FECHAS
             $form->get('compra_fechacompra')->setValue($entity->getCompraFechacompra('d/m/Y'));
             $form->get('compra_fechaentrega')->setValue($entity->getCompraFechaentrega('d/m/Y'));
-            
+            $form->get('compra_fechacreacion')->setValue($entity->getCompraFechacreacion('Y/m/d'));
             //SETEAMOS EL VALOR AUTOCOMPLETE
             $form->get('idproveedor_autocomplete')->setValue($entity->getProveedor()->getProveedorNombrecomercial());
             

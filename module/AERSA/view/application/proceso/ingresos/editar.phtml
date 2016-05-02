@@ -24,7 +24,7 @@
         </ul>
 </div>
 <div id="form_container">
-    <form class="form-horizontal" action="/procesos/ingresos/nuevo" method="post" enctype="multipart/form-data">
+    <form class="form-horizontal" action="/procesos/ingresos/editar/<?php echo $entity->getIdingreso()?>" method="post" enctype="multipart/form-data">
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
@@ -33,7 +33,8 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('ingreso_fecha')) ?>  
-                            <?php echo $this->formText($form->get('ingreso_fecha')) ?> 
+                            <?php echo $this->formText($form->get('ingreso_fecha')) ?>
+                            <?php echo $this->formHidden($form->get('ingreso_fechacreacion')) ?>
                         </div>
 
                     </div>
@@ -71,13 +72,17 @@
                         <?php $concepto = new Conceptoingreso();?>
                         <?php foreach ($concepto_ingresos as $concepto) :?>
                         <tr>
-                            <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][subtotal]" value="0">
-                            <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][iva]" value="0">
+                            <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][subtotal]" value="<?php echo $detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleSub']?>">
+                            <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][iva]" value="<?php echo $detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleIva']?>">
                             <td><?php echo $concepto->getConceptoingresoNombre()?></td>
-                            <td>$ 0.00</td>
-                            <td>$ 0.00</td>
-                            <td><input name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][total]" type="text" class="form-control" value="0.00"></td>
-                            <td><input name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][revisada]" type="checkbox"></td>
+                            <td><?php echo money_format('%(#10n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleSub']) ?></td>
+                             <td><?php echo money_format('%(#10n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleIva']) ?></td>
+                            <td><input name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][total]" type="text" class="form-control" value="<?php echo $detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleTotal']?>"></td>
+                            <?php if($detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleRevisada']) :?>
+                                <td><input name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][revisada]" type="checkbox" checked></td>
+                            <?php else :?>
+                                <td><input name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][revisada]" type="checkbox"></td>
+                            <?php endif;?>
                         </tr>
                         <?php endforeach;?>
                     </tbody>
@@ -86,6 +91,7 @@
         </div>
     </div>
     <?php endforeach;?>
+        
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
@@ -94,8 +100,8 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Total bebidas: </label>
                             <div class="col-md-7">
-                                <input type="hidden" name="ingreso_totalbebida" value="0.00">
-                                <p id="total_bebidas" class="form-control-static"> $ 0.00 </p>
+                                <input type="hidden" name="ingreso_totalbebida" value="<?php echo $entity->getIngresoTotalbebida() ?>">
+                                <p id="total_bebidas" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalbebida()) ?></p>
                             </div>
                         </div>
                     </div>
@@ -103,8 +109,8 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Total alimentos: </label>
                             <div class="col-md-7">
-                                <input type="hidden" name="ingreso_totalalimento" value="0.00">
-                                <p id="total_alimentos" class="form-control-static"> $ 0.00 </p>
+                                <input type="hidden" name="ingreso_totalalimento" value="<?php echo $entity->getIngresoTotalalimento() ?>">
+                                <p id="total_alimentos" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalalimento()) ?></p>
                             </div>
                         </div>
                     </div>
@@ -112,8 +118,8 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Total miscelanea: </label>
                             <div class="col-md-7">
-                                 <input type="hidden" name="ingreso_totalmiscelanea" value="0.00">
-                                <p id="total_miscelanea" class="form-control-static"> $ 0.00 </p>
+                                 <input type="hidden" name="ingreso_totalmiscelanea" value="<?php echo $entity->getIngresoTotalmiscelanea() ?>">
+                                 <p id="total_miscelanea" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalmiscelanea()) ?></p>
                             </div>
                         </div>
                     </div>
@@ -133,5 +139,5 @@
 <script type="text/javascript" src="/application/custom/js/procesos/ingresos.js"></script>
 <script>
     var $form = $('#form_container').ingresos({'iva':<?php echo $iva?>});
-    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
+    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

@@ -17,6 +17,14 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
+           'name'  => 'compra_fechacreacion',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => true,
+            ),
+        ));
+        
+        $this->add(array(
             'name' => 'compra_fechacompra',
             'type' => 'Text',
             'attributes' => array(

@@ -1129,7 +1129,7 @@
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
     <column name="venta_revisada" phpName="VentaRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
-    <column name="venta_fecha" phpName="VentaFecha" type="TIMESTAMP" required="true"/>
+    <column name="venta_fechaventa" phpName="VentaFechaventa" type="TIMESTAMP" required="true"/>
     <column name="venta_fechacreacion" phpName="VentaFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="venta_total" phpName="VentaTotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <foreign-key foreignTable="almacen" name="idalmacen_venta" onDelete="CASCADE" onUpdate="CASCADE">

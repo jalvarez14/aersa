@@ -840,7 +840,17 @@ return array(
                                                 'action' => 'eliminar',
                                             ), 
                                         ), 
-                                    ), 
+                                    ),
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
                                 ), 
                             ),
                             'notacredito' => array( 

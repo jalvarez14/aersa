@@ -381,7 +381,7 @@
                     dataType: "json",
                     data: {folio:folio},
                     success: function (exist) {
-                        console.log(exist);
+                       
                         if(exist){
                             alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
                             $this.val('');
@@ -585,8 +585,8 @@
            });
            
            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
-            var now = new Date();
-           
+            var now = new Date($('input[name=compra_fechacreacion]').val());
+            
             if((now.getMonth()+1) != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
