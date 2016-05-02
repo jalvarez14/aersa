@@ -306,11 +306,12 @@ class ProductoController extends AbstractActionController
             
             $exists = \RecetaQuery::create()->filterByIdproducto($post_data['idproductoreceta'])->exists();
             
-
+            
             //CREAMOS NUESTRA ENTIDAD VACIA
             $entity = new \Receta();
 
             foreach ($post_data as $key => $value) {
+                
                 $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
             $entity->setIdproducto($id);
