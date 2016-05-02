@@ -28,12 +28,45 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                <h3 class="page-title">Ingresos - Registro</h3><br><br>
+                 <h3 class="page-title">Ingresos - <?php echo '#'.$form->get('idingreso')->getValue()?></h3><br><br>
+                 <div class="row">
+                    <div class="col-md-6">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">Creado por:</label>
+                             <div class="col-md-9">
+                                 <p class="form-control-static"><?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre()?></p>
+                             </div>
+                         </div>
+                    </div>
+                     <div class="col-md-6">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">Auditor:</label>
+                             <div class="col-md-9">
+                                 <?php 
+                                   
+                                    if($entity->getIngresoRevisada()){
+                                        $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                    }else{
+                                        $auditor = 'N/D';
+                                    } 
+                                ?>
+                                 <p class="form-control-static"><?php echo $auditor?></p>
+                             </div>
+                         </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('ingreso_fecha')) ?>  
                             <?php echo $this->formText($form->get('ingreso_fecha')) ?>
+                            <?php echo $this->formHidden($form->get('idingreso')) ?>
                             <?php echo $this->formHidden($form->get('ingreso_fechacreacion')) ?>
                         </div>
 

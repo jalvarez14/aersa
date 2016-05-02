@@ -182,6 +182,9 @@
         }
         
         var validaFolio = function(){
+            
+            var id = $('input[name=idingreso]').val();
+            
             container.find('input[name=ingreso_folio]').on('blur',function(){
                var folio = $(this).val();
                 var $this = $(this);
@@ -189,7 +192,7 @@
                 $.ajax({
                     url: "/procesos/ingresos/validatefolio",
                     dataType: "json",
-                    data: {folio:folio},
+                    data: {folio:folio,id:id},
                     success: function (exist) {
                         if(exist){
                             alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');

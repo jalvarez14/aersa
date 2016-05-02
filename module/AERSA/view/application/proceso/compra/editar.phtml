@@ -67,6 +67,7 @@
                             <?php echo $this->formLabel($form->get('compra_fechacompra')) ?>  
                             <?php echo $this->formText($form->get('compra_fechacompra')) ?> 
                             <?php echo $this->formHidden($form->get('compra_fechacreacion')) ?> 
+                            <?php echo $this->formHidden($form->get('idcompra')) ?>
                         </div>
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('compra_tipo')) ?>  
@@ -265,6 +266,6 @@
 </div>
 <script type="text/javascript" src="/application/custom/js/procesos/compra.js"></script>
 <script>
-    var $form = $('#form_container').compra();
+    var $form = $('#form_container').compra({'iva':<?php echo $iva?>});
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>,<?php echo json_encode($entity->getCompraTipo())?>);
 </script>

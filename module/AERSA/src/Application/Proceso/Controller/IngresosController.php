@@ -138,11 +138,18 @@ class IngresosController extends AbstractActionController {
         $session = $session->getData();
         
         $folio = $this->params()->fromQuery('folio');
-        
+        $id = (!is_null($this->params()->fromQuery('id'))) ?$this->params()->fromQuery('id') : false;
+
         $to = new \DateTime();
         $from = date("Y-m-d", strtotime("-2 months")); $from = new \DateTime($from);
-
-        $exist = \IngresoQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByIngresoFecha(array('min' => $from,'to' => $to))->filterByIngresoFolio($folio,  \Criteria::LIKE)->exists();
+        
+        if($id){
+            $entity = \IngresoQuery::create()->findPk($id);
+             $exist = \IngresoQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByIngresoFecha(array('min' => $from,'to' => $to))->filterByIngresoFolio($entity->getIngresoFolio(),  \Criteria::NOT_EQUAL)->filterByIngresoFolio($folio,  \Criteria::LIKE)->exists();
+        }else{
+             $exist = \IngresoQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByIngresoFecha(array('min' => $from,'to' => $to))->filterByIngresoFolio($folio,  \Criteria::LIKE)->exists();
+        }
+       
         
         return $this->getResponse()->setContent(json_encode($exist));
     }

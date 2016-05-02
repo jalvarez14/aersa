@@ -39,10 +39,10 @@
         
         var settings;
         var $table;
-        var iva = 16.00;
+
         
         var defaults = {
-           
+            iva:19,
        };
         
         /*
@@ -102,10 +102,10 @@
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
-                if(has_iva == 'true'){
+                if(has_iva == '1'){
                     
                     var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
-                    var row_iva = (subtotal * iva) / 100;
+                    var row_iva = (subtotal * settings.iva) / 100;
                     
                     compra_iva = compra_iva + row_iva;
                 }
@@ -221,7 +221,8 @@
         }
         
         plugin.new = function(anio,mes,almacenes){
-
+            
+      
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
@@ -537,6 +538,12 @@
             
             });
             
+            //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL,IEPS, ETC
+            $container.find('table input').on('blur',function(){
+                var $tr = $(this).closest('tr');
+                caluclator($tr);
+            });
+                
             $('.fa-trash').on('click',function(){
                 var tr = $(this).closest('tr');
                 tr.remove();
@@ -569,9 +576,8 @@
                 $.ajax({
                     url: "/procesos/compra/validatefolio",
                     dataType: "json",
-                    data: {folio:folio},
+                    data: {folio:folio,edit:true,id:$('input[name=idcompra]').val()},
                     success: function (exist) {
-                        console.log(exist);
                         if(exist){
                             alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
                             $this.val('');
