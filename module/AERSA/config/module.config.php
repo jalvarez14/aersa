@@ -757,7 +757,27 @@ return array(
                                                 'action' => 'eliminar',
                                             ), 
                                         ), 
+                                    ),
+                                    'getalmdes' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/getalmdes[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                                'action' => 'getalmdes',
+                                            ), 
+                                        ), 
                                     ), 
+                                    'getconcepsal' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/getconcepsal[/:almorg][/:almdes][/:sucorg][/:sucdes]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                                'action' => 'getconcepsal',
+                                            ), 
+                                        ), 
+                                    ),
                                 ), 
                             ), 
                             'devolucion' => array( 
