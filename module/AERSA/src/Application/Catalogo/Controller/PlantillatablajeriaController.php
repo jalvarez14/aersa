@@ -7,8 +7,8 @@ use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
 class PlantillatablajeriaController extends AbstractActionController {
-    public function indexAction()
-    {
+
+    public function indexAction() {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -17,14 +17,13 @@ class PlantillatablajeriaController extends AbstractActionController {
 //        if($session['idrol'] == 1){
 //            $collection = \CategoriaQuery::create()->find();
 //        }
-        $idempresa=$session['idempresa'];
+        $idempresa = $session['idempresa'];
 
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA ---
-        
         //$idempresa=1;
         $collection = \PlantillatablajeriaQuery::create()->filterByIdempresa($idempresa)->find();
 
-        
+
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/catalogo/tablajeria/index');
@@ -34,9 +33,8 @@ class PlantillatablajeriaController extends AbstractActionController {
         ));
         return $view_model;
     }
-    
-    public function nuevoAction()
-    {
+
+    public function nuevoAction() {
         $idempresa = 1;
         //$idempresa=$session['idempresa'];
         $request = $this->getRequest();
@@ -74,8 +72,8 @@ class PlantillatablajeriaController extends AbstractActionController {
 
         $producto_array = array();
         $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
-        foreach ($productos as $producto){
-            
+        foreach ($productos as $producto) {
+
             $id = $producto->getIdproducto();
             $producto_array[$id] = $producto->getProductoNombre();
         }
@@ -83,65 +81,83 @@ class PlantillatablajeriaController extends AbstractActionController {
         $form = new \Application\Catalogo\Form\PlantillatablajeriaForm($producto_array);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
-            'form'      => $form,
-            'messages'  => $this->flashMessenger(),
-            ));
+            'form' => $form,
+            'messages' => $this->flashMessenger(),
+        ));
         $view_model->setTemplate('/application/catalogo/tablajeria/nuevo');
         return $view_model;
     }
-    
-    public function editarAction()
-    {
+
+    public function editarAction() {
         $request = $this->getRequest();
         $id = $this->params()->fromRoute('id');
-        $exist = \PlantillatablajeriaQuery::create()->filterByIdplantillatablajeria($id)->exists(); 
-        if($exist){
+        $exist = \PlantillatablajeriaQuery::create()->filterByIdplantillatablajeria($id)->exists();
+        if ($exist) {
             $plantillatablajeria = \PlantillatablajeriaQuery::create()->findPk($id);
-            if($request->isPost()){
-                $post_data =  $request->getPost();
-                foreach ($post_data as $key => $data){
-                    $plantillatablajeria->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
+            if ($request->isPost()) {
+                
+                $post_data = $request->getPost();
+                
+                if (isset($post_data['plantillatablajeria_detalle'])) {
+                    foreach ($post_data as $key => $value) {
+                        if (\CompraPeer::getTableMap()->hasColumn($key)) {
+                            $plantillatablajeria->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                        }
+                    }
+                    $plantillatablajeria->save();
+                    $plantillatablajeria->getPlantillatablajeriadetalles()->delete();
+                    foreach ($post_data['plantillatablajeria_detalle'] as $producto) {
+                        $plantillatablajeria_detalle = new \Plantillatablajeriadetalle();
+                        $plantillatablajeria_detalle->setIdplantillatablajeria($plantillatablajeria->getIdplantillatablajeria())
+                                ->setIdproducto($producto['idproducto']);
+                        $plantillatablajeria_detalle->save();
+                    }
+        
+                    //REDIRECCIONAMOS AL LISTADO
+                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                    return $this->redirect()->toUrl('/catalogo/tablajeria');
                 }
-                $plantillatablajeria->save();
-                return  $this->redirect()->toUrl('/catalogo/tablajeria');
-            }
-            $producto_array = array();
-            $productos = \ProductoQuery::create()->find();
-            foreach ($productos as $producto) {
 
-                $id = $producto->getIdproducto();
-                $producto_array[$id] = $producto->getProductoNombre();
+                return $this->redirect()->toUrl('/catalogo/tablajeria');
             }
-            $form = new \Application\Catalogo\Form\PlantillatablajeriaForm($producto_array);
-            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form = new \Application\Catalogo\Form\PlantillatablajeriaForm();
             $form->setData($plantillatablajeria->toArray(\BasePeer::TYPE_FIELDNAME));
-             //ENVIAMOS A LA VISTA
+            //SETEAMOS EL VALOR AUTOCOMPLETE
+            $form->get('idproducto_autocomplete')->setValue($plantillatablajeria->getProducto()->getProductoNombre());
+            //LOS DETALLES DE LA PLANTILLA TABLAJERIA
+            $plantillatablajeria_detalle = \PlantillatablajeriadetalleQuery::create()->filterByIdplantillatablajeria($plantillatablajeria->getIdplantillatablajeria())->find();
+
+            //COUNT
+            $count = \PlantillatablajeriadetalleQuery::create()->orderByIdplantillatablajeriadetalle(\Criteria::DESC)->findOne();
+            $count = $count->getIdplantillatablajeriadetalle() + 1;
+
             $view_model = new ViewModel();
-            $view_model->setVariables(array(
-                'form'      => $form,
-                'messages'  => $this->flashMessenger(),
-                ));
             $view_model->setTemplate('/application/catalogo/tablajeria/editar');
+            $view_model->setVariables(array(
+                'form' => $form,
+                'plantillatablajeria' => $plantillatablajeria,
+                'plantillatablajeria_detalle' => $plantillatablajeria_detalle,
+                'count' => $count,
+                'messages' => $this->flashMessenger(),
+            ));
             return $view_model;
-        }else{
+        } else {
             return $this->redirect()->toUrl('/catalogo/tablajeria');
         }
     }
-    
-    public function eliminarAction()
-    {
-    $request = $this->getRequest();
-    if($request->isPost())
-        {
-        $id = $this->params()->fromRoute('id');
-        $plantilla = \PlantillatablajeriaQuery::create()->findPk($id);
-        $plantilla->delete();
-        $plantilladetalles = \PlantillatablajeriadetalleQuery::create()->filterByIdplantillatablajeria($id)->find();
-        foreach ($plantilladetalles as $plantilladetalle) {
-            $plantilladetalle->delete();
-        }
-        $this->flashMessenger()->addSuccessMessage('Plantilla de tablajeria eliminada satisfactoriamente!');
-        return $this->redirect()->toUrl('/catalogo/tablajeria');       
+
+    public function eliminarAction() {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $id = $this->params()->fromRoute('id');
+            $plantilla = \PlantillatablajeriaQuery::create()->findPk($id);
+            $plantilla->delete();
+            $plantilladetalles = \PlantillatablajeriadetalleQuery::create()->filterByIdplantillatablajeria($id)->find();
+            foreach ($plantilladetalles as $plantilladetalle) {
+                $plantilladetalle->delete();
+            }
+            $this->flashMessenger()->addSuccessMessage('Plantilla de tablajeria eliminada satisfactoriamente!');
+            return $this->redirect()->toUrl('/catalogo/tablajeria');
         }
     }
 
