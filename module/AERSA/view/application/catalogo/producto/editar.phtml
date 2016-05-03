@@ -77,8 +77,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
-                        <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
+                        <?php echo $this->formLabel($form->get('producto_baja')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_baja')) ?>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -100,13 +100,15 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <?php echo $this->formLabel($form->get('producto_baja')) ?>  
-                        <?php echo $this->formSelect  ($form->get('producto_baja')) ?>
+                <?php if($isBebida):?>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
+                            <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
+                        </div>
                     </div>
-                </div>
-                
+                <?php endif ?>
                 
                 
             </div>
