@@ -38,18 +38,27 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('receta_cantidad')) ?>  
-                        <?php echo $this->formText($form->get('receta_cantidad')) ?>
+                        <?php echo $this->formLabel($form->get('idproductoreceta')) ?>  
+                        <?php //echo $this->formSelect($form->get('idproductoreceta')) ?>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                            </span>
+                            <input id="idproducto" name="idproductoreceta" type="hidden">
+                            <input id="producto_iva" type="hidden">
+                            <input id="producto_autocomplete" class="form-control" type="text">
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('idproductoreceta')) ?>  
-                        <?php echo $this->formSelect($form->get('idproductoreceta')) ?>
+                        <?php echo $this->formLabel($form->get('receta_cantidad')) ?>  
+                        <?php echo $this->formText($form->get('receta_cantidad')) ?>
                     </div>
                 </div>
                 
             </div>
+           
             
         </div>
         <div class="form-actions right">
@@ -61,3 +70,4 @@
     </div>
 </div>
 
+<script type="text/javascript" src="/application/custom/js/catalogo/subreceta.js"></script>

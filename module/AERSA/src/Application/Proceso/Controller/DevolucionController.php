@@ -144,13 +144,16 @@ class DevolucionController extends AbstractActionController {
         
         $form = new \Application\Proceso\Form\DevolucionForm($almecenes);
         
+        $iva = \TasaivaQuery::create()->findOne();
+        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/devolucion/nuevoregistro');
         $view_model->setVariables(array(
             'form' => $form,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
-            'almacenes' => json_encode($almecenes) //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
+            'almacenes' => json_encode($almecenes), //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
+            'iva'       => $iva,
         ));
 
         return $view_model;
