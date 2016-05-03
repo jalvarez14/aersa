@@ -51,7 +51,7 @@
        
         
         var caluclator = function($tr){
-            
+           
             var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 1;
             var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
             var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat($tr.find('input[name*=descuento]').val()) : 0;
@@ -102,7 +102,7 @@
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
-                if(has_iva == '1'){
+                if(has_iva){
                     
                     var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
                     var row_iva = (subtotal * settings.iva) / 100;
@@ -111,7 +111,7 @@
                 }
                 
             });
-            
+
             $('#productos_table tfoot').find('#iva').text(accounting.formatMoney(compra_iva));
             $('#productos_table tfoot').find('input[name=compra_iva]').val(compra_iva);
             
