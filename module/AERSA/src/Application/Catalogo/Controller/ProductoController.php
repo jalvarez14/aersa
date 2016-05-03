@@ -57,7 +57,7 @@ class ProductoController extends AbstractActionController
             $session = $session->getData();
             
             $post_data = $request->getPost();
-
+           
             //VALIDACION PENDIENTE
             //$exist = \ProductoQuery::create()->filterByProductoNombre($post_data['producto_nombre'])->exists();
 
@@ -129,9 +129,12 @@ class ProductoController extends AbstractActionController
             if ($request->isPost()) 
             {
                 $post_data = $request->getPost();
+              
                 //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
                 foreach ($post_data as $key => $value)
                     $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                
+                
                 
                 $entity->save();
 
@@ -139,13 +142,24 @@ class ProductoController extends AbstractActionController
 
                 return $this->redirect()->toUrl('/catalogo/producto/editar/'.$id);
             }
+            
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
             
+            if($entity->getProductoIva()){
+                $form->get('producto_iva')->setValue(1);
+            }
+            if($entity->getProductoBaja()){
+                $form->get('producto_baja')->setValue(1);
+            }
+            
         } 
-        else 
+        else{ 
             return $this->redirect()->toUrl('/catalogo/producto');
-
+        }
+        
+        
+        
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setVariables(array(

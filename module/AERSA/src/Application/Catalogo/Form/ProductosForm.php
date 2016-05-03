@@ -102,7 +102,7 @@ class ProductosForm extends Form
                 'label' => 'Iva *',
                 'value_options' => array(
                     1 => 'Si',
-                    2 => 'No',
+                    0 => 'No',
                 ),
             ),
             'attributes' => array(
@@ -170,7 +170,7 @@ class ProductosForm extends Form
                 'label' => 'Baja *',
                 'value_options' => array(
                     1 => 'Si',
-                    2 => 'No',
+                    0 => 'No',
                 ),
             ),
             'attributes' => array(
