@@ -1,6 +1,9 @@
 
 $( document ).ready(function() {
-
+    
+    $("[name=sucursal_anioactivo]").numeric();
+    $("[name=tasaiva_valor]").numeric();
+    
     $("[name=auditor_username]").focusout(function () {
         checkUser('auditor_username', 'Nombre de usuario *');
     });

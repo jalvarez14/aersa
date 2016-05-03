@@ -39,7 +39,7 @@
         
         var settings;
         var $table;
-        var iva = 16.00;
+        var iva = $("#iva").text();
         
         var defaults = {
            
@@ -98,7 +98,7 @@
             $('#productos_table tfoot').find('input[name=devolucion_ieps]').val(devolucion_ieps);
             
             //devolucion IVA
-            var devolucion_iva = 0.00;
+            var devolucion_iva = $("#iva").text();
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
@@ -262,7 +262,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                  url: '/autocomplete/getproductos?q=%QUERY',
+                  url: '/autocomplete/getproductossimples?q=%QUERY',
                   wildcard: '%QUERY'
                 }
             });
