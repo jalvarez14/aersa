@@ -19,6 +19,7 @@
                             }
                     } else
                     {
+                        $("[name=idalmacendestino]").html('');
                         alert('No existen almacenes para sucursal destino');
                     }
                 },
@@ -43,18 +44,82 @@
                     } else
                     {
                         $("[name=idconceptosalida]").html('');
-                        alert('No existen almacenes para sucursal destino');
+                        alert('No existen concepto para requisicion');
                         
                     }
                 },
             });
         }
     
+    
+    function getConceptos() {
+            var almorg= $("[name=idalmacenorigen] option:selected").text();
+            var almdes= $("[name=idalmacendestino] option:selected").text();
+            var sucorg= $("[name=idsucursalorigen]").val();
+            var sucdes= $("[name=idsucursaldestino]").val();
+            $.ajax({
+                type: "GET",
+                url: "/procesos/requisicion/getconcepsal/" + almorg + "/" +almdes +"/" + sucorg + "/" + sucdes,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data.length != 0)
+                    {
+                        $("[name=idconceptosalida]").html('');
+                        for (var k in data) 
+                            {
+                                $("[name=idconceptosalida]").append('<option value="' + data[k]['Idconceptosalida'] + '">' + data[k]['ConceptosalidaNombre'] + '</option>');
+                            }
+                    } else
+                    {
+                        $("[name=idconceptosalida]").html('');
+                        alert('No existen concepto para requisicion');
+                        
+                    }
+                },
+            });
+        }
+    function updateAlmacen() {
+        var idsucdes = $("[name=idsucursaldestino]").val();
+        $.ajax({
+            type: "GET",
+            url: "/procesos/requisicion/getalmdes/" + idsucdes,
+            dataType: "json",
+            success: function (data) {
+                if (data.length != 0)
+                {
+                    $("[name=idalmacendestino]").html('');
+                    for (var k in data) 
+                        {
+                        if(((idsucdes==$("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val()!=data[k]['Idalmacen'])))
+                            $("[name=idalmacendestino]").append('<option value="' + data[k]['Idalmacen'] + '">' + data[k]['AlmacenNombre'] + '</option>');
+                        }
+                } else
+                {
+                    alert('No existen concepto para requisicion');
+                }
+            },
+        });
+    }
+    
    $('[name=idsucursaldestino]').on('change', function () {
         getAlmacenesSucDes();
+        
     });
     $('[name=idalmacenorigen]').on('change', function () {
-        getAlmacenesSucDes();
+        var almorg= $("[name=idalmacenorigen]").val();
+        var almdes= $("[name=idalmacendestino]").val();
+        var sucorg= $("[name=idsucursalorigen]").val();
+        var sucdes= $("[name=idsucursaldestino]").val();
+        if(sucdes==sucorg)
+            updateAlmacen();
+        else
+            getConceptos();
+        
+
+    });
+    $('[name=idalmacendestino]').on('change', function () {
+        getConceptos();
     });
    /*
     * Handle input. Call public functions and initializers
@@ -527,5 +592,3 @@
     
     
 })( jQuery );
-
-

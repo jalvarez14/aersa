@@ -114,8 +114,7 @@ class RequisicionForm extends Form {
             ),
             'options' => array(
                 'label' => 'Concepto salida *',
-                'empty_option' => 'Seleccione un concepto',
-                'value_options' => $concepto_array,
+                'empty_option' => 'Seleccione un concepto'
             ),
         ));
         
