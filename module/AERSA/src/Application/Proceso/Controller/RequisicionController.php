@@ -31,17 +31,50 @@ class RequisicionController extends AbstractActionController {
     
     public function nuevoAction()
     {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
         $idempresa=$session['idempresa'];
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
         }
+        $sucursalorg = \SucursalQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne();
+        
+        $sucursaldes_array = array();
+        $sucursaldes = \SucursalQuery::create()->filterByIdempresa($idempresa)->find();
+        foreach ($sucursaldes as $sucursal){
+            
+            $id = $sucursal->getIdsucursal();
+            $sucursaldes_array[$id] = $sucursal->getSucursalNombre();
+        }
+        
+        $almacen_array = array();
+        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+        foreach ($almacenes as $almacen){
+            $id = $almacen->getIdalmacen();
+            $almacen_array[$id] = $almacen->getAlmacenNombre();
+        }
+        
+        $concepto_array = array();
+        $conceptos = \ConceptosalidaQuery::create()->find();
+        foreach ($conceptos as $concepto){
+            $id = $concepto->getIdconceptosalida();
+            $concepto_array[$id] = $concepto->getConceptosalidaNombre();
+        }
+        
+        $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+        $anio_activo = $sucursal->getSucursalAnioactivo();
+        $mes_activo = $sucursal->getSucursalMesactivo();
+        
         //INTANCIAMOS NUESTRA VISTA
-        $form = new \Application\Catalogo\Form\PlantillatablajeriaForm($producto_array);
+
+        $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg,$almacen_array,$sucursaldes_array, $concepto_array);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
+            'anio_activo' => $anio_activo,
+            'mes_activo' => $mes_activo,
             ));
         $view_model->setTemplate('/application/proceso/requisicion/nuevo');
         return $view_model;
@@ -101,5 +134,26 @@ class RequisicionController extends AbstractActionController {
         return $this->redirect()->toUrl('/catalogo/tablajeria');       
         }
     }
+    
+    public function getalmdesAction()
+    {
+        $cat = $this->params()->fromRoute('id');
+        $result = \AlmacenQuery::create()->filterByIdsucursal($cat)->find()->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    }
 
+    public function getconcepsalAction()
+    {
+        $almorg = $this->params()->fromRoute('almorg');
+        $almdes = $this->params()->fromRoute('almdes');
+        $sucorg = $this->params()->fromRoute('sucorg');
+        $sucdes = $this->params()->fromRoute('sucdes');
+        if($sucorg==$sucdes) {
+            $misma=1;
+        } else {
+            $misma=0;
+        }
+        $result = \ConceptosalidaQuery::create()->filterByAlmacendestino($almdes)->filterByAlmacenorigen($almorg)->filterByMismasucursal($misma)->find()->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    }
 }

@@ -39,21 +39,219 @@
         
         var settings;
         var $table;
-
+        
         var defaults = {
-           
+            iva:16,
         };
         
-        plugin.init = function(){
+        
+        plugin.list = function(anio,mes){
+        
+            //INICIALIZAMOS DATATABLES
+            var table = $container.find('#datatable');
+            $.ajax({
+                url:'/application/json/datatable/lang_es.json',
+                dataType:'json',
+                success:function(data){
+                   table.dataTable({
+                       "language":data,
+                       "order":[],
+                   });
+                },
+            });
+
+            //ELIMINAR COMPRA
+            $('.delete_modal').click(function(){
+
+              var id = $(this).closest('tr').attr('id');
+              var tmpl = [
+                // tabindex is required for focus
+                ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+                  '<div class="modal-header">',
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
+                    '<h4 class="modal-title">ADVERTENCIA</h4>', 
+                  '</div>',
+                  '<form method="post" action="/procesos/ingresos/eliminar/'+id+'">',
+                    '<div class="modal-body">',
+                      '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
+                    '</div>',
+                    '<div class="modal-footer">',
+                      '<a href="#" data-dismiss="modal" class="btn btn-default">Cancelar</a>',
+                      '<button class="btn btn-danger" type="submit">Eliminar</button>',
+                    '</div>',
+                  '</form>',
+                '</div>'
+              ].join('');
+              $(tmpl).modal();
+            });
             
-        settings = plugin.settings = $.extend({}, defaults, options);
+            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE ELIMINAR CADA UNO DE LOS REGISTROS
+            $container.find('#datatable tbody tr').filter(function(){
+                var date = new Date($(this).attr('date'));
+                if((date.getMonth()+1) != mes || (date.getFullYear()) != anio){
+                    $(this).find('.delete_modal').unbind();
+                    $(this).find('.delete_modal').css('cursor','not-allowed');
+                }
+            });
+            
+            
+        }
+        
+        plugin.init = function(){
+      
+            settings = plugin.settings = $.extend({}, defaults, options);
         
         }
         
         plugin.new = function(anio,mes){
-           
+            
+            formControl(anio,mes);
+       
         }
+        
+        plugin.edit = function(anio,mes){
+            
+            formControl(anio,mes);
+            
+            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
+            var now = new Date($('input[name=ingreso_fechacreacion]').val());
 
+            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
+                $container.find('input,select,button').attr('disabled',true);
+                $('.fa-trash').unbind();
+                $('.fa-trash').css('cursor','not-allowed');
+                
+            }
+            
+       
+        }
+        
+        /*
+         * PRIVATE METHODS
+         */
+        
+        var formControl = function(anio,mes){
+            
+            var minDate = new Date(anio + '/' + mes + '/' + '01');
+            var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
+            maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
+
+            //Inicializamos los calendarios
+            container.find('input[name=ingreso_fecha]').datepicker({
+                startDate:minDate,
+                endDate:maxDate,
+                format: 'dd/mm/yyyy',
+            });
+            
+            //Hacemos numericos los campos de total
+            $container.find('input[name*=total]').numeric();
+            
+            checkboxControl();
+            validaFolio();
+            calculator();
+            
+        }
+        
+        var checkboxControl = function(){
+            
+            $container.find('select[name=ingreso_revisada]').on('change',function(){
+                var selected = parseInt($container.find('select[name=ingreso_revisada]').val());
+                if(selected){
+                    $container.find('input[type=checkbox]').prop('checked',true);
+                }else{
+                    $container.find('input[type=checkbox]').prop('checked',false);
+                }
+            });
+            
+            
+            $container.find('input[type=checkbox]').on('click',function(){
+                 var revisada = 1;
+                 
+                $container.find('input[type=checkbox]').filter(function(){
+                   
+                    if(!$(this).is(':checked')){
+                        revisada = 0;
+                    }
+                });
+                
+                $container.find('select[name=ingreso_revisada]').val(revisada)
+                
+            });
+            
+            
+        }
+        
+        var validaFolio = function(){
+            
+            var id = $('input[name=idingreso]').val();
+            
+            container.find('input[name=ingreso_folio]').on('blur',function(){
+               var folio = $(this).val();
+                var $this = $(this);
+                $this.removeClass('valid');
+                $.ajax({
+                    url: "/procesos/ingresos/validatefolio",
+                    dataType: "json",
+                    data: {folio:folio,id:id},
+                    success: function (exist) {
+                        if(exist){
+                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            $this.val('');
+                        }else{
+                            $this.addClass('valid');
+                        }
+                        
+                    },
+                });
+            });
+        }
+        
+        var calculator = function(){
+            
+             $container.find('input[name*=total]').on('blur',function(){
+                 
+                 var total = $(this).val();
+                 var iva = (total * settings.iva) / 100
+                 var subtotal = total - iva;
+                 
+                 var $tr = $(this).closest('tr');
+               
+                 //ACTUALIZAMOS LA FILA
+                 $tr.find('td').eq(1).text(accounting.formatMoney(subtotal));
+                 $tr.find('td').eq(2).text(accounting.formatMoney(iva));
+                 $tr.find('input[name*=subtotal]').val(subtotal);
+                 $tr.find('input[name*=iva]').val(iva);
+                 
+                 //CALCULAMOS LOS TOTALES
+                 
+                 //ALIMENTOS
+                 var total_alimentos = 0.00;
+                 $container.find('table#alimentos input[name*=total]:visible').filter(function(){
+                     total_alimentos =  total_alimentos + parseFloat($(this).val());
+                 });
+                 $container.find('input[name=ingreso_totalalimento]').val(total_alimentos);
+                 $container.find('p#total_alimentos').text(accounting.formatMoney(total_alimentos));
+                 
+                 //BEBIDAS
+                 var total_bebidas = 0.00;
+                 $container.find('table#bebidas input[name*=total]:visible').filter(function(){
+                     total_bebidas =  total_bebidas + parseFloat($(this).val());
+                 });
+                 $container.find('input[name=ingreso_totalbebida]').val(total_bebidas);
+                 $container.find('p#total_bebidas').text(accounting.formatMoney(total_bebidas));
+                 
+                 //MISCELANIA
+                 var total_miscelanea = 0.00;
+                 $container.find('table#miscelanea input[name*=total]:visible').filter(function(){
+                     total_miscelanea =  total_miscelanea + parseFloat($(this).val());
+                 });
+                 $container.find('input[name=ingreso_totalmiscelanea]').val(total_miscelanea);
+                 $container.find('p#total_miscelanea').text(accounting.formatMoney(total_miscelanea));
+     
+               
+             });
+        }
+        
         plugin.init();
        
     }

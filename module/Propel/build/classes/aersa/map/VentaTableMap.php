@@ -45,7 +45,7 @@ class VentaTableMap extends TableMap
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addColumn('venta_revisada', 'VentaRevisada', 'BOOLEAN', true, 1, false);
-        $this->addColumn('venta_fecha', 'VentaFecha', 'TIMESTAMP', true, null, null);
+        $this->addColumn('venta_fechaventa', 'VentaFechaventa', 'TIMESTAMP', true, null, null);
         $this->addColumn('venta_fechacreacion', 'VentaFechacreacion', 'TIMESTAMP', true, null, null);
         $this->addColumn('venta_total', 'VentaTotal', 'DECIMAL', true, 15, null);
         // validators

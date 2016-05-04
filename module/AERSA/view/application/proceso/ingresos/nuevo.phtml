@@ -59,7 +59,7 @@
         <div class="portlet-body form">
             <div class="form-body">
                 <h3 class="page-title"><?php echo $rubro->getRubroingresoNombre()?></h3><br><br>
-                <table class="table">
+                <table class="table" id="<?php echo strtolower($rubro->getRubroingresoNombre())?>">
                     <thead>
                         <th>Conceptos</th>
                         <th>Subtotal</th>
@@ -77,7 +77,7 @@
                             <td>$ 0.00</td>
                             <td>$ 0.00</td>
                             <td><input name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][total]" type="text" class="form-control" value="0.00"></td>
-                            <td><input type="checkbox"value="0.00"></td>
+                            <td><input name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][revisada]" type="checkbox"></td>
                         </tr>
                         <?php endforeach;?>
                     </tbody>
@@ -94,7 +94,8 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Total bebidas: </label>
                             <div class="col-md-7">
-                                <p class="form-control-static"> $ 0.00 </p>
+                                <input type="hidden" name="ingreso_totalbebida" value="0.00">
+                                <p id="total_bebidas" class="form-control-static"> $ 0.00 </p>
                             </div>
                         </div>
                     </div>
@@ -102,7 +103,8 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Total alimentos: </label>
                             <div class="col-md-7">
-                                <p class="form-control-static"> $ 0.00 </p>
+                                <input type="hidden" name="ingreso_totalalimento" value="0.00">
+                                <p id="total_alimentos" class="form-control-static"> $ 0.00 </p>
                             </div>
                         </div>
                     </div>
@@ -110,7 +112,8 @@
                         <div class="form-group">
                             <label class="control-label col-md-5">Total miscelanea: </label>
                             <div class="col-md-7">
-                                <p class="form-control-static"> $ 0.00 </p>
+                                 <input type="hidden" name="ingreso_totalmiscelanea" value="0.00">
+                                <p id="total_miscelanea" class="form-control-static"> $ 0.00 </p>
                             </div>
                         </div>
                     </div>
@@ -129,6 +132,6 @@
 </div>
 <script type="text/javascript" src="/application/custom/js/procesos/ingresos.js"></script>
 <script>
-    var $form = $('#form_container').ingresos(<?php echo $iva?>);
+    var $form = $('#form_container').ingresos({'iva':<?php echo $iva?>});
     $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

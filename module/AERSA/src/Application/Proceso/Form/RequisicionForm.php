@@ -4,10 +4,9 @@ namespace Application\Proceso\Form;
 
 use Zend\Form\Form;
 
-class PlantillatablajeriaForm extends Form {
+class RequisicionForm extends Form {
     
-    public function __construct($producto_array = array()) {
-        
+    public function __construct($sucursalorg,$almacen_array = array(),$sucursaldes_array = array(), $concepto_array = array()) {
         parent::__construct('requisicionForm');
         
         $this->add(array(
@@ -32,8 +31,13 @@ class PlantillatablajeriaForm extends Form {
             'attributes' => array(
                 'class' => 'form-control',
                 'disabled' => true,
+                'value' => $sucursalorg->getSucursalNombre()
+                
             ),
-            'value' => $sucursal->getSucursalNombre(),
+            'options' => array(
+                'label' => 'Sucursal origen',
+            ),
+            
         ));
         
         $this->add(array(
@@ -41,8 +45,9 @@ class PlantillatablajeriaForm extends Form {
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => true,
+                'value' => $sucursalorg->getIdsucursal(),
             ),
-            'value' => $sucursal->getIdsucursal(),
+            
         ));
         
         $this->add(array(
@@ -54,8 +59,7 @@ class PlantillatablajeriaForm extends Form {
             ),
             'options' => array(
                 'label' => 'Alamacen origen *',
-                'empty_option' => 'Seleccione un almacen',
-                'value_options' => $almacenorg_array,
+                'value_options' => $almacen_array,
             ),
         ));
         
@@ -68,7 +72,6 @@ class PlantillatablajeriaForm extends Form {
             ),
             'options' => array(
                 'label' => 'Sucursal destino *',
-                'empty_option' => 'Seleccione una sucursal',
                 'value_options' => $sucursaldes_array,
             ),
         ));
@@ -82,8 +85,7 @@ class PlantillatablajeriaForm extends Form {
             ),
             'options' => array(
                 'label' => 'Almacen destino *',
-                'empty_option' => 'Seleccione un almacen',
-                'value_options' => $almacendes_array,
+                'value_options' => $almacen_array,
             ),
         ));
         

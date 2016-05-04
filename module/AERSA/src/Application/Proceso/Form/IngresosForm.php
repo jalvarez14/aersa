@@ -9,6 +9,14 @@ use Zend\Form\Form;
         parent::__construct('CompraForm');
         
         $this->add(array(
+           'name'  => 'ingreso_fechacreacion',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => true,
+            ),
+        ));
+        
+        $this->add(array(
            'name'  => 'idingreso',
             'type' => 'Hidden',
             'attributes' => array(

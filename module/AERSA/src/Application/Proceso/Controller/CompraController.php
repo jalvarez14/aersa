@@ -45,12 +45,20 @@ class CompraController extends AbstractActionController {
         $session = $session->getData();
         
         $folio = $this->params()->fromQuery('folio');
-        
+        $edit = (!is_null($this->params()->fromQuery('edit'))) ?$this->params()->fromQuery('edit') : false;
+
         $to = new \DateTime();
         $from = date("Y-m-d", strtotime("-2 months")); $from = new \DateTime($from);
-
-        $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($folio,  \Criteria::LIKE)->exists();
         
+        if($edit){
+             $id = $this->params()->fromQuery('id');
+             $entity = \CompraQuery::create()->findPk($id);
+            
+             $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::LIKE)->exists();
+        }else{
+            $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($folio,  \Criteria::LIKE)->exists();
+        }
+
         return $this->getResponse()->setContent(json_encode($exist));
     }
 
@@ -147,13 +155,18 @@ class CompraController extends AbstractActionController {
         
         $form = new \Application\Proceso\Form\CompraForm($almecenes);
         
+        //Obtenemos el iva
+        $iva = \TasaivaQuery::create()->findOne();
+        $iva = $iva->getTasaivaValor();
+        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/compra/nuevoregistro');
         $view_model->setVariables(array(
             'form' => $form,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
-            'almacenes' => json_encode($almecenes) //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
+            'almacenes' => json_encode($almecenes), //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
+            'iva' => $iva,
         ));
 
         return $view_model;
@@ -196,11 +209,7 @@ class CompraController extends AbstractActionController {
                     }
                 }
 
-                //SETEAMOS LA FECHA DE CREACION
-                $entity->setCompraFechacreacion(new \DateTime())
-                        ->setIdempresa($session['idempresa'])
-                        ->setIdsucursal($session['idsucursal']);
-
+                
                 if ($post_data['compra_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
                 }
@@ -265,7 +274,7 @@ class CompraController extends AbstractActionController {
             //CAMBIAMOS LOS VALORES DE FECHAS
             $form->get('compra_fechacompra')->setValue($entity->getCompraFechacompra('d/m/Y'));
             $form->get('compra_fechaentrega')->setValue($entity->getCompraFechaentrega('d/m/Y'));
-            
+            $form->get('compra_fechacreacion')->setValue($entity->getCompraFechacreacion('Y/m/d'));
             //SETEAMOS EL VALOR AUTOCOMPLETE
             $form->get('idproveedor_autocomplete')->setValue($entity->getProveedor()->getProveedorNombrecomercial());
             
@@ -279,7 +288,10 @@ class CompraController extends AbstractActionController {
             $count = \CompradetalleQuery::create()->orderByIdcompradetalle(\Criteria::DESC)->findOne();
             $count = $count->getIdcompradetalle() + 1;
    
-            
+            //Obtenemos el iva
+            $iva = \TasaivaQuery::create()->findOne();
+            $iva = $iva->getTasaivaValor();
+
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/proceso/compra/editar');
             $view_model->setVariables(array(
@@ -289,7 +301,8 @@ class CompraController extends AbstractActionController {
                 'anio_activo' => $anio_activo,
                 'mes_activo' => $mes_activo,
                 'almacenes' => $almecenes,
-                'count' => $count
+                'count' => $count,
+                'iva' => $iva,
             ));
             
             return $view_model;
