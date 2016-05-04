@@ -23,7 +23,7 @@
             </li>
         </ul>
 </div>
-<div id="form_container">
+<div id="form_container" >
     <form class="form-horizontal" action="/procesos/devolucion/editar/<?php echo $form->get('iddevolucion')->getValue()?>" method="post" enctype="multipart/form-data">
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
@@ -31,16 +31,18 @@
                 <h3 class="form-section">Datos de la devolución</h3>
                  <h3 class="page-title">Devolucion - <?php echo '#'.$form->get('iddevolucion')->getValue()?></h3>
                  <div class="row">
-                    <div class="col-md-6">
-                         <div class="form-group">
+                    <div class="form-group col-md-12">
+                        <div class="col-md-6">
+                         
                              <label class="control-label col-md-3">Creado por: </label>
                              <div class="col-md-9">
                                  <p class="form-control-static"><?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre()?></p>
                              </div>
                          </div>
                     </div>
-                     <div class="col-md-6">
-                         <div class="form-group">
+                     <div class="form-group">
+                        <div class="col-md-6">
+                         
                              <label class="control-label col-md-3">Auditor:</label>
                              <div class="col-md-9">
                                  <?php 
@@ -62,8 +64,8 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                <div class="row">
-                    <div class="form-group">
+                <div class="row ">
+                    <div class="form-group col-md-12">
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('devolucion_fechadevolucion')) ?>  
                             <?php echo $this->formText($form->get('devolucion_fechadevolucion')) ?> 
@@ -82,7 +84,7 @@
                         </div>
                         
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-md-12">
                         
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('devolucion_folio')) ?>  
@@ -94,7 +96,7 @@
                         </div>
                     </div>
                     
-                    <div class="form-group">
+                    <div class="form-group col-md-12">
                         <div class="col-md-6">
 
                             <?php echo $this->formLabel($form->get('idalmacen')) ?>  
@@ -147,15 +149,17 @@
                             </thead>
                             <tbody>
                                 <?php $detalle = new Devoluciondetalle()?>
+                                <?php $counter= 0 ?>
                                 <?php foreach ($devolucion_detalle as $detalle) :?>
-                                <tr id="<?php echo $detalle->getIddevoluciondetalle()?>">
+                                <tr id="productos_table<?php echo $detalle->getIddevoluciondetalle()?>">
                                     <td>
                                         <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][subtotal]" value="<?php echo $detalle->getDevoluciondetalleSubtotal()?>">
-                                        <!--<input type="hidden" name="productos[<?php //echo $detalle->getIddevoluciondetalle()?>][costo_unitario]" value="<?php //echo $detalle->getDevoluciondetalleCostounitario()?>">-->
+                                        <input type="hidden" name="productos[<?php //echo $detalle->getIddevoluciondetalle()?>][costo_unitario]" value="<?php //echo $detalle->getDevoluciondetalleCostounitario()?>">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][producto_iva]" value="<?php echo $detalle->getProducto()->getProductoIva()?>">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
                                         <?php echo $detalle->getProducto()->getProductoNombre()?>
                                     </td>
+                                    
                                     <td>
                                         <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][cantidad]" value="<?php echo $detalle->getDevoluciondetalleCantidad()?>"> 
                                     </td>
@@ -195,7 +199,7 @@
                                             <?php endforeach; ?>
                                         </select> 
                                     </td>
-                                    <td class="text-center"><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
+                                    <td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
                                 </tr>
                                 <?php endforeach?>
 
