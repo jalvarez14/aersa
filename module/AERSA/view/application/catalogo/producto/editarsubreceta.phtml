@@ -28,7 +28,7 @@
     </div>
 <?php endforeach;?>
 <?php
-    $form->setAttribute('action', '/catalogo/producto/editarsubreceta/'.$receta->getIdreceta().'/'.$producto->getIdProducto());
+    $form->setAttribute('action', '/catalogo/producto/editarsubreceta/'.$receta->getIdproductoreceta().'/'.$producto->getIdProducto());
     echo $this->form()->openTag($form);
     
 ?>
@@ -73,3 +73,5 @@
 
 <script type="text/javascript" src="/application/custom/js/catalogo/subreceta.js"></script>
 <script>     $("[name=receta_cantidad]").numeric();  </script>
+
+

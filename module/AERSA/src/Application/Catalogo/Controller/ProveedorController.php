@@ -99,4 +99,56 @@ class ProveedorController extends AbstractActionController
         
     }
     
+    public function editarAction() 
+    {
+
+        $request = $this->getRequest();
+
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id = $this->params()->fromRoute('id');
+
+        //VERIFICAMOS SI EXISTE
+        $exist = \ProveedorQuery::create()->filterByIdproveedor($id)->exists();
+
+        if ($exist) 
+        {
+            
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \ProveedorQuery::create()->findPk($id);
+
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Catalogo\Form\ProveedorForm();
+                
+            //SI NOS ENVIAN UNA PETICION POST
+            if ($request->isPost()) 
+            {
+                $post_data = $request->getPost();
+                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                foreach ($post_data as $key => $value)
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                
+                $entity->save();
+
+                $this->flashMessenger()->addSuccessMessage('Registro actualizado satisfactoriamente!');
+
+                return $this->redirect()->toUrl('/catalogo/proveedor');
+            }
+            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+        } 
+        else 
+            return $this->redirect()->toUrl('/catalogo/proveedor');
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form'      => $form,
+            'messages'  => $this->flashMessenger(),
+            'proveedor' => $entity,
+        ));
+        $view_model->setTemplate('/application/catalogo/proveedor/editar');
+        return $view_model;
+    }
+    
 }

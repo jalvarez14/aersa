@@ -363,22 +363,17 @@ class ProductoController extends AbstractActionController
             $producto = \ProductoQuery::create()->findPk($prod);
             
             //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \RecetaQuery::create()->findPk($id);
+            $entity = \RecetaQuery::create()->filterByIdproductoreceta($id)->findOne();
             
-            $collection  = \ProductoQuery::create()->filterByProductoTipo('simple')->find();
-            $productos = array();
-            foreach ($collection as $item)
-                    $productos[$item->getIdproducto()] = $item->getProductoNombre();
-            $form = new \Application\Catalogo\Form\SubrecetaForm($productos);
+            
+            $form = new \Application\Catalogo\Form\SubrecetaForm();
             
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) 
             {
                 $post_data = $request->getPost();
                 //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                foreach ($post_data as $key => $value)
-                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                
+                $entity->setRecetaCantidad($post_data[receta_cantidad]);
                 $entity->save();
 
                 $this->flashMessenger()->addSuccessMessage('Sub receta modificada correctamente!');

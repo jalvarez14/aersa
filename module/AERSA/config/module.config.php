@@ -248,6 +248,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Proveedor',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
                                ),
                             ),
                            'producto' => array(
