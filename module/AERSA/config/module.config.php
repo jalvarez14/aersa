@@ -354,6 +354,16 @@ return array(
                                    
                                ),
                             ),
+                        'altaproductos' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/altaproductos',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Altaproductos',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                            ),
                         
                         'iva' => array(
                                 'type' => 'Literal',
@@ -995,6 +1005,7 @@ return array(
             'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
             'Application\Catalogo\Controller\Producto'      => 'Application\Catalogo\Controller\ProductoController',
+            'Application\Catalogo\Controller\Altaproductos' => 'Application\Catalogo\Controller\AltaproductosController',
             'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
             
             /*
