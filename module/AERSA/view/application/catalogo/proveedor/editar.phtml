@@ -1,0 +1,139 @@
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
+
+<h3 class="page-title"><?php echo $proveedor->getProveedorNombrecomercial()?></h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/proveedor">Proveedores</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span><?php echo $proveedor->getProveedorNombrecomercial()?></span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+<?php
+    $form->setAttribute('action', '/catalogo/proveedor/editar/'.$proveedor->getIdproveedor());
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Información general</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_nombrecomercial')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_nombrecomercial')) ?>
+                    </div>
+                </div>
+                <!--
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php //echo $this->formLabel($form->get('idempresa')) ?>  
+                        <?php //echo $this->formSelect($form->get('idempresa')) ?>
+                        
+                        
+                    </div>
+                </div>
+                -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_razonsocial')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_razonsocial')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_RFC')) ?>  
+                        <?php echo $this->formText  ($form->get('proveedor_RFC')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_telefono')) ?>  
+                        <?php echo $this->formText  ($form->get('proveedor_telefono')) ?>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Dirección</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_calle')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_calle')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_numero')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_numero')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_interior')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_interior')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_colonia')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_colonia')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_ciudad')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_ciudad')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_estado')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_estado')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('proveedor_codigopostal')) ?>  
+                        <?php echo $this->formText($form->get('proveedor_codigopostal')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+            <div class="form-actions right">
+                <button class="btn blue" type="submit">
+                    <i class="fa fa-check"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

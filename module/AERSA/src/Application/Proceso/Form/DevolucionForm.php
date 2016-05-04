@@ -29,6 +29,18 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
+            'name' => 'devolucion_fechadevolucion',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Fecha *'
+            )
+        ));
+        
+        $this->add(array(
            'name'  => 'idproveedor',
             'type' => 'Hidden',
             'attributes' => array(

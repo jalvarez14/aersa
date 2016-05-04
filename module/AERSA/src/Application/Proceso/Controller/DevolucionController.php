@@ -263,7 +263,7 @@ class DevolucionController extends AbstractActionController {
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
             
             //CAMBIAMOS LOS VALORES DE FECHAS
-            $form->get('devolucion_fechacreacion')->setValue($entity->getDevolucionFechacreacion('d/m/Y'));
+            $form->get('devolucion_fechadevolucion')->setValue($entity->getDevolucionFechadevolucion('d/m/Y'));
             
             //SETEAMOS EL VALOR AUTOCOMPLETE
             $form->get('idproveedor_autocomplete')->setValue($entity->getProveedor()->getProveedorNombrecomercial());
