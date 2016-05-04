@@ -105,6 +105,11 @@ class ProductoController extends AbstractActionController
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \ProductoQuery::create()->findPk($id);
             
+            //Bandera para campo rendimiento
+            $isBebida = false;
+            if($entity->getIdcategoria() == "2")
+                $isBebida= true;
+            
             //Obtenemos las categorias y subcategorias
             $cats   = \CategoriaQuery::create()->filterByIdcategoriapadre(null)->find();
             $sub    = \CategoriaQuery::create()->filterByIdcategoriapadre(null, \Criteria::NOT_EQUAL)->find();
@@ -122,9 +127,10 @@ class ProductoController extends AbstractActionController
             //Crear arreglo de datos para formulario en campo subcategorias
             foreach ($sub as $item)
                 $subcategorias[$item->getIdCategoria()] = $item->getCategorianombre();
-
+                
             //INTANCIAMOS NUESTRO FORMULARIO
             $form = new \Application\Catalogo\Form\ProductosForm($categorias,$subcategorias);
+                
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) 
             {
@@ -168,6 +174,7 @@ class ProductoController extends AbstractActionController
             'cbarras'   => $cbarras,
             'recetas'   => $recetas,
             'producto'  => $entity,
+            'isBebida'  => $isBebida,
         ));
         $view_model->setTemplate('/application/catalogo/producto/editar');
         return $view_model;
@@ -398,6 +405,7 @@ class ProductoController extends AbstractActionController
         else 
             return $this->redirect()->toUrl('/catalogo/producto');
         
+        $dataProd = \ProductoQuery::create()->filterByIdproducto($id)->findOne();
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setVariables(array(
@@ -405,6 +413,7 @@ class ProductoController extends AbstractActionController
             'messages'  => $this->flashMessenger(),
             'receta'    => $entity,
             'producto'  => $producto,
+            'data'      => $dataProd,
         ));
         $view_model->setTemplate('/application/catalogo/producto/editarsubreceta');
         return $view_model;

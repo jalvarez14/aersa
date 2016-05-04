@@ -30,6 +30,7 @@
 <?php
     $form->setAttribute('action', '/catalogo/producto/editarsubreceta/'.$receta->getIdreceta().'/'.$producto->getIdProducto());
     echo $this->form()->openTag($form);
+    
 ?>
 <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
     <div class="portlet-body form">
@@ -44,9 +45,9 @@
                             <span class="input-group-addon">
                                 <i class="fa fa-search"></i>
                             </span>
-                            <input id="idproducto" name="idproductoreceta" type="hidden">
+                            <input id="idproducto" name="idproductoreceta" value="<?php echo $data->getIdProducto()?>" type="hidden">
                             <input id="producto_iva" type="hidden">
-                            <input id="producto_autocomplete" class="form-control" type="text">
+                            <input id="producto_autocomplete" class="form-control" disabled="disabled"type="text" value="<?php echo $data->getProductonombre()?>">
                         </div>  
                     </div>
                 </div>
@@ -71,3 +72,4 @@
 
 
 <script type="text/javascript" src="/application/custom/js/catalogo/subreceta.js"></script>
+<script>     $("[name=receta_cantidad]").numeric();  </script>

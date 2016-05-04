@@ -42,12 +42,12 @@ class ProveedorController extends AbstractActionController
         $request = $this->getRequest();
         
         $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
-        //$emp = \EmpresaQuery::create()->findPk(2);
         
         $empresa= array();
         $empresa[$emp->getIdempresa()] = $emp->getEmpresaNombrecomercial();
         $form = new \Application\Catalogo\Form\ProveedorForm($empresa);
-        
+        $element = $form->get('idempresa');
+        $element->setAttribute('disabled', 'disabled');
         
         if ($request->isPost()) 
         {
@@ -63,15 +63,16 @@ class ProveedorController extends AbstractActionController
                 $entity = new \Proveedor();
 
                 foreach ($post_data as $key => $value) {
+                    
                     $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
 
                 //SETEAMOS EL STATUS Y EL PASSWORD
-                $entity->setIdempresa($post_data['idempresa']);
+                $entity->setIdempresa($session['idempresa']);
 
                 $entity->save();
                 $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/catalogo/proveedor/nuevo');
+                return $this->redirect()->toUrl('/catalogo/proveedor');
 
             } 
             else 

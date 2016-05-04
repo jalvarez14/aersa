@@ -39,7 +39,9 @@
         
         var settings;
         var $table;
-        var iva = $("#iva").text();
+        
+        var aux = $("#iva").text().split('%');
+        var iva = parseFloat(aux[1]);
         
         var defaults = {
            
@@ -98,7 +100,7 @@
             $('#productos_table tfoot').find('input[name=devolucion_ieps]').val(devolucion_ieps);
             
             //devolucion IVA
-            var devolucion_iva = $("#iva").text();
+            var devolucion_iva = 0.00;
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
