@@ -1,4 +1,4 @@
-(function( $ ){
+    (function( $ ){
     
    
    /*
@@ -380,7 +380,6 @@
         }
         
         plugin.edit = function(anio,mes,mes_devolucion,anio_devolucion,almacenes,count){
-
 
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
