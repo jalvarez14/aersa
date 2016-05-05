@@ -126,9 +126,10 @@ class TrabajadorespromedioController extends AbstractActionController
         $view_model->setVariables(array(
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
+            'id'        => $id,
 
         ));
         $view_model->setTemplate('/application/catalogo/trabajadorespromedio/editar');
         return $view_model;
     }
-    }
+}

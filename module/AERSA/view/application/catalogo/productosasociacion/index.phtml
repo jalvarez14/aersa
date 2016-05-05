@@ -3,7 +3,7 @@
 
 
 <div id="my_container">
-    <h3 class="page-title">Productos</h3>
+    <h3 class="page-title">Asociar productos</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
@@ -23,13 +23,15 @@
             <div class="form-body">
                 
                 
-                <form action="/catalogo/altaproductos" method="post">
+                <form action="/catalogo/asociacionproductos" method="post">
                     
                     <div class="row  col-md-2">
                         <select class="form-control " required name="status">
                             <option selected value> Sin especificar </option>
-                            <option value="1"> Activo </option>
-                            <option value="0"> Inactivo </option>
+                            
+                            <?php foreach($almacenes as $item): ?>
+                                <option value="<?php echo $item->getIdalmacen() ?>"> <?php echo $item->getAlmacennombre() ?> </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -44,7 +46,7 @@
                                 <th><input type="checkbox" id="selectall" class="pull-left"> </th>
                                 <th> Producto </th>
                                 <th> Categoria </th>
-                                <th> Estatus </th>
+                                <th> Almacen </th>
                             </tr>
                         </thead>
                     <tbody>
@@ -57,16 +59,17 @@
                         <?php $subcategoria = \CategoriaQuery::create()->findPk($entity->getIdsubcategoria()) ?>
                             
                             <?php
-                                 if ($entity->getProductobaja()) 
+                                 $almacen = \ProductosucursalalmacenQuery::create()
+                                         ->filterByIdproducto($entity->getIdproducto())
+                                         ->findone();
+                                 if($almacen != null)
                                  {
-                                     $estatus = "Activo";
-                                     $class ="primary";
+                                    $almacen = $almacen->getIdalmacen();
+                                    $almacen = \AlmacenQuery::create()->findPk($almacen);
+                                    $almacen = $almacen->getAlmacenNombre();
                                  }
                                  else
-                                 {
-                                     $estatus = "Inactivo";
-                                     $class ="danger";
-                                 }
+                                     $almacen = ""
                             ?>
                             <tr id="tabla">
                             
@@ -74,7 +77,7 @@
                                 <td><?php echo $entity->getProductoNombre() ?></td>
                                 <td><span class="label label-sm label-success"> <?php echo $entity->getCategoriaRelatedByIdcategoria()->getCategoriaNombre() ?> </span></td>
                                 <?php if($subcategoria != NULL): ?>
-                                <td><span class="label label-sm label-<?php echo $class ?>  "><?php echo $estatus?></span></td>
+                                <td><span><?php echo $almacen?></span></td>
                                 <?php else:?>
                                     <td><span class="label label-sm label-danger"> N/A </span></td>
                                 <?php endif ?>
