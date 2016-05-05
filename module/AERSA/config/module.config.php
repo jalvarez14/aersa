@@ -397,6 +397,16 @@ return array(
                                     ),
                                 ),
                             ),
+                        'productosasociacion' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/asociacionproductos',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Productosasociacion',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                            ),
                         
                         'iva' => array(
                                 'type' => 'Literal',
@@ -1039,6 +1049,7 @@ return array(
             'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
             'Application\Catalogo\Controller\Producto'      => 'Application\Catalogo\Controller\ProductoController',
             'Application\Catalogo\Controller\Altaproductos' => 'Application\Catalogo\Controller\AltaproductosController',
+            'Application\Catalogo\Controller\Productosasociacion' => 'Application\Catalogo\Controller\ProductosasociacionController',
             'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
             
             'Application\Catalogo\Controller\Trabajadorespromedio'  => 'Application\Catalogo\Controller\Trabajadorespromediocontroller',
