@@ -20,7 +20,7 @@ class AltaproductosController extends AbstractActionController
         if($session['idempresa'] == 1)
             $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
         
-        $productos = \ProductoQuery::create()->filterByProductoTipo('plu',  \Criteria::EQUAL)->find();
+        $productos = \ProductoQuery::create()->find();
         $request = $this->getRequest();
         
         if($request->isPost())
