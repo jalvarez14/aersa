@@ -3,7 +3,7 @@
 
 
 <div id="my_container">
-    <h3 class="page-title">Productos</h3>
+    <h3 class="page-title">Asociar productos</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
@@ -23,13 +23,15 @@
             <div class="form-body">
                 
                 
-                <form action="/catalogo/altaproductos" method="post">
+                <form action="/catalogo/asociacionproductos" method="post">
                     
                     <div class="row  col-md-2">
                         <select class="form-control " required name="status">
                             <option selected value> Sin especificar </option>
-                            <option value="1"> Activo </option>
-                            <option value="0"> Inactivo </option>
+                            
+                            <?php foreach($almacenes as $item): ?>
+                                <option value="<?php echo $item->getIdalmacen() ?>"> <?php echo $item->getAlmacennombre() ?> </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-2">
