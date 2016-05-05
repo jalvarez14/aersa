@@ -79,7 +79,7 @@
                 },
             });
         }
-    function updateAlmacen() {
+    function updateAlmacen(almdes,almorg) {
         var idsucdes = $("[name=idsucursaldestino]").val();
         $.ajax({
             type: "GET",
@@ -94,12 +94,19 @@
                         if(((idsucdes==$("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val()!=data[k]['Idalmacen'])))
                             $("[name=idalmacendestino]").append('<option value="' + data[k]['Idalmacen'] + '">' + data[k]['AlmacenNombre'] + '</option>');
                         }
+                    if(almdes!=almorg) {
+                        $("[name=idalmacendestino]").val(almdes);
+                    var a = document.getElementsByName('idalmacendestino');
+                    //a.value = almdes;
+                    
+                    }
                 } else
                 {
                     alert('No existen concepto para requisicion');
                 }
             },
         });
+        getConceptos();
     }
     
    $('[name=idsucursaldestino]').on('change', function () {
@@ -112,7 +119,7 @@
         var sucorg= $("[name=idsucursalorigen]").val();
         var sucdes= $("[name=idsucursaldestino]").val();
         if(sucdes==sucorg)
-            updateAlmacen();
+            updateAlmacen(almdes,almorg);
         else
             getConceptos();
         
