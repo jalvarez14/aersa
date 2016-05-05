@@ -1,0 +1,76 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<link href="/application/custom/css/multiple-select.css" rel="stylesheet"/>
+
+<h3 class="page-title">Registro trabajadores promedio</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/trabajador_promedio">Trabajadores promedio</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>Registro</span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+<?php
+    $form->setAttribute('action', '/catalogo/trabajador_promedio/nuevo');
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Trabajador promedio - Registro</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('trabajadorpromedio_anio')) ?>  
+                        <?php echo $this->formText($form->get('trabajadorpromedio_anio')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('trabajadorpromedio_mes')) ?>  
+                        <?php echo $this->formSelect($form->get('trabajadorpromedio_mes')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('trabajadorpromedio_empleados')) ?>  
+                        <?php echo $this->formText($form->get('trabajadorpromedio_empleados')) ?>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <br>
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" id="btnSubmit" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+            
+        </div>
+    </div>
+</div>
+
+<script src="/application/custom/js/validaciones.js"></script>
+<script src="/application/custom/js/multiple-select.js"></script>
+<script>
+$("[name=trabajadorpromedio_empleados]").numeric();
+$("[name=trabajadorpromedio_anio]").numeric();
+</script>
+    

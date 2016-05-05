@@ -20,9 +20,30 @@ class AltaproductosController extends AbstractActionController
         if($session['idempresa'] == 1)
             $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
         
-        $productos = \ProductoQuery::create()->find();
-
+        $productos = \ProductoQuery::create()->filterByProductoTipo('plu',  \Criteria::EQUAL)->find();
+        $request = $this->getRequest();
         
+        if($request->isPost())
+        {
+            $post_data = $request->getPost();
+            
+            $status = $post_data['status'];
+            
+            //Seteamos campos en nulo para que no estorben
+            $post_data['datatable_length'] = null;
+            $post_data['status'] = null;
+            foreach ($post_data as $checked)
+            {   
+                if($checked != null)
+                {
+                    $prod = \ProductoQuery::create()->findPk($checked);
+                    $prod->setProductoBaja($status);
+                    $prod->save();
+                }
+            }
+            $this->flashMessenger()->addSuccessMessage('Productos guardados satisfactoriamente!');
+            return $this->redirect()->toUrl('/catalogo/altaproductos');
+        }
         
                 
         //INTANCIAMOS NUESTRA VISTA

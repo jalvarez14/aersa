@@ -227,6 +227,39 @@ return array(
                                     ),
                                ),
                             ),
+                           'trabajadorespromedio' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/trabajador_promedio',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Trabajadorespromedio',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                               'may_terminate' => true,
+                               'child_routes' => array(
+                                   'nuevo' => array(
+                                       'type' => 'Literal',
+                                       'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Trabajadorespromedio',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                   'editar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/editar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Trabajadorespromedio',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                               ),
+                            ),
                            'proveedor' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -1008,6 +1041,7 @@ return array(
             'Application\Catalogo\Controller\Altaproductos' => 'Application\Catalogo\Controller\AltaproductosController',
             'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
             
+            'Application\Catalogo\Controller\Trabajadorespromedio'  => 'Application\Catalogo\Controller\Trabajadorespromediocontroller',
             /*
              * PROCESO
              */
