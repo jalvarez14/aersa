@@ -2,6 +2,12 @@
 <link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 
 
+<style>
+    tr.selected { background-color: #EEF1F5 !important; }
+    .odd:hover,
+    .even:hover{ cursor: pointer; }
+</style>
+
 
 <div id="my_container">
     <h3 class="page-title">Asociar productos</h3>
@@ -52,7 +58,7 @@
                         </thead>
                     <tbody>
                         <?php $counter = 0?>
-                        <?php foreach ($productos as $entity) : ?>
+                        <?php foreach ($productos as $entity) : ?>                        
                         
                         <?php $counter++; ?>
                         
@@ -95,16 +101,9 @@
         </div>
     </div>
 </div>
+
 <script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
 <script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 <script src="/application/custom/js/catalogo/productoasociacion.js" type="text/javascript"></script>	
 
 
-
-
-<script>   
-
-    //var plugin = $('#my_container').usuario();
-    
-			
-</script>

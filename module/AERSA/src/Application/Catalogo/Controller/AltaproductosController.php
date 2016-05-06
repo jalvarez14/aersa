@@ -14,11 +14,8 @@ class AltaproductosController extends AbstractActionController
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
 
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
-        
-        //SI SE TRATA DE UN ADMIN DE AERSA
-        if($session['idempresa'] == 1)
-            $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
+
+        $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
         
         $productos = \ProductoQuery::create()->find();
         $request = $this->getRequest();
@@ -29,17 +26,11 @@ class AltaproductosController extends AbstractActionController
             
             $status = $post_data['status'];
             
-            //Seteamos campos en nulo para que no estorben
-            $post_data['datatable_length'] = null;
-            $post_data['status'] = null;
-            foreach ($post_data as $checked)
+            foreach ($post_data['id'] as $checked)
             {   
-                if($checked != null)
-                {
-                    $prod = \ProductoQuery::create()->findPk($checked);
-                    $prod->setProductoBaja($status);
-                    $prod->save();
-                }
+                $prod = \ProductoQuery::create()->findPk($checked);
+                $prod->setProductoBaja($status);
+                $prod->save();
             }
             $this->flashMessenger()->addSuccessMessage('Productos guardados satisfactoriamente!');
             return $this->redirect()->toUrl('/catalogo/altaproductos');

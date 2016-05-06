@@ -118,7 +118,7 @@ $(document).ready(function (){
    });
 
    // Handle form submission event 
-   $('#frm-asocia').on('submit', function(e){
+   $('#frm-altabaja').on('submit', function(e){
       var form = this;
       // Iterate over all selected checkboxes
       $.each(rows_selected, function(index, rowId){
