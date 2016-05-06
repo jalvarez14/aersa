@@ -2,6 +2,7 @@
     function getAlmacenesSucDes() {
             var idsucdes = $("[name=idsucursaldestino]").val();
             $.ajax({
+                async : false,
                 type: "GET",
                 url: "/procesos/requisicion/getalmdes/" + idsucdes,
                 dataType: "json",
@@ -33,7 +34,6 @@
                 url: "/procesos/requisicion/getconcepsal/" + almorg + "/" +almdes +"/" + sucorg + "/" + sucdes,
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
                     if (data.length != 0)
                     {
                         $("[name=idconceptosalida]").html('');
@@ -58,6 +58,7 @@
             var sucorg= $("[name=idsucursalorigen]").val();
             var sucdes= $("[name=idsucursaldestino]").val();
             $.ajax({
+                async : false,
                 type: "GET",
                 url: "/procesos/requisicion/getconcepsal/" + almorg + "/" +almdes +"/" + sucorg + "/" + sucdes,
                 dataType: "json",
@@ -80,8 +81,10 @@
             });
         }
     function updateAlmacen(almdes,almorg) {
+        
         var idsucdes = $("[name=idsucursaldestino]").val();
         $.ajax({
+            async : false,
             type: "GET",
             url: "/procesos/requisicion/getalmdes/" + idsucdes,
             dataType: "json",
@@ -100,6 +103,7 @@
                     //a.value = almdes;
                     
                     }
+                    getConceptos();
                 } else
                 {
                     alert('No existen concepto para requisicion');
@@ -186,13 +190,13 @@
             $tr.find('td.subtotal').text(accounting.formatMoney(row_subtotal));
             
             //COMPRA SUBTOTAL
-            var compra_subtotal = 0.00;
+            var requisicion_subtotal = 0.00;
             $('#productos_table tbody').find('input[name*=subtotal]').filter(function(){
-                compra_subtotal= compra_subtotal + parseFloat($(this).val());
+                requisicion_subtotal= requisicion_subtotal + parseFloat($(this).val());
             });
             
             //COMPRA TOTAL
-            var requisicion_total = compra_subtotal + row_subtotal -row_subtotal;
+            var requisicion_total = requisicion_subtotal + row_subtotal -row_subtotal;
             $('#productos_table tfoot').find('#total').text(accounting.formatMoney(requisicion_total));
             $('#productos_table tfoot').find('input[name=requisicion_total]').val(requisicion_total);
         }
@@ -349,7 +353,7 @@
                     
                     caluclator($tr);//mandar el total
                 });
-                var revisada = $('select[name=compra_revisada] option:selected').val();
+                var revisada = $('select[name=requisicion_revisada] option:selected').val();
                 if(revisada==1){
                     tr.find('input[type=checkbox]').prop('checked',true);
                 }
@@ -384,7 +388,7 @@
                 var $this = $(this);
                 $this.removeClass('valid');
                 $.ajax({
-                    url: "/procesos/compra/validatefolio",
+                    url: "/procesos/requisicion/validatefolio",
                     dataType: "json",
                     data: {folio:folio},
                     success: function (exist) {
@@ -403,191 +407,7 @@
            
         }
         
-        plugin.edit = function(anio,mes,almacenes,count,compra_tipo){
-            
-            //SI ES ORDEN DE COMPRA DESHABILITAMOS LOS SELECT DE ALMACEN
-            if(compra_tipo == 'ordecompra'){
-                $container.find('select[name=idalmacen]').attr('disabled',true);
-                $container.find('select[name*=almacen]').attr('disabled',true);
-            }
-
-            var minDate = new Date(anio + '/' + mes + '/' + '01');
-            var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
-            maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
-            
-            container.find('input[name=compra_fechacompra]').datepicker({
-                startDate:minDate,
-                endDate:maxDate,
-                format: 'dd/mm/yyyy',
-            });
-            
-            container.find('input[name=compra_fechaentrega]').datepicker({
-                format: 'dd/mm/yyyy',
-            });
-            
-            var data = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                remote: {
-                  url: '/autocomplete/getproveedores?q=%QUERY',
-                  wildcard: '%QUERY'
-                }
-            });
-            
-            $('input[name=idproveedor_autocomplete]').typeahead(null, {
-                name: 'best-pictures',
-                display: 'value',
-                hint: true,
-                highlight: true,
-                source: data,
-                limit:5,
-            });
-            
-            $('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
-                $('input[name=idproveedor]').val(suggestion.id);
-               
-            });
-            
-            var data = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                remote: {
-                  url: '/autocomplete/getproductos?q=%QUERY',
-                  wildcard: '%QUERY'
-                }
-            });
-            
-            $('input#producto_autocomplete').typeahead(null, {
-                name: 'best-pictures',
-                display: 'value',
-                hint: true,
-                highlight: true,
-                source: data,
-                limit:5,
-            });
-            
-            $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
-                $('#producto_add').attr('disabled',false);
-                $('input#idproducto').val(suggestion.id);
-                $('input#producto_iva').val(suggestion.producto_iva);
-                
-            });
-            
-            $('#productos_table tbody').numeric();
-            
-            var count = count;
-            $('#producto_add').on('click',function(){  
-                
-                //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var almacenen_select = $('<td><select class="form-control" name=productos['+count+'][almacen]></td>');
-                $.each(almacenes,function(index){
-                    var option = $('<option value="'+index+'">'+this+'</option>');
-                    almacenen_select.find('select').append(option);
-                });
-                
-                var tipo = $('select[name=compra_tipo] option:selected').val();
-                
-                if(tipo == 'ordecompra'){
-                   
-                    almacenen_select.find('select').attr('disabled',true);
-                }
-
-                               
-                var tr = $('<tr>');
-                tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
-                tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
-                tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
-                tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
-                tr.append(almacenen_select);
-                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
-                
-                //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
-                tr.find('input').numeric();
-                
-                //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL,IEPS, ETC
-                tr.find('input').on('blur',function(){
-                    var $tr = $(this).closest(tr);
-                    caluclator($tr);
-                });
-                
-                var revisada = $('select[name=compra_revisada] option:selected').val();
-                if(revisada==1){
-                    tr.find('input[type=checkbox]').prop('checked',true);
-                }
-                
-                //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
-                revisadaControl();
-                
-                //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
-                
-                
-                //LIMPIAMOS EL AUTOCOMPLETE
-                $('input#producto_autocomplete').typeahead('val', ''); 
-                $('input#idproducto').val(''); 
-                $('input#producto_iva').val('');
-                $('#producto_add').attr('disabled',true);
-                
-                
-             count ++;          
-             $('.fa-trash').on('click',function(){
-                var tr = $(this).closest('tr');
-                tr.remove();
-                caluclator(tr); 
-             });         
-              
-            
-            
-            });
-            
-            $('.fa-trash').on('click',function(){
-                var tr = $(this).closest('tr');
-                tr.remove();
-                caluclator(tr);
-             });
-           
-           //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
-            revisadaControl();
-           
-           //VALIDAR FOLIO
-           $('input[name=compra_folio]').on('blur',function(){
-                var folio = $(this).val();
-                var $this = $(this);
-                $this.removeClass('valid');
-                $.ajax({
-                    url: "/procesos/compra/validatefolio",
-                    dataType: "json",
-                    data: {folio:folio},
-                    success: function (exist) {
-                        console.log(exist);
-                        if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $this.val('');
-                        }else{
-                            $this.addClass('valid');
-                        }
-                        
-                    },
-                });
-                         
-           });
-           
-           //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
-            var now = new Date();
-           
-            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
-                $container.find('input,select,button').attr('disabled',true);
-                $('.fa-trash').unbind();
-                $('.fa-trash').css('cursor','not-allowed');
-                
-            }
-
-        }
-
+        
         /*
         * Plugin initializing
         */
