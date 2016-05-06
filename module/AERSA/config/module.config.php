@@ -258,6 +258,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'eliminar' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Trabajadorespromedio',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
                                ),
                             ),
                            'proveedor' => array(
