@@ -46,7 +46,20 @@ class TrabajadorespromedioController extends AbstractActionController
         
             $post_data = $request->getPost();
                 
-
+            $exists = \TrabajadorespromedioQuery::create()
+                    ->filterByTrabajadorespromedioAnio($post_data['trabajadorpromedio_anio'])
+                    ->filterByTrabajadorespromedioMes($post_data['trabajadorpromedio_mes'])
+                    ->find();
+            
+            echo $post_data['trabajadorpromedio_anio'];
+            echo $post_data['trabajadorpromedio_mes'];
+            
+            foreach ($exists as $item ) 
+            {
+                echo "mylord";
+                $this->flashMessenger()->addErrorMessage('Ya un registro con este mes y año anterior');
+                return $this->redirect()->toUrl('/catalogo/trabajador_promedio/nuevo');
+            }
             //Metemos los datos de las entidades
             $entity = new \Trabajadorpromedio();
 
@@ -131,5 +144,23 @@ class TrabajadorespromedioController extends AbstractActionController
         ));
         $view_model->setTemplate('/application/catalogo/trabajadorespromedio/editar');
         return $view_model;
+    }
+    
+    public function eliminarAction() 
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) 
+        {
+
+            $id = $this->params()->fromRoute('id');
+
+            $entity = \TrabajadorpromedioQuery::create()->findPk($id);
+            $entity->delete();
+
+            $this->flashMessenger()->addSuccessMessage('Registro eliminado satisfactoriamente!');
+
+            return $this->redirect()->toUrl('/catalogo/trabajador_promedio');
+        }
     }
 }
