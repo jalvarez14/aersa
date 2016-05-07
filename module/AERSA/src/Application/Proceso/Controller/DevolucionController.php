@@ -187,15 +187,15 @@ class DevolucionController extends AbstractActionController {
                 $post_data = $request->getPost();
                 $post_files = $request->getFiles();
 
-                $post_data["devolucion_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["decolucion_fechacreacion"]);
+                $post_data["devolucion_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["devolucion_fechadevolucion"]);
                 //$post_data["compra_fechaentrega"] = date_create_from_format('d/m/Y', $post_data["compra_fechaentrega"]);
-
+                
                 foreach ($post_data as $key => $value) {
                     if (\DevolucionPeer::getTableMap()->hasColumn($key)) {
                         $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                     }
                 }
-
+                
                 //SETEAMOS LA FECHA DE CREACION
                 $entity->setDevolucionFechacreacion(new \DateTime())
                         ->setIdempresa($session['idempresa'])
