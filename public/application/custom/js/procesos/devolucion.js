@@ -246,6 +246,8 @@
                 format: 'dd/mm/yyyy',
             });
             
+            
+            
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -389,7 +391,17 @@
         }
         
         plugin.edit = function(anio,mes,mes_devolucion,anio_devolucion,almacenes,count){
-
+            
+            container.find('input[name=devolucion_fechadevolucion]').datepicker({
+                startDate:minDate,
+                endDate:maxDate,
+                format: 'dd/mm/yyyy',
+            });
+            
+            container.find('input[name=devolucion_fechadevolucion]').datepicker({
+                format: 'dd/mm/yyyy',
+            });
+            
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
