@@ -9,7 +9,7 @@ class TrabajadorpromedioForm extends Form
     public function __construct()
     {
         // we want to ignore the name passed
-        parent::__construct('trabajadorpromedio_form');
+        parent::__construct('trabajadorespromedio_form');
         $this->setAttribute('method', 'post');
         
         $this->add(array(
@@ -18,7 +18,7 @@ class TrabajadorpromedioForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'trabajadorpromedio_anio',
+            'name' => 'trabajadorespromedio_anio',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Año *',
@@ -30,7 +30,7 @@ class TrabajadorpromedioForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'trabajadorpromedio_mes',
+            'name' => 'trabajadorespromedio_mes',
             'type' => 'Select',
             'options' => array(
                 'label' => 'Mes *',
@@ -57,7 +57,7 @@ class TrabajadorpromedioForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'trabajadorpromedio_empleados',
+            'name' => 'trabajadorespromedio_cantidad',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Trabajadores *',

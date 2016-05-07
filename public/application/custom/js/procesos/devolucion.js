@@ -40,9 +40,9 @@
         var settings;
         var $table;
         
-        var aux = $("#iva").text().split('%');
-        var iva = parseFloat(aux[1]);
-        
+        //La variable iva está definida en las vistas con un echo
+        //var aux = $("#iva").text().split('%');
+        var iva = parseFloat($("#ivaValor").val());
         var defaults = {
            
        };
@@ -52,7 +52,8 @@
         */
        
         
-        var caluclator = function($tr){
+        var caluclator = function($tr)
+        {            
             
             var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 1;
             var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
@@ -101,14 +102,20 @@
             
             //devolucion IVA
             var devolucion_iva = 0.00;
+            if($("#iva").text() != "$0.00")
+                devolucion_iva = parseFloat($("[name=devolucion_iva]").val())
+            
+            
+            
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
+                
                 if(has_iva == 'true'){
                     
                     var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
                     var row_iva = (subtotal * iva) / 100;
-                    
+                    alert(subtotal);
                     devolucion_iva = devolucion_iva + row_iva;
                 }
                 
@@ -564,7 +571,14 @@
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
-
+            $("#productos_table tbody tr").each(function()
+            {
+                var tr = $(this);
+                $(this).find("input").on("blur", function()
+                {
+                    caluclator(tr);
+                });
+            });
         }
 
         /*

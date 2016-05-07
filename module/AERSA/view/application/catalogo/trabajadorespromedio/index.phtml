@@ -35,7 +35,7 @@
                         <?php foreach ($collection as $entity) : ?>
                             
                         <?php
-                            $mes = $entity->getTrabajadorpromediomes();
+                            $mes = $entity->getTrabajadorespromediomes();
                             if($mes == 1)
                                 $mes = "Enero";
                             elseif($mes == 2)
@@ -62,11 +62,11 @@
                                 $mes = "Diciembre";
                             
                         ?>
-                            <tr id="<?php echo $entity->getIdTrabajadorpromedio() ?>">
-                                <td><?php echo $entity->getTrabajadorpromedioanio() ?></td>
+                            <tr id="<?php echo $entity->getIdTrabajadorespromedio() ?>">
+                                <td><?php echo $entity->getTrabajadorespromedioanio() ?></td>
                                 <td><?php echo $mes ?></td>
 
-                                <td><?php echo $entity->getTrabajadorpromedioempleados() ?></td>
+                                <td><?php echo $entity->getTrabajadorespromediocantidad() ?></td>
                                 <td>                                    
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
@@ -74,12 +74,12 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/catalogo/trabajador_promedio/editar/<?php echo $entity->getIdtrabajadorpromedio()?>">
+                                                <a href="/catalogo/trabajador_promedio/editar/<?php echo $entity->getIdtrabajadorespromedio()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
                                             
                                             <li>
-                                                <a href="javascript:;" class="delete_trabajadorpromedio">
+                                                <a href="javascript:;" class="delete_trabajadorespromedio">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
                                             
@@ -101,7 +101,7 @@
 <script>
     
     var plugin = $('#my_container').usuario();
-    $('.delete_trabajadorpromedio').click(function(){
+    $('.delete_trabajadorespromedio').click(function(){
               
         var id = $(this).closest('tr').attr('id');
         var tmpl = [
