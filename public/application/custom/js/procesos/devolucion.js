@@ -377,6 +377,7 @@
                             alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
                             $this.val('');
                         }else{
+                            alert('omg');
                             $this.addClass('valid');
                         }
                         
