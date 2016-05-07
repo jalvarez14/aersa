@@ -157,7 +157,7 @@
                                     <td colspan="8"></td>
                                     <td>IVA</td>
                                     <input type="hidden" name="devolucion_iva">
-                                    <td id="iva">%<?php echo $iva->getTasaivavalor() ?></td>
+                                    <td id="iva">$0.00</td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
@@ -169,6 +169,7 @@
                         </table>
                     </div>
                 </div>
+                <input type="hidden" id="ivaValor" value="<?php echo $iva->getTasaivavalor() ?>">
                 <div class="form-actions right">
                     <button class="btn blue" disabled="disabled" id="btnSubmit" type="submit">
                         <i class="fa fa-check"></i>

@@ -154,8 +154,8 @@
                                 <tr id="productos_table<?php echo $detalle->getIddevoluciondetalle()?>">
                                     <td>
                                         <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][subtotal]" value="<?php echo $detalle->getDevoluciondetalleSubtotal()?>">
-                                        <input type="hidden" name="productos[<?php //echo $detalle->getIddevoluciondetalle()?>][costo_unitario]" value="<?php //echo $detalle->getDevoluciondetalleCostounitario()?>">
-                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][producto_iva]" value="<?php echo $detalle->getProducto()->getProductoIva()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][costo_unitario]" value="<?php echo $detalle->getDevoluciondetalleCostounitario()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][producto_iva]" value="true">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
                                         <?php echo $detalle->getProducto()->getProductoNombre()?>
                                     </td>
@@ -233,6 +233,8 @@
                         </table>
                     </div>
                 </div>
+                <input type="hidden" id="ivaValor" value="16.00">
+                
                 <div class="form-actions right">
                     <button class="btn blue" type="submit">
                         <i class="fa fa-check"></i>
@@ -244,8 +246,12 @@
     </div>
 </form>
 </div>
+
+
+
 <script type="text/javascript" src="/application/custom/js/procesos/devolucion.js"></script>
 <script>
     var $form = $('#form_container').compra();
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $mes_devolucion ?>,<?php echo $anio_devolucion ?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
 </script>
+

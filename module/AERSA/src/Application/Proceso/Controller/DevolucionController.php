@@ -278,7 +278,8 @@ class DevolucionController extends AbstractActionController {
             //COUNT
             $count = \DevoluciondetalleQuery::create()->orderByIddevoluciondetalle(\Criteria::DESC)->findOne();
             $count = $count->getIddevoluciondetalle() + 1;
-   
+            
+            $iva = \TasaivaQuery::create()->findOne();
             
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/proceso/devolucion/editar');
@@ -292,6 +293,7 @@ class DevolucionController extends AbstractActionController {
                 'count'                 => $count,
                 'mes_devolucion'        => $entity->getDevolucionFechacreacion('m'),
                 'anio_devolucion'       => $entity->getDevolucionFechacreacion('Y'),
+                'iva'                   => $iva,
             ));
             
             return $view_model;

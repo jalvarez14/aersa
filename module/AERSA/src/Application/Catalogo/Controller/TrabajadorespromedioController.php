@@ -15,7 +15,7 @@ class TrabajadorespromedioController extends AbstractActionController
         $session = $session->getData();
 
 
-        $collection = \TrabajadorpromedioQuery::create()->find();
+        $collection = \TrabajadorespromedioQuery::create()->find();
 
 
 
@@ -47,12 +47,10 @@ class TrabajadorespromedioController extends AbstractActionController
             $post_data = $request->getPost();
                 
             $exists = \TrabajadorespromedioQuery::create()
-                    ->filterByTrabajadorespromedioAnio($post_data['trabajadorpromedio_anio'])
-                    ->filterByTrabajadorespromedioMes($post_data['trabajadorpromedio_mes'])
+                    ->filterByTrabajadorespromedioAnio($post_data['trabajadorespromedio_anio'])
+                    ->filterByTrabajadorespromedioMes($post_data['trabajadorespromedio_mes'])
                     ->find();
             
-            echo $post_data['trabajadorpromedio_anio'];
-            echo $post_data['trabajadorpromedio_mes'];
             
             foreach ($exists as $item ) 
             {
@@ -61,7 +59,7 @@ class TrabajadorespromedioController extends AbstractActionController
                 return $this->redirect()->toUrl('/catalogo/trabajador_promedio/nuevo');
             }
             //Metemos los datos de las entidades
-            $entity = new \Trabajadorpromedio();
+            $entity = new \Trabajadorespromedio();
 
             foreach ($post_data as $key => $value) {
                 $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
@@ -94,10 +92,10 @@ class TrabajadorespromedioController extends AbstractActionController
     {   
         $id = $this->params()->fromRoute('id');
         
-        $exists = \TrabajadorpromedioQuery::create()->filterByIdtrabajadorpromedio($id)->exists();
+        $exists = \TrabajadorespromedioQuery::create()->filterByIdtrabajadorespromedio($id)->exists();
         if($exists)
         {
-            $entity = \TrabajadorpromedioQuery::create()->findPk($id);
+            $entity = \TrabajadorespromedioQuery::create()->findPk($id);
             $request = $this->getRequest();
 
             //INTANCIAMOS NUESTRO FORMULARIO
@@ -155,7 +153,7 @@ class TrabajadorespromedioController extends AbstractActionController
 
             $id = $this->params()->fromRoute('id');
 
-            $entity = \TrabajadorpromedioQuery::create()->findPk($id);
+            $entity = \TrabajadorespromedioQuery::create()->findPk($id);
             $entity->delete();
 
             $this->flashMessenger()->addSuccessMessage('Registro eliminado satisfactoriamente!');
