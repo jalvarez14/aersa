@@ -392,6 +392,10 @@
         
         plugin.edit = function(anio,mes,mes_devolucion,anio_devolucion,almacenes,count){
             
+            var minDate = new Date(anio + '/' + mes + '/' + '01');
+            var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
+            maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
+            
             container.find('input[name=devolucion_fechadevolucion]').datepicker({
                 startDate:minDate,
                 endDate:maxDate,
