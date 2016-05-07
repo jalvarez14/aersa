@@ -13,6 +13,8 @@
  * @method RequisiciondetalleQuery orderByRequisiciondetalleRevisada($order = Criteria::ASC) Order by the requisiciondetalle_revisada column
  * @method RequisiciondetalleQuery orderByRequisiciondetallePreciounitario($order = Criteria::ASC) Order by the requisiciondetalle_preciounitario column
  * @method RequisiciondetalleQuery orderByRequisiciondetalleSubtotal($order = Criteria::ASC) Order by the requisiciondetalle_subtotal column
+ * @method RequisiciondetalleQuery orderByIdpadre($order = Criteria::ASC) Order by the idpadre column
+ * @method RequisiciondetalleQuery orderByRequisiciondetallecol($order = Criteria::ASC) Order by the requisiciondetallecol column
  *
  * @method RequisiciondetalleQuery groupByIdrequisiciondetalle() Group by the idrequisiciondetalle column
  * @method RequisiciondetalleQuery groupByIdrequisicion() Group by the idrequisicion column
@@ -21,10 +23,16 @@
  * @method RequisiciondetalleQuery groupByRequisiciondetalleRevisada() Group by the requisiciondetalle_revisada column
  * @method RequisiciondetalleQuery groupByRequisiciondetallePreciounitario() Group by the requisiciondetalle_preciounitario column
  * @method RequisiciondetalleQuery groupByRequisiciondetalleSubtotal() Group by the requisiciondetalle_subtotal column
+ * @method RequisiciondetalleQuery groupByIdpadre() Group by the idpadre column
+ * @method RequisiciondetalleQuery groupByRequisiciondetallecol() Group by the requisiciondetallecol column
  *
  * @method RequisiciondetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RequisiciondetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method RequisiciondetalleQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ *
+ * @method RequisiciondetalleQuery leftJoinRequisiciondetalleRelatedByIdpadre($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisiciondetalleRelatedByIdpadre relation
+ * @method RequisiciondetalleQuery rightJoinRequisiciondetalleRelatedByIdpadre($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisiciondetalleRelatedByIdpadre relation
+ * @method RequisiciondetalleQuery innerJoinRequisiciondetalleRelatedByIdpadre($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisiciondetalleRelatedByIdpadre relation
  *
  * @method RequisiciondetalleQuery leftJoinProducto($relationAlias = null) Adds a LEFT JOIN clause to the query using the Producto relation
  * @method RequisiciondetalleQuery rightJoinProducto($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Producto relation
@@ -33,6 +41,10 @@
  * @method RequisiciondetalleQuery leftJoinRequisicion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Requisicion relation
  * @method RequisiciondetalleQuery rightJoinRequisicion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Requisicion relation
  * @method RequisiciondetalleQuery innerJoinRequisicion($relationAlias = null) Adds a INNER JOIN clause to the query using the Requisicion relation
+ *
+ * @method RequisiciondetalleQuery leftJoinRequisiciondetalleRelatedByIdrequisiciondetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisiciondetalleRelatedByIdrequisiciondetalle relation
+ * @method RequisiciondetalleQuery rightJoinRequisiciondetalleRelatedByIdrequisiciondetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisiciondetalleRelatedByIdrequisiciondetalle relation
+ * @method RequisiciondetalleQuery innerJoinRequisiciondetalleRelatedByIdrequisiciondetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisiciondetalleRelatedByIdrequisiciondetalle relation
  *
  * @method Requisiciondetalle findOne(PropelPDO $con = null) Return the first Requisiciondetalle matching the query
  * @method Requisiciondetalle findOneOrCreate(PropelPDO $con = null) Return the first Requisiciondetalle matching the query, or a new Requisiciondetalle object populated from the query conditions when no match is found
@@ -43,6 +55,8 @@
  * @method Requisiciondetalle findOneByRequisiciondetalleRevisada(boolean $requisiciondetalle_revisada) Return the first Requisiciondetalle filtered by the requisiciondetalle_revisada column
  * @method Requisiciondetalle findOneByRequisiciondetallePreciounitario(string $requisiciondetalle_preciounitario) Return the first Requisiciondetalle filtered by the requisiciondetalle_preciounitario column
  * @method Requisiciondetalle findOneByRequisiciondetalleSubtotal(string $requisiciondetalle_subtotal) Return the first Requisiciondetalle filtered by the requisiciondetalle_subtotal column
+ * @method Requisiciondetalle findOneByIdpadre(int $idpadre) Return the first Requisiciondetalle filtered by the idpadre column
+ * @method Requisiciondetalle findOneByRequisiciondetallecol(string $requisiciondetallecol) Return the first Requisiciondetalle filtered by the requisiciondetallecol column
  *
  * @method array findByIdrequisiciondetalle(int $idrequisiciondetalle) Return Requisiciondetalle objects filtered by the idrequisiciondetalle column
  * @method array findByIdrequisicion(int $idrequisicion) Return Requisiciondetalle objects filtered by the idrequisicion column
@@ -51,6 +65,8 @@
  * @method array findByRequisiciondetalleRevisada(boolean $requisiciondetalle_revisada) Return Requisiciondetalle objects filtered by the requisiciondetalle_revisada column
  * @method array findByRequisiciondetallePreciounitario(string $requisiciondetalle_preciounitario) Return Requisiciondetalle objects filtered by the requisiciondetalle_preciounitario column
  * @method array findByRequisiciondetalleSubtotal(string $requisiciondetalle_subtotal) Return Requisiciondetalle objects filtered by the requisiciondetalle_subtotal column
+ * @method array findByIdpadre(int $idpadre) Return Requisiciondetalle objects filtered by the idpadre column
+ * @method array findByRequisiciondetallecol(string $requisiciondetallecol) Return Requisiciondetalle objects filtered by the requisiciondetallecol column
  *
  * @package    propel.generator.aersa.om
  */
@@ -158,7 +174,7 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada`, `requisiciondetalle_preciounitario`, `requisiciondetalle_subtotal` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
+        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada`, `requisiciondetalle_preciounitario`, `requisiciondetalle_subtotal`, `idpadre`, `requisiciondetallecol` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -531,6 +547,155 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idpadre column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdpadre(1234); // WHERE idpadre = 1234
+     * $query->filterByIdpadre(array(12, 34)); // WHERE idpadre IN (12, 34)
+     * $query->filterByIdpadre(array('min' => 12)); // WHERE idpadre >= 12
+     * $query->filterByIdpadre(array('max' => 12)); // WHERE idpadre <= 12
+     * </code>
+     *
+     * @see       filterByRequisiciondetalleRelatedByIdpadre()
+     *
+     * @param     mixed $idpadre The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisiciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByIdpadre($idpadre = null, $comparison = null)
+    {
+        if (is_array($idpadre)) {
+            $useMinMax = false;
+            if (isset($idpadre['min'])) {
+                $this->addUsingAlias(RequisiciondetallePeer::IDPADRE, $idpadre['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idpadre['max'])) {
+                $this->addUsingAlias(RequisiciondetallePeer::IDPADRE, $idpadre['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RequisiciondetallePeer::IDPADRE, $idpadre, $comparison);
+    }
+
+    /**
+     * Filter the query on the requisiciondetallecol column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRequisiciondetallecol('fooValue');   // WHERE requisiciondetallecol = 'fooValue'
+     * $query->filterByRequisiciondetallecol('%fooValue%'); // WHERE requisiciondetallecol LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $requisiciondetallecol The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisiciondetalleQuery The current query, for fluid interface
+     */
+    public function filterByRequisiciondetallecol($requisiciondetallecol = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($requisiciondetallecol)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $requisiciondetallecol)) {
+                $requisiciondetallecol = str_replace('*', '%', $requisiciondetallecol);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLECOL, $requisiciondetallecol, $comparison);
+    }
+
+    /**
+     * Filter the query by a related Requisiciondetalle object
+     *
+     * @param   Requisiciondetalle|PropelObjectCollection $requisiciondetalle The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 RequisiciondetalleQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisiciondetalleRelatedByIdpadre($requisiciondetalle, $comparison = null)
+    {
+        if ($requisiciondetalle instanceof Requisiciondetalle) {
+            return $this
+                ->addUsingAlias(RequisiciondetallePeer::IDPADRE, $requisiciondetalle->getIdrequisiciondetalle(), $comparison);
+        } elseif ($requisiciondetalle instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(RequisiciondetallePeer::IDPADRE, $requisiciondetalle->toKeyValue('PrimaryKey', 'Idrequisiciondetalle'), $comparison);
+        } else {
+            throw new PropelException('filterByRequisiciondetalleRelatedByIdpadre() only accepts arguments of type Requisiciondetalle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisiciondetalleRelatedByIdpadre relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return RequisiciondetalleQuery The current query, for fluid interface
+     */
+    public function joinRequisiciondetalleRelatedByIdpadre($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisiciondetalleRelatedByIdpadre');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisiciondetalleRelatedByIdpadre');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisiciondetalleRelatedByIdpadre relation Requisiciondetalle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisiciondetalleQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisiciondetalleRelatedByIdpadreQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinRequisiciondetalleRelatedByIdpadre($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisiciondetalleRelatedByIdpadre', 'RequisiciondetalleQuery');
+    }
+
+    /**
      * Filter the query by a related Producto object
      *
      * @param   Producto|PropelObjectCollection $producto The related object(s) to use as filter
@@ -680,6 +845,80 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
         return $this
             ->joinRequisicion($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Requisicion', 'RequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Requisiciondetalle object
+     *
+     * @param   Requisiciondetalle|PropelObjectCollection $requisiciondetalle  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 RequisiciondetalleQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByRequisiciondetalleRelatedByIdrequisiciondetalle($requisiciondetalle, $comparison = null)
+    {
+        if ($requisiciondetalle instanceof Requisiciondetalle) {
+            return $this
+                ->addUsingAlias(RequisiciondetallePeer::IDREQUISICIONDETALLE, $requisiciondetalle->getIdpadre(), $comparison);
+        } elseif ($requisiciondetalle instanceof PropelObjectCollection) {
+            return $this
+                ->useRequisiciondetalleRelatedByIdrequisiciondetalleQuery()
+                ->filterByPrimaryKeys($requisiciondetalle->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByRequisiciondetalleRelatedByIdrequisiciondetalle() only accepts arguments of type Requisiciondetalle or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the RequisiciondetalleRelatedByIdrequisiciondetalle relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return RequisiciondetalleQuery The current query, for fluid interface
+     */
+    public function joinRequisiciondetalleRelatedByIdrequisiciondetalle($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('RequisiciondetalleRelatedByIdrequisiciondetalle');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'RequisiciondetalleRelatedByIdrequisiciondetalle');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the RequisiciondetalleRelatedByIdrequisiciondetalle relation Requisiciondetalle object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   RequisiciondetalleQuery A secondary query class using the current class as primary query
+     */
+    public function useRequisiciondetalleRelatedByIdrequisiciondetalleQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinRequisiciondetalleRelatedByIdrequisiciondetalle($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'RequisiciondetalleRelatedByIdrequisiciondetalle', 'RequisiciondetalleQuery');
     }
 
     /**

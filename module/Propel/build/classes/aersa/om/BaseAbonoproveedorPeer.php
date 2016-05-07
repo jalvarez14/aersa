@@ -2,26 +2,26 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'empresa' table.
+ * Base static class for performing query and update operations on the 'abonoproveedor' table.
  *
  *
  *
  * @package propel.generator.aersa.om
  */
-abstract class BaseEmpresaPeer
+abstract class BaseAbonoproveedorPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'aersa';
 
     /** the table name for this class */
-    const TABLE_NAME = 'empresa';
+    const TABLE_NAME = 'abonoproveedor';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'Empresa';
+    const OM_CLASS = 'Abonoproveedor';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'EmpresaTableMap';
+    const TM_CLASS = 'AbonoproveedorTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 5;
@@ -32,29 +32,29 @@ abstract class BaseEmpresaPeer
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
     const NUM_HYDRATE_COLUMNS = 5;
 
+    /** the column name for the idabonoproveedor field */
+    const IDABONOPROVEEDOR = 'abonoproveedor.idabonoproveedor';
+
+    /** the column name for the idproveedor field */
+    const IDPROVEEDOR = 'abonoproveedor.idproveedor';
+
     /** the column name for the idempresa field */
-    const IDEMPRESA = 'empresa.idempresa';
+    const IDEMPRESA = 'abonoproveedor.idempresa';
 
-    /** the column name for the empresa_nombrecomercial field */
-    const EMPRESA_NOMBRECOMERCIAL = 'empresa.empresa_nombrecomercial';
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'abonoproveedor.idsucursal';
 
-    /** the column name for the empresa_razonsocial field */
-    const EMPRESA_RAZONSOCIAL = 'empresa.empresa_razonsocial';
-
-    /** the column name for the empresa_estatus field */
-    const EMPRESA_ESTATUS = 'empresa.empresa_estatus';
-
-    /** the column name for the empresa_administracion field */
-    const EMPRESA_ADMINISTRACION = 'empresa.empresa_administracion';
+    /** the column name for the idempleado field */
+    const IDEMPLEADO = 'abonoproveedor.idempleado';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of Empresa objects.
+     * An identity map to hold any loaded instances of Abonoproveedor objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array Empresa[]
+     * @var        array Abonoproveedor[]
      */
     public static $instances = array();
 
@@ -63,14 +63,14 @@ abstract class BaseEmpresaPeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. EmpresaPeer::$fieldNames[EmpresaPeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. AbonoproveedorPeer::$fieldNames[AbonoproveedorPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idempresa', 'EmpresaNombrecomercial', 'EmpresaRazonsocial', 'EmpresaEstatus', 'EmpresaAdministracion', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa', 'empresaNombrecomercial', 'empresaRazonsocial', 'empresaEstatus', 'empresaAdministracion', ),
-        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL, EmpresaPeer::EMPRESA_RAZONSOCIAL, EmpresaPeer::EMPRESA_ESTATUS, EmpresaPeer::EMPRESA_ADMINISTRACION, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA', 'EMPRESA_NOMBRECOMERCIAL', 'EMPRESA_RAZONSOCIAL', 'EMPRESA_ESTATUS', 'EMPRESA_ADMINISTRACION', ),
-        BasePeer::TYPE_FIELDNAME => array ('idempresa', 'empresa_nombrecomercial', 'empresa_razonsocial', 'empresa_estatus', 'empresa_administracion', ),
+        BasePeer::TYPE_PHPNAME => array ('Idabonoproveedor', 'Idproveedor', 'Idempresa', 'Idsucursal', 'Idempleado', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idabonoproveedor', 'idproveedor', 'idempresa', 'idsucursal', 'idempleado', ),
+        BasePeer::TYPE_COLNAME => array (AbonoproveedorPeer::IDABONOPROVEEDOR, AbonoproveedorPeer::IDPROVEEDOR, AbonoproveedorPeer::IDEMPRESA, AbonoproveedorPeer::IDSUCURSAL, AbonoproveedorPeer::IDEMPLEADO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDABONOPROVEEDOR', 'IDPROVEEDOR', 'IDEMPRESA', 'IDSUCURSAL', 'IDEMPLEADO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idabonoproveedor', 'idproveedor', 'idempresa', 'idsucursal', 'idempleado', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -78,14 +78,14 @@ abstract class BaseEmpresaPeer
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. EmpresaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. AbonoproveedorPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idempresa' => 0, 'EmpresaNombrecomercial' => 1, 'EmpresaRazonsocial' => 2, 'EmpresaEstatus' => 3, 'EmpresaAdministracion' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa' => 0, 'empresaNombrecomercial' => 1, 'empresaRazonsocial' => 2, 'empresaEstatus' => 3, 'empresaAdministracion' => 4, ),
-        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA => 0, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL => 1, EmpresaPeer::EMPRESA_RAZONSOCIAL => 2, EmpresaPeer::EMPRESA_ESTATUS => 3, EmpresaPeer::EMPRESA_ADMINISTRACION => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA' => 0, 'EMPRESA_NOMBRECOMERCIAL' => 1, 'EMPRESA_RAZONSOCIAL' => 2, 'EMPRESA_ESTATUS' => 3, 'EMPRESA_ADMINISTRACION' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('idempresa' => 0, 'empresa_nombrecomercial' => 1, 'empresa_razonsocial' => 2, 'empresa_estatus' => 3, 'empresa_administracion' => 4, ),
+        BasePeer::TYPE_PHPNAME => array ('Idabonoproveedor' => 0, 'Idproveedor' => 1, 'Idempresa' => 2, 'Idsucursal' => 3, 'Idempleado' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idabonoproveedor' => 0, 'idproveedor' => 1, 'idempresa' => 2, 'idsucursal' => 3, 'idempleado' => 4, ),
+        BasePeer::TYPE_COLNAME => array (AbonoproveedorPeer::IDABONOPROVEEDOR => 0, AbonoproveedorPeer::IDPROVEEDOR => 1, AbonoproveedorPeer::IDEMPRESA => 2, AbonoproveedorPeer::IDSUCURSAL => 3, AbonoproveedorPeer::IDEMPLEADO => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDABONOPROVEEDOR' => 0, 'IDPROVEEDOR' => 1, 'IDEMPRESA' => 2, 'IDSUCURSAL' => 3, 'IDEMPLEADO' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idabonoproveedor' => 0, 'idproveedor' => 1, 'idempresa' => 2, 'idsucursal' => 3, 'idempleado' => 4, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -101,10 +101,10 @@ abstract class BaseEmpresaPeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = EmpresaPeer::getFieldNames($toType);
-        $key = isset(EmpresaPeer::$fieldKeys[$fromType][$name]) ? EmpresaPeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = AbonoproveedorPeer::getFieldNames($toType);
+        $key = isset(AbonoproveedorPeer::$fieldKeys[$fromType][$name]) ? AbonoproveedorPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(EmpresaPeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(AbonoproveedorPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -121,11 +121,11 @@ abstract class BaseEmpresaPeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, EmpresaPeer::$fieldNames)) {
+        if (!array_key_exists($type, AbonoproveedorPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return EmpresaPeer::$fieldNames[$type];
+        return AbonoproveedorPeer::$fieldNames[$type];
     }
 
     /**
@@ -137,12 +137,12 @@ abstract class BaseEmpresaPeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. EmpresaPeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. AbonoproveedorPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(EmpresaPeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(AbonoproveedorPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -160,17 +160,17 @@ abstract class BaseEmpresaPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(EmpresaPeer::IDEMPRESA);
-            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_NOMBRECOMERCIAL);
-            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_RAZONSOCIAL);
-            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_ESTATUS);
-            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_ADMINISTRACION);
+            $criteria->addSelectColumn(AbonoproveedorPeer::IDABONOPROVEEDOR);
+            $criteria->addSelectColumn(AbonoproveedorPeer::IDPROVEEDOR);
+            $criteria->addSelectColumn(AbonoproveedorPeer::IDEMPRESA);
+            $criteria->addSelectColumn(AbonoproveedorPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(AbonoproveedorPeer::IDEMPLEADO);
         } else {
+            $criteria->addSelectColumn($alias . '.idabonoproveedor');
+            $criteria->addSelectColumn($alias . '.idproveedor');
             $criteria->addSelectColumn($alias . '.idempresa');
-            $criteria->addSelectColumn($alias . '.empresa_nombrecomercial');
-            $criteria->addSelectColumn($alias . '.empresa_razonsocial');
-            $criteria->addSelectColumn($alias . '.empresa_estatus');
-            $criteria->addSelectColumn($alias . '.empresa_administracion');
+            $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.idempleado');
         }
     }
 
@@ -190,21 +190,21 @@ abstract class BaseEmpresaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(EmpresaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            EmpresaPeer::addSelectColumns($criteria);
+            AbonoproveedorPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(EmpresaPeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -223,7 +223,7 @@ abstract class BaseEmpresaPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return Empresa
+     * @return Abonoproveedor
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -231,7 +231,7 @@ abstract class BaseEmpresaPeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = EmpresaPeer::doSelect($critcopy, $con);
+        $objects = AbonoproveedorPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -249,7 +249,7 @@ abstract class BaseEmpresaPeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return EmpresaPeer::populateObjects(EmpresaPeer::doSelectStmt($criteria, $con));
+        return AbonoproveedorPeer::populateObjects(AbonoproveedorPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -267,16 +267,16 @@ abstract class BaseEmpresaPeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            EmpresaPeer::addSelectColumns($criteria);
+            AbonoproveedorPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(EmpresaPeer::DATABASE_NAME);
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -290,16 +290,16 @@ abstract class BaseEmpresaPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param Empresa $obj A Empresa object.
+     * @param Abonoproveedor $obj A Abonoproveedor object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIdempresa();
+                $key = (string) $obj->getIdabonoproveedor();
             } // if key === null
-            EmpresaPeer::$instances[$key] = $obj;
+            AbonoproveedorPeer::$instances[$key] = $obj;
         }
     }
 
@@ -311,7 +311,7 @@ abstract class BaseEmpresaPeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A Empresa object or a primary key value.
+     * @param      mixed $value A Abonoproveedor object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -319,17 +319,17 @@ abstract class BaseEmpresaPeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof Empresa) {
-                $key = (string) $value->getIdempresa();
+            if (is_object($value) && $value instanceof Abonoproveedor) {
+                $key = (string) $value->getIdabonoproveedor();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Empresa object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Abonoproveedor object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(EmpresaPeer::$instances[$key]);
+            unset(AbonoproveedorPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -340,14 +340,14 @@ abstract class BaseEmpresaPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return Empresa Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return Abonoproveedor Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(EmpresaPeer::$instances[$key])) {
-                return EmpresaPeer::$instances[$key];
+            if (isset(AbonoproveedorPeer::$instances[$key])) {
+                return AbonoproveedorPeer::$instances[$key];
             }
         }
 
@@ -362,67 +362,19 @@ abstract class BaseEmpresaPeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (EmpresaPeer::$instances as $instance) {
+        foreach (AbonoproveedorPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        EmpresaPeer::$instances = array();
+        AbonoproveedorPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to empresa
+     * Method to invalidate the instance pool of all tables related to abonoproveedor
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in CompraPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        CompraPeer::clearInstancePool();
-        // Invalidate objects in CuentabancariaPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        CuentabancariaPeer::clearInstancePool();
-        // Invalidate objects in DevolucionPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        DevolucionPeer::clearInstancePool();
-        // Invalidate objects in IngresoPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        IngresoPeer::clearInstancePool();
-        // Invalidate objects in InventariomesPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        InventariomesPeer::clearInstancePool();
-        // Invalidate objects in NotacreditoPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        NotacreditoPeer::clearInstancePool();
-        // Invalidate objects in OrdentablajeriaPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        OrdentablajeriaPeer::clearInstancePool();
-        // Invalidate objects in PlantillatablajeriaPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        PlantillatablajeriaPeer::clearInstancePool();
-        // Invalidate objects in ProductoPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ProductoPeer::clearInstancePool();
-        // Invalidate objects in ProductosucursalalmacenPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ProductosucursalalmacenPeer::clearInstancePool();
-        // Invalidate objects in ProveedorPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        ProveedorPeer::clearInstancePool();
-        // Invalidate objects in RequisicionPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        RequisicionPeer::clearInstancePool();
-        // Invalidate objects in SucursalPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        SucursalPeer::clearInstancePool();
-        // Invalidate objects in TrabajadorespromedioPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        TrabajadorespromedioPeer::clearInstancePool();
-        // Invalidate objects in UsuarioempresaPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        UsuarioempresaPeer::clearInstancePool();
-        // Invalidate objects in VentaPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        VentaPeer::clearInstancePool();
     }
 
     /**
@@ -472,11 +424,11 @@ abstract class BaseEmpresaPeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = EmpresaPeer::getOMClass();
+        $cls = AbonoproveedorPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = EmpresaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = EmpresaPeer::getInstanceFromPool($key))) {
+            $key = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = AbonoproveedorPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -485,7 +437,7 @@ abstract class BaseEmpresaPeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                EmpresaPeer::addInstanceToPool($obj, $key);
+                AbonoproveedorPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -499,21 +451,21 @@ abstract class BaseEmpresaPeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (Empresa object, last column rank)
+     * @return array (Abonoproveedor object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = EmpresaPeer::getInstanceFromPool($key))) {
+        $key = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = AbonoproveedorPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = EmpresaPeer::OM_CLASS;
+            $cls = AbonoproveedorPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            EmpresaPeer::addInstanceToPool($obj, $key);
+            AbonoproveedorPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -528,7 +480,7 @@ abstract class BaseEmpresaPeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(EmpresaPeer::DATABASE_NAME)->getTable(EmpresaPeer::TABLE_NAME);
+        return Propel::getDatabaseMap(AbonoproveedorPeer::DATABASE_NAME)->getTable(AbonoproveedorPeer::TABLE_NAME);
     }
 
     /**
@@ -536,9 +488,9 @@ abstract class BaseEmpresaPeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseEmpresaPeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseEmpresaPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \EmpresaTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseAbonoproveedorPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseAbonoproveedorPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \AbonoproveedorTableMap());
       }
     }
 
@@ -550,13 +502,13 @@ abstract class BaseEmpresaPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return EmpresaPeer::OM_CLASS;
+        return AbonoproveedorPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a Empresa or Criteria object.
+     * Performs an INSERT on the database, given a Abonoproveedor or Criteria object.
      *
-     * @param      mixed $values Criteria or Empresa object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or Abonoproveedor object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -565,22 +517,22 @@ abstract class BaseEmpresaPeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from Empresa object
+            $criteria = $values->buildCriteria(); // build Criteria from Abonoproveedor object
         }
 
-        if ($criteria->containsKey(EmpresaPeer::IDEMPRESA) && $criteria->keyContainsValue(EmpresaPeer::IDEMPRESA) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.EmpresaPeer::IDEMPRESA.')');
+        if ($criteria->containsKey(AbonoproveedorPeer::IDABONOPROVEEDOR) && $criteria->keyContainsValue(AbonoproveedorPeer::IDABONOPROVEEDOR) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AbonoproveedorPeer::IDABONOPROVEEDOR.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(EmpresaPeer::DATABASE_NAME);
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -597,9 +549,9 @@ abstract class BaseEmpresaPeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a Empresa or Criteria object.
+     * Performs an UPDATE on the database, given a Abonoproveedor or Criteria object.
      *
-     * @param      mixed $values Criteria or Empresa object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or Abonoproveedor object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -608,35 +560,35 @@ abstract class BaseEmpresaPeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(EmpresaPeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(AbonoproveedorPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(EmpresaPeer::IDEMPRESA);
-            $value = $criteria->remove(EmpresaPeer::IDEMPRESA);
+            $comparison = $criteria->getComparison(AbonoproveedorPeer::IDABONOPROVEEDOR);
+            $value = $criteria->remove(AbonoproveedorPeer::IDABONOPROVEEDOR);
             if ($value) {
-                $selectCriteria->add(EmpresaPeer::IDEMPRESA, $value, $comparison);
+                $selectCriteria->add(AbonoproveedorPeer::IDABONOPROVEEDOR, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(EmpresaPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
             }
 
-        } else { // $values is Empresa object
+        } else { // $values is Abonoproveedor object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(EmpresaPeer::DATABASE_NAME);
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the empresa table.
+     * Deletes all rows from the abonoproveedor table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -645,20 +597,19 @@ abstract class BaseEmpresaPeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += EmpresaPeer::doOnDeleteCascade(new Criteria(EmpresaPeer::DATABASE_NAME), $con);
-            $affectedRows += BasePeer::doDeleteAll(EmpresaPeer::TABLE_NAME, $con, EmpresaPeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(AbonoproveedorPeer::TABLE_NAME, $con, AbonoproveedorPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            EmpresaPeer::clearInstancePool();
-            EmpresaPeer::clearRelatedInstancePool();
+            AbonoproveedorPeer::clearInstancePool();
+            AbonoproveedorPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -669,9 +620,9 @@ abstract class BaseEmpresaPeer
     }
 
     /**
-     * Performs a DELETE on the database, given a Empresa or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Abonoproveedor or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or Empresa object or primary key or array of primary keys
+     * @param      mixed $values Criteria or Abonoproveedor object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -682,22 +633,32 @@ abstract class BaseEmpresaPeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
+            // invalidate the cache for all objects of this type, since we have no
+            // way of knowing (without running a query) what objects should be invalidated
+            // from the cache based on this Criteria.
+            AbonoproveedorPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof Empresa) { // it's a model object
+        } elseif ($values instanceof Abonoproveedor) { // it's a model object
+            // invalidate the cache for this single object
+            AbonoproveedorPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(EmpresaPeer::DATABASE_NAME);
-            $criteria->add(EmpresaPeer::IDEMPRESA, (array) $values, Criteria::IN);
+            $criteria = new Criteria(AbonoproveedorPeer::DATABASE_NAME);
+            $criteria->add(AbonoproveedorPeer::IDABONOPROVEEDOR, (array) $values, Criteria::IN);
+            // invalidate the cache for this object(s)
+            foreach ((array) $values as $singleval) {
+                AbonoproveedorPeer::removeInstanceFromPool($singleval);
+            }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(EmpresaPeer::DATABASE_NAME);
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -706,25 +667,8 @@ abstract class BaseEmpresaPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
-            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
-            $c = clone $criteria;
-            $affectedRows += EmpresaPeer::doOnDeleteCascade($c, $con);
-
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            if ($values instanceof Criteria) {
-                EmpresaPeer::clearInstancePool();
-            } elseif ($values instanceof Empresa) { // it's a model object
-                EmpresaPeer::removeInstanceFromPool($values);
-            } else { // it's a primary key, or an array of pks
-                foreach ((array) $values as $singleval) {
-                    EmpresaPeer::removeInstanceFromPool($singleval);
-                }
-            }
-
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            EmpresaPeer::clearRelatedInstancePool();
+            AbonoproveedorPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -735,136 +679,13 @@ abstract class BaseEmpresaPeer
     }
 
     /**
-     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
-     * feature (like MySQL or SQLite).
-     *
-     * This method is not very speedy because it must perform a query first to get
-     * the implicated records and then perform the deletes by calling those Peer classes.
-     *
-     * This method should be used within a transaction if possible.
-     *
-     * @param      Criteria $criteria
-     * @param      PropelPDO $con
-     * @return int The number of affected rows (if supported by underlying database driver).
-     */
-    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
-    {
-        // initialize var to track total num of affected rows
-        $affectedRows = 0;
-
-        // first find the objects that are implicated by the $criteria
-        $objects = EmpresaPeer::doSelect($criteria, $con);
-        foreach ($objects as $obj) {
-
-
-            // delete related Compra objects
-            $criteria = new Criteria(CompraPeer::DATABASE_NAME);
-
-            $criteria->add(CompraPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += CompraPeer::doDelete($criteria, $con);
-
-            // delete related Cuentabancaria objects
-            $criteria = new Criteria(CuentabancariaPeer::DATABASE_NAME);
-
-            $criteria->add(CuentabancariaPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += CuentabancariaPeer::doDelete($criteria, $con);
-
-            // delete related Devolucion objects
-            $criteria = new Criteria(DevolucionPeer::DATABASE_NAME);
-
-            $criteria->add(DevolucionPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += DevolucionPeer::doDelete($criteria, $con);
-
-            // delete related Ingreso objects
-            $criteria = new Criteria(IngresoPeer::DATABASE_NAME);
-
-            $criteria->add(IngresoPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += IngresoPeer::doDelete($criteria, $con);
-
-            // delete related Inventariomes objects
-            $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
-
-            $criteria->add(InventariomesPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += InventariomesPeer::doDelete($criteria, $con);
-
-            // delete related Notacredito objects
-            $criteria = new Criteria(NotacreditoPeer::DATABASE_NAME);
-
-            $criteria->add(NotacreditoPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
-
-            // delete related Ordentablajeria objects
-            $criteria = new Criteria(OrdentablajeriaPeer::DATABASE_NAME);
-
-            $criteria->add(OrdentablajeriaPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
-
-            // delete related Plantillatablajeria objects
-            $criteria = new Criteria(PlantillatablajeriaPeer::DATABASE_NAME);
-
-            $criteria->add(PlantillatablajeriaPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += PlantillatablajeriaPeer::doDelete($criteria, $con);
-
-            // delete related Producto objects
-            $criteria = new Criteria(ProductoPeer::DATABASE_NAME);
-
-            $criteria->add(ProductoPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += ProductoPeer::doDelete($criteria, $con);
-
-            // delete related Productosucursalalmacen objects
-            $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);
-
-            $criteria->add(ProductosucursalalmacenPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += ProductosucursalalmacenPeer::doDelete($criteria, $con);
-
-            // delete related Proveedor objects
-            $criteria = new Criteria(ProveedorPeer::DATABASE_NAME);
-
-            $criteria->add(ProveedorPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += ProveedorPeer::doDelete($criteria, $con);
-
-            // delete related Requisicion objects
-            $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);
-
-            $criteria->add(RequisicionPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += RequisicionPeer::doDelete($criteria, $con);
-
-            // delete related Sucursal objects
-            $criteria = new Criteria(SucursalPeer::DATABASE_NAME);
-
-            $criteria->add(SucursalPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += SucursalPeer::doDelete($criteria, $con);
-
-            // delete related Trabajadorespromedio objects
-            $criteria = new Criteria(TrabajadorespromedioPeer::DATABASE_NAME);
-
-            $criteria->add(TrabajadorespromedioPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += TrabajadorespromedioPeer::doDelete($criteria, $con);
-
-            // delete related Usuarioempresa objects
-            $criteria = new Criteria(UsuarioempresaPeer::DATABASE_NAME);
-
-            $criteria->add(UsuarioempresaPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += UsuarioempresaPeer::doDelete($criteria, $con);
-
-            // delete related Venta objects
-            $criteria = new Criteria(VentaPeer::DATABASE_NAME);
-
-            $criteria->add(VentaPeer::IDEMPRESA, $obj->getIdempresa());
-            $affectedRows += VentaPeer::doDelete($criteria, $con);
-        }
-
-        return $affectedRows;
-    }
-
-    /**
-     * Validates all modified columns of given Empresa object.
+     * Validates all modified columns of given Abonoproveedor object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param Empresa $obj The object to validate.
+     * @param Abonoproveedor $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -874,8 +695,8 @@ abstract class BaseEmpresaPeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(EmpresaPeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(EmpresaPeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(AbonoproveedorPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(AbonoproveedorPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -891,7 +712,7 @@ abstract class BaseEmpresaPeer
 
         }
 
-        return BasePeer::doValidate(EmpresaPeer::DATABASE_NAME, EmpresaPeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(AbonoproveedorPeer::DATABASE_NAME, AbonoproveedorPeer::TABLE_NAME, $columns);
     }
 
     /**
@@ -899,23 +720,23 @@ abstract class BaseEmpresaPeer
      *
      * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
-     * @return Empresa
+     * @return Abonoproveedor
      */
     public static function retrieveByPK($pk, PropelPDO $con = null)
     {
 
-        if (null !== ($obj = EmpresaPeer::getInstanceFromPool((string) $pk))) {
+        if (null !== ($obj = AbonoproveedorPeer::getInstanceFromPool((string) $pk))) {
             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria = new Criteria(EmpresaPeer::DATABASE_NAME);
-        $criteria->add(EmpresaPeer::IDEMPRESA, $pk);
+        $criteria = new Criteria(AbonoproveedorPeer::DATABASE_NAME);
+        $criteria->add(AbonoproveedorPeer::IDABONOPROVEEDOR, $pk);
 
-        $v = EmpresaPeer::doSelect($criteria, $con);
+        $v = AbonoproveedorPeer::doSelect($criteria, $con);
 
         return !empty($v) > 0 ? $v[0] : null;
     }
@@ -925,31 +746,31 @@ abstract class BaseEmpresaPeer
      *
      * @param      array $pks List of primary keys
      * @param      PropelPDO $con the connection to use
-     * @return Empresa[]
+     * @return Abonoproveedor[]
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
     public static function retrieveByPKs($pks, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(EmpresaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         $objs = null;
         if (empty($pks)) {
             $objs = array();
         } else {
-            $criteria = new Criteria(EmpresaPeer::DATABASE_NAME);
-            $criteria->add(EmpresaPeer::IDEMPRESA, $pks, Criteria::IN);
-            $objs = EmpresaPeer::doSelect($criteria, $con);
+            $criteria = new Criteria(AbonoproveedorPeer::DATABASE_NAME);
+            $criteria->add(AbonoproveedorPeer::IDABONOPROVEEDOR, $pks, Criteria::IN);
+            $objs = AbonoproveedorPeer::doSelect($criteria, $con);
         }
 
         return $objs;
     }
 
-} // BaseEmpresaPeer
+} // BaseAbonoproveedorPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseEmpresaPeer::buildTableMap();
+BaseAbonoproveedorPeer::buildTableMap();
 

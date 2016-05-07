@@ -40,6 +40,10 @@
  * @method SucursalQuery rightJoinCompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compra relation
  * @method SucursalQuery innerJoinCompra($relationAlias = null) Adds a INNER JOIN clause to the query using the Compra relation
  *
+ * @method SucursalQuery leftJoinCuentabancaria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cuentabancaria relation
+ * @method SucursalQuery rightJoinCuentabancaria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cuentabancaria relation
+ * @method SucursalQuery innerJoinCuentabancaria($relationAlias = null) Adds a INNER JOIN clause to the query using the Cuentabancaria relation
+ *
  * @method SucursalQuery leftJoinDevolucion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devolucion relation
  * @method SucursalQuery rightJoinDevolucion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucion relation
  * @method SucursalQuery innerJoinDevolucion($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucion relation
@@ -75,10 +79,6 @@
  * @method SucursalQuery leftJoinTrabajadorespromedio($relationAlias = null) Adds a LEFT JOIN clause to the query using the Trabajadorespromedio relation
  * @method SucursalQuery rightJoinTrabajadorespromedio($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Trabajadorespromedio relation
  * @method SucursalQuery innerJoinTrabajadorespromedio($relationAlias = null) Adds a INNER JOIN clause to the query using the Trabajadorespromedio relation
- *
- * @method SucursalQuery leftJoinTrabajadorpromedio($relationAlias = null) Adds a LEFT JOIN clause to the query using the Trabajadorpromedio relation
- * @method SucursalQuery rightJoinTrabajadorpromedio($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Trabajadorpromedio relation
- * @method SucursalQuery innerJoinTrabajadorpromedio($relationAlias = null) Adds a INNER JOIN clause to the query using the Trabajadorpromedio relation
  *
  * @method SucursalQuery leftJoinUsuariosucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Usuariosucursal relation
  * @method SucursalQuery rightJoinUsuariosucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Usuariosucursal relation
@@ -808,6 +808,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Cuentabancaria object
+     *
+     * @param   Cuentabancaria|PropelObjectCollection $cuentabancaria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCuentabancaria($cuentabancaria, $comparison = null)
+    {
+        if ($cuentabancaria instanceof Cuentabancaria) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $cuentabancaria->getIdsucursal(), $comparison);
+        } elseif ($cuentabancaria instanceof PropelObjectCollection) {
+            return $this
+                ->useCuentabancariaQuery()
+                ->filterByPrimaryKeys($cuentabancaria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCuentabancaria() only accepts arguments of type Cuentabancaria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Cuentabancaria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinCuentabancaria($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Cuentabancaria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Cuentabancaria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Cuentabancaria relation Cuentabancaria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CuentabancariaQuery A secondary query class using the current class as primary query
+     */
+    public function useCuentabancariaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCuentabancaria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Cuentabancaria', 'CuentabancariaQuery');
+    }
+
+    /**
      * Filter the query by a related Devolucion object
      *
      * @param   Devolucion|PropelObjectCollection $devolucion  the related object to use as filter
@@ -1471,80 +1545,6 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinTrabajadorespromedio($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Trabajadorespromedio', 'TrabajadorespromedioQuery');
-    }
-
-    /**
-     * Filter the query by a related Trabajadorpromedio object
-     *
-     * @param   Trabajadorpromedio|PropelObjectCollection $trabajadorpromedio  the related object to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 SucursalQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByTrabajadorpromedio($trabajadorpromedio, $comparison = null)
-    {
-        if ($trabajadorpromedio instanceof Trabajadorpromedio) {
-            return $this
-                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $trabajadorpromedio->getIdsucursal(), $comparison);
-        } elseif ($trabajadorpromedio instanceof PropelObjectCollection) {
-            return $this
-                ->useTrabajadorpromedioQuery()
-                ->filterByPrimaryKeys($trabajadorpromedio->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByTrabajadorpromedio() only accepts arguments of type Trabajadorpromedio or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Trabajadorpromedio relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return SucursalQuery The current query, for fluid interface
-     */
-    public function joinTrabajadorpromedio($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Trabajadorpromedio');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Trabajadorpromedio');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Trabajadorpromedio relation Trabajadorpromedio object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   TrabajadorpromedioQuery A secondary query class using the current class as primary query
-     */
-    public function useTrabajadorpromedioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinTrabajadorpromedio($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Trabajadorpromedio', 'TrabajadorpromedioQuery');
     }
 
     /**

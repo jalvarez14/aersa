@@ -45,6 +45,8 @@ class RequisiciondetalleTableMap extends TableMap
         $this->addColumn('requisiciondetalle_revisada', 'RequisiciondetalleRevisada', 'BOOLEAN', true, 1, null);
         $this->addColumn('requisiciondetalle_preciounitario', 'RequisiciondetallePreciounitario', 'DECIMAL', true, 15, null);
         $this->addColumn('requisiciondetalle_subtotal', 'RequisiciondetalleSubtotal', 'DECIMAL', true, 15, null);
+        $this->addForeignKey('idpadre', 'Idpadre', 'INTEGER', 'requisiciondetalle', 'idrequisiciondetalle', false, null, null);
+        $this->addColumn('requisiciondetallecol', 'Requisiciondetallecol', 'VARCHAR', false, 45, null);
         // validators
     } // initialize()
 
@@ -53,8 +55,10 @@ class RequisiciondetalleTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('RequisiciondetalleRelatedByIdpadre', 'Requisiciondetalle', RelationMap::MANY_TO_ONE, array('idpadre' => 'idrequisiciondetalle', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Requisicion', 'Requisicion', RelationMap::MANY_TO_ONE, array('idrequisicion' => 'idrequisicion', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('RequisiciondetalleRelatedByIdrequisiciondetalle', 'Requisiciondetalle', RelationMap::ONE_TO_MANY, array('idrequisiciondetalle' => 'idpadre', ), 'CASCADE', 'CASCADE', 'RequisiciondetallesRelatedByIdrequisiciondetalle');
     } // buildRelations()
 
 } // RequisiciondetalleTableMap
