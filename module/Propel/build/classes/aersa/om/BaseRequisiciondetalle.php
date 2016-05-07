@@ -72,6 +72,23 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     protected $requisiciondetalle_subtotal;
 
     /**
+     * The value for the idpadre field.
+     * @var        int
+     */
+    protected $idpadre;
+
+    /**
+     * The value for the requisiciondetallecol field.
+     * @var        string
+     */
+    protected $requisiciondetallecol;
+
+    /**
+     * @var        Requisiciondetalle
+     */
+    protected $aRequisiciondetalleRelatedByIdpadre;
+
+    /**
      * @var        Producto
      */
     protected $aProducto;
@@ -80,6 +97,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      * @var        Requisicion
      */
     protected $aRequisicion;
+
+    /**
+     * @var        PropelObjectCollection|Requisiciondetalle[] Collection to store aggregation of Requisiciondetalle objects.
+     */
+    protected $collRequisiciondetallesRelatedByIdrequisiciondetalle;
+    protected $collRequisiciondetallesRelatedByIdrequisiciondetallePartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -100,6 +123,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion = null;
 
     /**
      * Get the [idrequisiciondetalle] column value.
@@ -176,6 +205,28 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
 
         return $this->requisiciondetalle_subtotal;
+    }
+
+    /**
+     * Get the [idpadre] column value.
+     *
+     * @return int
+     */
+    public function getIdpadre()
+    {
+
+        return $this->idpadre;
+    }
+
+    /**
+     * Get the [requisiciondetallecol] column value.
+     *
+     * @return string
+     */
+    public function getRequisiciondetallecol()
+    {
+
+        return $this->requisiciondetallecol;
     }
 
     /**
@@ -342,6 +393,52 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     } // setRequisiciondetalleSubtotal()
 
     /**
+     * Set the value of [idpadre] column.
+     *
+     * @param  int $v new value
+     * @return Requisiciondetalle The current object (for fluent API support)
+     */
+    public function setIdpadre($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idpadre !== $v) {
+            $this->idpadre = $v;
+            $this->modifiedColumns[] = RequisiciondetallePeer::IDPADRE;
+        }
+
+        if ($this->aRequisiciondetalleRelatedByIdpadre !== null && $this->aRequisiciondetalleRelatedByIdpadre->getIdrequisiciondetalle() !== $v) {
+            $this->aRequisiciondetalleRelatedByIdpadre = null;
+        }
+
+
+        return $this;
+    } // setIdpadre()
+
+    /**
+     * Set the value of [requisiciondetallecol] column.
+     *
+     * @param  string $v new value
+     * @return Requisiciondetalle The current object (for fluent API support)
+     */
+    public function setRequisiciondetallecol($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->requisiciondetallecol !== $v) {
+            $this->requisiciondetallecol = $v;
+            $this->modifiedColumns[] = RequisiciondetallePeer::REQUISICIONDETALLECOL;
+        }
+
+
+        return $this;
+    } // setRequisiciondetallecol()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -380,6 +477,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $this->requisiciondetalle_revisada = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
             $this->requisiciondetalle_preciounitario = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->requisiciondetalle_subtotal = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->idpadre = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->requisiciondetallecol = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -389,7 +488,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Requisiciondetalle object", $e);
@@ -417,6 +516,9 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         }
         if ($this->aProducto !== null && $this->idproducto !== $this->aProducto->getIdproducto()) {
             $this->aProducto = null;
+        }
+        if ($this->aRequisiciondetalleRelatedByIdpadre !== null && $this->idpadre !== $this->aRequisiciondetalleRelatedByIdpadre->getIdrequisiciondetalle()) {
+            $this->aRequisiciondetalleRelatedByIdpadre = null;
         }
     } // ensureConsistency
 
@@ -457,8 +559,11 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aRequisiciondetalleRelatedByIdpadre = null;
             $this->aProducto = null;
             $this->aRequisicion = null;
+            $this->collRequisiciondetallesRelatedByIdrequisiciondetalle = null;
+
         } // if (deep)
     }
 
@@ -577,6 +682,13 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aRequisiciondetalleRelatedByIdpadre !== null) {
+                if ($this->aRequisiciondetalleRelatedByIdpadre->isModified() || $this->aRequisiciondetalleRelatedByIdpadre->isNew()) {
+                    $affectedRows += $this->aRequisiciondetalleRelatedByIdpadre->save($con);
+                }
+                $this->setRequisiciondetalleRelatedByIdpadre($this->aRequisiciondetalleRelatedByIdpadre);
+            }
+
             if ($this->aProducto !== null) {
                 if ($this->aProducto->isModified() || $this->aProducto->isNew()) {
                     $affectedRows += $this->aProducto->save($con);
@@ -600,6 +712,23 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion !== null) {
+                if (!$this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion->isEmpty()) {
+                    RequisiciondetalleQuery::create()
+                        ->filterByPrimaryKeys($this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle !== null) {
+                foreach ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -649,6 +778,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`requisiciondetalle_subtotal`';
         }
+        if ($this->isColumnModified(RequisiciondetallePeer::IDPADRE)) {
+            $modifiedColumns[':p' . $index++]  = '`idpadre`';
+        }
+        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLECOL)) {
+            $modifiedColumns[':p' . $index++]  = '`requisiciondetallecol`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `requisiciondetalle` (%s) VALUES (%s)',
@@ -680,6 +815,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
                         break;
                     case '`requisiciondetalle_subtotal`':
                         $stmt->bindValue($identifier, $this->requisiciondetalle_subtotal, PDO::PARAM_STR);
+                        break;
+                    case '`idpadre`':
+                        $stmt->bindValue($identifier, $this->idpadre, PDO::PARAM_INT);
+                        break;
+                    case '`requisiciondetallecol`':
+                        $stmt->bindValue($identifier, $this->requisiciondetallecol, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -780,6 +921,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aRequisiciondetalleRelatedByIdpadre !== null) {
+                if (!$this->aRequisiciondetalleRelatedByIdpadre->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aRequisiciondetalleRelatedByIdpadre->getValidationFailures());
+                }
+            }
+
             if ($this->aProducto !== null) {
                 if (!$this->aProducto->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aProducto->getValidationFailures());
@@ -797,6 +944,14 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle !== null) {
+                    foreach ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -854,6 +1009,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 6:
                 return $this->getRequisiciondetalleSubtotal();
                 break;
+            case 7:
+                return $this->getIdpadre();
+                break;
+            case 8:
+                return $this->getRequisiciondetallecol();
+                break;
             default:
                 return null;
                 break;
@@ -890,6 +1051,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $keys[4] => $this->getRequisiciondetalleRevisada(),
             $keys[5] => $this->getRequisiciondetallePreciounitario(),
             $keys[6] => $this->getRequisiciondetalleSubtotal(),
+            $keys[7] => $this->getIdpadre(),
+            $keys[8] => $this->getRequisiciondetallecol(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -897,11 +1060,17 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aRequisiciondetalleRelatedByIdpadre) {
+                $result['RequisiciondetalleRelatedByIdpadre'] = $this->aRequisiciondetalleRelatedByIdpadre->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aProducto) {
                 $result['Producto'] = $this->aProducto->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aRequisicion) {
                 $result['Requisicion'] = $this->aRequisicion->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collRequisiciondetallesRelatedByIdrequisiciondetalle) {
+                $result['RequisiciondetallesRelatedByIdrequisiciondetalle'] = $this->collRequisiciondetallesRelatedByIdrequisiciondetalle->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -958,6 +1127,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 6:
                 $this->setRequisiciondetalleSubtotal($value);
                 break;
+            case 7:
+                $this->setIdpadre($value);
+                break;
+            case 8:
+                $this->setRequisiciondetallecol($value);
+                break;
         } // switch()
     }
 
@@ -989,6 +1164,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setRequisiciondetalleRevisada($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setRequisiciondetallePreciounitario($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setRequisiciondetalleSubtotal($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setIdpadre($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setRequisiciondetallecol($arr[$keys[8]]);
     }
 
     /**
@@ -1007,6 +1184,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, $this->requisiciondetalle_revisada);
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, $this->requisiciondetalle_preciounitario);
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, $this->requisiciondetalle_subtotal);
+        if ($this->isColumnModified(RequisiciondetallePeer::IDPADRE)) $criteria->add(RequisiciondetallePeer::IDPADRE, $this->idpadre);
+        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLECOL)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLECOL, $this->requisiciondetallecol);
 
         return $criteria;
     }
@@ -1076,6 +1255,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $copyObj->setRequisiciondetalleRevisada($this->getRequisiciondetalleRevisada());
         $copyObj->setRequisiciondetallePreciounitario($this->getRequisiciondetallePreciounitario());
         $copyObj->setRequisiciondetalleSubtotal($this->getRequisiciondetalleSubtotal());
+        $copyObj->setIdpadre($this->getIdpadre());
+        $copyObj->setRequisiciondetallecol($this->getRequisiciondetallecol());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1083,6 +1264,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getRequisiciondetallesRelatedByIdrequisiciondetalle() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addRequisiciondetalleRelatedByIdrequisiciondetalle($relObj->copy($deepCopy));
+                }
+            }
 
             //unflag object copy
             $this->startCopy = false;
@@ -1132,6 +1319,58 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         }
 
         return self::$peer;
+    }
+
+    /**
+     * Declares an association between this object and a Requisiciondetalle object.
+     *
+     * @param                  Requisiciondetalle $v
+     * @return Requisiciondetalle The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setRequisiciondetalleRelatedByIdpadre(Requisiciondetalle $v = null)
+    {
+        if ($v === null) {
+            $this->setIdpadre(NULL);
+        } else {
+            $this->setIdpadre($v->getIdrequisiciondetalle());
+        }
+
+        $this->aRequisiciondetalleRelatedByIdpadre = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Requisiciondetalle object, it will not be re-added.
+        if ($v !== null) {
+            $v->addRequisiciondetalleRelatedByIdrequisiciondetalle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Requisiciondetalle object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Requisiciondetalle The associated Requisiciondetalle object.
+     * @throws PropelException
+     */
+    public function getRequisiciondetalleRelatedByIdpadre(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aRequisiciondetalleRelatedByIdpadre === null && ($this->idpadre !== null) && $doQuery) {
+            $this->aRequisiciondetalleRelatedByIdpadre = RequisiciondetalleQuery::create()->findPk($this->idpadre, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aRequisiciondetalleRelatedByIdpadre->addRequisiciondetallesRelatedByIdrequisiciondetalle($this);
+             */
+        }
+
+        return $this->aRequisiciondetalleRelatedByIdpadre;
     }
 
     /**
@@ -1238,6 +1477,297 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         return $this->aRequisicion;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('RequisiciondetalleRelatedByIdrequisiciondetalle' == $relationName) {
+            $this->initRequisiciondetallesRelatedByIdrequisiciondetalle();
+        }
+    }
+
+    /**
+     * Clears out the collRequisiciondetallesRelatedByIdrequisiciondetalle collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Requisiciondetalle The current object (for fluent API support)
+     * @see        addRequisiciondetallesRelatedByIdrequisiciondetalle()
+     */
+    public function clearRequisiciondetallesRelatedByIdrequisiciondetalle()
+    {
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetalle = null; // important to set this to null since that means it is uninitialized
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collRequisiciondetallesRelatedByIdrequisiciondetalle collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialRequisiciondetallesRelatedByIdrequisiciondetalle($v = true)
+    {
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial = $v;
+    }
+
+    /**
+     * Initializes the collRequisiciondetallesRelatedByIdrequisiciondetalle collection.
+     *
+     * By default this just sets the collRequisiciondetallesRelatedByIdrequisiciondetalle collection to an empty array (like clearcollRequisiciondetallesRelatedByIdrequisiciondetalle());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initRequisiciondetallesRelatedByIdrequisiciondetalle($overrideExisting = true)
+    {
+        if (null !== $this->collRequisiciondetallesRelatedByIdrequisiciondetalle && !$overrideExisting) {
+            return;
+        }
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetalle = new PropelObjectCollection();
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetalle->setModel('Requisiciondetalle');
+    }
+
+    /**
+     * Gets an array of Requisiciondetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Requisiciondetalle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Requisiciondetalle[] List of Requisiciondetalle objects
+     * @throws PropelException
+     */
+    public function getRequisiciondetallesRelatedByIdrequisiciondetalle($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial && !$this->isNew();
+        if (null === $this->collRequisiciondetallesRelatedByIdrequisiciondetalle || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collRequisiciondetallesRelatedByIdrequisiciondetalle) {
+                // return empty collection
+                $this->initRequisiciondetallesRelatedByIdrequisiciondetalle();
+            } else {
+                $collRequisiciondetallesRelatedByIdrequisiciondetalle = RequisiciondetalleQuery::create(null, $criteria)
+                    ->filterByRequisiciondetalleRelatedByIdpadre($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial && count($collRequisiciondetallesRelatedByIdrequisiciondetalle)) {
+                      $this->initRequisiciondetallesRelatedByIdrequisiciondetalle(false);
+
+                      foreach ($collRequisiciondetallesRelatedByIdrequisiciondetalle as $obj) {
+                        if (false == $this->collRequisiciondetallesRelatedByIdrequisiciondetalle->contains($obj)) {
+                          $this->collRequisiciondetallesRelatedByIdrequisiciondetalle->append($obj);
+                        }
+                      }
+
+                      $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial = true;
+                    }
+
+                    $collRequisiciondetallesRelatedByIdrequisiciondetalle->getInternalIterator()->rewind();
+
+                    return $collRequisiciondetallesRelatedByIdrequisiciondetalle;
+                }
+
+                if ($partial && $this->collRequisiciondetallesRelatedByIdrequisiciondetalle) {
+                    foreach ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle as $obj) {
+                        if ($obj->isNew()) {
+                            $collRequisiciondetallesRelatedByIdrequisiciondetalle[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collRequisiciondetallesRelatedByIdrequisiciondetalle = $collRequisiciondetallesRelatedByIdrequisiciondetalle;
+                $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial = false;
+            }
+        }
+
+        return $this->collRequisiciondetallesRelatedByIdrequisiciondetalle;
+    }
+
+    /**
+     * Sets a collection of RequisiciondetalleRelatedByIdrequisiciondetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $requisiciondetallesRelatedByIdrequisiciondetalle A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Requisiciondetalle The current object (for fluent API support)
+     */
+    public function setRequisiciondetallesRelatedByIdrequisiciondetalle(PropelCollection $requisiciondetallesRelatedByIdrequisiciondetalle, PropelPDO $con = null)
+    {
+        $requisiciondetallesRelatedByIdrequisiciondetalleToDelete = $this->getRequisiciondetallesRelatedByIdrequisiciondetalle(new Criteria(), $con)->diff($requisiciondetallesRelatedByIdrequisiciondetalle);
+
+
+        $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion = $requisiciondetallesRelatedByIdrequisiciondetalleToDelete;
+
+        foreach ($requisiciondetallesRelatedByIdrequisiciondetalleToDelete as $requisiciondetalleRelatedByIdrequisiciondetalleRemoved) {
+            $requisiciondetalleRelatedByIdrequisiciondetalleRemoved->setRequisiciondetalleRelatedByIdpadre(null);
+        }
+
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetalle = null;
+        foreach ($requisiciondetallesRelatedByIdrequisiciondetalle as $requisiciondetalleRelatedByIdrequisiciondetalle) {
+            $this->addRequisiciondetalleRelatedByIdrequisiciondetalle($requisiciondetalleRelatedByIdrequisiciondetalle);
+        }
+
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetalle = $requisiciondetallesRelatedByIdrequisiciondetalle;
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Requisiciondetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Requisiciondetalle objects.
+     * @throws PropelException
+     */
+    public function countRequisiciondetallesRelatedByIdrequisiciondetalle(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial && !$this->isNew();
+        if (null === $this->collRequisiciondetallesRelatedByIdrequisiciondetalle || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collRequisiciondetallesRelatedByIdrequisiciondetalle) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getRequisiciondetallesRelatedByIdrequisiciondetalle());
+            }
+            $query = RequisiciondetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByRequisiciondetalleRelatedByIdpadre($this)
+                ->count($con);
+        }
+
+        return count($this->collRequisiciondetallesRelatedByIdrequisiciondetalle);
+    }
+
+    /**
+     * Method called to associate a Requisiciondetalle object to this object
+     * through the Requisiciondetalle foreign key attribute.
+     *
+     * @param    Requisiciondetalle $l Requisiciondetalle
+     * @return Requisiciondetalle The current object (for fluent API support)
+     */
+    public function addRequisiciondetalleRelatedByIdrequisiciondetalle(Requisiciondetalle $l)
+    {
+        if ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle === null) {
+            $this->initRequisiciondetallesRelatedByIdrequisiciondetalle();
+            $this->collRequisiciondetallesRelatedByIdrequisiciondetallePartial = true;
+        }
+
+        if (!in_array($l, $this->collRequisiciondetallesRelatedByIdrequisiciondetalle->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddRequisiciondetalleRelatedByIdrequisiciondetalle($l);
+
+            if ($this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion and $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion->contains($l)) {
+                $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion->remove($this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	RequisiciondetalleRelatedByIdrequisiciondetalle $requisiciondetalleRelatedByIdrequisiciondetalle The requisiciondetalleRelatedByIdrequisiciondetalle object to add.
+     */
+    protected function doAddRequisiciondetalleRelatedByIdrequisiciondetalle($requisiciondetalleRelatedByIdrequisiciondetalle)
+    {
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetalle[]= $requisiciondetalleRelatedByIdrequisiciondetalle;
+        $requisiciondetalleRelatedByIdrequisiciondetalle->setRequisiciondetalleRelatedByIdpadre($this);
+    }
+
+    /**
+     * @param	RequisiciondetalleRelatedByIdrequisiciondetalle $requisiciondetalleRelatedByIdrequisiciondetalle The requisiciondetalleRelatedByIdrequisiciondetalle object to remove.
+     * @return Requisiciondetalle The current object (for fluent API support)
+     */
+    public function removeRequisiciondetalleRelatedByIdrequisiciondetalle($requisiciondetalleRelatedByIdrequisiciondetalle)
+    {
+        if ($this->getRequisiciondetallesRelatedByIdrequisiciondetalle()->contains($requisiciondetalleRelatedByIdrequisiciondetalle)) {
+            $this->collRequisiciondetallesRelatedByIdrequisiciondetalle->remove($this->collRequisiciondetallesRelatedByIdrequisiciondetalle->search($requisiciondetalleRelatedByIdrequisiciondetalle));
+            if (null === $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion) {
+                $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion = clone $this->collRequisiciondetallesRelatedByIdrequisiciondetalle;
+                $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion->clear();
+            }
+            $this->requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion[]= $requisiciondetalleRelatedByIdrequisiciondetalle;
+            $requisiciondetalleRelatedByIdrequisiciondetalle->setRequisiciondetalleRelatedByIdpadre(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Requisiciondetalle is new, it will return
+     * an empty collection; or if this Requisiciondetalle has previously
+     * been saved, it will retrieve related RequisiciondetallesRelatedByIdrequisiciondetalle from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Requisiciondetalle.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisiciondetalle[] List of Requisiciondetalle objects
+     */
+    public function getRequisiciondetallesRelatedByIdrequisiciondetalleJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisiciondetalleQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getRequisiciondetallesRelatedByIdrequisiciondetalle($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Requisiciondetalle is new, it will return
+     * an empty collection; or if this Requisiciondetalle has previously
+     * been saved, it will retrieve related RequisiciondetallesRelatedByIdrequisiciondetalle from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Requisiciondetalle.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Requisiciondetalle[] List of Requisiciondetalle objects
+     */
+    public function getRequisiciondetallesRelatedByIdrequisiciondetalleJoinRequisicion($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = RequisiciondetalleQuery::create(null, $criteria);
+        $query->joinWith('Requisicion', $join_behavior);
+
+        return $this->getRequisiciondetallesRelatedByIdrequisiciondetalle($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1250,6 +1780,8 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $this->requisiciondetalle_revisada = null;
         $this->requisiciondetalle_preciounitario = null;
         $this->requisiciondetalle_subtotal = null;
+        $this->idpadre = null;
+        $this->requisiciondetallecol = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1272,6 +1804,14 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle) {
+                foreach ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aRequisiciondetalleRelatedByIdpadre instanceof Persistent) {
+              $this->aRequisiciondetalleRelatedByIdpadre->clearAllReferences($deep);
+            }
             if ($this->aProducto instanceof Persistent) {
               $this->aProducto->clearAllReferences($deep);
             }
@@ -1282,6 +1822,11 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collRequisiciondetallesRelatedByIdrequisiciondetalle instanceof PropelCollection) {
+            $this->collRequisiciondetallesRelatedByIdrequisiciondetalle->clearIterator();
+        }
+        $this->collRequisiciondetallesRelatedByIdrequisiciondetalle = null;
+        $this->aRequisiciondetalleRelatedByIdpadre = null;
         $this->aProducto = null;
         $this->aRequisicion = null;
     }

@@ -4,6 +4,22 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
+-- abonoproveedor
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `abonoproveedor`;
+
+CREATE TABLE `abonoproveedor`
+(
+    `idabonoproveedor` INTEGER NOT NULL AUTO_INCREMENT,
+    `idproveedor` INTEGER,
+    `idempresa` INTEGER,
+    `idsucursal` INTEGER,
+    `idempleado` INTEGER,
+    PRIMARY KEY (`idabonoproveedor`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- almacen
 -- ---------------------------------------------------------------------
 
@@ -229,6 +245,35 @@ CREATE TABLE `conceptosalida`
     `almacendestino` VARCHAR(45) NOT NULL,
     `mismasucursal` TINYINT(1) NOT NULL,
     PRIMARY KEY (`idconceptosalida`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- cuentabancaria
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `cuentabancaria`;
+
+CREATE TABLE `cuentabancaria`
+(
+    `idcuentabancaria` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `cuentabancaria_banco` VARCHAR(255) NOT NULL,
+    `cuentabancaria_nocuenta` VARCHAR(45) NOT NULL,
+    `cuentabancaria_balance` DECIMAL(15,5),
+    PRIMARY KEY (`idcuentabancaria`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_cuentabancaria`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_cuentabancaria`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1121,9 +1166,17 @@ CREATE TABLE `requisiciondetalle`
     `requisiciondetalle_revisada` TINYINT(1) NOT NULL,
     `requisiciondetalle_preciounitario` DECIMAL(15,5) NOT NULL,
     `requisiciondetalle_subtotal` DECIMAL(15,5) NOT NULL,
+    `idpadre` INTEGER,
+    `requisiciondetallecol` VARCHAR(45),
     PRIMARY KEY (`idrequisiciondetalle`),
     INDEX `idrequisicion` (`idrequisicion`),
     INDEX `idproducto` (`idproducto`),
+    INDEX `idpadre` (`idpadre`),
+    CONSTRAINT `idpadre_requisiciondetalle`
+        FOREIGN KEY (`idpadre`)
+        REFERENCES `requisiciondetalle` (`idrequisiciondetalle`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT `idproducto_requisiciondetalle`
         FOREIGN KEY (`idproducto`)
         REFERENCES `producto` (`idproducto`)
@@ -1252,35 +1305,6 @@ CREATE TABLE `trabajadorespromedio`
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT `idsucursal_trabajadorespromedio`
-        FOREIGN KEY (`idsucursal`)
-        REFERENCES `sucursal` (`idsucursal`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-) ENGINE=InnoDB;
-
--- ---------------------------------------------------------------------
--- trabajadorpromedio
--- ---------------------------------------------------------------------
-
-DROP TABLE IF EXISTS `trabajadorpromedio`;
-
-CREATE TABLE `trabajadorpromedio`
-(
-    `idtrabajadorpromedio` INTEGER NOT NULL AUTO_INCREMENT,
-    `idempresa` INTEGER NOT NULL,
-    `idsucursal` INTEGER NOT NULL,
-    `trabajadorpromedio_anio` INTEGER NOT NULL,
-    `trabajadorpromedio_mes` INTEGER NOT NULL,
-    `trabajadorpromedio_empleados` FLOAT NOT NULL,
-    PRIMARY KEY (`idtrabajadorpromedio`),
-    INDEX `idempresa` (`idempresa`),
-    INDEX `idsucursal` (`idsucursal`),
-    CONSTRAINT `idempresa_trabajadorpromedio`
-        FOREIGN KEY (`idempresa`)
-        REFERENCES `empresa` (`idempresa`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT `idsucursal_trabajadorpromedio`
         FOREIGN KEY (`idsucursal`)
         REFERENCES `sucursal` (`idsucursal`)
         ON UPDATE CASCADE

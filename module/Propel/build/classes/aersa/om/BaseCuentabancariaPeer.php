@@ -2,71 +2,62 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'requisiciondetalle' table.
+ * Base static class for performing query and update operations on the 'cuentabancaria' table.
  *
  *
  *
  * @package propel.generator.aersa.om
  */
-abstract class BaseRequisiciondetallePeer
+abstract class BaseCuentabancariaPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'aersa';
 
     /** the table name for this class */
-    const TABLE_NAME = 'requisiciondetalle';
+    const TABLE_NAME = 'cuentabancaria';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'Requisiciondetalle';
+    const OM_CLASS = 'Cuentabancaria';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'RequisiciondetalleTableMap';
+    const TM_CLASS = 'CuentabancariaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 6;
 
-    /** the column name for the idrequisiciondetalle field */
-    const IDREQUISICIONDETALLE = 'requisiciondetalle.idrequisiciondetalle';
+    /** the column name for the idcuentabancaria field */
+    const IDCUENTABANCARIA = 'cuentabancaria.idcuentabancaria';
 
-    /** the column name for the idrequisicion field */
-    const IDREQUISICION = 'requisiciondetalle.idrequisicion';
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'cuentabancaria.idempresa';
 
-    /** the column name for the idproducto field */
-    const IDPRODUCTO = 'requisiciondetalle.idproducto';
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'cuentabancaria.idsucursal';
 
-    /** the column name for the requisiciondetalle_cantidad field */
-    const REQUISICIONDETALLE_CANTIDAD = 'requisiciondetalle.requisiciondetalle_cantidad';
+    /** the column name for the cuentabancaria_banco field */
+    const CUENTABANCARIA_BANCO = 'cuentabancaria.cuentabancaria_banco';
 
-    /** the column name for the requisiciondetalle_revisada field */
-    const REQUISICIONDETALLE_REVISADA = 'requisiciondetalle.requisiciondetalle_revisada';
+    /** the column name for the cuentabancaria_nocuenta field */
+    const CUENTABANCARIA_NOCUENTA = 'cuentabancaria.cuentabancaria_nocuenta';
 
-    /** the column name for the requisiciondetalle_preciounitario field */
-    const REQUISICIONDETALLE_PRECIOUNITARIO = 'requisiciondetalle.requisiciondetalle_preciounitario';
-
-    /** the column name for the requisiciondetalle_subtotal field */
-    const REQUISICIONDETALLE_SUBTOTAL = 'requisiciondetalle.requisiciondetalle_subtotal';
-
-    /** the column name for the idpadre field */
-    const IDPADRE = 'requisiciondetalle.idpadre';
-
-    /** the column name for the requisiciondetallecol field */
-    const REQUISICIONDETALLECOL = 'requisiciondetalle.requisiciondetallecol';
+    /** the column name for the cuentabancaria_balance field */
+    const CUENTABANCARIA_BALANCE = 'cuentabancaria.cuentabancaria_balance';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of Requisiciondetalle objects.
+     * An identity map to hold any loaded instances of Cuentabancaria objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array Requisiciondetalle[]
+     * @var        array Cuentabancaria[]
      */
     public static $instances = array();
 
@@ -75,30 +66,30 @@ abstract class BaseRequisiciondetallePeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. RequisiciondetallePeer::$fieldNames[RequisiciondetallePeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. CuentabancariaPeer::$fieldNames[CuentabancariaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisiciondetalle', 'Idrequisicion', 'Idproducto', 'RequisiciondetalleCantidad', 'RequisiciondetalleRevisada', 'RequisiciondetallePreciounitario', 'RequisiciondetalleSubtotal', 'Idpadre', 'Requisiciondetallecol', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisiciondetalle', 'idrequisicion', 'idproducto', 'requisiciondetalleCantidad', 'requisiciondetalleRevisada', 'requisiciondetallePreciounitario', 'requisiciondetalleSubtotal', 'idpadre', 'requisiciondetallecol', ),
-        BasePeer::TYPE_COLNAME => array (RequisiciondetallePeer::IDREQUISICIONDETALLE, RequisiciondetallePeer::IDREQUISICION, RequisiciondetallePeer::IDPRODUCTO, RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD, RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA, RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, RequisiciondetallePeer::IDPADRE, RequisiciondetallePeer::REQUISICIONDETALLECOL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICIONDETALLE', 'IDREQUISICION', 'IDPRODUCTO', 'REQUISICIONDETALLE_CANTIDAD', 'REQUISICIONDETALLE_REVISADA', 'REQUISICIONDETALLE_PRECIOUNITARIO', 'REQUISICIONDETALLE_SUBTOTAL', 'IDPADRE', 'REQUISICIONDETALLECOL', ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisiciondetalle', 'idrequisicion', 'idproducto', 'requisiciondetalle_cantidad', 'requisiciondetalle_revisada', 'requisiciondetalle_preciounitario', 'requisiciondetalle_subtotal', 'idpadre', 'requisiciondetallecol', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Idcuentabancaria', 'Idempresa', 'Idsucursal', 'CuentabancariaBanco', 'CuentabancariaNocuenta', 'CuentabancariaBalance', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcuentabancaria', 'idempresa', 'idsucursal', 'cuentabancariaBanco', 'cuentabancariaNocuenta', 'cuentabancariaBalance', ),
+        BasePeer::TYPE_COLNAME => array (CuentabancariaPeer::IDCUENTABANCARIA, CuentabancariaPeer::IDEMPRESA, CuentabancariaPeer::IDSUCURSAL, CuentabancariaPeer::CUENTABANCARIA_BANCO, CuentabancariaPeer::CUENTABANCARIA_NOCUENTA, CuentabancariaPeer::CUENTABANCARIA_BALANCE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCUENTABANCARIA', 'IDEMPRESA', 'IDSUCURSAL', 'CUENTABANCARIA_BANCO', 'CUENTABANCARIA_NOCUENTA', 'CUENTABANCARIA_BALANCE', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcuentabancaria', 'idempresa', 'idsucursal', 'cuentabancaria_banco', 'cuentabancaria_nocuenta', 'cuentabancaria_balance', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. RequisiciondetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. CuentabancariaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idrequisiciondetalle' => 0, 'Idrequisicion' => 1, 'Idproducto' => 2, 'RequisiciondetalleCantidad' => 3, 'RequisiciondetalleRevisada' => 4, 'RequisiciondetallePreciounitario' => 5, 'RequisiciondetalleSubtotal' => 6, 'Idpadre' => 7, 'Requisiciondetallecol' => 8, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idrequisiciondetalle' => 0, 'idrequisicion' => 1, 'idproducto' => 2, 'requisiciondetalleCantidad' => 3, 'requisiciondetalleRevisada' => 4, 'requisiciondetallePreciounitario' => 5, 'requisiciondetalleSubtotal' => 6, 'idpadre' => 7, 'requisiciondetallecol' => 8, ),
-        BasePeer::TYPE_COLNAME => array (RequisiciondetallePeer::IDREQUISICIONDETALLE => 0, RequisiciondetallePeer::IDREQUISICION => 1, RequisiciondetallePeer::IDPRODUCTO => 2, RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD => 3, RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA => 4, RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO => 5, RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL => 6, RequisiciondetallePeer::IDPADRE => 7, RequisiciondetallePeer::REQUISICIONDETALLECOL => 8, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDREQUISICIONDETALLE' => 0, 'IDREQUISICION' => 1, 'IDPRODUCTO' => 2, 'REQUISICIONDETALLE_CANTIDAD' => 3, 'REQUISICIONDETALLE_REVISADA' => 4, 'REQUISICIONDETALLE_PRECIOUNITARIO' => 5, 'REQUISICIONDETALLE_SUBTOTAL' => 6, 'IDPADRE' => 7, 'REQUISICIONDETALLECOL' => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('idrequisiciondetalle' => 0, 'idrequisicion' => 1, 'idproducto' => 2, 'requisiciondetalle_cantidad' => 3, 'requisiciondetalle_revisada' => 4, 'requisiciondetalle_preciounitario' => 5, 'requisiciondetalle_subtotal' => 6, 'idpadre' => 7, 'requisiciondetallecol' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('Idcuentabancaria' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'CuentabancariaBanco' => 3, 'CuentabancariaNocuenta' => 4, 'CuentabancariaBalance' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcuentabancaria' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'cuentabancariaBanco' => 3, 'cuentabancariaNocuenta' => 4, 'cuentabancariaBalance' => 5, ),
+        BasePeer::TYPE_COLNAME => array (CuentabancariaPeer::IDCUENTABANCARIA => 0, CuentabancariaPeer::IDEMPRESA => 1, CuentabancariaPeer::IDSUCURSAL => 2, CuentabancariaPeer::CUENTABANCARIA_BANCO => 3, CuentabancariaPeer::CUENTABANCARIA_NOCUENTA => 4, CuentabancariaPeer::CUENTABANCARIA_BALANCE => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCUENTABANCARIA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'CUENTABANCARIA_BANCO' => 3, 'CUENTABANCARIA_NOCUENTA' => 4, 'CUENTABANCARIA_BALANCE' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcuentabancaria' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'cuentabancaria_banco' => 3, 'cuentabancaria_nocuenta' => 4, 'cuentabancaria_balance' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -113,10 +104,10 @@ abstract class BaseRequisiciondetallePeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = RequisiciondetallePeer::getFieldNames($toType);
-        $key = isset(RequisiciondetallePeer::$fieldKeys[$fromType][$name]) ? RequisiciondetallePeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = CuentabancariaPeer::getFieldNames($toType);
+        $key = isset(CuentabancariaPeer::$fieldKeys[$fromType][$name]) ? CuentabancariaPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(RequisiciondetallePeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(CuentabancariaPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -133,11 +124,11 @@ abstract class BaseRequisiciondetallePeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, RequisiciondetallePeer::$fieldNames)) {
+        if (!array_key_exists($type, CuentabancariaPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return RequisiciondetallePeer::$fieldNames[$type];
+        return CuentabancariaPeer::$fieldNames[$type];
     }
 
     /**
@@ -149,12 +140,12 @@ abstract class BaseRequisiciondetallePeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. RequisiciondetallePeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. CuentabancariaPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(RequisiciondetallePeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(CuentabancariaPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -172,25 +163,19 @@ abstract class BaseRequisiciondetallePeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(RequisiciondetallePeer::IDREQUISICIONDETALLE);
-            $criteria->addSelectColumn(RequisiciondetallePeer::IDREQUISICION);
-            $criteria->addSelectColumn(RequisiciondetallePeer::IDPRODUCTO);
-            $criteria->addSelectColumn(RequisiciondetallePeer::REQUISICIONDETALLE_CANTIDAD);
-            $criteria->addSelectColumn(RequisiciondetallePeer::REQUISICIONDETALLE_REVISADA);
-            $criteria->addSelectColumn(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO);
-            $criteria->addSelectColumn(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL);
-            $criteria->addSelectColumn(RequisiciondetallePeer::IDPADRE);
-            $criteria->addSelectColumn(RequisiciondetallePeer::REQUISICIONDETALLECOL);
+            $criteria->addSelectColumn(CuentabancariaPeer::IDCUENTABANCARIA);
+            $criteria->addSelectColumn(CuentabancariaPeer::IDEMPRESA);
+            $criteria->addSelectColumn(CuentabancariaPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(CuentabancariaPeer::CUENTABANCARIA_BANCO);
+            $criteria->addSelectColumn(CuentabancariaPeer::CUENTABANCARIA_NOCUENTA);
+            $criteria->addSelectColumn(CuentabancariaPeer::CUENTABANCARIA_BALANCE);
         } else {
-            $criteria->addSelectColumn($alias . '.idrequisiciondetalle');
-            $criteria->addSelectColumn($alias . '.idrequisicion');
-            $criteria->addSelectColumn($alias . '.idproducto');
-            $criteria->addSelectColumn($alias . '.requisiciondetalle_cantidad');
-            $criteria->addSelectColumn($alias . '.requisiciondetalle_revisada');
-            $criteria->addSelectColumn($alias . '.requisiciondetalle_preciounitario');
-            $criteria->addSelectColumn($alias . '.requisiciondetalle_subtotal');
-            $criteria->addSelectColumn($alias . '.idpadre');
-            $criteria->addSelectColumn($alias . '.requisiciondetallecol');
+            $criteria->addSelectColumn($alias . '.idcuentabancaria');
+            $criteria->addSelectColumn($alias . '.idempresa');
+            $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.cuentabancaria_banco');
+            $criteria->addSelectColumn($alias . '.cuentabancaria_nocuenta');
+            $criteria->addSelectColumn($alias . '.cuentabancaria_balance');
         }
     }
 
@@ -210,21 +195,21 @@ abstract class BaseRequisiciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(CuentabancariaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RequisiciondetallePeer::addSelectColumns($criteria);
+            CuentabancariaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -243,7 +228,7 @@ abstract class BaseRequisiciondetallePeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return Requisiciondetalle
+     * @return Cuentabancaria
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -251,7 +236,7 @@ abstract class BaseRequisiciondetallePeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = RequisiciondetallePeer::doSelect($critcopy, $con);
+        $objects = CuentabancariaPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -269,7 +254,7 @@ abstract class BaseRequisiciondetallePeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return RequisiciondetallePeer::populateObjects(RequisiciondetallePeer::doSelectStmt($criteria, $con));
+        return CuentabancariaPeer::populateObjects(CuentabancariaPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -287,16 +272,16 @@ abstract class BaseRequisiciondetallePeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            RequisiciondetallePeer::addSelectColumns($criteria);
+            CuentabancariaPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -310,16 +295,16 @@ abstract class BaseRequisiciondetallePeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param Requisiciondetalle $obj A Requisiciondetalle object.
+     * @param Cuentabancaria $obj A Cuentabancaria object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIdrequisiciondetalle();
+                $key = (string) $obj->getIdcuentabancaria();
             } // if key === null
-            RequisiciondetallePeer::$instances[$key] = $obj;
+            CuentabancariaPeer::$instances[$key] = $obj;
         }
     }
 
@@ -331,7 +316,7 @@ abstract class BaseRequisiciondetallePeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A Requisiciondetalle object or a primary key value.
+     * @param      mixed $value A Cuentabancaria object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -339,17 +324,17 @@ abstract class BaseRequisiciondetallePeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof Requisiciondetalle) {
-                $key = (string) $value->getIdrequisiciondetalle();
+            if (is_object($value) && $value instanceof Cuentabancaria) {
+                $key = (string) $value->getIdcuentabancaria();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Requisiciondetalle object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Cuentabancaria object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(RequisiciondetallePeer::$instances[$key]);
+            unset(CuentabancariaPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -360,14 +345,14 @@ abstract class BaseRequisiciondetallePeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return Requisiciondetalle Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return Cuentabancaria Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(RequisiciondetallePeer::$instances[$key])) {
-                return RequisiciondetallePeer::$instances[$key];
+            if (isset(CuentabancariaPeer::$instances[$key])) {
+                return CuentabancariaPeer::$instances[$key];
             }
         }
 
@@ -382,22 +367,19 @@ abstract class BaseRequisiciondetallePeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (RequisiciondetallePeer::$instances as $instance) {
+        foreach (CuentabancariaPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        RequisiciondetallePeer::$instances = array();
+        CuentabancariaPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to requisiciondetalle
+     * Method to invalidate the instance pool of all tables related to cuentabancaria
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
     {
-        // Invalidate objects in RequisiciondetallePeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        RequisiciondetallePeer::clearInstancePool();
     }
 
     /**
@@ -447,11 +429,11 @@ abstract class BaseRequisiciondetallePeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = RequisiciondetallePeer::getOMClass();
+        $cls = CuentabancariaPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = RequisiciondetallePeer::getInstanceFromPool($key))) {
+            $key = CuentabancariaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = CuentabancariaPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -460,7 +442,7 @@ abstract class BaseRequisiciondetallePeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                RequisiciondetallePeer::addInstanceToPool($obj, $key);
+                CuentabancariaPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -474,21 +456,21 @@ abstract class BaseRequisiciondetallePeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (Requisiciondetalle object, last column rank)
+     * @return array (Cuentabancaria object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = RequisiciondetallePeer::getInstanceFromPool($key))) {
+        $key = CuentabancariaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = CuentabancariaPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + RequisiciondetallePeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + CuentabancariaPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = RequisiciondetallePeer::OM_CLASS;
+            $cls = CuentabancariaPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            RequisiciondetallePeer::addInstanceToPool($obj, $key);
+            CuentabancariaPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -496,7 +478,7 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Producto table
+     * Returns the number of rows matching criteria, joining the related Empresa table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -504,7 +486,7 @@ abstract class BaseRequisiciondetallePeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -512,26 +494,26 @@ abstract class BaseRequisiciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(CuentabancariaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RequisiciondetallePeer::addSelectColumns($criteria);
+            CuentabancariaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -547,7 +529,7 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Requisicion table
+     * Returns the number of rows matching criteria, joining the related Sucursal table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -555,7 +537,7 @@ abstract class BaseRequisiciondetallePeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinRequisicion(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -563,26 +545,26 @@ abstract class BaseRequisiciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(CuentabancariaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RequisiciondetallePeer::addSelectColumns($criteria);
+            CuentabancariaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -598,61 +580,61 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Selects a collection of Requisiciondetalle objects pre-filled with their Producto objects.
+     * Selects a collection of Cuentabancaria objects pre-filled with their Empresa objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisiciondetalle objects.
+     * @return array           Array of Cuentabancaria objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
         }
 
-        RequisiciondetallePeer::addSelectColumns($criteria);
-        $startcol = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS;
-        ProductoPeer::addSelectColumns($criteria);
+        CuentabancariaPeer::addSelectColumns($criteria);
+        $startcol = CuentabancariaPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisiciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = CuentabancariaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CuentabancariaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = RequisiciondetallePeer::getOMClass();
+                $cls = CuentabancariaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RequisiciondetallePeer::addInstanceToPool($obj1, $key1);
+                CuentabancariaPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
-            $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
             if ($key2 !== null) {
-                $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = ProductoPeer::getOMClass();
+                    $cls = EmpresaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol);
-                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Requisiciondetalle) to $obj2 (Producto)
-                $obj2->addRequisiciondetalle($obj1);
+                // Add the $obj1 (Cuentabancaria) to $obj2 (Empresa)
+                $obj2->addCuentabancaria($obj1);
 
             } // if joined row was not null
 
@@ -665,61 +647,61 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Selects a collection of Requisiciondetalle objects pre-filled with their Requisicion objects.
+     * Selects a collection of Cuentabancaria objects pre-filled with their Sucursal objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisiciondetalle objects.
+     * @return array           Array of Cuentabancaria objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinRequisicion(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
         }
 
-        RequisiciondetallePeer::addSelectColumns($criteria);
-        $startcol = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS;
-        RequisicionPeer::addSelectColumns($criteria);
+        CuentabancariaPeer::addSelectColumns($criteria);
+        $startcol = CuentabancariaPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisiciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = CuentabancariaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CuentabancariaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = RequisiciondetallePeer::getOMClass();
+                $cls = CuentabancariaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RequisiciondetallePeer::addInstanceToPool($obj1, $key1);
+                CuentabancariaPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
-            $key2 = RequisicionPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol);
             if ($key2 !== null) {
-                $obj2 = RequisicionPeer::getInstanceFromPool($key2);
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = RequisicionPeer::getOMClass();
+                    $cls = SucursalPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol);
-                    RequisicionPeer::addInstanceToPool($obj2, $key2);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Requisiciondetalle) to $obj2 (Requisicion)
-                $obj2->addRequisiciondetalle($obj1);
+                // Add the $obj1 (Cuentabancaria) to $obj2 (Sucursal)
+                $obj2->addCuentabancaria($obj1);
 
             } // if joined row was not null
 
@@ -748,28 +730,28 @@ abstract class BaseRequisiciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(CuentabancariaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RequisiciondetallePeer::addSelectColumns($criteria);
+            CuentabancariaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -784,12 +766,12 @@ abstract class BaseRequisiciondetallePeer
     }
 
     /**
-     * Selects a collection of Requisiciondetalle objects pre-filled with all related objects.
+     * Selects a collection of Cuentabancaria objects pre-filled with all related objects.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisiciondetalle objects.
+     * @return array           Array of Cuentabancaria objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -799,73 +781,73 @@ abstract class BaseRequisiciondetallePeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
         }
 
-        RequisiciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS;
+        CuentabancariaPeer::addSelectColumns($criteria);
+        $startcol2 = CuentabancariaPeer::NUM_HYDRATE_COLUMNS;
 
-        ProductoPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
-        RequisicionPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + RequisicionPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisiciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = CuentabancariaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CuentabancariaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = RequisiciondetallePeer::getOMClass();
+                $cls = CuentabancariaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RequisiciondetallePeer::addInstanceToPool($obj1, $key1);
+                CuentabancariaPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Producto rows
+            // Add objects for joined Empresa rows
 
-            $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = ProductoPeer::getOMClass();
+                    $cls = EmpresaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (Requisiciondetalle) to the collection in $obj2 (Producto)
-                $obj2->addRequisiciondetalle($obj1);
+                // Add the $obj1 (Cuentabancaria) to the collection in $obj2 (Empresa)
+                $obj2->addCuentabancaria($obj1);
             } // if joined row not null
 
-            // Add objects for joined Requisicion rows
+            // Add objects for joined Sucursal rows
 
-            $key3 = RequisicionPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            $key3 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
             if ($key3 !== null) {
-                $obj3 = RequisicionPeer::getInstanceFromPool($key3);
+                $obj3 = SucursalPeer::getInstanceFromPool($key3);
                 if (!$obj3) {
 
-                    $cls = RequisicionPeer::getOMClass();
+                    $cls = SucursalPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    RequisicionPeer::addInstanceToPool($obj3, $key3);
+                    SucursalPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (Requisiciondetalle) to the collection in $obj3 (Requisicion)
-                $obj3->addRequisiciondetalle($obj1);
+                // Add the $obj1 (Cuentabancaria) to the collection in $obj3 (Sucursal)
+                $obj3->addCuentabancaria($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -877,7 +859,7 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related RequisiciondetalleRelatedByIdpadre table
+     * Returns the number of rows matching criteria, joining the related Empresa table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -885,7 +867,7 @@ abstract class BaseRequisiciondetallePeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptRequisiciondetalleRelatedByIdpadre(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -893,28 +875,26 @@ abstract class BaseRequisiciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(CuentabancariaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RequisiciondetallePeer::addSelectColumns($criteria);
+            CuentabancariaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
-
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -930,7 +910,7 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Producto table
+     * Returns the number of rows matching criteria, joining the related Sucursal table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -938,7 +918,7 @@ abstract class BaseRequisiciondetallePeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -946,26 +926,26 @@ abstract class BaseRequisiciondetallePeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(CuentabancariaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RequisiciondetallePeer::addSelectColumns($criteria);
+            CuentabancariaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -981,67 +961,16 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Requisicion table
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return int Number of matching rows.
-     */
-    public static function doCountJoinAllExceptRequisicion(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        // we're going to modify criteria, so copy it first
-        $criteria = clone $criteria;
-
-        // We need to set the primary table name, since in the case that there are no WHERE columns
-        // it will be impossible for the BasePeer::createSelectSql() method to determine which
-        // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
-
-        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-            $criteria->setDistinct();
-        }
-
-        if (!$criteria->hasSelectClause()) {
-            RequisiciondetallePeer::addSelectColumns($criteria);
-        }
-
-        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
-
-        // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
-
-        if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
-        }
-
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
-
-        $stmt = BasePeer::doCount($criteria, $con);
-
-        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $count = (int) $row[0];
-        } else {
-            $count = 0; // no rows returned; we infer that means 0 matches.
-        }
-        $stmt->closeCursor();
-
-        return $count;
-    }
-
-
-    /**
-     * Selects a collection of Requisiciondetalle objects pre-filled with all related objects except RequisiciondetalleRelatedByIdpadre.
+     * Selects a collection of Cuentabancaria objects pre-filled with all related objects except Empresa.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisiciondetalle objects.
+     * @return array           Array of Cuentabancaria objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptRequisiciondetalleRelatedByIdpadre(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1049,75 +978,51 @@ abstract class BaseRequisiciondetallePeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
         }
 
-        RequisiciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS;
+        CuentabancariaPeer::addSelectColumns($criteria);
+        $startcol2 = CuentabancariaPeer::NUM_HYDRATE_COLUMNS;
 
-        ProductoPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
-        RequisicionPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + RequisicionPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
-
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisiciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = CuentabancariaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CuentabancariaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = RequisiciondetallePeer::getOMClass();
+                $cls = CuentabancariaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RequisiciondetallePeer::addInstanceToPool($obj1, $key1);
+                CuentabancariaPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined Producto rows
+                // Add objects for joined Sucursal rows
 
-                $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                    $obj2 = SucursalPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = ProductoPeer::getOMClass();
+                        $cls = SucursalPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Requisiciondetalle) to the collection in $obj2 (Producto)
-                $obj2->addRequisiciondetalle($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Requisicion rows
-
-                $key3 = RequisicionPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = RequisicionPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = RequisicionPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    RequisicionPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Requisiciondetalle) to the collection in $obj3 (Requisicion)
-                $obj3->addRequisiciondetalle($obj1);
+                // Add the $obj1 (Cuentabancaria) to the collection in $obj2 (Sucursal)
+                $obj2->addCuentabancaria($obj1);
 
             } // if joined row is not null
 
@@ -1130,16 +1035,16 @@ abstract class BaseRequisiciondetallePeer
 
 
     /**
-     * Selects a collection of Requisiciondetalle objects pre-filled with all related objects except Producto.
+     * Selects a collection of Cuentabancaria objects pre-filled with all related objects except Sucursal.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisiciondetalle objects.
+     * @return array           Array of Cuentabancaria objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1147,125 +1052,51 @@ abstract class BaseRequisiciondetallePeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+            $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
         }
 
-        RequisiciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS;
+        CuentabancariaPeer::addSelectColumns($criteria);
+        $startcol2 = CuentabancariaPeer::NUM_HYDRATE_COLUMNS;
 
-        RequisicionPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + RequisicionPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(RequisiciondetallePeer::IDREQUISICION, RequisicionPeer::IDREQUISICION, $join_behavior);
+        $criteria->addJoin(CuentabancariaPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisiciondetallePeer::getInstanceFromPool($key1))) {
+            $key1 = CuentabancariaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CuentabancariaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = RequisiciondetallePeer::getOMClass();
+                $cls = CuentabancariaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RequisiciondetallePeer::addInstanceToPool($obj1, $key1);
+                CuentabancariaPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined Requisicion rows
+                // Add objects for joined Empresa rows
 
-                $key2 = RequisicionPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = RequisicionPeer::getInstanceFromPool($key2);
+                    $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = RequisicionPeer::getOMClass();
+                        $cls = EmpresaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    RequisicionPeer::addInstanceToPool($obj2, $key2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Requisiciondetalle) to the collection in $obj2 (Requisicion)
-                $obj2->addRequisiciondetalle($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Requisiciondetalle objects pre-filled with all related objects except Requisicion.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Requisiciondetalle objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptRequisicion(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
-        }
-
-        RequisiciondetallePeer::addSelectColumns($criteria);
-        $startcol2 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS;
-
-        ProductoPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + ProductoPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(RequisiciondetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RequisiciondetallePeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RequisiciondetallePeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = RequisiciondetallePeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                RequisiciondetallePeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Producto rows
-
-                $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = ProductoPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = ProductoPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    ProductoPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Requisiciondetalle) to the collection in $obj2 (Producto)
-                $obj2->addRequisiciondetalle($obj1);
+                // Add the $obj1 (Cuentabancaria) to the collection in $obj2 (Empresa)
+                $obj2->addCuentabancaria($obj1);
 
             } // if joined row is not null
 
@@ -1285,7 +1116,7 @@ abstract class BaseRequisiciondetallePeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(RequisiciondetallePeer::DATABASE_NAME)->getTable(RequisiciondetallePeer::TABLE_NAME);
+        return Propel::getDatabaseMap(CuentabancariaPeer::DATABASE_NAME)->getTable(CuentabancariaPeer::TABLE_NAME);
     }
 
     /**
@@ -1293,9 +1124,9 @@ abstract class BaseRequisiciondetallePeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseRequisiciondetallePeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseRequisiciondetallePeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \RequisiciondetalleTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseCuentabancariaPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseCuentabancariaPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \CuentabancariaTableMap());
       }
     }
 
@@ -1307,13 +1138,13 @@ abstract class BaseRequisiciondetallePeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return RequisiciondetallePeer::OM_CLASS;
+        return CuentabancariaPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a Requisiciondetalle or Criteria object.
+     * Performs an INSERT on the database, given a Cuentabancaria or Criteria object.
      *
-     * @param      mixed $values Criteria or Requisiciondetalle object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or Cuentabancaria object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1322,22 +1153,22 @@ abstract class BaseRequisiciondetallePeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from Requisiciondetalle object
+            $criteria = $values->buildCriteria(); // build Criteria from Cuentabancaria object
         }
 
-        if ($criteria->containsKey(RequisiciondetallePeer::IDREQUISICIONDETALLE) && $criteria->keyContainsValue(RequisiciondetallePeer::IDREQUISICIONDETALLE) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RequisiciondetallePeer::IDREQUISICIONDETALLE.')');
+        if ($criteria->containsKey(CuentabancariaPeer::IDCUENTABANCARIA) && $criteria->keyContainsValue(CuentabancariaPeer::IDCUENTABANCARIA) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.CuentabancariaPeer::IDCUENTABANCARIA.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -1354,9 +1185,9 @@ abstract class BaseRequisiciondetallePeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a Requisiciondetalle or Criteria object.
+     * Performs an UPDATE on the database, given a Cuentabancaria or Criteria object.
      *
-     * @param      mixed $values Criteria or Requisiciondetalle object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or Cuentabancaria object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -1365,35 +1196,35 @@ abstract class BaseRequisiciondetallePeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(CuentabancariaPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(RequisiciondetallePeer::IDREQUISICIONDETALLE);
-            $value = $criteria->remove(RequisiciondetallePeer::IDREQUISICIONDETALLE);
+            $comparison = $criteria->getComparison(CuentabancariaPeer::IDCUENTABANCARIA);
+            $value = $criteria->remove(CuentabancariaPeer::IDCUENTABANCARIA);
             if ($value) {
-                $selectCriteria->add(RequisiciondetallePeer::IDREQUISICIONDETALLE, $value, $comparison);
+                $selectCriteria->add(CuentabancariaPeer::IDCUENTABANCARIA, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(RequisiciondetallePeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(CuentabancariaPeer::TABLE_NAME);
             }
 
-        } else { // $values is Requisiciondetalle object
+        } else { // $values is Cuentabancaria object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the requisiciondetalle table.
+     * Deletes all rows from the cuentabancaria table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -1402,20 +1233,19 @@ abstract class BaseRequisiciondetallePeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += RequisiciondetallePeer::doOnDeleteCascade(new Criteria(RequisiciondetallePeer::DATABASE_NAME), $con);
-            $affectedRows += BasePeer::doDeleteAll(RequisiciondetallePeer::TABLE_NAME, $con, RequisiciondetallePeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(CuentabancariaPeer::TABLE_NAME, $con, CuentabancariaPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            RequisiciondetallePeer::clearInstancePool();
-            RequisiciondetallePeer::clearRelatedInstancePool();
+            CuentabancariaPeer::clearInstancePool();
+            CuentabancariaPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1426,9 +1256,9 @@ abstract class BaseRequisiciondetallePeer
     }
 
     /**
-     * Performs a DELETE on the database, given a Requisiciondetalle or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Cuentabancaria or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or Requisiciondetalle object or primary key or array of primary keys
+     * @param      mixed $values Criteria or Cuentabancaria object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1439,22 +1269,32 @@ abstract class BaseRequisiciondetallePeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
+            // invalidate the cache for all objects of this type, since we have no
+            // way of knowing (without running a query) what objects should be invalidated
+            // from the cache based on this Criteria.
+            CuentabancariaPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof Requisiciondetalle) { // it's a model object
+        } elseif ($values instanceof Cuentabancaria) { // it's a model object
+            // invalidate the cache for this single object
+            CuentabancariaPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
-            $criteria->add(RequisiciondetallePeer::IDREQUISICIONDETALLE, (array) $values, Criteria::IN);
+            $criteria = new Criteria(CuentabancariaPeer::DATABASE_NAME);
+            $criteria->add(CuentabancariaPeer::IDCUENTABANCARIA, (array) $values, Criteria::IN);
+            // invalidate the cache for this object(s)
+            foreach ((array) $values as $singleval) {
+                CuentabancariaPeer::removeInstanceFromPool($singleval);
+            }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(RequisiciondetallePeer::DATABASE_NAME);
+        $criteria->setDbName(CuentabancariaPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -1463,25 +1303,8 @@ abstract class BaseRequisiciondetallePeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
-            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
-            $c = clone $criteria;
-            $affectedRows += RequisiciondetallePeer::doOnDeleteCascade($c, $con);
-
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            if ($values instanceof Criteria) {
-                RequisiciondetallePeer::clearInstancePool();
-            } elseif ($values instanceof Requisiciondetalle) { // it's a model object
-                RequisiciondetallePeer::removeInstanceFromPool($values);
-            } else { // it's a primary key, or an array of pks
-                foreach ((array) $values as $singleval) {
-                    RequisiciondetallePeer::removeInstanceFromPool($singleval);
-                }
-            }
-
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            RequisiciondetallePeer::clearRelatedInstancePool();
+            CuentabancariaPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1492,46 +1315,13 @@ abstract class BaseRequisiciondetallePeer
     }
 
     /**
-     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
-     * feature (like MySQL or SQLite).
-     *
-     * This method is not very speedy because it must perform a query first to get
-     * the implicated records and then perform the deletes by calling those Peer classes.
-     *
-     * This method should be used within a transaction if possible.
-     *
-     * @param      Criteria $criteria
-     * @param      PropelPDO $con
-     * @return int The number of affected rows (if supported by underlying database driver).
-     */
-    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
-    {
-        // initialize var to track total num of affected rows
-        $affectedRows = 0;
-
-        // first find the objects that are implicated by the $criteria
-        $objects = RequisiciondetallePeer::doSelect($criteria, $con);
-        foreach ($objects as $obj) {
-
-
-            // delete related Requisiciondetalle objects
-            $criteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
-
-            $criteria->add(RequisiciondetallePeer::IDPADRE, $obj->getIdrequisiciondetalle());
-            $affectedRows += RequisiciondetallePeer::doDelete($criteria, $con);
-        }
-
-        return $affectedRows;
-    }
-
-    /**
-     * Validates all modified columns of given Requisiciondetalle object.
+     * Validates all modified columns of given Cuentabancaria object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param Requisiciondetalle $obj The object to validate.
+     * @param Cuentabancaria $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1541,8 +1331,8 @@ abstract class BaseRequisiciondetallePeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(RequisiciondetallePeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(RequisiciondetallePeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(CuentabancariaPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(CuentabancariaPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -1558,7 +1348,7 @@ abstract class BaseRequisiciondetallePeer
 
         }
 
-        return BasePeer::doValidate(RequisiciondetallePeer::DATABASE_NAME, RequisiciondetallePeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(CuentabancariaPeer::DATABASE_NAME, CuentabancariaPeer::TABLE_NAME, $columns);
     }
 
     /**
@@ -1566,23 +1356,23 @@ abstract class BaseRequisiciondetallePeer
      *
      * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
-     * @return Requisiciondetalle
+     * @return Cuentabancaria
      */
     public static function retrieveByPK($pk, PropelPDO $con = null)
     {
 
-        if (null !== ($obj = RequisiciondetallePeer::getInstanceFromPool((string) $pk))) {
+        if (null !== ($obj = CuentabancariaPeer::getInstanceFromPool((string) $pk))) {
             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
-        $criteria->add(RequisiciondetallePeer::IDREQUISICIONDETALLE, $pk);
+        $criteria = new Criteria(CuentabancariaPeer::DATABASE_NAME);
+        $criteria->add(CuentabancariaPeer::IDCUENTABANCARIA, $pk);
 
-        $v = RequisiciondetallePeer::doSelect($criteria, $con);
+        $v = CuentabancariaPeer::doSelect($criteria, $con);
 
         return !empty($v) > 0 ? $v[0] : null;
     }
@@ -1592,31 +1382,31 @@ abstract class BaseRequisiciondetallePeer
      *
      * @param      array $pks List of primary keys
      * @param      PropelPDO $con the connection to use
-     * @return Requisiciondetalle[]
+     * @return Cuentabancaria[]
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
     public static function retrieveByPKs($pks, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RequisiciondetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(CuentabancariaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         $objs = null;
         if (empty($pks)) {
             $objs = array();
         } else {
-            $criteria = new Criteria(RequisiciondetallePeer::DATABASE_NAME);
-            $criteria->add(RequisiciondetallePeer::IDREQUISICIONDETALLE, $pks, Criteria::IN);
-            $objs = RequisiciondetallePeer::doSelect($criteria, $con);
+            $criteria = new Criteria(CuentabancariaPeer::DATABASE_NAME);
+            $criteria->add(CuentabancariaPeer::IDCUENTABANCARIA, $pks, Criteria::IN);
+            $objs = CuentabancariaPeer::doSelect($criteria, $con);
         }
 
         return $objs;
     }
 
-} // BaseRequisiciondetallePeer
+} // BaseCuentabancariaPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseRequisiciondetallePeer::buildTableMap();
+BaseCuentabancariaPeer::buildTableMap();
 

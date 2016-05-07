@@ -67,6 +67,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collComprasPartial;
 
     /**
+     * @var        PropelObjectCollection|Cuentabancaria[] Collection to store aggregation of Cuentabancaria objects.
+     */
+    protected $collCuentabancarias;
+    protected $collCuentabancariasPartial;
+
+    /**
      * @var        PropelObjectCollection|Devolucion[] Collection to store aggregation of Devolucion objects.
      */
     protected $collDevolucions;
@@ -139,12 +145,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collTrabajadorespromediosPartial;
 
     /**
-     * @var        PropelObjectCollection|Trabajadorpromedio[] Collection to store aggregation of Trabajadorpromedio objects.
-     */
-    protected $collTrabajadorpromedios;
-    protected $collTrabajadorpromediosPartial;
-
-    /**
      * @var        PropelObjectCollection|Usuarioempresa[] Collection to store aggregation of Usuarioempresa objects.
      */
     protected $collUsuarioempresas;
@@ -181,6 +181,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $comprasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $cuentabancariasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -253,12 +259,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $trabajadorespromediosScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $trabajadorpromediosScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -583,6 +583,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             $this->collCompras = null;
 
+            $this->collCuentabancarias = null;
+
             $this->collDevolucions = null;
 
             $this->collIngresos = null;
@@ -606,8 +608,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collSucursals = null;
 
             $this->collTrabajadorespromedios = null;
-
-            $this->collTrabajadorpromedios = null;
 
             $this->collUsuarioempresas = null;
 
@@ -748,6 +748,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collCompras !== null) {
                 foreach ($this->collCompras as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->cuentabancariasScheduledForDeletion !== null) {
+                if (!$this->cuentabancariasScheduledForDeletion->isEmpty()) {
+                    CuentabancariaQuery::create()
+                        ->filterByPrimaryKeys($this->cuentabancariasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->cuentabancariasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCuentabancarias !== null) {
+                foreach ($this->collCuentabancarias as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -952,23 +969,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collTrabajadorespromedios !== null) {
                 foreach ($this->collTrabajadorespromedios as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->trabajadorpromediosScheduledForDeletion !== null) {
-                if (!$this->trabajadorpromediosScheduledForDeletion->isEmpty()) {
-                    TrabajadorpromedioQuery::create()
-                        ->filterByPrimaryKeys($this->trabajadorpromediosScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->trabajadorpromediosScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collTrabajadorpromedios !== null) {
-                foreach ($this->collTrabajadorpromedios as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1183,6 +1183,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collCuentabancarias !== null) {
+                    foreach ($this->collCuentabancarias as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collDevolucions !== null) {
                     foreach ($this->collDevolucions as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1273,14 +1281,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
                 if ($this->collTrabajadorespromedios !== null) {
                     foreach ($this->collTrabajadorespromedios as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
-
-                if ($this->collTrabajadorpromedios !== null) {
-                    foreach ($this->collTrabajadorpromedios as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1397,6 +1397,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             if (null !== $this->collCompras) {
                 $result['Compras'] = $this->collCompras->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collCuentabancarias) {
+                $result['Cuentabancarias'] = $this->collCuentabancarias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collDevolucions) {
                 $result['Devolucions'] = $this->collDevolucions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -1432,9 +1435,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collTrabajadorespromedios) {
                 $result['Trabajadorespromedios'] = $this->collTrabajadorespromedios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collTrabajadorpromedios) {
-                $result['Trabajadorpromedios'] = $this->collTrabajadorpromedios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUsuarioempresas) {
                 $result['Usuarioempresas'] = $this->collUsuarioempresas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1617,6 +1617,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getCuentabancarias() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCuentabancaria($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getDevolucions() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDevolucion($relObj->copy($deepCopy));
@@ -1686,12 +1692,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             foreach ($this->getTrabajadorespromedios() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addTrabajadorespromedio($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getTrabajadorpromedios() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addTrabajadorpromedio($relObj->copy($deepCopy));
                 }
             }
 
@@ -1771,6 +1771,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ('Compra' == $relationName) {
             $this->initCompras();
         }
+        if ('Cuentabancaria' == $relationName) {
+            $this->initCuentabancarias();
+        }
         if ('Devolucion' == $relationName) {
             $this->initDevolucions();
         }
@@ -1806,9 +1809,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
         if ('Trabajadorespromedio' == $relationName) {
             $this->initTrabajadorespromedios();
-        }
-        if ('Trabajadorpromedio' == $relationName) {
-            $this->initTrabajadorpromedios();
         }
         if ('Usuarioempresa' == $relationName) {
             $this->initUsuarioempresas();
@@ -2166,6 +2166,256 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
 
         return $this->getCompras($query, $con);
+    }
+
+    /**
+     * Clears out the collCuentabancarias collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addCuentabancarias()
+     */
+    public function clearCuentabancarias()
+    {
+        $this->collCuentabancarias = null; // important to set this to null since that means it is uninitialized
+        $this->collCuentabancariasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCuentabancarias collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCuentabancarias($v = true)
+    {
+        $this->collCuentabancariasPartial = $v;
+    }
+
+    /**
+     * Initializes the collCuentabancarias collection.
+     *
+     * By default this just sets the collCuentabancarias collection to an empty array (like clearcollCuentabancarias());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCuentabancarias($overrideExisting = true)
+    {
+        if (null !== $this->collCuentabancarias && !$overrideExisting) {
+            return;
+        }
+        $this->collCuentabancarias = new PropelObjectCollection();
+        $this->collCuentabancarias->setModel('Cuentabancaria');
+    }
+
+    /**
+     * Gets an array of Cuentabancaria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Cuentabancaria[] List of Cuentabancaria objects
+     * @throws PropelException
+     */
+    public function getCuentabancarias($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCuentabancariasPartial && !$this->isNew();
+        if (null === $this->collCuentabancarias || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCuentabancarias) {
+                // return empty collection
+                $this->initCuentabancarias();
+            } else {
+                $collCuentabancarias = CuentabancariaQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCuentabancariasPartial && count($collCuentabancarias)) {
+                      $this->initCuentabancarias(false);
+
+                      foreach ($collCuentabancarias as $obj) {
+                        if (false == $this->collCuentabancarias->contains($obj)) {
+                          $this->collCuentabancarias->append($obj);
+                        }
+                      }
+
+                      $this->collCuentabancariasPartial = true;
+                    }
+
+                    $collCuentabancarias->getInternalIterator()->rewind();
+
+                    return $collCuentabancarias;
+                }
+
+                if ($partial && $this->collCuentabancarias) {
+                    foreach ($this->collCuentabancarias as $obj) {
+                        if ($obj->isNew()) {
+                            $collCuentabancarias[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCuentabancarias = $collCuentabancarias;
+                $this->collCuentabancariasPartial = false;
+            }
+        }
+
+        return $this->collCuentabancarias;
+    }
+
+    /**
+     * Sets a collection of Cuentabancaria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $cuentabancarias A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setCuentabancarias(PropelCollection $cuentabancarias, PropelPDO $con = null)
+    {
+        $cuentabancariasToDelete = $this->getCuentabancarias(new Criteria(), $con)->diff($cuentabancarias);
+
+
+        $this->cuentabancariasScheduledForDeletion = $cuentabancariasToDelete;
+
+        foreach ($cuentabancariasToDelete as $cuentabancariaRemoved) {
+            $cuentabancariaRemoved->setEmpresa(null);
+        }
+
+        $this->collCuentabancarias = null;
+        foreach ($cuentabancarias as $cuentabancaria) {
+            $this->addCuentabancaria($cuentabancaria);
+        }
+
+        $this->collCuentabancarias = $cuentabancarias;
+        $this->collCuentabancariasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Cuentabancaria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Cuentabancaria objects.
+     * @throws PropelException
+     */
+    public function countCuentabancarias(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCuentabancariasPartial && !$this->isNew();
+        if (null === $this->collCuentabancarias || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCuentabancarias) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCuentabancarias());
+            }
+            $query = CuentabancariaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collCuentabancarias);
+    }
+
+    /**
+     * Method called to associate a Cuentabancaria object to this object
+     * through the Cuentabancaria foreign key attribute.
+     *
+     * @param    Cuentabancaria $l Cuentabancaria
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addCuentabancaria(Cuentabancaria $l)
+    {
+        if ($this->collCuentabancarias === null) {
+            $this->initCuentabancarias();
+            $this->collCuentabancariasPartial = true;
+        }
+
+        if (!in_array($l, $this->collCuentabancarias->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCuentabancaria($l);
+
+            if ($this->cuentabancariasScheduledForDeletion and $this->cuentabancariasScheduledForDeletion->contains($l)) {
+                $this->cuentabancariasScheduledForDeletion->remove($this->cuentabancariasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Cuentabancaria $cuentabancaria The cuentabancaria object to add.
+     */
+    protected function doAddCuentabancaria($cuentabancaria)
+    {
+        $this->collCuentabancarias[]= $cuentabancaria;
+        $cuentabancaria->setEmpresa($this);
+    }
+
+    /**
+     * @param	Cuentabancaria $cuentabancaria The cuentabancaria object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeCuentabancaria($cuentabancaria)
+    {
+        if ($this->getCuentabancarias()->contains($cuentabancaria)) {
+            $this->collCuentabancarias->remove($this->collCuentabancarias->search($cuentabancaria));
+            if (null === $this->cuentabancariasScheduledForDeletion) {
+                $this->cuentabancariasScheduledForDeletion = clone $this->collCuentabancarias;
+                $this->cuentabancariasScheduledForDeletion->clear();
+            }
+            $this->cuentabancariasScheduledForDeletion[]= clone $cuentabancaria;
+            $cuentabancaria->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Cuentabancarias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Cuentabancaria[] List of Cuentabancaria objects
+     */
+    public function getCuentabancariasJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CuentabancariaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getCuentabancarias($query, $con);
     }
 
     /**
@@ -5819,256 +6069,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
-     * Clears out the collTrabajadorpromedios collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return Empresa The current object (for fluent API support)
-     * @see        addTrabajadorpromedios()
-     */
-    public function clearTrabajadorpromedios()
-    {
-        $this->collTrabajadorpromedios = null; // important to set this to null since that means it is uninitialized
-        $this->collTrabajadorpromediosPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collTrabajadorpromedios collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialTrabajadorpromedios($v = true)
-    {
-        $this->collTrabajadorpromediosPartial = $v;
-    }
-
-    /**
-     * Initializes the collTrabajadorpromedios collection.
-     *
-     * By default this just sets the collTrabajadorpromedios collection to an empty array (like clearcollTrabajadorpromedios());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initTrabajadorpromedios($overrideExisting = true)
-    {
-        if (null !== $this->collTrabajadorpromedios && !$overrideExisting) {
-            return;
-        }
-        $this->collTrabajadorpromedios = new PropelObjectCollection();
-        $this->collTrabajadorpromedios->setModel('Trabajadorpromedio');
-    }
-
-    /**
-     * Gets an array of Trabajadorpromedio objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this Empresa is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Trabajadorpromedio[] List of Trabajadorpromedio objects
-     * @throws PropelException
-     */
-    public function getTrabajadorpromedios($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collTrabajadorpromediosPartial && !$this->isNew();
-        if (null === $this->collTrabajadorpromedios || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collTrabajadorpromedios) {
-                // return empty collection
-                $this->initTrabajadorpromedios();
-            } else {
-                $collTrabajadorpromedios = TrabajadorpromedioQuery::create(null, $criteria)
-                    ->filterByEmpresa($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collTrabajadorpromediosPartial && count($collTrabajadorpromedios)) {
-                      $this->initTrabajadorpromedios(false);
-
-                      foreach ($collTrabajadorpromedios as $obj) {
-                        if (false == $this->collTrabajadorpromedios->contains($obj)) {
-                          $this->collTrabajadorpromedios->append($obj);
-                        }
-                      }
-
-                      $this->collTrabajadorpromediosPartial = true;
-                    }
-
-                    $collTrabajadorpromedios->getInternalIterator()->rewind();
-
-                    return $collTrabajadorpromedios;
-                }
-
-                if ($partial && $this->collTrabajadorpromedios) {
-                    foreach ($this->collTrabajadorpromedios as $obj) {
-                        if ($obj->isNew()) {
-                            $collTrabajadorpromedios[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collTrabajadorpromedios = $collTrabajadorpromedios;
-                $this->collTrabajadorpromediosPartial = false;
-            }
-        }
-
-        return $this->collTrabajadorpromedios;
-    }
-
-    /**
-     * Sets a collection of Trabajadorpromedio objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $trabajadorpromedios A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return Empresa The current object (for fluent API support)
-     */
-    public function setTrabajadorpromedios(PropelCollection $trabajadorpromedios, PropelPDO $con = null)
-    {
-        $trabajadorpromediosToDelete = $this->getTrabajadorpromedios(new Criteria(), $con)->diff($trabajadorpromedios);
-
-
-        $this->trabajadorpromediosScheduledForDeletion = $trabajadorpromediosToDelete;
-
-        foreach ($trabajadorpromediosToDelete as $trabajadorpromedioRemoved) {
-            $trabajadorpromedioRemoved->setEmpresa(null);
-        }
-
-        $this->collTrabajadorpromedios = null;
-        foreach ($trabajadorpromedios as $trabajadorpromedio) {
-            $this->addTrabajadorpromedio($trabajadorpromedio);
-        }
-
-        $this->collTrabajadorpromedios = $trabajadorpromedios;
-        $this->collTrabajadorpromediosPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related Trabajadorpromedio objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related Trabajadorpromedio objects.
-     * @throws PropelException
-     */
-    public function countTrabajadorpromedios(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collTrabajadorpromediosPartial && !$this->isNew();
-        if (null === $this->collTrabajadorpromedios || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collTrabajadorpromedios) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getTrabajadorpromedios());
-            }
-            $query = TrabajadorpromedioQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEmpresa($this)
-                ->count($con);
-        }
-
-        return count($this->collTrabajadorpromedios);
-    }
-
-    /**
-     * Method called to associate a Trabajadorpromedio object to this object
-     * through the Trabajadorpromedio foreign key attribute.
-     *
-     * @param    Trabajadorpromedio $l Trabajadorpromedio
-     * @return Empresa The current object (for fluent API support)
-     */
-    public function addTrabajadorpromedio(Trabajadorpromedio $l)
-    {
-        if ($this->collTrabajadorpromedios === null) {
-            $this->initTrabajadorpromedios();
-            $this->collTrabajadorpromediosPartial = true;
-        }
-
-        if (!in_array($l, $this->collTrabajadorpromedios->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddTrabajadorpromedio($l);
-
-            if ($this->trabajadorpromediosScheduledForDeletion and $this->trabajadorpromediosScheduledForDeletion->contains($l)) {
-                $this->trabajadorpromediosScheduledForDeletion->remove($this->trabajadorpromediosScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	Trabajadorpromedio $trabajadorpromedio The trabajadorpromedio object to add.
-     */
-    protected function doAddTrabajadorpromedio($trabajadorpromedio)
-    {
-        $this->collTrabajadorpromedios[]= $trabajadorpromedio;
-        $trabajadorpromedio->setEmpresa($this);
-    }
-
-    /**
-     * @param	Trabajadorpromedio $trabajadorpromedio The trabajadorpromedio object to remove.
-     * @return Empresa The current object (for fluent API support)
-     */
-    public function removeTrabajadorpromedio($trabajadorpromedio)
-    {
-        if ($this->getTrabajadorpromedios()->contains($trabajadorpromedio)) {
-            $this->collTrabajadorpromedios->remove($this->collTrabajadorpromedios->search($trabajadorpromedio));
-            if (null === $this->trabajadorpromediosScheduledForDeletion) {
-                $this->trabajadorpromediosScheduledForDeletion = clone $this->collTrabajadorpromedios;
-                $this->trabajadorpromediosScheduledForDeletion->clear();
-            }
-            $this->trabajadorpromediosScheduledForDeletion[]= clone $trabajadorpromedio;
-            $trabajadorpromedio->setEmpresa(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Empresa is new, it will return
-     * an empty collection; or if this Empresa has previously
-     * been saved, it will retrieve related Trabajadorpromedios from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Empresa.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Trabajadorpromedio[] List of Trabajadorpromedio objects
-     */
-    public function getTrabajadorpromediosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = TrabajadorpromedioQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
-
-        return $this->getTrabajadorpromedios($query, $con);
-    }
-
-    /**
      * Clears out the collUsuarioempresas collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -6681,6 +6681,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collCuentabancarias) {
+                foreach ($this->collCuentabancarias as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collDevolucions) {
                 foreach ($this->collDevolucions as $o) {
                     $o->clearAllReferences($deep);
@@ -6741,11 +6746,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collTrabajadorpromedios) {
-                foreach ($this->collTrabajadorpromedios as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collUsuarioempresas) {
                 foreach ($this->collUsuarioempresas as $o) {
                     $o->clearAllReferences($deep);
@@ -6764,6 +6764,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collCompras->clearIterator();
         }
         $this->collCompras = null;
+        if ($this->collCuentabancarias instanceof PropelCollection) {
+            $this->collCuentabancarias->clearIterator();
+        }
+        $this->collCuentabancarias = null;
         if ($this->collDevolucions instanceof PropelCollection) {
             $this->collDevolucions->clearIterator();
         }
@@ -6812,10 +6816,6 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collTrabajadorespromedios->clearIterator();
         }
         $this->collTrabajadorespromedios = null;
-        if ($this->collTrabajadorpromedios instanceof PropelCollection) {
-            $this->collTrabajadorpromedios->clearIterator();
-        }
-        $this->collTrabajadorpromedios = null;
         if ($this->collUsuarioempresas instanceof PropelCollection) {
             $this->collUsuarioempresas->clearIterator();
         }
