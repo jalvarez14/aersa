@@ -39,8 +39,7 @@
         
         var settings;
         var $table;
-        var iva = 16.00;
-        
+        var iva = parseFloat($("#ivaValor").val());
         var defaults = {
            
        };
@@ -50,16 +49,21 @@
         */
        
         
-        var caluclator = function($tr){
+        var caluclator = function($tr)
+        {            
             
             var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 1;
             var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
             var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat($tr.find('input[name*=descuento]').val()) : 0;
             var ieps = $tr.find('input[name*=ieps]').val() != "" ? parseFloat($tr.find('input[name*=ieps]').val()) : 0;
- 
+            
+            
+            
             //COSTO UNITARIO
             var row_ieps = (precio * ieps) / 100;
             var costo_unitario = precio + row_ieps;
+            
+
             $tr.find('input[name=costo_unitario]').val(costo_unitario);
             $tr.find('td.costo_unitario').text(accounting.formatMoney(costo_unitario));
 
@@ -99,18 +103,21 @@
             
             //notacredito IVA
             var notacredito_iva = 0.00;
+            
+            
+            
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
                 if(has_iva == 'true'){
-                    
                     var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
                     var row_iva = (subtotal * iva) / 100;
-                    
+                        
                     notacredito_iva = notacredito_iva + row_iva;
                 }
                 
             });
+           
             
             $('#productos_table tfoot').find('#iva').text(accounting.formatMoney(notacredito_iva));
             $('#productos_table tfoot').find('input[name=notacredito_iva]').val(notacredito_iva);
@@ -178,8 +185,7 @@
             });
 
             //ELIMINAR notacredito
-            $('.delete_modal').click(function(){
-
+            $('.delete_credito').click(function(){
               var id = $(this).closest('tr').attr('id');
               var tmpl = [
                 // tabindex is required for focus
@@ -188,7 +194,7 @@
                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
                     '<h4 class="modal-title">ADVERTENCIA</h4>', 
                   '</div>',
-                  '<form method="post" action="/procesos/notacredito/eliminar/'+id+'">',
+                  '<form method="post" action="/procesos/credito/eliminar/'+id+'">',
                     '<div class="modal-body">',
                       '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
                     '</div>',
@@ -358,7 +364,7 @@
                 var $this = $(this);
                 $this.removeClass('valid');
                 $.ajax({
-                    url: "/procesos/notacredito/validatefolio",
+                    url: "/procesos/credito/validatefolio",
                     dataType: "json",
                     data: {folio:folio},
                     success: function (exist) {
@@ -538,7 +544,7 @@
                 var $this = $(this);
                 $this.removeClass('valid');
                 $.ajax({
-                    url: "/procesos/notacredito/validatefolio",
+                    url: "/procesos/credito/validatefolio",
                     dataType: "json",
                     data: {folio:folio},
                     success: function (exist) {
@@ -563,6 +569,14 @@
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
+            $("#productos_table tbody tr").each(function()
+            {
+                var tr = $(this);
+                $(this).find("input").on("blur", function()
+                {
+                    caluclator(tr);
+                });
+            });
 
         }
 
