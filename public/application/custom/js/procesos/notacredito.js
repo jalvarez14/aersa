@@ -237,6 +237,13 @@
                 format: 'dd/mm/yyyy',
             });
             
+            container.find('input[name=notacredito_fechanotacredito]').datepicker({
+                startDate:minDate,
+                endDate:maxDate,
+                format: 'dd/mm/yyyy',
+            });
+            
+            
             container.find('input[name=notacredito_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
@@ -391,6 +398,12 @@
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
             
             container.find('input[name=notacredito_fechacreacion]').datepicker({
+                startDate:minDate,
+                endDate:maxDate,
+                format: 'dd/mm/yyyy',
+            });
+            
+            container.find('input[name=notacredito_fechanotacredito]').datepicker({
                 startDate:minDate,
                 endDate:maxDate,
                 format: 'dd/mm/yyyy',

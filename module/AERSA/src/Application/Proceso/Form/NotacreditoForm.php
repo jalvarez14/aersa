@@ -28,6 +28,17 @@ class NotacreditoForm extends Form
                 'label' => 'Fecha *'
             )
         ));
+        $this->add(array(
+            'name' => 'notacredito_fechanotacredito',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Fecha *'
+            )
+        ));
         
         $this->add(array(
            'name'  => 'idproveedor',

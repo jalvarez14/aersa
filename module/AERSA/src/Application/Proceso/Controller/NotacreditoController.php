@@ -259,7 +259,7 @@ class NotacreditoController extends AbstractActionController {
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
 
             //CAMBIAMOS LOS VALORES DE FECHAS
-            $form->get('notacredito_fechacreacion')->setValue($entity->getNotacreditoFechacreacion('d/m/Y'));
+            $form->get('notacredito_fechanotacredito')->setValue($entity->getNotacreditoFechanotacredito('d/m/Y'));
 
             //SETEAMOS EL VALOR AUTOCOMPLETE
             $form->get('idproveedor_autocomplete')->setValue($entity->getProveedor()->getProveedorNombrecomercial());
