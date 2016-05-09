@@ -150,8 +150,8 @@
                                 <tr id="<?php echo $detalle->getIdnotacreditodetalle()?>">
                                     <td>
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][subtotal]" value="<?php echo $detalle->getNotacreditodetalleSubtotal()?>">
-                                        <!--<input type="hidden" name="productos[<?php //echo $detalle->getIdnotacreditodetalle()?>][costo_unitario]" value="<?php //echo $detalle->getNotacreditodetalleCostounitario()?>">-->
-                                        <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][producto_iva]" value="<?php echo $detalle->getProducto()->getProductoIva()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][costo_unitario]" value="<?php echo $detalle->getNotacreditodetalleCostounitario()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][producto_iva]" value="true">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
                                         <?php echo $detalle->getProducto()->getProductoNombre()?>
                                     </td>
@@ -162,7 +162,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][precio]" value="<?php echo $detalle->getNotacreditodetalleCostounitario()?>"> 
                                     </td>
                                     
-                                    <td>
+                                    <td class="costo_unitario">
                                         <?php echo money_format('%(#10n',$detalle->getNotacreditodetalleCostounitarioneto())?>
                                     </td>
                                     
@@ -172,7 +172,7 @@
                                     <td>
                                         <input type="text" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][ieps]" value="<?php echo $detalle->getNotacreditodetalleIeps()?>"> 
                                     </td>
-                                    <td>
+                                    <td class="subtotal" >
                                         <?php echo money_format('%(#10n',$detalle->getNotacreditodetalleSubtotal())?>
                                     </td>
                                     <td>
@@ -194,7 +194,7 @@
                                             <?php endforeach; ?>
                                         </select> 
                                     </td>
-                                    <td class="text-center"><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
+                                    <td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
                                 </tr>
                                 <?php endforeach?>
 
@@ -228,6 +228,9 @@
                         </table>
                     </div>
                 </div>
+                
+                <input type="hidden" id="ivaValor" value="<?php echo $iva->getTasaivavalor()?>">
+                
                 <div class="form-actions right">
                     <button class="btn blue" type="submit">
                         <i class="fa fa-check"></i>
