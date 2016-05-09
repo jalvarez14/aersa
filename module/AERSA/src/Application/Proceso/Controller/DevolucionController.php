@@ -215,10 +215,7 @@ class DevolucionController extends AbstractActionController {
                     $target_path = "/application/files/devoluciones/";
                     $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
                     
-                    echo $target_path;
-                    move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path);
-                    exit;
-                    
+                   
                     if (move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
                         $entity->setDevolucionFactura($target_path);
                         $entity->save();
