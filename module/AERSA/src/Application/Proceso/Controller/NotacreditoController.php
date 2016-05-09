@@ -194,7 +194,7 @@ class NotacreditoController extends AbstractActionController {
                 }
 
                 //SETEAMOS LA FECHA DE CREACION
-                $entity->setNotacreditoFechanotacredito(new \DateTime())
+                $entity->setNotacreditoFechanotacredito($post_data["notacredito_fechanotacredito"])
                         ->setIdempresa($session['idempresa'])
                         ->setIdsucursal($session['idsucursal']);
 
