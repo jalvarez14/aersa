@@ -42,7 +42,7 @@ class NotacreditoController extends AbstractActionController {
         $from = date("Y-m-d", strtotime("-2 months"));
         $from = new \DateTime($from);
 
-        $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from, 'to' => $to))->filterByCompraFolio($folio, \Criteria::LIKE)->exists();
+        $exist = \NotacreditoQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByNotacreditoFechanotacredito(array('min' => $from, 'to' => $to))->filterByNotacreditoFolio($folio, \Criteria::LIKE)->exists();
 
         return $this->getResponse()->setContent(json_encode($exist));
     }
@@ -94,10 +94,12 @@ class NotacreditoController extends AbstractActionController {
                 $type = $post_files['notacredito_factura']['type'];
                 $type = explode('/', $type);
                 $type = $type[1];
-
+                
+                //$type = 'pdf';
+                
                 $target_path = "/application/files/notacredito/";
                 $target_path = $target_path . 'notacredito_' . $entity->getIdnotacredito() . '.' . $type;
-
+                
                 if (move_uploaded_file($post_files['notacredito_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
                     $entity->setNotacreditoFactura($target_path);
                     $entity->save();

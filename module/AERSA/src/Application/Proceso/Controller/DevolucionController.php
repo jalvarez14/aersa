@@ -42,7 +42,7 @@ class DevolucionController extends AbstractActionController {
         $from = date("Y-m-d", strtotime("-2 months"));
         $from = new \DateTime($from);
 
-        $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from, 'to' => $to))->filterByCompraFolio($folio, \Criteria::LIKE)->exists();
+        $exist = \DevolucionQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByDevolucionFechadevolucion(array('min' => $from, 'to' => $to))->filterByDevolucionFolio($folio, \Criteria::LIKE)->exists();
 
         return $this->getResponse()->setContent(json_encode($exist));
     }
