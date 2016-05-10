@@ -135,6 +135,8 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
+                        
+                        
                 </tbody>
             </table>
         </div>        
@@ -222,6 +224,18 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
+                        
+                        <?php if(count($sucursales) == 0) : ?>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                                
+                        </tr>
+                        <?php endif ?>
+                        
                 </tbody>
             </table>
         </div>        

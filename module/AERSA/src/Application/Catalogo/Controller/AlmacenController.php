@@ -131,12 +131,12 @@ class AlmacenController extends AbstractActionController
 
                     $entity->save();
 
-                    $this->flashMessenger()->addSuccessMessage('Almacen editado correctamente');
+                    $this->flashMessenger()->addSuccessMessage('Almacén editado correctamente');
                     return $this->redirect()->toUrl('/catalogo/empresa/sucursal/editar/'.$idSuc.'/'.$idEmp);
                 }
                 else
                 {
-                    $this->flashMessenger()->addErrorMessage('Ya hay un almacen con este nombre para esta sucursal');
+                    $this->flashMessenger()->addErrorMessage('Ya hay un almacén con este nombre para esta sucursal');
                     return $this->redirect()->toUrl('/catalogo/almacen/editar/'.$id.'/'.$idSuc.'/'.$idEmp);
                 }
 
