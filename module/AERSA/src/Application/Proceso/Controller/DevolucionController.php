@@ -42,7 +42,7 @@ class DevolucionController extends AbstractActionController {
         $from = date("Y-m-d", strtotime("-2 months"));
         $from = new \DateTime($from);
 
-        $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from, 'to' => $to))->filterByCompraFolio($folio, \Criteria::LIKE)->exists();
+        $exist = \DevolucionQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByDevolucionFechadevolucion(array('min' => $from, 'to' => $to))->filterByDevolucionFolio($folio, \Criteria::LIKE)->exists();
 
         return $this->getResponse()->setContent(json_encode($exist));
     }
@@ -95,11 +95,10 @@ class DevolucionController extends AbstractActionController {
                 $type = explode('/', $type);
                 $type = $type[1];
 
-                $target_path = "/application/files/devoluciones/";
+                $target_path = "application/files/devoluciones/";
                 $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
 
-
-                if (move_uploaded_file($post_files['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                if (move_uploaded_file($post_files['devolucion_factura']['name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
 
                     $entity->setDevolucionFactura($target_path);
                     $entity->save();
@@ -215,7 +214,8 @@ class DevolucionController extends AbstractActionController {
 
                     $target_path = "/application/files/devoluciones/";
                     $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
-
+                    
+                   
                     if (move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
                         $entity->setDevolucionFactura($target_path);
                         $entity->save();
