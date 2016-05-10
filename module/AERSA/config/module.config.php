@@ -892,6 +892,16 @@ return array(
                                             ), 
                                         ), 
                                     ), 
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
                                 ), 
                             ),
                             'ingresos' => array( 

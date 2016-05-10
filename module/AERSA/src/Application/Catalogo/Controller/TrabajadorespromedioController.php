@@ -15,7 +15,7 @@ class TrabajadorespromedioController extends AbstractActionController
         $session = $session->getData();
 
 
-        $collection = \TrabajadorespromedioQuery::create()->find();
+        $collection = \TrabajadorespromedioQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
 
 
 
@@ -49,6 +49,7 @@ class TrabajadorespromedioController extends AbstractActionController
             $exists = \TrabajadorespromedioQuery::create()
                     ->filterByTrabajadorespromedioAnio($post_data['trabajadorespromedio_anio'])
                     ->filterByTrabajadorespromedioMes($post_data['trabajadorespromedio_mes'])
+                    ->filterByIdsucursal($session['idsucursal'])
                     ->find();
             
             

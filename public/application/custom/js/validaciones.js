@@ -41,8 +41,8 @@ $( document ).ready(function() {
            type: "GET",
            url: "/catalogo/usuario/checkuser/"+ username,
            dataType: "json",
-           success: function (data) {
-                console.log(data);
+           success: function (data) 
+           {
                 if(data.length != 0)
                 {
                     for(var k in data) 
@@ -50,7 +50,7 @@ $( document ).ready(function() {
                         console.log(data[k]);
                         $("[name="+inputName+"]").addClass('invalid');
                         $("label[for="+inputName).addClass('invalid') + "']";
-                        $("label[for="+inputName).text('Este nombre de usuario ya esta en uso');
+                        $("label[for="+inputName).text('Este nombre de usuario ya está en uso');
                         $('#btnSubmit').prop('disabled', true);
                          
                     }

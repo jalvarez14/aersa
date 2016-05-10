@@ -36,21 +36,34 @@ class AlmacenController extends AbstractActionController
             
             $post_data = $request->getPost();
                 
+            
+            $exists = \AlmacenQuery::create()
+                    ->filterByIdsucursal($idSuc)
+                    ->filterByAlmacenNombre($post_data['almacen_nombre'])
+                    ->exists();
+            
+            if(!$exists)
+            {
+                //Metemos los datos de las entidades
+                $entity = new \Almacen();
 
-            //Metemos los datos de las entidades
-            $entity = new \Almacen();
+                foreach ($post_data as $key => $value) {
+                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                }
 
-            foreach ($post_data as $key => $value) {
-                $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                $entity->setIdsucursal($idSuc);
+                $entity->save();
+
+                $this->flashMessenger()->addSuccessMessage('Almacen creado correctamente!');
+
+                return $this->redirect()->toUrl('/catalogo/empresa/sucursal/editar/'.$idSuc.'/'.$idEmp);
+            
             }
-                    
-            $entity->setIdsucursal($idSuc);
-            $entity->save();
-
-            $this->flashMessenger()->addSuccessMessage('Almacen creado correctamente!');
-
-            return $this->redirect()->toUrl('/catalogo/empresa/sucursal/editar/'.$idSuc.'/'.$idEmp);
-
+            else 
+            {   
+                $this->flashMessenger()->addErrorMessage('Ya hay un almacen con este nombre para esta sucursal');
+                return $this->redirect()->toUrl('/catalogo/almacen/nuevo/'.$idSuc.'/'.$idEmp);
+            }
            
         }
 
@@ -103,19 +116,29 @@ class AlmacenController extends AbstractActionController
             //SI NOS ENVIAN UNA PETICION POST
             if($request->isPost())
             {
-                
                 $post_data = $request->getPost();
                 
+                $exists = \AlmacenQuery::create()
+                    ->filterByIdsucursal($idSuc)
+                    ->filterByAlmacenNombre($post_data['almacen_nombre'])
+                    ->exists();
                 
-                foreach ($post_data as $key => $value)
-                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 
-                $entity->save();
+                if(!$exists)
+                {
+                    foreach ($post_data as $key => $value)
+                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
 
-                $this->flashMessenger()->addSuccessMessage('Almacen editado correctamente');
-                return $this->redirect()->toUrl('/catalogo/empresa/sucursal/editar/'.$idSuc.'/'.$idEmp);
+                    $entity->save();
 
-                    
+                    $this->flashMessenger()->addSuccessMessage('Almacén editado correctamente');
+                    return $this->redirect()->toUrl('/catalogo/empresa/sucursal/editar/'.$idSuc.'/'.$idEmp);
+                }
+                else
+                {
+                    $this->flashMessenger()->addErrorMessage('Ya hay un almacén con este nombre para esta sucursal');
+                    return $this->redirect()->toUrl('/catalogo/almacen/editar/'.$id.'/'.$idSuc.'/'.$idEmp);
+                }
 
                 
             }

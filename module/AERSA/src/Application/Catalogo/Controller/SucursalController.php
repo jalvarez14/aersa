@@ -249,8 +249,8 @@ function setSucursal($data, $entity = null,$idEmp)
     $entity->setSucursalEstatus($data['sucursal_estatus']);
     $entity->setSucursalAnioactivo($data['sucursal_anioactivo']);
     $entity->setSucursalMesactivo($data['sucursal_mesactivo']);
-    $entity->setSucursalHabilitarproductos(0);
-    $entity->setSucursalHabilitarrecetas(0);
+    $entity->setSucursalHabilitarproductos($data['sucursal_habilitarproductos']);
+    $entity->setSucursalHabilitarrecetas($data['sucursal_habilitarrecetas']);
     $entity->setIdempresa($idEmp);
     
     return $entity;

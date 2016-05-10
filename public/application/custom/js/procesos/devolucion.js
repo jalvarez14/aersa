@@ -59,10 +59,14 @@
             var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
             var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat($tr.find('input[name*=descuento]').val()) : 0;
             var ieps = $tr.find('input[name*=ieps]').val() != "" ? parseFloat($tr.find('input[name*=ieps]').val()) : 0;
- 
+            
+            
+            
             //COSTO UNITARIO
             var row_ieps = (precio * ieps) / 100;
             var costo_unitario = precio + row_ieps;
+            
+
             $tr.find('input[name=costo_unitario]').val(costo_unitario);
             $tr.find('td.costo_unitario').text(accounting.formatMoney(costo_unitario));
 
@@ -102,8 +106,6 @@
             
             //devolucion IVA
             var devolucion_iva = 0.00;
-            if($("#iva").text() != "$0.00")
-                devolucion_iva = parseFloat($("[name=devolucion_iva]").val())
             
             
             
@@ -115,7 +117,7 @@
                     
                     var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
                     var row_iva = (subtotal * iva) / 100;
-                    alert(subtotal);
+                        
                     devolucion_iva = devolucion_iva + row_iva;
                 }
                 
@@ -187,7 +189,7 @@
             });
 
             //ELIMINAR devolucion
-            $('.delete_modal').click(function(){
+            $('.delete_devolucion').click(function(){
 
               var id = $(this).closest('tr').attr('id');
               var tmpl = [
@@ -243,6 +245,8 @@
             container.find('input[name=devolucion_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
+            
+            
             
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -302,7 +306,6 @@
                     almacenen_select.find('select').append(option);
                 });
                 
-
 
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
@@ -387,7 +390,21 @@
         }
         
         plugin.edit = function(anio,mes,mes_devolucion,anio_devolucion,almacenes,count){
-
+            
+            var minDate = new Date(anio + '/' + mes + '/' + '01');
+            var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
+            maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
+            
+            container.find('input[name=devolucion_fechadevolucion]').datepicker({
+                startDate:minDate,
+                endDate:maxDate,
+                format: 'dd/mm/yyyy',
+            });
+            
+            container.find('input[name=devolucion_fechadevolucion]').datepicker({
+                format: 'dd/mm/yyyy',
+            });
+            
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
