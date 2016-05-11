@@ -30,15 +30,14 @@
                     <thead>
                         <tr>
                             <th> Fecha </th>
-                            <th> Proveedor </th>
-                            <th> Total </th>
+                            <th> Folio </th>
+                            <th> Producto </th>
                             <th> Revisada </th>
-                            <th> Comprobante </th>
                             <th> Acciones </th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        <?php $entity = new Devolucion(); ?>
                         <?php foreach ($collection as $entity) : ?>
                             <?php
                             if($entity->getDevolucionRevisada()) {
