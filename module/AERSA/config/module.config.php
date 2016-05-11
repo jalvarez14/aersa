@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route'    => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -1008,6 +1008,48 @@ return array(
                                     ),
                                 ), 
                             ),
+                            'tablajeria' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/tablajeria', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Tablajeria', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ),
+                                ), 
+                            ),
+                            
                         ), 
                     ), 
                 ),
@@ -1077,11 +1119,12 @@ return array(
              * PROCESO
              */
             
-            'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
-            'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
-            'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
-            'Application\Proceso\Controller\Ingresos' => 'Application\Proceso\Controller\IngresosController',
+            'Application\Proceso\Controller\Compra'         => 'Application\Proceso\Controller\CompraController',
+            'Application\Proceso\Controller\Requisicion'    => 'Application\Proceso\Controller\RequisicionController',
+            'Application\Proceso\Controller\Devolucion'     => 'Application\Proceso\Controller\DevolucionController',
+            'Application\Proceso\Controller\Ingresos'       => 'Application\Proceso\Controller\IngresosController',
             'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
+            'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
 
             /*
              * WEBSITE
