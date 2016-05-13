@@ -1008,12 +1008,13 @@ return array(
                                     ),
                                 ), 
                             ),
-                            'tablajeria' => array( 
+                            'ordentablajeria' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
                                     'route' => '/tablajeria', 
                                     'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Tablajeria', 'action' => 'index', 
+                                        'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                        'action' => 'index', 
                                     ), 
                                 ), 
                                 'may_terminate' => true, 

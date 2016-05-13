@@ -8,7 +8,8 @@ use Zend\Console\Request as ConsoleRequest;
 
 class TablajeriaController extends AbstractActionController {
 
-    public function indexAction() {
+    public function indexAction() 
+    {
 
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -18,7 +19,7 @@ class TablajeriaController extends AbstractActionController {
         $collection = \OrdentablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdordentablajeria(\Criteria::DESC)->find();
 
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/proceso/tablajeria/index');
+        $view_model->setTemplate('/application/proceso/ordentablajeria/index');
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
@@ -26,14 +27,16 @@ class TablajeriaController extends AbstractActionController {
         return $view_model;
     }
 
-    public function nuevoAction() {
+    public function nuevoAction() 
+    {
 
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
 
         $request = $this->getRequest();
 
-        if ($request->isPost()) {
+        if ($request->isPost()) 
+        {
 
             $post_data = $request->getPost();
             $post_files = $request->getFiles();
@@ -125,7 +128,7 @@ class TablajeriaController extends AbstractActionController {
         $iva = \TasaivaQuery::create()->findOne();
 
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/proceso/devolucion/nuevoregistro');
+        $view_model->setTemplate('/application/proceso/ordentablajeria/nuevo');
         $view_model->setVariables(array(
             'form' => $form,
             'anio_activo' => $anio_activo,

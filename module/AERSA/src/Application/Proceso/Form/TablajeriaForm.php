@@ -17,6 +17,48 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
+            'name' => 'idalmacenorigen',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Almacen *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                    1 => 'Revisada',
+                    0 => 'No revisada',
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'idalmacendestino',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Almacen destino *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                    1 => 'Revisada',
+                    0 => 'No revisada',
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+         $this->add(array(
+           'name'  => 'idproveedor',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
+         
+        $this->add(array(
             'name' => 'ordentablajeria_fechacreacion',
             'type' => 'Text',
             'attributes' => array(
@@ -29,7 +71,7 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
-            'name' => 'ordentablajeria_fechao',
+            'name' => 'ordentablajeria_fechacreacion',
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
@@ -40,46 +82,98 @@ use Zend\Form\Form;
             )
         ));
         
-        $this->add(array(
-           'name'  => 'idproveedor',
-            'type' => 'Hidden',
-            'attributes' => array(
-                'required' => false,
-            ),
-        ));
         
         $this->add(array(
-           'name' => 'idproveedor_autocomplete',
+            'name' => 'ordentablajeria_pesobruto',
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
             ),
-              'options' => array(
-                'label' => 'Proveedor *',
-            ),
+            'options' => array(
+                'label' => 'Peso bruto*'
+            )
         ));
         
         
         $this->add(array(
-            'name' => 'idalmacen',
-            'type' => 'Select',
-            'options' => array(
-                'label' => 'Almacen *',
-                'empty_option' => 'Sin especificar',
-                'value_options' => $almacen_array,
-            ),
+            'name' => 'ordentablajeria_preciokilo',
+            'type' => 'Text',
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
             ),
+            'options' => array(
+                'label' => 'Precio Kg *'
+            )
         ));
+        
+        $this->add(array(
+            'name' => 'ordentablajeria_pesoneto',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Peso *'
+            )
+        ));
+        
+        $this->add(array(
+            'name' => 'ordentablajeria_precioneto',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Pracio neto *'
+            )
+        ));
+        
+        $this->add(array(
+            'name' => 'ordentablajeria_inyeccion',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Inyección *'
+            )
+        ));
+        
+        $this->add(array(
+            'name' => 'ordentablajeria_merma',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Merma *'
+            )
+        ));
+        
+        $this->add(array(
+            'name' => 'ordentablajeria_aprovechamiento',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => 'Aprovechamiento *'
+            )
+        ));
+        
         
         $this->add(array(
             'name' => 'ordentablajeria_revisada',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Revisión *',
+                'label' => 'Revisada *',
                 'empty_option' => 'Sin especificar',
                 'value_options' => array(
                     1 => 'Revisada',
@@ -90,9 +184,8 @@ use Zend\Form\Form;
                 'required' => true,
                 'class' => 'form-control',
             ),
-        )); 
-        
-        
+        ));
+         
         $this->add(array(
             'name' => 'ordentablajeria_folio',
             'type' => 'Text',
@@ -105,49 +198,39 @@ use Zend\Form\Form;
                 'required' => true,
             )
         ));
+        
         $this->add(array(
-            'name' => 'ordentablajeria_factura',
-            'type' => 'File',
+            'name' => 'ordentablajeria_esporcion',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Es porcion *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                    1 => 'Si',
+                    0 => 'No',
+                ),
+            ),
             'attributes' => array(
-                'required' => false,
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'ordentablajeria_numeroporciones',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Factura'
+                'label' => 'Porciones *',
+                'required' => true,
             )
         ));
+
         
-        $this->add(array(
-           'name'  => 'ordentablajeria_subtotal',
-            'type' => 'Hidden',
-            'attributes' => array(
-                'required' => false,
-            ),
-        ));
-        
-        $this->add(array(
-           'name'  => 'ordentablajeria_iva',
-            'type' => 'Hidden',
-            'attributes' => array(
-                'required' => false,
-            ),
-        ));
-        
-        $this->add(array(
-           'name'  => 'ordentablajeria_ieps',
-            'type' => 'Hidden',
-            'attributes' => array(
-                'required' => false,
-            ),
-        ));
-        
-        $this->add(array(
-           'name'  => 'ordentablajeria_total',
-            'type' => 'Hidden',
-            'attributes' => array(
-                'required' => false,
-            ),
-        ));
+
   
     }
 }
