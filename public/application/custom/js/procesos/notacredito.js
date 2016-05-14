@@ -377,10 +377,15 @@
                     success: function (exist) {
                         console.log(exist);
                         if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $this.val('');
+                            //alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            $this.addClass('invalid');
+                            $("label[for=notacredito_folio]").addClass("invalid");
+                            $("label[for=notacredito_folio]").text("Este folio ya fue utilizado");
                         }else{
                             $this.addClass('valid');
+                            $this.removeClass('invalid');
+                            $("label[for=notacredito_folio]").removeClass("invalid");
+                            $("label[for=notacredito_folio]").text("Folio *");
                         }
                         
                     },
@@ -561,12 +566,16 @@
                     dataType: "json",
                     data: {folio:folio},
                     success: function (exist) {
-                        console.log(exist);
                         if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $this.val('');
+                            //alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            $this.addClass('invalid');
+                            $("label[for=notacredito_folio]").addClass("invalid");
+                            $("label[for=notacredito_folio]").text("Este folio ya fue utilizado");
                         }else{
                             $this.addClass('valid');
+                            $this.removeClass('invalid');
+                            $("label[for=notacredito_folio]").removeClass("invalid");
+                            $("label[for=notacredito_folio]").text("Folio *");
                         }
                         
                     },
@@ -601,7 +610,11 @@
        
     }
     
-    
+    $('#frm-nota').on('submit', function (e) 
+    {
+        if( $("[name=notacredito_folio]").hasClass('invalid'))
+            return false;
+    });
     
 })( jQuery );
 
