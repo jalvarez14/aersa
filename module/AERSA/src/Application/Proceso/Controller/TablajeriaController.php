@@ -324,11 +324,5 @@ class TablajeriaController extends AbstractActionController {
         return $this->getResponse()->setContent(json_encode($exist));
     }
     
-    public function getprodAction()
-    {
-        $cat = $this->params()->fromRoute('id');
-        $result = \ProductoQuery::create()->filterByIdcategoriapadre($cat)->find()->toArray();
-        return $this->getResponse()->setContent(json_encode($result));      
     
-    }
 }   

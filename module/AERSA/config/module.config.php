@@ -553,6 +553,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'getsubcat' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/getsubcat[/:idcategoria]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'getsubcat',
+                                            ),
+                                        ),
+                                    ),
                                     
                               ),
                             ),
