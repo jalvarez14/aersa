@@ -120,16 +120,21 @@ class TablajeriaController extends AbstractActionController {
         $anio_activo = $sucursal->getSucursalAnioactivo();
         $mes_activo = $sucursal->getSucursalMesactivo();
 
-        $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Créditos al costo', \Criteria::NOT_EQUAL)->find();
+        $almecenes = \AlmacenQuery::create()
+                ->filterByIdsucursal($session['idsucursal'])
+                ->filterByAlmacenEstatus(1)
+                ->filterByAlmacenNombre('Créditos al costo', \Criteria::NOT_EQUAL)
+                ->find();
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
 
-        $form = new \Application\Proceso\Form\DevolucionForm($almecenes);
+        $form = new \Application\Proceso\Form\TablajeriaForm($almecenes);
 
         $iva = \TasaivaQuery::create()->findOne();
 
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/ordentablajeria/nuevo');
         $view_model->setVariables(array(
+            'messages' => $this->flashMessenger(),
             'form' => $form,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
@@ -298,5 +303,32 @@ class TablajeriaController extends AbstractActionController {
             return $this->redirect()->toUrl('/procesos/devolucion');
         }
     }
+    
+    public function validatefolioAction() 
+    {
 
-}
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $folio = $this->params()->fromQuery('folio');
+
+        $to = new \DateTime();
+        $from = date("Y-m-d", strtotime("-2 months"));
+        $from = new \DateTime($from);
+
+        $exist = \OrdentablajeriaQuery::create()
+                ->filterByIdsucursal($session['idsucursal'])
+                ->filterByOrdentablajeriaFecha(array('min' => $from, 'to' => $to))
+                ->filterByOrdentablajeriaFolio($folio, \Criteria::LIKE)->exists();
+
+        return $this->getResponse()->setContent(json_encode($exist));
+    }
+    
+    public function getprodAction()
+    {
+        $cat = $this->params()->fromRoute('id');
+        $result = \ProductoQuery::create()->filterByIdcategoriapadre($cat)->find()->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    
+    }
+}   

@@ -17,15 +17,32 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
+           'name'  => 'idproducto',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
+        
+        $this->add(array(
+           'name' => 'idproducto_autocomplete',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+              'options' => array(
+                'label' => 'Producto ',
+            ),
+        ));
+        
+        $this->add(array(
             'name' => 'idalmacenorigen',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Almacen *',
+                'label' => 'Almacen ',
                 'empty_option' => 'Sin especificar',
-                'value_options' => array(
-                    1 => 'Revisada',
-                    0 => 'No revisada',
-                ),
+                'value_options' => $almacen_array,
             ),
             'attributes' => array(
                 'required' => true,
@@ -37,12 +54,9 @@ use Zend\Form\Form;
             'name' => 'idalmacendestino',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Almacen destino *',
+                'label' => 'Almacen destino ',
                 'empty_option' => 'Sin especificar',
-                'value_options' => array(
-                    1 => 'Revisada',
-                    0 => 'No revisada',
-                ),
+                'value_options' => $almacen_array,
             ),
             'attributes' => array(
                 'required' => true,
@@ -59,14 +73,14 @@ use Zend\Form\Form;
         ));
          
         $this->add(array(
-            'name' => 'ordentablajeria_fechacreacion',
+            'name' => 'ordentablajeria_fecha',
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Fecha *'
+                'label' => 'Fecha '
             )
         ));
         
@@ -78,7 +92,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Fecha *'
+                'label' => 'Fecha '
             )
         ));
         
@@ -91,7 +105,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Peso bruto*'
+                'label' => 'Peso bruto'
             )
         ));
         
@@ -104,7 +118,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Precio Kg *'
+                'label' => 'Precio Kg '
             )
         ));
         
@@ -116,7 +130,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Peso *'
+                'label' => 'Peso '
             )
         ));
         
@@ -126,9 +140,10 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
+                'disabled' => true,
             ),
             'options' => array(
-                'label' => 'Pracio neto *'
+                'label' => 'Total bruto'
             )
         ));
         
@@ -140,7 +155,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Inyección *'
+                'label' => 'Inyección '
             )
         ));
         
@@ -152,10 +167,20 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Merma *'
+                'label' => 'Merma '
             )
         ));
-        
+        $this->add(array(
+            'name' => 'ordentablajeria_porcentajemerma',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'label' => '% merma '
+            )
+        ));
         $this->add(array(
             'name' => 'ordentablajeria_aprovechamiento',
             'type' => 'Text',
@@ -164,16 +189,16 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Aprovechamiento *'
+                'label' => '% aprovechamiento '
             )
         ));
-        
+               
         
         $this->add(array(
             'name' => 'ordentablajeria_revisada',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Revisada *',
+                'label' => 'Revisada ',
                 'empty_option' => 'Sin especificar',
                 'value_options' => array(
                     1 => 'Revisada',
@@ -194,7 +219,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Folio *',
+                'label' => 'Folio ',
                 'required' => true,
             )
         ));
@@ -203,7 +228,7 @@ use Zend\Form\Form;
             'name' => 'ordentablajeria_esporcion',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Es porcion *',
+                'label' => 'Es porcion ',
                 'empty_option' => 'Sin especificar',
                 'value_options' => array(
                     1 => 'Si',
@@ -222,10 +247,12 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
+                //'placeholder' => 'porciones',
             ),
             'options' => array(
-                'label' => 'Porciones *',
+                'label' => 'Porciones ',
                 'required' => true,
+                
             )
         ));
 
