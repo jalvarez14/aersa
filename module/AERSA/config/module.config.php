@@ -394,6 +394,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'getprod' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/getprod[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'getprod',
+                                            ),
+                                        ),
+                                    ),
                                    
                                ),
                             ),
@@ -543,17 +553,8 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'getsubcat' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
-                                            'route' => '/getsubcat[/:idcategoria]',
-                                            'defaults' => array(
-                                                'controller' => 'Application\Catalogo\Controller\Categoria',
-                                                'action' => 'getsubcat',
-                                            ),
-                                        ),
-                                    ),
-                               ),
+                                    
+                              ),
                             ),
                            'empresa' => array(
                                 'type' => 'Literal',
@@ -1048,6 +1049,17 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
+                                    
                                 ), 
                             ),
                             

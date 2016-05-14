@@ -459,6 +459,12 @@ class ProductoController extends AbstractActionController
         
     }
     
-
+    public function getprodAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        $result = \ProductoQuery::create()->findPk($id)->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    
+    }
     
 }
