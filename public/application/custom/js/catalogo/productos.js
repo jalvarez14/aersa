@@ -39,10 +39,6 @@ $( document ).ready(function() {
                     for(var k in data) 
                         $("[name=idsubcategoria]").append('<option value="'+ data[k]['Idcategoria'] +'">' + data[k]['CategoriaNombre'] +'</option>');
                 }
-                else
-                {
-                    alert('nada');
-                }
            },
 
        });

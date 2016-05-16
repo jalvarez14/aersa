@@ -324,5 +324,30 @@ class TablajeriaController extends AbstractActionController {
         return $this->getResponse()->setContent(json_encode($exist));
     }
     
+    public function gettablajeriaAction()
+    {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $id = $this->params()->fromRoute('id');
+        $result = \PlantillatablajeriaQuery::create()
+                ->filterByIdproducto($id)
+                ->filterByIdempresa($session['idempresa'])
+                ->findOne();
+        
+        if(count($result) == 0)
+            return $this->getResponse()->setContent("false");    
+        else
+        {
+             
+            $detalle = \PlantillatablajeriadetalleQuery::create()
+                    ->filterByIdplantillatablajeria($result->getIdplantillatablajeria())
+                    ->find()
+                    ->toArray();
+
+            return $this->getResponse()->setContent(json_encode($detalle));    
+        }
+
+    }
     
 }   
