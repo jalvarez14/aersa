@@ -1069,6 +1069,16 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'gettablajeria' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/gettablajeria[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'gettablajeria',
+                                            ), 
+                                        ), 
+                                    ),
                                     
                                 ), 
                             ),
