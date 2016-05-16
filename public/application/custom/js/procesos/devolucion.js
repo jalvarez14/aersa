@@ -376,10 +376,15 @@
                     success: function (exist) {
                         console.log(exist);
                         if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $this.val('');
+                            //alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            $this.addClass('invalid');
+                            $("label[for=devolucion_folio]").addClass("invalid");
+                            $("label[for=devolucion_folio]").text("Este folio ya fue utilizado");
                         }else{
                             $this.addClass('valid');
+                            $this.removeClass('invalid');
+                            $("label[for=devolucion_folio]").removeClass("invalid");
+                            $("label[for=devolucion_folio]").text("Folio *");
                         }
                         
                     },
@@ -569,10 +574,15 @@
                     success: function (exist) {
                         console.log(exist);
                         if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $this.val('');
+                            //alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            $this.addClass('invalid');
+                            $("label[for=devolucion_folio]").addClass("invalid");
+                            $("label[for=devolucion_folio]").text("Este folio ya fue utilizado");
                         }else{
                             $this.addClass('valid');
+                            $this.removeClass('invalid');
+                            $("label[for=devolucion_folio]").removeClass("invalid");
+                            $("label[for=devolucion_folio]").text("Folio *");
                         }
                         
                     },
@@ -606,7 +616,11 @@
        
     }
     
-    
+    $('#frm-dev').on('submit', function (e) 
+    {
+        if( $("[name=devolucion_folio]").hasClass('invalid'))
+            return false;
+    });
     
 })( jQuery );
 

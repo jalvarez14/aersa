@@ -394,6 +394,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'getprod' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/getprod[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'getprod',
+                                            ),
+                                        ),
+                                    ),
                                    
                                ),
                             ),
@@ -553,7 +563,8 @@ return array(
                                             ),
                                         ),
                                     ),
-                               ),
+                                    
+                              ),
                             ),
                            'empresa' => array(
                                 'type' => 'Literal',
@@ -1008,6 +1019,70 @@ return array(
                                     ),
                                 ), 
                             ),
+                            'ordentablajeria' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/tablajeria', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                        'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ),
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
+                                    'gettablajeria' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/gettablajeria[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'gettablajeria',
+                                            ), 
+                                        ), 
+                                    ),
+                                    
+                                ), 
+                            ),
+                            
                         ), 
                     ), 
                 ),
@@ -1077,11 +1152,12 @@ return array(
              * PROCESO
              */
             
-            'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
-            'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
-            'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
-            'Application\Proceso\Controller\Ingresos' => 'Application\Proceso\Controller\IngresosController',
+            'Application\Proceso\Controller\Compra'         => 'Application\Proceso\Controller\CompraController',
+            'Application\Proceso\Controller\Requisicion'    => 'Application\Proceso\Controller\RequisicionController',
+            'Application\Proceso\Controller\Devolucion'     => 'Application\Proceso\Controller\DevolucionController',
+            'Application\Proceso\Controller\Ingresos'       => 'Application\Proceso\Controller\IngresosController',
             'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
+            'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
 
             /*
              * WEBSITE

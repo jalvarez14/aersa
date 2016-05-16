@@ -49,13 +49,18 @@ class IndexController extends AbstractActionController
 
         
     }
+    
     public function getproductossimplesAction(){
         
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
 
         $search = $this->params()->fromQuery('q');
-        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoTipo("simple",  \Criteria::EQUAL)->find();
+        $query = \ProductoQuery::create()
+                ->filterByIdempresa($session['idempresa'])
+                ->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)
+                ->filterByProductoTipo("simple",  \Criteria::EQUAL)
+                ->find();
         
         return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva'))));
 

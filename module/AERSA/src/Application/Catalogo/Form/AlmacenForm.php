@@ -36,7 +36,7 @@ class AlmacenForm extends Form
                 'label' => 'Encargado',
             ),
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
             ),
         ));
