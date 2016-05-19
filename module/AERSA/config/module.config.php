@@ -851,6 +851,36 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'gettipopro' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/gettipopro[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                                'action' => 'gettipopro',
+                                            ), 
+                                        ), 
+                                    ),
+                                    'getres' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/getres[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                                'action' => 'getres',
+                                            ), 
+                                        ), 
+                                    ),
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
+                                                'action' => 'validatefolio',
+                                            ),
+                                        ),
+                                    ),
                                 ), 
                             ), 
                             'devolucion' => array( 
