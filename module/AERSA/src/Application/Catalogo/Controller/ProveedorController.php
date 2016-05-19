@@ -20,7 +20,7 @@ class ProveedorController extends AbstractActionController
             $collection = \EmpresaQuery::create()->orderByIdempresa(\Criteria::DESC)->find();
         }
         
-        $proveedores = \ProveedorQuery::create()->find();
+        $proveedores = \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->find();
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();

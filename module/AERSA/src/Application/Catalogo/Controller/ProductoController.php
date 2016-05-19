@@ -17,13 +17,11 @@ class ProductoController extends AbstractActionController
         
         //SI SE TRATA DE UN ADMIN DE AERSA
         if($session['idempresa'] == 1)
-            $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
         
-        $productos = \ProductoQuery::create()->find();
+        $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
+        $productos = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->find();
 
-        
-        
-                
+         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/catalogo/producto/index');
@@ -71,6 +69,12 @@ class ProductoController extends AbstractActionController
             $entity->setIdempresa($session['idempresa']);
             
             $entity->save();
+            
+            if($post_data['producto_tipo'] == 'plu')
+            {
+                $this->flashMessenger()->addSuccessMessage('Producto registrado satisfactoriamente, ahora ingresa una subreceta');
+                return $this->redirect()->toUrl('/catalogo/producto/nuevasubreceta/'.$entity->getIdproducto());
+            }
             $this->flashMessenger()->addSuccessMessage('Producto registrado satisfactoriamente!');
             return $this->redirect()->toUrl('/catalogo/producto');
             
@@ -182,6 +186,9 @@ class ProductoController extends AbstractActionController
 
     public function nuevocodigoAction()
     {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
         $id = $this->params()->fromRoute('id');
         
         $prod = \ProductoQuery::create()->findPk($id);
@@ -194,9 +201,12 @@ class ProductoController extends AbstractActionController
         {
             $post_data = $request->getPost();
 
-            //VALIDACION PENDIENTE
-            $exists = \CodigobarrasQuery::create()->filterByCodigobarrasCodigo($post_data['codigobarras_codigo'])->exists();
             
+            $productos = \ProductoQuery::create()->select('idproducto')->filterByIdempresa($session['idempresa'])->find()->toArray();
+            $exists = \CodigobarrasQuery::create()
+                    ->filterByIdproducto($productos)
+                    ->filterByCodigobarrasCodigo($post_data['codigobarras_codigo'])->exists();
+
             if(!$exists)
             {
                 //CREAMOS NUESTRA ENTIDAD VACIA
@@ -235,7 +245,9 @@ class ProductoController extends AbstractActionController
     
     public function editarcodigoAction() 
     {
-
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
         $request = $this->getRequest();
 
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
@@ -258,14 +270,28 @@ class ProductoController extends AbstractActionController
             if ($request->isPost()) 
             {
                 $post_data = $request->getPost();
-                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                foreach ($post_data as $key => $value)
-                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 
-                $entity->save();
+                $productos = \ProductoQuery::create()->select('idproducto')->filterByIdempresa($session['idempresa'])->find()->toArray();
+                $exists = \CodigobarrasQuery::create()
+                        ->filterByIdproducto($productos)
+                        ->filterByCodigobarrasCodigo($post_data['codigobarras_codigo'])->exists();
+            
+                if(!$exists)
+                {
+                    //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+                    foreach ($post_data as $key => $value)
+                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
 
-                $this->flashMessenger()->addSuccessMessage('Codigo modificado correctamente!');
-                return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
+                    $entity->save();
+
+                    $this->flashMessenger()->addSuccessMessage('Codigo modificado correctamente!');
+                    return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
+                }
+                else 
+                {
+                    $this->flashMessenger()->addErrorMessage('Ya existe un código de barras idéntico');
+                    return $this->redirect()->toUrl('/catalogo/producto/editarcodigo/'.$id.'/'.$prod);
+                }
             }
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
@@ -433,6 +459,11 @@ class ProductoController extends AbstractActionController
         
     }
     
-
+    public function getprodAction()
+    {
+        $id = $this->params()->fromRoute('id');
+        $result = \ProductoQuery::create()->findPk($id)->toArray();
+        return $this->getResponse()->setContent(json_encode($result));      
+    }
     
 }

@@ -14,7 +14,10 @@ class ProductosasociacionController extends AbstractActionController
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
 
-        $productos = \ProductoQuery::create()->filterByProductoTipo('plu',  \Criteria::EQUAL)->find();
+        $productos = \ProductoQuery::create()
+                ->filterByProductoTipo('plu',  \Criteria::EQUAL)
+                ->filterByIdempresa($session['idempresa'])
+                ->find();
         $request = $this->getRequest();
         
         if($request->isPost())
