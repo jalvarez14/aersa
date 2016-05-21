@@ -52,6 +52,10 @@
  * @method IngresoQuery rightJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
  * @method IngresoQuery innerJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdusuario relation
  *
+ * @method IngresoQuery leftJoinFlujoefectivo($relationAlias = null) Adds a LEFT JOIN clause to the query using the Flujoefectivo relation
+ * @method IngresoQuery rightJoinFlujoefectivo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Flujoefectivo relation
+ * @method IngresoQuery innerJoinFlujoefectivo($relationAlias = null) Adds a INNER JOIN clause to the query using the Flujoefectivo relation
+ *
  * @method IngresoQuery leftJoinIngresodetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ingresodetalle relation
  * @method IngresoQuery rightJoinIngresodetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ingresodetalle relation
  * @method IngresoQuery innerJoinIngresodetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Ingresodetalle relation
@@ -1067,6 +1071,80 @@ abstract class BaseIngresoQuery extends ModelCriteria
         return $this
             ->joinUsuarioRelatedByIdusuario($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UsuarioRelatedByIdusuario', 'UsuarioQuery');
+    }
+
+    /**
+     * Filter the query by a related Flujoefectivo object
+     *
+     * @param   Flujoefectivo|PropelObjectCollection $flujoefectivo  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 IngresoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByFlujoefectivo($flujoefectivo, $comparison = null)
+    {
+        if ($flujoefectivo instanceof Flujoefectivo) {
+            return $this
+                ->addUsingAlias(IngresoPeer::IDINGRESO, $flujoefectivo->getIdingreso(), $comparison);
+        } elseif ($flujoefectivo instanceof PropelObjectCollection) {
+            return $this
+                ->useFlujoefectivoQuery()
+                ->filterByPrimaryKeys($flujoefectivo->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByFlujoefectivo() only accepts arguments of type Flujoefectivo or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Flujoefectivo relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return IngresoQuery The current query, for fluid interface
+     */
+    public function joinFlujoefectivo($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Flujoefectivo');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Flujoefectivo');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Flujoefectivo relation Flujoefectivo object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   FlujoefectivoQuery A secondary query class using the current class as primary query
+     */
+    public function useFlujoefectivoQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinFlujoefectivo($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Flujoefectivo', 'FlujoefectivoQuery');
     }
 
     /**

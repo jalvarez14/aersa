@@ -39,10 +39,10 @@ class AbonoproveedorTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idabonoproveedor', 'Idabonoproveedor', 'INTEGER', true, null, null);
-        $this->addColumn('idproveedor', 'Idproveedor', 'INTEGER', false, null, null);
-        $this->addColumn('idempresa', 'Idempresa', 'INTEGER', false, null, null);
-        $this->addColumn('idsucursal', 'Idsucursal', 'INTEGER', false, null, null);
-        $this->addColumn('idempleado', 'Idempleado', 'INTEGER', false, null, null);
+        $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
+        $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addForeignKey('idproveedor', 'Idproveedor', 'INTEGER', 'proveedor', 'idproveedor', true, null, null);
+        $this->addColumn('abonoproveedor_balance', 'AbonoproveedorBalance', 'DECIMAL', true, 15, null);
         // validators
     } // initialize()
 
@@ -51,6 +51,10 @@ class AbonoproveedorTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Proveedor', 'Proveedor', RelationMap::MANY_TO_ONE, array('idproveedor' => 'idproveedor', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Abonoproveedordetalle', 'Abonoproveedordetalle', RelationMap::ONE_TO_MANY, array('idabonoproveedor' => 'idabonoproveedor', ), 'CASCADE', 'CASCADE', 'Abonoproveedordetalles');
     } // buildRelations()
 
 } // AbonoproveedorTableMap

@@ -76,6 +76,18 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
     protected $aSucursal;
 
     /**
+     * @var        PropelObjectCollection|Abonoproveedordetalle[] Collection to store aggregation of Abonoproveedordetalle objects.
+     */
+    protected $collAbonoproveedordetalles;
+    protected $collAbonoproveedordetallesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Flujoefectivo[] Collection to store aggregation of Flujoefectivo objects.
+     */
+    protected $collFlujoefectivos;
+    protected $collFlujoefectivosPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -94,6 +106,18 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $abonoproveedordetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $flujoefectivosScheduledForDeletion = null;
 
     /**
      * Get the [idcuentabancaria] column value.
@@ -412,6 +436,10 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
 
             $this->aEmpresa = null;
             $this->aSucursal = null;
+            $this->collAbonoproveedordetalles = null;
+
+            $this->collFlujoefectivos = null;
+
         } // if (deep)
     }
 
@@ -553,6 +581,41 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->abonoproveedordetallesScheduledForDeletion !== null) {
+                if (!$this->abonoproveedordetallesScheduledForDeletion->isEmpty()) {
+                    AbonoproveedordetalleQuery::create()
+                        ->filterByPrimaryKeys($this->abonoproveedordetallesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->abonoproveedordetallesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAbonoproveedordetalles !== null) {
+                foreach ($this->collAbonoproveedordetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->flujoefectivosScheduledForDeletion !== null) {
+                if (!$this->flujoefectivosScheduledForDeletion->isEmpty()) {
+                    foreach ($this->flujoefectivosScheduledForDeletion as $flujoefectivo) {
+                        // need to save related object because we set the relation to null
+                        $flujoefectivo->save($con);
+                    }
+                    $this->flujoefectivosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collFlujoefectivos !== null) {
+                foreach ($this->collFlujoefectivos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -745,6 +808,22 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
             }
 
 
+                if ($this->collAbonoproveedordetalles !== null) {
+                    foreach ($this->collAbonoproveedordetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collFlujoefectivos !== null) {
+                    foreach ($this->collFlujoefectivos as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -845,6 +924,12 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
             }
             if (null !== $this->aSucursal) {
                 $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collAbonoproveedordetalles) {
+                $result['Abonoproveedordetalles'] = $this->collAbonoproveedordetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collFlujoefectivos) {
+                $result['Flujoefectivos'] = $this->collFlujoefectivos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1021,6 +1106,18 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getAbonoproveedordetalles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAbonoproveedordetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getFlujoefectivos() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addFlujoefectivo($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
@@ -1175,6 +1272,700 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
         return $this->aSucursal;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Abonoproveedordetalle' == $relationName) {
+            $this->initAbonoproveedordetalles();
+        }
+        if ('Flujoefectivo' == $relationName) {
+            $this->initFlujoefectivos();
+        }
+    }
+
+    /**
+     * Clears out the collAbonoproveedordetalles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Cuentabancaria The current object (for fluent API support)
+     * @see        addAbonoproveedordetalles()
+     */
+    public function clearAbonoproveedordetalles()
+    {
+        $this->collAbonoproveedordetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collAbonoproveedordetallesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAbonoproveedordetalles collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAbonoproveedordetalles($v = true)
+    {
+        $this->collAbonoproveedordetallesPartial = $v;
+    }
+
+    /**
+     * Initializes the collAbonoproveedordetalles collection.
+     *
+     * By default this just sets the collAbonoproveedordetalles collection to an empty array (like clearcollAbonoproveedordetalles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAbonoproveedordetalles($overrideExisting = true)
+    {
+        if (null !== $this->collAbonoproveedordetalles && !$overrideExisting) {
+            return;
+        }
+        $this->collAbonoproveedordetalles = new PropelObjectCollection();
+        $this->collAbonoproveedordetalles->setModel('Abonoproveedordetalle');
+    }
+
+    /**
+     * Gets an array of Abonoproveedordetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Cuentabancaria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Abonoproveedordetalle[] List of Abonoproveedordetalle objects
+     * @throws PropelException
+     */
+    public function getAbonoproveedordetalles($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAbonoproveedordetallesPartial && !$this->isNew();
+        if (null === $this->collAbonoproveedordetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAbonoproveedordetalles) {
+                // return empty collection
+                $this->initAbonoproveedordetalles();
+            } else {
+                $collAbonoproveedordetalles = AbonoproveedordetalleQuery::create(null, $criteria)
+                    ->filterByCuentabancaria($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAbonoproveedordetallesPartial && count($collAbonoproveedordetalles)) {
+                      $this->initAbonoproveedordetalles(false);
+
+                      foreach ($collAbonoproveedordetalles as $obj) {
+                        if (false == $this->collAbonoproveedordetalles->contains($obj)) {
+                          $this->collAbonoproveedordetalles->append($obj);
+                        }
+                      }
+
+                      $this->collAbonoproveedordetallesPartial = true;
+                    }
+
+                    $collAbonoproveedordetalles->getInternalIterator()->rewind();
+
+                    return $collAbonoproveedordetalles;
+                }
+
+                if ($partial && $this->collAbonoproveedordetalles) {
+                    foreach ($this->collAbonoproveedordetalles as $obj) {
+                        if ($obj->isNew()) {
+                            $collAbonoproveedordetalles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAbonoproveedordetalles = $collAbonoproveedordetalles;
+                $this->collAbonoproveedordetallesPartial = false;
+            }
+        }
+
+        return $this->collAbonoproveedordetalles;
+    }
+
+    /**
+     * Sets a collection of Abonoproveedordetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $abonoproveedordetalles A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function setAbonoproveedordetalles(PropelCollection $abonoproveedordetalles, PropelPDO $con = null)
+    {
+        $abonoproveedordetallesToDelete = $this->getAbonoproveedordetalles(new Criteria(), $con)->diff($abonoproveedordetalles);
+
+
+        $this->abonoproveedordetallesScheduledForDeletion = $abonoproveedordetallesToDelete;
+
+        foreach ($abonoproveedordetallesToDelete as $abonoproveedordetalleRemoved) {
+            $abonoproveedordetalleRemoved->setCuentabancaria(null);
+        }
+
+        $this->collAbonoproveedordetalles = null;
+        foreach ($abonoproveedordetalles as $abonoproveedordetalle) {
+            $this->addAbonoproveedordetalle($abonoproveedordetalle);
+        }
+
+        $this->collAbonoproveedordetalles = $abonoproveedordetalles;
+        $this->collAbonoproveedordetallesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Abonoproveedordetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Abonoproveedordetalle objects.
+     * @throws PropelException
+     */
+    public function countAbonoproveedordetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAbonoproveedordetallesPartial && !$this->isNew();
+        if (null === $this->collAbonoproveedordetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAbonoproveedordetalles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAbonoproveedordetalles());
+            }
+            $query = AbonoproveedordetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCuentabancaria($this)
+                ->count($con);
+        }
+
+        return count($this->collAbonoproveedordetalles);
+    }
+
+    /**
+     * Method called to associate a Abonoproveedordetalle object to this object
+     * through the Abonoproveedordetalle foreign key attribute.
+     *
+     * @param    Abonoproveedordetalle $l Abonoproveedordetalle
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function addAbonoproveedordetalle(Abonoproveedordetalle $l)
+    {
+        if ($this->collAbonoproveedordetalles === null) {
+            $this->initAbonoproveedordetalles();
+            $this->collAbonoproveedordetallesPartial = true;
+        }
+
+        if (!in_array($l, $this->collAbonoproveedordetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAbonoproveedordetalle($l);
+
+            if ($this->abonoproveedordetallesScheduledForDeletion and $this->abonoproveedordetallesScheduledForDeletion->contains($l)) {
+                $this->abonoproveedordetallesScheduledForDeletion->remove($this->abonoproveedordetallesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Abonoproveedordetalle $abonoproveedordetalle The abonoproveedordetalle object to add.
+     */
+    protected function doAddAbonoproveedordetalle($abonoproveedordetalle)
+    {
+        $this->collAbonoproveedordetalles[]= $abonoproveedordetalle;
+        $abonoproveedordetalle->setCuentabancaria($this);
+    }
+
+    /**
+     * @param	Abonoproveedordetalle $abonoproveedordetalle The abonoproveedordetalle object to remove.
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function removeAbonoproveedordetalle($abonoproveedordetalle)
+    {
+        if ($this->getAbonoproveedordetalles()->contains($abonoproveedordetalle)) {
+            $this->collAbonoproveedordetalles->remove($this->collAbonoproveedordetalles->search($abonoproveedordetalle));
+            if (null === $this->abonoproveedordetallesScheduledForDeletion) {
+                $this->abonoproveedordetallesScheduledForDeletion = clone $this->collAbonoproveedordetalles;
+                $this->abonoproveedordetallesScheduledForDeletion->clear();
+            }
+            $this->abonoproveedordetallesScheduledForDeletion[]= $abonoproveedordetalle;
+            $abonoproveedordetalle->setCuentabancaria(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Abonoproveedordetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Abonoproveedordetalle[] List of Abonoproveedordetalle objects
+     */
+    public function getAbonoproveedordetallesJoinAbonoproveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AbonoproveedordetalleQuery::create(null, $criteria);
+        $query->joinWith('Abonoproveedor', $join_behavior);
+
+        return $this->getAbonoproveedordetalles($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Abonoproveedordetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Abonoproveedordetalle[] List of Abonoproveedordetalle objects
+     */
+    public function getAbonoproveedordetallesJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AbonoproveedordetalleQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getAbonoproveedordetalles($query, $con);
+    }
+
+    /**
+     * Clears out the collFlujoefectivos collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Cuentabancaria The current object (for fluent API support)
+     * @see        addFlujoefectivos()
+     */
+    public function clearFlujoefectivos()
+    {
+        $this->collFlujoefectivos = null; // important to set this to null since that means it is uninitialized
+        $this->collFlujoefectivosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collFlujoefectivos collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialFlujoefectivos($v = true)
+    {
+        $this->collFlujoefectivosPartial = $v;
+    }
+
+    /**
+     * Initializes the collFlujoefectivos collection.
+     *
+     * By default this just sets the collFlujoefectivos collection to an empty array (like clearcollFlujoefectivos());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initFlujoefectivos($overrideExisting = true)
+    {
+        if (null !== $this->collFlujoefectivos && !$overrideExisting) {
+            return;
+        }
+        $this->collFlujoefectivos = new PropelObjectCollection();
+        $this->collFlujoefectivos->setModel('Flujoefectivo');
+    }
+
+    /**
+     * Gets an array of Flujoefectivo objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Cuentabancaria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     * @throws PropelException
+     */
+    public function getFlujoefectivos($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collFlujoefectivosPartial && !$this->isNew();
+        if (null === $this->collFlujoefectivos || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collFlujoefectivos) {
+                // return empty collection
+                $this->initFlujoefectivos();
+            } else {
+                $collFlujoefectivos = FlujoefectivoQuery::create(null, $criteria)
+                    ->filterByCuentabancaria($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collFlujoefectivosPartial && count($collFlujoefectivos)) {
+                      $this->initFlujoefectivos(false);
+
+                      foreach ($collFlujoefectivos as $obj) {
+                        if (false == $this->collFlujoefectivos->contains($obj)) {
+                          $this->collFlujoefectivos->append($obj);
+                        }
+                      }
+
+                      $this->collFlujoefectivosPartial = true;
+                    }
+
+                    $collFlujoefectivos->getInternalIterator()->rewind();
+
+                    return $collFlujoefectivos;
+                }
+
+                if ($partial && $this->collFlujoefectivos) {
+                    foreach ($this->collFlujoefectivos as $obj) {
+                        if ($obj->isNew()) {
+                            $collFlujoefectivos[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collFlujoefectivos = $collFlujoefectivos;
+                $this->collFlujoefectivosPartial = false;
+            }
+        }
+
+        return $this->collFlujoefectivos;
+    }
+
+    /**
+     * Sets a collection of Flujoefectivo objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $flujoefectivos A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function setFlujoefectivos(PropelCollection $flujoefectivos, PropelPDO $con = null)
+    {
+        $flujoefectivosToDelete = $this->getFlujoefectivos(new Criteria(), $con)->diff($flujoefectivos);
+
+
+        $this->flujoefectivosScheduledForDeletion = $flujoefectivosToDelete;
+
+        foreach ($flujoefectivosToDelete as $flujoefectivoRemoved) {
+            $flujoefectivoRemoved->setCuentabancaria(null);
+        }
+
+        $this->collFlujoefectivos = null;
+        foreach ($flujoefectivos as $flujoefectivo) {
+            $this->addFlujoefectivo($flujoefectivo);
+        }
+
+        $this->collFlujoefectivos = $flujoefectivos;
+        $this->collFlujoefectivosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Flujoefectivo objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Flujoefectivo objects.
+     * @throws PropelException
+     */
+    public function countFlujoefectivos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collFlujoefectivosPartial && !$this->isNew();
+        if (null === $this->collFlujoefectivos || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collFlujoefectivos) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getFlujoefectivos());
+            }
+            $query = FlujoefectivoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCuentabancaria($this)
+                ->count($con);
+        }
+
+        return count($this->collFlujoefectivos);
+    }
+
+    /**
+     * Method called to associate a Flujoefectivo object to this object
+     * through the Flujoefectivo foreign key attribute.
+     *
+     * @param    Flujoefectivo $l Flujoefectivo
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function addFlujoefectivo(Flujoefectivo $l)
+    {
+        if ($this->collFlujoefectivos === null) {
+            $this->initFlujoefectivos();
+            $this->collFlujoefectivosPartial = true;
+        }
+
+        if (!in_array($l, $this->collFlujoefectivos->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddFlujoefectivo($l);
+
+            if ($this->flujoefectivosScheduledForDeletion and $this->flujoefectivosScheduledForDeletion->contains($l)) {
+                $this->flujoefectivosScheduledForDeletion->remove($this->flujoefectivosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Flujoefectivo $flujoefectivo The flujoefectivo object to add.
+     */
+    protected function doAddFlujoefectivo($flujoefectivo)
+    {
+        $this->collFlujoefectivos[]= $flujoefectivo;
+        $flujoefectivo->setCuentabancaria($this);
+    }
+
+    /**
+     * @param	Flujoefectivo $flujoefectivo The flujoefectivo object to remove.
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function removeFlujoefectivo($flujoefectivo)
+    {
+        if ($this->getFlujoefectivos()->contains($flujoefectivo)) {
+            $this->collFlujoefectivos->remove($this->collFlujoefectivos->search($flujoefectivo));
+            if (null === $this->flujoefectivosScheduledForDeletion) {
+                $this->flujoefectivosScheduledForDeletion = clone $this->collFlujoefectivos;
+                $this->flujoefectivosScheduledForDeletion->clear();
+            }
+            $this->flujoefectivosScheduledForDeletion[]= $flujoefectivo;
+            $flujoefectivo->setCuentabancaria(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinCompra($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Compra', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinCuentaporcobrar($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Cuentaporcobrar', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinIngreso($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Ingreso', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Cuentabancaria is new, it will return
+     * an empty collection; or if this Cuentabancaria has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Cuentabancaria.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1208,6 +1999,16 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collAbonoproveedordetalles) {
+                foreach ($this->collAbonoproveedordetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collFlujoefectivos) {
+                foreach ($this->collFlujoefectivos as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aEmpresa instanceof Persistent) {
               $this->aEmpresa->clearAllReferences($deep);
             }
@@ -1218,6 +2019,14 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collAbonoproveedordetalles instanceof PropelCollection) {
+            $this->collAbonoproveedordetalles->clearIterator();
+        }
+        $this->collAbonoproveedordetalles = null;
+        if ($this->collFlujoefectivos instanceof PropelCollection) {
+            $this->collFlujoefectivos->clearIterator();
+        }
+        $this->collFlujoefectivos = null;
         $this->aEmpresa = null;
         $this->aSucursal = null;
     }

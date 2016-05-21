@@ -14,7 +14,6 @@
  * @method RequisiciondetalleQuery orderByRequisiciondetallePreciounitario($order = Criteria::ASC) Order by the requisiciondetalle_preciounitario column
  * @method RequisiciondetalleQuery orderByRequisiciondetalleSubtotal($order = Criteria::ASC) Order by the requisiciondetalle_subtotal column
  * @method RequisiciondetalleQuery orderByIdpadre($order = Criteria::ASC) Order by the idpadre column
- * @method RequisiciondetalleQuery orderByRequisiciondetallecol($order = Criteria::ASC) Order by the requisiciondetallecol column
  *
  * @method RequisiciondetalleQuery groupByIdrequisiciondetalle() Group by the idrequisiciondetalle column
  * @method RequisiciondetalleQuery groupByIdrequisicion() Group by the idrequisicion column
@@ -24,7 +23,6 @@
  * @method RequisiciondetalleQuery groupByRequisiciondetallePreciounitario() Group by the requisiciondetalle_preciounitario column
  * @method RequisiciondetalleQuery groupByRequisiciondetalleSubtotal() Group by the requisiciondetalle_subtotal column
  * @method RequisiciondetalleQuery groupByIdpadre() Group by the idpadre column
- * @method RequisiciondetalleQuery groupByRequisiciondetallecol() Group by the requisiciondetallecol column
  *
  * @method RequisiciondetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RequisiciondetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -56,7 +54,6 @@
  * @method Requisiciondetalle findOneByRequisiciondetallePreciounitario(string $requisiciondetalle_preciounitario) Return the first Requisiciondetalle filtered by the requisiciondetalle_preciounitario column
  * @method Requisiciondetalle findOneByRequisiciondetalleSubtotal(string $requisiciondetalle_subtotal) Return the first Requisiciondetalle filtered by the requisiciondetalle_subtotal column
  * @method Requisiciondetalle findOneByIdpadre(int $idpadre) Return the first Requisiciondetalle filtered by the idpadre column
- * @method Requisiciondetalle findOneByRequisiciondetallecol(string $requisiciondetallecol) Return the first Requisiciondetalle filtered by the requisiciondetallecol column
  *
  * @method array findByIdrequisiciondetalle(int $idrequisiciondetalle) Return Requisiciondetalle objects filtered by the idrequisiciondetalle column
  * @method array findByIdrequisicion(int $idrequisicion) Return Requisiciondetalle objects filtered by the idrequisicion column
@@ -66,7 +63,6 @@
  * @method array findByRequisiciondetallePreciounitario(string $requisiciondetalle_preciounitario) Return Requisiciondetalle objects filtered by the requisiciondetalle_preciounitario column
  * @method array findByRequisiciondetalleSubtotal(string $requisiciondetalle_subtotal) Return Requisiciondetalle objects filtered by the requisiciondetalle_subtotal column
  * @method array findByIdpadre(int $idpadre) Return Requisiciondetalle objects filtered by the idpadre column
- * @method array findByRequisiciondetallecol(string $requisiciondetallecol) Return Requisiciondetalle objects filtered by the requisiciondetallecol column
  *
  * @package    propel.generator.aersa.om
  */
@@ -174,7 +170,7 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada`, `requisiciondetalle_preciounitario`, `requisiciondetalle_subtotal`, `idpadre`, `requisiciondetallecol` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
+        $sql = 'SELECT `idrequisiciondetalle`, `idrequisicion`, `idproducto`, `requisiciondetalle_cantidad`, `requisiciondetalle_revisada`, `requisiciondetalle_preciounitario`, `requisiciondetalle_subtotal`, `idpadre` FROM `requisiciondetalle` WHERE `idrequisiciondetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -588,35 +584,6 @@ abstract class BaseRequisiciondetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisiciondetallePeer::IDPADRE, $idpadre, $comparison);
-    }
-
-    /**
-     * Filter the query on the requisiciondetallecol column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByRequisiciondetallecol('fooValue');   // WHERE requisiciondetallecol = 'fooValue'
-     * $query->filterByRequisiciondetallecol('%fooValue%'); // WHERE requisiciondetallecol LIKE '%fooValue%'
-     * </code>
-     *
-     * @param     string $requisiciondetallecol The value to use as filter.
-     *              Accepts wildcards (* and % trigger a LIKE)
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return RequisiciondetalleQuery The current query, for fluid interface
-     */
-    public function filterByRequisiciondetallecol($requisiciondetallecol = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($requisiciondetallecol)) {
-                $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $requisiciondetallecol)) {
-                $requisiciondetallecol = str_replace('*', '%', $requisiciondetallecol);
-                $comparison = Criteria::LIKE;
-            }
-        }
-
-        return $this->addUsingAlias(RequisiciondetallePeer::REQUISICIONDETALLECOL, $requisiciondetallecol, $comparison);
     }
 
     /**

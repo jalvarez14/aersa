@@ -62,6 +62,7 @@ class IngresoTableMap extends TableMap
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idingreso' => 'idingreso', ), null, null, 'Flujoefectivos');
         $this->addRelation('Ingresodetalle', 'Ingresodetalle', RelationMap::ONE_TO_MANY, array('idingreso' => 'idingreso', ), 'CASCADE', 'CASCADE', 'Ingresodetalles');
     } // buildRelations()
 

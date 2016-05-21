@@ -55,10 +55,13 @@ class SucursalTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Abonoproveedor', 'Abonoproveedor', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Abonoproveedors');
         $this->addRelation('Almacen', 'Almacen', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Almacens');
         $this->addRelation('Compra', 'Compra', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Compras');
         $this->addRelation('Cuentabancaria', 'Cuentabancaria', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Cuentabancarias');
+        $this->addRelation('Cuentaporcobrar', 'Cuentaporcobrar', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Cuentaporcobrars');
         $this->addRelation('Devolucion', 'Devolucion', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Devolucions');
+        $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), null, null, 'Flujoefectivos');
         $this->addRelation('Ingreso', 'Ingreso', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Ingresos');
         $this->addRelation('Inventariomes', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Inventariomess');
         $this->addRelation('Notacredito', 'Notacredito', RelationMap::ONE_TO_MANY, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE', 'Notacreditos');

@@ -59,6 +59,7 @@ class CompraTableMap extends TableMap
         $this->getColumn('compra_tipo', false)->setValueSet(array (
   0 => 'ordecompra',
   1 => 'compra',
+  2 => 'consignacion',
 ));
         // validators
     } // initialize()
@@ -76,6 +77,7 @@ class CompraTableMap extends TableMap
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idcompra' => 'idcompra', ), 'CASCADE', 'CASCADE', 'Compradetalles');
         $this->addRelation('Compranota', 'Compranota', RelationMap::ONE_TO_MANY, array('idcompra' => 'idcompra', ), 'CASCADE', 'CASCADE', 'Compranotas');
+        $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idcompra' => 'idcompra', ), null, null, 'Flujoefectivos');
     } // buildRelations()
 
 } // CompraTableMap

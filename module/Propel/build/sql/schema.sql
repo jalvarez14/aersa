@@ -12,11 +12,70 @@ DROP TABLE IF EXISTS `abonoproveedor`;
 CREATE TABLE `abonoproveedor`
 (
     `idabonoproveedor` INTEGER NOT NULL AUTO_INCREMENT,
-    `idproveedor` INTEGER,
-    `idempresa` INTEGER,
-    `idsucursal` INTEGER,
-    `idempleado` INTEGER,
-    PRIMARY KEY (`idabonoproveedor`)
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `idproveedor` INTEGER NOT NULL,
+    `abonoproveedor_balance` DECIMAL(15,5) NOT NULL,
+    PRIMARY KEY (`idabonoproveedor`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    INDEX `idproveedor` (`idproveedor`),
+    CONSTRAINT `idempresa_abonoproveedor`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproveedor_abonoproveedor`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_abonoproveedor`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- abonoproveedordetalle
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `abonoproveedordetalle`;
+
+CREATE TABLE `abonoproveedordetalle`
+(
+    `idabonoproveedordetalle` INTEGER NOT NULL AUTO_INCREMENT,
+    `idabonoproveedor` INTEGER NOT NULL,
+    `idcuentabancaria` INTEGER,
+    `idusuario` INTEGER NOT NULL,
+    `abonoproveedordetalle_fechaabono` DATETIME NOT NULL,
+    `abonoproveedordetalle_cantidad` DECIMAL(15,5) NOT NULL,
+    `abonoproveedordetalle_tipo` enum('abono','egreso') NOT NULL,
+    `abonoproveedordetalle_referencia` VARCHAR(255),
+    `abonoproveedordetalle_comprobante` TEXT,
+    `abonoproveedordetalle_mediodepago` enum('cheque','efectivo','transferencia') NOT NULL,
+    `abonoproveedordetalle_chequecirculacion` TINYINT(1),
+    `abonoproveedordetalle_fechacobrocheque` DATETIME,
+    PRIMARY KEY (`idabonoproveedordetalle`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idcuentabancaria` (`idcuentabancaria`),
+    INDEX `idabonoproveedor` (`idabonoproveedor`),
+    CONSTRAINT `idabonoproveedor_abonoproveedordetalle`
+        FOREIGN KEY (`idabonoproveedor`)
+        REFERENCES `abonoproveedor` (`idabonoproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idcuentabancaria_abonoproveedordetalle`
+        FOREIGN KEY (`idcuentabancaria`)
+        REFERENCES `cuentabancaria` (`idcuentabancaria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_abonoproveedordetalle`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -108,7 +167,7 @@ CREATE TABLE `compra`
     `compra_iva` DECIMAL(15,5),
     `compra_subtotal` DECIMAL(15,5),
     `compra_total` DECIMAL(15,5),
-    `compra_tipo` enum('ordecompra','compra') NOT NULL,
+    `compra_tipo` enum('ordecompra','compra','consignacion') NOT NULL,
     PRIMARY KEY (`idcompra`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -277,6 +336,43 @@ CREATE TABLE `cuentabancaria`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- cuentaporcobrar
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `cuentaporcobrar`;
+
+CREATE TABLE `cuentaporcobrar`
+(
+    `idcuentaporcobrar` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `idusuario` INTEGER NOT NULL,
+    `cuentaporcobrar_cantidad` DECIMAL(15,5),
+    `cuentaporcobrar_cliente` VARCHAR(255),
+    `cuentaporcobrar_fecha` DATETIME,
+    `cuentaporcobrar_nota` TEXT,
+    PRIMARY KEY (`idcuentaporcobrar`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `idempresa_cuentaporcobrar`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_cuentaporcobrar`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_cuentaporcobrar`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- devolucion
 -- ---------------------------------------------------------------------
 
@@ -421,6 +517,69 @@ CREATE TABLE `empresa`
     `empresa_estatus` TINYINT(1) DEFAULT 1,
     `empresa_administracion` TINYINT(1),
     PRIMARY KEY (`idempresa`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- flujoefectivo
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `flujoefectivo`;
+
+CREATE TABLE `flujoefectivo`
+(
+    `idflujoefectivo` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `idusuario` INTEGER NOT NULL,
+    `flujoefectivo_origen` enum('cuentaporcobrar','ingreso','compra') NOT NULL,
+    `idcuentaporcobrar` INTEGER,
+    `idcompra` INTEGER,
+    `idingreso` INTEGER,
+    `ingresorubro` enum('alimentos','bebidas','miscelanea'),
+    `flujoefectivo_pago` enum('cuenta','abono','bonificacion') NOT NULL,
+    `idproveedor` INTEGER,
+    `idcuentabancaria` INTEGER,
+    `flujoefectivo_cantidad` DECIMAL(15,5) NOT NULL,
+    `flujoefectivo_fecha` DATETIME NOT NULL,
+    `flujoefectivo_referencia` TEXT NOT NULL,
+    `flujoefectivo_comprobante` TEXT,
+    `flujoefectivo_mediodepago` enum('cheque','efectivo','transferencia','abono') NOT NULL,
+    `flujoefectivo_tipo` enum('ingreso','egreso') NOT NULL,
+    `flujoefectivo_chequecirculacion` TINYINT(1),
+    `flujoefectivo_fechacobrocheque` DATETIME,
+    PRIMARY KEY (`idflujoefectivo`),
+    INDEX `idcuentabancaria` (`idcuentabancaria`),
+    INDEX `idproveedor` (`idproveedor`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idingreso` (`idingreso`),
+    INDEX `idcompra` (`idcompra`),
+    INDEX `idcuentaporcobrar` (`idcuentaporcobrar`),
+    CONSTRAINT `idcompra_flujoefectivo`
+        FOREIGN KEY (`idcompra`)
+        REFERENCES `compra` (`idcompra`),
+    CONSTRAINT `idcuentabancaria_flujoefectivo`
+        FOREIGN KEY (`idcuentabancaria`)
+        REFERENCES `cuentabancaria` (`idcuentabancaria`),
+    CONSTRAINT `idcuentaporcobrar_flujoefectivo`
+        FOREIGN KEY (`idcuentaporcobrar`)
+        REFERENCES `cuentaporcobrar` (`idcuentaporcobrar`),
+    CONSTRAINT `idempresa_flujoefectivo`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`),
+    CONSTRAINT `idingreso_flujoefectivo`
+        FOREIGN KEY (`idingreso`)
+        REFERENCES `ingreso` (`idingreso`),
+    CONSTRAINT `idproveedor_flujoefectivo`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`),
+    CONSTRAINT `idsucursal_flujoefectivo`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`),
+    CONSTRAINT `idusuario_flujoefectivo`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1167,7 +1326,6 @@ CREATE TABLE `requisiciondetalle`
     `requisiciondetalle_preciounitario` DECIMAL(15,5) NOT NULL,
     `requisiciondetalle_subtotal` DECIMAL(15,5) NOT NULL,
     `idpadre` INTEGER,
-    `requisiciondetallecol` VARCHAR(45),
     PRIMARY KEY (`idrequisiciondetalle`),
     INDEX `idrequisicion` (`idrequisicion`),
     INDEX `idproducto` (`idproducto`),

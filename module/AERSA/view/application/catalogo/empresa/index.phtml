@@ -25,11 +25,11 @@
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
                     <thead >
                         <tr>
-                            <th class="text-center"> Nombre comercial </th>
-                            <th class="text-center"> Razón social </th>
-                            <th class="text-center"> Estatus </th>
-                            <th class="text-center"> Administrable </th>
-                            <th class="text-center"> Acciones </th>
+                            <th> Nombre comercial </th>
+                            <th> Razón social </th>
+                            <th> Estatus </th>
+                            <th> Administrable </th>
+                            <th> Acciones </th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
@@ -59,10 +59,10 @@
                              
                             ?>
                             <tr id="<?php echo $entity->getIdempresa() ?>">
-                                <td><?php echo $entity->getEmpresaNombrecomercial() ?></td>
-                                <td><?php echo $entity->getEmpresarazonsocial() ?></td>
-                                <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
-                                <td><span class="label label-sm label-<?php echo $classAdm ?>"> <?php echo $administracion ?> </span></td>
+                                <td style="text-align: left"><?php echo $entity->getEmpresaNombrecomercial() ?></td>
+                                <td style="text-align: left"><?php echo $entity->getEmpresarazonsocial() ?></td>
+                                <td style="text-align: left"><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
+                                <td style="text-align: left"><span class="label label-sm label-<?php echo $classAdm ?>"> <?php echo $administracion ?> </span></td>
                                 
                                 <td class="text-left">                                    
                                     <div class="btn-group">

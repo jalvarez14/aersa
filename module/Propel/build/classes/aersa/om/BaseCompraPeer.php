@@ -89,6 +89,7 @@ abstract class BaseCompraPeer
     /** The enumerated values for the compra_tipo field */
     const COMPRA_TIPO_ORDECOMPRA = 'ordecompra';
     const COMPRA_TIPO_COMPRA = 'compra';
+    const COMPRA_TIPO_CONSIGNACION = 'consignacion';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -137,6 +138,7 @@ abstract class BaseCompraPeer
         CompraPeer::COMPRA_TIPO => array(
             CompraPeer::COMPRA_TIPO_ORDECOMPRA,
             CompraPeer::COMPRA_TIPO_COMPRA,
+            CompraPeer::COMPRA_TIPO_CONSIGNACION,
         ),
     );
 

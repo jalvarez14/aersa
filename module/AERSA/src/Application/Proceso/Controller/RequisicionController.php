@@ -12,11 +12,10 @@ class RequisicionController extends AbstractActionController {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA
-        //SI SE TRATA DE UN ADMIN DE AERSA
-//        if($session['idrol'] == 1){
-//            $collection = \CategoriaQuery::create()->find();
-//        }
+        $idusuario = $session['idusuario'];
+        $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+        $anio_activo = $sucursal->getSucursalAnioactivo();
+        $mes_activo = $sucursal->getSucursalMesactivo();
         $idempresa = $session['idempresa'];
         $collection = \RequisicionQuery::create()->filterByIdempresa($idempresa)->find();
         //INTANCIAMOS NUESTRA VISTA
@@ -25,6 +24,9 @@ class RequisicionController extends AbstractActionController {
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
+            'idusuario' => $idusuario,
+            'anio_activo' => $anio_activo,
+            'mes_activo' => $mes_activo,
         ));
         return $view_model;
     }
@@ -33,13 +35,15 @@ class RequisicionController extends AbstractActionController {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         $idempresa = $session['idempresa'];
+        $idusuario = $session['idusuario'];
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
-            echo '<pre>' . var_dump($post_data) . '</pre>';
-            exit;
             $requisicion = new \Requisicion();
             $post_data["requisicion_fecha"] = date_create_from_format('d/m/Y', $post_data["requisicion_fecha"]);
+            $post_data["idusuario"] = $idusuario;
+            if($post_data["requisicion_revisada"]==1)
+                $post_data["idauditor"] = $idusuario;
             foreach ($post_data as $key => $value) {
                 if (\RequisicionPeer::getTableMap()->hasColumn($key)) {
                     $requisicion->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
@@ -51,8 +55,7 @@ class RequisicionController extends AbstractActionController {
                     ->setIdempresa($session['idempresa']);
 
             $requisicion->save();
-
-            //COMPRA DETALLES
+            //REQUISICION DETALLES
             foreach ($post_data['productos'] as $producto) {
                 $requisicion_detalle = new \Requisiciondetalle();
                 foreach ($producto as $key => $value) {
@@ -64,13 +67,28 @@ class RequisicionController extends AbstractActionController {
                 if (isset($producto['requisiciondetalle_revisada'])) {
                     $requisicion_detalle->setRequisiciondetalleRevisada(1);
                 }
-
+                $requisicion_detalle->setIdrequisicion($requisicion->getIdrequisicion());
                 $requisicion_detalle->save();
+                $tipopro = \ProductoQuery::create()->filterByIdproducto($requisicion_detalle->getIdproducto())->findOne();
+                if($tipopro->getProductoTipo()!='simple') {
+                    $receta = new \Receta();
+                    $receta = \RecetaQuery::create()->filterByIdproducto($tipopro->getIdproducto())->find();
+                    foreach ($receta as $pro) {
+                        $requisiciond = new \Requisiciondetalle();
+                        $requisiciond->setIdrequisicion($requisicion->getIdrequisicion())
+                                ->setIdproducto($pro->getIdproductoreceta())
+                                ->setRequisiciondetalleCantidad($pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
+                                ->setRequisiciondetallePreciounitario('0')
+                                ->setRequisiciondetalleSubtotal('0')
+                                ->setIdpadre($requisicion_detalle->getIdrequisiciondetalle());
+                        $requisiciond->save();        
+                    }
+                }
             }
-
             //REDIRECCIONAMOS AL LISTADO
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-            return $this->redirect()->toUrl('/procesos/compra');
+            return $this->redirect()->toUrl('/procesos/requisicion');
         }
         $sucursalorg = \SucursalQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne();
 
@@ -115,54 +133,156 @@ class RequisicionController extends AbstractActionController {
     }
 
     public function editarAction() {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
         $request = $this->getRequest();
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
-        $exist = \PlantillatablajeriaQuery::create()->filterByIdplantillatablajeria($id)->exists();
-        if ($exist) {
-
+       
+        //VERIFICAMOS SI EXISTE
+        $exist = \RequisicionQuery::create()->filterByIdrequisicion($id)->exists();
+        
+        if($exist){
+            
+            // OBTENEMOS EL MES Y EL ANIO ACTIVO DE LA SUCURSAL
+            $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+            $anio_activo = $sucursal->getSucursalAnioactivo();
+            $mes_activo = $sucursal->getSucursalMesactivo();
+            $entity = \RequisicionQuery::create()->findPk($id);
+            //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) {
                 $post_data = $request->getPost();
-                foreach ($post_data as $key => $data) {
-                    $plantillatablajeria->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
+                $post_data["requisicion_fecha"] = date_create_from_format('d/m/Y', $post_data["requisicion_fecha"]);
+                foreach ($post_data as $key => $value) {
+                    if (\RequisicionPeer::getTableMap()->hasColumn($key)) {
+                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    }
                 }
-                $plantillatablajeria->save();
-                return $this->redirect()->toUrl('/catalogo/tablajeria');
-            }
-            $producto_array = array();
-            $productos = \ProductoQuery::create()->find();
-            foreach ($productos as $producto) {
+                
+                if ($post_data['requisicion_revisada']) {
+                    $entity->setIdauditor($session['idusuario']);
+                }
+                $entity->save();
+                
+                //Requisicion DETALLES
+                $entity->getRequisiciondetalles()->delete();
+                foreach ($post_data['productos'] as $producto) {
+                $requisicion_detalle = new \Requisiciondetalle();
+                foreach ($producto as $key => $value) {
+                    if (\RequisiciondetallePeer::getTableMap()->hasColumn($key)) {
+                        $requisicion_detalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    }
+                }
 
-                $id = $producto->getIdproducto();
-                $producto_array[$id] = $producto->getProductoNombre();
+                if (isset($producto['requisiciondetalle_revisada'])) {
+                    $requisicion_detalle->setRequisiciondetalleRevisada(1);
+                }
+                $requisicion_detalle->setIdrequisicion($entity->getIdrequisicion());
+                $requisicion_detalle->save();
+                $tipopro = \ProductoQuery::create()->filterByIdproducto($requisicion_detalle->getIdproducto())->findOne();
+                if($tipopro->getProductoTipo()!='simple') {
+                    $receta = new \Receta();
+                    $receta = \RecetaQuery::create()->filterByIdproducto($tipopro->getIdproducto())->find();
+                    foreach ($receta as $pro) {
+                        $requisiciond = new \Requisiciondetalle();
+                        $requisiciond->setIdrequisicion($entity->getIdrequisicion())
+                                ->setIdproducto($pro->getIdproductoreceta())
+                                ->setRequisiciondetalleCantidad($pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
+                                ->setRequisiciondetallePreciounitario('0')
+                                ->setRequisiciondetalleSubtotal('0')
+                                ->setIdpadre($requisicion_detalle->getIdrequisiciondetalle());
+                        $requisiciond->save();        
+                    }
+                }
             }
-            $form = new \Application\Catalogo\Form\PlantillatablajeriaForm($producto_array);
+                //REDIRECCIONAMOS AL LISTADO
+                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                return $this->redirect()->toUrl('/procesos/requisicion');
+            }
+
+            $sucursalorg = \SucursalQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne();
+
+            $sucursaldes_array = array();
+            $sucursaldes = \SucursalQuery::create()->filterByIdempresa($session['idempresa'])->find();
+            foreach ($sucursaldes as $sucursal) {
+
+                $id = $sucursal->getIdsucursal();
+                $sucursaldes_array[$id] = $sucursal->getSucursalNombre();
+            }
+
+            $almacen_array = array();
+            $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+            foreach ($almacenes as $almacen) {
+                $id = $almacen->getIdalmacen();
+                $almacen_array[$id] = $almacen->getAlmacenNombre();
+            }
+
+            $concepto_array = array();
+            $conceptos = \ConceptosalidaQuery::create()->find();
+            foreach ($conceptos as $concepto) {
+                $id = $concepto->getIdconceptosalida();
+                $concepto_array[$id] = $concepto->getConceptosalidaNombre();
+            }
+
+            $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+            $anio_activo = $sucursal->getSucursalAnioactivo();
+            $mes_activo = $sucursal->getSucursalMesactivo();
+
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $id = $this->params()->fromRoute('id');
+            
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg, $almacen_array, $sucursaldes_array, $concepto_array);
+
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
-            $form->setData($plantillatablajeria->toArray(\BasePeer::TYPE_FIELDNAME));
-            //ENVIAMOS A LA VISTA
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+            //CAMBIAMOS LOS VALORES DE FECHAS
+            $form->get('requisicion_fecha')->setValue($entity->getRequisicionFecha('d/m/Y'));
+            $form->get('requisicion_fechacreacion')->setValue($entity->getRequisicionFechacreacion('Y/m/d'));
+            
+            //LE PONEMOS LA CLASE VALID AL FOLIO
+            $form->get('requisicion_folio')->setAttribute('class', 'form-control valid');
+            
+            //LOS DETALLES DE LA COMPRA
+            $requisiciondetalle = \RequisiciondetalleQuery::create()->filterByIdrequisicion($entity->getIdrequisicion())->filterByIdpadre(NULL)->find();
+            
+            //COUNT
+            $count = \RequisiciondetalleQuery::create()->orderByIdrequisiciondetalle(\Criteria::DESC) ->findOne();
+            $count = $count->getIdrequisiciondetalle() + 1;
+   
             $view_model = new ViewModel();
+            $view_model->setTemplate('/application/proceso/requisicion/editar');
             $view_model->setVariables(array(
                 'form' => $form,
-                'messages' => $this->flashMessenger(),
+                'entity' => $entity,
+                'requisiciondetalle' => $requisiciondetalle,
+                'anio_activo' => $anio_activo,
+                'mes_activo' => $mes_activo,
+                'count' => $count,
             ));
-            $view_model->setTemplate('/application/proceso/requisicion/editar');
+            
             return $view_model;
-        } else {
-            return $this->redirect()->toUrl('/catalogo/tablajeria');
+        }else{
+            return $this->redirect()->toUrl('/procesos/requisicion');
         }
+        
     }
 
     public function eliminarAction() {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $id = $this->params()->fromRoute('id');
-            $plantilla = \PlantillatablajeriaQuery::create()->findPk($id);
-            $plantilla->delete();
-            $plantilladetalles = \PlantillatablajeriadetalleQuery::create()->filterByIdplantillatablajeria($id)->find();
-            foreach ($plantilladetalles as $plantilladetalle) {
-                $plantilladetalle->delete();
+            $requisicion = \RequisicionQuery::create()->findPk($id);
+            $requisicion->delete();
+            $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($id)->find();
+            foreach ($requisiciondetalles as $requisiciondetalle) {
+                $requisiciondetalle->delete();
             }
-            $this->flashMessenger()->addSuccessMessage('Plantilla de tablajeria eliminada satisfactoriamente!');
-            return $this->redirect()->toUrl('/catalogo/tablajeria');
+            $this->flashMessenger()->addSuccessMessage('Requisicion eliminada satisfactoriamente!');
+            return $this->redirect()->toUrl('/procesos/requisicion');
         }
     }
 
@@ -206,25 +326,24 @@ class RequisicionController extends AbstractActionController {
     }
     
     public function validatefolioAction(){
-        
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-        
         $folio = $this->params()->fromQuery('folio');
         $edit = (!is_null($this->params()->fromQuery('edit'))) ?$this->params()->fromQuery('edit') : false;
-
         $to = new \DateTime();
         $from = date("Y-m-d", strtotime("-2 months")); $from = new \DateTime($from);
-        
         if($edit){
              $id = $this->params()->fromQuery('id');
-             $entity = \CompraQuery::create()->findPk($id);
+             $entity = \RequisicionQuery::create()->findPk($id);
             
-             $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::LIKE)->exists();
+             $exist = \RequisicionQuery::create()->filterByIdsucursalorigen($session['idsucursal'])
+                     ->filterByRequisicionFechacreacion(array('min' => $from,'to' => $to))
+                     ->filterByRequisicionFolio($entity->getRequisicionFolio(),  \Criteria::NOT_EQUAL)
+                     ->filterByRequisicionFolio($folio,  \Criteria::LIKE)
+                     ->exists();
         }else{
             $exist = \RequisicionQuery::create()->filterByIdsucursalorigen($session['idsucursal'])->filterByRequisicionFechacreacion(array('min' => $from,'to' => $to))->filterByRequisicionFolio($folio,  \Criteria::LIKE)->exists();
         }
-
         return $this->getResponse()->setContent(json_encode($exist));
     }
 

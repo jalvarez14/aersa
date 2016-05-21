@@ -53,12 +53,15 @@ class UsuarioTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Rol', 'Rol', RelationMap::MANY_TO_ONE, array('idrol' => 'idrol', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Abonoproveedordetalle', 'Abonoproveedordetalle', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Abonoproveedordetalles');
         $this->addRelation('CompraRelatedByIdauditor', 'Compra', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'ComprasRelatedByIdauditor');
         $this->addRelation('CompraRelatedByIdusuario', 'Compra', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'ComprasRelatedByIdusuario');
         $this->addRelation('Compranota', 'Compranota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Compranotas');
+        $this->addRelation('Cuentaporcobrar', 'Cuentaporcobrar', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Cuentaporcobrars');
         $this->addRelation('DevolucionRelatedByIdauditor', 'Devolucion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'DevolucionsRelatedByIdauditor');
         $this->addRelation('DevolucionRelatedByIdusuario', 'Devolucion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'DevolucionsRelatedByIdusuario');
         $this->addRelation('Devolucionnota', 'Devolucionnota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Devolucionnotas');
+        $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), null, null, 'Flujoefectivos');
         $this->addRelation('IngresoRelatedByIdauditor', 'Ingreso', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'IngresosRelatedByIdauditor');
         $this->addRelation('IngresoRelatedByIdusuario', 'Ingreso', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'IngresosRelatedByIdusuario');
         $this->addRelation('InventariomesRelatedByIdauditor', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'InventariomessRelatedByIdauditor');

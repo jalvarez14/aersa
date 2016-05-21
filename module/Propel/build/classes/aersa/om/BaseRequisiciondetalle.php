@@ -78,12 +78,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     protected $idpadre;
 
     /**
-     * The value for the requisiciondetallecol field.
-     * @var        string
-     */
-    protected $requisiciondetallecol;
-
-    /**
      * @var        Requisiciondetalle
      */
     protected $aRequisiciondetalleRelatedByIdpadre;
@@ -216,17 +210,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
 
         return $this->idpadre;
-    }
-
-    /**
-     * Get the [requisiciondetallecol] column value.
-     *
-     * @return string
-     */
-    public function getRequisiciondetallecol()
-    {
-
-        return $this->requisiciondetallecol;
     }
 
     /**
@@ -418,27 +401,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     } // setIdpadre()
 
     /**
-     * Set the value of [requisiciondetallecol] column.
-     *
-     * @param  string $v new value
-     * @return Requisiciondetalle The current object (for fluent API support)
-     */
-    public function setRequisiciondetallecol($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->requisiciondetallecol !== $v) {
-            $this->requisiciondetallecol = $v;
-            $this->modifiedColumns[] = RequisiciondetallePeer::REQUISICIONDETALLECOL;
-        }
-
-
-        return $this;
-    } // setRequisiciondetallecol()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -478,7 +440,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $this->requisiciondetalle_preciounitario = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->requisiciondetalle_subtotal = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->idpadre = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-            $this->requisiciondetallecol = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -488,7 +449,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Requisiciondetalle object", $e);
@@ -781,9 +742,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::IDPADRE)) {
             $modifiedColumns[':p' . $index++]  = '`idpadre`';
         }
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLECOL)) {
-            $modifiedColumns[':p' . $index++]  = '`requisiciondetallecol`';
-        }
 
         $sql = sprintf(
             'INSERT INTO `requisiciondetalle` (%s) VALUES (%s)',
@@ -818,9 +776,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
                         break;
                     case '`idpadre`':
                         $stmt->bindValue($identifier, $this->idpadre, PDO::PARAM_INT);
-                        break;
-                    case '`requisiciondetallecol`':
-                        $stmt->bindValue($identifier, $this->requisiciondetallecol, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1012,9 +967,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 7:
                 return $this->getIdpadre();
                 break;
-            case 8:
-                return $this->getRequisiciondetallecol();
-                break;
             default:
                 return null;
                 break;
@@ -1052,7 +1004,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $keys[5] => $this->getRequisiciondetallePreciounitario(),
             $keys[6] => $this->getRequisiciondetalleSubtotal(),
             $keys[7] => $this->getIdpadre(),
-            $keys[8] => $this->getRequisiciondetallecol(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1130,9 +1081,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 7:
                 $this->setIdpadre($value);
                 break;
-            case 8:
-                $this->setRequisiciondetallecol($value);
-                break;
         } // switch()
     }
 
@@ -1165,7 +1113,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[5], $arr)) $this->setRequisiciondetallePreciounitario($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setRequisiciondetalleSubtotal($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setIdpadre($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setRequisiciondetallecol($arr[$keys[8]]);
     }
 
     /**
@@ -1185,7 +1132,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, $this->requisiciondetalle_preciounitario);
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, $this->requisiciondetalle_subtotal);
         if ($this->isColumnModified(RequisiciondetallePeer::IDPADRE)) $criteria->add(RequisiciondetallePeer::IDPADRE, $this->idpadre);
-        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLECOL)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLECOL, $this->requisiciondetallecol);
 
         return $criteria;
     }
@@ -1256,7 +1202,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $copyObj->setRequisiciondetallePreciounitario($this->getRequisiciondetallePreciounitario());
         $copyObj->setRequisiciondetalleSubtotal($this->getRequisiciondetalleSubtotal());
         $copyObj->setIdpadre($this->getIdpadre());
-        $copyObj->setRequisiciondetallecol($this->getRequisiciondetallecol());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1781,7 +1726,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $this->requisiciondetalle_preciounitario = null;
         $this->requisiciondetalle_subtotal = null;
         $this->idpadre = null;
-        $this->requisiciondetallecol = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

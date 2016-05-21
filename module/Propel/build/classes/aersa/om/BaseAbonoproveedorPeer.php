@@ -35,17 +35,17 @@ abstract class BaseAbonoproveedorPeer
     /** the column name for the idabonoproveedor field */
     const IDABONOPROVEEDOR = 'abonoproveedor.idabonoproveedor';
 
-    /** the column name for the idproveedor field */
-    const IDPROVEEDOR = 'abonoproveedor.idproveedor';
-
     /** the column name for the idempresa field */
     const IDEMPRESA = 'abonoproveedor.idempresa';
 
     /** the column name for the idsucursal field */
     const IDSUCURSAL = 'abonoproveedor.idsucursal';
 
-    /** the column name for the idempleado field */
-    const IDEMPLEADO = 'abonoproveedor.idempleado';
+    /** the column name for the idproveedor field */
+    const IDPROVEEDOR = 'abonoproveedor.idproveedor';
+
+    /** the column name for the abonoproveedor_balance field */
+    const ABONOPROVEEDOR_BALANCE = 'abonoproveedor.abonoproveedor_balance';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -66,11 +66,11 @@ abstract class BaseAbonoproveedorPeer
      * e.g. AbonoproveedorPeer::$fieldNames[AbonoproveedorPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idabonoproveedor', 'Idproveedor', 'Idempresa', 'Idsucursal', 'Idempleado', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idabonoproveedor', 'idproveedor', 'idempresa', 'idsucursal', 'idempleado', ),
-        BasePeer::TYPE_COLNAME => array (AbonoproveedorPeer::IDABONOPROVEEDOR, AbonoproveedorPeer::IDPROVEEDOR, AbonoproveedorPeer::IDEMPRESA, AbonoproveedorPeer::IDSUCURSAL, AbonoproveedorPeer::IDEMPLEADO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDABONOPROVEEDOR', 'IDPROVEEDOR', 'IDEMPRESA', 'IDSUCURSAL', 'IDEMPLEADO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idabonoproveedor', 'idproveedor', 'idempresa', 'idsucursal', 'idempleado', ),
+        BasePeer::TYPE_PHPNAME => array ('Idabonoproveedor', 'Idempresa', 'Idsucursal', 'Idproveedor', 'AbonoproveedorBalance', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idabonoproveedor', 'idempresa', 'idsucursal', 'idproveedor', 'abonoproveedorBalance', ),
+        BasePeer::TYPE_COLNAME => array (AbonoproveedorPeer::IDABONOPROVEEDOR, AbonoproveedorPeer::IDEMPRESA, AbonoproveedorPeer::IDSUCURSAL, AbonoproveedorPeer::IDPROVEEDOR, AbonoproveedorPeer::ABONOPROVEEDOR_BALANCE, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDABONOPROVEEDOR', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'ABONOPROVEEDOR_BALANCE', ),
+        BasePeer::TYPE_FIELDNAME => array ('idabonoproveedor', 'idempresa', 'idsucursal', 'idproveedor', 'abonoproveedor_balance', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -81,11 +81,11 @@ abstract class BaseAbonoproveedorPeer
      * e.g. AbonoproveedorPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idabonoproveedor' => 0, 'Idproveedor' => 1, 'Idempresa' => 2, 'Idsucursal' => 3, 'Idempleado' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idabonoproveedor' => 0, 'idproveedor' => 1, 'idempresa' => 2, 'idsucursal' => 3, 'idempleado' => 4, ),
-        BasePeer::TYPE_COLNAME => array (AbonoproveedorPeer::IDABONOPROVEEDOR => 0, AbonoproveedorPeer::IDPROVEEDOR => 1, AbonoproveedorPeer::IDEMPRESA => 2, AbonoproveedorPeer::IDSUCURSAL => 3, AbonoproveedorPeer::IDEMPLEADO => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDABONOPROVEEDOR' => 0, 'IDPROVEEDOR' => 1, 'IDEMPRESA' => 2, 'IDSUCURSAL' => 3, 'IDEMPLEADO' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('idabonoproveedor' => 0, 'idproveedor' => 1, 'idempresa' => 2, 'idsucursal' => 3, 'idempleado' => 4, ),
+        BasePeer::TYPE_PHPNAME => array ('Idabonoproveedor' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'AbonoproveedorBalance' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idabonoproveedor' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'abonoproveedorBalance' => 4, ),
+        BasePeer::TYPE_COLNAME => array (AbonoproveedorPeer::IDABONOPROVEEDOR => 0, AbonoproveedorPeer::IDEMPRESA => 1, AbonoproveedorPeer::IDSUCURSAL => 2, AbonoproveedorPeer::IDPROVEEDOR => 3, AbonoproveedorPeer::ABONOPROVEEDOR_BALANCE => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDABONOPROVEEDOR' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'ABONOPROVEEDOR_BALANCE' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idabonoproveedor' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'abonoproveedor_balance' => 4, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -161,16 +161,16 @@ abstract class BaseAbonoproveedorPeer
     {
         if (null === $alias) {
             $criteria->addSelectColumn(AbonoproveedorPeer::IDABONOPROVEEDOR);
-            $criteria->addSelectColumn(AbonoproveedorPeer::IDPROVEEDOR);
             $criteria->addSelectColumn(AbonoproveedorPeer::IDEMPRESA);
             $criteria->addSelectColumn(AbonoproveedorPeer::IDSUCURSAL);
-            $criteria->addSelectColumn(AbonoproveedorPeer::IDEMPLEADO);
+            $criteria->addSelectColumn(AbonoproveedorPeer::IDPROVEEDOR);
+            $criteria->addSelectColumn(AbonoproveedorPeer::ABONOPROVEEDOR_BALANCE);
         } else {
             $criteria->addSelectColumn($alias . '.idabonoproveedor');
-            $criteria->addSelectColumn($alias . '.idproveedor');
             $criteria->addSelectColumn($alias . '.idempresa');
             $criteria->addSelectColumn($alias . '.idsucursal');
-            $criteria->addSelectColumn($alias . '.idempleado');
+            $criteria->addSelectColumn($alias . '.idproveedor');
+            $criteria->addSelectColumn($alias . '.abonoproveedor_balance');
         }
     }
 
@@ -375,6 +375,9 @@ abstract class BaseAbonoproveedorPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in AbonoproveedordetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AbonoproveedordetallePeer::clearInstancePool();
     }
 
     /**
@@ -469,6 +472,983 @@ abstract class BaseAbonoproveedorPeer
         }
 
         return array($obj, $col);
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            AbonoproveedorPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Proveedor table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinProveedor(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            AbonoproveedorPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            AbonoproveedorPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Abonoproveedor objects pre-filled with their Empresa objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Abonoproveedor objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+        }
+
+        AbonoproveedorPeer::addSelectColumns($criteria);
+        $startcol = AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = AbonoproveedorPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = AbonoproveedorPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                AbonoproveedorPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to $obj2 (Empresa)
+                $obj2->addAbonoproveedor($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Abonoproveedor objects pre-filled with their Proveedor objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Abonoproveedor objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinProveedor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+        }
+
+        AbonoproveedorPeer::addSelectColumns($criteria);
+        $startcol = AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
+        ProveedorPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = AbonoproveedorPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = AbonoproveedorPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                AbonoproveedorPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = ProveedorPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = ProveedorPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    ProveedorPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to $obj2 (Proveedor)
+                $obj2->addAbonoproveedor($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Abonoproveedor objects pre-filled with their Sucursal objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Abonoproveedor objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+        }
+
+        AbonoproveedorPeer::addSelectColumns($criteria);
+        $startcol = AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = AbonoproveedorPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = AbonoproveedorPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                AbonoproveedorPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = SucursalPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    SucursalPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to $obj2 (Sucursal)
+                $obj2->addAbonoproveedor($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining all related tables
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            AbonoproveedorPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+    /**
+     * Selects a collection of Abonoproveedor objects pre-filled with all related objects.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Abonoproveedor objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAll(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+        }
+
+        AbonoproveedorPeer::addSelectColumns($criteria);
+        $startcol2 = AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = AbonoproveedorPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = AbonoproveedorPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                AbonoproveedorPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+            // Add objects for joined Empresa rows
+
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            if ($key2 !== null) {
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj2 (Empresa)
+                $obj2->addAbonoproveedor($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Proveedor rows
+
+            $key3 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = ProveedorPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
+                    $cls = ProveedorPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    ProveedorPeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj3 (Proveedor)
+                $obj3->addAbonoproveedor($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Sucursal rows
+
+            $key4 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = SucursalPeer::getInstanceFromPool($key4);
+                if (!$obj4) {
+
+                    $cls = SucursalPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    SucursalPeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj4 (Sucursal)
+                $obj4->addAbonoproveedor($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Empresa table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            AbonoproveedorPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Proveedor table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptProveedor(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            AbonoproveedorPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Sucursal table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptSucursal(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(AbonoproveedorPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            AbonoproveedorPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(AbonoproveedorPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Abonoproveedor objects pre-filled with all related objects except Empresa.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Abonoproveedor objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+        }
+
+        AbonoproveedorPeer::addSelectColumns($criteria);
+        $startcol2 = AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = AbonoproveedorPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = AbonoproveedorPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                AbonoproveedorPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Proveedor rows
+
+                $key2 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = ProveedorPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = ProveedorPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    ProveedorPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj2 (Proveedor)
+                $obj2->addAbonoproveedor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key3 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = SucursalPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SucursalPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj3 (Sucursal)
+                $obj3->addAbonoproveedor($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Abonoproveedor objects pre-filled with all related objects except Proveedor.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Abonoproveedor objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptProveedor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+        }
+
+        AbonoproveedorPeer::addSelectColumns($criteria);
+        $startcol2 = AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = AbonoproveedorPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = AbonoproveedorPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                AbonoproveedorPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Empresa rows
+
+                $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj2 (Empresa)
+                $obj2->addAbonoproveedor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key3 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = SucursalPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    SucursalPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj3 (Sucursal)
+                $obj3->addAbonoproveedor($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Abonoproveedor objects pre-filled with all related objects except Sucursal.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Abonoproveedor objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(AbonoproveedorPeer::DATABASE_NAME);
+        }
+
+        AbonoproveedorPeer::addSelectColumns($criteria);
+        $startcol2 = AbonoproveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(AbonoproveedorPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(AbonoproveedorPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = AbonoproveedorPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = AbonoproveedorPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = AbonoproveedorPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                AbonoproveedorPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Empresa rows
+
+                $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj2 (Empresa)
+                $obj2->addAbonoproveedor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Proveedor rows
+
+                $key3 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = ProveedorPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = ProveedorPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    ProveedorPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Abonoproveedor) to the collection in $obj3 (Proveedor)
+                $obj3->addAbonoproveedor($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
     /**
@@ -604,6 +1584,7 @@ abstract class BaseAbonoproveedorPeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += AbonoproveedorPeer::doOnDeleteCascade(new Criteria(AbonoproveedorPeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(AbonoproveedorPeer::TABLE_NAME, $con, AbonoproveedorPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -637,24 +1618,14 @@ abstract class BaseAbonoproveedorPeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            AbonoproveedorPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Abonoproveedor) { // it's a model object
-            // invalidate the cache for this single object
-            AbonoproveedorPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(AbonoproveedorPeer::DATABASE_NAME);
             $criteria->add(AbonoproveedorPeer::IDABONOPROVEEDOR, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                AbonoproveedorPeer::removeInstanceFromPool($singleval);
-            }
         }
 
         // Set the correct dbName
@@ -667,6 +1638,23 @@ abstract class BaseAbonoproveedorPeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += AbonoproveedorPeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                AbonoproveedorPeer::clearInstancePool();
+            } elseif ($values instanceof Abonoproveedor) { // it's a model object
+                AbonoproveedorPeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    AbonoproveedorPeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             AbonoproveedorPeer::clearRelatedInstancePool();
             $con->commit();
@@ -676,6 +1664,39 @@ abstract class BaseAbonoproveedorPeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = AbonoproveedorPeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related Abonoproveedordetalle objects
+            $criteria = new Criteria(AbonoproveedordetallePeer::DATABASE_NAME);
+
+            $criteria->add(AbonoproveedordetallePeer::IDABONOPROVEEDOR, $obj->getIdabonoproveedor());
+            $affectedRows += AbonoproveedordetallePeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**

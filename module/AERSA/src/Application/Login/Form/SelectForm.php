@@ -18,7 +18,7 @@ class SelectForm extends Form
                 'name' => 'area_trabajo',
                 'type' => 'Select',
                 'options' => array(
-                    'empty_option' => 'Área de trabajo',
+                    'empty_option' => 'Seleccione área de trabajo',
                     'value_options' => array(
                         1 => 'Administración AERSA',
                         2 => 'Empresas'

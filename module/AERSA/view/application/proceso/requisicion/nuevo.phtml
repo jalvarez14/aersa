@@ -7,27 +7,28 @@
         color:red;
     }
 </style>
-<style>
-    #productos_table .pu-input{
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div id="form_container">
-    <h3 class="page-title">Requisición - Registro</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="/procesos/requisicion">Requisición</a>
-                <i class="fa fa-angle-right"></i>
+                <a href="javascript:;">Procesos</a>
+                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <span>Registro</span>
+                <a href="/procesos/requisicion">Requisicion</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/requisicion/nuevo">Registro</a>
             </li>
         </ul>
     </div>
+    
     <?php foreach ($messages->getSuccessMessages() as $message): ?>
         <div class="alert alert-success alert-dismissable">
             <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-            <strong>Ã‰xito!</strong>
+            <strong>Exito!</strong>
             <?php echo $message ?>
         </div>
     <?php endforeach; ?>
@@ -46,6 +47,7 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
+                <h3 class="page-title">Requisición - Registro</h3>
                 <h3 class="form-section">Información general</h3>
                 <div class="row">
                     <?php echo $this->formHidden($form->get('idempresa')); ?>

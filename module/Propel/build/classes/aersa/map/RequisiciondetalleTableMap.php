@@ -46,7 +46,6 @@ class RequisiciondetalleTableMap extends TableMap
         $this->addColumn('requisiciondetalle_preciounitario', 'RequisiciondetallePreciounitario', 'DECIMAL', true, 15, null);
         $this->addColumn('requisiciondetalle_subtotal', 'RequisiciondetalleSubtotal', 'DECIMAL', true, 15, null);
         $this->addForeignKey('idpadre', 'Idpadre', 'INTEGER', 'requisiciondetalle', 'idrequisiciondetalle', false, null, null);
-        $this->addColumn('requisiciondetallecol', 'Requisiciondetallecol', 'VARCHAR', false, 45, null);
         // validators
     } // initialize()
 

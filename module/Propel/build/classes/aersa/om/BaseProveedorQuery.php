@@ -42,6 +42,10 @@
  * @method ProveedorQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
  * @method ProveedorQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
  *
+ * @method ProveedorQuery leftJoinAbonoproveedor($relationAlias = null) Adds a LEFT JOIN clause to the query using the Abonoproveedor relation
+ * @method ProveedorQuery rightJoinAbonoproveedor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Abonoproveedor relation
+ * @method ProveedorQuery innerJoinAbonoproveedor($relationAlias = null) Adds a INNER JOIN clause to the query using the Abonoproveedor relation
+ *
  * @method ProveedorQuery leftJoinCompra($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compra relation
  * @method ProveedorQuery rightJoinCompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compra relation
  * @method ProveedorQuery innerJoinCompra($relationAlias = null) Adds a INNER JOIN clause to the query using the Compra relation
@@ -49,6 +53,10 @@
  * @method ProveedorQuery leftJoinDevolucion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devolucion relation
  * @method ProveedorQuery rightJoinDevolucion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucion relation
  * @method ProveedorQuery innerJoinDevolucion($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucion relation
+ *
+ * @method ProveedorQuery leftJoinFlujoefectivo($relationAlias = null) Adds a LEFT JOIN clause to the query using the Flujoefectivo relation
+ * @method ProveedorQuery rightJoinFlujoefectivo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Flujoefectivo relation
+ * @method ProveedorQuery innerJoinFlujoefectivo($relationAlias = null) Adds a INNER JOIN clause to the query using the Flujoefectivo relation
  *
  * @method ProveedorQuery leftJoinNotacredito($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notacredito relation
  * @method ProveedorQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
@@ -761,6 +769,80 @@ abstract class BaseProveedorQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Abonoproveedor object
+     *
+     * @param   Abonoproveedor|PropelObjectCollection $abonoproveedor  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProveedorQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAbonoproveedor($abonoproveedor, $comparison = null)
+    {
+        if ($abonoproveedor instanceof Abonoproveedor) {
+            return $this
+                ->addUsingAlias(ProveedorPeer::IDPROVEEDOR, $abonoproveedor->getIdproveedor(), $comparison);
+        } elseif ($abonoproveedor instanceof PropelObjectCollection) {
+            return $this
+                ->useAbonoproveedorQuery()
+                ->filterByPrimaryKeys($abonoproveedor->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAbonoproveedor() only accepts arguments of type Abonoproveedor or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Abonoproveedor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProveedorQuery The current query, for fluid interface
+     */
+    public function joinAbonoproveedor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Abonoproveedor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Abonoproveedor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Abonoproveedor relation Abonoproveedor object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AbonoproveedorQuery A secondary query class using the current class as primary query
+     */
+    public function useAbonoproveedorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAbonoproveedor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Abonoproveedor', 'AbonoproveedorQuery');
+    }
+
+    /**
      * Filter the query by a related Compra object
      *
      * @param   Compra|PropelObjectCollection $compra  the related object to use as filter
@@ -906,6 +988,80 @@ abstract class BaseProveedorQuery extends ModelCriteria
         return $this
             ->joinDevolucion($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Devolucion', 'DevolucionQuery');
+    }
+
+    /**
+     * Filter the query by a related Flujoefectivo object
+     *
+     * @param   Flujoefectivo|PropelObjectCollection $flujoefectivo  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProveedorQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByFlujoefectivo($flujoefectivo, $comparison = null)
+    {
+        if ($flujoefectivo instanceof Flujoefectivo) {
+            return $this
+                ->addUsingAlias(ProveedorPeer::IDPROVEEDOR, $flujoefectivo->getIdproveedor(), $comparison);
+        } elseif ($flujoefectivo instanceof PropelObjectCollection) {
+            return $this
+                ->useFlujoefectivoQuery()
+                ->filterByPrimaryKeys($flujoefectivo->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByFlujoefectivo() only accepts arguments of type Flujoefectivo or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Flujoefectivo relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProveedorQuery The current query, for fluid interface
+     */
+    public function joinFlujoefectivo($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Flujoefectivo');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Flujoefectivo');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Flujoefectivo relation Flujoefectivo object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   FlujoefectivoQuery A secondary query class using the current class as primary query
+     */
+    public function useFlujoefectivoQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinFlujoefectivo($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Flujoefectivo', 'FlujoefectivoQuery');
     }
 
     /**

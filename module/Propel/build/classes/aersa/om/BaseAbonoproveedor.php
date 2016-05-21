@@ -36,12 +36,6 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     protected $idabonoproveedor;
 
     /**
-     * The value for the idproveedor field.
-     * @var        int
-     */
-    protected $idproveedor;
-
-    /**
      * The value for the idempresa field.
      * @var        int
      */
@@ -54,10 +48,37 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     protected $idsucursal;
 
     /**
-     * The value for the idempleado field.
+     * The value for the idproveedor field.
      * @var        int
      */
-    protected $idempleado;
+    protected $idproveedor;
+
+    /**
+     * The value for the abonoproveedor_balance field.
+     * @var        string
+     */
+    protected $abonoproveedor_balance;
+
+    /**
+     * @var        Empresa
+     */
+    protected $aEmpresa;
+
+    /**
+     * @var        Proveedor
+     */
+    protected $aProveedor;
+
+    /**
+     * @var        Sucursal
+     */
+    protected $aSucursal;
+
+    /**
+     * @var        PropelObjectCollection|Abonoproveedordetalle[] Collection to store aggregation of Abonoproveedordetalle objects.
+     */
+    protected $collAbonoproveedordetalles;
+    protected $collAbonoproveedordetallesPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -80,6 +101,12 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $abonoproveedordetallesScheduledForDeletion = null;
+
+    /**
      * Get the [idabonoproveedor] column value.
      *
      * @return int
@@ -88,17 +115,6 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     {
 
         return $this->idabonoproveedor;
-    }
-
-    /**
-     * Get the [idproveedor] column value.
-     *
-     * @return int
-     */
-    public function getIdproveedor()
-    {
-
-        return $this->idproveedor;
     }
 
     /**
@@ -124,14 +140,25 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [idempleado] column value.
+     * Get the [idproveedor] column value.
      *
      * @return int
      */
-    public function getIdempleado()
+    public function getIdproveedor()
     {
 
-        return $this->idempleado;
+        return $this->idproveedor;
+    }
+
+    /**
+     * Get the [abonoproveedor_balance] column value.
+     *
+     * @return string
+     */
+    public function getAbonoproveedorBalance()
+    {
+
+        return $this->abonoproveedor_balance;
     }
 
     /**
@@ -156,27 +183,6 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     } // setIdabonoproveedor()
 
     /**
-     * Set the value of [idproveedor] column.
-     *
-     * @param  int $v new value
-     * @return Abonoproveedor The current object (for fluent API support)
-     */
-    public function setIdproveedor($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idproveedor !== $v) {
-            $this->idproveedor = $v;
-            $this->modifiedColumns[] = AbonoproveedorPeer::IDPROVEEDOR;
-        }
-
-
-        return $this;
-    } // setIdproveedor()
-
-    /**
      * Set the value of [idempresa] column.
      *
      * @param  int $v new value
@@ -191,6 +197,10 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         if ($this->idempresa !== $v) {
             $this->idempresa = $v;
             $this->modifiedColumns[] = AbonoproveedorPeer::IDEMPRESA;
+        }
+
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
         }
 
 
@@ -214,30 +224,59 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
             $this->modifiedColumns[] = AbonoproveedorPeer::IDSUCURSAL;
         }
 
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
+        }
+
 
         return $this;
     } // setIdsucursal()
 
     /**
-     * Set the value of [idempleado] column.
+     * Set the value of [idproveedor] column.
      *
      * @param  int $v new value
      * @return Abonoproveedor The current object (for fluent API support)
      */
-    public function setIdempleado($v)
+    public function setIdproveedor($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idempleado !== $v) {
-            $this->idempleado = $v;
-            $this->modifiedColumns[] = AbonoproveedorPeer::IDEMPLEADO;
+        if ($this->idproveedor !== $v) {
+            $this->idproveedor = $v;
+            $this->modifiedColumns[] = AbonoproveedorPeer::IDPROVEEDOR;
+        }
+
+        if ($this->aProveedor !== null && $this->aProveedor->getIdproveedor() !== $v) {
+            $this->aProveedor = null;
         }
 
 
         return $this;
-    } // setIdempleado()
+    } // setIdproveedor()
+
+    /**
+     * Set the value of [abonoproveedor_balance] column.
+     *
+     * @param  string $v new value
+     * @return Abonoproveedor The current object (for fluent API support)
+     */
+    public function setAbonoproveedorBalance($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->abonoproveedor_balance !== $v) {
+            $this->abonoproveedor_balance = $v;
+            $this->modifiedColumns[] = AbonoproveedorPeer::ABONOPROVEEDOR_BALANCE;
+        }
+
+
+        return $this;
+    } // setAbonoproveedorBalance()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -272,10 +311,10 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         try {
 
             $this->idabonoproveedor = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idproveedor = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idempresa = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->idsucursal = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->idempleado = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idproveedor = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->abonoproveedor_balance = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -308,6 +347,15 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
+        }
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
+        }
+        if ($this->aProveedor !== null && $this->idproveedor !== $this->aProveedor->getIdproveedor()) {
+            $this->aProveedor = null;
+        }
     } // ensureConsistency
 
     /**
@@ -346,6 +394,11 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->aEmpresa = null;
+            $this->aProveedor = null;
+            $this->aSucursal = null;
+            $this->collAbonoproveedordetalles = null;
 
         } // if (deep)
     }
@@ -460,6 +513,32 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
+                }
+                $this->setEmpresa($this->aEmpresa);
+            }
+
+            if ($this->aProveedor !== null) {
+                if ($this->aProveedor->isModified() || $this->aProveedor->isNew()) {
+                    $affectedRows += $this->aProveedor->save($con);
+                }
+                $this->setProveedor($this->aProveedor);
+            }
+
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
+                }
+                $this->setSucursal($this->aSucursal);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -469,6 +548,23 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->abonoproveedordetallesScheduledForDeletion !== null) {
+                if (!$this->abonoproveedordetallesScheduledForDeletion->isEmpty()) {
+                    AbonoproveedordetalleQuery::create()
+                        ->filterByPrimaryKeys($this->abonoproveedordetallesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->abonoproveedordetallesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAbonoproveedordetalles !== null) {
+                foreach ($this->collAbonoproveedordetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -500,17 +596,17 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         if ($this->isColumnModified(AbonoproveedorPeer::IDABONOPROVEEDOR)) {
             $modifiedColumns[':p' . $index++]  = '`idabonoproveedor`';
         }
-        if ($this->isColumnModified(AbonoproveedorPeer::IDPROVEEDOR)) {
-            $modifiedColumns[':p' . $index++]  = '`idproveedor`';
-        }
         if ($this->isColumnModified(AbonoproveedorPeer::IDEMPRESA)) {
             $modifiedColumns[':p' . $index++]  = '`idempresa`';
         }
         if ($this->isColumnModified(AbonoproveedorPeer::IDSUCURSAL)) {
             $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
-        if ($this->isColumnModified(AbonoproveedorPeer::IDEMPLEADO)) {
-            $modifiedColumns[':p' . $index++]  = '`idempleado`';
+        if ($this->isColumnModified(AbonoproveedorPeer::IDPROVEEDOR)) {
+            $modifiedColumns[':p' . $index++]  = '`idproveedor`';
+        }
+        if ($this->isColumnModified(AbonoproveedorPeer::ABONOPROVEEDOR_BALANCE)) {
+            $modifiedColumns[':p' . $index++]  = '`abonoproveedor_balance`';
         }
 
         $sql = sprintf(
@@ -526,17 +622,17 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
                     case '`idabonoproveedor`':
                         $stmt->bindValue($identifier, $this->idabonoproveedor, PDO::PARAM_INT);
                         break;
-                    case '`idproveedor`':
-                        $stmt->bindValue($identifier, $this->idproveedor, PDO::PARAM_INT);
-                        break;
                     case '`idempresa`':
                         $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
                     case '`idsucursal`':
                         $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
                         break;
-                    case '`idempleado`':
-                        $stmt->bindValue($identifier, $this->idempleado, PDO::PARAM_INT);
+                    case '`idproveedor`':
+                        $stmt->bindValue($identifier, $this->idproveedor, PDO::PARAM_INT);
+                        break;
+                    case '`abonoproveedor_balance`':
+                        $stmt->bindValue($identifier, $this->abonoproveedor_balance, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -632,10 +728,42 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
+                }
+            }
+
+            if ($this->aProveedor !== null) {
+                if (!$this->aProveedor->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aProveedor->getValidationFailures());
+                }
+            }
+
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
+                }
+            }
+
+
             if (($retval = AbonoproveedorPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collAbonoproveedordetalles !== null) {
+                    foreach ($this->collAbonoproveedordetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -676,16 +804,16 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
                 return $this->getIdabonoproveedor();
                 break;
             case 1:
-                return $this->getIdproveedor();
-                break;
-            case 2:
                 return $this->getIdempresa();
                 break;
-            case 3:
+            case 2:
                 return $this->getIdsucursal();
                 break;
+            case 3:
+                return $this->getIdproveedor();
+                break;
             case 4:
-                return $this->getIdempleado();
+                return $this->getAbonoproveedorBalance();
                 break;
             default:
                 return null;
@@ -704,10 +832,11 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Abonoproveedor'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -716,16 +845,30 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         $keys = AbonoproveedorPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getIdabonoproveedor(),
-            $keys[1] => $this->getIdproveedor(),
-            $keys[2] => $this->getIdempresa(),
-            $keys[3] => $this->getIdsucursal(),
-            $keys[4] => $this->getIdempleado(),
+            $keys[1] => $this->getIdempresa(),
+            $keys[2] => $this->getIdsucursal(),
+            $keys[3] => $this->getIdproveedor(),
+            $keys[4] => $this->getAbonoproveedorBalance(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aProveedor) {
+                $result['Proveedor'] = $this->aProveedor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collAbonoproveedordetalles) {
+                $result['Abonoproveedordetalles'] = $this->collAbonoproveedordetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -763,16 +906,16 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
                 $this->setIdabonoproveedor($value);
                 break;
             case 1:
-                $this->setIdproveedor($value);
-                break;
-            case 2:
                 $this->setIdempresa($value);
                 break;
-            case 3:
+            case 2:
                 $this->setIdsucursal($value);
                 break;
+            case 3:
+                $this->setIdproveedor($value);
+                break;
             case 4:
-                $this->setIdempleado($value);
+                $this->setAbonoproveedorBalance($value);
                 break;
         } // switch()
     }
@@ -799,10 +942,10 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         $keys = AbonoproveedorPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setIdabonoproveedor($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdproveedor($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdempresa($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdsucursal($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIdempleado($arr[$keys[4]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdproveedor($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setAbonoproveedorBalance($arr[$keys[4]]);
     }
 
     /**
@@ -815,10 +958,10 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
         $criteria = new Criteria(AbonoproveedorPeer::DATABASE_NAME);
 
         if ($this->isColumnModified(AbonoproveedorPeer::IDABONOPROVEEDOR)) $criteria->add(AbonoproveedorPeer::IDABONOPROVEEDOR, $this->idabonoproveedor);
-        if ($this->isColumnModified(AbonoproveedorPeer::IDPROVEEDOR)) $criteria->add(AbonoproveedorPeer::IDPROVEEDOR, $this->idproveedor);
         if ($this->isColumnModified(AbonoproveedorPeer::IDEMPRESA)) $criteria->add(AbonoproveedorPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(AbonoproveedorPeer::IDSUCURSAL)) $criteria->add(AbonoproveedorPeer::IDSUCURSAL, $this->idsucursal);
-        if ($this->isColumnModified(AbonoproveedorPeer::IDEMPLEADO)) $criteria->add(AbonoproveedorPeer::IDEMPLEADO, $this->idempleado);
+        if ($this->isColumnModified(AbonoproveedorPeer::IDPROVEEDOR)) $criteria->add(AbonoproveedorPeer::IDPROVEEDOR, $this->idproveedor);
+        if ($this->isColumnModified(AbonoproveedorPeer::ABONOPROVEEDOR_BALANCE)) $criteria->add(AbonoproveedorPeer::ABONOPROVEEDOR_BALANCE, $this->abonoproveedor_balance);
 
         return $criteria;
     }
@@ -882,10 +1025,28 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setIdproveedor($this->getIdproveedor());
         $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setIdsucursal($this->getIdsucursal());
-        $copyObj->setIdempleado($this->getIdempleado());
+        $copyObj->setIdproveedor($this->getIdproveedor());
+        $copyObj->setAbonoproveedorBalance($this->getAbonoproveedorBalance());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getAbonoproveedordetalles() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAbonoproveedordetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdabonoproveedor(NULL); // this is a auto-increment column, so set to default value
@@ -933,15 +1094,462 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Empresa object.
+     *
+     * @param                  Empresa $v
+     * @return Abonoproveedor The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEmpresa(Empresa $v = null)
+    {
+        if ($v === null) {
+            $this->setIdempresa(NULL);
+        } else {
+            $this->setIdempresa($v->getIdempresa());
+        }
+
+        $this->aEmpresa = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Empresa object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAbonoproveedor($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Empresa object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Empresa The associated Empresa object.
+     * @throws PropelException
+     */
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEmpresa->addAbonoproveedors($this);
+             */
+        }
+
+        return $this->aEmpresa;
+    }
+
+    /**
+     * Declares an association between this object and a Proveedor object.
+     *
+     * @param                  Proveedor $v
+     * @return Abonoproveedor The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setProveedor(Proveedor $v = null)
+    {
+        if ($v === null) {
+            $this->setIdproveedor(NULL);
+        } else {
+            $this->setIdproveedor($v->getIdproveedor());
+        }
+
+        $this->aProveedor = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Proveedor object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAbonoproveedor($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Proveedor object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Proveedor The associated Proveedor object.
+     * @throws PropelException
+     */
+    public function getProveedor(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aProveedor === null && ($this->idproveedor !== null) && $doQuery) {
+            $this->aProveedor = ProveedorQuery::create()->findPk($this->idproveedor, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aProveedor->addAbonoproveedors($this);
+             */
+        }
+
+        return $this->aProveedor;
+    }
+
+    /**
+     * Declares an association between this object and a Sucursal object.
+     *
+     * @param                  Sucursal $v
+     * @return Abonoproveedor The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSucursal(Sucursal $v = null)
+    {
+        if ($v === null) {
+            $this->setIdsucursal(NULL);
+        } else {
+            $this->setIdsucursal($v->getIdsucursal());
+        }
+
+        $this->aSucursal = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
+        if ($v !== null) {
+            $v->addAbonoproveedor($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Sucursal object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Sucursal The associated Sucursal object.
+     * @throws PropelException
+     */
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSucursal->addAbonoproveedors($this);
+             */
+        }
+
+        return $this->aSucursal;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Abonoproveedordetalle' == $relationName) {
+            $this->initAbonoproveedordetalles();
+        }
+    }
+
+    /**
+     * Clears out the collAbonoproveedordetalles collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Abonoproveedor The current object (for fluent API support)
+     * @see        addAbonoproveedordetalles()
+     */
+    public function clearAbonoproveedordetalles()
+    {
+        $this->collAbonoproveedordetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collAbonoproveedordetallesPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAbonoproveedordetalles collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAbonoproveedordetalles($v = true)
+    {
+        $this->collAbonoproveedordetallesPartial = $v;
+    }
+
+    /**
+     * Initializes the collAbonoproveedordetalles collection.
+     *
+     * By default this just sets the collAbonoproveedordetalles collection to an empty array (like clearcollAbonoproveedordetalles());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAbonoproveedordetalles($overrideExisting = true)
+    {
+        if (null !== $this->collAbonoproveedordetalles && !$overrideExisting) {
+            return;
+        }
+        $this->collAbonoproveedordetalles = new PropelObjectCollection();
+        $this->collAbonoproveedordetalles->setModel('Abonoproveedordetalle');
+    }
+
+    /**
+     * Gets an array of Abonoproveedordetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Abonoproveedor is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Abonoproveedordetalle[] List of Abonoproveedordetalle objects
+     * @throws PropelException
+     */
+    public function getAbonoproveedordetalles($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAbonoproveedordetallesPartial && !$this->isNew();
+        if (null === $this->collAbonoproveedordetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAbonoproveedordetalles) {
+                // return empty collection
+                $this->initAbonoproveedordetalles();
+            } else {
+                $collAbonoproveedordetalles = AbonoproveedordetalleQuery::create(null, $criteria)
+                    ->filterByAbonoproveedor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAbonoproveedordetallesPartial && count($collAbonoproveedordetalles)) {
+                      $this->initAbonoproveedordetalles(false);
+
+                      foreach ($collAbonoproveedordetalles as $obj) {
+                        if (false == $this->collAbonoproveedordetalles->contains($obj)) {
+                          $this->collAbonoproveedordetalles->append($obj);
+                        }
+                      }
+
+                      $this->collAbonoproveedordetallesPartial = true;
+                    }
+
+                    $collAbonoproveedordetalles->getInternalIterator()->rewind();
+
+                    return $collAbonoproveedordetalles;
+                }
+
+                if ($partial && $this->collAbonoproveedordetalles) {
+                    foreach ($this->collAbonoproveedordetalles as $obj) {
+                        if ($obj->isNew()) {
+                            $collAbonoproveedordetalles[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAbonoproveedordetalles = $collAbonoproveedordetalles;
+                $this->collAbonoproveedordetallesPartial = false;
+            }
+        }
+
+        return $this->collAbonoproveedordetalles;
+    }
+
+    /**
+     * Sets a collection of Abonoproveedordetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $abonoproveedordetalles A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Abonoproveedor The current object (for fluent API support)
+     */
+    public function setAbonoproveedordetalles(PropelCollection $abonoproveedordetalles, PropelPDO $con = null)
+    {
+        $abonoproveedordetallesToDelete = $this->getAbonoproveedordetalles(new Criteria(), $con)->diff($abonoproveedordetalles);
+
+
+        $this->abonoproveedordetallesScheduledForDeletion = $abonoproveedordetallesToDelete;
+
+        foreach ($abonoproveedordetallesToDelete as $abonoproveedordetalleRemoved) {
+            $abonoproveedordetalleRemoved->setAbonoproveedor(null);
+        }
+
+        $this->collAbonoproveedordetalles = null;
+        foreach ($abonoproveedordetalles as $abonoproveedordetalle) {
+            $this->addAbonoproveedordetalle($abonoproveedordetalle);
+        }
+
+        $this->collAbonoproveedordetalles = $abonoproveedordetalles;
+        $this->collAbonoproveedordetallesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Abonoproveedordetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Abonoproveedordetalle objects.
+     * @throws PropelException
+     */
+    public function countAbonoproveedordetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAbonoproveedordetallesPartial && !$this->isNew();
+        if (null === $this->collAbonoproveedordetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAbonoproveedordetalles) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAbonoproveedordetalles());
+            }
+            $query = AbonoproveedordetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAbonoproveedor($this)
+                ->count($con);
+        }
+
+        return count($this->collAbonoproveedordetalles);
+    }
+
+    /**
+     * Method called to associate a Abonoproveedordetalle object to this object
+     * through the Abonoproveedordetalle foreign key attribute.
+     *
+     * @param    Abonoproveedordetalle $l Abonoproveedordetalle
+     * @return Abonoproveedor The current object (for fluent API support)
+     */
+    public function addAbonoproveedordetalle(Abonoproveedordetalle $l)
+    {
+        if ($this->collAbonoproveedordetalles === null) {
+            $this->initAbonoproveedordetalles();
+            $this->collAbonoproveedordetallesPartial = true;
+        }
+
+        if (!in_array($l, $this->collAbonoproveedordetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAbonoproveedordetalle($l);
+
+            if ($this->abonoproveedordetallesScheduledForDeletion and $this->abonoproveedordetallesScheduledForDeletion->contains($l)) {
+                $this->abonoproveedordetallesScheduledForDeletion->remove($this->abonoproveedordetallesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Abonoproveedordetalle $abonoproveedordetalle The abonoproveedordetalle object to add.
+     */
+    protected function doAddAbonoproveedordetalle($abonoproveedordetalle)
+    {
+        $this->collAbonoproveedordetalles[]= $abonoproveedordetalle;
+        $abonoproveedordetalle->setAbonoproveedor($this);
+    }
+
+    /**
+     * @param	Abonoproveedordetalle $abonoproveedordetalle The abonoproveedordetalle object to remove.
+     * @return Abonoproveedor The current object (for fluent API support)
+     */
+    public function removeAbonoproveedordetalle($abonoproveedordetalle)
+    {
+        if ($this->getAbonoproveedordetalles()->contains($abonoproveedordetalle)) {
+            $this->collAbonoproveedordetalles->remove($this->collAbonoproveedordetalles->search($abonoproveedordetalle));
+            if (null === $this->abonoproveedordetallesScheduledForDeletion) {
+                $this->abonoproveedordetallesScheduledForDeletion = clone $this->collAbonoproveedordetalles;
+                $this->abonoproveedordetallesScheduledForDeletion->clear();
+            }
+            $this->abonoproveedordetallesScheduledForDeletion[]= clone $abonoproveedordetalle;
+            $abonoproveedordetalle->setAbonoproveedor(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Abonoproveedor is new, it will return
+     * an empty collection; or if this Abonoproveedor has previously
+     * been saved, it will retrieve related Abonoproveedordetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Abonoproveedor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Abonoproveedordetalle[] List of Abonoproveedordetalle objects
+     */
+    public function getAbonoproveedordetallesJoinCuentabancaria($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AbonoproveedordetalleQuery::create(null, $criteria);
+        $query->joinWith('Cuentabancaria', $join_behavior);
+
+        return $this->getAbonoproveedordetalles($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Abonoproveedor is new, it will return
+     * an empty collection; or if this Abonoproveedor has previously
+     * been saved, it will retrieve related Abonoproveedordetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Abonoproveedor.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Abonoproveedordetalle[] List of Abonoproveedordetalle objects
+     */
+    public function getAbonoproveedordetallesJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AbonoproveedordetalleQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getAbonoproveedordetalles($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->idabonoproveedor = null;
-        $this->idproveedor = null;
         $this->idempresa = null;
         $this->idsucursal = null;
-        $this->idempleado = null;
+        $this->idproveedor = null;
+        $this->abonoproveedor_balance = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -964,10 +1572,31 @@ abstract class BaseAbonoproveedor extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collAbonoproveedordetalles) {
+                foreach ($this->collAbonoproveedordetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
+            }
+            if ($this->aProveedor instanceof Persistent) {
+              $this->aProveedor->clearAllReferences($deep);
+            }
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collAbonoproveedordetalles instanceof PropelCollection) {
+            $this->collAbonoproveedordetalles->clearIterator();
+        }
+        $this->collAbonoproveedordetalles = null;
+        $this->aEmpresa = null;
+        $this->aProveedor = null;
+        $this->aSucursal = null;
     }
 
     /**

@@ -390,6 +390,9 @@ abstract class BaseSucursalPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in AbonoproveedorPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AbonoproveedorPeer::clearInstancePool();
         // Invalidate objects in AlmacenPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AlmacenPeer::clearInstancePool();
@@ -399,6 +402,9 @@ abstract class BaseSucursalPeer
         // Invalidate objects in CuentabancariaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CuentabancariaPeer::clearInstancePool();
+        // Invalidate objects in CuentaporcobrarPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CuentaporcobrarPeer::clearInstancePool();
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
@@ -1004,6 +1010,12 @@ abstract class BaseSucursalPeer
         foreach ($objects as $obj) {
 
 
+            // delete related Abonoproveedor objects
+            $criteria = new Criteria(AbonoproveedorPeer::DATABASE_NAME);
+
+            $criteria->add(AbonoproveedorPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += AbonoproveedorPeer::doDelete($criteria, $con);
+
             // delete related Almacen objects
             $criteria = new Criteria(AlmacenPeer::DATABASE_NAME);
 
@@ -1021,6 +1033,12 @@ abstract class BaseSucursalPeer
 
             $criteria->add(CuentabancariaPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += CuentabancariaPeer::doDelete($criteria, $con);
+
+            // delete related Cuentaporcobrar objects
+            $criteria = new Criteria(CuentaporcobrarPeer::DATABASE_NAME);
+
+            $criteria->add(CuentaporcobrarPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += CuentaporcobrarPeer::doDelete($criteria, $con);
 
             // delete related Devolucion objects
             $criteria = new Criteria(DevolucionPeer::DATABASE_NAME);

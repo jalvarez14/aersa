@@ -893,7 +893,7 @@ return array(
                                         ),
                                     ),
                                 ), 
-                            ), 
+                            ),  
                             'devolucion' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 

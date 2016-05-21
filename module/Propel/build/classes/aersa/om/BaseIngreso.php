@@ -122,6 +122,12 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     protected $aUsuarioRelatedByIdusuario;
 
     /**
+     * @var        PropelObjectCollection|Flujoefectivo[] Collection to store aggregation of Flujoefectivo objects.
+     */
+    protected $collFlujoefectivos;
+    protected $collFlujoefectivosPartial;
+
+    /**
      * @var        PropelObjectCollection|Ingresodetalle[] Collection to store aggregation of Ingresodetalle objects.
      */
     protected $collIngresodetalles;
@@ -146,6 +152,12 @@ abstract class BaseIngreso extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $flujoefectivosScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -754,6 +766,8 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $this->aEmpresa = null;
             $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
+            $this->collFlujoefectivos = null;
+
             $this->collIngresodetalles = null;
 
         } // if (deep)
@@ -911,6 +925,24 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->flujoefectivosScheduledForDeletion !== null) {
+                if (!$this->flujoefectivosScheduledForDeletion->isEmpty()) {
+                    foreach ($this->flujoefectivosScheduledForDeletion as $flujoefectivo) {
+                        // need to save related object because we set the relation to null
+                        $flujoefectivo->save($con);
+                    }
+                    $this->flujoefectivosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collFlujoefectivos !== null) {
+                foreach ($this->collFlujoefectivos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->ingresodetallesScheduledForDeletion !== null) {
@@ -1168,6 +1200,14 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             }
 
 
+                if ($this->collFlujoefectivos !== null) {
+                    foreach ($this->collFlujoefectivos as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collIngresodetalles !== null) {
                     foreach ($this->collIngresodetalles as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1306,6 +1346,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             }
             if (null !== $this->aUsuarioRelatedByIdusuario) {
                 $result['UsuarioRelatedByIdusuario'] = $this->aUsuarioRelatedByIdusuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collFlujoefectivos) {
+                $result['Flujoefectivos'] = $this->collFlujoefectivos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collIngresodetalles) {
                 $result['Ingresodetalles'] = $this->collIngresodetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1520,6 +1563,12 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getFlujoefectivos() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addFlujoefectivo($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getIngresodetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1796,9 +1845,412 @@ abstract class BaseIngreso extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('Flujoefectivo' == $relationName) {
+            $this->initFlujoefectivos();
+        }
         if ('Ingresodetalle' == $relationName) {
             $this->initIngresodetalles();
         }
+    }
+
+    /**
+     * Clears out the collFlujoefectivos collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Ingreso The current object (for fluent API support)
+     * @see        addFlujoefectivos()
+     */
+    public function clearFlujoefectivos()
+    {
+        $this->collFlujoefectivos = null; // important to set this to null since that means it is uninitialized
+        $this->collFlujoefectivosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collFlujoefectivos collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialFlujoefectivos($v = true)
+    {
+        $this->collFlujoefectivosPartial = $v;
+    }
+
+    /**
+     * Initializes the collFlujoefectivos collection.
+     *
+     * By default this just sets the collFlujoefectivos collection to an empty array (like clearcollFlujoefectivos());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initFlujoefectivos($overrideExisting = true)
+    {
+        if (null !== $this->collFlujoefectivos && !$overrideExisting) {
+            return;
+        }
+        $this->collFlujoefectivos = new PropelObjectCollection();
+        $this->collFlujoefectivos->setModel('Flujoefectivo');
+    }
+
+    /**
+     * Gets an array of Flujoefectivo objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Ingreso is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     * @throws PropelException
+     */
+    public function getFlujoefectivos($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collFlujoefectivosPartial && !$this->isNew();
+        if (null === $this->collFlujoefectivos || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collFlujoefectivos) {
+                // return empty collection
+                $this->initFlujoefectivos();
+            } else {
+                $collFlujoefectivos = FlujoefectivoQuery::create(null, $criteria)
+                    ->filterByIngreso($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collFlujoefectivosPartial && count($collFlujoefectivos)) {
+                      $this->initFlujoefectivos(false);
+
+                      foreach ($collFlujoefectivos as $obj) {
+                        if (false == $this->collFlujoefectivos->contains($obj)) {
+                          $this->collFlujoefectivos->append($obj);
+                        }
+                      }
+
+                      $this->collFlujoefectivosPartial = true;
+                    }
+
+                    $collFlujoefectivos->getInternalIterator()->rewind();
+
+                    return $collFlujoefectivos;
+                }
+
+                if ($partial && $this->collFlujoefectivos) {
+                    foreach ($this->collFlujoefectivos as $obj) {
+                        if ($obj->isNew()) {
+                            $collFlujoefectivos[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collFlujoefectivos = $collFlujoefectivos;
+                $this->collFlujoefectivosPartial = false;
+            }
+        }
+
+        return $this->collFlujoefectivos;
+    }
+
+    /**
+     * Sets a collection of Flujoefectivo objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $flujoefectivos A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function setFlujoefectivos(PropelCollection $flujoefectivos, PropelPDO $con = null)
+    {
+        $flujoefectivosToDelete = $this->getFlujoefectivos(new Criteria(), $con)->diff($flujoefectivos);
+
+
+        $this->flujoefectivosScheduledForDeletion = $flujoefectivosToDelete;
+
+        foreach ($flujoefectivosToDelete as $flujoefectivoRemoved) {
+            $flujoefectivoRemoved->setIngreso(null);
+        }
+
+        $this->collFlujoefectivos = null;
+        foreach ($flujoefectivos as $flujoefectivo) {
+            $this->addFlujoefectivo($flujoefectivo);
+        }
+
+        $this->collFlujoefectivos = $flujoefectivos;
+        $this->collFlujoefectivosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Flujoefectivo objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Flujoefectivo objects.
+     * @throws PropelException
+     */
+    public function countFlujoefectivos(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collFlujoefectivosPartial && !$this->isNew();
+        if (null === $this->collFlujoefectivos || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collFlujoefectivos) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getFlujoefectivos());
+            }
+            $query = FlujoefectivoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByIngreso($this)
+                ->count($con);
+        }
+
+        return count($this->collFlujoefectivos);
+    }
+
+    /**
+     * Method called to associate a Flujoefectivo object to this object
+     * through the Flujoefectivo foreign key attribute.
+     *
+     * @param    Flujoefectivo $l Flujoefectivo
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function addFlujoefectivo(Flujoefectivo $l)
+    {
+        if ($this->collFlujoefectivos === null) {
+            $this->initFlujoefectivos();
+            $this->collFlujoefectivosPartial = true;
+        }
+
+        if (!in_array($l, $this->collFlujoefectivos->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddFlujoefectivo($l);
+
+            if ($this->flujoefectivosScheduledForDeletion and $this->flujoefectivosScheduledForDeletion->contains($l)) {
+                $this->flujoefectivosScheduledForDeletion->remove($this->flujoefectivosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Flujoefectivo $flujoefectivo The flujoefectivo object to add.
+     */
+    protected function doAddFlujoefectivo($flujoefectivo)
+    {
+        $this->collFlujoefectivos[]= $flujoefectivo;
+        $flujoefectivo->setIngreso($this);
+    }
+
+    /**
+     * @param	Flujoefectivo $flujoefectivo The flujoefectivo object to remove.
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function removeFlujoefectivo($flujoefectivo)
+    {
+        if ($this->getFlujoefectivos()->contains($flujoefectivo)) {
+            $this->collFlujoefectivos->remove($this->collFlujoefectivos->search($flujoefectivo));
+            if (null === $this->flujoefectivosScheduledForDeletion) {
+                $this->flujoefectivosScheduledForDeletion = clone $this->collFlujoefectivos;
+                $this->flujoefectivosScheduledForDeletion->clear();
+            }
+            $this->flujoefectivosScheduledForDeletion[]= $flujoefectivo;
+            $flujoefectivo->setIngreso(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinCompra($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Compra', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinCuentabancaria($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Cuentabancaria', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinCuentaporcobrar($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Cuentaporcobrar', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Flujoefectivos from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Flujoefectivo[] List of Flujoefectivo objects
+     */
+    public function getFlujoefectivosJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FlujoefectivoQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getFlujoefectivos($query, $con);
     }
 
     /**
@@ -2115,6 +2567,11 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collFlujoefectivos) {
+                foreach ($this->collFlujoefectivos as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collIngresodetalles) {
                 foreach ($this->collIngresodetalles as $o) {
                     $o->clearAllReferences($deep);
@@ -2136,6 +2593,10 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collFlujoefectivos instanceof PropelCollection) {
+            $this->collFlujoefectivos->clearIterator();
+        }
+        $this->collFlujoefectivos = null;
         if ($this->collIngresodetalles instanceof PropelCollection) {
             $this->collIngresodetalles->clearIterator();
         }
