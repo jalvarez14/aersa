@@ -74,7 +74,7 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/procesos/compra/editar/<?php echo $entity->getIdcompra()?>">
+                                                <a href="/procesos/consignacion/editar/<?php echo $entity->getIdcompra()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
                                             <li>
@@ -95,9 +95,9 @@
 <script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
 <script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
 <script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-<script src="/application/custom/js/procesos/compra.js" type="text/javascript"></script>	
+<script src="/application/custom/js/procesos/consignacion.js" type="text/javascript"></script>	
 <script>
     
-    var plugin = $('#my_container').compra();
+    var plugin = $('#my_container').consignacion();
     plugin.list(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

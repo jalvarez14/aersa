@@ -1,0 +1,188 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+    #productos_table .fa-trash{
+        color:red;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:;">Procesos</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/consignacion">Consignación</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/nuevoregistro">Registro</a>
+            </li>
+        </ul>
+</div>
+<div id="form_container">
+    <form class="form-horizontal" action="/procesos/consignacion/nuevoregistro" method="post" enctype="multipart/form-data">
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="page-title">Consignación  - Registro</h3><br><br>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+
+                            <?php echo $this->formLabel($form->get('compra_fechacompra')) ?>  
+                            <?php echo $this->formText($form->get('compra_fechacompra')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_tipo')) ?>  
+                            <?php echo $this->formSelect($form->get('compra_tipo')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formHidden($form->get('idproveedor')); ?>  
+                            <?php echo $this->formLabel($form->get('idproveedor_autocomplete')); ?>  
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                 <?php echo $this->formText($form->get('idproveedor_autocomplete')); ?>  
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_folio')) ?>  
+                            <?php echo $this->formText($form->get('compra_folio')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+
+                            <?php echo $this->formLabel($form->get('compra_fechaentrega')) ?>  
+                            <?php echo $this->formText($form->get('compra_fechaentrega')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_factura')) ?>  
+                            <?php echo $this->formFile($form->get('compra_factura')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+
+                            <?php echo $this->formLabel($form->get('idalmacen')) ?>  
+                            <?php echo $this->formSelect($form->get('idalmacen')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('compra_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('compra_revisada')) ?> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <h3 class="page-title">Productos</h3><br><br>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-5 col-md-offset-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                    <input id="idproducto" type="hidden">
+                                    <input id="producto_iva" type="hidden">
+                                    <input id="producto_autocomplete" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <button disabled id="producto_add" class="btn grey-mint" type="button">Agregar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table" id="productos_table">
+                            <thead>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>C.U. Neto</th>
+                                <th>Desc. (%)</th>
+                                <th>IEPS (%)</th>
+                                <th>Subtotal</th>
+                                <th>Revisada</th>
+                                <th>Almacen</th>
+                                <th>Opciones</th>
+                            </thead>
+                            <tbody>
+<!--                                <tr>
+                                    <td>Producto 1</td>
+                                    <td><input type="text"></td>
+                                    <td><input type="text"></td>
+                                    <td>$ 100.00</td>
+                                    <td><input type="text"></td>
+                                    <td><input type="text"></td>
+                                    <td>$ 100.00</td>
+                                    <td><input type="checkbox"></td>
+                                    <td>
+                                        <select class="form-control">
+                                            <option>almacen 1</option>
+                                            <option>almacen 2</option>
+                                            <option>almacen 3</option>
+                                        </select>
+                                    </td>
+                                    <td><i class="fa fa-trash"></i></td>
+                                </tr>-->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>SUBTOTAL</td>
+                                    <input type="hidden" name="compra_subtotal">
+                                    <td id="subtotal">$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>IEPS</td>
+                                    <input type="hidden" name="compra_ieps">
+                                    <td id="ieps">$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>IVA</td>
+                                    <input type="hidden" name="compra_iva">
+                                    <td id="iva">$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8"></td>
+                                    <td>TOTAL</td>
+                                    <input type="hidden" name="compra_total">
+                                    <td id="total">$0.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript" src="/application/custom/js/procesos/consignacion.js"></script>
+<script>
+    var $form = $('#form_container').consignacion({'iva':<?php echo $iva?>});
+    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $almacenes?>);
+</script>

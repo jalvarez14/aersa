@@ -136,12 +136,12 @@
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
                     <thead >
                         <tr>
-                            <th class="text-center"> Código de barras </th>
-                            <th class="text-center"> Cantidad </th>
-                            <th class="text-center"> Opciones </th>
+                            <th> Código de barras </th>
+                            <th> Cantidad </th>
+                            <th> Opciones </th>
                         </tr>
                     </thead>
-                    <tbody class="text-center">
+                    <tbody>
                         <?php if(count($cbarras) == 0): ?>
                             <td valign="top" colspan="4" class="dataTables_empty">Ningún dato disponible en esta tabla</td>
                         <?php endif ?>
@@ -190,12 +190,12 @@
                         <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
                             <thead >
                                 <tr>
-                                    <th class="text-center"> Producto </th>
-                                    <th class="text-center"> Cantidad </th>
-                                    <th class="text-center"> Opciones </th>
+                                    <th> Producto </th>
+                                    <th> Cantidad </th>
+                                    <th> Opciones </th>
                                 </tr>
                             </thead>
-                            <tbody class="text-center">
+                            <tbody>
                                 <?php foreach ($recetas as $entity) : ?>
                                 <?php $nombreProducto = \ProductoQuery::create()->findPk($entity->getIdproductoreceta())?>
                                     <tr id="<?php echo $entity->getIdreceta() ?>">

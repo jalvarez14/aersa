@@ -26,7 +26,7 @@ class ConsignacionController extends AbstractActionController {
         $mes_activo = $sucursal->getSucursalMesactivo();
         
         $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraTipo('consignacion')->find();
-       
+      
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/consignacion/index');
             $view_model->setVariables(array(
@@ -73,7 +73,7 @@ class ConsignacionController extends AbstractActionController {
             
             $post_data = $request->getPost();
             $post_files = $request->getFiles();
-           
+            
             $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
             $post_data["compra_fechaentrega"] = date_create_from_format('d/m/Y', $post_data["compra_fechaentrega"]);
            
@@ -96,6 +96,7 @@ class ConsignacionController extends AbstractActionController {
                 $entity->setIdauditor($session['idusuario']);
             }
            
+             
             $entity->save();
             
             //EL COMPROBANTE
@@ -129,7 +130,7 @@ class ConsignacionController extends AbstractActionController {
                                ->setCompradetalleIeps($producto['ieps'])
                                ->setCompradetalleSubtotal($producto['subtotal']);
                 
-                if($entity->getCompraTipo() == 'compra'){
+                if($entity->getCompraTipo() == 'compra' || $entity->getCompraTipo() == 'consignacion'){
                     $compra_detalle->setIdalmacen($producto['almacen']);
                 }
                 
@@ -143,24 +144,25 @@ class ConsignacionController extends AbstractActionController {
             
             //REDIRECCIONAMOS AL LISTADO
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-            return $this->redirect()->toUrl('/procesos/compra');
+            return $this->redirect()->toUrl('/procesos/consignacion');
         }
         
         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
         $anio_activo = $sucursal->getSucursalAnioactivo();
         $mes_activo = $sucursal->getSucursalMesactivo();
         
-        $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Créditos al costo',  \Criteria::NOT_EQUAL)->find();
+        $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Consignación',  \Criteria::EQUAL)->find();
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
         
-        $form = new \Application\Proceso\Form\CompraForm($almecenes);
+        $form = new \Application\Proceso\Form\ConsignacionForm($almecenes);
+        $form->get('compra_tipo')->setValue('consignacion');
         
         //Obtenemos el iva
         $iva = \TasaivaQuery::create()->findOne();
         $iva = $iva->getTasaivaValor();
-        
+       
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/proceso/compra/nuevoregistro');
+        $view_model->setTemplate('/application/proceso/consignacion/nuevoregistro');
         $view_model->setVariables(array(
             'form' => $form,
             'anio_activo' => $anio_activo,
@@ -262,11 +264,11 @@ class ConsignacionController extends AbstractActionController {
             }
 
             //NUESTROS ALMACENES
-            $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Créditos al costo',  \Criteria::NOT_EQUAL)->find();
+            $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Consignación',  \Criteria::EQUAL)->find();
             $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
             
             //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Proceso\Form\CompraForm($almecenes);
+            $form = new \Application\Proceso\Form\ConsignacionForm($almecenes);
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
@@ -293,7 +295,7 @@ class ConsignacionController extends AbstractActionController {
             $iva = $iva->getTasaivaValor();
 
             $view_model = new ViewModel();
-            $view_model->setTemplate('/application/proceso/compra/editar');
+            $view_model->setTemplate('/application/proceso/consignacion/editar');
             $view_model->setVariables(array(
                 'form' => $form,
                 'entity' => $entity,
@@ -326,7 +328,7 @@ class ConsignacionController extends AbstractActionController {
 
             $this->flashMessenger()->addSuccessMessage('Registro eliminado satisfactoriamente!');
 
-            return $this->redirect()->toUrl('/procesos/compra');
+            return $this->redirect()->toUrl('/procesos/consignacion');
         }
     }
 }
