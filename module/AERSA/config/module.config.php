@@ -803,6 +803,57 @@ return array(
                                     ),
                                 ), 
                             ), 
+                            'consignacion' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/consignacion', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Consignacion', 'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevoregistro' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevoregistro', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Consignacion', 
+                                                'action' => 'nuevoregistro', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Consignacion', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Consignacion', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Consignacion', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),
+                                ), 
+                            ),
                             'requisicion' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1183,6 +1234,7 @@ return array(
              */
             
             'Application\Proceso\Controller\Compra'         => 'Application\Proceso\Controller\CompraController',
+            'Application\Proceso\Controller\Consignacion'   => 'Application\Proceso\Controller\ConsignacionController',
             'Application\Proceso\Controller\Requisicion'    => 'Application\Proceso\Controller\RequisicionController',
             'Application\Proceso\Controller\Devolucion'     => 'Application\Proceso\Controller\DevolucionController',
             'Application\Proceso\Controller\Ingresos'       => 'Application\Proceso\Controller\IngresosController',

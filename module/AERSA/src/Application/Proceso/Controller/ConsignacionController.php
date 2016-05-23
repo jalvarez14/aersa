@@ -13,22 +13,22 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class CompraController extends AbstractActionController {
+class ConsignacionController extends AbstractActionController {
     
     public function indexAction() {
         
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         
-         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+        $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
          
-         $anio_activo = $sucursal->getSucursalAnioactivo();
-         $mes_activo = $sucursal->getSucursalMesactivo();
+        $anio_activo = $sucursal->getSucursalAnioactivo();
+        $mes_activo = $sucursal->getSucursalMesactivo();
         
-        $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->find();
-        
+        $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraTipo('consignacion')->find();
+       
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/proceso/compra/index');
+        $view_model->setTemplate('/application/proceso/consignacion/index');
             $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
