@@ -71,7 +71,7 @@
             
             //ROW SUBTOTAL
             var row_subtotal = cantidad * costo_unitario;
-    
+            
             $tr.find('input[name*=subtotal]').val(row_subtotal);
             $tr.find('td.subtotal').text(accounting.formatMoney(row_subtotal));
             
