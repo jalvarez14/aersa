@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 
-<h3 class="page-title">Registro plantilla tablajeria</h3>
+<h3 class="page-title">Registro orden de tablajeria</h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -17,15 +17,6 @@
         <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
         <strong>Éxito!</strong>
         <?php echo $message?>
-    </div>
-<?php endforeach;?>
-
-<?php foreach ($messages->getErrorMessages() as $message):?>
-    <div class="alert alert-danger alert-dismissable">
-        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-        <strong>Error!</strong>
-        <?php echo $message?>
-        
     </div>
 <?php endforeach;?>
 <?php
@@ -72,10 +63,10 @@
                         <div class="col-md-2">
                             <?php echo $this->formLabel($form->get('ordentablajeria_pesobruto')); ?>  
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <?php echo  $this->formText($form->get('ordentablajeria_pesobruto'));?>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <?php echo  $this->formText($form->get('ordentablajeria_numeroporciones'));?>
                         </div>
                     </div>
@@ -116,64 +107,66 @@
                         </div>
                     </div>
                 </div>
-                
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
                 <h3 class="form-section">Tablajeando</h3>
                 <div class="row">
-                    <div class="form-group col-md-12">
-                        <div class="col-md-2">
-                            <?php echo $this->formLabel($form->get('ordentablajeria_pesoneto')); ?>  
+                        <div class="form-group col-md-12">
+                            <div class="col-md-2">
+                                <?php echo $this->formLabel($form->get('ordentablajeria_pesoneto')); ?>  
+                            </div>
+                            <div class="col-md-4">
+                                <?php echo  $this->formText($form->get('ordentablajeria_pesoneto'));?>
+                            </div>
+                            <div class="col-md-2">
+                                <?php echo $this->formLabel($form->get('ordentablajeria_precioneto')) ?>  
+                            </div>
+                            <div class="col-md-4">
+                                <?php echo  $this->formText($form->get('ordentablajeria_precioneto'))?>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <?php echo  $this->formText($form->get('ordentablajeria_pesoneto'));?>
+                        <div class="form-group col-md-12">
+                            <div class="col-md-2">
+                                <?php echo $this->formLabel($form->get('ordentablajeria_merma')); ?>  
+                            </div>
+                            <div class="col-md-4">
+                                <?php echo  $this->formText($form->get('ordentablajeria_merma'));?>
+                            </div>
+                            <div class="col-md-2">
+                                <?php echo $this->formLabel($form->get('ordentablajeria_porcentajemerma')) ?>  
+                            </div>
+                            <div class="col-md-4">
+                                <?php echo  $this->formText($form->get('ordentablajeria_porcentajemerma'))?>
+                            </div>
                         </div>
-                        <div class="col-md-2">
-                            <?php echo $this->formLabel($form->get('ordentablajeria_precioneto')) ?>  
+
+                        <div class="form-group col-md-12">
+                            <div class="col-md-2">
+                                <?php echo $this->formLabel($form->get('ordentablajeria_aprovechamiento')); ?>  
+                            </div>
+                            <div class="col-md-4">
+                                <?php echo  $this->formText($form->get('ordentablajeria_aprovechamiento'));?>
+                            </div>
+                            <div class="col-md-2">
+                                <?php echo $this->formLabel($form->get('ordentablajeria_revisada')) ?>  
+                            </div>
+                            <div class="col-md-4">
+                                <?php echo  $this->formSelect($form->get('ordentablajeria_revisada'))?>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <?php echo  $this->formText($form->get('ordentablajeria_precioneto'))?>
-                        </div>
+
                     </div>
-                    <div class="form-group col-md-12">
-                        <div class="col-md-2">
-                            <?php echo $this->formLabel($form->get('ordentablajeria_merma')); ?>  
-                        </div>
-                        <div class="col-md-4">
-                            <?php echo  $this->formText($form->get('ordentablajeria_merma'));?>
-                        </div>
-                        <div class="col-md-2">
-                            <?php echo $this->formLabel($form->get('ordentablajeria_porcentajemerma')) ?>  
-                        </div>
-                        <div class="col-md-4">
-                            <?php echo  $this->formText($form->get('ordentablajeria_porcentajemerma'))?>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group col-md-12">
-                        <div class="col-md-2">
-                            <?php echo $this->formLabel($form->get('ordentablajeria_aprovechamiento')); ?>  
-                        </div>
-                        <div class="col-md-4">
-                            <?php echo  $this->formText($form->get('ordentablajeria_aprovechamiento'));?>
-                        </div>
-                        <div class="col-md-2">
-                            <?php echo $this->formLabel($form->get('ordentablajeria_revisada')) ?>  
-                        </div>
-                        <div class="col-md-4">
-                            <?php echo  $this->formSelect($form->get('ordentablajeria_revisada'))?>
-                        </div>
-                    </div>
-                    
-                </div>
-                <br>
-                <!--
-                <div class="row  col-md-12">
-                    <div class="col-md-12 text-right">
-                        <p>(*)Campos obligatorios</p>
-                    </div>
-                </div>
-                -->
-                <br><br>
-                <h3 class="page-title">Productos</h3><br><br>
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="form-section">Productos</h3>
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-5 col-md-offset-6">
@@ -182,7 +175,6 @@
                                     <i class="fa fa-search"></i>
                                 </span>
                                 <input id="idproductoTabla" type="hidden">
-                                <input id="producto_iva" type="hidden">
                                 <input name="producto_autocompleteTabla" class="form-control" type="text">
                             </div>
                         </div>
@@ -191,7 +183,6 @@
                         </div>
                     </div>
                 </div>
-                <br>
                 <div class="row">
                     <table class="table" id="productos_table">
                         <thead>
@@ -214,22 +205,16 @@
                         </tfoot>
                     </table>
                 </div>
-                <br>
                 
-                <input type="hidden" id="ivaValor" value="<?php echo $iva->getTasaivavalor() ?>">
-                <div class="form-actions right">
-                    <button class="btn blue" disabled="disabled" id="btnSubmit" type="submit">
-                        <i class="fa fa-check"></i>
-                        Guardar
-                    </button>
-                </div>
             </div>
-            
+            <div class="form-actions right">
+                <button class="btn blue" id="btnSubmit" type="submit">
+                    <i class="fa fa-check"></i>
+                    Guardar
+                </button>
+            </div>
         </div>
     </div>
-
-    <input type="hidden" id="mes" value="<?php echo $mes_activo ?>">
-    <input type="hidden" id="anio" value="<?php echo $anio_activo ?>">
 <?php  echo $this->form()->closeTag(); ?>
 
 <script type="text/javascript" src="/application/custom/js/procesos/ordentablajeria.js"></script>
