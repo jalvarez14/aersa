@@ -51,7 +51,7 @@
        
         
         var caluclator = function($tr){
-           
+          
             var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 1;
             var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
             var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat($tr.find('input[name*=descuento]').val()) : 0;
@@ -71,6 +71,7 @@
             
             //ROW SUBTOTAL
             var row_subtotal = cantidad * costo_unitario;
+    
             $tr.find('input[name*=subtotal]').val(row_subtotal);
             $tr.find('td.subtotal').text(accounting.formatMoney(row_subtotal));
             

@@ -260,7 +260,7 @@ class ConsignacionController extends AbstractActionController {
 
                 //REDIRECCIONAMOS AL LISTADO
                 $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/procesos/compra');
+                return $this->redirect()->toUrl('/procesos/consignacion');
             }
 
             //NUESTROS ALMACENES

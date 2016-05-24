@@ -35,8 +35,6 @@ class PlantillatablajeriaController extends AbstractActionController {
     }
 
     public function nuevoAction() {
-        $idempresa = 1;
-        //$idempresa=$session['idempresa'];
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
