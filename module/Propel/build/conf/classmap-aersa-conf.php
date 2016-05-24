@@ -337,4 +337,8 @@ return array (
   'VentadetallePeer' => 'aersa/VentadetallePeer.php',
   'VentadetalleQuery' => 'aersa/VentadetalleQuery.php',
   'VentadetalleTableMap' => 'aersa/map/VentadetalleTableMap.php',
+    
+    
+    
+    
 );
