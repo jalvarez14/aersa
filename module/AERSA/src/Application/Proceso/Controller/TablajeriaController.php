@@ -15,6 +15,9 @@ class TablajeriaController extends AbstractActionController {
         $session = $session->getData();
 
         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+         
+         $anio_activo = $sucursal->getSucursalAnioactivo();
+         $mes_activo = $sucursal->getSucursalMesactivo();
 
         $collection = \OrdentablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdordentablajeria(\Criteria::DESC)->find();
 
@@ -23,8 +26,35 @@ class TablajeriaController extends AbstractActionController {
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
+            'anio_activo' => $anio_activo,
+            'mes_activo' => $mes_activo,
         ));
         return $view_model;
+    }
+    
+    public function getproductosAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $search = $this->params()->fromQuery('q');
+        $query = \ProductoQuery::create()->filterByIdunidadmedida(array(3,5))->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->find();
+        
+        $array = array();
+        $producto = new \Producto();
+        foreach ($query as $producto){
+            $tmp = $producto->toArray(\BasePeer::TYPE_FIELDNAME);
+            $tmp['unidad_medida'] = strtolower($producto->getUnidadmedida()->getUnidadmedidaNombre());
+            $has_plantilla = $producto->getPlantillatablajerias()->count();
+            if($has_plantilla > 0){
+                
+            }else{
+                $tmp['plantilla_tablajeria'] = false;
+            }
+            $array[] = $tmp;
+        }
+        
+        return $this->getResponse()->setContent(json_encode($array));
     }
 
     public function nuevoAction() 
@@ -125,12 +155,14 @@ class TablajeriaController extends AbstractActionController {
                 ->filterByAlmacenEstatus(1)
                 ->filterByAlmacenNombre('Créditos al costo', \Criteria::NOT_EQUAL)
                 ->find();
+        
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
 
         $form = new \Application\Proceso\Form\TablajeriaForm($almecenes);
 
         $iva = \TasaivaQuery::create()->findOne();
-
+        $iva = $iva->getTasaivaValor();
+        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/ordentablajeria/nuevo');
         $view_model->setVariables(array(
@@ -306,19 +338,13 @@ class TablajeriaController extends AbstractActionController {
     
     public function validatefolioAction() 
     {
-
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
 
         $folio = $this->params()->fromQuery('folio');
 
-        $to = new \DateTime();
-        $from = date("Y-m-d", strtotime("-2 months"));
-        $from = new \DateTime($from);
-
         $exist = \OrdentablajeriaQuery::create()
                 ->filterByIdsucursal($session['idsucursal'])
-                ->filterByOrdentablajeriaFecha(array('min' => $from, 'to' => $to))
                 ->filterByOrdentablajeriaFolio($folio, \Criteria::LIKE)->exists();
 
         return $this->getResponse()->setContent(json_encode($exist));

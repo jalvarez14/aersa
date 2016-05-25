@@ -52,7 +52,7 @@
                                     <td><span class="label label-sm label-danger"> N/A </span></td>
                                 <?php endif ?>
                                     <td><span class="label label-sm label-success"><?php echo  $entity->getUnidadmedida()->getUnidadmedidaNombre() ?></span></td>
-                                <td><?php echo $entity->getProductocosto() ?></td>
+                                <td><?php echo money_format('%(#10n',$entity->getProductocosto()) ?></td>
                                 
                                 <td class="text-left">                                    
                                     <div class="btn-group">

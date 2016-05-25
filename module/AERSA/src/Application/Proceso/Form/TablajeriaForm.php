@@ -25,6 +25,14 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
+           'name'  => 'producto_unidadmedida',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+            ),
+        ));
+        
+        $this->add(array(
            'name' => 'idproducto_autocomplete',
             'type' => 'Text',
             'attributes' => array(
@@ -32,7 +40,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
               'options' => array(
-                'label' => 'Producto ',
+                'label' => 'Producto *',
             ),
         ));
         
@@ -80,7 +88,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Fecha '
+                'label' => 'Fecha *'
             )
         ));
         
@@ -105,7 +113,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Peso bruto'
+                'label' => 'Peso bruto *'
             )
         ));
         
@@ -114,11 +122,13 @@ use Zend\Form\Form;
             'name' => 'ordentablajeria_preciokilo',
             'type' => 'Text',
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
+              
+                'disabled' => true,
             ),
             'options' => array(
-                'label' => 'Precio Kg '
+                'label' => 'Precio Kilo '
             )
         ));
         
@@ -219,7 +229,7 @@ use Zend\Form\Form;
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Folio ',
+                'label' => 'Folio *',
                 'required' => true,
             )
         ));
@@ -245,13 +255,13 @@ use Zend\Form\Form;
             'name' => 'ordentablajeria_numeroporciones',
             'type' => 'Text',
             'attributes' => array(
-                'required' => true,
+                'required' => false,
                 'class' => 'form-control',
+                'disabled' => true,
                 //'placeholder' => 'porciones',
             ),
             'options' => array(
                 'label' => 'Porciones ',
-                'required' => true,
                 
             )
         ));

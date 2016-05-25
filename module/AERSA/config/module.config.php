@@ -1150,6 +1150,16 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'getproductos' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/getproductos', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                                'action' => 'getproductos',
+                                            ), 
+                                        ), 
+                                    ),
                                     'gettablajeria' => array( 
                                         'type' => 'Segment', 
                                         'options' => array( 
