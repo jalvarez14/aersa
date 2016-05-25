@@ -1175,7 +1175,61 @@ return array(
                             ),
                             
                         ), 
-                    ), 
+                    ),
+                    /*
+                    * FLUJO DE EFECTIVO
+                    */
+                    'flujoefectivo' => array( 
+                        'type' => 'Literal', 
+                        'options' => array(
+                            'route' => '/flujoefectivo', 
+                        ),
+                        'may_terminate' => true, 
+                        'child_routes' => array( 
+                            'cuentabancaria' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/cuentabancaria', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
+                                        'action' => 'index', 
+                                    ), 
+                                ),
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevo' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/nuevo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'website' => array(
@@ -1250,6 +1304,12 @@ return array(
             'Application\Proceso\Controller\Ingresos'       => 'Application\Proceso\Controller\IngresosController',
             'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
             'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
+            
+            /*
+             * FLUJO EFECTIVO
+             */
+            
+            'Application\Flujoefectivo\Controller\Cuentabancaria' => 'Application\Flujoefectivo\Controller\CuentabancariaController',
 
             /*
              * WEBSITE
