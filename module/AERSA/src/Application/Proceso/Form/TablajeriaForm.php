@@ -48,7 +48,7 @@ use Zend\Form\Form;
             'name' => 'idalmacenorigen',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Almacen ',
+                'label' => 'Almacen origen *',
                 'empty_option' => 'Sin especificar',
                 'value_options' => $almacen_array,
             ),
@@ -62,7 +62,7 @@ use Zend\Form\Form;
             'name' => 'idalmacendestino',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Almacen destino ',
+                'label' => 'Almacen destino *',
                 'empty_option' => 'Sin especificar',
                 'value_options' => $almacen_array,
             ),
@@ -137,10 +137,11 @@ use Zend\Form\Form;
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
+                'disabled' => true,
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Peso '
+                'label' => 'Peso neto'
             )
         ));
         
@@ -153,7 +154,7 @@ use Zend\Form\Form;
                 'disabled' => true,
             ),
             'options' => array(
-                'label' => 'Total bruto'
+                'label' => 'Precio neto'
             )
         ));
         
