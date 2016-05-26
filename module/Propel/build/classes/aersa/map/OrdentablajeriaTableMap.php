@@ -46,8 +46,11 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
+        $this->addColumn('ordentablajeria_esporcion', 'OrdentablajeriaEsporcion', 'BOOLEAN', true, 1, null);
+        $this->addColumn('ordentablajeria_numeroporciones', 'OrdentablajeriaNumeroporciones', 'FLOAT', false, null, null);
         $this->addColumn('ordentablajeria_pesobruto', 'OrdentablajeriaPesobruto', 'FLOAT', true, null, null);
         $this->addColumn('ordentablajeria_preciokilo', 'OrdentablajeriaPreciokilo', 'DECIMAL', true, 15, null);
+        $this->addColumn('ordentablajeria_totalbruto', 'OrdentablajeriaTotalbruto', 'DECIMAL', false, 15, null);
         $this->addColumn('ordentablajeria_pesoneto', 'OrdentablajeriaPesoneto', 'FLOAT', true, null, null);
         $this->addColumn('ordentablajeria_precioneto', 'OrdentablajeriaPrecioneto', 'DECIMAL', true, 15, null);
         $this->addColumn('ordentablajeria_inyeccion', 'OrdentablajeriaInyeccion', 'FLOAT', false, null, null);
@@ -55,10 +58,9 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addColumn('ordentablajeria_aprovechamiento', 'OrdentablajeriaAprovechamiento', 'FLOAT', true, null, null);
         $this->addColumn('ordentablajeria_revisada', 'OrdentablajeriaRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('ordentablajeria_folio', 'OrdentablajeriaFolio', 'VARCHAR', true, 10, null);
-        $this->addColumn('ordentablajeria_esporcion', 'OrdentablajeriaEsporcion', 'BOOLEAN', true, 1, null);
-        $this->addColumn('ordentablajeria_numeroporciones', 'OrdentablajeriaNumeroporciones', 'FLOAT', false, null, null);
         $this->addColumn('ordentablajeria_fecha', 'OrdentablajeriaFecha', 'TIMESTAMP', true, null, null);
         $this->addColumn('ordentablajeria_fechacreacion', 'OrdentablajeriaFechacreacion', 'TIMESTAMP', true, null, null);
+        $this->addColumn('ordentablajeria_pesoporcion', 'OrdentablajeriaPesoporcion', 'FLOAT', false, null, null);
         // validators
     } // initialize()
 

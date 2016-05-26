@@ -14,8 +14,11 @@
  * @method OrdentablajeriaQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method OrdentablajeriaQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method OrdentablajeriaQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaEsporcion($order = Criteria::ASC) Order by the ordentablajeria_esporcion column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaNumeroporciones($order = Criteria::ASC) Order by the ordentablajeria_numeroporciones column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaPesobruto($order = Criteria::ASC) Order by the ordentablajeria_pesobruto column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaPreciokilo($order = Criteria::ASC) Order by the ordentablajeria_preciokilo column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaTotalbruto($order = Criteria::ASC) Order by the ordentablajeria_totalbruto column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaPesoneto($order = Criteria::ASC) Order by the ordentablajeria_pesoneto column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaPrecioneto($order = Criteria::ASC) Order by the ordentablajeria_precioneto column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaInyeccion($order = Criteria::ASC) Order by the ordentablajeria_inyeccion column
@@ -23,10 +26,9 @@
  * @method OrdentablajeriaQuery orderByOrdentablajeriaAprovechamiento($order = Criteria::ASC) Order by the ordentablajeria_aprovechamiento column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaRevisada($order = Criteria::ASC) Order by the ordentablajeria_revisada column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaFolio($order = Criteria::ASC) Order by the ordentablajeria_folio column
- * @method OrdentablajeriaQuery orderByOrdentablajeriaEsporcion($order = Criteria::ASC) Order by the ordentablajeria_esporcion column
- * @method OrdentablajeriaQuery orderByOrdentablajeriaNumeroporciones($order = Criteria::ASC) Order by the ordentablajeria_numeroporciones column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaFecha($order = Criteria::ASC) Order by the ordentablajeria_fecha column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaFechacreacion($order = Criteria::ASC) Order by the ordentablajeria_fechacreacion column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaPesoporcion($order = Criteria::ASC) Order by the ordentablajeria_pesoporcion column
  *
  * @method OrdentablajeriaQuery groupByIdordentablajeria() Group by the idordentablajeria column
  * @method OrdentablajeriaQuery groupByIdempresa() Group by the idempresa column
@@ -36,8 +38,11 @@
  * @method OrdentablajeriaQuery groupByIdusuario() Group by the idusuario column
  * @method OrdentablajeriaQuery groupByIdauditor() Group by the idauditor column
  * @method OrdentablajeriaQuery groupByIdproducto() Group by the idproducto column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaEsporcion() Group by the ordentablajeria_esporcion column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaNumeroporciones() Group by the ordentablajeria_numeroporciones column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaPesobruto() Group by the ordentablajeria_pesobruto column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaPreciokilo() Group by the ordentablajeria_preciokilo column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaTotalbruto() Group by the ordentablajeria_totalbruto column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaPesoneto() Group by the ordentablajeria_pesoneto column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaPrecioneto() Group by the ordentablajeria_precioneto column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaInyeccion() Group by the ordentablajeria_inyeccion column
@@ -45,10 +50,9 @@
  * @method OrdentablajeriaQuery groupByOrdentablajeriaAprovechamiento() Group by the ordentablajeria_aprovechamiento column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaRevisada() Group by the ordentablajeria_revisada column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaFolio() Group by the ordentablajeria_folio column
- * @method OrdentablajeriaQuery groupByOrdentablajeriaEsporcion() Group by the ordentablajeria_esporcion column
- * @method OrdentablajeriaQuery groupByOrdentablajeriaNumeroporciones() Group by the ordentablajeria_numeroporciones column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaFecha() Group by the ordentablajeria_fecha column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaFechacreacion() Group by the ordentablajeria_fechacreacion column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaPesoporcion() Group by the ordentablajeria_pesoporcion column
  *
  * @method OrdentablajeriaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method OrdentablajeriaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -100,8 +104,11 @@
  * @method Ordentablajeria findOneByIdusuario(int $idusuario) Return the first Ordentablajeria filtered by the idusuario column
  * @method Ordentablajeria findOneByIdauditor(int $idauditor) Return the first Ordentablajeria filtered by the idauditor column
  * @method Ordentablajeria findOneByIdproducto(int $idproducto) Return the first Ordentablajeria filtered by the idproducto column
+ * @method Ordentablajeria findOneByOrdentablajeriaEsporcion(boolean $ordentablajeria_esporcion) Return the first Ordentablajeria filtered by the ordentablajeria_esporcion column
+ * @method Ordentablajeria findOneByOrdentablajeriaNumeroporciones(double $ordentablajeria_numeroporciones) Return the first Ordentablajeria filtered by the ordentablajeria_numeroporciones column
  * @method Ordentablajeria findOneByOrdentablajeriaPesobruto(double $ordentablajeria_pesobruto) Return the first Ordentablajeria filtered by the ordentablajeria_pesobruto column
  * @method Ordentablajeria findOneByOrdentablajeriaPreciokilo(string $ordentablajeria_preciokilo) Return the first Ordentablajeria filtered by the ordentablajeria_preciokilo column
+ * @method Ordentablajeria findOneByOrdentablajeriaTotalbruto(string $ordentablajeria_totalbruto) Return the first Ordentablajeria filtered by the ordentablajeria_totalbruto column
  * @method Ordentablajeria findOneByOrdentablajeriaPesoneto(double $ordentablajeria_pesoneto) Return the first Ordentablajeria filtered by the ordentablajeria_pesoneto column
  * @method Ordentablajeria findOneByOrdentablajeriaPrecioneto(string $ordentablajeria_precioneto) Return the first Ordentablajeria filtered by the ordentablajeria_precioneto column
  * @method Ordentablajeria findOneByOrdentablajeriaInyeccion(double $ordentablajeria_inyeccion) Return the first Ordentablajeria filtered by the ordentablajeria_inyeccion column
@@ -109,10 +116,9 @@
  * @method Ordentablajeria findOneByOrdentablajeriaAprovechamiento(double $ordentablajeria_aprovechamiento) Return the first Ordentablajeria filtered by the ordentablajeria_aprovechamiento column
  * @method Ordentablajeria findOneByOrdentablajeriaRevisada(boolean $ordentablajeria_revisada) Return the first Ordentablajeria filtered by the ordentablajeria_revisada column
  * @method Ordentablajeria findOneByOrdentablajeriaFolio(string $ordentablajeria_folio) Return the first Ordentablajeria filtered by the ordentablajeria_folio column
- * @method Ordentablajeria findOneByOrdentablajeriaEsporcion(boolean $ordentablajeria_esporcion) Return the first Ordentablajeria filtered by the ordentablajeria_esporcion column
- * @method Ordentablajeria findOneByOrdentablajeriaNumeroporciones(double $ordentablajeria_numeroporciones) Return the first Ordentablajeria filtered by the ordentablajeria_numeroporciones column
  * @method Ordentablajeria findOneByOrdentablajeriaFecha(string $ordentablajeria_fecha) Return the first Ordentablajeria filtered by the ordentablajeria_fecha column
  * @method Ordentablajeria findOneByOrdentablajeriaFechacreacion(string $ordentablajeria_fechacreacion) Return the first Ordentablajeria filtered by the ordentablajeria_fechacreacion column
+ * @method Ordentablajeria findOneByOrdentablajeriaPesoporcion(double $ordentablajeria_pesoporcion) Return the first Ordentablajeria filtered by the ordentablajeria_pesoporcion column
  *
  * @method array findByIdordentablajeria(int $idordentablajeria) Return Ordentablajeria objects filtered by the idordentablajeria column
  * @method array findByIdempresa(int $idempresa) Return Ordentablajeria objects filtered by the idempresa column
@@ -122,8 +128,11 @@
  * @method array findByIdusuario(int $idusuario) Return Ordentablajeria objects filtered by the idusuario column
  * @method array findByIdauditor(int $idauditor) Return Ordentablajeria objects filtered by the idauditor column
  * @method array findByIdproducto(int $idproducto) Return Ordentablajeria objects filtered by the idproducto column
+ * @method array findByOrdentablajeriaEsporcion(boolean $ordentablajeria_esporcion) Return Ordentablajeria objects filtered by the ordentablajeria_esporcion column
+ * @method array findByOrdentablajeriaNumeroporciones(double $ordentablajeria_numeroporciones) Return Ordentablajeria objects filtered by the ordentablajeria_numeroporciones column
  * @method array findByOrdentablajeriaPesobruto(double $ordentablajeria_pesobruto) Return Ordentablajeria objects filtered by the ordentablajeria_pesobruto column
  * @method array findByOrdentablajeriaPreciokilo(string $ordentablajeria_preciokilo) Return Ordentablajeria objects filtered by the ordentablajeria_preciokilo column
+ * @method array findByOrdentablajeriaTotalbruto(string $ordentablajeria_totalbruto) Return Ordentablajeria objects filtered by the ordentablajeria_totalbruto column
  * @method array findByOrdentablajeriaPesoneto(double $ordentablajeria_pesoneto) Return Ordentablajeria objects filtered by the ordentablajeria_pesoneto column
  * @method array findByOrdentablajeriaPrecioneto(string $ordentablajeria_precioneto) Return Ordentablajeria objects filtered by the ordentablajeria_precioneto column
  * @method array findByOrdentablajeriaInyeccion(double $ordentablajeria_inyeccion) Return Ordentablajeria objects filtered by the ordentablajeria_inyeccion column
@@ -131,10 +140,9 @@
  * @method array findByOrdentablajeriaAprovechamiento(double $ordentablajeria_aprovechamiento) Return Ordentablajeria objects filtered by the ordentablajeria_aprovechamiento column
  * @method array findByOrdentablajeriaRevisada(boolean $ordentablajeria_revisada) Return Ordentablajeria objects filtered by the ordentablajeria_revisada column
  * @method array findByOrdentablajeriaFolio(string $ordentablajeria_folio) Return Ordentablajeria objects filtered by the ordentablajeria_folio column
- * @method array findByOrdentablajeriaEsporcion(boolean $ordentablajeria_esporcion) Return Ordentablajeria objects filtered by the ordentablajeria_esporcion column
- * @method array findByOrdentablajeriaNumeroporciones(double $ordentablajeria_numeroporciones) Return Ordentablajeria objects filtered by the ordentablajeria_numeroporciones column
  * @method array findByOrdentablajeriaFecha(string $ordentablajeria_fecha) Return Ordentablajeria objects filtered by the ordentablajeria_fecha column
  * @method array findByOrdentablajeriaFechacreacion(string $ordentablajeria_fechacreacion) Return Ordentablajeria objects filtered by the ordentablajeria_fechacreacion column
+ * @method array findByOrdentablajeriaPesoporcion(double $ordentablajeria_pesoporcion) Return Ordentablajeria objects filtered by the ordentablajeria_pesoporcion column
  *
  * @package    propel.generator.aersa.om
  */
@@ -242,7 +250,7 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio`, `ordentablajeria_esporcion`, `ordentablajeria_numeroporciones`, `ordentablajeria_fecha`, `ordentablajeria_fechacreacion` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
+        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_esporcion`, `ordentablajeria_numeroporciones`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_totalbruto`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio`, `ordentablajeria_fecha`, `ordentablajeria_fechacreacion`, `ordentablajeria_pesoporcion` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -682,6 +690,75 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the ordentablajeria_esporcion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaEsporcion(true); // WHERE ordentablajeria_esporcion = true
+     * $query->filterByOrdentablajeriaEsporcion('yes'); // WHERE ordentablajeria_esporcion = true
+     * </code>
+     *
+     * @param     boolean|string $ordentablajeriaEsporcion The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaEsporcion($ordentablajeriaEsporcion = null, $comparison = null)
+    {
+        if (is_string($ordentablajeriaEsporcion)) {
+            $ordentablajeriaEsporcion = in_array(strtolower($ordentablajeriaEsporcion), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION, $ordentablajeriaEsporcion, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeria_numeroporciones column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaNumeroporciones(1234); // WHERE ordentablajeria_numeroporciones = 1234
+     * $query->filterByOrdentablajeriaNumeroporciones(array(12, 34)); // WHERE ordentablajeria_numeroporciones IN (12, 34)
+     * $query->filterByOrdentablajeriaNumeroporciones(array('min' => 12)); // WHERE ordentablajeria_numeroporciones >= 12
+     * $query->filterByOrdentablajeriaNumeroporciones(array('max' => 12)); // WHERE ordentablajeria_numeroporciones <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriaNumeroporciones The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaNumeroporciones($ordentablajeriaNumeroporciones = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriaNumeroporciones)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriaNumeroporciones['min'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriaNumeroporciones['max'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones, $comparison);
+    }
+
+    /**
      * Filter the query on the ordentablajeria_pesobruto column
      *
      * Example usage:
@@ -763,6 +840,48 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIOKILO, $ordentablajeriaPreciokilo, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeria_totalbruto column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaTotalbruto(1234); // WHERE ordentablajeria_totalbruto = 1234
+     * $query->filterByOrdentablajeriaTotalbruto(array(12, 34)); // WHERE ordentablajeria_totalbruto IN (12, 34)
+     * $query->filterByOrdentablajeriaTotalbruto(array('min' => 12)); // WHERE ordentablajeria_totalbruto >= 12
+     * $query->filterByOrdentablajeriaTotalbruto(array('max' => 12)); // WHERE ordentablajeria_totalbruto <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriaTotalbruto The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaTotalbruto($ordentablajeriaTotalbruto = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriaTotalbruto)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriaTotalbruto['min'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_TOTALBRUTO, $ordentablajeriaTotalbruto['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriaTotalbruto['max'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_TOTALBRUTO, $ordentablajeriaTotalbruto['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_TOTALBRUTO, $ordentablajeriaTotalbruto, $comparison);
     }
 
     /**
@@ -1032,75 +1151,6 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the ordentablajeria_esporcion column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByOrdentablajeriaEsporcion(true); // WHERE ordentablajeria_esporcion = true
-     * $query->filterByOrdentablajeriaEsporcion('yes'); // WHERE ordentablajeria_esporcion = true
-     * </code>
-     *
-     * @param     boolean|string $ordentablajeriaEsporcion The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return OrdentablajeriaQuery The current query, for fluid interface
-     */
-    public function filterByOrdentablajeriaEsporcion($ordentablajeriaEsporcion = null, $comparison = null)
-    {
-        if (is_string($ordentablajeriaEsporcion)) {
-            $ordentablajeriaEsporcion = in_array(strtolower($ordentablajeriaEsporcion), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_ESPORCION, $ordentablajeriaEsporcion, $comparison);
-    }
-
-    /**
-     * Filter the query on the ordentablajeria_numeroporciones column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByOrdentablajeriaNumeroporciones(1234); // WHERE ordentablajeria_numeroporciones = 1234
-     * $query->filterByOrdentablajeriaNumeroporciones(array(12, 34)); // WHERE ordentablajeria_numeroporciones IN (12, 34)
-     * $query->filterByOrdentablajeriaNumeroporciones(array('min' => 12)); // WHERE ordentablajeria_numeroporciones >= 12
-     * $query->filterByOrdentablajeriaNumeroporciones(array('max' => 12)); // WHERE ordentablajeria_numeroporciones <= 12
-     * </code>
-     *
-     * @param     mixed $ordentablajeriaNumeroporciones The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return OrdentablajeriaQuery The current query, for fluid interface
-     */
-    public function filterByOrdentablajeriaNumeroporciones($ordentablajeriaNumeroporciones = null, $comparison = null)
-    {
-        if (is_array($ordentablajeriaNumeroporciones)) {
-            $useMinMax = false;
-            if (isset($ordentablajeriaNumeroporciones['min'])) {
-                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($ordentablajeriaNumeroporciones['max'])) {
-                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_NUMEROPORCIONES, $ordentablajeriaNumeroporciones, $comparison);
-    }
-
-    /**
      * Filter the query on the ordentablajeria_fecha column
      *
      * Example usage:
@@ -1184,6 +1234,48 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION, $ordentablajeriaFechacreacion, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeria_pesoporcion column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaPesoporcion(1234); // WHERE ordentablajeria_pesoporcion = 1234
+     * $query->filterByOrdentablajeriaPesoporcion(array(12, 34)); // WHERE ordentablajeria_pesoporcion IN (12, 34)
+     * $query->filterByOrdentablajeriaPesoporcion(array('min' => 12)); // WHERE ordentablajeria_pesoporcion >= 12
+     * $query->filterByOrdentablajeriaPesoporcion(array('max' => 12)); // WHERE ordentablajeria_pesoporcion <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriaPesoporcion The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaPesoporcion($ordentablajeriaPesoporcion = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriaPesoporcion)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriaPesoporcion['min'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PESOPORCION, $ordentablajeriaPesoporcion['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriaPesoporcion['max'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PESOPORCION, $ordentablajeriaPesoporcion['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PESOPORCION, $ordentablajeriaPesoporcion, $comparison);
     }
 
     /**
