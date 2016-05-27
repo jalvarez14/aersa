@@ -117,6 +117,20 @@ use Zend\Form\Form;
             )
         ));
         
+        $this->add(array(
+            'name' => 'ordentablajeria_totalbruto',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+                'disabled' => true,
+            ),
+            'options' => array(
+                'label' => 'Total bruto *'
+            )
+        ));
+        
+        
         
         $this->add(array(
             'name' => 'ordentablajeria_preciokilo',
@@ -176,9 +190,10 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
+                'disabled' => true,
             ),
             'options' => array(
-                'label' => 'Merma '
+                'label' => 'Merma total'
             )
         ));
         $this->add(array(
@@ -187,6 +202,7 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
+                'disabled' => true,
             ),
             'options' => array(
                 'label' => '% merma '
@@ -197,6 +213,7 @@ use Zend\Form\Form;
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
+                'disabled' => true,
                 'class' => 'form-control',
             ),
             'options' => array(

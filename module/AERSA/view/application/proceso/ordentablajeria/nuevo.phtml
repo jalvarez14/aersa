@@ -1,4 +1,9 @@
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<style>
+    #productos_table .fa-trash{
+        color:red;
+    }
+</style>
 <div id="form_container">
 <h3 class="page-title">Registro orden de tablajeria</h3>
 <div class="page-bar">
@@ -78,10 +83,10 @@
                             <?php echo  $this->formText($form->get('ordentablajeria_preciokilo'));?>
                         </div>
                         <div class="col-md-2">
-                            <?php echo $this->formLabel($form->get('ordentablajeria_precioneto')) ?>  
+                            <?php echo $this->formLabel($form->get('ordentablajeria_totalbruto')) ?>  
                         </div>
                         <div class="col-md-4">
-                            <?php echo  $this->formText($form->get('ordentablajeria_precioneto'))?>
+                            <?php echo  $this->formText($form->get('ordentablajeria_totalbruto'))?>
                         </div>
                     </div>
                     <div class="form-group col-md-12">
@@ -174,8 +179,9 @@
                                 <span class="input-group-addon">
                                     <i class="fa fa-search"></i>
                                 </span>
-                                <input id="idproductoTabla" type="hidden">
-                                <input name="producto_autocompleteTabla" class="form-control" type="text">
+                                <input name="idproductoautocomplete" type="hidden" disabled>
+                                <input name="productoautocomplete_unidadmedida" type="hidden" disabled>
+                                <input name="producto_autocomplete" class="form-control" type="text" disabled>
                             </div>
                         </div>
                         <div class="col-md-1">
@@ -189,19 +195,22 @@
                             <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Unidad medida</th>
-                            <th>Peso porción</th>
+                            <th>Peso porción (Kilos)</th>
                             <th>Peso total</th>
                             <th>Precio porción</th>
                             <th>Importe</th>
                             <th>Revisada</th>
-                            <th>Almacen</th>
                             <th>Opciones</th>
                         </thead>
                         <tbody>
-
+                            
                         </tbody>
                         <tfoot>
-                            
+                            <tr>
+                                <td colspan="4">Total</td>
+                                <td style="padding-left: 8px;" colspan="2" id="peso_total">0</td>
+                                <td colspan="3" style="padding-left: 8px;" id="importe_total">$0.00</td>
+                            </tr> 
                         </tfoot>
                     </table>
                 </div>
