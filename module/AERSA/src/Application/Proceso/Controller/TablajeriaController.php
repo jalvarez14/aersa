@@ -48,9 +48,29 @@ class TablajeriaController extends AbstractActionController {
             $tmp['unidad_medida'] = strtolower($producto->getUnidadmedida()->getUnidadmedidaNombre());
             $has_plantilla = $producto->getPlantillatablajerias()->count();
             if($has_plantilla > 0){
-                
+                $tmp['plantilla_tablajeria'] = array();
+                $plantilatablajeria = \PlantillatablajeriaQuery::create()->filterByIdproducto($producto->getIdproducto())->findOne();
+                $plantilatablajeria_detalles = \PlantillatablajeriadetalleQuery::create()->filterByIdplantillatablajeria($plantilatablajeria->getIdplantillatablajeria())->find();
+                $detalle = new \Plantillatablajeriadetalle();
+                foreach ($plantilatablajeria_detalles as $detalle){
+                    $tmp2['idproducto'] = $detalle->getIdproducto();
+                    $tmp2['producto_nombe'] = $detalle->getProducto()->getProductoNombre();
+                    $tmp2['unidad_medida'] = strtolower($detalle->getProducto()->getUnidadmedida()->getUnidadmedidaNombre());
+                    $tmp['plantilla_tablajeria'][] = $tmp2;
+                }
             }else{
                 $tmp['plantilla_tablajeria'] = false;
+            }
+            if($tmp['unidad_medida'] == 'porcion'){
+                $pesoporcion = 0;
+                $exist = \OrdentablajeriadetalleQuery::create()->filterByIdproducto($producto->getIdproducto())->useOrdentablajeriaQuery()->orderByOrdentablajeriaFecha(\Criteria::ASC)->endUse()->exists();
+                if($exist){
+                    $ordentablajeriadetalle = \OrdentablajeriadetalleQuery::create()->filterByIdproducto($producto->getIdproducto())->useOrdentablajeriaQuery()->orderByOrdentablajeriaFecha(\Criteria::ASC)->endUse()->findOne();
+                    $pesoporcion = $ordentablajeriadetalle->getOrdentablajeriadetallePesoporcion();
+                }else{
+                    $pesoporcion = $producto->getProductoRendimiento();
+                }
+                 $tmp['pesoporcion'] = $pesoporcion;
             }
             $array[] = $tmp;
         }
@@ -70,81 +90,67 @@ class TablajeriaController extends AbstractActionController {
         {
 
             $post_data = $request->getPost();
-            $post_files = $request->getFiles();
-
-
-
-            $post_data["devolucion_fechacreacion"] = date_create_from_format('d/m/Y', $post_data["devolucion_fechacreacion"]);
-
-
-            $entity = new \Devolucion();
+            
+            $post_data["ordentablajeria_fecha"] = date_create_from_format('d/m/Y', $post_data["ordentablajeria_fecha"]);
+            $post_data["ordentablajeria_preciokilo"] = preg_replace('/[^\d\.]/', '', $post_data["ordentablajeria_preciokilo"]);
+            $post_data["ordentablajeria_totalbruto"] = preg_replace('/[^\d\.]/', '', $post_data["ordentablajeria_totalbruto"]);
+            $post_data["ordentablajeria_precioneto"] = preg_replace('/[^\d\.]/', '', $post_data["ordentablajeria_precioneto"]);
+            
+           
+           
+            $entity = new \Ordentablajeria();
             foreach ($post_data as $key => $value) {
 
-                if (\DevolucionPeer::getTableMap()->hasColumn($key)) {
+                if (\OrdentablajeriaPeer::getTableMap()->hasColumn($key)) {
                     $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
             }
-
+           
+            //SETEAMOS EL CAMPO ESPORCION
+            if($entity->getProducto()->getUnidadmedida()->getUnidadmedidaNombre() == 'Kilogramos'){
+                $entity->setOrdentablajeriaEsporcion(false);
+            }else{
+                $entity->setOrdentablajeriaEsporcion(true);
+            }
 
             //SETEAMOS LA FECHA DE CREACION
-            $entity->setDevolucionFechacreacion(new \DateTime())
+            $entity->setOrdentablajeriaFechacreacion(new \DateTime())
                     ->setIdempresa($session['idempresa'])
                     ->setIdsucursal($session['idsucursal'])
                     ->setIdusuario($session['idusuario']);
 
-            $entity->setDevolucionFechadevolucion($post_data["devolucion_fechacreacion"]);
 
-
-            if ($post_data['devolucion_revisada']) {
+            if ($post_data['ordentablajeria_revisada']) {
                 $entity->setIdauditor($session['idusuario']);
             }
-
+            
+           
             $entity->save();
 
-            //EL COMPROBANTE
-            if (!empty($post_files['devolucion_factura']['name'])) {
-
-                $type = $post_files['devolucion_factura']['type'];
-                $type = explode('/', $type);
-                $type = $type[1];
-
-                $target_path = "application/files/devoluciones/";
-                $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
-
-                if (move_uploaded_file($post_files['devolucion_factura']['name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
-
-                    $entity->setDevolucionFactura($target_path);
-                    $entity->save();
-                }
-            }
-
-            //DEVOLUCION DETALLES
+            //DETALLES
             foreach ($post_data['productos'] as $producto) {
 
-                $devolucion_detalle = new \Devoluciondetalle();
-                $devolucion_detalle->setIddevolucion($entity->getIddevolucion())
-                        ->setdevoluciondetalleRevisada(0)
+                $ordentablajeria_detalle = new \Ordentablajeriadetalle();
+                $ordentablajeria_detalle->setIdordentablajeria($entity->getIdordentablajeria())
+                        ->setOrdentablajeriadetalleRevisada(0)
                         ->setIdproducto($producto['idproducto'])
-                        ->setDevoluciondetalleCantidad($producto['cantidad'])
-                        ->setDevoluciondetalleCostounitario($producto['precio'])
-                        ->setDevoluciondetalleCostounitarioneto($producto['costo_unitario'])
-                        ->setDevoluciondetalleDescuento($producto['descuento'])
-                        ->setDevoluciondetalleIeps($producto['ieps'])
-                        ->setDevoluciondetalleSubtotal($producto['subtotal']);
+                        ->setOrdentablajeriadetalleCantidad($producto['cantidad'])
+                        ->setOrdentablajeriadetallePesoporcion($producto['pesoporcion'])
+                        ->setOrdentablajeriadetallePrecioporcion($producto['precioporcion'])
+                        ->setOrdentablajeriadetallePesototal($producto['pesototal'])
+                        ->setOrdentablajeriadetalleSubtotal($producto['subtotal']);
 
-
-                $devolucion_detalle->setIdalmacen($producto['almacen']);
 
                 if (isset($producto['revisada'])) {
-                    $devolucion_detalle->setDevoluciondetalleRevisada(1);
+                    $ordentablajeria_detalle->setOrdentablajeriadetalleRevisada(1);
                 }
 
-                $devolucion_detalle->save();
+                $ordentablajeria_detalle->save();
             }
-
+          
             //REDIRECCIONAMOS AL LISTADO
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-            return $this->redirect()->toUrl('/procesos/devolucion');
+            return $this->redirect()->toUrl('/procesos/tablajeria');
         }
 
         $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
@@ -327,13 +333,13 @@ class TablajeriaController extends AbstractActionController {
         if ($request->isPost()) {
 
             $id = $this->params()->fromRoute('id');
-
-            $entity = \DevolucionQuery::create()->findPk($id);
+           
+            $entity = \OrdentablajeriaQuery::create()->findPk($id);
             $entity->delete();
 
             $this->flashMessenger()->addSuccessMessage('Registro eliminado satisfactoriamente!');
 
-            return $this->redirect()->toUrl('/procesos/devolucion');
+            return $this->redirect()->toUrl('/procesos/tablajeria');
         }
     }
     

@@ -123,7 +123,7 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
-                'disabled' => true,
+                'readonly' => true,
             ),
             'options' => array(
                 'label' => 'Total bruto *'
@@ -139,7 +139,7 @@ use Zend\Form\Form;
                 'required' => false,
                 'class' => 'form-control',
               
-                'disabled' => true,
+                'readonly' => true,
             ),
             'options' => array(
                 'label' => 'Precio Kilo '
@@ -151,7 +151,7 @@ use Zend\Form\Form;
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
-                'disabled' => true,
+                'readonly' => true,
                 'class' => 'form-control',
             ),
             'options' => array(
@@ -165,7 +165,7 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
-                'disabled' => true,
+                'readonly' => true,
             ),
             'options' => array(
                 'label' => 'Precio neto'
@@ -176,7 +176,6 @@ use Zend\Form\Form;
             'name' => 'ordentablajeria_inyeccion',
             'type' => 'Text',
             'attributes' => array(
-                'required' => true,
                 'class' => 'form-control',
             ),
             'options' => array(
@@ -190,7 +189,7 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
-                'disabled' => true,
+                'readonly' => true,
             ),
             'options' => array(
                 'label' => 'Merma total'
@@ -202,7 +201,7 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
-                'disabled' => true,
+                'readonly' => true,
             ),
             'options' => array(
                 'label' => '% merma '
@@ -213,7 +212,7 @@ use Zend\Form\Form;
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
-                'disabled' => true,
+                'readonly' => true,
                 'class' => 'form-control',
             ),
             'options' => array(
@@ -275,11 +274,13 @@ use Zend\Form\Form;
             'attributes' => array(
                 'required' => false,
                 'class' => 'form-control',
-                'disabled' => true,
+                'readonly' => true,
+                'style' => 'margin-top: 5px;',
+      
                 //'placeholder' => 'porciones',
             ),
             'options' => array(
-                'label' => 'Porciones ',
+                'label' => ' ',
                 
             )
         ));

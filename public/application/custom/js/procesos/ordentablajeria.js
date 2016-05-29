@@ -54,7 +54,8 @@
 
             //ROW UPDATE
             $tr.find('td.pesototal').text(pesototal);
-           
+            $tr.find('input[name*=pesototal]').val(pesototal);
+            
             //TOTALES
             var peso_total = 0;
             $('#productos_table tbody td.pesototal').filter(function(){
@@ -108,7 +109,7 @@
        
         var totalBruto = function(){
             
-            var pesobruto = ($('input[name=ordentablajeria_pesobruto]').val() != "") ? $('input[name=ordentablajeria_pesobruto]').val() : 0;
+            var pesobruto = ($('input[name=ordentablajeria_numeroporciones]').val() != "") ? $('input[name=ordentablajeria_numeroporciones]').val() : 0;
             var preciokilo = accounting.unformat($('input[name=ordentablajeria_preciokilo]').val());
             var precioneto = pesobruto * preciokilo;
             $('input[name=ordentablajeria_totalbruto]').val(accounting.formatMoney(precioneto));
@@ -131,7 +132,7 @@
             });
             $('#importe_total').text(accounting.formatMoney(importe_total));
             
-            var pesobruto = ($('input[name=ordentablajeria_pesobruto]').val() != "") ? parseFloat($('input[name=ordentablajeria_pesobruto]').val()) : 0;
+            var pesobruto = ($('input[name=ordentablajeria_numeroporciones]').val() != "") ? parseFloat($('input[name=ordentablajeria_numeroporciones]').val()) : 0;
             var inyeccion = ($('input[name=ordentablajeria_inyeccion]').val() != "") ? parseFloat($('input[name=ordentablajeria_inyeccion]').val()) : 0;
             var pesoneto =  parseFloat($('#peso_total').text());
             var mermatotal = (pesobruto + inyeccion) - pesoneto;
@@ -157,6 +158,8 @@
                 
                 $tr.find('td.precioporcion').text(accounting.formatMoney(precioporcion));
                 $tr.find('td.importe').text(accounting.formatMoney(importe));
+                $tr.find('input[name*=precioporcion]').val(precioporcion);
+                $tr.find('input[name*=subtotal]').val(importe);
                 
 
             });
@@ -207,7 +210,7 @@
                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
                     '<h4 class="modal-title">ADVERTENCIA</h4>', 
                   '</div>',
-                  '<form method="post" action="/procesos/compra/eliminar/'+id+'">',
+                  '<form method="post" action="/procesos/tablajeria/eliminar/'+id+'">',
                     '<div class="modal-body">',
                       '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
                     '</div>',
@@ -274,6 +277,7 @@
                     $('label[for=ordentablajeria_pesobruto]').text('Peso bruto *');
                 }else{
                     $('label[for=ordentablajeria_pesobruto]').text('Porciones *');
+                    $('input[name=pesoporcion]').val(suggestion.pesoporcion);
                 }
                 
                 $('input[name=idproducto]').val(suggestion.idproducto);
@@ -281,13 +285,49 @@
                 $('input[name=ordentablajeria_preciokilo]').val(accounting.formatMoney(suggestion.producto_ultimocosto));
                 $('input[name=ordentablajeria_pesobruto]').val('');
                 $('input[name=ordentablajeria_numeroporciones]').val('');
-                
+              
                 //SI NO TIENE PLANTILLA DE TABLAJERIA
                 if(!suggestion.plantilla_tablajeria){
                     $('input[name=producto_autocomplete]').prop('disabled',false);
                 }else{
                     $('input[name=producto_autocomplete]').prop('disabled',true);
                     $('button#producto_add').prop('disabled',true);
+                    var count = 0;
+                    $.each(suggestion.plantilla_tablajeria,function(){
+                 
+                        var $tr = $('<tr>');
+                        $tr.append('<td><input type="hidden" name=productos['+count+'][idproducto] value="'+this.idproducto+'"><input type="hidden" name=productos['+count+'][subtotal]><input type="hidden" name=productos['+count+'][pesototal] value="1"><input type="hidden" name=productos['+count+'][precioporcion]>'+this.producto_nombe+'</td>');
+                        $tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
+                        $tr.append('<td>'+this.unidad_medida+'</td>');
+                        if(this.unidad_medida == 'kilogramos'){
+                             $tr.append('<td><input readonly type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                        }else{
+                             $tr.append('<td><input type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                        }
+                        $tr.append('<td class="pesototal">1</td>');
+                        $tr.append('<td class="precioporcion">'+accounting.formatMoney(1)+'</td>');
+                        $tr.append('<td class="importe">'+accounting.formatMoney(1)+'</td>');
+                        $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                        $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                        
+                        //EVENTOS DE NUESTRAS ROW
+                        $tr.find('input').numeric();
+                        $tr.find('input').on('blur',function(){
+                            calculator($tr);
+                        });
+
+                        $tr.find('.fa-trash').on('click',function(){
+
+                            $tr.remove();
+                            tablajeando();
+                        });  
+
+                        $('#productos_table > tbody').append($tr);
+
+                        calculator($tr);
+                        count ++;
+                    });
+                    
                 }
 
                 totalBruto();
@@ -306,7 +346,14 @@
                 if(unidad_medida == 'kilogramos'){
                     var pesobruto = $('input[name=ordentablajeria_pesobruto]').val();
                     $('input[name=ordentablajeria_numeroporciones]').val(pesobruto);
+                }else{
+                    var numeroporciones = $('input[name=ordentablajeria_pesobruto]').val();
+                    var pesoporcion = $('input[name=pesoporcion]').val();
+                    var totalpeso = numeroporciones * pesoporcion;
+                    $('input[name=ordentablajeria_numeroporciones]').val(totalpeso);
                 }
+                totalBruto();
+                tablajeando();  
             });
             
             var data = new Bloodhound({
@@ -338,14 +385,19 @@
             var count = 0;
             $('button#producto_add').on('click',function(){
                 
+                var idproducto = $('input[name=idproductoautocomplete]').val();
                 var producto = $('input[name=producto_autocomplete]').val();
                 var unidad_medida = $('input[name=productoautocomplete_unidadmedida]').val();
                 
                 var $tr = $('<tr>');
-                $tr.append('<td>'+producto+'</td>');
+                $tr.append('<td><input type="hidden" name=productos['+count+'][idproducto] value="'+idproducto+'"><input type="hidden" name=productos['+count+'][subtotal]><input type="hidden" name=productos['+count+'][pesototal] value="1"><input type="hidden" name=productos['+count+'][precioporcion]>'+producto+'</td>');
                 $tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
                 $tr.append('<td>'+unidad_medida+'</td>');
-                $tr.append('<td><input type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                if(unidad_medida == 'kilogramos'){
+                     $tr.append('<td><input readonly type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                }else{
+                     $tr.append('<td><input type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                }
                 $tr.append('<td class="pesototal">1</td>');
                 $tr.append('<td class="precioporcion">'+accounting.formatMoney(1)+'</td>');
                 $tr.append('<td class="importe">'+accounting.formatMoney(1)+'</td>');
@@ -376,7 +428,31 @@
                     
             });
             
-             revisadaControl();
+            revisadaControl();
+            
+            
+            //VALIDAR FOLIO
+           $('input[name=ordentablajeria_folio]').on('blur',function(){
+                var folio = $(this).val();
+                var $this = $(this);
+                $this.removeClass('valid');
+                $.ajax({
+                    url: "/procesos/tablajeria/validatefolio",
+                    dataType: "json",
+                    data: {folio:folio},
+                    success: function (exist) {
+                       
+                        if(exist){
+                            alert('El folio "'+folio+'" ya fue utilizado');
+                            $this.val('');
+                        }else{
+                            $this.addClass('valid');
+                        }
+                        
+                    },
+                });
+                         
+           });
     
         }
         

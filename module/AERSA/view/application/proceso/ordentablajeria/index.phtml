@@ -37,12 +37,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        <?php $entity = new Ordentablajeria()?>
                         <?php foreach ($collection as $entity) : ?>
-                            <tr id="<?php echo $entity->getIdplantillatablajeria() ?>">
-                                <td><?php echo $entity->getPlantillatablajeriaNombre() ?></td>
+                            <?php
+                            if($entity->getOrdentablajeriaRevisada()) {
+                                $class = 'info';
+                                $revisada = 'Revisada';
+                            } else {
+                                $class = 'danger';
+                                $revisada = 'No revisada';
+                            }?>
+                            <tr date="<?php echo $entity->getOrdentablajeriaFecha('Y/m/d') ?>" id="<?php echo $entity->getIdordentablajeria()?>">
+                                <td><?php echo $entity->getOrdentablajeriaFecha('d/m/Y') ?></td>
+                                <td><?php echo $entity->getOrdentablajeriaFolio() ?></td>
                                 <td><?php echo $entity->getProducto()->getProductoNombre() ?></td>
-                                <td><?php echo $entity->getPlantillatablajeriaDescripcion() ?></td>
+                                <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
@@ -50,7 +59,7 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/catalogo/tablajeria/editar/<?php echo $entity->getIdplantillatablajeria()?>">
+                                                <a href="/procesos/tablajeria/editar/<?php echo $entity->getIdordentablajeria()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
                                             <li>
