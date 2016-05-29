@@ -47,19 +47,21 @@
        
         
         var calculator = function($tr){
+            
+            if(typeof $tr != 'undefined'){
+            
+                var cantidad = parseFloat($tr.find('input[name*=cantidad]').val());
+                var pesoporcion = parseFloat($tr.find('input[name*=pesoporcion]').val());
+                var pesototal =  cantidad * pesoporcion;
 
-            var cantidad = parseFloat($tr.find('input[name*=cantidad]').val());
-            var pesoporcion = parseFloat($tr.find('input[name*=pesoporcion]').val());
-            var pesototal =  cantidad * pesoporcion;
-
-            //ROW UPDATE
-            $tr.find('td.pesototal').text(pesototal);
-            $tr.find('input[name*=pesototal]').val(pesototal);
+                //ROW UPDATE
+                $tr.find('td.pesototal').text(pesototal);
+                $tr.find('input[name*=pesototal]').val(pesototal);
+            }
             
             //TOTALES
             var peso_total = 0;
             $('#productos_table tbody td.pesototal').filter(function(){
-
                 peso_total = peso_total + parseFloat($(this).text());
             });
             $('#peso_total').text(peso_total);
@@ -456,189 +458,210 @@
     
         }
         
-        plugin.edit = function(anio,mes,almacenes,count,compra_tipo){
+        plugin.edit = function(anio,mes,count){
             
-            //SI ES ORDEN DE COMPRA DESHABILITAMOS LOS SELECT DE ALMACEN
-            if(compra_tipo == 'ordecompra'){
-                $container.find('select[name=idalmacen]').attr('disabled',true);
-                $container.find('select[name*=almacen]').attr('disabled',true);
-            }
-
+            calculator();
+            tablajeando();
+            
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
             
-            container.find('input[name=compra_fechacompra]').datepicker({
+            container.find('input[name=ordentablajeria_fecha]').datepicker({
                 startDate:minDate,
                 endDate:maxDate,
                 format: 'dd/mm/yyyy',
             });
             
-            container.find('input[name=compra_fechaentrega]').datepicker({
-                format: 'dd/mm/yyyy',
-            });
-            
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                  url: '/autocomplete/getproveedores?q=%QUERY',
+                  url: '/procesos/tablajeria/getproductos?q=%QUERY',
                   wildcard: '%QUERY'
                 }
             });
             
-            $('input[name=idproveedor_autocomplete]').typeahead(null, {
+            $('input[name=idproducto_autocomplete]').typeahead(null, {
                 name: 'best-pictures',
-                display: 'value',
+                display: 'producto_nombre',
                 hint: true,
                 highlight: true,
                 source: data,
                 limit:5,
             });
             
-            $('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
-                $('input[name=idproveedor]').val(suggestion.id);
-               
-            });
-            
-            var data = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                remote: {
-                  url: '/autocomplete/getproductos?q=%QUERY',
-                  wildcard: '%QUERY'
-                }
-            });
-            
-            $('input#producto_autocomplete').typeahead(null, {
-                name: 'best-pictures',
-                display: 'value',
-                hint: true,
-                highlight: true,
-                source: data,
-                limit:5,
-            });
-            
-            $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
-                $('#producto_add').attr('disabled',false);
-                $('input#idproducto').val(suggestion.id);
-                $('input#producto_iva').val(suggestion.producto_iva);
-                
-            });
-            
-            $('#productos_table tbody').numeric();
-            
-            var count = count;
-            $('#producto_add').on('click',function(){  
-                
-                //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var almacenen_select = $('<td><select class="form-control" name=productos['+count+'][almacen]></td>');
-                $.each(almacenes,function(index){
-                    var option = $('<option value="'+index+'">'+this+'</option>');
-                    almacenen_select.find('select').append(option);
-                });
-                
-                var tipo = $('select[name=compra_tipo] option:selected').val();
-                
-                if(tipo == 'ordecompra'){
-                   
-                    almacenen_select.find('select').attr('disabled',true);
-                }
-
-                               
-                var tr = $('<tr>');
-                tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
-                tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
-                tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
-                tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
-                tr.append(almacenen_select);
-                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
-                
-                //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
-                tr.find('input').numeric();
-                
-                //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL,IEPS, ETC
-                tr.find('input').on('blur',function(){
-                    var $tr = $(this).closest(tr);
-                    caluclator($tr);
-                });
-                
-                var revisada = $('select[name=compra_revisada] option:selected').val();
-                if(revisada==1){
-                    tr.find('input[type=checkbox]').prop('checked',true);
+            $('input[name=idproducto_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+                if(suggestion.unidad_medida == 'kilogramos'){
+                    $('label[for=ordentablajeria_pesobruto]').text('Peso bruto *');
+                }else{
+                    $('label[for=ordentablajeria_pesobruto]').text('Porciones *');
+                    $('input[name=pesoporcion]').val(suggestion.pesoporcion);
                 }
                 
-                //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
-                revisadaControl();
-                
-                //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
-                
-                
-                //LIMPIAMOS EL AUTOCOMPLETE
-                $('input#producto_autocomplete').typeahead('val', ''); 
-                $('input#idproducto').val(''); 
-                $('input#producto_iva').val('');
-                $('#producto_add').attr('disabled',true);
-                
-                
-             count ++;          
-             $('.fa-trash').on('click',function(){
-                var tr = $(this).closest('tr');
-                tr.remove();
-                caluclator(tr); 
-             });         
+                $('input[name=idproducto]').val(suggestion.idproducto);
+                $('input[name=producto_unidadmedida]').val(suggestion.unidad_medida);
+                $('input[name=ordentablajeria_preciokilo]').val(accounting.formatMoney(suggestion.producto_ultimocosto));
+                $('input[name=ordentablajeria_pesobruto]').val('');
+                $('input[name=ordentablajeria_numeroporciones]').val('');
               
-            
-            
-            });
-            
-            //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL,IEPS, ETC
-            $container.find('table input').on('blur',function(){
-                var $tr = $(this).closest('tr');
-                caluclator($tr);
-            });
-                
-            $('.fa-trash').on('click',function(){
-                var tr = $(this).closest('tr');
-                tr.remove();
-                caluclator(tr);
-             });
+                //SI NO TIENE PLANTILLA DE TABLAJERIA
+                if(!suggestion.plantilla_tablajeria){
+                    $('input[name=producto_autocomplete]').prop('disabled',false);
+                }else{
+                    $('input[name=producto_autocomplete]').prop('disabled',true);
+                    $('button#producto_add').prop('disabled',true);
+                    var count = 0;
+                    $.each(suggestion.plantilla_tablajeria,function(){
+                 
+                        var $tr = $('<tr>');
+                        $tr.append('<td><input type="hidden" name=productos['+count+'][idproducto] value="'+this.idproducto+'"><input type="hidden" name=productos['+count+'][subtotal]><input type="hidden" name=productos['+count+'][pesototal] value="1"><input type="hidden" name=productos['+count+'][precioporcion]>'+this.producto_nombe+'</td>');
+                        $tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
+                        $tr.append('<td>'+this.unidad_medida+'</td>');
+                        if(this.unidad_medida == 'kilogramos'){
+                             $tr.append('<td><input readonly type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                        }else{
+                             $tr.append('<td><input type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                        }
+                        $tr.append('<td class="pesototal">1</td>');
+                        $tr.append('<td class="precioporcion">'+accounting.formatMoney(1)+'</td>');
+                        $tr.append('<td class="importe">'+accounting.formatMoney(1)+'</td>');
+                        $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                        $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                        
+                        //EVENTOS DE NUESTRAS ROW
+                        $tr.find('input').numeric();
+                        $tr.find('input').on('blur',function(){
+                            calculator($tr);
+                        });
 
-            //Si el tipo de entidad es orden de compra, el campo de almacén (entidad) y almacén (registro) se encuentra disable
-           $('select[name=compra_tipo]').on('change',function(){
-               
-               var selected = $('select[name=compra_tipo] option:selected').val();
-               if(selected == 'ordecompra'){
-                   $('select[name=idalmacen]').attr('disabled',true);
-                   $('select[name=idalmacen]').attr('required',false);
-                   $('#productos_table tbody select').attr('disabled',true);
-               }else{
-                   $('select[name=idalmacen]').attr('disabled',false);
-                   $('select[name=idalmacen]').attr('required',true);
-                   $('#productos_table tbody select').attr('disabled',false);
-               }
-           });
-           
+                        $tr.find('.fa-trash').on('click',function(){
+
+                            $tr.remove();
+                            tablajeando();
+                        });  
+
+                        $('#productos_table > tbody').append($tr);
+
+                        calculator($tr);
+                        count ++;
+                    });
+                    
+                }
+
+                totalBruto();
+
+            });
+            
+            $('input[name=ordentablajeria_pesobruto],input[name=ordentablajeria_inyeccion]').on('blur',function(){
+                totalBruto();
+                tablajeando();
+            });
+            
+            $('input[name=ordentablajeria_pesobruto],input[name=ordentablajeria_inyeccion]').numeric();
+            
+            $('input[name=ordentablajeria_pesobruto]').on('blur',function(){
+                var unidad_medida = $('input[name=producto_unidadmedida]').val();
+                if(unidad_medida == 'kilogramos'){
+                    var pesobruto = $('input[name=ordentablajeria_pesobruto]').val();
+                    $('input[name=ordentablajeria_numeroporciones]').val(pesobruto);
+                }else{
+                    var numeroporciones = $('input[name=ordentablajeria_pesobruto]').val();
+                    var pesoporcion = $('input[name=pesoporcion]').val();
+                    var totalpeso = numeroporciones * pesoporcion;
+                    $('input[name=ordentablajeria_numeroporciones]').val(totalpeso);
+                }
+                totalBruto();
+                tablajeando();  
+            });
+            
+            var data = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                  url: '/procesos/tablajeria/getproductos?q=%QUERY',
+                  wildcard: '%QUERY'
+                }
+            });
+            
+            $('input[name=producto_autocomplete]').typeahead(null, {
+                name: 'best-pictures',
+                display: 'producto_nombre',
+                hint: true,
+                highlight: true,
+                source: data,
+                limit:5,
+            });
+            
+            
+             $('input[name=producto_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+                 $('input[name=idproductoautocomplete]').val(suggestion.idproducto);
+                 $('input[name=productoautocomplete_unidadmedida]').val(suggestion.unidad_medida);              
+                 $('button#producto_add').prop('disabled',false);
+             });
+             
+            //EVENTO ADD 
+            var count = count;
+            $('button#producto_add').on('click',function(){
+                
+                var idproducto = $('input[name=idproductoautocomplete]').val();
+                var producto = $('input[name=producto_autocomplete]').val();
+                var unidad_medida = $('input[name=productoautocomplete_unidadmedida]').val();
+                
+                var $tr = $('<tr>');
+                $tr.append('<td><input type="hidden" name=productos['+count+'][idproducto] value="'+idproducto+'"><input type="hidden" name=productos['+count+'][subtotal]><input type="hidden" name=productos['+count+'][pesototal] value="1"><input type="hidden" name=productos['+count+'][precioporcion]>'+producto+'</td>');
+                $tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
+                $tr.append('<td>'+unidad_medida+'</td>');
+                if(unidad_medida == 'kilogramos'){
+                     $tr.append('<td><input readonly type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                }else{
+                     $tr.append('<td><input type="text" name=productos['+count+'][pesoporcion] value="1"></td>');
+                }
+                $tr.append('<td class="pesototal">1</td>');
+                $tr.append('<td class="precioporcion">'+accounting.formatMoney(1)+'</td>');
+                $tr.append('<td class="importe">'+accounting.formatMoney(1)+'</td>');
+                $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                
+                //EVENTOS DE NUESTRAS ROW
+                $tr.find('input').numeric();
+                $tr.find('input').on('blur',function(){
+                    calculator($tr);
+                });
+                
+                $tr.find('.fa-trash').on('click',function(){
+                    
+                    $tr.remove();
+                    tablajeando();
+                });  
+                
+                $('#productos_table > tbody').append($tr);
+                
+                calculator($tr);
+
+                $('input[name=idproductoautocomplete]').val('');
+                $('input[name=producto_autocomplete]').val('');
+                $('input[name=productoautocomplete_unidadmedida]').val('');
+                
+                revisadaControl();
+                    
+            });
+            
            //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
             revisadaControl();
            
            //VALIDAR FOLIO
-           $('input[name=compra_folio]').on('blur',function(){
+           $('input[name=ordentablajeria_folio]').on('blur',function(){
                 var folio = $(this).val();
                 var $this = $(this);
                 $this.removeClass('valid');
                 $.ajax({
-                    url: "/procesos/compra/validatefolio",
+                    url: "/procesos/tablajeria/validatefolio",
                     dataType: "json",
-                    data: {folio:folio,edit:true,id:$('input[name=idcompra]').val()},
+                    data: {folio:folio,edit:true,id:$('input[name=idordentablajeria]').val()},
                     success: function (exist) {
                         if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            alert('El folio "'+folio+'" ya fue utilizado');
                             $this.val('');
                         }else{
                             $this.addClass('valid');
@@ -650,14 +673,26 @@
            });
            
            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
-            var now = new Date($('input[name=compra_fechacreacion]').val());
-            
+            var now = $('input[name=ordentablajeria_fecha]').val();
+            var now_array = now.split('/');
+            var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
             if((now.getMonth()+1) != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
+            
+            //VALIDAMOS SI EL PRODUCTO TIENE PLANTILLA DE TABLAJERIA PARA VER SI SE PUEDEN INSERTAR MAS ELEMENTOS
+            var has_plantilla = $('input[name=has_plantilla]').val();
+            if(has_plantilla == 1){
+                $('input[name=producto_autocomplete]').prop('disabled',true);
+                $('button#producto_add').prop('disabled',true);
+            }else{
+                 $('input[name=producto_autocomplete]').prop('disabled',false);
+            }
+            
+            console.log(has_plantilla);
 
         }
 

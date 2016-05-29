@@ -1,12 +1,27 @@
-<h3 class="page-title"><?php echo $form->get('plantillatablajeria_nombre')->getValue()?></h3>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<style>
+    #productos_table .fa-trash{
+        color:red;
+    }
+    #productos_table input[readonly]{
+        background: #EEF1F5;
+        
+    }
+</style>
+<div id="form_container">
+<h3 class="page-title">Orden de tablajeria - <?php echo '#'.$form->get('idordentablajeria')->getValue()?></h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
-            <a href="/catalogo/tablajeria">Tablajerias</a>
+            <a href="javascript:;">Procesos</a>
+             <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/procesos/tablajeria">Orden de tablajeria</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <span><span><?php echo $form->get('plantillatablajeria_nombre')->getValue()?></span></span>
+            <a href="javascript:;"><?php echo '#'.$form->get('idordentablajeria')->getValue()?></a>
         </li>
     </ul>
 </div>
@@ -17,51 +32,236 @@
         <?php echo $message?>
     </div>
 <?php endforeach;?>
-
-<?php foreach ($messages->getErrorMessages() as $message):?>
-    <div class="alert alert-danger alert-dismissable">
-        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-        <strong>Error!</strong>
-        <?php echo $message?>
-        
-    </div>
-<?php endforeach;?>
 <?php
-    $form->setAttribute('action', '/catalogo/tablajeria/editar/'.$form->get('idplantillatablajeria')->getValue());
+    $form->setAttribute('action', '/procesos/tablajeria/editar/'.$form->get('idordentablajeria')->getValue());
     echo $this->form()->openTag($form);
 ?>
-<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
-    <div class="portlet-body form">
-        <div class="form-body">
-            <h3 class="form-section">Información general</h3>
-            <div class="row">
-                    <?php echo  $this->formHidden($form->get('idempresa'));?>
-                <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('plantillatablajeria_nombre')); ?>  
-                    <?php echo  $this->formText($form->get('plantillatablajeria_nombre'));?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="form-section">Información general</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formHidden($form->get('idordentablajeria')) ?> 
+                            <?php echo $this->formLabel($form->get('ordentablajeria_fecha')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_fecha')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_folio')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_folio')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formHidden($form->get('idproducto')); ?> 
+                            <input type="hidden" name="has_plantilla" value="<?php echo $has_plantilla?>">
+                            <?php echo $this->formHidden($form->get('producto_unidadmedida')); ?>  
+                            <?php echo $this->formLabel($form->get('idproducto_autocomplete')) ?>  
+                            <?php echo $this->formText($form->get('idproducto_autocomplete')) ?> 
+                        </div>
+                        <div class="col-md-3">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_pesobruto')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_pesobruto')) ?> 
+                        </div>
+                        <div class="col-md-3">
+                            <input type="hidden" name="pesoporcion">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_numeroporciones')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_numeroporciones')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_preciokilo')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_preciokilo')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_totalbruto')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_totalbruto')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_inyeccion')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_inyeccion')) ?> 
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('idproducto')) ?>  
-                    <?php echo  $this->formSelect($form->get('idproducto'))?>
-                </div>
-                <div class="col-md-12">
-                    <?php echo $this->formLabel($form->get('plantillatablajeria_descripcion')) ?>  
-                    <?php echo  $this->formTextarea($form->get('plantillatablajeria_descripcion'))?>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('idalmacenorigen')) ?>  
+                            <?php echo $this->formSelect($form->get('idalmacenorigen')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('idalmacendestino')) ?>  
+                            <?php echo $this->formSelect($form->get('idalmacendestino')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label>Creado por</label>
+                            <input class="form-control" type="text" value="<?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();?>" readonly="readonly"> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Auditor</label>
+                            <?php  
+                                if($entity->getOrdentablajeriaRevisada()){
+                                    $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                }else{
+                                    $auditor = 'N/D';
+                                } 
+                            ?>
+                            <input class="form-control" type="text" value="<?php echo $auditor;?>" readonly="readonly"> 
+                        </div>
+                    </div>
                 </div>
             </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <p>(*)Campos obligatorios</p>
-                </div>
-            </div>
-        </div>
-        <div class="form-actions right">
-            <button class="btn blue" type="submit">
-                <i class="fa fa-check"></i>
-                Guardar
-            </button>
         </div>
     </div>
-</div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="form-section">Tablajeando</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_pesoneto')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_pesoneto')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_precioneto')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_precioneto')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_merma')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_merma')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_porcentajemerma')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_porcentajemerma')) ?> 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_aprovechamiento')) ?>  
+                            <?php echo $this->formText($form->get('ordentablajeria_aprovechamiento')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ordentablajeria_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('ordentablajeria_revisada')) ?> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="form-section">Productos</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-5 col-md-offset-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-search"></i>
+                                </span>
+                                <input name="idproductoautocomplete" type="hidden" disabled>
+                                <input name="productoautocomplete_unidadmedida" type="hidden" disabled>
+                                <input name="producto_autocomplete" class="form-control" type="text" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button disabled id="producto_add" class="btn grey-mint" type="button">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table" id="productos_table">
+                        <thead>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Unidad medida</th>
+                            <th>Peso porción (Kilos)</th>
+                            <th>Peso total</th>
+                            <th>Precio porción</th>
+                            <th>Importe</th>
+                            <th>Revisada</th>
+                            <th>Opciones</th>
+                        </thead>
+                        <tbody>
+                             <?php $detalle = new Ordentablajeriadetalle()?>
+                             <?php foreach ($detalles as $detalle) :?>
+                                <?php $unidad_medida = strtolower($detalle->getProducto()->getUnidadmedida()->getUnidadmedidaNombre())?>
+                                <tr id="<?php echo $detalle->getIdordentablajeriadetalle()?>">
+                                    <td>
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][subtotal]" value="<?php echo $detalle->getOrdentablajeriadetalleSubtotal()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][pesototal]" value="<?php echo $detalle->getOrdentablajeriadetallePesototal()?>">
+                                        <input type="hidden" name="productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][precioporcion]" value="<?php echo $detalle->getOrdentablajeriadetallePrecioporcion()?>">
+                                        <?php echo $detalle->getProducto()->getProductoNombre()?>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][cantidad]" value="<?php echo $detalle->getOrdentablajeriadetalleCantidad()?>"> 
+                                    </td>
+                                    <td>
+                                        <?php echo $unidad_medida?>
+                                    </td>
+                                    <td>
+                                        <?php if($unidad_medida == 'kilogramos') :?>
+                                        <input type="text" name="productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][pesoporcion]" value="<?php echo $detalle->getOrdentablajeriadetallePesoporcion()?>" readonly> 
+                                        <?php else :?>
+                                        <input type="text" name="productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][pesoporcion]" value="<?php echo $detalle->getOrdentablajeriadetallePesoporcion()?>">
+                                        <?php endif;?>
+                                    </td>
+                                    <td class="pesototal">
+                                        <?php echo $detalle->getOrdentablajeriadetallePesototal()?>
+                                    </td>
+                                    <td class="precioporcion">
+                                        <?php echo money_format('%(#1n',$detalle->getOrdentablajeriadetallePrecioporcion())?>
+                                    </td>
+                                    <td class="importe">
+                                        <?php echo money_format('%(#1n',$detalle->getOrdentablajeriadetalleSubtotal())?>
+                                    </td>
+                                    <td>
+                                        <?php if($detalle->getOrdentablajeriadetalleRevisada()) :?>
+                                            <input checked type="checkbox" name=productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][revisada]>
+                                        <?php else :?>
+                                            <input type="checkbox" name=productos[<?php echo $detalle->getIdordentablajeriadetalle()?>][revisada]>
+                                        <?php endif?>
+                                    </td>
+                                    <td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>
+                                </tr>
+                                <?php endforeach?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+         
+                                <td colspan="4">Total</td>
+                                <td style="padding-left: 8px;" colspan="2" id="peso_total">0</td>
+                                <td colspan="4" style="padding-left: 8px;" id="importe_total">$0.00</td>
+                            </tr> 
+                        </tfoot>
+                    </table>
+                </div>
+                
+            </div>
+            <div class="form-actions right">
+                <button class="btn blue" id="btnSubmit" type="submit">
+                    <i class="fa fa-check"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
 <?php  echo $this->form()->closeTag(); ?>
+</div>
+
+<script type="text/javascript" src="/application/custom/js/procesos/ordentablajeria.js"></script>
+<script>
+    var $form = $('#form_container').ordentablajeria();
+    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $count?>);
+</script>

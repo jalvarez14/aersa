@@ -160,16 +160,12 @@ class TablajeriaController extends AbstractActionController {
         $almecenes = \AlmacenQuery::create()
                 ->filterByIdsucursal($session['idsucursal'])
                 ->filterByAlmacenEstatus(1)
-                ->filterByAlmacenNombre('Créditos al costo', \Criteria::NOT_EQUAL)
                 ->find();
         
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
 
         $form = new \Application\Proceso\Form\TablajeriaForm($almecenes);
 
-        $iva = \TasaivaQuery::create()->findOne();
-        $iva = $iva->getTasaivaValor();
-        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/ordentablajeria/nuevo');
         $view_model->setVariables(array(
@@ -178,7 +174,7 @@ class TablajeriaController extends AbstractActionController {
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
             'almacenes' => json_encode($almecenes), //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
-            'iva' => $iva,
+ 
         ));
 
         return $view_model;
@@ -194,7 +190,7 @@ class TablajeriaController extends AbstractActionController {
         $id = $this->params()->fromRoute('id');
 
         //VERIFICAMOS SI EXISTE
-        $exist = \DevolucionQuery::create()->filterByIddevolucion($id)->exists();
+        $exist = \OrdentablajeriaQuery::create()->filterByIdordentablajeria($id)->exists();
 
         if ($exist) {
             // OBTENEMOS EL MES Y EL ANIO ACTIVO DE LA SUCURSAL
@@ -203,126 +199,112 @@ class TablajeriaController extends AbstractActionController {
             $mes_activo = $sucursal->getSucursalMesactivo();
 
             //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \DevolucionQuery::create()->findPk($id);
+            $entity = \OrdentablajeriaQuery::create()->findPk($id);
 
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();
-                $post_files = $request->getFiles();
+               
 
-                $post_data["devolucion_fechadevolucion"] = date_create_from_format('d/m/Y', $post_data["devolucion_fechadevolucion"]);
-                //$post_data["compra_fechaentrega"] = date_create_from_format('d/m/Y', $post_data["compra_fechaentrega"]);
+                $post_data["ordentablajeria_fecha"] = date_create_from_format('d/m/Y', $post_data["ordentablajeria_fecha"]);
+                $post_data["ordentablajeria_preciokilo"] = preg_replace('/[^\d\.]/', '', $post_data["ordentablajeria_preciokilo"]);
+                $post_data["ordentablajeria_totalbruto"] = preg_replace('/[^\d\.]/', '', $post_data["ordentablajeria_totalbruto"]);
+                $post_data["ordentablajeria_precioneto"] = preg_replace('/[^\d\.]/', '', $post_data["ordentablajeria_precioneto"]);
 
                 foreach ($post_data as $key => $value) {
-                    if (\DevolucionPeer::getTableMap()->hasColumn($key)) {
+
+                    if (\OrdentablajeriaPeer::getTableMap()->hasColumn($key)) {
                         $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                     }
                 }
 
-                //SETEAMOS LA FECHA DE CREACION
-                $entity->setDevolucionFechacreacion(new \DateTime())
-                        ->setIdempresa($session['idempresa'])
-                        ->setIdsucursal($session['idsucursal']);
-
-                if ($post_data['devolucion_revisada']) {
+                if ($post_data['ordentablajeria_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
                 }
 
                 $entity->save();
 
-                //EL COMPROBANTE
-                if (!empty($post_files['devolucion_factura']['name'])) {
 
-                    $type = $post_files['devolucion_factura']['type'];
-                    $type = explode('/', $type);
-                    $type = $type[1];
-
-                    $target_path = "/application/files/devoluciones/";
-                    $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
-                    
-                   
-                    if (move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
-                        $entity->setDevolucionFactura($target_path);
-                        $entity->save();
-                    }
-                }
-
-                //Devolucion DETALLES
-                $entity->getDevoluciondetalles()->delete();
+                //DETALLES
+                $entity->getOrdentablajeriadetalles()->delete();
                 foreach ($post_data['productos'] as $producto) {
 
-                    $devolucion_detalle = new \Devoluciondetalle();
-                    $devolucion_detalle->setIddevolucion($entity->getIddevolucion())
-                            ->setDevoluciondetalleRevisada(0)
+                    $ordentablajeria_detalle = new \Ordentablajeriadetalle();
+                    $ordentablajeria_detalle->setIdordentablajeria($entity->getIdordentablajeria())
+                            ->setOrdentablajeriadetalleRevisada(0)
                             ->setIdproducto($producto['idproducto'])
-                            ->setIdalmacen($producto['almacen'])
-                            ->setDevoluciondetalleCantidad($producto['cantidad'])
-                            ->setDevoluciondetalleCostounitario($producto['precio'])
-                            ->setDevoluciondetalleCostounitarioneto($producto['costo_unitario'])
-                            ->setDevoluciondetalleDescuento($producto['descuento'])
-                            ->setDevoluciondetalleIeps($producto['ieps'])
-                            ->setDevoluciondetalleSubtotal($producto['subtotal']);
+                            ->setOrdentablajeriadetalleCantidad($producto['cantidad'])
+                            ->setOrdentablajeriadetallePesoporcion($producto['pesoporcion'])
+                            ->setOrdentablajeriadetallePrecioporcion($producto['precioporcion'])
+                            ->setOrdentablajeriadetallePesototal($producto['pesototal'])
+                            ->setOrdentablajeriadetalleSubtotal($producto['subtotal']);
+
 
                     if (isset($producto['revisada'])) {
-                        $devolucion_detalle->setDevoluciondetalleRevisada(1);
+                        $ordentablajeria_detalle->setOrdentablajeriadetalleRevisada(1);
                     }
 
-                    $devolucion_detalle->save();
+                    $ordentablajeria_detalle->save();
                 }
 
                 //REDIRECCIONAMOS AL LISTADO
                 $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/procesos/devolucion');
+                return $this->redirect()->toUrl('/procesos/tablajeria');
             }
 
             //NUESTROS ALMACENES
-            $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Créditos al costo', \Criteria::NOT_EQUAL)->find();
+            $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
             $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
 
             //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Proceso\Form\DevolucionForm($almecenes);
+            $form = new \Application\Proceso\Form\TablajeriaForm($almecenes);
 
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
 
             //CAMBIAMOS LOS VALORES DE FECHAS
-            $form->get('devolucion_fechadevolucion')->setValue($entity->getDevolucionFechadevolucion('d/m/Y'));
+            $form->get('ordentablajeria_fecha')->setValue($entity->getOrdentablajeriaFecha('d/m/Y'));
 
             //SETEAMOS EL VALOR AUTOCOMPLETE
-            $form->get('idproveedor_autocomplete')->setValue($entity->getProveedor()->getProveedorNombrecomercial());
-
+            $form->get('idproducto_autocomplete')->setValue($entity->getProducto()->getProductoNombre());
+            $form->get('producto_unidadmedida')->setValue(strtolower($entity->getProducto()->getUnidadmedida()->getUnidadmedidaNombre()));
+            
             //LE PONEMOS LA CLASE VALID AL FOLIO
-            $form->get('devolucion_folio')->setAttribute('class', 'form-control valid');
+            $form->get('ordentablajeria_folio')->setAttribute('class', 'form-control valid');
 
+            //MONEY FORMAT
+            $form->get('ordentablajeria_preciokilo')->setValue(money_format('%(#1n',$entity->getOrdentablajeriaPreciokilo()));
+            $form->get('ordentablajeria_totalbruto')->setValue(money_format('%(#1n',$entity->getOrdentablajeriaTotalbruto()));
+            
             //LOS DETALLES DE LA DEVOLUCION
-            $devolucion_detalle = \DevoluciondetalleQuery::create()->filterByIddevolucion($entity->getIddevolucion())->find();
-
+            $detalles = \OrdentablajeriadetalleQuery::create()->filterByIdordentablajeria($entity->getIdordentablajeria())->find();
+            
+            $has_plantila = \PlantillatablajeriaQuery::create()->filterByIdproducto($entity->getIdproducto())->count();
 
             //COUNT
-            $count = \DevoluciondetalleQuery::create()->orderByIddevoluciondetalle(\Criteria::DESC)->findOne();
-            $count = $count->getIddevoluciondetalle() + 1;
-
-            $iva = \TasaivaQuery::create()->findOne();
-
+            $count = \OrdentablajeriadetalleQuery::create()->orderByIdordentablajeriadetalle(\Criteria::DESC)->findOne();
+            $count = $count->getIdordentablajeriadetalle() + 1;
+            
             $view_model = new ViewModel();
-            $view_model->setTemplate('/application/proceso/devolucion/editar');
+            $view_model->setTemplate('/application/proceso/ordentablajeria/editar');
             $view_model->setVariables(array(
+                'messages' => $this->flashMessenger(),
                 'form' => $form,
                 'entity' => $entity,
-                'devolucion_detalle' => $devolucion_detalle,
+                'detalles' => $detalles,
                 'anio_activo' => $anio_activo,
                 'mes_activo' => $mes_activo,
                 'almacenes' => $almecenes,
                 'count' => $count,
-                'mes_devolucion' => $entity->getDevolucionFechacreacion('m'),
-                'anio_devolucion' => $entity->getDevolucionFechacreacion('Y'),
-                'iva' => $iva,
+                'has_plantilla' => $has_plantila,
+                'mes_ordentablajeria' => $entity->getOrdentablajeriaFecha('m'),
+                'anio_ordentablajeria' => $entity->getOrdentablajeriaFecha('Y'),
             ));
 
             return $view_model;
         } else {
-            return $this->redirect()->toUrl('/procesos/devolucion');
+            return $this->redirect()->toUrl('/procesos/tablajeria');
         }
     }
 
@@ -343,44 +325,24 @@ class TablajeriaController extends AbstractActionController {
         }
     }
     
-    public function validatefolioAction() 
-    {
+    public function validatefolioAction(){
+        
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-
+        
         $folio = $this->params()->fromQuery('folio');
+        $edit = (!is_null($this->params()->fromQuery('edit'))) ?$this->params()->fromQuery('edit') : false;
 
-        $exist = \OrdentablajeriaQuery::create()
-                ->filterByIdsucursal($session['idsucursal'])
-                ->filterByOrdentablajeriaFolio($folio, \Criteria::LIKE)->exists();
-
+        if($edit){
+             $id = $this->params()->fromQuery('id');
+             $entity = \OrdentablajeriaQuery::create()->findPk($id);
+            
+             $exist = \OrdentablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByOrdentablajeriaFolio($entity->getOrdentablajeriaFolio(),  \Criteria::NOT_EQUAL)->filterByOrdentablajeriaFolio($folio,  \Criteria::LIKE)->exists();
+        }else{
+            $exist = \OrdentablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByOrdentablajeriaFolio($folio,  \Criteria::EQUAL)->exists();
+        }
+        
         return $this->getResponse()->setContent(json_encode($exist));
     }
-    
-    public function gettablajeriaAction()
-    {
-        $session = new \Shared\Session\AouthSession();
-        $session = $session->getData();
-        
-        $id = $this->params()->fromRoute('id');
-        $result = \PlantillatablajeriaQuery::create()
-                ->filterByIdproducto($id)
-                ->filterByIdempresa($session['idempresa'])
-                ->findOne();
-        
-        if(count($result) == 0)
-            return $this->getResponse()->setContent("false");    
-        else
-        {
-             
-            $detalle = \PlantillatablajeriadetalleQuery::create()
-                    ->filterByIdplantillatablajeria($result->getIdplantillatablajeria())
-                    ->find()
-                    ->toArray();
 
-            return $this->getResponse()->setContent(json_encode($detalle));    
-        }
-
-    }
-    
 }   
