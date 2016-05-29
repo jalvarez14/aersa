@@ -463,6 +463,15 @@
             calculator();
             tablajeando();
             
+            $('#productos_table tbody tr').each(function(){
+                var $tr = $(this);
+                //EVENTOS DE NUESTRAS ROW
+                $tr.find('input').numeric();
+                $tr.find('input').on('blur',function(){
+                    calculator($tr);
+                });
+            });
+            
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
             maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate()-1));
