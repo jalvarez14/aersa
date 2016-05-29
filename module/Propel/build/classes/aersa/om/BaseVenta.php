@@ -48,12 +48,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
     protected $idsucursal;
 
     /**
-     * The value for the idalmacen field.
-     * @var        int
-     */
-    protected $idalmacen;
-
-    /**
      * The value for the idusuario field.
      * @var        int
      */
@@ -89,11 +83,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
      * @var        string
      */
     protected $venta_total;
-
-    /**
-     * @var        Almacen
-     */
-    protected $aAlmacen;
 
     /**
      * @var        Usuario
@@ -199,17 +188,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
 
         return $this->idsucursal;
-    }
-
-    /**
-     * Get the [idalmacen] column value.
-     *
-     * @return int
-     */
-    public function getIdalmacen()
-    {
-
-        return $this->idalmacen;
     }
 
     /**
@@ -408,31 +386,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
     } // setIdsucursal()
 
     /**
-     * Set the value of [idalmacen] column.
-     *
-     * @param  int $v new value
-     * @return Venta The current object (for fluent API support)
-     */
-    public function setIdalmacen($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idalmacen !== $v) {
-            $this->idalmacen = $v;
-            $this->modifiedColumns[] = VentaPeer::IDALMACEN;
-        }
-
-        if ($this->aAlmacen !== null && $this->aAlmacen->getIdalmacen() !== $v) {
-            $this->aAlmacen = null;
-        }
-
-
-        return $this;
-    } // setIdalmacen()
-
-    /**
      * Set the value of [idusuario] column.
      *
      * @param  int $v new value
@@ -617,13 +570,12 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $this->idventa = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->idsucursal = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->idalmacen = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-            $this->idusuario = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-            $this->idauditor = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-            $this->venta_revisada = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
-            $this->venta_fechaventa = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-            $this->venta_fechacreacion = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
-            $this->venta_total = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->idusuario = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->idauditor = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->venta_revisada = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+            $this->venta_fechaventa = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+            $this->venta_fechacreacion = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->venta_total = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -633,7 +585,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 10; // 10 = VentaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = VentaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Venta object", $e);
@@ -661,9 +613,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
         }
         if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
             $this->aSucursal = null;
-        }
-        if ($this->aAlmacen !== null && $this->idalmacen !== $this->aAlmacen->getIdalmacen()) {
-            $this->aAlmacen = null;
         }
         if ($this->aUsuarioRelatedByIdusuario !== null && $this->idusuario !== $this->aUsuarioRelatedByIdusuario->getIdusuario()) {
             $this->aUsuarioRelatedByIdusuario = null;
@@ -710,7 +659,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aAlmacen = null;
             $this->aUsuarioRelatedByIdauditor = null;
             $this->aEmpresa = null;
             $this->aSucursal = null;
@@ -835,13 +783,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aAlmacen !== null) {
-                if ($this->aAlmacen->isModified() || $this->aAlmacen->isNew()) {
-                    $affectedRows += $this->aAlmacen->save($con);
-                }
-                $this->setAlmacen($this->aAlmacen);
-            }
-
             if ($this->aUsuarioRelatedByIdauditor !== null) {
                 if ($this->aUsuarioRelatedByIdauditor->isModified() || $this->aUsuarioRelatedByIdauditor->isNew()) {
                     $affectedRows += $this->aUsuarioRelatedByIdauditor->save($con);
@@ -933,9 +874,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if ($this->isColumnModified(VentaPeer::IDSUCURSAL)) {
             $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
-        if ($this->isColumnModified(VentaPeer::IDALMACEN)) {
-            $modifiedColumns[':p' . $index++]  = '`idalmacen`';
-        }
         if ($this->isColumnModified(VentaPeer::IDUSUARIO)) {
             $modifiedColumns[':p' . $index++]  = '`idusuario`';
         }
@@ -973,9 +911,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
                         break;
                     case '`idsucursal`':
                         $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
-                        break;
-                    case '`idalmacen`':
-                        $stmt->bindValue($identifier, $this->idalmacen, PDO::PARAM_INT);
                         break;
                     case '`idusuario`':
                         $stmt->bindValue($identifier, $this->idusuario, PDO::PARAM_INT);
@@ -1094,12 +1029,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aAlmacen !== null) {
-                if (!$this->aAlmacen->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aAlmacen->getValidationFailures());
-                }
-            }
-
             if ($this->aUsuarioRelatedByIdauditor !== null) {
                 if (!$this->aUsuarioRelatedByIdauditor->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aUsuarioRelatedByIdauditor->getValidationFailures());
@@ -1183,24 +1112,21 @@ abstract class BaseVenta extends BaseObject implements Persistent
                 return $this->getIdsucursal();
                 break;
             case 3:
-                return $this->getIdalmacen();
-                break;
-            case 4:
                 return $this->getIdusuario();
                 break;
-            case 5:
+            case 4:
                 return $this->getIdauditor();
                 break;
-            case 6:
+            case 5:
                 return $this->getVentaRevisada();
                 break;
-            case 7:
+            case 6:
                 return $this->getVentaFechaventa();
                 break;
-            case 8:
+            case 7:
                 return $this->getVentaFechacreacion();
                 break;
-            case 9:
+            case 8:
                 return $this->getVentaTotal();
                 break;
             default:
@@ -1235,13 +1161,12 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $keys[0] => $this->getIdventa(),
             $keys[1] => $this->getIdempresa(),
             $keys[2] => $this->getIdsucursal(),
-            $keys[3] => $this->getIdalmacen(),
-            $keys[4] => $this->getIdusuario(),
-            $keys[5] => $this->getIdauditor(),
-            $keys[6] => $this->getVentaRevisada(),
-            $keys[7] => $this->getVentaFechaventa(),
-            $keys[8] => $this->getVentaFechacreacion(),
-            $keys[9] => $this->getVentaTotal(),
+            $keys[3] => $this->getIdusuario(),
+            $keys[4] => $this->getIdauditor(),
+            $keys[5] => $this->getVentaRevisada(),
+            $keys[6] => $this->getVentaFechaventa(),
+            $keys[7] => $this->getVentaFechacreacion(),
+            $keys[8] => $this->getVentaTotal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1249,9 +1174,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aAlmacen) {
-                $result['Almacen'] = $this->aAlmacen->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aUsuarioRelatedByIdauditor) {
                 $result['UsuarioRelatedByIdauditor'] = $this->aUsuarioRelatedByIdauditor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
@@ -1311,24 +1233,21 @@ abstract class BaseVenta extends BaseObject implements Persistent
                 $this->setIdsucursal($value);
                 break;
             case 3:
-                $this->setIdalmacen($value);
-                break;
-            case 4:
                 $this->setIdusuario($value);
                 break;
-            case 5:
+            case 4:
                 $this->setIdauditor($value);
                 break;
-            case 6:
+            case 5:
                 $this->setVentaRevisada($value);
                 break;
-            case 7:
+            case 6:
                 $this->setVentaFechaventa($value);
                 break;
-            case 8:
+            case 7:
                 $this->setVentaFechacreacion($value);
                 break;
-            case 9:
+            case 8:
                 $this->setVentaTotal($value);
                 break;
         } // switch()
@@ -1358,13 +1277,12 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if (array_key_exists($keys[0], $arr)) $this->setIdventa($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdsucursal($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setIdalmacen($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setIdusuario($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setIdauditor($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setVentaRevisada($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setVentaFechaventa($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setVentaFechacreacion($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setVentaTotal($arr[$keys[9]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdusuario($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdauditor($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setVentaRevisada($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setVentaFechaventa($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setVentaFechacreacion($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setVentaTotal($arr[$keys[8]]);
     }
 
     /**
@@ -1379,7 +1297,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if ($this->isColumnModified(VentaPeer::IDVENTA)) $criteria->add(VentaPeer::IDVENTA, $this->idventa);
         if ($this->isColumnModified(VentaPeer::IDEMPRESA)) $criteria->add(VentaPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(VentaPeer::IDSUCURSAL)) $criteria->add(VentaPeer::IDSUCURSAL, $this->idsucursal);
-        if ($this->isColumnModified(VentaPeer::IDALMACEN)) $criteria->add(VentaPeer::IDALMACEN, $this->idalmacen);
         if ($this->isColumnModified(VentaPeer::IDUSUARIO)) $criteria->add(VentaPeer::IDUSUARIO, $this->idusuario);
         if ($this->isColumnModified(VentaPeer::IDAUDITOR)) $criteria->add(VentaPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(VentaPeer::VENTA_REVISADA)) $criteria->add(VentaPeer::VENTA_REVISADA, $this->venta_revisada);
@@ -1451,7 +1368,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
         $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setIdsucursal($this->getIdsucursal());
-        $copyObj->setIdalmacen($this->getIdalmacen());
         $copyObj->setIdusuario($this->getIdusuario());
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setVentaRevisada($this->getVentaRevisada());
@@ -1520,58 +1436,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
         }
 
         return self::$peer;
-    }
-
-    /**
-     * Declares an association between this object and a Almacen object.
-     *
-     * @param                  Almacen $v
-     * @return Venta The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setAlmacen(Almacen $v = null)
-    {
-        if ($v === null) {
-            $this->setIdalmacen(NULL);
-        } else {
-            $this->setIdalmacen($v->getIdalmacen());
-        }
-
-        $this->aAlmacen = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Almacen object, it will not be re-added.
-        if ($v !== null) {
-            $v->addVenta($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Almacen object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Almacen The associated Almacen object.
-     * @throws PropelException
-     */
-    public function getAlmacen(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aAlmacen === null && ($this->idalmacen !== null) && $doQuery) {
-            $this->aAlmacen = AlmacenQuery::create()->findPk($this->idalmacen, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aAlmacen->addVentas($this);
-             */
-        }
-
-        return $this->aAlmacen;
     }
 
     /**
@@ -2023,6 +1887,81 @@ abstract class BaseVenta extends BaseObject implements Persistent
         return $this;
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Venta is new, it will return
+     * an empty collection; or if this Venta has previously
+     * been saved, it will retrieve related Ventadetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Venta.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
+     */
+    public function getVentadetallesJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getVentadetalles($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Venta is new, it will return
+     * an empty collection; or if this Venta has previously
+     * been saved, it will retrieve related Ventadetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Venta.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
+     */
+    public function getVentadetallesJoinVentadetalleRelatedByIdpadre($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('VentadetalleRelatedByIdpadre', $join_behavior);
+
+        return $this->getVentadetalles($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Venta is new, it will return
+     * an empty collection; or if this Venta has previously
+     * been saved, it will retrieve related Ventadetalles from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Venta.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
+     */
+    public function getVentadetallesJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getVentadetalles($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -2031,7 +1970,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
         $this->idventa = null;
         $this->idempresa = null;
         $this->idsucursal = null;
-        $this->idalmacen = null;
         $this->idusuario = null;
         $this->idauditor = null;
         $this->venta_revisada = null;
@@ -2066,9 +2004,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->aAlmacen instanceof Persistent) {
-              $this->aAlmacen->clearAllReferences($deep);
-            }
             if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
               $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
             }
@@ -2089,7 +2024,6 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $this->collVentadetalles->clearIterator();
         }
         $this->collVentadetalles = null;
-        $this->aAlmacen = null;
         $this->aUsuarioRelatedByIdauditor = null;
         $this->aEmpresa = null;
         $this->aSucursal = null;

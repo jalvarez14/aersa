@@ -24,13 +24,13 @@ abstract class BaseVentadetallePeer
     const TM_CLASS = 'VentadetalleTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /** the column name for the idventadetalle field */
     const IDVENTADETALLE = 'ventadetalle.idventadetalle';
@@ -49,6 +49,12 @@ abstract class BaseVentadetallePeer
 
     /** the column name for the ventadetalle_subtotal field */
     const VENTADETALLE_SUBTOTAL = 'ventadetalle.ventadetalle_subtotal';
+
+    /** the column name for the idpadre field */
+    const IDPADRE = 'ventadetalle.idpadre';
+
+    /** the column name for the ventadetalle_revisada field */
+    const VENTADETALLE_REVISADA = 'ventadetalle.ventadetalle_revisada';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -69,12 +75,12 @@ abstract class BaseVentadetallePeer
      * e.g. VentadetallePeer::$fieldNames[VentadetallePeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idventadetalle', 'Idventa', 'Idalmacen', 'Idproducto', 'VentadetalleCantidad', 'VentadetalleSubtotal', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle', 'idventa', 'idalmacen', 'idproducto', 'ventadetalleCantidad', 'ventadetalleSubtotal', ),
-        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE, VentadetallePeer::IDVENTA, VentadetallePeer::IDALMACEN, VentadetallePeer::IDPRODUCTO, VentadetallePeer::VENTADETALLE_CANTIDAD, VentadetallePeer::VENTADETALLE_SUBTOTAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE', 'IDVENTA', 'IDALMACEN', 'IDPRODUCTO', 'VENTADETALLE_CANTIDAD', 'VENTADETALLE_SUBTOTAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('idventadetalle', 'idventa', 'idalmacen', 'idproducto', 'ventadetalle_cantidad', 'ventadetalle_subtotal', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idventadetalle', 'Idventa', 'Idalmacen', 'Idproducto', 'VentadetalleCantidad', 'VentadetalleSubtotal', 'Idpadre', 'VentadetalleRevisada', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle', 'idventa', 'idalmacen', 'idproducto', 'ventadetalleCantidad', 'ventadetalleSubtotal', 'idpadre', 'ventadetalleRevisada', ),
+        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE, VentadetallePeer::IDVENTA, VentadetallePeer::IDALMACEN, VentadetallePeer::IDPRODUCTO, VentadetallePeer::VENTADETALLE_CANTIDAD, VentadetallePeer::VENTADETALLE_SUBTOTAL, VentadetallePeer::IDPADRE, VentadetallePeer::VENTADETALLE_REVISADA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE', 'IDVENTA', 'IDALMACEN', 'IDPRODUCTO', 'VENTADETALLE_CANTIDAD', 'VENTADETALLE_SUBTOTAL', 'IDPADRE', 'VENTADETALLE_REVISADA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idventadetalle', 'idventa', 'idalmacen', 'idproducto', 'ventadetalle_cantidad', 'ventadetalle_subtotal', 'idpadre', 'ventadetalle_revisada', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -84,12 +90,12 @@ abstract class BaseVentadetallePeer
      * e.g. VentadetallePeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idventadetalle' => 0, 'Idventa' => 1, 'Idalmacen' => 2, 'Idproducto' => 3, 'VentadetalleCantidad' => 4, 'VentadetalleSubtotal' => 5, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'idalmacen' => 2, 'idproducto' => 3, 'ventadetalleCantidad' => 4, 'ventadetalleSubtotal' => 5, ),
-        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE => 0, VentadetallePeer::IDVENTA => 1, VentadetallePeer::IDALMACEN => 2, VentadetallePeer::IDPRODUCTO => 3, VentadetallePeer::VENTADETALLE_CANTIDAD => 4, VentadetallePeer::VENTADETALLE_SUBTOTAL => 5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE' => 0, 'IDVENTA' => 1, 'IDALMACEN' => 2, 'IDPRODUCTO' => 3, 'VENTADETALLE_CANTIDAD' => 4, 'VENTADETALLE_SUBTOTAL' => 5, ),
-        BasePeer::TYPE_FIELDNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'idalmacen' => 2, 'idproducto' => 3, 'ventadetalle_cantidad' => 4, 'ventadetalle_subtotal' => 5, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+        BasePeer::TYPE_PHPNAME => array ('Idventadetalle' => 0, 'Idventa' => 1, 'Idalmacen' => 2, 'Idproducto' => 3, 'VentadetalleCantidad' => 4, 'VentadetalleSubtotal' => 5, 'Idpadre' => 6, 'VentadetalleRevisada' => 7, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'idalmacen' => 2, 'idproducto' => 3, 'ventadetalleCantidad' => 4, 'ventadetalleSubtotal' => 5, 'idpadre' => 6, 'ventadetalleRevisada' => 7, ),
+        BasePeer::TYPE_COLNAME => array (VentadetallePeer::IDVENTADETALLE => 0, VentadetallePeer::IDVENTA => 1, VentadetallePeer::IDALMACEN => 2, VentadetallePeer::IDPRODUCTO => 3, VentadetallePeer::VENTADETALLE_CANTIDAD => 4, VentadetallePeer::VENTADETALLE_SUBTOTAL => 5, VentadetallePeer::IDPADRE => 6, VentadetallePeer::VENTADETALLE_REVISADA => 7, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDVENTADETALLE' => 0, 'IDVENTA' => 1, 'IDALMACEN' => 2, 'IDPRODUCTO' => 3, 'VENTADETALLE_CANTIDAD' => 4, 'VENTADETALLE_SUBTOTAL' => 5, 'IDPADRE' => 6, 'VENTADETALLE_REVISADA' => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('idventadetalle' => 0, 'idventa' => 1, 'idalmacen' => 2, 'idproducto' => 3, 'ventadetalle_cantidad' => 4, 'ventadetalle_subtotal' => 5, 'idpadre' => 6, 'ventadetalle_revisada' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -169,6 +175,8 @@ abstract class BaseVentadetallePeer
             $criteria->addSelectColumn(VentadetallePeer::IDPRODUCTO);
             $criteria->addSelectColumn(VentadetallePeer::VENTADETALLE_CANTIDAD);
             $criteria->addSelectColumn(VentadetallePeer::VENTADETALLE_SUBTOTAL);
+            $criteria->addSelectColumn(VentadetallePeer::IDPADRE);
+            $criteria->addSelectColumn(VentadetallePeer::VENTADETALLE_REVISADA);
         } else {
             $criteria->addSelectColumn($alias . '.idventadetalle');
             $criteria->addSelectColumn($alias . '.idventa');
@@ -176,6 +184,8 @@ abstract class BaseVentadetallePeer
             $criteria->addSelectColumn($alias . '.idproducto');
             $criteria->addSelectColumn($alias . '.ventadetalle_cantidad');
             $criteria->addSelectColumn($alias . '.ventadetalle_subtotal');
+            $criteria->addSelectColumn($alias . '.idpadre');
+            $criteria->addSelectColumn($alias . '.ventadetalle_revisada');
         }
     }
 
@@ -380,6 +390,9 @@ abstract class BaseVentadetallePeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in VentadetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        VentadetallePeer::clearInstancePool();
     }
 
     /**
@@ -478,6 +491,108 @@ abstract class BaseVentadetallePeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Almacen table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAlmacen(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(VentadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            VentadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(VentadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Producto table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(VentadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            VentadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(VentadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related Venta table
      *
      * @param      Criteria $criteria
@@ -525,6 +640,140 @@ abstract class BaseVentadetallePeer
         $stmt->closeCursor();
 
         return $count;
+    }
+
+
+    /**
+     * Selects a collection of Ventadetalle objects pre-filled with their Almacen objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ventadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAlmacen(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+        }
+
+        VentadetallePeer::addSelectColumns($criteria);
+        $startcol = VentadetallePeer::NUM_HYDRATE_COLUMNS;
+        AlmacenPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = VentadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = VentadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = VentadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                VentadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Ventadetalle) to $obj2 (Almacen)
+                $obj2->addVentadetalle($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Ventadetalle objects pre-filled with their Producto objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ventadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+        }
+
+        VentadetallePeer::addSelectColumns($criteria);
+        $startcol = VentadetallePeer::NUM_HYDRATE_COLUMNS;
+        ProductoPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = VentadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = VentadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = VentadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                VentadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = ProductoPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Ventadetalle) to $obj2 (Producto)
+                $obj2->addVentadetalle($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
     }
 
 
@@ -631,6 +880,10 @@ abstract class BaseVentadetallePeer
             $con = Propel::getConnection(VentadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
         $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
@@ -667,8 +920,18 @@ abstract class BaseVentadetallePeer
         VentadetallePeer::addSelectColumns($criteria);
         $startcol2 = VentadetallePeer::NUM_HYDRATE_COLUMNS;
 
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
         VentaPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + VentaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
 
@@ -689,23 +952,689 @@ abstract class BaseVentadetallePeer
                 VentadetallePeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Venta rows
+            // Add objects for joined Almacen rows
 
-            $key2 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = VentaPeer::getInstanceFromPool($key2);
+                $obj2 = AlmacenPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = VentaPeer::getOMClass();
+                    $cls = AlmacenPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    VentaPeer::addInstanceToPool($obj2, $key2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (Ventadetalle) to the collection in $obj2 (Venta)
+                // Add the $obj1 (Ventadetalle) to the collection in $obj2 (Almacen)
                 $obj2->addVentadetalle($obj1);
             } // if joined row not null
+
+            // Add objects for joined Producto rows
+
+            $key3 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+            if ($key3 !== null) {
+                $obj3 = ProductoPeer::getInstanceFromPool($key3);
+                if (!$obj3) {
+
+                    $cls = ProductoPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    ProductoPeer::addInstanceToPool($obj3, $key3);
+                } // if obj3 loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj3 (Producto)
+                $obj3->addVentadetalle($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Venta rows
+
+            $key4 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            if ($key4 !== null) {
+                $obj4 = VentaPeer::getInstanceFromPool($key4);
+                if (!$obj4) {
+
+                    $cls = VentaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    VentaPeer::addInstanceToPool($obj4, $key4);
+                } // if obj4 loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj4 (Venta)
+                $obj4->addVentadetalle($obj1);
+            } // if joined row not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Almacen table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptAlmacen(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(VentadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            VentadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(VentadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related VentadetalleRelatedByIdpadre table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptVentadetalleRelatedByIdpadre(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(VentadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            VentadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(VentadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Producto table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(VentadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            VentadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(VentadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Venta table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptVenta(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(VentadetallePeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            VentadetallePeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(VentadetallePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Selects a collection of Ventadetalle objects pre-filled with all related objects except Almacen.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ventadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptAlmacen(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+        }
+
+        VentadetallePeer::addSelectColumns($criteria);
+        $startcol2 = VentadetallePeer::NUM_HYDRATE_COLUMNS;
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = VentadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = VentadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = VentadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                VentadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Producto rows
+
+                $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = ProductoPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj2 (Producto)
+                $obj2->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Venta rows
+
+                $key3 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = VentaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = VentaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    VentaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj3 (Venta)
+                $obj3->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Ventadetalle objects pre-filled with all related objects except VentadetalleRelatedByIdpadre.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ventadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptVentadetalleRelatedByIdpadre(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+        }
+
+        VentadetallePeer::addSelectColumns($criteria);
+        $startcol2 = VentadetallePeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = VentadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = VentadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = VentadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                VentadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj2 (Almacen)
+                $obj2->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Producto rows
+
+                $key3 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = ProductoPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = ProductoPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    ProductoPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj3 (Producto)
+                $obj3->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Venta rows
+
+                $key4 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = VentaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = VentaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    VentaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj4 (Venta)
+                $obj4->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Ventadetalle objects pre-filled with all related objects except Producto.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ventadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+        }
+
+        VentadetallePeer::addSelectColumns($criteria);
+        $startcol2 = VentadetallePeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        VentaPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + VentaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDVENTA, VentaPeer::IDVENTA, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = VentadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = VentadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = VentadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                VentadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj2 (Almacen)
+                $obj2->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Venta rows
+
+                $key3 = VentaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = VentaPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = VentaPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    VentaPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj3 (Venta)
+                $obj3->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Ventadetalle objects pre-filled with all related objects except Venta.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Ventadetalle objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptVenta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(VentadetallePeer::DATABASE_NAME);
+        }
+
+        VentadetallePeer::addSelectColumns($criteria);
+        $startcol2 = VentadetallePeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(VentadetallePeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(VentadetallePeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = VentadetallePeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = VentadetallePeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = VentadetallePeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                VentadetallePeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj2 (Almacen)
+                $obj2->addVentadetalle($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Producto rows
+
+                $key3 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = ProductoPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = ProductoPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    ProductoPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Ventadetalle) to the collection in $obj3 (Producto)
+                $obj3->addVentadetalle($obj1);
+
+            } // if joined row is not null
 
             $results[] = $obj1;
         }
@@ -847,6 +1776,7 @@ abstract class BaseVentadetallePeer
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
+            $affectedRows += VentadetallePeer::doOnDeleteCascade(new Criteria(VentadetallePeer::DATABASE_NAME), $con);
             $affectedRows += BasePeer::doDeleteAll(VentadetallePeer::TABLE_NAME, $con, VentadetallePeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
@@ -880,24 +1810,14 @@ abstract class BaseVentadetallePeer
         }
 
         if ($values instanceof Criteria) {
-            // invalidate the cache for all objects of this type, since we have no
-            // way of knowing (without running a query) what objects should be invalidated
-            // from the cache based on this Criteria.
-            VentadetallePeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
         } elseif ($values instanceof Ventadetalle) { // it's a model object
-            // invalidate the cache for this single object
-            VentadetallePeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(VentadetallePeer::DATABASE_NAME);
             $criteria->add(VentadetallePeer::IDVENTADETALLE, (array) $values, Criteria::IN);
-            // invalidate the cache for this object(s)
-            foreach ((array) $values as $singleval) {
-                VentadetallePeer::removeInstanceFromPool($singleval);
-            }
         }
 
         // Set the correct dbName
@@ -910,6 +1830,23 @@ abstract class BaseVentadetallePeer
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
 
+            // cloning the Criteria in case it's modified by doSelect() or doSelectStmt()
+            $c = clone $criteria;
+            $affectedRows += VentadetallePeer::doOnDeleteCascade($c, $con);
+
+            // Because this db requires some delete cascade/set null emulation, we have to
+            // clear the cached instance *after* the emulation has happened (since
+            // instances get re-added by the select statement contained therein).
+            if ($values instanceof Criteria) {
+                VentadetallePeer::clearInstancePool();
+            } elseif ($values instanceof Ventadetalle) { // it's a model object
+                VentadetallePeer::removeInstanceFromPool($values);
+            } else { // it's a primary key, or an array of pks
+                foreach ((array) $values as $singleval) {
+                    VentadetallePeer::removeInstanceFromPool($singleval);
+                }
+            }
+
             $affectedRows += BasePeer::doDelete($criteria, $con);
             VentadetallePeer::clearRelatedInstancePool();
             $con->commit();
@@ -919,6 +1856,39 @@ abstract class BaseVentadetallePeer
             $con->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+     * feature (like MySQL or SQLite).
+     *
+     * This method is not very speedy because it must perform a query first to get
+     * the implicated records and then perform the deletes by calling those Peer classes.
+     *
+     * This method should be used within a transaction if possible.
+     *
+     * @param      Criteria $criteria
+     * @param      PropelPDO $con
+     * @return int The number of affected rows (if supported by underlying database driver).
+     */
+    protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+    {
+        // initialize var to track total num of affected rows
+        $affectedRows = 0;
+
+        // first find the objects that are implicated by the $criteria
+        $objects = VentadetallePeer::doSelect($criteria, $con);
+        foreach ($objects as $obj) {
+
+
+            // delete related Ventadetalle objects
+            $criteria = new Criteria(VentadetallePeer::DATABASE_NAME);
+
+            $criteria->add(VentadetallePeer::IDPADRE, $obj->getIdventadetalle());
+            $affectedRows += VentadetallePeer::doDelete($criteria, $con);
+        }
+
+        return $affectedRows;
     }
 
     /**

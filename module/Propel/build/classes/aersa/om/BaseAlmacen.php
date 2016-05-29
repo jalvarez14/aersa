@@ -137,10 +137,10 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $collRequisicionsRelatedByIdalmacenorigenPartial;
 
     /**
-     * @var        PropelObjectCollection|Venta[] Collection to store aggregation of Venta objects.
+     * @var        PropelObjectCollection|Ventadetalle[] Collection to store aggregation of Ventadetalle objects.
      */
-    protected $collVentas;
-    protected $collVentasPartial;
+    protected $collVentadetalles;
+    protected $collVentadetallesPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -238,7 +238,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
-    protected $ventasScheduledForDeletion = null;
+    protected $ventadetallesScheduledForDeletion = null;
 
     /**
      * Get the [idalmacen] column value.
@@ -548,7 +548,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             $this->collRequisicionsRelatedByIdalmacenorigen = null;
 
-            $this->collVentas = null;
+            $this->collVentadetalles = null;
 
         } // if (deep)
     }
@@ -890,17 +890,17 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
             }
 
-            if ($this->ventasScheduledForDeletion !== null) {
-                if (!$this->ventasScheduledForDeletion->isEmpty()) {
-                    VentaQuery::create()
-                        ->filterByPrimaryKeys($this->ventasScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->ventadetallesScheduledForDeletion !== null) {
+                if (!$this->ventadetallesScheduledForDeletion->isEmpty()) {
+                    VentadetalleQuery::create()
+                        ->filterByPrimaryKeys($this->ventadetallesScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->ventasScheduledForDeletion = null;
+                    $this->ventadetallesScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collVentas !== null) {
-                foreach ($this->collVentas as $referrerFK) {
+            if ($this->collVentadetalles !== null) {
+                foreach ($this->collVentadetalles as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1181,8 +1181,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     }
                 }
 
-                if ($this->collVentas !== null) {
-                    foreach ($this->collVentas as $referrerFK) {
+                if ($this->collVentadetalles !== null) {
+                    foreach ($this->collVentadetalles as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1319,8 +1319,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             if (null !== $this->collRequisicionsRelatedByIdalmacenorigen) {
                 $result['RequisicionsRelatedByIdalmacenorigen'] = $this->collRequisicionsRelatedByIdalmacenorigen->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collVentas) {
-                $result['Ventas'] = $this->collVentas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            if (null !== $this->collVentadetalles) {
+                $result['Ventadetalles'] = $this->collVentadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1563,9 +1563,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
             }
 
-            foreach ($this->getVentas() as $relObj) {
+            foreach ($this->getVentadetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addVenta($relObj->copy($deepCopy));
+                    $copyObj->addVentadetalle($relObj->copy($deepCopy));
                 }
             }
 
@@ -1718,8 +1718,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         if ('RequisicionRelatedByIdalmacenorigen' == $relationName) {
             $this->initRequisicionsRelatedByIdalmacenorigen();
         }
-        if ('Venta' == $relationName) {
-            $this->initVentas();
+        if ('Ventadetalle' == $relationName) {
+            $this->initVentadetalles();
         }
     }
 
@@ -5674,36 +5674,36 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     }
 
     /**
-     * Clears out the collVentas collection
+     * Clears out the collVentadetalles collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return Almacen The current object (for fluent API support)
-     * @see        addVentas()
+     * @see        addVentadetalles()
      */
-    public function clearVentas()
+    public function clearVentadetalles()
     {
-        $this->collVentas = null; // important to set this to null since that means it is uninitialized
-        $this->collVentasPartial = null;
+        $this->collVentadetalles = null; // important to set this to null since that means it is uninitialized
+        $this->collVentadetallesPartial = null;
 
         return $this;
     }
 
     /**
-     * reset is the collVentas collection loaded partially
+     * reset is the collVentadetalles collection loaded partially
      *
      * @return void
      */
-    public function resetPartialVentas($v = true)
+    public function resetPartialVentadetalles($v = true)
     {
-        $this->collVentasPartial = $v;
+        $this->collVentadetallesPartial = $v;
     }
 
     /**
-     * Initializes the collVentas collection.
+     * Initializes the collVentadetalles collection.
      *
-     * By default this just sets the collVentas collection to an empty array (like clearcollVentas());
+     * By default this just sets the collVentadetalles collection to an empty array (like clearcollVentadetalles());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -5712,17 +5712,17 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      *
      * @return void
      */
-    public function initVentas($overrideExisting = true)
+    public function initVentadetalles($overrideExisting = true)
     {
-        if (null !== $this->collVentas && !$overrideExisting) {
+        if (null !== $this->collVentadetalles && !$overrideExisting) {
             return;
         }
-        $this->collVentas = new PropelObjectCollection();
-        $this->collVentas->setModel('Venta');
+        $this->collVentadetalles = new PropelObjectCollection();
+        $this->collVentadetalles->setModel('Ventadetalle');
     }
 
     /**
-     * Gets an array of Venta objects which contain a foreign key that references this object.
+     * Gets an array of Ventadetalle objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -5732,107 +5732,107 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      *
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Venta[] List of Venta objects
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
      * @throws PropelException
      */
-    public function getVentas($criteria = null, PropelPDO $con = null)
+    public function getVentadetalles($criteria = null, PropelPDO $con = null)
     {
-        $partial = $this->collVentasPartial && !$this->isNew();
-        if (null === $this->collVentas || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collVentas) {
+        $partial = $this->collVentadetallesPartial && !$this->isNew();
+        if (null === $this->collVentadetalles || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collVentadetalles) {
                 // return empty collection
-                $this->initVentas();
+                $this->initVentadetalles();
             } else {
-                $collVentas = VentaQuery::create(null, $criteria)
+                $collVentadetalles = VentadetalleQuery::create(null, $criteria)
                     ->filterByAlmacen($this)
                     ->find($con);
                 if (null !== $criteria) {
-                    if (false !== $this->collVentasPartial && count($collVentas)) {
-                      $this->initVentas(false);
+                    if (false !== $this->collVentadetallesPartial && count($collVentadetalles)) {
+                      $this->initVentadetalles(false);
 
-                      foreach ($collVentas as $obj) {
-                        if (false == $this->collVentas->contains($obj)) {
-                          $this->collVentas->append($obj);
+                      foreach ($collVentadetalles as $obj) {
+                        if (false == $this->collVentadetalles->contains($obj)) {
+                          $this->collVentadetalles->append($obj);
                         }
                       }
 
-                      $this->collVentasPartial = true;
+                      $this->collVentadetallesPartial = true;
                     }
 
-                    $collVentas->getInternalIterator()->rewind();
+                    $collVentadetalles->getInternalIterator()->rewind();
 
-                    return $collVentas;
+                    return $collVentadetalles;
                 }
 
-                if ($partial && $this->collVentas) {
-                    foreach ($this->collVentas as $obj) {
+                if ($partial && $this->collVentadetalles) {
+                    foreach ($this->collVentadetalles as $obj) {
                         if ($obj->isNew()) {
-                            $collVentas[] = $obj;
+                            $collVentadetalles[] = $obj;
                         }
                     }
                 }
 
-                $this->collVentas = $collVentas;
-                $this->collVentasPartial = false;
+                $this->collVentadetalles = $collVentadetalles;
+                $this->collVentadetallesPartial = false;
             }
         }
 
-        return $this->collVentas;
+        return $this->collVentadetalles;
     }
 
     /**
-     * Sets a collection of Venta objects related by a one-to-many relationship
+     * Sets a collection of Ventadetalle objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param PropelCollection $ventas A Propel collection.
+     * @param PropelCollection $ventadetalles A Propel collection.
      * @param PropelPDO $con Optional connection object
      * @return Almacen The current object (for fluent API support)
      */
-    public function setVentas(PropelCollection $ventas, PropelPDO $con = null)
+    public function setVentadetalles(PropelCollection $ventadetalles, PropelPDO $con = null)
     {
-        $ventasToDelete = $this->getVentas(new Criteria(), $con)->diff($ventas);
+        $ventadetallesToDelete = $this->getVentadetalles(new Criteria(), $con)->diff($ventadetalles);
 
 
-        $this->ventasScheduledForDeletion = $ventasToDelete;
+        $this->ventadetallesScheduledForDeletion = $ventadetallesToDelete;
 
-        foreach ($ventasToDelete as $ventaRemoved) {
-            $ventaRemoved->setAlmacen(null);
+        foreach ($ventadetallesToDelete as $ventadetalleRemoved) {
+            $ventadetalleRemoved->setAlmacen(null);
         }
 
-        $this->collVentas = null;
-        foreach ($ventas as $venta) {
-            $this->addVenta($venta);
+        $this->collVentadetalles = null;
+        foreach ($ventadetalles as $ventadetalle) {
+            $this->addVentadetalle($ventadetalle);
         }
 
-        $this->collVentas = $ventas;
-        $this->collVentasPartial = false;
+        $this->collVentadetalles = $ventadetalles;
+        $this->collVentadetallesPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Venta objects.
+     * Returns the number of related Ventadetalle objects.
      *
      * @param Criteria $criteria
      * @param boolean $distinct
      * @param PropelPDO $con
-     * @return int             Count of related Venta objects.
+     * @return int             Count of related Ventadetalle objects.
      * @throws PropelException
      */
-    public function countVentas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    public function countVentadetalles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
     {
-        $partial = $this->collVentasPartial && !$this->isNew();
-        if (null === $this->collVentas || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collVentas) {
+        $partial = $this->collVentadetallesPartial && !$this->isNew();
+        if (null === $this->collVentadetalles || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVentadetalles) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getVentas());
+                return count($this->getVentadetalles());
             }
-            $query = VentaQuery::create(null, $criteria);
+            $query = VentadetalleQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -5842,28 +5842,28 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 ->count($con);
         }
 
-        return count($this->collVentas);
+        return count($this->collVentadetalles);
     }
 
     /**
-     * Method called to associate a Venta object to this object
-     * through the Venta foreign key attribute.
+     * Method called to associate a Ventadetalle object to this object
+     * through the Ventadetalle foreign key attribute.
      *
-     * @param    Venta $l Venta
+     * @param    Ventadetalle $l Ventadetalle
      * @return Almacen The current object (for fluent API support)
      */
-    public function addVenta(Venta $l)
+    public function addVentadetalle(Ventadetalle $l)
     {
-        if ($this->collVentas === null) {
-            $this->initVentas();
-            $this->collVentasPartial = true;
+        if ($this->collVentadetalles === null) {
+            $this->initVentadetalles();
+            $this->collVentadetallesPartial = true;
         }
 
-        if (!in_array($l, $this->collVentas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddVenta($l);
+        if (!in_array($l, $this->collVentadetalles->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddVentadetalle($l);
 
-            if ($this->ventasScheduledForDeletion and $this->ventasScheduledForDeletion->contains($l)) {
-                $this->ventasScheduledForDeletion->remove($this->ventasScheduledForDeletion->search($l));
+            if ($this->ventadetallesScheduledForDeletion and $this->ventadetallesScheduledForDeletion->contains($l)) {
+                $this->ventadetallesScheduledForDeletion->remove($this->ventadetallesScheduledForDeletion->search($l));
             }
         }
 
@@ -5871,28 +5871,28 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     }
 
     /**
-     * @param	Venta $venta The venta object to add.
+     * @param	Ventadetalle $ventadetalle The ventadetalle object to add.
      */
-    protected function doAddVenta($venta)
+    protected function doAddVentadetalle($ventadetalle)
     {
-        $this->collVentas[]= $venta;
-        $venta->setAlmacen($this);
+        $this->collVentadetalles[]= $ventadetalle;
+        $ventadetalle->setAlmacen($this);
     }
 
     /**
-     * @param	Venta $venta The venta object to remove.
+     * @param	Ventadetalle $ventadetalle The ventadetalle object to remove.
      * @return Almacen The current object (for fluent API support)
      */
-    public function removeVenta($venta)
+    public function removeVentadetalle($ventadetalle)
     {
-        if ($this->getVentas()->contains($venta)) {
-            $this->collVentas->remove($this->collVentas->search($venta));
-            if (null === $this->ventasScheduledForDeletion) {
-                $this->ventasScheduledForDeletion = clone $this->collVentas;
-                $this->ventasScheduledForDeletion->clear();
+        if ($this->getVentadetalles()->contains($ventadetalle)) {
+            $this->collVentadetalles->remove($this->collVentadetalles->search($ventadetalle));
+            if (null === $this->ventadetallesScheduledForDeletion) {
+                $this->ventadetallesScheduledForDeletion = clone $this->collVentadetalles;
+                $this->ventadetallesScheduledForDeletion->clear();
             }
-            $this->ventasScheduledForDeletion[]= clone $venta;
-            $venta->setAlmacen(null);
+            $this->ventadetallesScheduledForDeletion[]= clone $ventadetalle;
+            $ventadetalle->setAlmacen(null);
         }
 
         return $this;
@@ -5904,7 +5904,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Almacen is new, it will return
      * an empty collection; or if this Almacen has previously
-     * been saved, it will retrieve related Ventas from storage.
+     * been saved, it will retrieve related Ventadetalles from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -5913,14 +5913,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Venta[] List of Venta objects
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
      */
-    public function getVentasJoinUsuarioRelatedByIdauditor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getVentadetallesJoinVentadetalleRelatedByIdpadre($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
-        $query = VentaQuery::create(null, $criteria);
-        $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('VentadetalleRelatedByIdpadre', $join_behavior);
 
-        return $this->getVentas($query, $con);
+        return $this->getVentadetalles($query, $con);
     }
 
 
@@ -5929,7 +5929,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Almacen is new, it will return
      * an empty collection; or if this Almacen has previously
-     * been saved, it will retrieve related Ventas from storage.
+     * been saved, it will retrieve related Ventadetalles from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -5938,14 +5938,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Venta[] List of Venta objects
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
      */
-    public function getVentasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getVentadetallesJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
-        $query = VentaQuery::create(null, $criteria);
-        $query->joinWith('Empresa', $join_behavior);
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
 
-        return $this->getVentas($query, $con);
+        return $this->getVentadetalles($query, $con);
     }
 
 
@@ -5954,7 +5954,7 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * an identical criteria, it returns the collection.
      * Otherwise if this Almacen is new, it will return
      * an empty collection; or if this Almacen has previously
-     * been saved, it will retrieve related Ventas from storage.
+     * been saved, it will retrieve related Ventadetalles from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -5963,39 +5963,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @param Criteria $criteria optional Criteria object to narrow the query
      * @param PropelPDO $con optional connection object
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Venta[] List of Venta objects
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
      */
-    public function getVentasJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public function getVentadetallesJoinVenta($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
-        $query = VentaQuery::create(null, $criteria);
-        $query->joinWith('Sucursal', $join_behavior);
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('Venta', $join_behavior);
 
-        return $this->getVentas($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Almacen is new, it will return
-     * an empty collection; or if this Almacen has previously
-     * been saved, it will retrieve related Ventas from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Almacen.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Venta[] List of Venta objects
-     */
-    public function getVentasJoinUsuarioRelatedByIdusuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = VentaQuery::create(null, $criteria);
-        $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
-
-        return $this->getVentas($query, $con);
+        return $this->getVentadetalles($query, $con);
     }
 
     /**
@@ -6090,8 +6065,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collVentas) {
-                foreach ($this->collVentas as $o) {
+            if ($this->collVentadetalles) {
+                foreach ($this->collVentadetalles as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -6150,10 +6125,10 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $this->collRequisicionsRelatedByIdalmacenorigen->clearIterator();
         }
         $this->collRequisicionsRelatedByIdalmacenorigen = null;
-        if ($this->collVentas instanceof PropelCollection) {
-            $this->collVentas->clearIterator();
+        if ($this->collVentadetalles instanceof PropelCollection) {
+            $this->collVentadetalles->clearIterator();
         }
-        $this->collVentas = null;
+        $this->collVentadetalles = null;
         $this->aSucursal = null;
     }
 

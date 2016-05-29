@@ -505,6 +505,9 @@ abstract class BaseProductoPeer
         // Invalidate objects in RequisiciondetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisiciondetallePeer::clearInstancePool();
+        // Invalidate objects in VentadetallePeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        VentadetallePeer::clearInstancePool();
     }
 
     /**
@@ -2233,6 +2236,12 @@ abstract class BaseProductoPeer
 
             $criteria->add(RequisiciondetallePeer::IDPRODUCTO, $obj->getIdproducto());
             $affectedRows += RequisiciondetallePeer::doDelete($criteria, $con);
+
+            // delete related Ventadetalle objects
+            $criteria = new Criteria(VentadetallePeer::DATABASE_NAME);
+
+            $criteria->add(VentadetallePeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += VentadetallePeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

@@ -10234,31 +10234,6 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return PropelObjectCollection|Venta[] List of Venta objects
      */
-    public function getVentasRelatedByIdauditorJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = VentaQuery::create(null, $criteria);
-        $query->joinWith('Almacen', $join_behavior);
-
-        return $this->getVentasRelatedByIdauditor($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Usuario is new, it will return
-     * an empty collection; or if this Usuario has previously
-     * been saved, it will retrieve related VentasRelatedByIdauditor from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Usuario.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Venta[] List of Venta objects
-     */
     public function getVentasRelatedByIdauditorJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $query = VentaQuery::create(null, $criteria);
@@ -10515,31 +10490,6 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         }
 
         return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Usuario is new, it will return
-     * an empty collection; or if this Usuario has previously
-     * been saved, it will retrieve related VentasRelatedByIdusuario from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Usuario.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Venta[] List of Venta objects
-     */
-    public function getVentasRelatedByIdusuarioJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = VentaQuery::create(null, $criteria);
-        $query->joinWith('Almacen', $join_behavior);
-
-        return $this->getVentasRelatedByIdusuario($query, $con);
     }
 
 

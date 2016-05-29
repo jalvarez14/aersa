@@ -1301,16 +1301,12 @@
     <column name="idventa" phpName="Idventa" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
-    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
     <column name="venta_revisada" phpName="VentaRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="venta_fechaventa" phpName="VentaFechaventa" type="TIMESTAMP" required="true"/>
     <column name="venta_fechacreacion" phpName="VentaFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="venta_total" phpName="VentaTotal" type="DECIMAL" size="15" scale="5" required="true"/>
-    <foreign-key foreignTable="almacen" name="idalmacen_venta" onDelete="CASCADE" onUpdate="CASCADE">
-      <reference local="idalmacen" foreign="idalmacen"/>
-    </foreign-key>
     <foreign-key foreignTable="usuario" name="idauditor_venta" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idauditor" foreign="idusuario"/>
     </foreign-key>
@@ -1329,9 +1325,6 @@
     <index name="idsucursal">
       <index-column name="idsucursal"/>
     </index>
-    <index name="idalmacen">
-      <index-column name="idalmacen"/>
-    </index>
     <index name="idusuario">
       <index-column name="idusuario"/>
     </index>
@@ -1345,15 +1338,35 @@
   <table name="ventadetalle" phpName="Ventadetalle" idMethod="native">
     <column name="idventadetalle" phpName="Idventadetalle" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idventa" phpName="Idventa" type="INTEGER" required="true"/>
-    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="false"/>
-    <column name="idproducto" phpName="Idproducto" type="INTEGER" required="false"/>
-    <column name="ventadetalle_cantidad" phpName="VentadetalleCantidad" type="FLOAT" required="false"/>
-    <column name="ventadetalle_subtotal" phpName="VentadetalleSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
+    <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
+    <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
+    <column name="ventadetalle_cantidad" phpName="VentadetalleCantidad" type="FLOAT" required="true"/>
+    <column name="ventadetalle_subtotal" phpName="VentadetalleSubtotal" type="DECIMAL" size="15" scale="5" required="true"/>
+    <column name="idpadre" phpName="Idpadre" type="INTEGER" required="false"/>
+    <column name="ventadetalle_revisada" phpName="VentadetalleRevisada" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="ventadetalle" name="idpadre_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idpadre" foreign="idventadetalle"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <foreign-key foreignTable="venta" name="idventa_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idventa" foreign="idventa"/>
     </foreign-key>
     <index name="idventa">
       <index-column name="idventa"/>
+    </index>
+    <index name="idpadre">
+      <index-column name="idpadre"/>
+    </index>
+    <index name="idalmacen">
+      <index-column name="idalmacen"/>
+    </index>
+    <index name="idproducto">
+      <index-column name="idproducto"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

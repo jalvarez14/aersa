@@ -1570,7 +1570,6 @@ CREATE TABLE `venta`
     `idventa` INTEGER NOT NULL AUTO_INCREMENT,
     `idempresa` INTEGER NOT NULL,
     `idsucursal` INTEGER NOT NULL,
-    `idalmacen` INTEGER NOT NULL,
     `idusuario` INTEGER NOT NULL,
     `idauditor` INTEGER NOT NULL,
     `venta_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
@@ -1580,14 +1579,8 @@ CREATE TABLE `venta`
     PRIMARY KEY (`idventa`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
-    INDEX `idalmacen` (`idalmacen`),
     INDEX `idusuario` (`idusuario`),
     INDEX `idauditor` (`idauditor`),
-    CONSTRAINT `idalmacen_venta`
-        FOREIGN KEY (`idalmacen`)
-        REFERENCES `almacen` (`idalmacen`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
     CONSTRAINT `idauditor_venta`
         FOREIGN KEY (`idauditor`)
         REFERENCES `usuario` (`idusuario`)
@@ -1620,12 +1613,32 @@ CREATE TABLE `ventadetalle`
 (
     `idventadetalle` INTEGER NOT NULL AUTO_INCREMENT,
     `idventa` INTEGER NOT NULL,
-    `idalmacen` INTEGER,
-    `idproducto` INTEGER,
-    `ventadetalle_cantidad` FLOAT,
-    `ventadetalle_subtotal` DECIMAL(15,5),
+    `idalmacen` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `ventadetalle_cantidad` FLOAT NOT NULL,
+    `ventadetalle_subtotal` DECIMAL(15,5) NOT NULL,
+    `idpadre` INTEGER,
+    `ventadetalle_revisada` TINYINT(1) NOT NULL,
     PRIMARY KEY (`idventadetalle`),
     INDEX `idventa` (`idventa`),
+    INDEX `idpadre` (`idpadre`),
+    INDEX `idalmacen` (`idalmacen`),
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idalmacen_ventadetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idpadre_ventadetalle`
+        FOREIGN KEY (`idpadre`)
+        REFERENCES `ventadetalle` (`idventadetalle`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_ventadetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     CONSTRAINT `idventa_ventadetalle`
         FOREIGN KEY (`idventa`)
         REFERENCES `venta` (`idventa`)

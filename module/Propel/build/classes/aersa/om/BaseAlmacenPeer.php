@@ -411,9 +411,9 @@ abstract class BaseAlmacenPeer
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
-        // Invalidate objects in VentaPeer instance pool,
+        // Invalidate objects in VentadetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        VentaPeer::clearInstancePool();
+        VentadetallePeer::clearInstancePool();
     }
 
     /**
@@ -1058,11 +1058,11 @@ abstract class BaseAlmacenPeer
             $criteria->add(RequisicionPeer::IDALMACENORIGEN, $obj->getIdalmacen());
             $affectedRows += RequisicionPeer::doDelete($criteria, $con);
 
-            // delete related Venta objects
-            $criteria = new Criteria(VentaPeer::DATABASE_NAME);
+            // delete related Ventadetalle objects
+            $criteria = new Criteria(VentadetallePeer::DATABASE_NAME);
 
-            $criteria->add(VentaPeer::IDALMACEN, $obj->getIdalmacen());
-            $affectedRows += VentaPeer::doDelete($criteria, $con);
+            $criteria->add(VentadetallePeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += VentadetallePeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

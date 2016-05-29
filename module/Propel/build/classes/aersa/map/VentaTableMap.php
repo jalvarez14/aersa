@@ -41,7 +41,6 @@ class VentaTableMap extends TableMap
         $this->addPrimaryKey('idventa', 'Idventa', 'INTEGER', true, null, null);
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
-        $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
         $this->addColumn('venta_revisada', 'VentaRevisada', 'BOOLEAN', true, 1, false);
@@ -56,7 +55,6 @@ class VentaTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Almacen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdauditor', 'Usuario', RelationMap::MANY_TO_ONE, array('idauditor' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
