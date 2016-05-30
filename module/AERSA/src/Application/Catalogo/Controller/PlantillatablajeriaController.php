@@ -35,6 +35,9 @@ class PlantillatablajeriaController extends AbstractActionController {
     }
 
     public function nuevoAction() {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        $idempresa = $session['idempresa'];
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
@@ -44,11 +47,9 @@ class PlantillatablajeriaController extends AbstractActionController {
                 $productos = $post_data['productos'];
                 unset($post_data['productos']);
                 foreach ($post_data as $key => $data) {
-                    if ($key != 'idempresa')
                         $plantillatablajeria->setByName($key, $data, \BasePeer::TYPE_FIELDNAME);
-                    else
-                        $plantillatablajeria->setByName($key, $idempresa, \BasePeer::TYPE_FIELDNAME);
                 }
+                $plantillatablajeria->setIdempresa($idempresa);
                 $plantillatablajeria->save();
                 $idplantillatablajeria = $plantillatablajeria->getIdplantillatablajeria();
                 foreach ($productos as $producto) {
