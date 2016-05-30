@@ -42,7 +42,7 @@ class VentaTableMap extends TableMap
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', true, null, null);
+        $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addColumn('venta_revisada', 'VentaRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('venta_fechaventa', 'VentaFechaventa', 'TIMESTAMP', true, null, null);
         $this->addColumn('venta_fechacreacion', 'VentaFechacreacion', 'TIMESTAMP', true, null, null);

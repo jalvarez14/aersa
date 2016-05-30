@@ -2505,7 +2505,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return UsuarioQuery The current query, for fluid interface
      */
-    public function joinVentaRelatedByIdauditor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinVentaRelatedByIdauditor($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('VentaRelatedByIdauditor');
@@ -2540,7 +2540,7 @@ abstract class BaseUsuarioQuery extends ModelCriteria
      *
      * @return   VentaQuery A secondary query class using the current class as primary query
      */
-    public function useVentaRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useVentaRelatedByIdauditorQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinVentaRelatedByIdauditor($relationAlias, $joinType)

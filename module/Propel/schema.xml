@@ -1302,7 +1302,7 @@
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="venta_revisada" phpName="VentaRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="venta_fechaventa" phpName="VentaFechaventa" type="TIMESTAMP" required="true"/>
     <column name="venta_fechacreacion" phpName="VentaFechacreacion" type="TIMESTAMP" required="true"/>

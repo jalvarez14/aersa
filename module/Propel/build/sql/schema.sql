@@ -1571,7 +1571,7 @@ CREATE TABLE `venta`
     `idempresa` INTEGER NOT NULL,
     `idsucursal` INTEGER NOT NULL,
     `idusuario` INTEGER NOT NULL,
-    `idauditor` INTEGER NOT NULL,
+    `idauditor` INTEGER,
     `venta_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `venta_fechaventa` DATETIME NOT NULL,
     `venta_fechacreacion` DATETIME NOT NULL,

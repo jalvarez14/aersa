@@ -10210,7 +10210,7 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 $this->ventasRelatedByIdauditorScheduledForDeletion = clone $this->collVentasRelatedByIdauditor;
                 $this->ventasRelatedByIdauditorScheduledForDeletion->clear();
             }
-            $this->ventasRelatedByIdauditorScheduledForDeletion[]= clone $ventaRelatedByIdauditor;
+            $this->ventasRelatedByIdauditorScheduledForDeletion[]= $ventaRelatedByIdauditor;
             $ventaRelatedByIdauditor->setUsuarioRelatedByIdauditor(null);
         }
 
