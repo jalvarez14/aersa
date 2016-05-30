@@ -60,7 +60,41 @@
             return result;
         }
         
+       var revisadaControl = function () {
+
+            $('select[name=venta_revisada]').on('change', function () {
+               
+                var selected = $('select[name=venta_revisada] option:selected').val();
+              
+                if (selected == 1) {
+                    $('#productos_table tbody input[type=checkbox]').prop('checked', true);
+                } else {
+                    $('#productos_table tbody input[type=checkbox]').prop('checked', false);
+                }
+            });
+
+            $('#productos_table tbody input[type=checkbox]').on('change', function () {
+                
+                var all_checked = true;
+                $('#productos_table tbody input[type=checkbox]').filter(function(){
+                    if(!$(this).prop('checked')){
+                        all_checked = false;
+                    }
+                });
+               if(!all_checked){
+                    $('select[name=venta_revisada]').val(0);
+               }else{
+                    $('select[name=venta_revisada]').val(1);
+               }
+                
+                
+            });
+
+        }
+        
        var formBind = function(anio,mes){
+           
+           $('body').modalmanager('loading');
            
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
@@ -74,7 +108,11 @@
             
             $('#upload_file').on('click',function(){
                 
-                 $('#upload_container input').removeClass('invalid');
+                $('#upload_container input').removeClass('invalid');
+                $('#productos_table tbody tr').remove();
+                $('input[name=venta_total]').val(0);
+                $('#total').text(accounting.formatMoney('0'));
+                
                 
                 var empty = false;
                 $('#upload_container input').filter(function(){
@@ -88,7 +126,10 @@
                 
                 if(!empty){
                     
+                    
+                    
                     $('#error_alert').hide();
+
                     
                     var col_parse = false;
                     var col_nombre = $('input[name=xls_nombre]').val();
@@ -110,30 +151,276 @@
                             var workbook = XLSX.read(data, {type: 'binary'});
                             var first_sheet_name = workbook.SheetNames[0];
                             var workbook_array = to_json(workbook);
+          
                             //VALIDAMOS SI EL XML TIENE DATOS 
                             if(typeof workbook_array[first_sheet_name] != 'undefined'){
-                                $.each(workbook_array[first_sheet_name][0],function(index){
-                                    if(col_nombre == index){
-                                        col_nombre_parse = true;
-                                    }else if(col_cantidad == index){
-                                        col_cantidad_parse = true;
-                                    }else if(col_subtotal == index){
-                                        col_subtotal_parse = true;
-                                    }
-                                    console.log(col_nombre);
-                                    console.log(col_nombre_parse);
-                                    console.log(col_cantidad);
-                                    console.log(col_cantidad_parse);
-                                    console.log(col_subtotal);
-                                    console.log(col_subtotal_parse);
+                                
+                                var cont_rows = workbook.Sheets[first_sheet_name]['!range'].e.r;
+                                var ventas_array = Array();
+                                for(var i=2;i<=cont_rows;i++){
+                                    var tmp = {
+                                        nombre:workbook.Sheets[first_sheet_name][col_nombre+i].v,
+                                        cantidad:workbook.Sheets[first_sheet_name][col_cantidad+i].v,
+                                        subtotal:workbook.Sheets[first_sheet_name][col_subtotal+i].v,
+                                    };
+                                    ventas_array.push(tmp);
                                     
-                                    if(col_nombre_parse && col_cantidad_parse && col_subtotal_parse){
-                                        alert('aqui comenzamos con la itineracion de cada uno en ajax');
-                                    }else{
-                                         $('#error_alert').show();
-                                         $('#error_message').text('El nombre de las columnas no coincide con los del archivo');
+                                }
+                                var numRequests = ventas_array.length;
+                                var count = 0;
+                                var total = 0;
+                                
+                                function nextAjax(){
+                                  
+                                    if(count < numRequests){
+                                        $.ajax({
+                                            url: '/procesos/venta/validateproduct',
+                                            type: 'POST',
+                                            dataType: 'JSON',
+                                            data: {
+                                                producto_nombre: ventas_array[count].nombre,
+                                                producto_cantidad: ventas_array[count].cantidad,
+                                                producto_subtotal: ventas_array[count].subtotal,
+                                            },
+                                            success: function (data) {
+                                                if(data.response){
+                                                    if(data.create){
+                                                        
+                                                        var tmpl = [
+                                                            '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                                                                '<div class="modal-header">',
+                                                                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
+                                                                    '<h4 class="modal-title">Registro de producto</h4>',
+                                                                '</div>',
+                                                                '<div class="modal-body">',
+                                                                    '<div class="row">',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_nombre">Nombre del producto *</label>',
+                                                                                '<input required class="form-control" type="text" name="producto_nombre" value="'+data.data.producto+'" readonly>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_nombre">Categoria *</label>',
+                                                                                '<select required class="form-control" name="idcategoria">',
+                                                                                    '<option value="">Sin especificar</option>',
+                                                                                    '<option value="1">Alimentos</option>',
+                                                                                    '<option value="2">Bebidas</option>',
+                                                                                    '<option value="3">Gastos</option>',
+                                                                                '</select>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="idsubcategoria">Subcategoria *</label>',
+                                                                                '<select required class="form-control" name="idsubcategoria">',
+                                                                                    '<option value="">Sin especificar</option>',
+                                                                                '</select>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_nombre">Unidad de medida *</label>',
+                                                                                '<select required class="form-control" name="idunidadmedida">',
+                                                                                    '<option value="">Sin especificar</option>',
+                                                                                    '<option value="1">Pieza</option>',
+                                                                                    '<option value="2">Botella</option>',
+                                                                                    '<option value="3">Kilogramos</option>',
+                                                                                    '<option value="4">Litros</option>',
+                                                                                    '<option value="5">Porcion</option>',
+                                                                                    '<option value="6">Caja</option>',
+                                                                                '</select>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_tipo">Tipo *</label>',
+                                                                                '<select required class="form-control" name="producto_tipo">',
+                                                                                    '<option value="plu">Botón de venta</option>',
+                                                                                '</select>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_iva">IVA *</label>',
+                                                                                '<select required class="form-control" name="producto_iva">',
+                                                                                    '<option value="1">Si</option>',
+                                                                                    '<option value="0">No</option>',
+                                                                                '</select>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_costo">Costo *</label>',
+                                                                                '<input required class="form-control" type="text" name="producto_costo">',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_ultimocosto">Ultimo costo *</label>',
+                                                                                '<input required class="form-control" type="text" name="producto_ultimocosto">',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_stock">Stock *</label>',
+                                                                                '<input required class="form-control" type="text" value="0" readonly>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_baja">Baja *</label>',
+                                                                                '<select required class="form-control" name="producto_baja">',
+                                                                                    '<option value="1">Si</option>',
+                                                                                    '<option value="0">No</option>',
+                                                                                '</select>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                        '<div class="col-md-6" id="rendimiento_container" style="display:none">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_rendimiento">Rendimiento *</label>',
+                                                                                '<input class="form-control" type="text">',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                    '</div>',
+                                                                '</div>',
+                                                                '<div class="modal-footer">',
+                                                                    '<a id="save_product" href="#" class="btn blue">Guardar</a>',
+                                                                '</div>',
+                                                            '</div>',  
+                                                        ].join('');
+                                                        var $modal = $(tmpl);
+                                                        $modal.modal();
+                                                        $modal.find('select[name=idcategoria]').on('change',function(){
+                                                            
+                                                            var idcat = $modal.find('select[name=idcategoria] option:selected').val();
+                                                            
+                                                            if(idcat != ""){
+                                                            
+                                                                $.ajax({
+                                                                    type: "GET",
+                                                                    url: "/catalogo/categoria/getsubcat/" + idcat,
+                                                                    dataType: "json",
+                                                                    success: function (data) {
+                                                                        
+                                                                        if (data.length != 0)
+                                                                        {
+                                                                            $modal.find("[name=idsubcategoria]").html('');
+                                                                            for (var k in data)
+                                                                                $("[name=idsubcategoria]").append('<option value="' + data[k]['Idcategoria'] + '">' + data[k]['CategoriaNombre'] + '</option>');
+                                                                        }
+                                                                    },
+                                                                });
+                                                                
+                                                                if(idcat == 2){
+                                                                    $modal.find('#rendimiento_container').show();
+                                                                    $modal.find('#input[name=producto_rendimiento]').prop('required',true);
+                                                                }else{
+                                                                    $modal.find('#rendimiento_container').hide();
+                                                                    $modal.find('#input[name=producto_rendimiento]').prop('required',false);
+                                                                }
+                                                            }
+
+                                                        });
+                                                        $modal.find('#save_product').on('click',function(){
+                                                            $modal.find('input[required],select[required]').removeClass('invalid');
+                                                            var post_data = {};
+                                                            var empty = false;
+                                                            $modal.find('input[required],select[required]').filter(function(){
+                                                                var name = $(this).attr('name');
+                                                                var value = $(this).val();
+                                                                if(value == ""){
+                                                                    empty = true;
+                                                                    $(this).addClass('invalid');
+                                                                }
+                                                                post_data[name] = value;
+                                                               
+                                                            });
+                                                            
+                                                            if(!empty){
+                                                               
+                                                            }
+                                                        });
+                                                        
+                                                    }else if(data.rename){
+                                                        
+                                                    }else{
+                                                        
+                                                        var revisado = ($('select[name=venta_revisada] option:selected').val() != "") ? $('select[name=venta_revisada] option:selected').val():0;
+
+                                                        var $tr = $('<tr>');
+                                                        $tr.append('<td><input type="hidden" name="productos['+count+'][subtotal]" value="'+data.data.subtotal+'"><input type="hidden" name="productos['+count+'][cantidad]" value="'+data.data.cantidad+'"><input type="hidden" name="productos['+count+'][idalmacen]" value="'+data.data.idalmacen+'"><input type="hidden" name="productos['+count+'][idproducto]" value="'+data.data.idproducto+'">'+data.data.producto+'</td>');
+                                                        $tr.append('<td>'+data.data.almacen_nombre+'</td>');
+                                                        $tr.append('<td>'+data.data.cantidad+'</td>');
+                                                        $tr.append('<td>'+accounting.formatMoney(data.data.precio_unitario)+'</td>');
+                                                        $tr.append('<td>'+accounting.formatMoney(data.data.subtotal)+'</td>');
+                                                        if(revisado == 1){
+                                                            $tr.append('<td><input checked type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                        }else{
+                                                            $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                        }
+                                                        if(data.data.receta.length > 0){
+                                                            $tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
+                                                            var tmpl2 = "";
+                                                            for (var k in data.data.receta) {
+                                                                tmpl2 += [
+                                                                    '<tr> <td>' + data.data.receta[k].producto +'</td> <td> '+ data.data.receta[k].cantidad + '</td>'
+                                                                ];
+                                                            }
+                                                            $tr.find('i.fa-list').on('click',function(){
+                                                            var tmpl = [
+                                                                // tabindex is required for focus
+                                                                '<div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+                                                                '<div class="modal-header">',
+                                                                '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
+                                                                '<h4 class="modal-title">' + data.data.producto + '</h4>',
+                                                                '</div>',
+                                                                '<div class="modal-body">',
+                                                                '<table class="table" id="productos_table">',
+                                                                '<thead>',
+                                                                '<th>Producto</th>',
+                                                                '<th>Cantidad</th>',
+                                                                '</thead>',
+                                                                '<tbody id="productos_table_tbody">',
+                                                                tmpl2,
+                                                                '</tbody>',
+                                                                '</table>',
+                                                                '</div>',
+                                                                '<div class="modal-footer">',
+                                                                '<a href="#" data-dismiss="modal" class="btn btn-default">Cerrar</a>',
+                                                                '</div>',
+                                                                '</div>'
+                                                            ].join('');
+                                                          $(tmpl).modal();
+                                                        });
+                                                        }else{
+                                                            $tr.append('<td> N/D </td>');
+                                                        }
+                                                        
+                                                        
+                                                        
+                                                        $('#productos_table tbody').append($tr);
+                                                        
+                                                        total = total + parseFloat(data.data.subtotal);
+                                                        $('#total').text(accounting.formatMoney(total));
+                                                        $('input[name=venta_total]').val(total);
+                                                        
+                                                        nextAjax();
+                                                    }
+                                                }
+                                                
+                                            }
+                                        });
+                                        count++;
                                     }
-                                });
+
+                               }
+                                if(numRequests > 0){
+                                     nextAjax();
+                                }
+                               
+
                             }else{
                                 $('#error_alert').show();
                                 $('#error_message').text('Archivo dañado o el archivo se encuentra sin datos');
@@ -143,9 +430,12 @@
                         reader.readAsBinaryString(f);
                     }
                     
+                    //LIMPIAMOS LOS CAMPOS
+                    $('#upload_container input').val('');
                 }
                 
             });
+            revisadaControl();
            
        }
         
