@@ -94,7 +94,7 @@
         
        var formBind = function(anio,mes){
            
-           $('body').modalmanager('loading');
+           //$('body').modalmanager('loading');
            
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
