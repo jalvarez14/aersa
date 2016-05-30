@@ -39,7 +39,7 @@
                         <?php $entity = new Venta(); ?>
                         <?php foreach ($collection as $entity) : ?>
                             <?php
-                                if($entity->getCompraRevisada()) {
+                                if($entity->getVentaRevisada()) {
                                     $class = 'info';
                                     $revisada = 'Revisada';
                                 } else {

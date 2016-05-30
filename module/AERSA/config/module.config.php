@@ -1148,7 +1148,17 @@ return array(
                                                 'action' => 'validatefolio',
                                             ), 
                                         ), 
-                                    ),                           
+                                    ),
+                                    'validateproduct' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validateproduct', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'validateproduct',
+                                            ), 
+                                        ), 
+                                    ),    
                                 ), 
                             ),
                             'ordentablajeria' => array( 
