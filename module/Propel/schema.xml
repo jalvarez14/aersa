@@ -1307,6 +1307,7 @@
     <column name="venta_fechaventa" phpName="VentaFechaventa" type="TIMESTAMP" required="true"/>
     <column name="venta_fechacreacion" phpName="VentaFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="venta_total" phpName="VentaTotal" type="DECIMAL" size="15" scale="5" required="true"/>
+    <column name="venta_folio" phpName="VentaFolio" type="VARCHAR" size="10" required="true"/>
     <foreign-key foreignTable="usuario" name="idauditor_venta" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idauditor" foreign="idusuario"/>
     </foreign-key>

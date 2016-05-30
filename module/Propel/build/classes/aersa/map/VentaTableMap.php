@@ -47,6 +47,7 @@ class VentaTableMap extends TableMap
         $this->addColumn('venta_fechaventa', 'VentaFechaventa', 'TIMESTAMP', true, null, null);
         $this->addColumn('venta_fechacreacion', 'VentaFechacreacion', 'TIMESTAMP', true, null, null);
         $this->addColumn('venta_total', 'VentaTotal', 'DECIMAL', true, 15, null);
+        $this->addColumn('venta_folio', 'VentaFolio', 'VARCHAR', true, 10, null);
         // validators
     } // initialize()
 

@@ -1,0 +1,159 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+    #productos_table .fa-trash{
+        color:red;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:;">Procesos</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/venta">Ventas</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/venta/nuevo">Registro</a>
+            </li>
+        </ul>
+</div>
+<div id="form_container">
+    <form class="form-horizontal" action="/procesos/venta/nuevo" method="post" enctype="multipart/form-data">
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="page-title">Ventas - Registro</h3><br><br>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('venta_fechaventa')) ?>  
+                            <?php echo $this->formText($form->get('venta_fechaventa')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('venta_folio')) ?>  
+                            <?php echo $this->formText($form->get('venta_folio')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('venta_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('venta_revisada')) ?> 
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+        <div id="error_alert" class="alert alert-danger alert-dismissable" style="display: none">
+            <strong>Error!</strong>
+            <p id="error_message"></p>
+        </div>
+        <div id="upload_container" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+            <div class="portlet-body form">
+                <div class="portlet-body form">
+                    <div class="form-body">
+                        <h3 class="page-title">Subir venta</h3>
+                        <div class="row">
+                            <div class="form-group">
+                                 <div class="col-md-4">
+                                    <label for="venta_file">Archivo *</label>
+                                    <input id="venta_file" class="form-control" type="file" value="" required="required" name="venta_file">
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4>Definición de columnas</h4>
+                            <div class="form-group">
+                                 <div class="col-md-4">
+                                    <label for="xls_nombre">Nombre del producto (PLU) *</label>
+                                    <input class="form-control" type="text" value="" name="xls_nombre">
+                                 </div>
+                                <div class="col-md-4">
+                                    <label for="xls_cantidad">Cantidad de productos vendidos *</label>
+                                    <input class="form-control" type="text" value="" name="xls_cantidad">
+                                 </div>
+                                <div class="col-md-4">
+                                    <label for="xls_subtotal">Subtotal *</label>
+                                    <input class="form-control" type="text" value="" name="xls_subtotal">
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions right">
+                        <a id="upload_file" class="btn blue">
+                            <i class="fa fa-upload"></i>
+                            Subir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <h3 class="page-title">Productos</h3>
+                    <div class="row">
+                        <table class="table" id="productos_table">
+                            <thead>
+                                <th>Producto</th>
+                                <th>Almacén</th>
+                                <th>Cantidad</th>
+                                <th>Precio unitario</th>
+                                <th>Subtotal</th>
+                                <th>Revisada</th>
+                                <th>Opciones</th>
+                            </thead>
+                            <tbody>
+<!--                                <tr>
+                                    <td>Producto 1</td>
+                                    <td><input type="text"></td>
+                                    <td><input type="text"></td>
+                                    <td>$ 100.00</td>
+                                    <td><input type="text"></td>
+                                    <td><input type="text"></td>
+                                    <td>$ 100.00</td>
+                                    <td><input type="checkbox"></td>
+                                    <td>
+                                        <select class="form-control">
+                                            <option>almacen 1</option>
+                                            <option>almacen 2</option>
+                                            <option>almacen 3</option>
+                                        </select>
+                                    </td>
+                                    <td><i class="fa fa-trash"></i></td>
+                                </tr>-->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5"></td>
+                                    <td>TOTAL</td>
+                                    <input type="hidden" name="venta_total">
+                                    <td id="total">$0.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/venta.js"></script>
+<script>
+    var $form = $('#form_container').venta();
+    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
+</script>

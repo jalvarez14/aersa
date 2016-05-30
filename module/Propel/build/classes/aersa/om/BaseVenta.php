@@ -85,6 +85,12 @@ abstract class BaseVenta extends BaseObject implements Persistent
     protected $venta_total;
 
     /**
+     * The value for the venta_folio field.
+     * @var        string
+     */
+    protected $venta_folio;
+
+    /**
      * @var        Usuario
      */
     protected $aUsuarioRelatedByIdauditor;
@@ -315,6 +321,17 @@ abstract class BaseVenta extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [venta_folio] column value.
+     *
+     * @return string
+     */
+    public function getVentaFolio()
+    {
+
+        return $this->venta_folio;
+    }
+
+    /**
      * Set the value of [idventa] column.
      *
      * @param  int $v new value
@@ -532,6 +549,27 @@ abstract class BaseVenta extends BaseObject implements Persistent
     } // setVentaTotal()
 
     /**
+     * Set the value of [venta_folio] column.
+     *
+     * @param  string $v new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setVentaFolio($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->venta_folio !== $v) {
+            $this->venta_folio = $v;
+            $this->modifiedColumns[] = VentaPeer::VENTA_FOLIO;
+        }
+
+
+        return $this;
+    } // setVentaFolio()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -576,6 +614,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $this->venta_fechaventa = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->venta_fechacreacion = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->venta_total = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->venta_folio = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -585,7 +624,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 9; // 9 = VentaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = VentaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Venta object", $e);
@@ -892,6 +931,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if ($this->isColumnModified(VentaPeer::VENTA_TOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`venta_total`';
         }
+        if ($this->isColumnModified(VentaPeer::VENTA_FOLIO)) {
+            $modifiedColumns[':p' . $index++]  = '`venta_folio`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `venta` (%s) VALUES (%s)',
@@ -929,6 +971,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
                         break;
                     case '`venta_total`':
                         $stmt->bindValue($identifier, $this->venta_total, PDO::PARAM_STR);
+                        break;
+                    case '`venta_folio`':
+                        $stmt->bindValue($identifier, $this->venta_folio, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1129,6 +1174,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
             case 8:
                 return $this->getVentaTotal();
                 break;
+            case 9:
+                return $this->getVentaFolio();
+                break;
             default:
                 return null;
                 break;
@@ -1167,6 +1215,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $keys[6] => $this->getVentaFechaventa(),
             $keys[7] => $this->getVentaFechacreacion(),
             $keys[8] => $this->getVentaTotal(),
+            $keys[9] => $this->getVentaFolio(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1250,6 +1299,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
             case 8:
                 $this->setVentaTotal($value);
                 break;
+            case 9:
+                $this->setVentaFolio($value);
+                break;
         } // switch()
     }
 
@@ -1283,6 +1335,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if (array_key_exists($keys[6], $arr)) $this->setVentaFechaventa($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setVentaFechacreacion($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setVentaTotal($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setVentaFolio($arr[$keys[9]]);
     }
 
     /**
@@ -1303,6 +1356,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if ($this->isColumnModified(VentaPeer::VENTA_FECHAVENTA)) $criteria->add(VentaPeer::VENTA_FECHAVENTA, $this->venta_fechaventa);
         if ($this->isColumnModified(VentaPeer::VENTA_FECHACREACION)) $criteria->add(VentaPeer::VENTA_FECHACREACION, $this->venta_fechacreacion);
         if ($this->isColumnModified(VentaPeer::VENTA_TOTAL)) $criteria->add(VentaPeer::VENTA_TOTAL, $this->venta_total);
+        if ($this->isColumnModified(VentaPeer::VENTA_FOLIO)) $criteria->add(VentaPeer::VENTA_FOLIO, $this->venta_folio);
 
         return $criteria;
     }
@@ -1374,6 +1428,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
         $copyObj->setVentaFechaventa($this->getVentaFechaventa());
         $copyObj->setVentaFechacreacion($this->getVentaFechacreacion());
         $copyObj->setVentaTotal($this->getVentaTotal());
+        $copyObj->setVentaFolio($this->getVentaFolio());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1976,6 +2031,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
         $this->venta_fechaventa = null;
         $this->venta_fechacreacion = null;
         $this->venta_total = null;
+        $this->venta_folio = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

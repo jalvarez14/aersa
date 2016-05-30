@@ -1576,6 +1576,7 @@ CREATE TABLE `venta`
     `venta_fechaventa` DATETIME NOT NULL,
     `venta_fechacreacion` DATETIME NOT NULL,
     `venta_total` DECIMAL(15,5) NOT NULL,
+    `venta_folio` VARCHAR(10) NOT NULL,
     PRIMARY KEY (`idventa`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),

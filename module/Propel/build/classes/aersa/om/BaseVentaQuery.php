@@ -15,6 +15,7 @@
  * @method VentaQuery orderByVentaFechaventa($order = Criteria::ASC) Order by the venta_fechaventa column
  * @method VentaQuery orderByVentaFechacreacion($order = Criteria::ASC) Order by the venta_fechacreacion column
  * @method VentaQuery orderByVentaTotal($order = Criteria::ASC) Order by the venta_total column
+ * @method VentaQuery orderByVentaFolio($order = Criteria::ASC) Order by the venta_folio column
  *
  * @method VentaQuery groupByIdventa() Group by the idventa column
  * @method VentaQuery groupByIdempresa() Group by the idempresa column
@@ -25,6 +26,7 @@
  * @method VentaQuery groupByVentaFechaventa() Group by the venta_fechaventa column
  * @method VentaQuery groupByVentaFechacreacion() Group by the venta_fechacreacion column
  * @method VentaQuery groupByVentaTotal() Group by the venta_total column
+ * @method VentaQuery groupByVentaFolio() Group by the venta_folio column
  *
  * @method VentaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method VentaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -61,6 +63,7 @@
  * @method Venta findOneByVentaFechaventa(string $venta_fechaventa) Return the first Venta filtered by the venta_fechaventa column
  * @method Venta findOneByVentaFechacreacion(string $venta_fechacreacion) Return the first Venta filtered by the venta_fechacreacion column
  * @method Venta findOneByVentaTotal(string $venta_total) Return the first Venta filtered by the venta_total column
+ * @method Venta findOneByVentaFolio(string $venta_folio) Return the first Venta filtered by the venta_folio column
  *
  * @method array findByIdventa(int $idventa) Return Venta objects filtered by the idventa column
  * @method array findByIdempresa(int $idempresa) Return Venta objects filtered by the idempresa column
@@ -71,6 +74,7 @@
  * @method array findByVentaFechaventa(string $venta_fechaventa) Return Venta objects filtered by the venta_fechaventa column
  * @method array findByVentaFechacreacion(string $venta_fechacreacion) Return Venta objects filtered by the venta_fechacreacion column
  * @method array findByVentaTotal(string $venta_total) Return Venta objects filtered by the venta_total column
+ * @method array findByVentaFolio(string $venta_folio) Return Venta objects filtered by the venta_folio column
  *
  * @package    propel.generator.aersa.om
  */
@@ -178,7 +182,7 @@ abstract class BaseVentaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idventa`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `venta_revisada`, `venta_fechaventa`, `venta_fechacreacion`, `venta_total` FROM `venta` WHERE `idventa` = :p0';
+        $sql = 'SELECT `idventa`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `venta_revisada`, `venta_fechaventa`, `venta_fechacreacion`, `venta_total`, `venta_folio` FROM `venta` WHERE `idventa` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -638,6 +642,35 @@ abstract class BaseVentaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(VentaPeer::VENTA_TOTAL, $ventaTotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the venta_folio column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByVentaFolio('fooValue');   // WHERE venta_folio = 'fooValue'
+     * $query->filterByVentaFolio('%fooValue%'); // WHERE venta_folio LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $ventaFolio The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VentaQuery The current query, for fluid interface
+     */
+    public function filterByVentaFolio($ventaFolio = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($ventaFolio)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $ventaFolio)) {
+                $ventaFolio = str_replace('*', '%', $ventaFolio);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(VentaPeer::VENTA_FOLIO, $ventaFolio, $comparison);
     }
 
     /**

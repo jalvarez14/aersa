@@ -5,7 +5,7 @@
             <datasource id="aersa">
                 <adapter>mysql</adapter> <!-- sqlite, mysql, myssql, oracle, or pgsql -->
                 <connection>
-                    <dsn>mysql:host=l;dbname=aersa_system</dsn>
+                    <dsn>mysql:host=localhost;dbname=aersa_system</dsn>
                     <user>aersa_admin</user>
                     <password>2Wu75TqdtVA5V9nt</password>
                 </connection>

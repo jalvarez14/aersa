@@ -675,8 +675,6 @@ return array(
 
                                ),
                             ),
-
-                           
                             'tablajeria' => array(
                                 'type' => 'Segment',
                                 'options' => array(
@@ -1100,6 +1098,59 @@ return array(
                                     ),
                                 ), 
                             ),
+                            'venta' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/venta', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Venta', 
+                                        'action' => 'index', 
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevo' => array( 
+                                        'type' => 'Literal', 
+                                        'options' => array( 
+                                            'route' => '/nuevo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                             'defaults' => array( 
+                                                 'controller' => 'Application\Proceso\Controller\Venta', 
+                                                 'action' => 'editar', 
+                                                 ), 
+                                            ), 
+                                        ), 
+                                    'eliminar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'eliminar',
+                                            ), 
+                                        ), 
+                                    ),
+                                    'validatefolio' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validatefolio', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'validatefolio',
+                                            ), 
+                                        ), 
+                                    ),                           
+                                ), 
+                            ),
                             'ordentablajeria' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1304,6 +1355,7 @@ return array(
             'Application\Proceso\Controller\Ingresos'       => 'Application\Proceso\Controller\IngresosController',
             'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
             'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
+            'Application\Proceso\Controller\Venta'          => 'Application\Proceso\Controller\VentaController',
             
             /*
              * FLUJO EFECTIVO
