@@ -187,7 +187,7 @@
                                                     if(data.create){
                                                         
                                                         var tmpl = [
-                                                            '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                                                            '<div style="width:800px;left:40%" class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
                                                                 '<div class="modal-header">',
                                                                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
                                                                     '<h4 class="modal-title">Registro de producto</h4>',
@@ -360,9 +360,25 @@
                                                                                         '<div class="form-group">',
                                                                                             '<label for="producto_nombre">Almacen *</label>',
                                                                                             '<select required class="form-control" name="idalmacen">',
-    
                                                                                             '</select>',
                                                                                         '</div>',
+                                                                                    '</div>',
+                                                                                '<div>',
+                                                                                '<div class="row">',
+                                                                                    '<div class="col-md-6">',
+                                                                                        '<h4>Subreceta</h4>',
+                                                                                    '</div>',
+                                                                                    '<div class="col-md-12">',
+                                                                                        
+                                                                                    '</div>',
+                                                                                    '<div class="col-md-12">',
+                                                                                        '<table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">',
+                                                                                            '<thead>',
+                                                                                                '<th> Producto </th>',
+                                                                                                '<th> Cantidad </th>',
+                                                                                                '<th> Opciones </th>',
+                                                                                            '</thead>',
+                                                                                        '</table>',
                                                                                     '</div>',
                                                                                 '<div>',
                                                                             ].join('');
