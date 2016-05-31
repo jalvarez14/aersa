@@ -94,7 +94,7 @@
         
        var formBind = function(anio,mes){
            
-           //$('body').modalmanager('loading');
+           
            
             var minDate = new Date(anio + '/' + mes + '/' + '01');
             var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth()+1));
@@ -151,7 +151,7 @@
                             var workbook = XLSX.read(data, {type: 'binary'});
                             var first_sheet_name = workbook.SheetNames[0];
                             var workbook_array = to_json(workbook);
-          
+
                             //VALIDAMOS SI EL XML TIENE DATOS 
                             if(typeof workbook_array[first_sheet_name] != 'undefined'){
                                 
@@ -339,7 +339,43 @@
                                                             });
                                                             
                                                             if(!empty){
-                                                               
+                                                                
+                                                                $.ajax({
+                                                                    url:'/procesos/venta/nuevoproducto',
+                                                                    type:'POST',
+                                                                    data:post_data,
+                                                                    dataType:'JSON',
+                                                                    beforeSend: function () {
+                                                                        $modal.modal('loading');
+                                                                    },
+                                                                    success: function (data) {
+                                                                        if(data.response){
+                                                                            $modal.modal('loading');
+                                                                            $modal.find('.modal-body > .row').remove();
+                                                                            $modal.find('.modal-title').text(data.data.producto_nombre);
+                                                                            $modal.find('#save_product').unbind();
+                                                                            tmpl = [
+                                                                                '<div class="row">',
+                                                                                    '<div class="col-md-6">',
+                                                                                        '<div class="form-group">',
+                                                                                            '<label for="producto_nombre">Almacen *</label>',
+                                                                                            '<select required class="form-control" name="idalmacen">',
+    
+                                                                                            '</select>',
+                                                                                        '</div>',
+                                                                                    '</div>',
+                                                                                '<div>',
+                                                                            ].join('');
+                                                                            $modal.find('.modal-body').append(tmpl);
+                                                                            $.each(data.almacenes,function(index){
+                                                                                var option = $('<option value="'+index+'">'+this+'</option>');
+                                                                                $modal.find('select[name=idalmacen]').append(option);
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                    
+                                                                });
+                                                                
                                                             }
                                                         });
                                                         

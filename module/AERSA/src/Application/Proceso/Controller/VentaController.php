@@ -32,6 +32,36 @@ class VentaController extends AbstractActionController {
         return $view_model;
     }
     
+    public function nuevoproductoAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            
+            $post_data = $request->getPost();
+            
+            $entity = new \Producto();
+            foreach ($post_data as $key => $value){
+                if(\ProductoPeer::getTableMap()->hasColumn($key)){
+                    $entity->setByName($key, $value,  \BasePeer::TYPE_FIELDNAME);
+                }
+            }
+            
+            $entity->setIdempresa($session['idempresa']);
+            $entity->save();
+            $entity_array = $entity->toArray(\BasePeer::TYPE_FIELDNAME);
+            
+            $almacen = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+            $almacen_array = \Shared\GeneralFunctions::collectionToSelectArray($almacen, 'idalmacen', 'almacen_nombre');
+            
+            return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $entity_array, 'almacenes' => $almacen_array)));
+        }
+        
+    }
+    
     public function nuevoAction(){
         
         $session = new \Shared\Session\AouthSession();

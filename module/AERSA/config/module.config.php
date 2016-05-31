@@ -1158,7 +1158,17 @@ return array(
                                                 'action' => 'validateproduct',
                                             ), 
                                         ), 
-                                    ),    
+                                    ),   
+                                    'nuevoproducto' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/nuevoproducto', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'nuevoproducto',
+                                            ), 
+                                        ), 
+                                    ),
                                 ), 
                             ),
                             'ordentablajeria' => array( 
