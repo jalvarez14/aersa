@@ -1169,6 +1169,16 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'nuevosubreceta' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/nuevosubreceta', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'nuevosubreceta',
+                                            ), 
+                                        ), 
+                                    ),
                                 ), 
                             ),
                             'ordentablajeria' => array( 

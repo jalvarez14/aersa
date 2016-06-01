@@ -171,23 +171,30 @@
                                 var total = 0;
                                 
                                 function nextAjax(){
-                                  
+
                                     if(count < numRequests){
+                                        
+                                        var subtotal = parseFloat(ventas_array[count].subtotal);
+                                        var cantidad = parseFloat(ventas_array[count].cantidad);
+                                        var producto = ventas_array[count].nombre;
+
+                                        var precio_unitario = subtotal / cantidad;
+                                        
+                                        
                                         $.ajax({
                                             url: '/procesos/venta/validateproduct',
                                             type: 'POST',
                                             dataType: 'JSON',
                                             data: {
-                                                producto_nombre: ventas_array[count].nombre,
+                                                producto_nombre:   ventas_array[count].nombre,
                                                 producto_cantidad: ventas_array[count].cantidad,
                                                 producto_subtotal: ventas_array[count].subtotal,
                                             },
                                             success: function (data) {
                                                 if(data.response){
                                                     if(data.create){
-                                                        
                                                         var tmpl = [
-                                                            '<div style="width:800px;left:40%" class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                                                            '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
                                                                 '<div class="modal-header">',
                                                                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
                                                                     '<h4 class="modal-title">Registro de producto</h4>',
@@ -292,6 +299,7 @@
                                                         ].join('');
                                                         var $modal = $(tmpl);
                                                         $modal.modal();
+                                                        $modal.find('input').numeric();
                                                         $modal.find('select[name=idcategoria]').on('change',function(){
                                                             
                                                             var idcat = $modal.find('select[name=idcategoria] option:selected').val();
@@ -348,11 +356,11 @@
                                                                     beforeSend: function () {
                                                                         $modal.modal('loading');
                                                                     },
-                                                                    success: function (data) {
-                                                                        if(data.response){
+                                                                    success: function (data2) {
+                                                                        if(data2.response){
                                                                             $modal.modal('loading');
                                                                             $modal.find('.modal-body > .row').remove();
-                                                                            $modal.find('.modal-title').text(data.data.producto_nombre);
+                                                                            $modal.find('.modal-title').text(data2.data.producto_nombre);
                                                                             $modal.find('#save_product').unbind();
                                                                             tmpl = [
                                                                                 '<div class="row">',
@@ -363,29 +371,190 @@
                                                                                             '</select>',
                                                                                         '</div>',
                                                                                     '</div>',
-                                                                                '<div>',
+                                                                                '</div>',
                                                                                 '<div class="row">',
                                                                                     '<div class="col-md-6">',
                                                                                         '<h4>Subreceta</h4>',
                                                                                     '</div>',
-                                                                                    '<div class="col-md-12">',
-                                                                                        
+                                                                                    '<div class="col-md-3 col-md-offset-5">',
+                                                                                        '<label for="producto_rendimiento">Producto *</label>',
+                                                                                        '<div class="input-group">',
+                                                                                            '<span class="input-group-addon">',
+                                                                                                '<i class="fa fa-search"></i>',
+                                                                                            '</span>',   
+                                                                                            '<input id="idproducto" type="hidden">',
+                                                                                            '<input id="producto_autocomplete" class="form-control" type="text">',
+                                                                                        '</div>',
+                                                                                    '</div>',
+                                                                                    '<div class="col-md-2">',
+                                                                                        '<div class="form-group">',
+                                                                                             '<label for="producto_rendimiento">Cantidad *</label>',
+                                                                                             '<input disabled name="producto_cantidad" type="text" class="form-control">',
+                                                                                        '</div>',
+                                                                                    '</div>',
+                                                                                    '<div class="col-md-1">',
+                                                                                       '<a id="producto_add" class="btn blue" href="javascript:;" style="top: 24px;">Agregar</a>',
                                                                                     '</div>',
                                                                                     '<div class="col-md-12">',
-                                                                                        '<table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">',
+                                                                                        '<table class="table table-striped table-hover order-column" id="datatable" style="border-bottom-width: 0px;">',
                                                                                             '<thead>',
                                                                                                 '<th> Producto </th>',
                                                                                                 '<th> Cantidad </th>',
                                                                                                 '<th> Opciones </th>',
                                                                                             '</thead>',
+                                                                                            '<tbody>',
+                                                                                            '</tbody>',
                                                                                         '</table>',
                                                                                     '</div>',
                                                                                 '<div>',
+                                                                                
+                                                                                
                                                                             ].join('');
                                                                             $modal.find('.modal-body').append(tmpl);
-                                                                            $.each(data.almacenes,function(index){
+                                                                            $.each(data2.almacenes,function(index){
                                                                                 var option = $('<option value="'+index+'">'+this+'</option>');
                                                                                 $modal.find('select[name=idalmacen]').append(option);
+                                                                            });
+                                                                            
+                                                                            var producto_autocomplete = new Bloodhound({
+                                                                                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                                                                                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                                                                remote: {
+                                                                                    url: '/autocomplete/getproductos?q=%QUERY',
+                                                                                    wildcard: '%QUERY'
+                                                                                }
+                                                                            });
+                                                                            $modal.find('#producto_autocomplete').typeahead(null, {
+                                                                                name: 'best-pictures',
+                                                                                display: 'value',
+                                                                                hint: true,
+                                                                                highlight: true,
+                                                                                source: producto_autocomplete,
+                                                                                limit: 5,
+                                                                            });
+                                                                            $modal.find('input[name=producto_cantidad]').numeric();
+                                                                            $modal.find('#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
+                                                                                $modal.find('#producto_add').attr('disabled', false);
+                                                                                $modal.find('input[name=producto_cantidad]').attr('disabled', false);
+                                                                                $modal.find('input#idproducto').val(suggestion.id);
+                                                                            });
+                                                                            var count2 = 0;
+                                                                            $modal.find('#producto_add').on('click',function(){
+                                                                                
+                                                                                var empty = false;
+                                                                                $modal.find('input[type=text]').removeClass('invalid');
+                                                                                
+                                                                                $modal.find('input#producto_autocomplete,input[name=producto_cantidad]').filter(function(){
+                                                                                   
+                                                                                    if($(this).val() == ""){
+                                                                                        empty = true;
+                                                                                        $(this).addClass('invalid');
+                                                                                    }
+                                                                                });
+                                                                                
+                                                                              
+                                                                                if(!empty){
+                                                                                
+                                                                                    var $tr = $('<tr>');
+                                                                                    $tr.append('<td><input type="hidden" name=subreceta['+count2+'][cantidad] value="'+$modal.find('input[name=producto_cantidad]').val()+'"><input type="hidden" name=subreceta['+count2+'][idproducto] value="'+$modal.find('#idproducto').val()+'">'+$modal.find('#producto_autocomplete').val()+'</td>');
+                                                                                    $tr.append('<td>'+$modal.find('input[name=producto_cantidad]').val()+'</td>');
+                                                                                    $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                                                                                    
+                                                                                    $tr.find('i.fa-trash').on('click',function(){
+                                                                                        $tr.remove();
+                                                                                    });
+
+                                                                                    $modal.find('table tbody').append($tr);
+                                                                                    
+                                                                                    count2++;
+                                                                                    
+                                                                                    //LIMPIAMOS LOS INPUTS
+                                                                                    $modal.find('input[name=producto_cantidad]').val('');
+                                                                                    $modal.find('input#idproducto').val('');
+                                                                                    $modal.find('input#producto_autocomplete').val('');
+                                                                                }
+                                                                                
+                                                                            });
+                                                                            
+                                                                            //EVENTO GUARDAR ALMACEN Y SUBRECETA
+                                                                            $modal.find('#save_product').on('click',function(){
+                                                                             
+                                                                                var post_data = {idproducto:data2.data.idproducto,cantidad:cantidad};
+                                                                                $modal.find('select,input').filter(function(){
+                                                                                    var name = $(this).attr('name');
+                                                                                    var value = $(this).val();
+                                                                                    post_data[name] = value;
+                                                                                });
+                                                                                
+                                                                                $.ajax({
+                                                                                    url:'/procesos/venta/nuevosubreceta',
+                                                                                    type:'POST',
+                                                                                    data:post_data,
+                                                                                    dataType:'JSON',
+                                                                                    success: function (data3) {
+                                                                                        if(data3.response){
+                                                                                            
+                                                                                            
+                                                                                            var revisado = ($('select[name=venta_revisada] option:selected').val() != "") ? $('select[name=venta_revisada] option:selected').val():0;
+                                                                                            
+                                                                                            var $tr = $('<tr>');
+                                                                                            $tr.append('<td><input type="hidden" name="productos['+count+'][subtotal]" value="'+subtotal+'"><input type="hidden" name="productos['+count+'][cantidad]" value="'+data.data.cantidad+'"><input type="hidden" name="productos['+count+'][idalmacen]" value="'+data3.data.idalmacen+'"><input type="hidden" name="productos['+count+'][idproducto]" value="'+data3.data.idproducto+'">'+producto+'</td>');
+                                                                                            $tr.append('<td>'+data3.data.almacen_nombre+'</td>');
+                                                                                            $tr.append('<td>'+cantidad+'</td>');
+                                                                                            $tr.append('<td>'+accounting.formatMoney(precio_unitario)+'</td>');
+                                                                                            $tr.append('<td>'+accounting.formatMoney(subtotal)+'</td>');
+                                                                                            if(revisado == 1){
+                                                                                                $tr.append('<td><input checked type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                                                            }else{
+                                                                                                $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                                                            }
+                                                                                            if (data3.data.receta.length > 0) {
+                                                                                                $tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
+                                                                                                var tmpl2 = "";
+                                                                                                for (var k in data3.data.receta) {
+                                                                                                    tmpl2 += [
+                                                                                                        '<tr> <td>' + data3.data.receta[k].producto + '</td> <td> ' + data3.data.receta[k].cantidad + '</td>'
+                                                                                                    ];
+                                                                                                }
+                                                                                                $tr.find('i.fa-list').on('click', function () {
+                                                                                                    var tmpl = [
+                                                                                                        // tabindex is required for focus
+                                                                                                        '<div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+                                                                                                        '<div class="modal-header">',
+                                                                                                        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
+                                                                                                        '<h4 class="modal-title">' + producto + '</h4>',
+                                                                                                        '</div>',
+                                                                                                        '<div class="modal-body">',
+                                                                                                        '<table class="table" id="productos_table">',
+                                                                                                        '<thead>',
+                                                                                                        '<th>Producto</th>',
+                                                                                                        '<th>Cantidad</th>',
+                                                                                                        '</thead>',
+                                                                                                        '<tbody id="productos_table_tbody">',
+                                                                                                        tmpl2,
+                                                                                                        '</tbody>',
+                                                                                                        '</table>',
+                                                                                                        '</div>',
+                                                                                                        '<div class="modal-footer">',
+                                                                                                        '<a href="#" data-dismiss="modal" class="btn btn-default">Cerrar</a>',
+                                                                                                        '</div>',
+                                                                                                        '</div>'
+                                                                                                    ].join('');
+                                                                                                    $(tmpl).modal();
+                                                                                                });
+                                                                                            } else {
+                                                                                                $tr.append('<td> N/D </td>');
+                                                                                            }
+                                                                                            $('#productos_table tbody').append($tr);
+
+                                                                                            total = total + parseFloat(subtotal);
+                                                                                            $('#total').text(accounting.formatMoney(total));
+                                                                                            $('input[name=venta_total]').val(total);
+                                                                                            $modal.modal('hide');
+                                                                                            nextAjax();
+                                                                                        }
+                                                                                    }
+                                                                                });
                                                                             });
                                                                         }
                                                                     }
@@ -402,11 +571,11 @@
                                                         var revisado = ($('select[name=venta_revisada] option:selected').val() != "") ? $('select[name=venta_revisada] option:selected').val():0;
 
                                                         var $tr = $('<tr>');
-                                                        $tr.append('<td><input type="hidden" name="productos['+count+'][subtotal]" value="'+data.data.subtotal+'"><input type="hidden" name="productos['+count+'][cantidad]" value="'+data.data.cantidad+'"><input type="hidden" name="productos['+count+'][idalmacen]" value="'+data.data.idalmacen+'"><input type="hidden" name="productos['+count+'][idproducto]" value="'+data.data.idproducto+'">'+data.data.producto+'</td>');
+                                                        $tr.append('<td><input type="hidden" name="productos['+count+'][subtotal]" value="'+subtotal+'"><input type="hidden" name="productos['+count+'][cantidad]" value="'+cantidad+'"><input type="hidden" name="productos['+count+'][idalmacen]" value="'+data.data.idalmacen+'"><input type="hidden" name="productos['+count+'][idproducto]" value="'+data.data.idproducto+'">'+producto+'</td>');
                                                         $tr.append('<td>'+data.data.almacen_nombre+'</td>');
-                                                        $tr.append('<td>'+data.data.cantidad+'</td>');
-                                                        $tr.append('<td>'+accounting.formatMoney(data.data.precio_unitario)+'</td>');
-                                                        $tr.append('<td>'+accounting.formatMoney(data.data.subtotal)+'</td>');
+                                                        $tr.append('<td>'+cantidad+'</td>');
+                                                        $tr.append('<td>'+accounting.formatMoney(precio_unitario)+'</td>');
+                                                        $tr.append('<td>'+accounting.formatMoney(subtotal)+'</td>');
                                                         if(revisado == 1){
                                                             $tr.append('<td><input checked type="checkbox" name=productos['+count+'][revisada]></td>');
                                                         }else{
@@ -426,7 +595,7 @@
                                                                 '<div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
                                                                 '<div class="modal-header">',
                                                                 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
-                                                                '<h4 class="modal-title">' + data.data.producto + '</h4>',
+                                                                '<h4 class="modal-title">' + producto + '</h4>',
                                                                 '</div>',
                                                                 '<div class="modal-body">',
                                                                 '<table class="table" id="productos_table">',
@@ -454,7 +623,7 @@
                                                         
                                                         $('#productos_table tbody').append($tr);
                                                         
-                                                        total = total + parseFloat(data.data.subtotal);
+                                                        total = total + parseFloat(subtotal);
                                                         $('#total').text(accounting.formatMoney(total));
                                                         $('input[name=venta_total]').val(total);
                                                         

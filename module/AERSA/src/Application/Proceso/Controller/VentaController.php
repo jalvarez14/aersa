@@ -62,6 +62,60 @@ class VentaController extends AbstractActionController {
         
     }
     
+    public function nuevosubrecetaAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            
+            //ASIGNAMOS EL PRODUCTO AL ALMACEN
+            
+            $productosucrusalalmacen = new \Productosucursalalmacen();
+            $productosucrusalalmacen->setIdproducto($post_data['idproducto'])
+                                    ->setIdalmacen($post_data['idalmacen'])
+                                    ->setIdsucursal($session['idsucursal'])
+                                    ->setIdempresa($session['idempresa'])
+                                    ->save();
+            
+                             
+            
+            $tmp['idproducto'] = $post_data['idproducto'];
+            $tmp['idalmacen'] = $post_data['idalmacen'];
+            $tmp['almacen_nombre'] = $productosucrusalalmacen->getAlmacen()->getAlmacenNombre();
+            $tmp['receta']= array();
+            
+            //VALIDAMOS SI EL PRODUCTO TIENE RECETA
+            if(isset($post_data['subreceta'])){
+                foreach ($post_data['subreceta'] as $detalle){
+                    $receta = new \Receta();
+                    $receta->setIdproducto($post_data['idproducto'])
+                           ->setIdproductoreceta($detalle['idproducto'])
+                           ->setRecetaCantidad($detalle['cantidad'])
+                           ->save();
+                }
+                
+                $receta = \RecetaQuery::create()->filterByIdproducto($post_data['idproducto'])->find();
+                $detalle = new \Receta();
+                foreach ($receta as $detalle){
+                    $tmp2['idproducto'] = $detalle->getIdproductoreceta();
+                    $tmp2['producto'] = $detalle->getProductoRelatedByIdproductoreceta()->getProductoNombre();
+                    $tmp2['cantidad'] = $detalle->getRecetaCantidad() * $post_data['cantidad'];
+                    $tmp['receta'][] = $tmp2;
+                }
+                
+                return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $tmp)));
+                
+            }
+            
+            
+            echo '<pre>';var_dump($post_data);echo '</pre>';exit();
+        }
+    }
+    
     public function nuevoAction(){
         
         $session = new \Shared\Session\AouthSession();
@@ -233,7 +287,7 @@ class VentaController extends AbstractActionController {
                 return $this->getResponse()->setContent(json_encode(array('response' => true, 'create' => true, 'rename' => false, 'data' => $tmp)));
                
             }
-            echo '<pre>';var_dump($exist);echo '</pre>';exit();
+            
         }
         
     }
