@@ -119,7 +119,7 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td>TOTAL</td>
-                                    <input type="hidden" name="venta_total" value="<?php $entity->getVentaTotal()?>">
+                                    <input type="hidden" name="venta_total" value="<?php echo $entity->getVentaTotal()?>">
                                     <td style="padding-left: 8px;" colspan="3" id="total"><?php echo money_format('%(#1n',$entity->getVentaTotal())?></td>
                                 </tr>
                             </tfoot>

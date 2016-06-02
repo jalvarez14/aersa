@@ -379,6 +379,31 @@ class VentaController extends AbstractActionController {
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \VentaQuery::create()->findPk($id);
             
+            if($request->isPost()){
+                
+                $post_data = $request->getPost();
+                
+                $post_data["venta_fechaventa"] = date_create_from_format('d/m/Y', $post_data["venta_fechaventa"]);
+
+                foreach ($post_data as $key => $value){
+                    if(\VentaPeer::getTableMap()->hasColumn($key)){
+                        $entity->setByName($key, $value,  \BasePeer::TYPE_FIELDNAME);
+                    }
+                }
+                
+                if($post_data['venta_revisada']){
+                    $entity->setIdauditor($session['idusuario']);
+                }
+
+                $entity->save();
+                
+                //REDIRECCIONAMOS AL LISTADO
+                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                return $this->redirect()->toUrl('/procesos/venta');
+                        
+                
+            }
+            
             //INTANCIAMOS NUESTRO FORMULARIO
             $form = new \Application\Proceso\Form\VentaForm();
             
