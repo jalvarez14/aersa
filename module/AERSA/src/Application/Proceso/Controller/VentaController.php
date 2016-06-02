@@ -285,7 +285,7 @@ class VentaController extends AbstractActionController {
             $producto_preciounitario = $producto_subtotal / $producto_cantidad;
             
             //VALIDAMOS SI EXISTE EL PRODUCTO
-            $exist = \ProductoQuery::create()->filterByProductoNombre($producto_nombe)->exists();
+            $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->exists();
             //SI EXISTE
             if($exist){
                 $producto = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->findOne();
