@@ -1159,6 +1159,36 @@ return array(
                                             ), 
                                         ), 
                                     ),   
+                                    'validateproductexist' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validateproductexist', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'validateproductexist',
+                                            ), 
+                                        ), 
+                                    ),
+                                    'renameproduct' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/renameproduct', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'renameproduct',
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'getreceta' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/getreceta', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                                'action' => 'getreceta',
+                                            ), 
+                                        ), 
+                                    ),
                                     'nuevoproducto' => array( 
                                         'type' => 'Segment', 
                                         'options' => array( 

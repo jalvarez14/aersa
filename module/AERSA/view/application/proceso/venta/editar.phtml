@@ -1,0 +1,145 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+    .fa-trash{
+        color:red;
+    }
+    .modal{
+        width: 800px;
+        left: 40%;
+    }
+</style>
+<link class="" rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:;">Procesos</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/venta">Ventas</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+            <a href="javascript:;"><?php echo '#'.$form->get('idventa')->getValue()?></a>
+        </li>
+        </ul>
+</div>
+<div id="form_container">
+    <form class="form-horizontal" action="/procesos/venta/editar/<?php echo $form->get('idventa')->getValue()?>" method="post" enctype="multipart/form-data">
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="page-title">Ventas - <?php echo '#'.$form->get('idventa')->getValue()?></h3><br><br>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formHidden($form->get('idventa')) ?> 
+                            <?php echo $this->formLabel($form->get('venta_fechaventa')) ?>  
+                            <?php echo $this->formText($form->get('venta_fechaventa')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('venta_folio')) ?>  
+                            <?php echo $this->formText($form->get('venta_folio')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('venta_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('venta_revisada')) ?> 
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label>Creado por</label>
+                            <input class="form-control" type="text" value="<?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();?>" readonly="readonly"> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Auditor</label>
+                            <?php  
+                                if($entity->getVentaRevisada()){
+                                    $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                }else{
+                                    $auditor = 'N/D';
+                                } 
+                            ?>
+                            <input class="form-control" type="text" value="<?php echo $auditor;?>" readonly="readonly"> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <h3 class="page-title">Productos</h3>
+                    <div class="row">
+                        <table class="table" id="productos_table">
+                            <thead>
+                                <th>Producto</th>
+                                <th>Almacén</th>
+                                <th>Cantidad</th>
+                                <th>Precio unitario</th>
+                                <th>Subtotal</th>
+                                <th>Revisada</th>
+                                <th>Opciones</th>
+                            </thead>
+                            <?php $detalle = new Ventadetalle()?>
+                            <tbody>
+                                <?php foreach ($detalles as $detalle) :?>
+                                <?php 
+                                    $precio_unitario = $detalle->getVentadetalleSubtotal() / $detalle->getVentadetalleCantidad();
+                                    $opciones = 'N/D';
+                                    if($detalle->getProducto()->getRecetasRelatedByIdproducto()->count() > 0){
+                                        $opciones = '<a href="javascript:;"><i class="fa fa-list"></i></a>';
+                                    }
+                                ?>
+                                <tr idproducto="<?php echo $detalle->getIdproducto()?>">
+                                    <td><?php echo $detalle->getProducto()->getProductoNombre()?></td>
+                                    <td><?php echo $detalle->getAlmacen()->getAlmacenNombre()?></td>
+                                    <td><?php echo $detalle->getVentadetalleCantidad()?></td>
+                                    <td><?php echo money_format('%(#1n',$precio_unitario)?></td>
+                                    <td><?php echo money_format('%(#1n',$detalle->getVentadetalleSubtotal())?></td>
+                                    <td>
+                                        <?php if($detalle->getVentadetalleRevisada()) :?>
+                                            <input checked type="checkbox" name=productos[<?php echo $detalle->getIdventadetalle()?>][revisada]>
+                                        <?php else :?>
+                                            <input type="checkbox" name=productos[<?php echo $detalle->getIdventadetalle()?>][revisada]>
+                                        <?php endif?>
+                                    </td>
+                                    <td><?php echo $opciones?></td>
+                                </tr>
+                                <?php endforeach;?>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td>TOTAL</td>
+                                    <input type="hidden" name="venta_total" value="<?php $entity->getVentaTotal()?>">
+                                    <td style="padding-left: 8px;" colspan="3" id="total"><?php echo money_format('%(#1n',$entity->getVentaTotal())?></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/venta.js"></script>
+<script>
+    var $form = $('#form_container').venta();
+    $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
+</script>

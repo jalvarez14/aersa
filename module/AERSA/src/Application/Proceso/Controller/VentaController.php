@@ -216,17 +216,58 @@ class VentaController extends AbstractActionController {
         
         $folio = $this->params()->fromQuery('folio');
         $edit = (!is_null($this->params()->fromQuery('edit'))) ?$this->params()->fromQuery('edit') : false;
-
+        
         if($edit){
+            
              $id = $this->params()->fromQuery('id');
              $entity = \VentaQuery::create()->findPk($id);
-            
-             $exist = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByVentaFolio($entity->getVentaFolio(),  \Criteria::NOT_EQUAL)->getVentaFolio($folio,  \Criteria::LIKE)->exists();
+             
+             $exist = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByVentaFolio($entity->getVentaFolio(),  \Criteria::NOT_EQUAL)->filterByVentaFolio($folio,  \Criteria::LIKE)->exists();
         }else{
             $exist = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByVentaFolio($folio,  \Criteria::EQUAL)->exists();
         }
         
         return $this->getResponse()->setContent(json_encode($exist));
+    }
+    
+    public function validateproductexistAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            
+            $post_data = $request->getPost();
+            
+            $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($post_data['product_name'],  \Criteria::LIKE)->exists();
+            
+            return $this->getResponse()->setContent(json_encode(array('response' => true, 'exist' => $exist)));
+
+                       
+        }
+        
+        
+        
+    }
+    
+    public function renameproductAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            $producto = \ProductoQuery::create()->findPk($post_data['idproduct']);
+            $producto->setProductoNombre($post_data['product_name']);
+            $producto->save();
+            
+            return $this->getResponse()->setContent(json_encode(array('response' => true)));
+        }
+        
     }
     
     public function validateproductAction(){
@@ -298,6 +339,79 @@ class VentaController extends AbstractActionController {
             }
             
         }
+        
+    }
+    
+    public function getrecetaAction(){
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            $receta = \RecetaQuery::create()->joinProductoRelatedByIdproductoreceta()->withColumn('producto_nombre')->filterByIdproducto($post_data['idproducto'])->find()->toArray();
+            
+            return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $receta)));
+        }
+    }
+
+
+    public function editarAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+
+        //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
+        $id = $this->params()->fromRoute('id');
+        
+        //VERIFICAMOS SI EXISTE
+        $exist = \VentaQuery::create()->filterByIdventa($id)->exists();
+        
+        if ($exist) {
+            
+             // OBTENEMOS EL MES Y EL ANIO ACTIVO DE LA SUCURSAL
+            $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+            $anio_activo = $sucursal->getSucursalAnioactivo();
+            $mes_activo = $sucursal->getSucursalMesactivo();
+            
+            //INTANCIAMOS NUESTRA ENTIDAD
+            $entity = \VentaQuery::create()->findPk($id);
+            
+            //INTANCIAMOS NUESTRO FORMULARIO
+            $form = new \Application\Proceso\Form\VentaForm();
+            
+            //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+            //CAMBIAMOS LOS VALORES DE FECHAS
+            $form->get('venta_fechaventa')->setValue($entity->getVentaFechaventa('d/m/Y'));
+            
+            //LE PONEMOS LA CLASE VALID AL FOLIO
+            $form->get('venta_folio')->setAttribute('class', 'form-control valid');
+            
+            //LOS DETALLES DE LA DEVOLUCION
+            $detalles = \VentadetalleQuery::create()->filterByIdventa($entity->getIdventa())->filterByIdpadre(NULL,  \Criteria::EQUAL)->find();
+            
+            $view_model = new ViewModel();
+            $view_model->setTemplate('/application/proceso/venta/editar');
+            $view_model->setVariables(array(
+                'messages' => $this->flashMessenger(),
+                'form' => $form,
+                'entity' => $entity,
+                'detalles' => $detalles,
+                'anio_activo' => $anio_activo,
+                'mes_activo' => $mes_activo,
+                'mes_ordentablajeria' => $entity->getVentaFechaventa('m'),
+                'anio_ordentablajeria' => $entity->getVentaFechaventa('Y'),
+            ));
+
+            return $view_model;
+            
+        }
+        
+ 
         
     }
     
