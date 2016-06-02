@@ -107,12 +107,14 @@ class VentaController extends AbstractActionController {
                     $tmp['receta'][] = $tmp2;
                 }
                 
-                return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $tmp)));
+              
                 
             }
             
             
-            echo '<pre>';var_dump($post_data);echo '</pre>';exit();
+            return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $tmp)));
+            
+           
         }
     }
     
