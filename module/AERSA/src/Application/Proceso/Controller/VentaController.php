@@ -278,7 +278,14 @@ class VentaController extends AbstractActionController {
                         }
                     }
                     return $this->getResponse()->setContent(json_encode(array('response' => true, 'create' => false, 'rename' => false, 'data' => $tmp)));
-                    
+                //SI EL PRODUCTO NO ES PLU    
+                }else{
+                    $tmp['idproducto'] = $producto->getIdproducto();
+                    $tmp['producto'] = $producto_nombe;
+                    $tmp['cantidad'] = $producto_cantidad;
+                    $tmp['precio_unitario'] = $producto_preciounitario;
+                    $tmp['subtotal'] = $producto_subtotal;
+                    return $this->getResponse()->setContent(json_encode(array('response' => true, 'create' => false, 'rename' => true, 'data' => $tmp)));
                 }
             //SI NO EXISTE EL PRODUCTO    
             }else{

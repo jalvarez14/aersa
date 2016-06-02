@@ -565,7 +565,29 @@
                                                         });
                                                         
                                                     }else if(data.rename){
-                                                        
+                                                        var tmpl = [
+                                                            '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                                                                '<div class="modal-header">',
+                                                                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
+                                                                    '<h4 class="modal-title">Renombrar producto</h4>',
+                                                                '</div>',
+                                                                '<div class="modal-body">',
+                                                                    '<div class="row">',
+                                                                        '<div class="col-md-12">',
+                                                                            '<div class="form-group">',
+                                                                                '<label for="producto_nombre">Nombre del producto *</label>',
+                                                                                '<input required class="form-control" type="text" name="producto_nombre" value="'+data.data.producto+'">',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                    '</div>',
+                                                                '</div>',
+                                                                '<div class="modal-footer">',
+                                                                    '<a id="save_product" href="#" class="btn blue">Guardar</a>',
+                                                                '</div>',
+                                                            '</div>',  
+                                                        ].join('');
+                                                        var $modal = $(tmpl);
+                                                        $modal.modal();
                                                     }else{
                                                         
                                                         var revisado = ($('select[name=venta_revisada] option:selected').val() != "") ? $('select[name=venta_revisada] option:selected').val():0;
