@@ -25,7 +25,7 @@ class IngresosController extends AbstractActionController {
         $anio_activo = $sucursal->getSucursalAnioactivo();
         $mes_activo = $sucursal->getSucursalMesactivo();
         
-        $collection = \IngresoQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+        $collection = \IngresoQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIngresoFechacreacion(\Criteria::DESC)->find();
         
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/ingresos/index');

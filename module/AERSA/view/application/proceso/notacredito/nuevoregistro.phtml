@@ -6,6 +6,9 @@
     #productos_table .fa-trash{
         color:red;
     }
+    #productos_table input{
+        width: 80px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div id="form_container">
@@ -106,6 +109,7 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="table-responsive">
                         <table class="table" id="productos_table">
                             <thead>
                                 <th>Producto</th>
@@ -166,6 +170,7 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" id="ivaValor" value="<?php echo $iva->getTasaivavalor() ?>">

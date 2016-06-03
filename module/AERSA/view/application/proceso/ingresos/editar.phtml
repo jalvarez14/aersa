@@ -19,48 +19,18 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/ingresos/nuevo">Registro</a>
+                <a href="javascript:;"><?php echo '#'.$form->get('idingreso')->getValue()?></a>
             </li>
         </ul>
 </div>
 <div id="form_container">
     <form class="form-horizontal" action="/procesos/ingresos/editar/<?php echo $entity->getIdingreso()?>" method="post" enctype="multipart/form-data">
+  
+        
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                 <h3 class="page-title">Ingresos - <?php echo '#'.$form->get('idingreso')->getValue()?></h3><br><br>
-                 <div class="row">
-                    <div class="col-md-6">
-                         <div class="form-group">
-                             <label class="control-label col-md-3">Creado por:</label>
-                             <div class="col-md-9">
-                                 <p class="form-control-static"><?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre()?></p>
-                             </div>
-                         </div>
-                    </div>
-                     <div class="col-md-6">
-                         <div class="form-group">
-                             <label class="control-label col-md-3">Auditor:</label>
-                             <div class="col-md-9">
-                                 <?php 
-                                   
-                                    if($entity->getIngresoRevisada()){
-                                        $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
-                                    }else{
-                                        $auditor = 'N/D';
-                                    } 
-                                ?>
-                                 <p class="form-control-static"><?php echo $auditor?></p>
-                             </div>
-                         </div>
-                    </div>
-                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
-        <div class="portlet-body form">
-            <div class="form-body">
+                <h3 class="page-title">Ingresos - <?php echo '#'.$form->get('idingreso')->getValue()?></h3>
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-6">
@@ -84,6 +54,25 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label>Creado por</label>
+                            <input class="form-control" type="text" value="<?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();?>" readonly="readonly"> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Auditor</label>
+                            <?php  
+                                if($entity->getIngresoRevisada()){
+                                    $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                }else{
+                                    $auditor = 'N/D';
+                                } 
+                            ?>
+                            <input class="form-control" type="text" value="<?php echo $auditor;?>" readonly="readonly"> 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -93,7 +82,8 @@
         <div class="portlet-body form">
             <div class="form-body">
                 <h3 class="page-title"><?php echo $rubro->getRubroingresoNombre()?></h3><br><br>
-                <table class="table" id="<?php echo strtolower($rubro->getRubroingresoNombre())?>">
+          
+                    <table class="table" id="<?php echo strtolower($rubro->getRubroingresoNombre())?>">
                     <thead>
                         <th>Conceptos</th>
                         <th>Subtotal</th>
@@ -120,6 +110,7 @@
                         <?php endforeach;?>
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>

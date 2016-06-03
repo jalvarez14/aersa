@@ -7,6 +7,9 @@
         background: #EEF1F5;
         
     }
+    #productos_table input{
+        width: 80px;
+    }
 </style>
 <div id="form_container">
 <h3 class="page-title">Registro orden de tablajeria</h3>
@@ -103,7 +106,7 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                <h3 class="form-section">Tablajeando</h3>
+                <h3 class="form-section">Tablajeado</h3>
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-6">
@@ -145,7 +148,8 @@
                 <h3 class="form-section">Productos</h3>
                 <div class="row">
                     <div class="form-group">
-                        <div class="col-md-5 col-md-offset-6">
+                        
+                        <div class="col-md-4 col-md-offset-6">
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="fa fa-search"></i>
@@ -161,7 +165,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <table class="table" id="productos_table">
+                    <div class="table-responsive">
+                        <table class="table" id="productos_table">
                         <thead>
                             <th>Producto</th>
                             <th>Cantidad</th>
@@ -185,6 +190,7 @@
                             </tr> 
                         </tfoot>
                     </table>
+                    </div>
                 </div>
                 
             </div>

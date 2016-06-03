@@ -270,6 +270,10 @@ class TablajeriaController extends AbstractActionController {
             $form->get('idproducto_autocomplete')->setValue($entity->getProducto()->getProductoNombre());
             $form->get('producto_unidadmedida')->setValue(strtolower($entity->getProducto()->getUnidadmedida()->getUnidadmedidaNombre()));
             
+            if($entity->getProducto()->getUnidadmedida()->getUnidadmedidaNombre() == 'Porcion'){
+                $form->get('ordentablajeria_pesobruto')->setLabel('Porciones');
+            }
+            
             //LE PONEMOS LA CLASE VALID AL FOLIO
             $form->get('ordentablajeria_folio')->setAttribute('class', 'form-control valid');
 

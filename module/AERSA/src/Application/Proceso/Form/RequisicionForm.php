@@ -26,6 +26,14 @@ class RequisicionForm extends Form {
         ));
         
         $this->add(array(
+           'name' => 'requisicion_fechacreacion',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => true,
+            ),
+        ));
+        
+        $this->add(array(
             'name' => 'sucursal_nombre',
             'type' => 'Text',
             'attributes' => array(

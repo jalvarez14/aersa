@@ -6,6 +6,9 @@
     #productos_table .fa-trash{
         color:red;
     }
+    #productos_table input{
+        width: 80px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div class="page-bar">
@@ -15,7 +18,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/credito">Nota de crédito</a>
+                <a href="/procesos/credito">Notas de crédito</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -28,7 +31,7 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                 <h3 class="page-title">Notacredito - <?php echo '#'.$form->get('idnotacredito')->getValue()?></h3>
+                
                  <div class="row">
                     <div class="col-md-6">
                          <div class="form-group">
@@ -61,6 +64,7 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
+                 <h3 class="page-title">Notacredito - <?php echo '#'.$form->get('idnotacredito')->getValue()?></h3>
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-6">
@@ -105,6 +109,25 @@
                         </div>
                     </div>
                 </div>
+                 <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label>Creado por</label>
+                            <input class="form-control" type="text" value="<?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();?>" readonly="readonly"> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Auditor</label>
+                            <?php  
+                                if($entity->getNotacreditoRevisada()){
+                                    $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                }else{
+                                    $auditor = 'N/D';
+                                } 
+                            ?>
+                            <input class="form-control" type="text" value="<?php echo $auditor;?>" readonly="readonly"> 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -131,6 +154,7 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="table-responsive">
                         <table class="table" id="productos_table">
                             <thead>
                                 <th>Producto</th>
@@ -226,6 +250,7 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
                 

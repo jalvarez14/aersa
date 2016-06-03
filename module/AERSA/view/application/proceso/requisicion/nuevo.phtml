@@ -6,6 +6,9 @@
     #productos_table .fa-trash{
         color:red;
     }
+    #productos_table_tbody input{
+        width: 80px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div id="form_container">
@@ -16,7 +19,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/requisicion">Requisicion</a>
+                <a href="/procesos/requisicion">Requisición</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -47,7 +50,6 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                <h3 class="page-title">Requisición - Registro</h3>
                 <h3 class="form-section">Información general</h3>
                 <div class="row">
                     <?php echo $this->formHidden($form->get('idempresa')); ?>
@@ -104,7 +106,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table" id="productos_table">
+                        <div class="table-responsive">
+                            <table class="table" id="productos_table">
                             <thead>
                             <th>Producto</th>
                             <th>Cantidad</th>
@@ -118,13 +121,14 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="8"></td>
+                                    <td colspan="4"></td>
                                     <td>TOTAL</td>
                                     <input type="hidden" name="requisicion_total">
                                     <td id="total">$0.00</td>
                                 </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
                 <br>

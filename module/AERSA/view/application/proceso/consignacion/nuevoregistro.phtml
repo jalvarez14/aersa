@@ -6,6 +6,9 @@
     #productos_table .fa-trash{
         color:red;
     }
+    #productos_table input{
+        width: 80px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div class="page-bar">
@@ -15,7 +18,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/consignacion">Consignación</a>
+                <a href="/procesos/consignacion">Consignaciones</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -92,7 +95,7 @@
                     <h3 class="page-title">Productos</h3><br><br>
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-5 col-md-offset-6">
+                            <div class="col-md-4 col-md-offset-6">
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="fa fa-search"></i>
@@ -108,7 +111,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <table class="table" id="productos_table">
+                        <div class="table-responsive">
+                            <table class="table" id="productos_table">
                             <thead>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
@@ -168,6 +172,7 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions right">

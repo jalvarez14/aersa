@@ -584,13 +584,17 @@
            });
            
            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
-            var now = new Date();
-            if(mes_notacredito != mes || anio_notacredito != anio){
+            var now = $('input[name=notacredito_fechanotacredito]').val();
+            var now_array = now.split('/');
+            var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
+            
+            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
+            
             $("#productos_table tbody tr").each(function()
             {
                 var tr = $(this);

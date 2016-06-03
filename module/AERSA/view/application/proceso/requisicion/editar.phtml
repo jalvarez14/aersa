@@ -6,6 +6,9 @@
     #productos_table .fa-trash{
         color:red;
     }
+    #productos_table_tbody input{
+        width: 80px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div id="form_container">
@@ -16,7 +19,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/requisicion">Requisicion</a>
+                <a href="/procesos/requisicion">Requisición</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -24,7 +27,6 @@
             </li>
         </ul>
     </div>
-    <h3 class="page-title">Requisición - <?php echo '#'.$form->get('idrequisicion')->getValue()?></h3>
     <?php
     $form->setAttribute('action', '/procesos/requisicion/editar/'.$form->get('idrequisicion')->getValue());
     echo $this->form()->openTag($form);
@@ -90,6 +92,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="table-responsive">
                         <table class="table" id="productos_table">
                             <thead>
                             <th>Producto</th>
@@ -138,7 +141,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="8"></td>
+                                    <td colspan="4"></td>
                                     <td>TOTAL</td>
                                     <?php echo $this->formHidden($form->get('requisicion_total')) ?> 
                                     <td id="total"><?php echo '$'.money_format('%(#10n',$entity->getRequisicionTotal())?></td>
