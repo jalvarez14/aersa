@@ -56,7 +56,7 @@ class CompraController extends AbstractActionController {
             
              $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::LIKE)->exists();
         }else{
-            $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($folio,  \Criteria::EQUAL)->exists();
+            $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::EQUAL)->exists();
         }
         
         return $this->getResponse()->setContent(json_encode($exist));
