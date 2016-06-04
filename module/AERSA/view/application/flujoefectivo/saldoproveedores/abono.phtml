@@ -1,0 +1,104 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div id="form_container">
+    <h3 class="page-title">Abono <?php echo $proveedor; ?> </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/flujoefectivo/saldoproveedores/movimientos/<?php echo $id; ?>/abono">Abono <?php echo $proveedor; ?></a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+        </ul>
+    </div>
+    <?php foreach ($messages->getSuccessMessages() as $message): ?>
+        <div class="alert alert-success alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Exito!</strong>
+            <?php echo $message ?>
+        </div>
+    <?php endforeach; ?>
+
+    <?php foreach ($messages->getErrorMessages() as $message): ?>
+        <div class="alert alert-danger alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Error!</strong>
+            <?php echo $message ?>
+        </div>
+    <?php endforeach; ?>
+    <?php
+    $form->setAttribute('action', '/flujoefectivo/saldoproveedores/movimientos/'.$id.'/abono');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="form-section">Información general</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('abonoproveedordetalle_fechaabono')); ?>  
+                        <?php echo $this->formText($form->get('abonoproveedordetalle_fechaabono')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('idcuentabancaria')) ?>  
+                        <?php echo $this->formSelect($form->get('idcuentabancaria')) ?> 
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('abonoproveedordetalle_cantidad')); ?>  
+                        <?php echo $this->formText($form->get('abonoproveedordetalle_cantidad')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('abonoproveedordetalle_mediodepago')) ?>  
+                        <?php echo $this->formSelect($form->get('abonoproveedordetalle_mediodepago')) ?> 
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('abonoproveedordetalle_referencia')); ?>  
+                        <?php echo $this->formText($form->get('abonoproveedordetalle_referencia')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('abonoproveedordetalle_comprobante')); ?>  
+                        <?php echo $this->formText($form->get('abonoproveedordetalle_comprobante')); ?>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div id="cheque_select" style="display: none">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('abonoproveedordetalle_chequecirculacion')) ?>  
+                            <?php echo $this->formSelect($form->get('abonoproveedordetalle_chequecirculacion')) ?> 
+                        </div>
+                    </div>
+                    <div id="chequefecha_select" style="display: none">
+                            
+                        
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('abonoproveedordetalle_fechacobrocheque')); ?>  
+                            <?php echo $this->formText($form->get('abonoproveedordetalle_fechacobrocheque')); ?>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions right">
+                <button class="btn blue" id="plantilla_save" type="submit">
+                    <i class="fa fa-check"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/application/custom/js/flujoefectivo/saldoproveedores.js"></script>
+<script>
+    var $plugin = $('#form_container').saldoproveedores();
+    $plugin.abono();
+</script>

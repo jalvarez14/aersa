@@ -766,7 +766,9 @@
            });
            
            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
-            var now = new Date($('input[name=requisicion_fechacreacion]').val());
+            var now = $('input[name=requisicion_fecha]').val();
+            var now_array = now.split('/');
+            var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
             if((now.getMonth()+1) != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();

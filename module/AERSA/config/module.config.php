@@ -1339,6 +1339,61 @@ return array(
                                     ),
                                 ),
                             ),
+                            'saldoproveedores' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/saldoproveedores', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                        'action' => 'index', 
+                                    ), 
+                                ),
+                                'may_terminate' => true, 
+                                'child_routes' => array(
+                                    'movimientos' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/movimientos[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                                'action' => 'movimientos',
+                                            ), 
+                                        ),
+                                        'may_terminate' => true, 
+                                        'child_routes' => array(
+                                            'abono' => array(
+                                                'type' => 'Literal', 'options' => array(
+                                                    'route' => '/abono', 
+                                                    'defaults' => array( 
+                                                        'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                                        'action' => 'abono', 
+                                                    ), 
+                                                ), 
+                                            ), 
+                                            'editar' => array( 
+                                            'type' => 'Segment', 
+                                            'options' => array( 
+                                                'route' => '/editar[/:idch]', 
+                                                 'defaults' => array( 
+                                                     'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
+                                                     'action' => 'editar', 
+                                                     ), 
+                                                ), 
+                                            ), 
+                                        ),
+                                    ),
+                                    'saldo' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/saldo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                                'action' => 'saldo',
+                                            ), 
+                                        ), 
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -1422,7 +1477,7 @@ return array(
              */
             
             'Application\Flujoefectivo\Controller\Cuentabancaria' => 'Application\Flujoefectivo\Controller\CuentabancariaController',
-
+            'Application\Flujoefectivo\Controller\Saldoproveedores' => 'Application\Flujoefectivo\Controller\SaldoproveedoresController',
             /*
              * WEBSITE
              */

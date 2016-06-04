@@ -73,6 +73,33 @@
                         <?php echo $this->formSelect($form->get('requisicion_revisada')) ?> 
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label>Creado por</label>
+                            <input class="form-control" type="text" value="<?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();?>" readonly="readonly"> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Auditor</label>
+                            <?php  
+                                if($entity->getRequisicionRevisada()){
+                                    $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                }else{
+                                    $auditor = 'N/D';
+                                } 
+                            ?>
+                            <input class="form-control" type="text" value="<?php echo $auditor;?>" readonly="readonly"> 
+                        </div>
+                    </div>
+                </div>
+                
+            
+        </div>
+    </div>
+</div>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
                 <h3 class="form-section">Productos *</h3><br><br>
                 <div class="row">
                     <div class="form-group">
@@ -157,6 +184,7 @@
                     </div>
                 </div>
             </div>
+            </div>
             <div class="form-actions right">
                 <button class="btn blue" id="requisicion_save" type="submit">
                     <i class="fa fa-check"></i>
@@ -165,7 +193,6 @@
             </div>
         </div>
     </div>
-</div>
 <script type="text/javascript" src="/application/custom/js/procesos/requisicion.js"></script>
 <script>
     var $form = $('#form_container').requisicion();

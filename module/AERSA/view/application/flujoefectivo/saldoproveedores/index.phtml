@@ -1,0 +1,67 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">Saldo proveedores</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/flujoefectivo/saldoproveedores">Saldo proveedores</a>
+            </li>
+        </ul>
+    </div>
+    <?php foreach ($messages->getSuccessMessages() as $message):?>
+        <div class="alert alert-success alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Éxito!</strong>
+            <?php echo $message?>
+        </div>
+    <?php endforeach;?>
+    <div class="portlet box " style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <table class="table table-striped table-bordered table-hover order-column" id="datatable"  style="border-bottom-width: 0px;">
+                    <thead>
+                        <tr>
+                            <th class="text-center"> Proveedor </th>
+                            <th class="text-center"> Saldo </th>
+                            <th class="text-center"> Opciones </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        <?php $entity = new Abonoproveedor();foreach ($collection as $entity) : ?>
+                        <tr id="<?php echo $entity->getIdabonoproveedor()?>">
+                            <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
+                            <td><?php echo $entity->getAbonoproveedorBalance() ?></td>
+                                <td>
+                                    <div class="btn-group">
+                                        
+                                    </div>
+                                    <div class="btn-group">
+                                        <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                            <i class="fa fa-angle-down"></i>
+                                        </button>   
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="/flujoefectivo/saldoproveedores/movimientos/<?php echo $entity->getIdabonoproveedor()?>">
+                                                <i class="fa fa-pencil"></i> Movimientos </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>                            
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="/application/custom/js/flujoefectivo/saldoproveedores.js" type="text/javascript"></script>	
+<script>
+    var $plugin = $('#my_container').saldoproveedores();
+    $plugin.list();
+</script>
