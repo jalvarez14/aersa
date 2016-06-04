@@ -50,6 +50,9 @@ class IngresoTableMap extends TableMap
         $this->addColumn('ingreso_totalmiscelanea', 'IngresoTotalmiscelanea', 'DECIMAL', true, 15, null);
         $this->addColumn('ingreso_fecha', 'IngresoFecha', 'TIMESTAMP', true, null, null);
         $this->addColumn('ingreso_fechacreacion', 'IngresoFechacreacion', 'TIMESTAMP', true, null, null);
+        $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
         // validators
     } // initialize()
 
@@ -64,6 +67,7 @@ class IngresoTableMap extends TableMap
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idingreso' => 'idingreso', ), null, null, 'Flujoefectivos');
         $this->addRelation('Ingresodetalle', 'Ingresodetalle', RelationMap::ONE_TO_MANY, array('idingreso' => 'idingreso', ), 'CASCADE', 'CASCADE', 'Ingresodetalles');
+        $this->addRelation('Ingresonota', 'Ingresonota', RelationMap::ONE_TO_MANY, array('idingreso' => 'idingreso', ), 'CASCADE', 'CASCADE', 'Ingresonotas');
     } // buildRelations()
 
 } // IngresoTableMap

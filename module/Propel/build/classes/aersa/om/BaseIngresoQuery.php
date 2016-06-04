@@ -18,6 +18,9 @@
  * @method IngresoQuery orderByIngresoTotalmiscelanea($order = Criteria::ASC) Order by the ingreso_totalmiscelanea column
  * @method IngresoQuery orderByIngresoFecha($order = Criteria::ASC) Order by the ingreso_fecha column
  * @method IngresoQuery orderByIngresoFechacreacion($order = Criteria::ASC) Order by the ingreso_fechacreacion column
+ * @method IngresoQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
+ * @method IngresoQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
+ * @method IngresoQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  *
  * @method IngresoQuery groupByIdingreso() Group by the idingreso column
  * @method IngresoQuery groupByIdempresa() Group by the idempresa column
@@ -31,6 +34,9 @@
  * @method IngresoQuery groupByIngresoTotalmiscelanea() Group by the ingreso_totalmiscelanea column
  * @method IngresoQuery groupByIngresoFecha() Group by the ingreso_fecha column
  * @method IngresoQuery groupByIngresoFechacreacion() Group by the ingreso_fechacreacion column
+ * @method IngresoQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
+ * @method IngresoQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
+ * @method IngresoQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  *
  * @method IngresoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method IngresoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -60,6 +66,10 @@
  * @method IngresoQuery rightJoinIngresodetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ingresodetalle relation
  * @method IngresoQuery innerJoinIngresodetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Ingresodetalle relation
  *
+ * @method IngresoQuery leftJoinIngresonota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ingresonota relation
+ * @method IngresoQuery rightJoinIngresonota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ingresonota relation
+ * @method IngresoQuery innerJoinIngresonota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ingresonota relation
+ *
  * @method Ingreso findOne(PropelPDO $con = null) Return the first Ingreso matching the query
  * @method Ingreso findOneOrCreate(PropelPDO $con = null) Return the first Ingreso matching the query, or a new Ingreso object populated from the query conditions when no match is found
  *
@@ -74,6 +84,9 @@
  * @method Ingreso findOneByIngresoTotalmiscelanea(string $ingreso_totalmiscelanea) Return the first Ingreso filtered by the ingreso_totalmiscelanea column
  * @method Ingreso findOneByIngresoFecha(string $ingreso_fecha) Return the first Ingreso filtered by the ingreso_fecha column
  * @method Ingreso findOneByIngresoFechacreacion(string $ingreso_fechacreacion) Return the first Ingreso filtered by the ingreso_fechacreacion column
+ * @method Ingreso findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Ingreso filtered by the notaauditorempresa column
+ * @method Ingreso findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Ingreso filtered by the notaalmacenistaempresa column
+ * @method Ingreso findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Ingreso filtered by the notaauditoraersa column
  *
  * @method array findByIdingreso(int $idingreso) Return Ingreso objects filtered by the idingreso column
  * @method array findByIdempresa(int $idempresa) Return Ingreso objects filtered by the idempresa column
@@ -87,6 +100,9 @@
  * @method array findByIngresoTotalmiscelanea(string $ingreso_totalmiscelanea) Return Ingreso objects filtered by the ingreso_totalmiscelanea column
  * @method array findByIngresoFecha(string $ingreso_fecha) Return Ingreso objects filtered by the ingreso_fecha column
  * @method array findByIngresoFechacreacion(string $ingreso_fechacreacion) Return Ingreso objects filtered by the ingreso_fechacreacion column
+ * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Ingreso objects filtered by the notaauditorempresa column
+ * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Ingreso objects filtered by the notaalmacenistaempresa column
+ * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Ingreso objects filtered by the notaauditoraersa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -194,7 +210,7 @@ abstract class BaseIngresoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idingreso`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `ingreso_folio`, `ingreso_revisada`, `ingreso_totalalimento`, `ingreso_totalbebida`, `ingreso_totalmiscelanea`, `ingreso_fecha`, `ingreso_fechacreacion` FROM `ingreso` WHERE `idingreso` = :p0';
+        $sql = 'SELECT `idingreso`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `ingreso_folio`, `ingreso_revisada`, `ingreso_totalalimento`, `ingreso_totalbebida`, `ingreso_totalmiscelanea`, `ingreso_fecha`, `ingreso_fechacreacion`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `ingreso` WHERE `idingreso` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -770,6 +786,87 @@ abstract class BaseIngresoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the notaauditorempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditorempresa(true); // WHERE notaauditorempresa = true
+     * $query->filterByNotaauditorempresa('yes'); // WHERE notaauditorempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditorempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return IngresoQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditorempresa($notaauditorempresa = null, $comparison = null)
+    {
+        if (is_string($notaauditorempresa)) {
+            $notaauditorempresa = in_array(strtolower($notaauditorempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(IngresoPeer::NOTAAUDITOREMPRESA, $notaauditorempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaalmacenistaempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaalmacenistaempresa(true); // WHERE notaalmacenistaempresa = true
+     * $query->filterByNotaalmacenistaempresa('yes'); // WHERE notaalmacenistaempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaalmacenistaempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return IngresoQuery The current query, for fluid interface
+     */
+    public function filterByNotaalmacenistaempresa($notaalmacenistaempresa = null, $comparison = null)
+    {
+        if (is_string($notaalmacenistaempresa)) {
+            $notaalmacenistaempresa = in_array(strtolower($notaalmacenistaempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(IngresoPeer::NOTAALMACENISTAEMPRESA, $notaalmacenistaempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditoraersa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditoraersa(true); // WHERE notaauditoraersa = true
+     * $query->filterByNotaauditoraersa('yes'); // WHERE notaauditoraersa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditoraersa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return IngresoQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditoraersa($notaauditoraersa = null, $comparison = null)
+    {
+        if (is_string($notaauditoraersa)) {
+            $notaauditoraersa = in_array(strtolower($notaauditoraersa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(IngresoPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
+    }
+
+    /**
      * Filter the query by a related Usuario object
      *
      * @param   Usuario|PropelObjectCollection $usuario The related object(s) to use as filter
@@ -1219,6 +1316,80 @@ abstract class BaseIngresoQuery extends ModelCriteria
         return $this
             ->joinIngresodetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ingresodetalle', 'IngresodetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Ingresonota object
+     *
+     * @param   Ingresonota|PropelObjectCollection $ingresonota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 IngresoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByIngresonota($ingresonota, $comparison = null)
+    {
+        if ($ingresonota instanceof Ingresonota) {
+            return $this
+                ->addUsingAlias(IngresoPeer::IDINGRESO, $ingresonota->getIdingreso(), $comparison);
+        } elseif ($ingresonota instanceof PropelObjectCollection) {
+            return $this
+                ->useIngresonotaQuery()
+                ->filterByPrimaryKeys($ingresonota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByIngresonota() only accepts arguments of type Ingresonota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ingresonota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return IngresoQuery The current query, for fluid interface
+     */
+    public function joinIngresonota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ingresonota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ingresonota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ingresonota relation Ingresonota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   IngresonotaQuery A secondary query class using the current class as primary query
+     */
+    public function useIngresonotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinIngresonota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ingresonota', 'IngresonotaQuery');
     }
 
     /**

@@ -48,6 +48,9 @@ class VentaTableMap extends TableMap
         $this->addColumn('venta_fechacreacion', 'VentaFechacreacion', 'TIMESTAMP', true, null, null);
         $this->addColumn('venta_total', 'VentaTotal', 'DECIMAL', true, 15, null);
         $this->addColumn('venta_folio', 'VentaFolio', 'VARCHAR', true, 10, null);
+        $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
         // validators
     } // initialize()
 
@@ -61,6 +64,7 @@ class VentaTableMap extends TableMap
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Ventadetalle', 'Ventadetalle', RelationMap::ONE_TO_MANY, array('idventa' => 'idventa', ), 'CASCADE', 'CASCADE', 'Ventadetalles');
+        $this->addRelation('Ventanota', 'Ventanota', RelationMap::ONE_TO_MANY, array('idventa' => 'idventa', ), 'CASCADE', 'CASCADE', 'Ventanotas');
     } // buildRelations()
 
 } // VentaTableMap

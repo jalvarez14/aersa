@@ -137,6 +137,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     protected $collIngresosRelatedByIdusuarioPartial;
 
     /**
+     * @var        PropelObjectCollection|Ingresonota[] Collection to store aggregation of Ingresonota objects.
+     */
+    protected $collIngresonotas;
+    protected $collIngresonotasPartial;
+
+    /**
      * @var        PropelObjectCollection|Inventariomes[] Collection to store aggregation of Inventariomes objects.
      */
     protected $collInventariomessRelatedByIdauditor;
@@ -233,6 +239,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     protected $collVentasRelatedByIdusuarioPartial;
 
     /**
+     * @var        PropelObjectCollection|Ventanota[] Collection to store aggregation of Ventanota objects.
+     */
+    protected $collVentanotas;
+    protected $collVentanotasPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -317,6 +329,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $ingresosRelatedByIdusuarioScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ingresonotasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -413,6 +431,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $ventasRelatedByIdusuarioScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ventanotasScheduledForDeletion = null;
 
     /**
      * Get the [idusuario] column value.
@@ -753,6 +777,8 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
             $this->collIngresosRelatedByIdusuario = null;
 
+            $this->collIngresonotas = null;
+
             $this->collInventariomessRelatedByIdauditor = null;
 
             $this->collInventariomessRelatedByIdusuario = null;
@@ -784,6 +810,8 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             $this->collVentasRelatedByIdauditor = null;
 
             $this->collVentasRelatedByIdusuario = null;
+
+            $this->collVentanotas = null;
 
         } // if (deep)
     }
@@ -1108,6 +1136,23 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->ingresonotasScheduledForDeletion !== null) {
+                if (!$this->ingresonotasScheduledForDeletion->isEmpty()) {
+                    IngresonotaQuery::create()
+                        ->filterByPrimaryKeys($this->ingresonotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ingresonotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collIngresonotas !== null) {
+                foreach ($this->collIngresonotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->inventariomessRelatedByIdauditorScheduledForDeletion !== null) {
                 if (!$this->inventariomessRelatedByIdauditorScheduledForDeletion->isEmpty()) {
                     InventariomesQuery::create()
@@ -1374,6 +1419,23 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
             if ($this->collVentasRelatedByIdusuario !== null) {
                 foreach ($this->collVentasRelatedByIdusuario as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ventanotasScheduledForDeletion !== null) {
+                if (!$this->ventanotasScheduledForDeletion->isEmpty()) {
+                    VentanotaQuery::create()
+                        ->filterByPrimaryKeys($this->ventanotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ventanotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collVentanotas !== null) {
+                foreach ($this->collVentanotas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1652,6 +1714,14 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collIngresonotas !== null) {
+                    foreach ($this->collIngresonotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collInventariomessRelatedByIdauditor !== null) {
                     foreach ($this->collInventariomessRelatedByIdauditor as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1774,6 +1844,14 @@ abstract class BaseUsuario extends BaseObject implements Persistent
 
                 if ($this->collVentasRelatedByIdusuario !== null) {
                     foreach ($this->collVentasRelatedByIdusuario as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collVentanotas !== null) {
+                    foreach ($this->collVentanotas as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1911,6 +1989,9 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             if (null !== $this->collIngresosRelatedByIdusuario) {
                 $result['IngresosRelatedByIdusuario'] = $this->collIngresosRelatedByIdusuario->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collIngresonotas) {
+                $result['Ingresonotas'] = $this->collIngresonotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collInventariomessRelatedByIdauditor) {
                 $result['InventariomessRelatedByIdauditor'] = $this->collInventariomessRelatedByIdauditor->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -1958,6 +2039,9 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             }
             if (null !== $this->collVentasRelatedByIdusuario) {
                 $result['VentasRelatedByIdusuario'] = $this->collVentasRelatedByIdusuario->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collVentanotas) {
+                $result['Ventanotas'] = $this->collVentanotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -2200,6 +2284,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getIngresonotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addIngresonota($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getInventariomessRelatedByIdauditor() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addInventariomesRelatedByIdauditor($relObj->copy($deepCopy));
@@ -2293,6 +2383,12 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             foreach ($this->getVentasRelatedByIdusuario() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addVentaRelatedByIdusuario($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getVentanotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addVentanota($relObj->copy($deepCopy));
                 }
             }
 
@@ -2442,6 +2538,9 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         if ('IngresoRelatedByIdusuario' == $relationName) {
             $this->initIngresosRelatedByIdusuario();
         }
+        if ('Ingresonota' == $relationName) {
+            $this->initIngresonotas();
+        }
         if ('InventariomesRelatedByIdauditor' == $relationName) {
             $this->initInventariomessRelatedByIdauditor();
         }
@@ -2489,6 +2588,9 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         }
         if ('VentaRelatedByIdusuario' == $relationName) {
             $this->initVentasRelatedByIdusuario();
+        }
+        if ('Ventanota' == $relationName) {
+            $this->initVentanotas();
         }
     }
 
@@ -5790,6 +5892,256 @@ abstract class BaseUsuario extends BaseObject implements Persistent
         $query->joinWith('Sucursal', $join_behavior);
 
         return $this->getIngresosRelatedByIdusuario($query, $con);
+    }
+
+    /**
+     * Clears out the collIngresonotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addIngresonotas()
+     */
+    public function clearIngresonotas()
+    {
+        $this->collIngresonotas = null; // important to set this to null since that means it is uninitialized
+        $this->collIngresonotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collIngresonotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialIngresonotas($v = true)
+    {
+        $this->collIngresonotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collIngresonotas collection.
+     *
+     * By default this just sets the collIngresonotas collection to an empty array (like clearcollIngresonotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initIngresonotas($overrideExisting = true)
+    {
+        if (null !== $this->collIngresonotas && !$overrideExisting) {
+            return;
+        }
+        $this->collIngresonotas = new PropelObjectCollection();
+        $this->collIngresonotas->setModel('Ingresonota');
+    }
+
+    /**
+     * Gets an array of Ingresonota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ingresonota[] List of Ingresonota objects
+     * @throws PropelException
+     */
+    public function getIngresonotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresonotasPartial && !$this->isNew();
+        if (null === $this->collIngresonotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collIngresonotas) {
+                // return empty collection
+                $this->initIngresonotas();
+            } else {
+                $collIngresonotas = IngresonotaQuery::create(null, $criteria)
+                    ->filterByUsuario($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collIngresonotasPartial && count($collIngresonotas)) {
+                      $this->initIngresonotas(false);
+
+                      foreach ($collIngresonotas as $obj) {
+                        if (false == $this->collIngresonotas->contains($obj)) {
+                          $this->collIngresonotas->append($obj);
+                        }
+                      }
+
+                      $this->collIngresonotasPartial = true;
+                    }
+
+                    $collIngresonotas->getInternalIterator()->rewind();
+
+                    return $collIngresonotas;
+                }
+
+                if ($partial && $this->collIngresonotas) {
+                    foreach ($this->collIngresonotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collIngresonotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collIngresonotas = $collIngresonotas;
+                $this->collIngresonotasPartial = false;
+            }
+        }
+
+        return $this->collIngresonotas;
+    }
+
+    /**
+     * Sets a collection of Ingresonota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ingresonotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setIngresonotas(PropelCollection $ingresonotas, PropelPDO $con = null)
+    {
+        $ingresonotasToDelete = $this->getIngresonotas(new Criteria(), $con)->diff($ingresonotas);
+
+
+        $this->ingresonotasScheduledForDeletion = $ingresonotasToDelete;
+
+        foreach ($ingresonotasToDelete as $ingresonotaRemoved) {
+            $ingresonotaRemoved->setUsuario(null);
+        }
+
+        $this->collIngresonotas = null;
+        foreach ($ingresonotas as $ingresonota) {
+            $this->addIngresonota($ingresonota);
+        }
+
+        $this->collIngresonotas = $ingresonotas;
+        $this->collIngresonotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ingresonota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ingresonota objects.
+     * @throws PropelException
+     */
+    public function countIngresonotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresonotasPartial && !$this->isNew();
+        if (null === $this->collIngresonotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collIngresonotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getIngresonotas());
+            }
+            $query = IngresonotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuario($this)
+                ->count($con);
+        }
+
+        return count($this->collIngresonotas);
+    }
+
+    /**
+     * Method called to associate a Ingresonota object to this object
+     * through the Ingresonota foreign key attribute.
+     *
+     * @param    Ingresonota $l Ingresonota
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addIngresonota(Ingresonota $l)
+    {
+        if ($this->collIngresonotas === null) {
+            $this->initIngresonotas();
+            $this->collIngresonotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collIngresonotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddIngresonota($l);
+
+            if ($this->ingresonotasScheduledForDeletion and $this->ingresonotasScheduledForDeletion->contains($l)) {
+                $this->ingresonotasScheduledForDeletion->remove($this->ingresonotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ingresonota $ingresonota The ingresonota object to add.
+     */
+    protected function doAddIngresonota($ingresonota)
+    {
+        $this->collIngresonotas[]= $ingresonota;
+        $ingresonota->setUsuario($this);
+    }
+
+    /**
+     * @param	Ingresonota $ingresonota The ingresonota object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeIngresonota($ingresonota)
+    {
+        if ($this->getIngresonotas()->contains($ingresonota)) {
+            $this->collIngresonotas->remove($this->collIngresonotas->search($ingresonota));
+            if (null === $this->ingresonotasScheduledForDeletion) {
+                $this->ingresonotasScheduledForDeletion = clone $this->collIngresonotas;
+                $this->ingresonotasScheduledForDeletion->clear();
+            }
+            $this->ingresonotasScheduledForDeletion[]= clone $ingresonota;
+            $ingresonota->setUsuario(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related Ingresonotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingresonota[] List of Ingresonota objects
+     */
+    public function getIngresonotasJoinIngreso($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresonotaQuery::create(null, $criteria);
+        $query->joinWith('Ingreso', $join_behavior);
+
+        return $this->getIngresonotas($query, $con);
     }
 
     /**
@@ -10543,6 +10895,256 @@ abstract class BaseUsuario extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collVentanotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Usuario The current object (for fluent API support)
+     * @see        addVentanotas()
+     */
+    public function clearVentanotas()
+    {
+        $this->collVentanotas = null; // important to set this to null since that means it is uninitialized
+        $this->collVentanotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collVentanotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialVentanotas($v = true)
+    {
+        $this->collVentanotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collVentanotas collection.
+     *
+     * By default this just sets the collVentanotas collection to an empty array (like clearcollVentanotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initVentanotas($overrideExisting = true)
+    {
+        if (null !== $this->collVentanotas && !$overrideExisting) {
+            return;
+        }
+        $this->collVentanotas = new PropelObjectCollection();
+        $this->collVentanotas->setModel('Ventanota');
+    }
+
+    /**
+     * Gets an array of Ventanota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Usuario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ventanota[] List of Ventanota objects
+     * @throws PropelException
+     */
+    public function getVentanotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collVentanotasPartial && !$this->isNew();
+        if (null === $this->collVentanotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collVentanotas) {
+                // return empty collection
+                $this->initVentanotas();
+            } else {
+                $collVentanotas = VentanotaQuery::create(null, $criteria)
+                    ->filterByUsuario($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collVentanotasPartial && count($collVentanotas)) {
+                      $this->initVentanotas(false);
+
+                      foreach ($collVentanotas as $obj) {
+                        if (false == $this->collVentanotas->contains($obj)) {
+                          $this->collVentanotas->append($obj);
+                        }
+                      }
+
+                      $this->collVentanotasPartial = true;
+                    }
+
+                    $collVentanotas->getInternalIterator()->rewind();
+
+                    return $collVentanotas;
+                }
+
+                if ($partial && $this->collVentanotas) {
+                    foreach ($this->collVentanotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collVentanotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collVentanotas = $collVentanotas;
+                $this->collVentanotasPartial = false;
+            }
+        }
+
+        return $this->collVentanotas;
+    }
+
+    /**
+     * Sets a collection of Ventanota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ventanotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function setVentanotas(PropelCollection $ventanotas, PropelPDO $con = null)
+    {
+        $ventanotasToDelete = $this->getVentanotas(new Criteria(), $con)->diff($ventanotas);
+
+
+        $this->ventanotasScheduledForDeletion = $ventanotasToDelete;
+
+        foreach ($ventanotasToDelete as $ventanotaRemoved) {
+            $ventanotaRemoved->setUsuario(null);
+        }
+
+        $this->collVentanotas = null;
+        foreach ($ventanotas as $ventanota) {
+            $this->addVentanota($ventanota);
+        }
+
+        $this->collVentanotas = $ventanotas;
+        $this->collVentanotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ventanota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ventanota objects.
+     * @throws PropelException
+     */
+    public function countVentanotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collVentanotasPartial && !$this->isNew();
+        if (null === $this->collVentanotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVentanotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getVentanotas());
+            }
+            $query = VentanotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUsuario($this)
+                ->count($con);
+        }
+
+        return count($this->collVentanotas);
+    }
+
+    /**
+     * Method called to associate a Ventanota object to this object
+     * through the Ventanota foreign key attribute.
+     *
+     * @param    Ventanota $l Ventanota
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function addVentanota(Ventanota $l)
+    {
+        if ($this->collVentanotas === null) {
+            $this->initVentanotas();
+            $this->collVentanotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collVentanotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddVentanota($l);
+
+            if ($this->ventanotasScheduledForDeletion and $this->ventanotasScheduledForDeletion->contains($l)) {
+                $this->ventanotasScheduledForDeletion->remove($this->ventanotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ventanota $ventanota The ventanota object to add.
+     */
+    protected function doAddVentanota($ventanota)
+    {
+        $this->collVentanotas[]= $ventanota;
+        $ventanota->setUsuario($this);
+    }
+
+    /**
+     * @param	Ventanota $ventanota The ventanota object to remove.
+     * @return Usuario The current object (for fluent API support)
+     */
+    public function removeVentanota($ventanota)
+    {
+        if ($this->getVentanotas()->contains($ventanota)) {
+            $this->collVentanotas->remove($this->collVentanotas->search($ventanota));
+            if (null === $this->ventanotasScheduledForDeletion) {
+                $this->ventanotasScheduledForDeletion = clone $this->collVentanotas;
+                $this->ventanotasScheduledForDeletion->clear();
+            }
+            $this->ventanotasScheduledForDeletion[]= clone $ventanota;
+            $ventanota->setUsuario(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Usuario is new, it will return
+     * an empty collection; or if this Usuario has previously
+     * been saved, it will retrieve related Ventanotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Usuario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventanota[] List of Ventanota objects
+     */
+    public function getVentanotasJoinVenta($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentanotaQuery::create(null, $criteria);
+        $query->joinWith('Venta', $join_behavior);
+
+        return $this->getVentanotas($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -10630,6 +11232,11 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collIngresonotas) {
+                foreach ($this->collIngresonotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collInventariomessRelatedByIdauditor) {
                 foreach ($this->collInventariomessRelatedByIdauditor as $o) {
                     $o->clearAllReferences($deep);
@@ -10710,6 +11317,11 @@ abstract class BaseUsuario extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collVentanotas) {
+                foreach ($this->collVentanotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aRol instanceof Persistent) {
               $this->aRol->clearAllReferences($deep);
             }
@@ -10761,6 +11373,10 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             $this->collIngresosRelatedByIdusuario->clearIterator();
         }
         $this->collIngresosRelatedByIdusuario = null;
+        if ($this->collIngresonotas instanceof PropelCollection) {
+            $this->collIngresonotas->clearIterator();
+        }
+        $this->collIngresonotas = null;
         if ($this->collInventariomessRelatedByIdauditor instanceof PropelCollection) {
             $this->collInventariomessRelatedByIdauditor->clearIterator();
         }
@@ -10825,6 +11441,10 @@ abstract class BaseUsuario extends BaseObject implements Persistent
             $this->collVentasRelatedByIdusuario->clearIterator();
         }
         $this->collVentasRelatedByIdusuario = null;
+        if ($this->collVentanotas instanceof PropelCollection) {
+            $this->collVentanotas->clearIterator();
+        }
+        $this->collVentanotas = null;
         $this->aRol = null;
     }
 

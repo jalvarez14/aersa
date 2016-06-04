@@ -168,6 +168,9 @@ CREATE TABLE `compra`
     `compra_subtotal` DECIMAL(15,5),
     `compra_total` DECIMAL(15,5),
     `compra_tipo` enum('ordecompra','compra','consignacion') NOT NULL,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idcompra`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -396,6 +399,9 @@ CREATE TABLE `devolucion`
     `devolucion_iva` DECIMAL(10,5),
     `devolucion_total` DECIMAL(10,5),
     `devolucion_subtotal` DECIMAL(15,5),
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`iddevolucion`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idusuario` (`idusuario`),
@@ -602,6 +608,9 @@ CREATE TABLE `ingreso`
     `ingreso_totalmiscelanea` DECIMAL(15,5) NOT NULL,
     `ingreso_fecha` DATETIME NOT NULL,
     `ingreso_fechacreacion` DATETIME NOT NULL,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idingreso`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -662,6 +671,34 @@ CREATE TABLE `ingresodetalle`
     CONSTRAINT `idrubroingreso_ingresodetalle`
         FOREIGN KEY (`idrubroingreso`)
         REFERENCES `rubroingreso` (`idrubroingreso`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- ingresonota
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ingresonota`;
+
+CREATE TABLE `ingresonota`
+(
+    `idingresonota` INTEGER NOT NULL AUTO_INCREMENT,
+    `idusuario` INTEGER NOT NULL,
+    `idingreso` INTEGER NOT NULL,
+    `ingresonota_nota` TEXT NOT NULL,
+    `ingresonota_fecha` DATETIME NOT NULL,
+    PRIMARY KEY (`idingresonota`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idingreso` (`idingreso`),
+    CONSTRAINT `ingresonota_idingreso`
+        FOREIGN KEY (`idingreso`)
+        REFERENCES `ingreso` (`idingreso`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `ingresonota_idusuario`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -799,6 +836,9 @@ CREATE TABLE `notacredito`
     `notacredito_iva` DECIMAL(15,5),
     `notacredito_total` DECIMAL(15,5),
     `notacredito_subtotal` DECIMAL(15,5),
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa_copy1` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa_copy1` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idnotacredito`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idusuario` (`idusuario`),
@@ -890,6 +930,7 @@ CREATE TABLE `notacreditonota`
     `idnotacredito` INTEGER NOT NULL,
     `idusuario` INTEGER NOT NULL,
     `notacreditonota_nota` TEXT NOT NULL,
+    `notacreditonota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`idnotacreditonota`),
     INDEX `idnotacredito` (`idnotacredito`),
     INDEX `idusuario` (`idusuario`),
@@ -936,6 +977,9 @@ CREATE TABLE `ordentablajeria`
     `ordentablajeria_fecha` DATETIME NOT NULL,
     `ordentablajeria_fechacreacion` DATETIME NOT NULL,
     `ordentablajeria_pesoporcion` FLOAT,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idordentablajeria`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -1261,6 +1305,9 @@ CREATE TABLE `requisicion`
     `requisicion_revisada` TINYINT(1) NOT NULL,
     `requisicion_folio` VARCHAR(10) NOT NULL,
     `requisicion_total` DECIMAL(15,5),
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idrequisicion`),
     INDEX `idconceptosalida` (`idconceptosalida`),
     INDEX `idusuario` (`idusuario`),
@@ -1577,6 +1624,9 @@ CREATE TABLE `venta`
     `venta_fechacreacion` DATETIME NOT NULL,
     `venta_total` DECIMAL(15,5) NOT NULL,
     `venta_folio` VARCHAR(10) NOT NULL,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idventa`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -1641,6 +1691,34 @@ CREATE TABLE `ventadetalle`
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT `idventa_ventadetalle`
+        FOREIGN KEY (`idventa`)
+        REFERENCES `venta` (`idventa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- ventanota
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ventanota`;
+
+CREATE TABLE `ventanota`
+(
+    `idventanota` INTEGER NOT NULL AUTO_INCREMENT,
+    `idusuario` INTEGER NOT NULL,
+    `idventa` INTEGER NOT NULL,
+    `ventanota_nota` VARCHAR(45) NOT NULL,
+    `ventanota_fecha` DATETIME NOT NULL,
+    PRIMARY KEY (`idventanota`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idventa` (`idventa`),
+    CONSTRAINT `idusuario_ventanota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idventa_ventanota`
         FOREIGN KEY (`idventa`)
         REFERENCES `venta` (`idventa`)
         ON UPDATE CASCADE

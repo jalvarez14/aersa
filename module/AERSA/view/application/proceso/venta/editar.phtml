@@ -32,7 +32,7 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                <h3 class="page-title">Ventas - <?php echo '#'.$form->get('idventa')->getValue()?></h3><br><br>
+                <h3 class="page-title">Ventas - <?php echo '#'.$form->get('idventa')->getValue()?></h3>
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-6">
@@ -135,10 +135,26 @@
             </div>
         </div>
     </div>
+    <div id="comentarios_container" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="btn-set pull-right">
+                        <a id="nota_nuevo" href="javascript:;" class="btn default">Nuevo comentario</a>
+                    </div>
+                     <h3 class="page-title">Comentarios</h3>
+                     <div class="mt-comments">
+
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
 </div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
 <script type="text/javascript" src="/application/custom/js/procesos/venta.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/comentarios.js"></script>
 <script>
     var $form = $('#form_container').venta();
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>);

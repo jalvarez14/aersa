@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'notacreditonota' table.
+ * This class defines the structure of the 'ventanota' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.aersa.map
  */
-class NotacreditonotaTableMap extends TableMap
+class VentanotaTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'aersa.map.NotacreditonotaTableMap';
+    const CLASS_NAME = 'aersa.map.VentanotaTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,17 +32,17 @@ class NotacreditonotaTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('notacreditonota');
-        $this->setPhpName('Notacreditonota');
-        $this->setClassname('Notacreditonota');
+        $this->setName('ventanota');
+        $this->setPhpName('Ventanota');
+        $this->setClassname('Ventanota');
         $this->setPackage('aersa');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('idnotacreditonota', 'Idnotacreditonota', 'INTEGER', true, null, null);
-        $this->addForeignKey('idnotacredito', 'Idnotacredito', 'INTEGER', 'notacredito', 'idnotacredito', true, null, null);
+        $this->addPrimaryKey('idventanota', 'Idventanota', 'INTEGER', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addColumn('notacreditonota_nota', 'NotacreditonotaNota', 'LONGVARCHAR', true, null, null);
-        $this->addColumn('notacreditonota_fecha', 'NotacreditonotaFecha', 'TIMESTAMP', true, null, null);
+        $this->addForeignKey('idventa', 'Idventa', 'INTEGER', 'venta', 'idventa', true, null, null);
+        $this->addColumn('ventanota_nota', 'VentanotaNota', 'VARCHAR', true, 45, null);
+        $this->addColumn('ventanota_fecha', 'VentanotaFecha', 'TIMESTAMP', true, null, null);
         // validators
     } // initialize()
 
@@ -51,8 +51,8 @@ class NotacreditonotaTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Notacredito', 'Notacredito', RelationMap::MANY_TO_ONE, array('idnotacredito' => 'idnotacredito', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Usuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Venta', 'Venta', RelationMap::MANY_TO_ONE, array('idventa' => 'idventa', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
-} // NotacreditonotaTableMap
+} // VentanotaTableMap

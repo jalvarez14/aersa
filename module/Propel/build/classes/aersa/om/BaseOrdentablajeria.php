@@ -169,6 +169,27 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     protected $ordentablajeria_pesoporcion;
 
     /**
+     * The value for the notaauditorempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditorempresa;
+
+    /**
+     * The value for the notaalmacenistaempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaalmacenistaempresa;
+
+    /**
+     * The value for the notaauditoraersa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditoraersa;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacenRelatedByIdalmacendestino;
@@ -256,6 +277,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->ordentablajeria_revisada = false;
+        $this->notaauditorempresa = true;
+        $this->notaalmacenistaempresa = true;
+        $this->notaauditoraersa = true;
     }
 
     /**
@@ -577,6 +601,39 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     {
 
         return $this->ordentablajeria_pesoporcion;
+    }
+
+    /**
+     * Get the [notaauditorempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditorempresa()
+    {
+
+        return $this->notaauditorempresa;
+    }
+
+    /**
+     * Get the [notaalmacenistaempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaalmacenistaempresa()
+    {
+
+        return $this->notaalmacenistaempresa;
+    }
+
+    /**
+     * Get the [notaauditoraersa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditoraersa()
+    {
+
+        return $this->notaauditoraersa;
     }
 
     /**
@@ -1111,6 +1168,93 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     } // setOrdentablajeriaPesoporcion()
 
     /**
+     * Sets the value of the [notaauditorempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setNotaauditorempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditorempresa !== $v) {
+            $this->notaauditorempresa = $v;
+            $this->modifiedColumns[] = OrdentablajeriaPeer::NOTAAUDITOREMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaauditorempresa()
+
+    /**
+     * Sets the value of the [notaalmacenistaempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setNotaalmacenistaempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaalmacenistaempresa !== $v) {
+            $this->notaalmacenistaempresa = $v;
+            $this->modifiedColumns[] = OrdentablajeriaPeer::NOTAALMACENISTAEMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaalmacenistaempresa()
+
+    /**
+     * Sets the value of the [notaauditoraersa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setNotaauditoraersa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditoraersa !== $v) {
+            $this->notaauditoraersa = $v;
+            $this->modifiedColumns[] = OrdentablajeriaPeer::NOTAAUDITORAERSA;
+        }
+
+
+        return $this;
+    } // setNotaauditoraersa()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1121,6 +1265,18 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     public function hasOnlyDefaultValues()
     {
             if ($this->ordentablajeria_revisada !== false) {
+                return false;
+            }
+
+            if ($this->notaauditorempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaalmacenistaempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaauditoraersa !== true) {
                 return false;
             }
 
@@ -1169,6 +1325,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->ordentablajeria_fecha = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
             $this->ordentablajeria_fechacreacion = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
             $this->ordentablajeria_pesoporcion = ($row[$startcol + 22] !== null) ? (double) $row[$startcol + 22] : null;
+            $this->notaauditorempresa = ($row[$startcol + 23] !== null) ? (boolean) $row[$startcol + 23] : null;
+            $this->notaalmacenistaempresa = ($row[$startcol + 24] !== null) ? (boolean) $row[$startcol + 24] : null;
+            $this->notaauditoraersa = ($row[$startcol + 25] !== null) ? (boolean) $row[$startcol + 25] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1178,7 +1337,7 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 23; // 23 = OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 26; // 26 = OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Ordentablajeria object", $e);
@@ -1579,6 +1738,15 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_PESOPORCION)) {
             $modifiedColumns[':p' . $index++]  = '`ordentablajeria_pesoporcion`';
         }
+        if ($this->isColumnModified(OrdentablajeriaPeer::NOTAAUDITOREMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditorempresa`';
+        }
+        if ($this->isColumnModified(OrdentablajeriaPeer::NOTAALMACENISTAEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaalmacenistaempresa`';
+        }
+        if ($this->isColumnModified(OrdentablajeriaPeer::NOTAAUDITORAERSA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditoraersa`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `ordentablajeria` (%s) VALUES (%s)',
@@ -1658,6 +1826,15 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                         break;
                     case '`ordentablajeria_pesoporcion`':
                         $stmt->bindValue($identifier, $this->ordentablajeria_pesoporcion, PDO::PARAM_STR);
+                        break;
+                    case '`notaauditorempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditorempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaalmacenistaempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaalmacenistaempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaauditoraersa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditoraersa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1926,6 +2103,15 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             case 22:
                 return $this->getOrdentablajeriaPesoporcion();
                 break;
+            case 23:
+                return $this->getNotaauditorempresa();
+                break;
+            case 24:
+                return $this->getNotaalmacenistaempresa();
+                break;
+            case 25:
+                return $this->getNotaauditoraersa();
+                break;
             default:
                 return null;
                 break;
@@ -1978,6 +2164,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $keys[20] => $this->getOrdentablajeriaFecha(),
             $keys[21] => $this->getOrdentablajeriaFechacreacion(),
             $keys[22] => $this->getOrdentablajeriaPesoporcion(),
+            $keys[23] => $this->getNotaauditorempresa(),
+            $keys[24] => $this->getNotaalmacenistaempresa(),
+            $keys[25] => $this->getNotaauditoraersa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2115,6 +2304,15 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             case 22:
                 $this->setOrdentablajeriaPesoporcion($value);
                 break;
+            case 23:
+                $this->setNotaauditorempresa($value);
+                break;
+            case 24:
+                $this->setNotaalmacenistaempresa($value);
+                break;
+            case 25:
+                $this->setNotaauditoraersa($value);
+                break;
         } // switch()
     }
 
@@ -2162,6 +2360,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if (array_key_exists($keys[20], $arr)) $this->setOrdentablajeriaFecha($arr[$keys[20]]);
         if (array_key_exists($keys[21], $arr)) $this->setOrdentablajeriaFechacreacion($arr[$keys[21]]);
         if (array_key_exists($keys[22], $arr)) $this->setOrdentablajeriaPesoporcion($arr[$keys[22]]);
+        if (array_key_exists($keys[23], $arr)) $this->setNotaauditorempresa($arr[$keys[23]]);
+        if (array_key_exists($keys[24], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[24]]);
+        if (array_key_exists($keys[25], $arr)) $this->setNotaauditoraersa($arr[$keys[25]]);
     }
 
     /**
@@ -2196,6 +2397,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHA, $this->ordentablajeria_fecha);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_FECHACREACION, $this->ordentablajeria_fechacreacion);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_PESOPORCION)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_PESOPORCION, $this->ordentablajeria_pesoporcion);
+        if ($this->isColumnModified(OrdentablajeriaPeer::NOTAAUDITOREMPRESA)) $criteria->add(OrdentablajeriaPeer::NOTAAUDITOREMPRESA, $this->notaauditorempresa);
+        if ($this->isColumnModified(OrdentablajeriaPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(OrdentablajeriaPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
+        if ($this->isColumnModified(OrdentablajeriaPeer::NOTAAUDITORAERSA)) $criteria->add(OrdentablajeriaPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
 
         return $criteria;
     }
@@ -2281,6 +2485,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         $copyObj->setOrdentablajeriaFecha($this->getOrdentablajeriaFecha());
         $copyObj->setOrdentablajeriaFechacreacion($this->getOrdentablajeriaFechacreacion());
         $copyObj->setOrdentablajeriaPesoporcion($this->getOrdentablajeriaPesoporcion());
+        $copyObj->setNotaauditorempresa($this->getNotaauditorempresa());
+        $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
+        $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -3262,6 +3469,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         $this->ordentablajeria_fecha = null;
         $this->ordentablajeria_fechacreacion = null;
         $this->ordentablajeria_pesoporcion = null;
+        $this->notaauditorempresa = null;
+        $this->notaalmacenistaempresa = null;
+        $this->notaauditoraersa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

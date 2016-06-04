@@ -24,6 +24,9 @@
  * @method CompraQuery orderByCompraSubtotal($order = Criteria::ASC) Order by the compra_subtotal column
  * @method CompraQuery orderByCompraTotal($order = Criteria::ASC) Order by the compra_total column
  * @method CompraQuery orderByCompraTipo($order = Criteria::ASC) Order by the compra_tipo column
+ * @method CompraQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
+ * @method CompraQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
+ * @method CompraQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  *
  * @method CompraQuery groupByIdcompra() Group by the idcompra column
  * @method CompraQuery groupByIdempresa() Group by the idempresa column
@@ -43,6 +46,9 @@
  * @method CompraQuery groupByCompraSubtotal() Group by the compra_subtotal column
  * @method CompraQuery groupByCompraTotal() Group by the compra_total column
  * @method CompraQuery groupByCompraTipo() Group by the compra_tipo column
+ * @method CompraQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
+ * @method CompraQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
+ * @method CompraQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  *
  * @method CompraQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CompraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -104,6 +110,9 @@
  * @method Compra findOneByCompraSubtotal(string $compra_subtotal) Return the first Compra filtered by the compra_subtotal column
  * @method Compra findOneByCompraTotal(string $compra_total) Return the first Compra filtered by the compra_total column
  * @method Compra findOneByCompraTipo(string $compra_tipo) Return the first Compra filtered by the compra_tipo column
+ * @method Compra findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Compra filtered by the notaauditorempresa column
+ * @method Compra findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Compra filtered by the notaalmacenistaempresa column
+ * @method Compra findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Compra filtered by the notaauditoraersa column
  *
  * @method array findByIdcompra(int $idcompra) Return Compra objects filtered by the idcompra column
  * @method array findByIdempresa(int $idempresa) Return Compra objects filtered by the idempresa column
@@ -123,6 +132,9 @@
  * @method array findByCompraSubtotal(string $compra_subtotal) Return Compra objects filtered by the compra_subtotal column
  * @method array findByCompraTotal(string $compra_total) Return Compra objects filtered by the compra_total column
  * @method array findByCompraTipo(string $compra_tipo) Return Compra objects filtered by the compra_tipo column
+ * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Compra objects filtered by the notaauditorempresa column
+ * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Compra objects filtered by the notaalmacenistaempresa column
+ * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Compra objects filtered by the notaauditoraersa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -230,7 +242,7 @@ abstract class BaseCompraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_subtotal`, `compra_total`, `compra_tipo` FROM `compra` WHERE `idcompra` = :p0';
+        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_subtotal`, `compra_total`, `compra_tipo`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `compra` WHERE `idcompra` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1034,6 +1046,87 @@ abstract class BaseCompraQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompraPeer::COMPRA_TIPO, $compraTipo, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditorempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditorempresa(true); // WHERE notaauditorempresa = true
+     * $query->filterByNotaauditorempresa('yes'); // WHERE notaauditorempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditorempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditorempresa($notaauditorempresa = null, $comparison = null)
+    {
+        if (is_string($notaauditorempresa)) {
+            $notaauditorempresa = in_array(strtolower($notaauditorempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(CompraPeer::NOTAAUDITOREMPRESA, $notaauditorempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaalmacenistaempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaalmacenistaempresa(true); // WHERE notaalmacenistaempresa = true
+     * $query->filterByNotaalmacenistaempresa('yes'); // WHERE notaalmacenistaempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaalmacenistaempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByNotaalmacenistaempresa($notaalmacenistaempresa = null, $comparison = null)
+    {
+        if (is_string($notaalmacenistaempresa)) {
+            $notaalmacenistaempresa = in_array(strtolower($notaalmacenistaempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(CompraPeer::NOTAALMACENISTAEMPRESA, $notaalmacenistaempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditoraersa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditoraersa(true); // WHERE notaauditoraersa = true
+     * $query->filterByNotaauditoraersa('yes'); // WHERE notaauditoraersa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditoraersa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditoraersa($notaauditoraersa = null, $comparison = null)
+    {
+        if (is_string($notaauditoraersa)) {
+            $notaauditoraersa = in_array(strtolower($notaauditoraersa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(CompraPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
     }
 
     /**

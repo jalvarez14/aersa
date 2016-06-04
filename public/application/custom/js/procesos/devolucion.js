@@ -610,6 +610,14 @@
                     caluclator(tr);
                 });
             });
+            
+            //COMENTARIOS
+            var id = $('input[name=iddevolucion]').val();
+            $('#comentarios_container').comentarios({
+                table:'devolucionnota',
+                id: id,
+                parent:'iddevolucion',
+            });
         }
 
         /*

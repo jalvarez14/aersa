@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'notacreditonota' table.
+ * Base class that represents a row from the 'ingresonota' table.
  *
  *
  *
  * @package    propel.generator.aersa.om
  */
-abstract class BaseNotacreditonota extends BaseObject implements Persistent
+abstract class BaseIngresonota extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'NotacreditonotaPeer';
+    const PEER = 'IngresonotaPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        NotacreditonotaPeer
+     * @var        IngresonotaPeer
      */
     protected static $peer;
 
@@ -30,16 +30,10 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the idnotacreditonota field.
+     * The value for the idingresonota field.
      * @var        int
      */
-    protected $idnotacreditonota;
-
-    /**
-     * The value for the idnotacredito field.
-     * @var        int
-     */
-    protected $idnotacredito;
+    protected $idingresonota;
 
     /**
      * The value for the idusuario field.
@@ -48,21 +42,27 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     protected $idusuario;
 
     /**
-     * The value for the notacreditonota_nota field.
-     * @var        string
+     * The value for the idingreso field.
+     * @var        int
      */
-    protected $notacreditonota_nota;
+    protected $idingreso;
 
     /**
-     * The value for the notacreditonota_fecha field.
+     * The value for the ingresonota_nota field.
      * @var        string
      */
-    protected $notacreditonota_fecha;
+    protected $ingresonota_nota;
 
     /**
-     * @var        Notacredito
+     * The value for the ingresonota_fecha field.
+     * @var        string
      */
-    protected $aNotacredito;
+    protected $ingresonota_fecha;
+
+    /**
+     * @var        Ingreso
+     */
+    protected $aIngreso;
 
     /**
      * @var        Usuario
@@ -90,25 +90,14 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [idnotacreditonota] column value.
+     * Get the [idingresonota] column value.
      *
      * @return int
      */
-    public function getIdnotacreditonota()
+    public function getIdingresonota()
     {
 
-        return $this->idnotacreditonota;
-    }
-
-    /**
-     * Get the [idnotacredito] column value.
-     *
-     * @return int
-     */
-    public function getIdnotacredito()
-    {
-
-        return $this->idnotacredito;
+        return $this->idingresonota;
     }
 
     /**
@@ -123,18 +112,29 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [notacreditonota_nota] column value.
+     * Get the [idingreso] column value.
      *
-     * @return string
+     * @return int
      */
-    public function getNotacreditonotaNota()
+    public function getIdingreso()
     {
 
-        return $this->notacreditonota_nota;
+        return $this->idingreso;
     }
 
     /**
-     * Get the [optionally formatted] temporal [notacreditonota_fecha] column value.
+     * Get the [ingresonota_nota] column value.
+     *
+     * @return string
+     */
+    public function getIngresonotaNota()
+    {
+
+        return $this->ingresonota_nota;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [ingresonota_fecha] column value.
      *
      *
      * @param string $format The date/time format string (either date()-style or strftime()-style).
@@ -142,22 +142,22 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      * @return mixed Formatted date/time value as string or DateTime object (if format is null), null if column is null, and 0 if column value is 0000-00-00 00:00:00
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getNotacreditonotaFecha($format = 'Y-m-d H:i:s')
+    public function getIngresonotaFecha($format = 'Y-m-d H:i:s')
     {
-        if ($this->notacreditonota_fecha === null) {
+        if ($this->ingresonota_fecha === null) {
             return null;
         }
 
-        if ($this->notacreditonota_fecha === '0000-00-00 00:00:00') {
+        if ($this->ingresonota_fecha === '0000-00-00 00:00:00') {
             // while technically this is not a default value of null,
             // this seems to be closest in meaning.
             return null;
         }
 
         try {
-            $dt = new DateTime($this->notacreditonota_fecha);
+            $dt = new DateTime($this->ingresonota_fecha);
         } catch (Exception $x) {
-            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->notacreditonota_fecha, true), $x);
+            throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->ingresonota_fecha, true), $x);
         }
 
         if ($format === null) {
@@ -174,56 +174,31 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     }
 
     /**
-     * Set the value of [idnotacreditonota] column.
+     * Set the value of [idingresonota] column.
      *
      * @param  int $v new value
-     * @return Notacreditonota The current object (for fluent API support)
+     * @return Ingresonota The current object (for fluent API support)
      */
-    public function setIdnotacreditonota($v)
+    public function setIdingresonota($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idnotacreditonota !== $v) {
-            $this->idnotacreditonota = $v;
-            $this->modifiedColumns[] = NotacreditonotaPeer::IDNOTACREDITONOTA;
+        if ($this->idingresonota !== $v) {
+            $this->idingresonota = $v;
+            $this->modifiedColumns[] = IngresonotaPeer::IDINGRESONOTA;
         }
 
 
         return $this;
-    } // setIdnotacreditonota()
-
-    /**
-     * Set the value of [idnotacredito] column.
-     *
-     * @param  int $v new value
-     * @return Notacreditonota The current object (for fluent API support)
-     */
-    public function setIdnotacredito($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idnotacredito !== $v) {
-            $this->idnotacredito = $v;
-            $this->modifiedColumns[] = NotacreditonotaPeer::IDNOTACREDITO;
-        }
-
-        if ($this->aNotacredito !== null && $this->aNotacredito->getIdnotacredito() !== $v) {
-            $this->aNotacredito = null;
-        }
-
-
-        return $this;
-    } // setIdnotacredito()
+    } // setIdingresonota()
 
     /**
      * Set the value of [idusuario] column.
      *
      * @param  int $v new value
-     * @return Notacreditonota The current object (for fluent API support)
+     * @return Ingresonota The current object (for fluent API support)
      */
     public function setIdusuario($v)
     {
@@ -233,7 +208,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
 
         if ($this->idusuario !== $v) {
             $this->idusuario = $v;
-            $this->modifiedColumns[] = NotacreditonotaPeer::IDUSUARIO;
+            $this->modifiedColumns[] = IngresonotaPeer::IDUSUARIO;
         }
 
         if ($this->aUsuario !== null && $this->aUsuario->getIdusuario() !== $v) {
@@ -245,48 +220,73 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     } // setIdusuario()
 
     /**
-     * Set the value of [notacreditonota_nota] column.
+     * Set the value of [idingreso] column.
+     *
+     * @param  int $v new value
+     * @return Ingresonota The current object (for fluent API support)
+     */
+    public function setIdingreso($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idingreso !== $v) {
+            $this->idingreso = $v;
+            $this->modifiedColumns[] = IngresonotaPeer::IDINGRESO;
+        }
+
+        if ($this->aIngreso !== null && $this->aIngreso->getIdingreso() !== $v) {
+            $this->aIngreso = null;
+        }
+
+
+        return $this;
+    } // setIdingreso()
+
+    /**
+     * Set the value of [ingresonota_nota] column.
      *
      * @param  string $v new value
-     * @return Notacreditonota The current object (for fluent API support)
+     * @return Ingresonota The current object (for fluent API support)
      */
-    public function setNotacreditonotaNota($v)
+    public function setIngresonotaNota($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->notacreditonota_nota !== $v) {
-            $this->notacreditonota_nota = $v;
-            $this->modifiedColumns[] = NotacreditonotaPeer::NOTACREDITONOTA_NOTA;
+        if ($this->ingresonota_nota !== $v) {
+            $this->ingresonota_nota = $v;
+            $this->modifiedColumns[] = IngresonotaPeer::INGRESONOTA_NOTA;
         }
 
 
         return $this;
-    } // setNotacreditonotaNota()
+    } // setIngresonotaNota()
 
     /**
-     * Sets the value of [notacreditonota_fecha] column to a normalized version of the date/time value specified.
+     * Sets the value of [ingresonota_fecha] column to a normalized version of the date/time value specified.
      *
      * @param mixed $v string, integer (timestamp), or DateTime value.
      *               Empty strings are treated as null.
-     * @return Notacreditonota The current object (for fluent API support)
+     * @return Ingresonota The current object (for fluent API support)
      */
-    public function setNotacreditonotaFecha($v)
+    public function setIngresonotaFecha($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->notacreditonota_fecha !== null || $dt !== null) {
-            $currentDateAsString = ($this->notacreditonota_fecha !== null && $tmpDt = new DateTime($this->notacreditonota_fecha)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+        if ($this->ingresonota_fecha !== null || $dt !== null) {
+            $currentDateAsString = ($this->ingresonota_fecha !== null && $tmpDt = new DateTime($this->ingresonota_fecha)) ? $tmpDt->format('Y-m-d H:i:s') : null;
             $newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
             if ($currentDateAsString !== $newDateAsString) {
-                $this->notacreditonota_fecha = $newDateAsString;
-                $this->modifiedColumns[] = NotacreditonotaPeer::NOTACREDITONOTA_FECHA;
+                $this->ingresonota_fecha = $newDateAsString;
+                $this->modifiedColumns[] = IngresonotaPeer::INGRESONOTA_FECHA;
             }
         } // if either are not null
 
 
         return $this;
-    } // setNotacreditonotaFecha()
+    } // setIngresonotaFecha()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -320,11 +320,11 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     {
         try {
 
-            $this->idnotacreditonota = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idnotacredito = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idusuario = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->notacreditonota_nota = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-            $this->notacreditonota_fecha = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+            $this->idingresonota = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->idusuario = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+            $this->idingreso = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->ingresonota_nota = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->ingresonota_fecha = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -334,10 +334,10 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = NotacreditonotaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = IngresonotaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Notacreditonota object", $e);
+            throw new PropelException("Error populating Ingresonota object", $e);
         }
     }
 
@@ -357,11 +357,11 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aNotacredito !== null && $this->idnotacredito !== $this->aNotacredito->getIdnotacredito()) {
-            $this->aNotacredito = null;
-        }
         if ($this->aUsuario !== null && $this->idusuario !== $this->aUsuario->getIdusuario()) {
             $this->aUsuario = null;
+        }
+        if ($this->aIngreso !== null && $this->idingreso !== $this->aIngreso->getIdingreso()) {
+            $this->aIngreso = null;
         }
     } // ensureConsistency
 
@@ -386,13 +386,13 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = NotacreditonotaPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = IngresonotaPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -402,7 +402,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aNotacredito = null;
+            $this->aIngreso = null;
             $this->aUsuario = null;
         } // if (deep)
     }
@@ -424,12 +424,12 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = NotacreditonotaQuery::create()
+            $deleteQuery = IngresonotaQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -467,7 +467,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -487,7 +487,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                NotacreditonotaPeer::addInstanceToPool($this);
+                IngresonotaPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -522,11 +522,11 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aNotacredito !== null) {
-                if ($this->aNotacredito->isModified() || $this->aNotacredito->isNew()) {
-                    $affectedRows += $this->aNotacredito->save($con);
+            if ($this->aIngreso !== null) {
+                if ($this->aIngreso->isModified() || $this->aIngreso->isNew()) {
+                    $affectedRows += $this->aIngreso->save($con);
                 }
-                $this->setNotacredito($this->aNotacredito);
+                $this->setIngreso($this->aIngreso);
             }
 
             if ($this->aUsuario !== null) {
@@ -567,30 +567,30 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = NotacreditonotaPeer::IDNOTACREDITONOTA;
-        if (null !== $this->idnotacreditonota) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . NotacreditonotaPeer::IDNOTACREDITONOTA . ')');
+        $this->modifiedColumns[] = IngresonotaPeer::IDINGRESONOTA;
+        if (null !== $this->idingresonota) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . IngresonotaPeer::IDINGRESONOTA . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(NotacreditonotaPeer::IDNOTACREDITONOTA)) {
-            $modifiedColumns[':p' . $index++]  = '`idnotacreditonota`';
+        if ($this->isColumnModified(IngresonotaPeer::IDINGRESONOTA)) {
+            $modifiedColumns[':p' . $index++]  = '`idingresonota`';
         }
-        if ($this->isColumnModified(NotacreditonotaPeer::IDNOTACREDITO)) {
-            $modifiedColumns[':p' . $index++]  = '`idnotacredito`';
-        }
-        if ($this->isColumnModified(NotacreditonotaPeer::IDUSUARIO)) {
+        if ($this->isColumnModified(IngresonotaPeer::IDUSUARIO)) {
             $modifiedColumns[':p' . $index++]  = '`idusuario`';
         }
-        if ($this->isColumnModified(NotacreditonotaPeer::NOTACREDITONOTA_NOTA)) {
-            $modifiedColumns[':p' . $index++]  = '`notacreditonota_nota`';
+        if ($this->isColumnModified(IngresonotaPeer::IDINGRESO)) {
+            $modifiedColumns[':p' . $index++]  = '`idingreso`';
         }
-        if ($this->isColumnModified(NotacreditonotaPeer::NOTACREDITONOTA_FECHA)) {
-            $modifiedColumns[':p' . $index++]  = '`notacreditonota_fecha`';
+        if ($this->isColumnModified(IngresonotaPeer::INGRESONOTA_NOTA)) {
+            $modifiedColumns[':p' . $index++]  = '`ingresonota_nota`';
+        }
+        if ($this->isColumnModified(IngresonotaPeer::INGRESONOTA_FECHA)) {
+            $modifiedColumns[':p' . $index++]  = '`ingresonota_fecha`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `notacreditonota` (%s) VALUES (%s)',
+            'INSERT INTO `ingresonota` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -599,20 +599,20 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`idnotacreditonota`':
-                        $stmt->bindValue($identifier, $this->idnotacreditonota, PDO::PARAM_INT);
-                        break;
-                    case '`idnotacredito`':
-                        $stmt->bindValue($identifier, $this->idnotacredito, PDO::PARAM_INT);
+                    case '`idingresonota`':
+                        $stmt->bindValue($identifier, $this->idingresonota, PDO::PARAM_INT);
                         break;
                     case '`idusuario`':
                         $stmt->bindValue($identifier, $this->idusuario, PDO::PARAM_INT);
                         break;
-                    case '`notacreditonota_nota`':
-                        $stmt->bindValue($identifier, $this->notacreditonota_nota, PDO::PARAM_STR);
+                    case '`idingreso`':
+                        $stmt->bindValue($identifier, $this->idingreso, PDO::PARAM_INT);
                         break;
-                    case '`notacreditonota_fecha`':
-                        $stmt->bindValue($identifier, $this->notacreditonota_fecha, PDO::PARAM_STR);
+                    case '`ingresonota_nota`':
+                        $stmt->bindValue($identifier, $this->ingresonota_nota, PDO::PARAM_STR);
+                        break;
+                    case '`ingresonota_fecha`':
+                        $stmt->bindValue($identifier, $this->ingresonota_fecha, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -627,7 +627,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdnotacreditonota($pk);
+        $this->setIdingresonota($pk);
 
         $this->setNew(false);
     }
@@ -713,9 +713,9 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aNotacredito !== null) {
-                if (!$this->aNotacredito->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aNotacredito->getValidationFailures());
+            if ($this->aIngreso !== null) {
+                if (!$this->aIngreso->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aIngreso->getValidationFailures());
                 }
             }
 
@@ -726,7 +726,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
             }
 
 
-            if (($retval = NotacreditonotaPeer::doValidate($this, $columns)) !== true) {
+            if (($retval = IngresonotaPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -750,7 +750,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = NotacreditonotaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = IngresonotaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -767,19 +767,19 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdnotacreditonota();
+                return $this->getIdingresonota();
                 break;
             case 1:
-                return $this->getIdnotacredito();
-                break;
-            case 2:
                 return $this->getIdusuario();
                 break;
+            case 2:
+                return $this->getIdingreso();
+                break;
             case 3:
-                return $this->getNotacreditonotaNota();
+                return $this->getIngresonotaNota();
                 break;
             case 4:
-                return $this->getNotacreditonotaFecha();
+                return $this->getIngresonotaFecha();
                 break;
             default:
                 return null;
@@ -804,17 +804,17 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Notacreditonota'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Ingresonota'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Notacreditonota'][$this->getPrimaryKey()] = true;
-        $keys = NotacreditonotaPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Ingresonota'][$this->getPrimaryKey()] = true;
+        $keys = IngresonotaPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdnotacreditonota(),
-            $keys[1] => $this->getIdnotacredito(),
-            $keys[2] => $this->getIdusuario(),
-            $keys[3] => $this->getNotacreditonotaNota(),
-            $keys[4] => $this->getNotacreditonotaFecha(),
+            $keys[0] => $this->getIdingresonota(),
+            $keys[1] => $this->getIdusuario(),
+            $keys[2] => $this->getIdingreso(),
+            $keys[3] => $this->getIngresonotaNota(),
+            $keys[4] => $this->getIngresonotaFecha(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -822,8 +822,8 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aNotacredito) {
-                $result['Notacredito'] = $this->aNotacredito->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aIngreso) {
+                $result['Ingreso'] = $this->aIngreso->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUsuario) {
                 $result['Usuario'] = $this->aUsuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -846,7 +846,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = NotacreditonotaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = IngresonotaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -863,19 +863,19 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdnotacreditonota($value);
+                $this->setIdingresonota($value);
                 break;
             case 1:
-                $this->setIdnotacredito($value);
-                break;
-            case 2:
                 $this->setIdusuario($value);
                 break;
+            case 2:
+                $this->setIdingreso($value);
+                break;
             case 3:
-                $this->setNotacreditonotaNota($value);
+                $this->setIngresonotaNota($value);
                 break;
             case 4:
-                $this->setNotacreditonotaFecha($value);
+                $this->setIngresonotaFecha($value);
                 break;
         } // switch()
     }
@@ -899,13 +899,13 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = NotacreditonotaPeer::getFieldNames($keyType);
+        $keys = IngresonotaPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdnotacreditonota($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdnotacredito($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdusuario($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setNotacreditonotaNota($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setNotacreditonotaFecha($arr[$keys[4]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdingresonota($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setIdusuario($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdingreso($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIngresonotaNota($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIngresonotaFecha($arr[$keys[4]]);
     }
 
     /**
@@ -915,13 +915,13 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria = new Criteria(IngresonotaPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(NotacreditonotaPeer::IDNOTACREDITONOTA)) $criteria->add(NotacreditonotaPeer::IDNOTACREDITONOTA, $this->idnotacreditonota);
-        if ($this->isColumnModified(NotacreditonotaPeer::IDNOTACREDITO)) $criteria->add(NotacreditonotaPeer::IDNOTACREDITO, $this->idnotacredito);
-        if ($this->isColumnModified(NotacreditonotaPeer::IDUSUARIO)) $criteria->add(NotacreditonotaPeer::IDUSUARIO, $this->idusuario);
-        if ($this->isColumnModified(NotacreditonotaPeer::NOTACREDITONOTA_NOTA)) $criteria->add(NotacreditonotaPeer::NOTACREDITONOTA_NOTA, $this->notacreditonota_nota);
-        if ($this->isColumnModified(NotacreditonotaPeer::NOTACREDITONOTA_FECHA)) $criteria->add(NotacreditonotaPeer::NOTACREDITONOTA_FECHA, $this->notacreditonota_fecha);
+        if ($this->isColumnModified(IngresonotaPeer::IDINGRESONOTA)) $criteria->add(IngresonotaPeer::IDINGRESONOTA, $this->idingresonota);
+        if ($this->isColumnModified(IngresonotaPeer::IDUSUARIO)) $criteria->add(IngresonotaPeer::IDUSUARIO, $this->idusuario);
+        if ($this->isColumnModified(IngresonotaPeer::IDINGRESO)) $criteria->add(IngresonotaPeer::IDINGRESO, $this->idingreso);
+        if ($this->isColumnModified(IngresonotaPeer::INGRESONOTA_NOTA)) $criteria->add(IngresonotaPeer::INGRESONOTA_NOTA, $this->ingresonota_nota);
+        if ($this->isColumnModified(IngresonotaPeer::INGRESONOTA_FECHA)) $criteria->add(IngresonotaPeer::INGRESONOTA_FECHA, $this->ingresonota_fecha);
 
         return $criteria;
     }
@@ -936,8 +936,8 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(NotacreditonotaPeer::DATABASE_NAME);
-        $criteria->add(NotacreditonotaPeer::IDNOTACREDITONOTA, $this->idnotacreditonota);
+        $criteria = new Criteria(IngresonotaPeer::DATABASE_NAME);
+        $criteria->add(IngresonotaPeer::IDINGRESONOTA, $this->idingresonota);
 
         return $criteria;
     }
@@ -948,18 +948,18 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdnotacreditonota();
+        return $this->getIdingresonota();
     }
 
     /**
-     * Generic method to set the primary key (idnotacreditonota column).
+     * Generic method to set the primary key (idingresonota column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdnotacreditonota($key);
+        $this->setIdingresonota($key);
     }
 
     /**
@@ -969,7 +969,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdnotacreditonota();
+        return null === $this->getIdingresonota();
     }
 
     /**
@@ -978,17 +978,17 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Notacreditonota (or compatible) type.
+     * @param object $copyObj An object of Ingresonota (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setIdnotacredito($this->getIdnotacredito());
         $copyObj->setIdusuario($this->getIdusuario());
-        $copyObj->setNotacreditonotaNota($this->getNotacreditonotaNota());
-        $copyObj->setNotacreditonotaFecha($this->getNotacreditonotaFecha());
+        $copyObj->setIdingreso($this->getIdingreso());
+        $copyObj->setIngresonotaNota($this->getIngresonotaNota());
+        $copyObj->setIngresonotaFecha($this->getIngresonotaFecha());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1003,7 +1003,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdnotacreditonota(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdingresonota(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1016,7 +1016,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Notacreditonota Clone of current object.
+     * @return Ingresonota Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1036,38 +1036,38 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return NotacreditonotaPeer
+     * @return IngresonotaPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new NotacreditonotaPeer();
+            self::$peer = new IngresonotaPeer();
         }
 
         return self::$peer;
     }
 
     /**
-     * Declares an association between this object and a Notacredito object.
+     * Declares an association between this object and a Ingreso object.
      *
-     * @param                  Notacredito $v
-     * @return Notacreditonota The current object (for fluent API support)
+     * @param                  Ingreso $v
+     * @return Ingresonota The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setNotacredito(Notacredito $v = null)
+    public function setIngreso(Ingreso $v = null)
     {
         if ($v === null) {
-            $this->setIdnotacredito(NULL);
+            $this->setIdingreso(NULL);
         } else {
-            $this->setIdnotacredito($v->getIdnotacredito());
+            $this->setIdingreso($v->getIdingreso());
         }
 
-        $this->aNotacredito = $v;
+        $this->aIngreso = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Notacredito object, it will not be re-added.
+        // If this object has already been added to the Ingreso object, it will not be re-added.
         if ($v !== null) {
-            $v->addNotacreditonota($this);
+            $v->addIngresonota($this);
         }
 
 
@@ -1076,34 +1076,34 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
 
 
     /**
-     * Get the associated Notacredito object
+     * Get the associated Ingreso object
      *
      * @param PropelPDO $con Optional Connection object.
      * @param $doQuery Executes a query to get the object if required
-     * @return Notacredito The associated Notacredito object.
+     * @return Ingreso The associated Ingreso object.
      * @throws PropelException
      */
-    public function getNotacredito(PropelPDO $con = null, $doQuery = true)
+    public function getIngreso(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aNotacredito === null && ($this->idnotacredito !== null) && $doQuery) {
-            $this->aNotacredito = NotacreditoQuery::create()->findPk($this->idnotacredito, $con);
+        if ($this->aIngreso === null && ($this->idingreso !== null) && $doQuery) {
+            $this->aIngreso = IngresoQuery::create()->findPk($this->idingreso, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aNotacredito->addNotacreditonotas($this);
+                $this->aIngreso->addIngresonotas($this);
              */
         }
 
-        return $this->aNotacredito;
+        return $this->aIngreso;
     }
 
     /**
      * Declares an association between this object and a Usuario object.
      *
      * @param                  Usuario $v
-     * @return Notacreditonota The current object (for fluent API support)
+     * @return Ingresonota The current object (for fluent API support)
      * @throws PropelException
      */
     public function setUsuario(Usuario $v = null)
@@ -1119,7 +1119,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the Usuario object, it will not be re-added.
         if ($v !== null) {
-            $v->addNotacreditonota($this);
+            $v->addIngresonota($this);
         }
 
 
@@ -1144,7 +1144,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUsuario->addNotacreditonotas($this);
+                $this->aUsuario->addIngresonotas($this);
              */
         }
 
@@ -1156,11 +1156,11 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->idnotacreditonota = null;
-        $this->idnotacredito = null;
+        $this->idingresonota = null;
         $this->idusuario = null;
-        $this->notacreditonota_nota = null;
-        $this->notacreditonota_fecha = null;
+        $this->idingreso = null;
+        $this->ingresonota_nota = null;
+        $this->ingresonota_fecha = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1183,8 +1183,8 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aNotacredito instanceof Persistent) {
-              $this->aNotacredito->clearAllReferences($deep);
+            if ($this->aIngreso instanceof Persistent) {
+              $this->aIngreso->clearAllReferences($deep);
             }
             if ($this->aUsuario instanceof Persistent) {
               $this->aUsuario->clearAllReferences($deep);
@@ -1193,7 +1193,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aNotacredito = null;
+        $this->aIngreso = null;
         $this->aUsuario = null;
     }
 
@@ -1204,7 +1204,7 @@ abstract class BaseNotacreditonota extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(NotacreditonotaPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(IngresonotaPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**

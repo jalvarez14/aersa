@@ -54,6 +54,9 @@ class DevolucionTableMap extends TableMap
         $this->addColumn('devolucion_iva', 'DevolucionIva', 'DECIMAL', false, 10, null);
         $this->addColumn('devolucion_total', 'DevolucionTotal', 'DECIMAL', false, 10, null);
         $this->addColumn('devolucion_subtotal', 'DevolucionSubtotal', 'DECIMAL', false, 15, null);
+        $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
         // validators
     } // initialize()
 

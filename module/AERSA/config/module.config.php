@@ -749,7 +749,55 @@ return array(
                             'route' => '/procesos', 
                         ),
                         'may_terminate' => true, 
-                        'child_routes' => array( 
+                        'child_routes' => array(
+                            'comentarios' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/comentarios', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Proceso\Controller\Comentarios',
+                                    ), 
+                                ), 
+                                'may_terminate' => true, 
+                                'child_routes' => array(
+                                    'get' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/get', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
+                                                'action' => 'get', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'create' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/create', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
+                                                'action' => 'create', 
+                                            ), 
+                                        ), 
+                                    ),
+                                    'delete' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/delete', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
+                                                'action' => 'delete', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'edit' => array( 
+                                        'type' => 'Literal', 'options' => array( 
+                                            'route' => '/edit', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
+                                                'action' => 'edit', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                ),
+                            ),
                             'compra' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1471,6 +1519,7 @@ return array(
             'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
             'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
             'Application\Proceso\Controller\Venta'          => 'Application\Proceso\Controller\VentaController',
+            'Application\Proceso\Controller\Comentarios'    => 'Application\Proceso\Controller\ComentariosController',
             
             /*
              * FLUJO EFECTIVO

@@ -10,11 +10,13 @@
  * @method NotacreditonotaQuery orderByIdnotacredito($order = Criteria::ASC) Order by the idnotacredito column
  * @method NotacreditonotaQuery orderByIdusuario($order = Criteria::ASC) Order by the idusuario column
  * @method NotacreditonotaQuery orderByNotacreditonotaNota($order = Criteria::ASC) Order by the notacreditonota_nota column
+ * @method NotacreditonotaQuery orderByNotacreditonotaFecha($order = Criteria::ASC) Order by the notacreditonota_fecha column
  *
  * @method NotacreditonotaQuery groupByIdnotacreditonota() Group by the idnotacreditonota column
  * @method NotacreditonotaQuery groupByIdnotacredito() Group by the idnotacredito column
  * @method NotacreditonotaQuery groupByIdusuario() Group by the idusuario column
  * @method NotacreditonotaQuery groupByNotacreditonotaNota() Group by the notacreditonota_nota column
+ * @method NotacreditonotaQuery groupByNotacreditonotaFecha() Group by the notacreditonota_fecha column
  *
  * @method NotacreditonotaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method NotacreditonotaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -34,11 +36,13 @@
  * @method Notacreditonota findOneByIdnotacredito(int $idnotacredito) Return the first Notacreditonota filtered by the idnotacredito column
  * @method Notacreditonota findOneByIdusuario(int $idusuario) Return the first Notacreditonota filtered by the idusuario column
  * @method Notacreditonota findOneByNotacreditonotaNota(string $notacreditonota_nota) Return the first Notacreditonota filtered by the notacreditonota_nota column
+ * @method Notacreditonota findOneByNotacreditonotaFecha(string $notacreditonota_fecha) Return the first Notacreditonota filtered by the notacreditonota_fecha column
  *
  * @method array findByIdnotacreditonota(int $idnotacreditonota) Return Notacreditonota objects filtered by the idnotacreditonota column
  * @method array findByIdnotacredito(int $idnotacredito) Return Notacreditonota objects filtered by the idnotacredito column
  * @method array findByIdusuario(int $idusuario) Return Notacreditonota objects filtered by the idusuario column
  * @method array findByNotacreditonotaNota(string $notacreditonota_nota) Return Notacreditonota objects filtered by the notacreditonota_nota column
+ * @method array findByNotacreditonotaFecha(string $notacreditonota_fecha) Return Notacreditonota objects filtered by the notacreditonota_fecha column
  *
  * @package    propel.generator.aersa.om
  */
@@ -146,7 +150,7 @@ abstract class BaseNotacreditonotaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idnotacreditonota`, `idnotacredito`, `idusuario`, `notacreditonota_nota` FROM `notacreditonota` WHERE `idnotacreditonota` = :p0';
+        $sql = 'SELECT `idnotacreditonota`, `idnotacredito`, `idusuario`, `notacreditonota_nota`, `notacreditonota_fecha` FROM `notacreditonota` WHERE `idnotacreditonota` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -392,6 +396,49 @@ abstract class BaseNotacreditonotaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(NotacreditonotaPeer::NOTACREDITONOTA_NOTA, $notacreditonotaNota, $comparison);
+    }
+
+    /**
+     * Filter the query on the notacreditonota_fecha column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotacreditonotaFecha('2011-03-14'); // WHERE notacreditonota_fecha = '2011-03-14'
+     * $query->filterByNotacreditonotaFecha('now'); // WHERE notacreditonota_fecha = '2011-03-14'
+     * $query->filterByNotacreditonotaFecha(array('max' => 'yesterday')); // WHERE notacreditonota_fecha < '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $notacreditonotaFecha The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotacreditonotaQuery The current query, for fluid interface
+     */
+    public function filterByNotacreditonotaFecha($notacreditonotaFecha = null, $comparison = null)
+    {
+        if (is_array($notacreditonotaFecha)) {
+            $useMinMax = false;
+            if (isset($notacreditonotaFecha['min'])) {
+                $this->addUsingAlias(NotacreditonotaPeer::NOTACREDITONOTA_FECHA, $notacreditonotaFecha['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($notacreditonotaFecha['max'])) {
+                $this->addUsingAlias(NotacreditonotaPeer::NOTACREDITONOTA_FECHA, $notacreditonotaFecha['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotacreditonotaPeer::NOTACREDITONOTA_FECHA, $notacreditonotaFecha, $comparison);
     }
 
     /**

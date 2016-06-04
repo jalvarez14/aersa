@@ -24,13 +24,13 @@ abstract class BaseDevolucionPeer
     const TM_CLASS = 'DevolucionTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 16;
+    const NUM_COLUMNS = 19;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 16;
+    const NUM_HYDRATE_COLUMNS = 19;
 
     /** the column name for the iddevolucion field */
     const IDDEVOLUCION = 'devolucion.iddevolucion';
@@ -80,6 +80,15 @@ abstract class BaseDevolucionPeer
     /** the column name for the devolucion_subtotal field */
     const DEVOLUCION_SUBTOTAL = 'devolucion.devolucion_subtotal';
 
+    /** the column name for the notaauditorempresa field */
+    const NOTAAUDITOREMPRESA = 'devolucion.notaauditorempresa';
+
+    /** the column name for the notaalmacenistaempresa field */
+    const NOTAALMACENISTAEMPRESA = 'devolucion.notaalmacenistaempresa';
+
+    /** the column name for the notaauditoraersa field */
+    const NOTAAUDITORAERSA = 'devolucion.notaauditoraersa';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -99,12 +108,12 @@ abstract class BaseDevolucionPeer
      * e.g. DevolucionPeer::$fieldNames[DevolucionPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevolucion', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'Idalmacen', 'Idproveedor', 'DevolucionFolio', 'DevolucionRevisada', 'DevolucionFactura', 'DevolucionFechacreacion', 'DevolucionFechadevolucion', 'DevolucionIeps', 'DevolucionIva', 'DevolucionTotal', 'DevolucionSubtotal', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'idproveedor', 'devolucionFolio', 'devolucionRevisada', 'devolucionFactura', 'devolucionFechacreacion', 'devolucionFechadevolucion', 'devolucionIeps', 'devolucionIva', 'devolucionTotal', 'devolucionSubtotal', ),
-        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION, DevolucionPeer::IDEMPRESA, DevolucionPeer::IDSUCURSAL, DevolucionPeer::IDUSUARIO, DevolucionPeer::IDAUDITOR, DevolucionPeer::IDALMACEN, DevolucionPeer::IDPROVEEDOR, DevolucionPeer::DEVOLUCION_FOLIO, DevolucionPeer::DEVOLUCION_REVISADA, DevolucionPeer::DEVOLUCION_FACTURA, DevolucionPeer::DEVOLUCION_FECHACREACION, DevolucionPeer::DEVOLUCION_FECHADEVOLUCION, DevolucionPeer::DEVOLUCION_IEPS, DevolucionPeer::DEVOLUCION_IVA, DevolucionPeer::DEVOLUCION_TOTAL, DevolucionPeer::DEVOLUCION_SUBTOTAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'IDPROVEEDOR', 'DEVOLUCION_FOLIO', 'DEVOLUCION_REVISADA', 'DEVOLUCION_FACTURA', 'DEVOLUCION_FECHACREACION', 'DEVOLUCION_FECHADEVOLUCION', 'DEVOLUCION_IEPS', 'DEVOLUCION_IVA', 'DEVOLUCION_TOTAL', 'DEVOLUCION_SUBTOTAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevolucion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'idproveedor', 'devolucion_folio', 'devolucion_revisada', 'devolucion_factura', 'devolucion_fechacreacion', 'devolucion_fechadevolucion', 'devolucion_ieps', 'devolucion_iva', 'devolucion_total', 'devolucion_subtotal', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevolucion', 'Idempresa', 'Idsucursal', 'Idusuario', 'Idauditor', 'Idalmacen', 'Idproveedor', 'DevolucionFolio', 'DevolucionRevisada', 'DevolucionFactura', 'DevolucionFechacreacion', 'DevolucionFechadevolucion', 'DevolucionIeps', 'DevolucionIva', 'DevolucionTotal', 'DevolucionSubtotal', 'Notaauditorempresa', 'Notaalmacenistaempresa', 'Notaauditoraersa', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'idproveedor', 'devolucionFolio', 'devolucionRevisada', 'devolucionFactura', 'devolucionFechacreacion', 'devolucionFechadevolucion', 'devolucionIeps', 'devolucionIva', 'devolucionTotal', 'devolucionSubtotal', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', ),
+        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION, DevolucionPeer::IDEMPRESA, DevolucionPeer::IDSUCURSAL, DevolucionPeer::IDUSUARIO, DevolucionPeer::IDAUDITOR, DevolucionPeer::IDALMACEN, DevolucionPeer::IDPROVEEDOR, DevolucionPeer::DEVOLUCION_FOLIO, DevolucionPeer::DEVOLUCION_REVISADA, DevolucionPeer::DEVOLUCION_FACTURA, DevolucionPeer::DEVOLUCION_FECHACREACION, DevolucionPeer::DEVOLUCION_FECHADEVOLUCION, DevolucionPeer::DEVOLUCION_IEPS, DevolucionPeer::DEVOLUCION_IVA, DevolucionPeer::DEVOLUCION_TOTAL, DevolucionPeer::DEVOLUCION_SUBTOTAL, DevolucionPeer::NOTAAUDITOREMPRESA, DevolucionPeer::NOTAALMACENISTAEMPRESA, DevolucionPeer::NOTAAUDITORAERSA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'IDPROVEEDOR', 'DEVOLUCION_FOLIO', 'DEVOLUCION_REVISADA', 'DEVOLUCION_FACTURA', 'DEVOLUCION_FECHACREACION', 'DEVOLUCION_FECHADEVOLUCION', 'DEVOLUCION_IEPS', 'DEVOLUCION_IVA', 'DEVOLUCION_TOTAL', 'DEVOLUCION_SUBTOTAL', 'NOTAAUDITOREMPRESA', 'NOTAALMACENISTAEMPRESA', 'NOTAAUDITORAERSA', ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevolucion', 'idempresa', 'idsucursal', 'idusuario', 'idauditor', 'idalmacen', 'idproveedor', 'devolucion_folio', 'devolucion_revisada', 'devolucion_factura', 'devolucion_fechacreacion', 'devolucion_fechadevolucion', 'devolucion_ieps', 'devolucion_iva', 'devolucion_total', 'devolucion_subtotal', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -114,12 +123,12 @@ abstract class BaseDevolucionPeer
      * e.g. DevolucionPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Iddevolucion' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'Idalmacen' => 5, 'Idproveedor' => 6, 'DevolucionFolio' => 7, 'DevolucionRevisada' => 8, 'DevolucionFactura' => 9, 'DevolucionFechacreacion' => 10, 'DevolucionFechadevolucion' => 11, 'DevolucionIeps' => 12, 'DevolucionIva' => 13, 'DevolucionTotal' => 14, 'DevolucionSubtotal' => 15, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'idproveedor' => 6, 'devolucionFolio' => 7, 'devolucionRevisada' => 8, 'devolucionFactura' => 9, 'devolucionFechacreacion' => 10, 'devolucionFechadevolucion' => 11, 'devolucionIeps' => 12, 'devolucionIva' => 13, 'devolucionTotal' => 14, 'devolucionSubtotal' => 15, ),
-        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION => 0, DevolucionPeer::IDEMPRESA => 1, DevolucionPeer::IDSUCURSAL => 2, DevolucionPeer::IDUSUARIO => 3, DevolucionPeer::IDAUDITOR => 4, DevolucionPeer::IDALMACEN => 5, DevolucionPeer::IDPROVEEDOR => 6, DevolucionPeer::DEVOLUCION_FOLIO => 7, DevolucionPeer::DEVOLUCION_REVISADA => 8, DevolucionPeer::DEVOLUCION_FACTURA => 9, DevolucionPeer::DEVOLUCION_FECHACREACION => 10, DevolucionPeer::DEVOLUCION_FECHADEVOLUCION => 11, DevolucionPeer::DEVOLUCION_IEPS => 12, DevolucionPeer::DEVOLUCION_IVA => 13, DevolucionPeer::DEVOLUCION_TOTAL => 14, DevolucionPeer::DEVOLUCION_SUBTOTAL => 15, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'IDALMACEN' => 5, 'IDPROVEEDOR' => 6, 'DEVOLUCION_FOLIO' => 7, 'DEVOLUCION_REVISADA' => 8, 'DEVOLUCION_FACTURA' => 9, 'DEVOLUCION_FECHACREACION' => 10, 'DEVOLUCION_FECHADEVOLUCION' => 11, 'DEVOLUCION_IEPS' => 12, 'DEVOLUCION_IVA' => 13, 'DEVOLUCION_TOTAL' => 14, 'DEVOLUCION_SUBTOTAL' => 15, ),
-        BasePeer::TYPE_FIELDNAME => array ('iddevolucion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'idproveedor' => 6, 'devolucion_folio' => 7, 'devolucion_revisada' => 8, 'devolucion_factura' => 9, 'devolucion_fechacreacion' => 10, 'devolucion_fechadevolucion' => 11, 'devolucion_ieps' => 12, 'devolucion_iva' => 13, 'devolucion_total' => 14, 'devolucion_subtotal' => 15, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('Iddevolucion' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'Idauditor' => 4, 'Idalmacen' => 5, 'Idproveedor' => 6, 'DevolucionFolio' => 7, 'DevolucionRevisada' => 8, 'DevolucionFactura' => 9, 'DevolucionFechacreacion' => 10, 'DevolucionFechadevolucion' => 11, 'DevolucionIeps' => 12, 'DevolucionIva' => 13, 'DevolucionTotal' => 14, 'DevolucionSubtotal' => 15, 'Notaauditorempresa' => 16, 'Notaalmacenistaempresa' => 17, 'Notaauditoraersa' => 18, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('iddevolucion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'idproveedor' => 6, 'devolucionFolio' => 7, 'devolucionRevisada' => 8, 'devolucionFactura' => 9, 'devolucionFechacreacion' => 10, 'devolucionFechadevolucion' => 11, 'devolucionIeps' => 12, 'devolucionIva' => 13, 'devolucionTotal' => 14, 'devolucionSubtotal' => 15, 'notaauditorempresa' => 16, 'notaalmacenistaempresa' => 17, 'notaauditoraersa' => 18, ),
+        BasePeer::TYPE_COLNAME => array (DevolucionPeer::IDDEVOLUCION => 0, DevolucionPeer::IDEMPRESA => 1, DevolucionPeer::IDSUCURSAL => 2, DevolucionPeer::IDUSUARIO => 3, DevolucionPeer::IDAUDITOR => 4, DevolucionPeer::IDALMACEN => 5, DevolucionPeer::IDPROVEEDOR => 6, DevolucionPeer::DEVOLUCION_FOLIO => 7, DevolucionPeer::DEVOLUCION_REVISADA => 8, DevolucionPeer::DEVOLUCION_FACTURA => 9, DevolucionPeer::DEVOLUCION_FECHACREACION => 10, DevolucionPeer::DEVOLUCION_FECHADEVOLUCION => 11, DevolucionPeer::DEVOLUCION_IEPS => 12, DevolucionPeer::DEVOLUCION_IVA => 13, DevolucionPeer::DEVOLUCION_TOTAL => 14, DevolucionPeer::DEVOLUCION_SUBTOTAL => 15, DevolucionPeer::NOTAAUDITOREMPRESA => 16, DevolucionPeer::NOTAALMACENISTAEMPRESA => 17, DevolucionPeer::NOTAAUDITORAERSA => 18, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDDEVOLUCION' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'IDAUDITOR' => 4, 'IDALMACEN' => 5, 'IDPROVEEDOR' => 6, 'DEVOLUCION_FOLIO' => 7, 'DEVOLUCION_REVISADA' => 8, 'DEVOLUCION_FACTURA' => 9, 'DEVOLUCION_FECHACREACION' => 10, 'DEVOLUCION_FECHADEVOLUCION' => 11, 'DEVOLUCION_IEPS' => 12, 'DEVOLUCION_IVA' => 13, 'DEVOLUCION_TOTAL' => 14, 'DEVOLUCION_SUBTOTAL' => 15, 'NOTAAUDITOREMPRESA' => 16, 'NOTAALMACENISTAEMPRESA' => 17, 'NOTAAUDITORAERSA' => 18, ),
+        BasePeer::TYPE_FIELDNAME => array ('iddevolucion' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'idauditor' => 4, 'idalmacen' => 5, 'idproveedor' => 6, 'devolucion_folio' => 7, 'devolucion_revisada' => 8, 'devolucion_factura' => 9, 'devolucion_fechacreacion' => 10, 'devolucion_fechadevolucion' => 11, 'devolucion_ieps' => 12, 'devolucion_iva' => 13, 'devolucion_total' => 14, 'devolucion_subtotal' => 15, 'notaauditorempresa' => 16, 'notaalmacenistaempresa' => 17, 'notaauditoraersa' => 18, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
     /**
@@ -209,6 +218,9 @@ abstract class BaseDevolucionPeer
             $criteria->addSelectColumn(DevolucionPeer::DEVOLUCION_IVA);
             $criteria->addSelectColumn(DevolucionPeer::DEVOLUCION_TOTAL);
             $criteria->addSelectColumn(DevolucionPeer::DEVOLUCION_SUBTOTAL);
+            $criteria->addSelectColumn(DevolucionPeer::NOTAAUDITOREMPRESA);
+            $criteria->addSelectColumn(DevolucionPeer::NOTAALMACENISTAEMPRESA);
+            $criteria->addSelectColumn(DevolucionPeer::NOTAAUDITORAERSA);
         } else {
             $criteria->addSelectColumn($alias . '.iddevolucion');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -226,6 +238,9 @@ abstract class BaseDevolucionPeer
             $criteria->addSelectColumn($alias . '.devolucion_iva');
             $criteria->addSelectColumn($alias . '.devolucion_total');
             $criteria->addSelectColumn($alias . '.devolucion_subtotal');
+            $criteria->addSelectColumn($alias . '.notaauditorempresa');
+            $criteria->addSelectColumn($alias . '.notaalmacenistaempresa');
+            $criteria->addSelectColumn($alias . '.notaauditoraersa');
         }
     }
 

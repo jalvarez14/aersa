@@ -61,6 +61,9 @@ class CompraTableMap extends TableMap
   1 => 'compra',
   2 => 'consignacion',
 ));
+        $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
         // validators
     } // initialize()
 

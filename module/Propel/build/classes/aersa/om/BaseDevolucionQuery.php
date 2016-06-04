@@ -22,6 +22,9 @@
  * @method DevolucionQuery orderByDevolucionIva($order = Criteria::ASC) Order by the devolucion_iva column
  * @method DevolucionQuery orderByDevolucionTotal($order = Criteria::ASC) Order by the devolucion_total column
  * @method DevolucionQuery orderByDevolucionSubtotal($order = Criteria::ASC) Order by the devolucion_subtotal column
+ * @method DevolucionQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
+ * @method DevolucionQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
+ * @method DevolucionQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  *
  * @method DevolucionQuery groupByIddevolucion() Group by the iddevolucion column
  * @method DevolucionQuery groupByIdempresa() Group by the idempresa column
@@ -39,6 +42,9 @@
  * @method DevolucionQuery groupByDevolucionIva() Group by the devolucion_iva column
  * @method DevolucionQuery groupByDevolucionTotal() Group by the devolucion_total column
  * @method DevolucionQuery groupByDevolucionSubtotal() Group by the devolucion_subtotal column
+ * @method DevolucionQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
+ * @method DevolucionQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
+ * @method DevolucionQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  *
  * @method DevolucionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method DevolucionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -94,6 +100,9 @@
  * @method Devolucion findOneByDevolucionIva(string $devolucion_iva) Return the first Devolucion filtered by the devolucion_iva column
  * @method Devolucion findOneByDevolucionTotal(string $devolucion_total) Return the first Devolucion filtered by the devolucion_total column
  * @method Devolucion findOneByDevolucionSubtotal(string $devolucion_subtotal) Return the first Devolucion filtered by the devolucion_subtotal column
+ * @method Devolucion findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Devolucion filtered by the notaauditorempresa column
+ * @method Devolucion findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Devolucion filtered by the notaalmacenistaempresa column
+ * @method Devolucion findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Devolucion filtered by the notaauditoraersa column
  *
  * @method array findByIddevolucion(int $iddevolucion) Return Devolucion objects filtered by the iddevolucion column
  * @method array findByIdempresa(int $idempresa) Return Devolucion objects filtered by the idempresa column
@@ -111,6 +120,9 @@
  * @method array findByDevolucionIva(string $devolucion_iva) Return Devolucion objects filtered by the devolucion_iva column
  * @method array findByDevolucionTotal(string $devolucion_total) Return Devolucion objects filtered by the devolucion_total column
  * @method array findByDevolucionSubtotal(string $devolucion_subtotal) Return Devolucion objects filtered by the devolucion_subtotal column
+ * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Devolucion objects filtered by the notaauditorempresa column
+ * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Devolucion objects filtered by the notaalmacenistaempresa column
+ * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Devolucion objects filtered by the notaauditoraersa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -218,7 +230,7 @@ abstract class BaseDevolucionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `idproveedor`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechadevolucion`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total`, `devolucion_subtotal` FROM `devolucion` WHERE `iddevolucion` = :p0';
+        $sql = 'SELECT `iddevolucion`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `idalmacen`, `idproveedor`, `devolucion_folio`, `devolucion_revisada`, `devolucion_factura`, `devolucion_fechacreacion`, `devolucion_fechadevolucion`, `devolucion_ieps`, `devolucion_iva`, `devolucion_total`, `devolucion_subtotal`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `devolucion` WHERE `iddevolucion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -950,6 +962,87 @@ abstract class BaseDevolucionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(DevolucionPeer::DEVOLUCION_SUBTOTAL, $devolucionSubtotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditorempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditorempresa(true); // WHERE notaauditorempresa = true
+     * $query->filterByNotaauditorempresa('yes'); // WHERE notaauditorempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditorempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditorempresa($notaauditorempresa = null, $comparison = null)
+    {
+        if (is_string($notaauditorempresa)) {
+            $notaauditorempresa = in_array(strtolower($notaauditorempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(DevolucionPeer::NOTAAUDITOREMPRESA, $notaauditorempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaalmacenistaempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaalmacenistaempresa(true); // WHERE notaalmacenistaempresa = true
+     * $query->filterByNotaalmacenistaempresa('yes'); // WHERE notaalmacenistaempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaalmacenistaempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function filterByNotaalmacenistaempresa($notaalmacenistaempresa = null, $comparison = null)
+    {
+        if (is_string($notaalmacenistaempresa)) {
+            $notaalmacenistaempresa = in_array(strtolower($notaalmacenistaempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(DevolucionPeer::NOTAALMACENISTAEMPRESA, $notaalmacenistaempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditoraersa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditoraersa(true); // WHERE notaauditoraersa = true
+     * $query->filterByNotaauditoraersa('yes'); // WHERE notaauditoraersa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditoraersa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return DevolucionQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditoraersa($notaauditoraersa = null, $comparison = null)
+    {
+        if (is_string($notaauditoraersa)) {
+            $notaauditoraersa = in_array(strtolower($notaauditoraersa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(DevolucionPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
     }
 
     /**

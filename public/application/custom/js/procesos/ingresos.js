@@ -125,6 +125,14 @@
                 
             }
             
+            //COMENTARIOS
+            var id = $('input[name=idingreso]').val();
+            $('#comentarios_container').comentarios({
+                table:'ingresonota',
+                id: id,
+                parent:'idingreso',
+            });
+            
        
         }
         

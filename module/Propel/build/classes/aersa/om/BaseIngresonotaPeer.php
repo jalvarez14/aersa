@@ -2,26 +2,26 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'notacreditonota' table.
+ * Base static class for performing query and update operations on the 'ingresonota' table.
  *
  *
  *
  * @package propel.generator.aersa.om
  */
-abstract class BaseNotacreditonotaPeer
+abstract class BaseIngresonotaPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'aersa';
 
     /** the table name for this class */
-    const TABLE_NAME = 'notacreditonota';
+    const TABLE_NAME = 'ingresonota';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'Notacreditonota';
+    const OM_CLASS = 'Ingresonota';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'NotacreditonotaTableMap';
+    const TM_CLASS = 'IngresonotaTableMap';
 
     /** The total number of columns. */
     const NUM_COLUMNS = 5;
@@ -32,29 +32,29 @@ abstract class BaseNotacreditonotaPeer
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
     const NUM_HYDRATE_COLUMNS = 5;
 
-    /** the column name for the idnotacreditonota field */
-    const IDNOTACREDITONOTA = 'notacreditonota.idnotacreditonota';
-
-    /** the column name for the idnotacredito field */
-    const IDNOTACREDITO = 'notacreditonota.idnotacredito';
+    /** the column name for the idingresonota field */
+    const IDINGRESONOTA = 'ingresonota.idingresonota';
 
     /** the column name for the idusuario field */
-    const IDUSUARIO = 'notacreditonota.idusuario';
+    const IDUSUARIO = 'ingresonota.idusuario';
 
-    /** the column name for the notacreditonota_nota field */
-    const NOTACREDITONOTA_NOTA = 'notacreditonota.notacreditonota_nota';
+    /** the column name for the idingreso field */
+    const IDINGRESO = 'ingresonota.idingreso';
 
-    /** the column name for the notacreditonota_fecha field */
-    const NOTACREDITONOTA_FECHA = 'notacreditonota.notacreditonota_fecha';
+    /** the column name for the ingresonota_nota field */
+    const INGRESONOTA_NOTA = 'ingresonota.ingresonota_nota';
+
+    /** the column name for the ingresonota_fecha field */
+    const INGRESONOTA_FECHA = 'ingresonota.ingresonota_fecha';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of Notacreditonota objects.
+     * An identity map to hold any loaded instances of Ingresonota objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array Notacreditonota[]
+     * @var        array Ingresonota[]
      */
     public static $instances = array();
 
@@ -63,14 +63,14 @@ abstract class BaseNotacreditonotaPeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. NotacreditonotaPeer::$fieldNames[NotacreditonotaPeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. IngresonotaPeer::$fieldNames[IngresonotaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacreditonota', 'Idnotacredito', 'Idusuario', 'NotacreditonotaNota', 'NotacreditonotaFecha', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacreditonota', 'idnotacredito', 'idusuario', 'notacreditonotaNota', 'notacreditonotaFecha', ),
-        BasePeer::TYPE_COLNAME => array (NotacreditonotaPeer::IDNOTACREDITONOTA, NotacreditonotaPeer::IDNOTACREDITO, NotacreditonotaPeer::IDUSUARIO, NotacreditonotaPeer::NOTACREDITONOTA_NOTA, NotacreditonotaPeer::NOTACREDITONOTA_FECHA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITONOTA', 'IDNOTACREDITO', 'IDUSUARIO', 'NOTACREDITONOTA_NOTA', 'NOTACREDITONOTA_FECHA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacreditonota', 'idnotacredito', 'idusuario', 'notacreditonota_nota', 'notacreditonota_fecha', ),
+        BasePeer::TYPE_PHPNAME => array ('Idingresonota', 'Idusuario', 'Idingreso', 'IngresonotaNota', 'IngresonotaFecha', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idingresonota', 'idusuario', 'idingreso', 'ingresonotaNota', 'ingresonotaFecha', ),
+        BasePeer::TYPE_COLNAME => array (IngresonotaPeer::IDINGRESONOTA, IngresonotaPeer::IDUSUARIO, IngresonotaPeer::IDINGRESO, IngresonotaPeer::INGRESONOTA_NOTA, IngresonotaPeer::INGRESONOTA_FECHA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESONOTA', 'IDUSUARIO', 'IDINGRESO', 'INGRESONOTA_NOTA', 'INGRESONOTA_FECHA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idingresonota', 'idusuario', 'idingreso', 'ingresonota_nota', 'ingresonota_fecha', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -78,14 +78,14 @@ abstract class BaseNotacreditonotaPeer
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. NotacreditonotaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. IngresonotaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacreditonota' => 0, 'Idnotacredito' => 1, 'Idusuario' => 2, 'NotacreditonotaNota' => 3, 'NotacreditonotaFecha' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacreditonota' => 0, 'idnotacredito' => 1, 'idusuario' => 2, 'notacreditonotaNota' => 3, 'notacreditonotaFecha' => 4, ),
-        BasePeer::TYPE_COLNAME => array (NotacreditonotaPeer::IDNOTACREDITONOTA => 0, NotacreditonotaPeer::IDNOTACREDITO => 1, NotacreditonotaPeer::IDUSUARIO => 2, NotacreditonotaPeer::NOTACREDITONOTA_NOTA => 3, NotacreditonotaPeer::NOTACREDITONOTA_FECHA => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITONOTA' => 0, 'IDNOTACREDITO' => 1, 'IDUSUARIO' => 2, 'NOTACREDITONOTA_NOTA' => 3, 'NOTACREDITONOTA_FECHA' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacreditonota' => 0, 'idnotacredito' => 1, 'idusuario' => 2, 'notacreditonota_nota' => 3, 'notacreditonota_fecha' => 4, ),
+        BasePeer::TYPE_PHPNAME => array ('Idingresonota' => 0, 'Idusuario' => 1, 'Idingreso' => 2, 'IngresonotaNota' => 3, 'IngresonotaFecha' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idingresonota' => 0, 'idusuario' => 1, 'idingreso' => 2, 'ingresonotaNota' => 3, 'ingresonotaFecha' => 4, ),
+        BasePeer::TYPE_COLNAME => array (IngresonotaPeer::IDINGRESONOTA => 0, IngresonotaPeer::IDUSUARIO => 1, IngresonotaPeer::IDINGRESO => 2, IngresonotaPeer::INGRESONOTA_NOTA => 3, IngresonotaPeer::INGRESONOTA_FECHA => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINGRESONOTA' => 0, 'IDUSUARIO' => 1, 'IDINGRESO' => 2, 'INGRESONOTA_NOTA' => 3, 'INGRESONOTA_FECHA' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idingresonota' => 0, 'idusuario' => 1, 'idingreso' => 2, 'ingresonota_nota' => 3, 'ingresonota_fecha' => 4, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
@@ -101,10 +101,10 @@ abstract class BaseNotacreditonotaPeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = NotacreditonotaPeer::getFieldNames($toType);
-        $key = isset(NotacreditonotaPeer::$fieldKeys[$fromType][$name]) ? NotacreditonotaPeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = IngresonotaPeer::getFieldNames($toType);
+        $key = isset(IngresonotaPeer::$fieldKeys[$fromType][$name]) ? IngresonotaPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(NotacreditonotaPeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(IngresonotaPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -121,11 +121,11 @@ abstract class BaseNotacreditonotaPeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, NotacreditonotaPeer::$fieldNames)) {
+        if (!array_key_exists($type, IngresonotaPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return NotacreditonotaPeer::$fieldNames[$type];
+        return IngresonotaPeer::$fieldNames[$type];
     }
 
     /**
@@ -137,12 +137,12 @@ abstract class BaseNotacreditonotaPeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. NotacreditonotaPeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. IngresonotaPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(NotacreditonotaPeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(IngresonotaPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -160,17 +160,17 @@ abstract class BaseNotacreditonotaPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(NotacreditonotaPeer::IDNOTACREDITONOTA);
-            $criteria->addSelectColumn(NotacreditonotaPeer::IDNOTACREDITO);
-            $criteria->addSelectColumn(NotacreditonotaPeer::IDUSUARIO);
-            $criteria->addSelectColumn(NotacreditonotaPeer::NOTACREDITONOTA_NOTA);
-            $criteria->addSelectColumn(NotacreditonotaPeer::NOTACREDITONOTA_FECHA);
+            $criteria->addSelectColumn(IngresonotaPeer::IDINGRESONOTA);
+            $criteria->addSelectColumn(IngresonotaPeer::IDUSUARIO);
+            $criteria->addSelectColumn(IngresonotaPeer::IDINGRESO);
+            $criteria->addSelectColumn(IngresonotaPeer::INGRESONOTA_NOTA);
+            $criteria->addSelectColumn(IngresonotaPeer::INGRESONOTA_FECHA);
         } else {
-            $criteria->addSelectColumn($alias . '.idnotacreditonota');
-            $criteria->addSelectColumn($alias . '.idnotacredito');
+            $criteria->addSelectColumn($alias . '.idingresonota');
             $criteria->addSelectColumn($alias . '.idusuario');
-            $criteria->addSelectColumn($alias . '.notacreditonota_nota');
-            $criteria->addSelectColumn($alias . '.notacreditonota_fecha');
+            $criteria->addSelectColumn($alias . '.idingreso');
+            $criteria->addSelectColumn($alias . '.ingresonota_nota');
+            $criteria->addSelectColumn($alias . '.ingresonota_fecha');
         }
     }
 
@@ -190,21 +190,21 @@ abstract class BaseNotacreditonotaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NotacreditonotaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(IngresonotaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NotacreditonotaPeer::addSelectColumns($criteria);
+            IngresonotaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -223,7 +223,7 @@ abstract class BaseNotacreditonotaPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return Notacreditonota
+     * @return Ingresonota
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -231,7 +231,7 @@ abstract class BaseNotacreditonotaPeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = NotacreditonotaPeer::doSelect($critcopy, $con);
+        $objects = IngresonotaPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -249,7 +249,7 @@ abstract class BaseNotacreditonotaPeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return NotacreditonotaPeer::populateObjects(NotacreditonotaPeer::doSelectStmt($criteria, $con));
+        return IngresonotaPeer::populateObjects(IngresonotaPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -267,16 +267,16 @@ abstract class BaseNotacreditonotaPeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            NotacreditonotaPeer::addSelectColumns($criteria);
+            IngresonotaPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -290,16 +290,16 @@ abstract class BaseNotacreditonotaPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param Notacreditonota $obj A Notacreditonota object.
+     * @param Ingresonota $obj A Ingresonota object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIdnotacreditonota();
+                $key = (string) $obj->getIdingresonota();
             } // if key === null
-            NotacreditonotaPeer::$instances[$key] = $obj;
+            IngresonotaPeer::$instances[$key] = $obj;
         }
     }
 
@@ -311,7 +311,7 @@ abstract class BaseNotacreditonotaPeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A Notacreditonota object or a primary key value.
+     * @param      mixed $value A Ingresonota object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -319,17 +319,17 @@ abstract class BaseNotacreditonotaPeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof Notacreditonota) {
-                $key = (string) $value->getIdnotacreditonota();
+            if (is_object($value) && $value instanceof Ingresonota) {
+                $key = (string) $value->getIdingresonota();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Notacreditonota object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Ingresonota object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(NotacreditonotaPeer::$instances[$key]);
+            unset(IngresonotaPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -340,14 +340,14 @@ abstract class BaseNotacreditonotaPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return Notacreditonota Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return Ingresonota Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(NotacreditonotaPeer::$instances[$key])) {
-                return NotacreditonotaPeer::$instances[$key];
+            if (isset(IngresonotaPeer::$instances[$key])) {
+                return IngresonotaPeer::$instances[$key];
             }
         }
 
@@ -362,15 +362,15 @@ abstract class BaseNotacreditonotaPeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (NotacreditonotaPeer::$instances as $instance) {
+        foreach (IngresonotaPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        NotacreditonotaPeer::$instances = array();
+        IngresonotaPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to notacreditonota
+     * Method to invalidate the instance pool of all tables related to ingresonota
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -424,11 +424,11 @@ abstract class BaseNotacreditonotaPeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = NotacreditonotaPeer::getOMClass();
+        $cls = IngresonotaPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = NotacreditonotaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = NotacreditonotaPeer::getInstanceFromPool($key))) {
+            $key = IngresonotaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = IngresonotaPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -437,7 +437,7 @@ abstract class BaseNotacreditonotaPeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                NotacreditonotaPeer::addInstanceToPool($obj, $key);
+                IngresonotaPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -451,21 +451,21 @@ abstract class BaseNotacreditonotaPeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (Notacreditonota object, last column rank)
+     * @return array (Ingresonota object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = NotacreditonotaPeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = NotacreditonotaPeer::getInstanceFromPool($key))) {
+        $key = IngresonotaPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = IngresonotaPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + NotacreditonotaPeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + IngresonotaPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = NotacreditonotaPeer::OM_CLASS;
+            $cls = IngresonotaPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            NotacreditonotaPeer::addInstanceToPool($obj, $key);
+            IngresonotaPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -473,7 +473,7 @@ abstract class BaseNotacreditonotaPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Notacredito table
+     * Returns the number of rows matching criteria, joining the related Ingreso table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -481,7 +481,7 @@ abstract class BaseNotacreditonotaPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinNotacredito(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinIngreso(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -489,26 +489,26 @@ abstract class BaseNotacreditonotaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NotacreditonotaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(IngresonotaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NotacreditonotaPeer::addSelectColumns($criteria);
+            IngresonotaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NotacreditonotaPeer::IDNOTACREDITO, NotacreditoPeer::IDNOTACREDITO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDINGRESO, IngresoPeer::IDINGRESO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -540,26 +540,26 @@ abstract class BaseNotacreditonotaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NotacreditonotaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(IngresonotaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NotacreditonotaPeer::addSelectColumns($criteria);
+            IngresonotaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NotacreditonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -575,61 +575,61 @@ abstract class BaseNotacreditonotaPeer
 
 
     /**
-     * Selects a collection of Notacreditonota objects pre-filled with their Notacredito objects.
+     * Selects a collection of Ingresonota objects pre-filled with their Ingreso objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Notacreditonota objects.
+     * @return array           Array of Ingresonota objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinNotacredito(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinIngreso(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+            $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
         }
 
-        NotacreditonotaPeer::addSelectColumns($criteria);
-        $startcol = NotacreditonotaPeer::NUM_HYDRATE_COLUMNS;
-        NotacreditoPeer::addSelectColumns($criteria);
+        IngresonotaPeer::addSelectColumns($criteria);
+        $startcol = IngresonotaPeer::NUM_HYDRATE_COLUMNS;
+        IngresoPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(NotacreditonotaPeer::IDNOTACREDITO, NotacreditoPeer::IDNOTACREDITO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDINGRESO, IngresoPeer::IDINGRESO, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NotacreditonotaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NotacreditonotaPeer::getInstanceFromPool($key1))) {
+            $key1 = IngresonotaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = IngresonotaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = NotacreditonotaPeer::getOMClass();
+                $cls = IngresonotaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NotacreditonotaPeer::addInstanceToPool($obj1, $key1);
+                IngresonotaPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
-            $key2 = NotacreditoPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            $key2 = IngresoPeer::getPrimaryKeyHashFromRow($row, $startcol);
             if ($key2 !== null) {
-                $obj2 = NotacreditoPeer::getInstanceFromPool($key2);
+                $obj2 = IngresoPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = NotacreditoPeer::getOMClass();
+                    $cls = IngresoPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol);
-                    NotacreditoPeer::addInstanceToPool($obj2, $key2);
+                    IngresoPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Notacreditonota) to $obj2 (Notacredito)
-                $obj2->addNotacreditonota($obj1);
+                // Add the $obj1 (Ingresonota) to $obj2 (Ingreso)
+                $obj2->addIngresonota($obj1);
 
             } // if joined row was not null
 
@@ -642,11 +642,11 @@ abstract class BaseNotacreditonotaPeer
 
 
     /**
-     * Selects a collection of Notacreditonota objects pre-filled with their Usuario objects.
+     * Selects a collection of Ingresonota objects pre-filled with their Usuario objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Notacreditonota objects.
+     * @return array           Array of Ingresonota objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -656,31 +656,31 @@ abstract class BaseNotacreditonotaPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+            $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
         }
 
-        NotacreditonotaPeer::addSelectColumns($criteria);
-        $startcol = NotacreditonotaPeer::NUM_HYDRATE_COLUMNS;
+        IngresonotaPeer::addSelectColumns($criteria);
+        $startcol = IngresonotaPeer::NUM_HYDRATE_COLUMNS;
         UsuarioPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(NotacreditonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NotacreditonotaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NotacreditonotaPeer::getInstanceFromPool($key1))) {
+            $key1 = IngresonotaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = IngresonotaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = NotacreditonotaPeer::getOMClass();
+                $cls = IngresonotaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NotacreditonotaPeer::addInstanceToPool($obj1, $key1);
+                IngresonotaPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -695,8 +695,8 @@ abstract class BaseNotacreditonotaPeer
                     UsuarioPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Notacreditonota) to $obj2 (Usuario)
-                $obj2->addNotacreditonota($obj1);
+                // Add the $obj1 (Ingresonota) to $obj2 (Usuario)
+                $obj2->addIngresonota($obj1);
 
             } // if joined row was not null
 
@@ -725,28 +725,28 @@ abstract class BaseNotacreditonotaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NotacreditonotaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(IngresonotaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NotacreditonotaPeer::addSelectColumns($criteria);
+            IngresonotaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NotacreditonotaPeer::IDNOTACREDITO, NotacreditoPeer::IDNOTACREDITO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDINGRESO, IngresoPeer::IDINGRESO, $join_behavior);
 
-        $criteria->addJoin(NotacreditonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -761,12 +761,12 @@ abstract class BaseNotacreditonotaPeer
     }
 
     /**
-     * Selects a collection of Notacreditonota objects pre-filled with all related objects.
+     * Selects a collection of Ingresonota objects pre-filled with all related objects.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Notacreditonota objects.
+     * @return array           Array of Ingresonota objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -776,55 +776,55 @@ abstract class BaseNotacreditonotaPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+            $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
         }
 
-        NotacreditonotaPeer::addSelectColumns($criteria);
-        $startcol2 = NotacreditonotaPeer::NUM_HYDRATE_COLUMNS;
+        IngresonotaPeer::addSelectColumns($criteria);
+        $startcol2 = IngresonotaPeer::NUM_HYDRATE_COLUMNS;
 
-        NotacreditoPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + NotacreditoPeer::NUM_HYDRATE_COLUMNS;
+        IngresoPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + IngresoPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(NotacreditonotaPeer::IDNOTACREDITO, NotacreditoPeer::IDNOTACREDITO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDINGRESO, IngresoPeer::IDINGRESO, $join_behavior);
 
-        $criteria->addJoin(NotacreditonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NotacreditonotaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NotacreditonotaPeer::getInstanceFromPool($key1))) {
+            $key1 = IngresonotaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = IngresonotaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = NotacreditonotaPeer::getOMClass();
+                $cls = IngresonotaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NotacreditonotaPeer::addInstanceToPool($obj1, $key1);
+                IngresonotaPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Notacredito rows
+            // Add objects for joined Ingreso rows
 
-            $key2 = NotacreditoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = IngresoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = NotacreditoPeer::getInstanceFromPool($key2);
+                $obj2 = IngresoPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = NotacreditoPeer::getOMClass();
+                    $cls = IngresoPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    NotacreditoPeer::addInstanceToPool($obj2, $key2);
+                    IngresoPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (Notacreditonota) to the collection in $obj2 (Notacredito)
-                $obj2->addNotacreditonota($obj1);
+                // Add the $obj1 (Ingresonota) to the collection in $obj2 (Ingreso)
+                $obj2->addIngresonota($obj1);
             } // if joined row not null
 
             // Add objects for joined Usuario rows
@@ -841,8 +841,8 @@ abstract class BaseNotacreditonotaPeer
                     UsuarioPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (Notacreditonota) to the collection in $obj3 (Usuario)
-                $obj3->addNotacreditonota($obj1);
+                // Add the $obj1 (Ingresonota) to the collection in $obj3 (Usuario)
+                $obj3->addIngresonota($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -854,7 +854,7 @@ abstract class BaseNotacreditonotaPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related Notacredito table
+     * Returns the number of rows matching criteria, joining the related Ingreso table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -862,7 +862,7 @@ abstract class BaseNotacreditonotaPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptNotacredito(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptIngreso(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -870,26 +870,26 @@ abstract class BaseNotacreditonotaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NotacreditonotaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(IngresonotaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NotacreditonotaPeer::addSelectColumns($criteria);
+            IngresonotaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NotacreditonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -921,26 +921,26 @@ abstract class BaseNotacreditonotaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(NotacreditonotaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(IngresonotaPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            NotacreditonotaPeer::addSelectColumns($criteria);
+            IngresonotaPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(NotacreditonotaPeer::IDNOTACREDITO, NotacreditoPeer::IDNOTACREDITO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDINGRESO, IngresoPeer::IDINGRESO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -956,16 +956,16 @@ abstract class BaseNotacreditonotaPeer
 
 
     /**
-     * Selects a collection of Notacreditonota objects pre-filled with all related objects except Notacredito.
+     * Selects a collection of Ingresonota objects pre-filled with all related objects except Ingreso.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Notacreditonota objects.
+     * @return array           Array of Ingresonota objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptNotacredito(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptIngreso(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -973,33 +973,33 @@ abstract class BaseNotacreditonotaPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+            $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
         }
 
-        NotacreditonotaPeer::addSelectColumns($criteria);
-        $startcol2 = NotacreditonotaPeer::NUM_HYDRATE_COLUMNS;
+        IngresonotaPeer::addSelectColumns($criteria);
+        $startcol2 = IngresonotaPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(NotacreditonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NotacreditonotaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NotacreditonotaPeer::getInstanceFromPool($key1))) {
+            $key1 = IngresonotaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = IngresonotaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = NotacreditonotaPeer::getOMClass();
+                $cls = IngresonotaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NotacreditonotaPeer::addInstanceToPool($obj1, $key1);
+                IngresonotaPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
                 // Add objects for joined Usuario rows
@@ -1016,8 +1016,8 @@ abstract class BaseNotacreditonotaPeer
                     UsuarioPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Notacreditonota) to the collection in $obj2 (Usuario)
-                $obj2->addNotacreditonota($obj1);
+                // Add the $obj1 (Ingresonota) to the collection in $obj2 (Usuario)
+                $obj2->addIngresonota($obj1);
 
             } // if joined row is not null
 
@@ -1030,12 +1030,12 @@ abstract class BaseNotacreditonotaPeer
 
 
     /**
-     * Selects a collection of Notacreditonota objects pre-filled with all related objects except Usuario.
+     * Selects a collection of Ingresonota objects pre-filled with all related objects except Usuario.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Notacreditonota objects.
+     * @return array           Array of Ingresonota objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -1047,51 +1047,51 @@ abstract class BaseNotacreditonotaPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+            $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
         }
 
-        NotacreditonotaPeer::addSelectColumns($criteria);
-        $startcol2 = NotacreditonotaPeer::NUM_HYDRATE_COLUMNS;
+        IngresonotaPeer::addSelectColumns($criteria);
+        $startcol2 = IngresonotaPeer::NUM_HYDRATE_COLUMNS;
 
-        NotacreditoPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + NotacreditoPeer::NUM_HYDRATE_COLUMNS;
+        IngresoPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + IngresoPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(NotacreditonotaPeer::IDNOTACREDITO, NotacreditoPeer::IDNOTACREDITO, $join_behavior);
+        $criteria->addJoin(IngresonotaPeer::IDINGRESO, IngresoPeer::IDINGRESO, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = NotacreditonotaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = NotacreditonotaPeer::getInstanceFromPool($key1))) {
+            $key1 = IngresonotaPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = IngresonotaPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = NotacreditonotaPeer::getOMClass();
+                $cls = IngresonotaPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                NotacreditonotaPeer::addInstanceToPool($obj1, $key1);
+                IngresonotaPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-                // Add objects for joined Notacredito rows
+                // Add objects for joined Ingreso rows
 
-                $key2 = NotacreditoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                $key2 = IngresoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
                 if ($key2 !== null) {
-                    $obj2 = NotacreditoPeer::getInstanceFromPool($key2);
+                    $obj2 = IngresoPeer::getInstanceFromPool($key2);
                     if (!$obj2) {
 
-                        $cls = NotacreditoPeer::getOMClass();
+                        $cls = IngresoPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    NotacreditoPeer::addInstanceToPool($obj2, $key2);
+                    IngresoPeer::addInstanceToPool($obj2, $key2);
                 } // if $obj2 already loaded
 
-                // Add the $obj1 (Notacreditonota) to the collection in $obj2 (Notacredito)
-                $obj2->addNotacreditonota($obj1);
+                // Add the $obj1 (Ingresonota) to the collection in $obj2 (Ingreso)
+                $obj2->addIngresonota($obj1);
 
             } // if joined row is not null
 
@@ -1111,7 +1111,7 @@ abstract class BaseNotacreditonotaPeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(NotacreditonotaPeer::DATABASE_NAME)->getTable(NotacreditonotaPeer::TABLE_NAME);
+        return Propel::getDatabaseMap(IngresonotaPeer::DATABASE_NAME)->getTable(IngresonotaPeer::TABLE_NAME);
     }
 
     /**
@@ -1119,9 +1119,9 @@ abstract class BaseNotacreditonotaPeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseNotacreditonotaPeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseNotacreditonotaPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \NotacreditonotaTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseIngresonotaPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseIngresonotaPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \IngresonotaTableMap());
       }
     }
 
@@ -1133,13 +1133,13 @@ abstract class BaseNotacreditonotaPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return NotacreditonotaPeer::OM_CLASS;
+        return IngresonotaPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a Notacreditonota or Criteria object.
+     * Performs an INSERT on the database, given a Ingresonota or Criteria object.
      *
-     * @param      mixed $values Criteria or Notacreditonota object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or Ingresonota object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1148,22 +1148,22 @@ abstract class BaseNotacreditonotaPeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from Notacreditonota object
+            $criteria = $values->buildCriteria(); // build Criteria from Ingresonota object
         }
 
-        if ($criteria->containsKey(NotacreditonotaPeer::IDNOTACREDITONOTA) && $criteria->keyContainsValue(NotacreditonotaPeer::IDNOTACREDITONOTA) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.NotacreditonotaPeer::IDNOTACREDITONOTA.')');
+        if ($criteria->containsKey(IngresonotaPeer::IDINGRESONOTA) && $criteria->keyContainsValue(IngresonotaPeer::IDINGRESONOTA) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.IngresonotaPeer::IDINGRESONOTA.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -1180,9 +1180,9 @@ abstract class BaseNotacreditonotaPeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a Notacreditonota or Criteria object.
+     * Performs an UPDATE on the database, given a Ingresonota or Criteria object.
      *
-     * @param      mixed $values Criteria or Notacreditonota object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or Ingresonota object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -1191,35 +1191,35 @@ abstract class BaseNotacreditonotaPeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(NotacreditonotaPeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(IngresonotaPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(NotacreditonotaPeer::IDNOTACREDITONOTA);
-            $value = $criteria->remove(NotacreditonotaPeer::IDNOTACREDITONOTA);
+            $comparison = $criteria->getComparison(IngresonotaPeer::IDINGRESONOTA);
+            $value = $criteria->remove(IngresonotaPeer::IDINGRESONOTA);
             if ($value) {
-                $selectCriteria->add(NotacreditonotaPeer::IDNOTACREDITONOTA, $value, $comparison);
+                $selectCriteria->add(IngresonotaPeer::IDINGRESONOTA, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(NotacreditonotaPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(IngresonotaPeer::TABLE_NAME);
             }
 
-        } else { // $values is Notacreditonota object
+        } else { // $values is Ingresonota object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the notacreditonota table.
+     * Deletes all rows from the ingresonota table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -1228,19 +1228,19 @@ abstract class BaseNotacreditonotaPeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += BasePeer::doDeleteAll(NotacreditonotaPeer::TABLE_NAME, $con, NotacreditonotaPeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(IngresonotaPeer::TABLE_NAME, $con, IngresonotaPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            NotacreditonotaPeer::clearInstancePool();
-            NotacreditonotaPeer::clearRelatedInstancePool();
+            IngresonotaPeer::clearInstancePool();
+            IngresonotaPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1251,9 +1251,9 @@ abstract class BaseNotacreditonotaPeer
     }
 
     /**
-     * Performs a DELETE on the database, given a Notacreditonota or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Ingresonota or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or Notacreditonota object or primary key or array of primary keys
+     * @param      mixed $values Criteria or Ingresonota object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1264,32 +1264,32 @@ abstract class BaseNotacreditonotaPeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             // invalidate the cache for all objects of this type, since we have no
             // way of knowing (without running a query) what objects should be invalidated
             // from the cache based on this Criteria.
-            NotacreditonotaPeer::clearInstancePool();
+            IngresonotaPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof Notacreditonota) { // it's a model object
+        } elseif ($values instanceof Ingresonota) { // it's a model object
             // invalidate the cache for this single object
-            NotacreditonotaPeer::removeInstanceFromPool($values);
+            IngresonotaPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(NotacreditonotaPeer::DATABASE_NAME);
-            $criteria->add(NotacreditonotaPeer::IDNOTACREDITONOTA, (array) $values, Criteria::IN);
+            $criteria = new Criteria(IngresonotaPeer::DATABASE_NAME);
+            $criteria->add(IngresonotaPeer::IDINGRESONOTA, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
-                NotacreditonotaPeer::removeInstanceFromPool($singleval);
+                IngresonotaPeer::removeInstanceFromPool($singleval);
             }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(NotacreditonotaPeer::DATABASE_NAME);
+        $criteria->setDbName(IngresonotaPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -1299,7 +1299,7 @@ abstract class BaseNotacreditonotaPeer
             $con->beginTransaction();
 
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            NotacreditonotaPeer::clearRelatedInstancePool();
+            IngresonotaPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1310,13 +1310,13 @@ abstract class BaseNotacreditonotaPeer
     }
 
     /**
-     * Validates all modified columns of given Notacreditonota object.
+     * Validates all modified columns of given Ingresonota object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param Notacreditonota $obj The object to validate.
+     * @param Ingresonota $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1326,8 +1326,8 @@ abstract class BaseNotacreditonotaPeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(NotacreditonotaPeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(NotacreditonotaPeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(IngresonotaPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(IngresonotaPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -1343,7 +1343,7 @@ abstract class BaseNotacreditonotaPeer
 
         }
 
-        return BasePeer::doValidate(NotacreditonotaPeer::DATABASE_NAME, NotacreditonotaPeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(IngresonotaPeer::DATABASE_NAME, IngresonotaPeer::TABLE_NAME, $columns);
     }
 
     /**
@@ -1351,23 +1351,23 @@ abstract class BaseNotacreditonotaPeer
      *
      * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
-     * @return Notacreditonota
+     * @return Ingresonota
      */
     public static function retrieveByPK($pk, PropelPDO $con = null)
     {
 
-        if (null !== ($obj = NotacreditonotaPeer::getInstanceFromPool((string) $pk))) {
+        if (null !== ($obj = IngresonotaPeer::getInstanceFromPool((string) $pk))) {
             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria = new Criteria(NotacreditonotaPeer::DATABASE_NAME);
-        $criteria->add(NotacreditonotaPeer::IDNOTACREDITONOTA, $pk);
+        $criteria = new Criteria(IngresonotaPeer::DATABASE_NAME);
+        $criteria->add(IngresonotaPeer::IDINGRESONOTA, $pk);
 
-        $v = NotacreditonotaPeer::doSelect($criteria, $con);
+        $v = IngresonotaPeer::doSelect($criteria, $con);
 
         return !empty($v) > 0 ? $v[0] : null;
     }
@@ -1377,31 +1377,31 @@ abstract class BaseNotacreditonotaPeer
      *
      * @param      array $pks List of primary keys
      * @param      PropelPDO $con the connection to use
-     * @return Notacreditonota[]
+     * @return Ingresonota[]
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
     public static function retrieveByPKs($pks, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(NotacreditonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(IngresonotaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         $objs = null;
         if (empty($pks)) {
             $objs = array();
         } else {
-            $criteria = new Criteria(NotacreditonotaPeer::DATABASE_NAME);
-            $criteria->add(NotacreditonotaPeer::IDNOTACREDITONOTA, $pks, Criteria::IN);
-            $objs = NotacreditonotaPeer::doSelect($criteria, $con);
+            $criteria = new Criteria(IngresonotaPeer::DATABASE_NAME);
+            $criteria->add(IngresonotaPeer::IDINGRESONOTA, $pks, Criteria::IN);
+            $objs = IngresonotaPeer::doSelect($criteria, $con);
         }
 
         return $objs;
     }
 
-} // BaseNotacreditonotaPeer
+} // BaseIngresonotaPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseNotacreditonotaPeer::buildTableMap();
+BaseIngresonotaPeer::buildTableMap();
 

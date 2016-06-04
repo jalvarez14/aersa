@@ -129,6 +129,9 @@
     <column name="compra_subtotal" phpName="CompraSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="compra_total" phpName="CompraTotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="compra_tipo" phpName="CompraTipo" type="CHAR" sqlType="enum('ordecompra','compra','consignacion')" required="true"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <foreign-key foreignTable="almacen" name="idalmacen_compra" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -315,6 +318,9 @@
     <column name="devolucion_iva" phpName="DevolucionIva" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_total" phpName="DevolucionTotal" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_subtotal" phpName="DevolucionSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <foreign-key foreignTable="almacen" name="idalmacen_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -507,6 +513,9 @@
     <column name="ingreso_totalmiscelanea" phpName="IngresoTotalmiscelanea" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="ingreso_fecha" phpName="IngresoFecha" type="TIMESTAMP" required="true"/>
     <column name="ingreso_fechacreacion" phpName="IngresoFechacreacion" type="TIMESTAMP" required="true"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <foreign-key foreignTable="usuario" name="idauditor_ingreso" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idauditor" foreign="idusuario"/>
     </foreign-key>
@@ -561,6 +570,28 @@
     </index>
     <index name="idrubroingreso">
       <index-column name="idrubroingreso"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="ingresonota" phpName="Ingresonota" idMethod="native">
+    <column name="idingresonota" phpName="Idingresonota" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
+    <column name="idingreso" phpName="Idingreso" type="INTEGER" required="true"/>
+    <column name="ingresonota_nota" phpName="IngresonotaNota" type="LONGVARCHAR" required="true"/>
+    <column name="ingresonota_fecha" phpName="IngresonotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="ingreso" name="ingresonota_idingreso" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idingreso" foreign="idingreso"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="ingresonota_idusuario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <index name="idusuario">
+      <index-column name="idusuario"/>
+    </index>
+    <index name="idingreso">
+      <index-column name="idingreso"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -674,6 +705,9 @@
     <column name="notacredito_iva" phpName="NotacreditoIva" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacredito_total" phpName="NotacreditoTotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacredito_subtotal" phpName="NotacreditoSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa_copy1" phpName="NotaalmacenistaempresaCopy1" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa_copy1" phpName="NotaauditoraersaCopy1" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <foreign-key foreignTable="almacen" name="idalmacen_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -753,6 +787,7 @@
     <column name="idnotacredito" phpName="Idnotacredito" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="notacreditonota_nota" phpName="NotacreditonotaNota" type="LONGVARCHAR" required="true"/>
+    <column name="notacreditonota_fecha" phpName="NotacreditonotaFecha" type="TIMESTAMP" required="true"/>
     <foreign-key foreignTable="notacredito" name="idnotacredito_notacreditonota" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idnotacredito" foreign="idnotacredito"/>
     </foreign-key>
@@ -793,6 +828,9 @@
     <column name="ordentablajeria_fecha" phpName="OrdentablajeriaFecha" type="TIMESTAMP" required="true"/>
     <column name="ordentablajeria_fechacreacion" phpName="OrdentablajeriaFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="ordentablajeria_pesoporcion" phpName="OrdentablajeriaPesoporcion" type="FLOAT" required="false"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <foreign-key foreignTable="almacen" name="idalmacendestino_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacendestino" foreign="idalmacen"/>
     </foreign-key>
@@ -1064,6 +1102,9 @@
     <column name="requisicion_revisada" phpName="RequisicionRevisada" type="BOOLEAN" size="1" required="true"/>
     <column name="requisicion_folio" phpName="RequisicionFolio" type="VARCHAR" size="10" required="true"/>
     <column name="requisicion_total" phpName="RequisicionTotal" type="DECIMAL" size="15" scale="5" required="false"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <foreign-key foreignTable="almacen" name="idalmacendestino_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacendestino" foreign="idalmacen"/>
     </foreign-key>
@@ -1308,6 +1349,9 @@
     <column name="venta_fechacreacion" phpName="VentaFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="venta_total" phpName="VentaTotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="venta_folio" phpName="VentaFolio" type="VARCHAR" size="10" required="true"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <foreign-key foreignTable="usuario" name="idauditor_venta" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idauditor" foreign="idusuario"/>
     </foreign-key>
@@ -1368,6 +1412,28 @@
     </index>
     <index name="idproducto">
       <index-column name="idproducto"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="ventanota" phpName="Ventanota" idMethod="native">
+    <column name="idventanota" phpName="Idventanota" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
+    <column name="idventa" phpName="Idventa" type="INTEGER" required="true"/>
+    <column name="ventanota_nota" phpName="VentanotaNota" type="VARCHAR" size="45" required="true"/>
+    <column name="ventanota_fecha" phpName="VentanotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="usuario" name="idusuario_ventanota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="venta" name="idventa_ventanota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idventa" foreign="idventa"/>
+    </foreign-key>
+    <index name="idusuario">
+      <index-column name="idusuario"/>
+    </index>
+    <index name="idventa">
+      <index-column name="idventa"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

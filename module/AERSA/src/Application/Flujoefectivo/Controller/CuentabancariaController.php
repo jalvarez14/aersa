@@ -17,7 +17,7 @@ class CuentabancariaController extends AbstractActionController {
         $idsucursal = $session['idsucursal'];
 
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL---
-        $collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal(1)->find();
+        $collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
 
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
@@ -33,6 +33,7 @@ class CuentabancariaController extends AbstractActionController {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         $idempresa = $session['idempresa'];
+        $idsucursal = $session['idsucursal'];
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
@@ -45,7 +46,7 @@ class CuentabancariaController extends AbstractActionController {
                 }
             }
             $cuentabancaria->setIdempresa($idempresa);
-            $cuentabancaria->setIdsucursal("1");
+            $cuentabancaria->setIdsucursal($idsucursal);
             $cuentabancaria->save();
             return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
         }
@@ -116,7 +117,7 @@ class CuentabancariaController extends AbstractActionController {
             $id = $this->params()->fromQuery('id');
             $exist = \CuentabancariaQuery::create()
                     ->filterByIdempresa($idempresa)
-                    ->filterByIdsucursal(1)
+                    ->filterByIdsucursal($idsucursal)
                     ->filterByCuentabancariaBanco($banco)
                     ->filterByCuentabancariaNocuenta($cuenta)
                     ->filterByIdcuentabancaria($id, \Criteria::NOT_EQUAL)
@@ -124,7 +125,7 @@ class CuentabancariaController extends AbstractActionController {
         } else {
             $exist = \CuentabancariaQuery::create()
                     ->filterByIdempresa($idempresa)
-                    ->filterByIdsucursal(1)
+                    ->filterByIdsucursal($idsucursal)
                     ->filterByCuentabancariaBanco($banco)
                     ->filterByCuentabancariaNocuenta($cuenta)
                     ->exists();

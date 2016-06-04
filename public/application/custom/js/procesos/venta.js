@@ -1256,6 +1256,14 @@
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
+            
+            //COMENTARIOS
+            var id = $('input[name=idventa]').val();
+            $('#comentarios_container').comentarios({
+                table:'ventanota',
+                id: id,
+                parent:'idventa',
+            });
            
            
         }

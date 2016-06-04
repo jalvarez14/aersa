@@ -262,10 +262,26 @@
             </div>
         </div>
     </div>
+    <div id="comentarios_container" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="btn-set pull-right">
+                        <a id="nota_nuevo" href="javascript:;" class="btn default">Nuevo comentario</a>
+                    </div>
+                     <h3 class="page-title">Comentarios</h3>
+                     <div class="mt-comments">
+
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php  echo $this->form()->closeTag(); ?>
 </div>
 
 <script type="text/javascript" src="/application/custom/js/procesos/ordentablajeria.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/comentarios.js"></script>
 <script>
     var $form = $('#form_container').ordentablajeria();
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $count?>);

@@ -91,6 +91,27 @@ abstract class BaseVenta extends BaseObject implements Persistent
     protected $venta_folio;
 
     /**
+     * The value for the notaauditorempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditorempresa;
+
+    /**
+     * The value for the notaalmacenistaempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaalmacenistaempresa;
+
+    /**
+     * The value for the notaauditoraersa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditoraersa;
+
+    /**
      * @var        Usuario
      */
     protected $aUsuarioRelatedByIdauditor;
@@ -115,6 +136,12 @@ abstract class BaseVenta extends BaseObject implements Persistent
      */
     protected $collVentadetalles;
     protected $collVentadetallesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Ventanota[] Collection to store aggregation of Ventanota objects.
+     */
+    protected $collVentanotas;
+    protected $collVentanotasPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -143,6 +170,12 @@ abstract class BaseVenta extends BaseObject implements Persistent
     protected $ventadetallesScheduledForDeletion = null;
 
     /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ventanotasScheduledForDeletion = null;
+
+    /**
      * Applies default values to this object.
      * This method should be called from the object's constructor (or
      * equivalent initialization method).
@@ -151,6 +184,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->venta_revisada = false;
+        $this->notaauditorempresa = true;
+        $this->notaalmacenistaempresa = true;
+        $this->notaauditoraersa = true;
     }
 
     /**
@@ -329,6 +365,39 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
 
         return $this->venta_folio;
+    }
+
+    /**
+     * Get the [notaauditorempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditorempresa()
+    {
+
+        return $this->notaauditorempresa;
+    }
+
+    /**
+     * Get the [notaalmacenistaempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaalmacenistaempresa()
+    {
+
+        return $this->notaalmacenistaempresa;
+    }
+
+    /**
+     * Get the [notaauditoraersa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditoraersa()
+    {
+
+        return $this->notaauditoraersa;
     }
 
     /**
@@ -570,6 +639,93 @@ abstract class BaseVenta extends BaseObject implements Persistent
     } // setVentaFolio()
 
     /**
+     * Sets the value of the [notaauditorempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setNotaauditorempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditorempresa !== $v) {
+            $this->notaauditorempresa = $v;
+            $this->modifiedColumns[] = VentaPeer::NOTAAUDITOREMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaauditorempresa()
+
+    /**
+     * Sets the value of the [notaalmacenistaempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setNotaalmacenistaempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaalmacenistaempresa !== $v) {
+            $this->notaalmacenistaempresa = $v;
+            $this->modifiedColumns[] = VentaPeer::NOTAALMACENISTAEMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaalmacenistaempresa()
+
+    /**
+     * Sets the value of the [notaauditoraersa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setNotaauditoraersa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditoraersa !== $v) {
+            $this->notaauditoraersa = $v;
+            $this->modifiedColumns[] = VentaPeer::NOTAAUDITORAERSA;
+        }
+
+
+        return $this;
+    } // setNotaauditoraersa()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -580,6 +736,18 @@ abstract class BaseVenta extends BaseObject implements Persistent
     public function hasOnlyDefaultValues()
     {
             if ($this->venta_revisada !== false) {
+                return false;
+            }
+
+            if ($this->notaauditorempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaalmacenistaempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaauditoraersa !== true) {
                 return false;
             }
 
@@ -615,6 +783,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $this->venta_fechacreacion = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
             $this->venta_total = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
             $this->venta_folio = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->notaauditorempresa = ($row[$startcol + 10] !== null) ? (boolean) $row[$startcol + 10] : null;
+            $this->notaalmacenistaempresa = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
+            $this->notaauditoraersa = ($row[$startcol + 12] !== null) ? (boolean) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -624,7 +795,7 @@ abstract class BaseVenta extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 10; // 10 = VentaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = VentaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Venta object", $e);
@@ -703,6 +874,8 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collVentadetalles = null;
+
+            $this->collVentanotas = null;
 
         } // if (deep)
     }
@@ -878,6 +1051,23 @@ abstract class BaseVenta extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->ventanotasScheduledForDeletion !== null) {
+                if (!$this->ventanotasScheduledForDeletion->isEmpty()) {
+                    VentanotaQuery::create()
+                        ->filterByPrimaryKeys($this->ventanotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ventanotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collVentanotas !== null) {
+                foreach ($this->collVentanotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -934,6 +1124,15 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if ($this->isColumnModified(VentaPeer::VENTA_FOLIO)) {
             $modifiedColumns[':p' . $index++]  = '`venta_folio`';
         }
+        if ($this->isColumnModified(VentaPeer::NOTAAUDITOREMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditorempresa`';
+        }
+        if ($this->isColumnModified(VentaPeer::NOTAALMACENISTAEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaalmacenistaempresa`';
+        }
+        if ($this->isColumnModified(VentaPeer::NOTAAUDITORAERSA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditoraersa`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `venta` (%s) VALUES (%s)',
@@ -974,6 +1173,15 @@ abstract class BaseVenta extends BaseObject implements Persistent
                         break;
                     case '`venta_folio`':
                         $stmt->bindValue($identifier, $this->venta_folio, PDO::PARAM_STR);
+                        break;
+                    case '`notaauditorempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditorempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaalmacenistaempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaalmacenistaempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaauditoraersa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditoraersa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1112,6 +1320,14 @@ abstract class BaseVenta extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collVentanotas !== null) {
+                    foreach ($this->collVentanotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1177,6 +1393,15 @@ abstract class BaseVenta extends BaseObject implements Persistent
             case 9:
                 return $this->getVentaFolio();
                 break;
+            case 10:
+                return $this->getNotaauditorempresa();
+                break;
+            case 11:
+                return $this->getNotaalmacenistaempresa();
+                break;
+            case 12:
+                return $this->getNotaauditoraersa();
+                break;
             default:
                 return null;
                 break;
@@ -1216,6 +1441,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $keys[7] => $this->getVentaFechacreacion(),
             $keys[8] => $this->getVentaTotal(),
             $keys[9] => $this->getVentaFolio(),
+            $keys[10] => $this->getNotaauditorempresa(),
+            $keys[11] => $this->getNotaalmacenistaempresa(),
+            $keys[12] => $this->getNotaauditoraersa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1237,6 +1465,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
             }
             if (null !== $this->collVentadetalles) {
                 $result['Ventadetalles'] = $this->collVentadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collVentanotas) {
+                $result['Ventanotas'] = $this->collVentanotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1302,6 +1533,15 @@ abstract class BaseVenta extends BaseObject implements Persistent
             case 9:
                 $this->setVentaFolio($value);
                 break;
+            case 10:
+                $this->setNotaauditorempresa($value);
+                break;
+            case 11:
+                $this->setNotaalmacenistaempresa($value);
+                break;
+            case 12:
+                $this->setNotaauditoraersa($value);
+                break;
         } // switch()
     }
 
@@ -1336,6 +1576,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if (array_key_exists($keys[7], $arr)) $this->setVentaFechacreacion($arr[$keys[7]]);
         if (array_key_exists($keys[8], $arr)) $this->setVentaTotal($arr[$keys[8]]);
         if (array_key_exists($keys[9], $arr)) $this->setVentaFolio($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setNotaauditorempresa($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setNotaauditoraersa($arr[$keys[12]]);
     }
 
     /**
@@ -1357,6 +1600,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
         if ($this->isColumnModified(VentaPeer::VENTA_FECHACREACION)) $criteria->add(VentaPeer::VENTA_FECHACREACION, $this->venta_fechacreacion);
         if ($this->isColumnModified(VentaPeer::VENTA_TOTAL)) $criteria->add(VentaPeer::VENTA_TOTAL, $this->venta_total);
         if ($this->isColumnModified(VentaPeer::VENTA_FOLIO)) $criteria->add(VentaPeer::VENTA_FOLIO, $this->venta_folio);
+        if ($this->isColumnModified(VentaPeer::NOTAAUDITOREMPRESA)) $criteria->add(VentaPeer::NOTAAUDITOREMPRESA, $this->notaauditorempresa);
+        if ($this->isColumnModified(VentaPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(VentaPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
+        if ($this->isColumnModified(VentaPeer::NOTAAUDITORAERSA)) $criteria->add(VentaPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
 
         return $criteria;
     }
@@ -1429,6 +1675,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
         $copyObj->setVentaFechacreacion($this->getVentaFechacreacion());
         $copyObj->setVentaTotal($this->getVentaTotal());
         $copyObj->setVentaFolio($this->getVentaFolio());
+        $copyObj->setNotaauditorempresa($this->getNotaauditorempresa());
+        $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
+        $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1440,6 +1689,12 @@ abstract class BaseVenta extends BaseObject implements Persistent
             foreach ($this->getVentadetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addVentadetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getVentanotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addVentanota($relObj->copy($deepCopy));
                 }
             }
 
@@ -1714,6 +1969,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
     {
         if ('Ventadetalle' == $relationName) {
             $this->initVentadetalles();
+        }
+        if ('Ventanota' == $relationName) {
+            $this->initVentanotas();
         }
     }
 
@@ -2018,6 +2276,256 @@ abstract class BaseVenta extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collVentanotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Venta The current object (for fluent API support)
+     * @see        addVentanotas()
+     */
+    public function clearVentanotas()
+    {
+        $this->collVentanotas = null; // important to set this to null since that means it is uninitialized
+        $this->collVentanotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collVentanotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialVentanotas($v = true)
+    {
+        $this->collVentanotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collVentanotas collection.
+     *
+     * By default this just sets the collVentanotas collection to an empty array (like clearcollVentanotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initVentanotas($overrideExisting = true)
+    {
+        if (null !== $this->collVentanotas && !$overrideExisting) {
+            return;
+        }
+        $this->collVentanotas = new PropelObjectCollection();
+        $this->collVentanotas->setModel('Ventanota');
+    }
+
+    /**
+     * Gets an array of Ventanota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Venta is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ventanota[] List of Ventanota objects
+     * @throws PropelException
+     */
+    public function getVentanotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collVentanotasPartial && !$this->isNew();
+        if (null === $this->collVentanotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collVentanotas) {
+                // return empty collection
+                $this->initVentanotas();
+            } else {
+                $collVentanotas = VentanotaQuery::create(null, $criteria)
+                    ->filterByVenta($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collVentanotasPartial && count($collVentanotas)) {
+                      $this->initVentanotas(false);
+
+                      foreach ($collVentanotas as $obj) {
+                        if (false == $this->collVentanotas->contains($obj)) {
+                          $this->collVentanotas->append($obj);
+                        }
+                      }
+
+                      $this->collVentanotasPartial = true;
+                    }
+
+                    $collVentanotas->getInternalIterator()->rewind();
+
+                    return $collVentanotas;
+                }
+
+                if ($partial && $this->collVentanotas) {
+                    foreach ($this->collVentanotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collVentanotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collVentanotas = $collVentanotas;
+                $this->collVentanotasPartial = false;
+            }
+        }
+
+        return $this->collVentanotas;
+    }
+
+    /**
+     * Sets a collection of Ventanota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ventanotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Venta The current object (for fluent API support)
+     */
+    public function setVentanotas(PropelCollection $ventanotas, PropelPDO $con = null)
+    {
+        $ventanotasToDelete = $this->getVentanotas(new Criteria(), $con)->diff($ventanotas);
+
+
+        $this->ventanotasScheduledForDeletion = $ventanotasToDelete;
+
+        foreach ($ventanotasToDelete as $ventanotaRemoved) {
+            $ventanotaRemoved->setVenta(null);
+        }
+
+        $this->collVentanotas = null;
+        foreach ($ventanotas as $ventanota) {
+            $this->addVentanota($ventanota);
+        }
+
+        $this->collVentanotas = $ventanotas;
+        $this->collVentanotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ventanota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ventanota objects.
+     * @throws PropelException
+     */
+    public function countVentanotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collVentanotasPartial && !$this->isNew();
+        if (null === $this->collVentanotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVentanotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getVentanotas());
+            }
+            $query = VentanotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByVenta($this)
+                ->count($con);
+        }
+
+        return count($this->collVentanotas);
+    }
+
+    /**
+     * Method called to associate a Ventanota object to this object
+     * through the Ventanota foreign key attribute.
+     *
+     * @param    Ventanota $l Ventanota
+     * @return Venta The current object (for fluent API support)
+     */
+    public function addVentanota(Ventanota $l)
+    {
+        if ($this->collVentanotas === null) {
+            $this->initVentanotas();
+            $this->collVentanotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collVentanotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddVentanota($l);
+
+            if ($this->ventanotasScheduledForDeletion and $this->ventanotasScheduledForDeletion->contains($l)) {
+                $this->ventanotasScheduledForDeletion->remove($this->ventanotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ventanota $ventanota The ventanota object to add.
+     */
+    protected function doAddVentanota($ventanota)
+    {
+        $this->collVentanotas[]= $ventanota;
+        $ventanota->setVenta($this);
+    }
+
+    /**
+     * @param	Ventanota $ventanota The ventanota object to remove.
+     * @return Venta The current object (for fluent API support)
+     */
+    public function removeVentanota($ventanota)
+    {
+        if ($this->getVentanotas()->contains($ventanota)) {
+            $this->collVentanotas->remove($this->collVentanotas->search($ventanota));
+            if (null === $this->ventanotasScheduledForDeletion) {
+                $this->ventanotasScheduledForDeletion = clone $this->collVentanotas;
+                $this->ventanotasScheduledForDeletion->clear();
+            }
+            $this->ventanotasScheduledForDeletion[]= clone $ventanota;
+            $ventanota->setVenta(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Venta is new, it will return
+     * an empty collection; or if this Venta has previously
+     * been saved, it will retrieve related Ventanotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Venta.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventanota[] List of Ventanota objects
+     */
+    public function getVentanotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentanotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getVentanotas($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -2032,6 +2540,9 @@ abstract class BaseVenta extends BaseObject implements Persistent
         $this->venta_fechacreacion = null;
         $this->venta_total = null;
         $this->venta_folio = null;
+        $this->notaauditorempresa = null;
+        $this->notaalmacenistaempresa = null;
+        $this->notaauditoraersa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -2060,6 +2571,11 @@ abstract class BaseVenta extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collVentanotas) {
+                foreach ($this->collVentanotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
               $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
             }
@@ -2080,6 +2596,10 @@ abstract class BaseVenta extends BaseObject implements Persistent
             $this->collVentadetalles->clearIterator();
         }
         $this->collVentadetalles = null;
+        if ($this->collVentanotas instanceof PropelCollection) {
+            $this->collVentanotas->clearIterator();
+        }
+        $this->collVentanotas = null;
         $this->aUsuarioRelatedByIdauditor = null;
         $this->aEmpresa = null;
         $this->aSucursal = null;

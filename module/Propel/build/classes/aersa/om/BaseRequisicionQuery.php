@@ -20,6 +20,9 @@
  * @method RequisicionQuery orderByRequisicionRevisada($order = Criteria::ASC) Order by the requisicion_revisada column
  * @method RequisicionQuery orderByRequisicionFolio($order = Criteria::ASC) Order by the requisicion_folio column
  * @method RequisicionQuery orderByRequisicionTotal($order = Criteria::ASC) Order by the requisicion_total column
+ * @method RequisicionQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
+ * @method RequisicionQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
+ * @method RequisicionQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  *
  * @method RequisicionQuery groupByIdrequisicion() Group by the idrequisicion column
  * @method RequisicionQuery groupByIdempresa() Group by the idempresa column
@@ -35,6 +38,9 @@
  * @method RequisicionQuery groupByRequisicionRevisada() Group by the requisicion_revisada column
  * @method RequisicionQuery groupByRequisicionFolio() Group by the requisicion_folio column
  * @method RequisicionQuery groupByRequisicionTotal() Group by the requisicion_total column
+ * @method RequisicionQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
+ * @method RequisicionQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
+ * @method RequisicionQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  *
  * @method RequisicionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RequisicionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -96,6 +102,9 @@
  * @method Requisicion findOneByRequisicionRevisada(boolean $requisicion_revisada) Return the first Requisicion filtered by the requisicion_revisada column
  * @method Requisicion findOneByRequisicionFolio(string $requisicion_folio) Return the first Requisicion filtered by the requisicion_folio column
  * @method Requisicion findOneByRequisicionTotal(string $requisicion_total) Return the first Requisicion filtered by the requisicion_total column
+ * @method Requisicion findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Requisicion filtered by the notaauditorempresa column
+ * @method Requisicion findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Requisicion filtered by the notaalmacenistaempresa column
+ * @method Requisicion findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Requisicion filtered by the notaauditoraersa column
  *
  * @method array findByIdrequisicion(int $idrequisicion) Return Requisicion objects filtered by the idrequisicion column
  * @method array findByIdempresa(int $idempresa) Return Requisicion objects filtered by the idempresa column
@@ -111,6 +120,9 @@
  * @method array findByRequisicionRevisada(boolean $requisicion_revisada) Return Requisicion objects filtered by the requisicion_revisada column
  * @method array findByRequisicionFolio(string $requisicion_folio) Return Requisicion objects filtered by the requisicion_folio column
  * @method array findByRequisicionTotal(string $requisicion_total) Return Requisicion objects filtered by the requisicion_total column
+ * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Requisicion objects filtered by the notaauditorempresa column
+ * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Requisicion objects filtered by the notaalmacenistaempresa column
+ * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Requisicion objects filtered by the notaauditoraersa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -218,7 +230,7 @@ abstract class BaseRequisicionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursalorigen`, `idalmacenorigen`, `idsucursaldestino`, `idalmacendestino`, `idusuario`, `idauditor`, `idconceptosalida`, `requisicion_fecha`, `requisicion_fechacreacion`, `requisicion_revisada`, `requisicion_folio`, `requisicion_total` FROM `requisicion` WHERE `idrequisicion` = :p0';
+        $sql = 'SELECT `idrequisicion`, `idempresa`, `idsucursalorigen`, `idalmacenorigen`, `idsucursaldestino`, `idalmacendestino`, `idusuario`, `idauditor`, `idconceptosalida`, `requisicion_fecha`, `requisicion_fechacreacion`, `requisicion_revisada`, `requisicion_folio`, `requisicion_total`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `requisicion` WHERE `idrequisicion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -883,6 +895,87 @@ abstract class BaseRequisicionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RequisicionPeer::REQUISICION_TOTAL, $requisicionTotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditorempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditorempresa(true); // WHERE notaauditorempresa = true
+     * $query->filterByNotaauditorempresa('yes'); // WHERE notaauditorempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditorempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditorempresa($notaauditorempresa = null, $comparison = null)
+    {
+        if (is_string($notaauditorempresa)) {
+            $notaauditorempresa = in_array(strtolower($notaauditorempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::NOTAAUDITOREMPRESA, $notaauditorempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaalmacenistaempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaalmacenistaempresa(true); // WHERE notaalmacenistaempresa = true
+     * $query->filterByNotaalmacenistaempresa('yes'); // WHERE notaalmacenistaempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaalmacenistaempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByNotaalmacenistaempresa($notaalmacenistaempresa = null, $comparison = null)
+    {
+        if (is_string($notaalmacenistaempresa)) {
+            $notaalmacenistaempresa = in_array(strtolower($notaalmacenistaempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::NOTAALMACENISTAEMPRESA, $notaalmacenistaempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditoraersa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditoraersa(true); // WHERE notaauditoraersa = true
+     * $query->filterByNotaauditoraersa('yes'); // WHERE notaauditoraersa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditoraersa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RequisicionQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditoraersa($notaauditoraersa = null, $comparison = null)
+    {
+        if (is_string($notaauditoraersa)) {
+            $notaauditoraersa = in_array(strtolower($notaauditoraersa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(RequisicionPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
     }
 
     /**

@@ -72,6 +72,10 @@
  * @method UsuarioQuery rightJoinIngresoRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the IngresoRelatedByIdusuario relation
  * @method UsuarioQuery innerJoinIngresoRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the IngresoRelatedByIdusuario relation
  *
+ * @method UsuarioQuery leftJoinIngresonota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ingresonota relation
+ * @method UsuarioQuery rightJoinIngresonota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ingresonota relation
+ * @method UsuarioQuery innerJoinIngresonota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ingresonota relation
+ *
  * @method UsuarioQuery leftJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the InventariomesRelatedByIdauditor relation
  * @method UsuarioQuery rightJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InventariomesRelatedByIdauditor relation
  * @method UsuarioQuery innerJoinInventariomesRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the InventariomesRelatedByIdauditor relation
@@ -135,6 +139,10 @@
  * @method UsuarioQuery leftJoinVentaRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the VentaRelatedByIdusuario relation
  * @method UsuarioQuery rightJoinVentaRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the VentaRelatedByIdusuario relation
  * @method UsuarioQuery innerJoinVentaRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the VentaRelatedByIdusuario relation
+ *
+ * @method UsuarioQuery leftJoinVentanota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ventanota relation
+ * @method UsuarioQuery rightJoinVentanota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ventanota relation
+ * @method UsuarioQuery innerJoinVentanota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ventanota relation
  *
  * @method Usuario findOne(PropelPDO $con = null) Return the first Usuario matching the query
  * @method Usuario findOneOrCreate(PropelPDO $con = null) Return the first Usuario matching the query, or a new Usuario object populated from the query conditions when no match is found
@@ -1438,6 +1446,80 @@ abstract class BaseUsuarioQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Ingresonota object
+     *
+     * @param   Ingresonota|PropelObjectCollection $ingresonota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByIngresonota($ingresonota, $comparison = null)
+    {
+        if ($ingresonota instanceof Ingresonota) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $ingresonota->getIdusuario(), $comparison);
+        } elseif ($ingresonota instanceof PropelObjectCollection) {
+            return $this
+                ->useIngresonotaQuery()
+                ->filterByPrimaryKeys($ingresonota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByIngresonota() only accepts arguments of type Ingresonota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ingresonota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinIngresonota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ingresonota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ingresonota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ingresonota relation Ingresonota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   IngresonotaQuery A secondary query class using the current class as primary query
+     */
+    public function useIngresonotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinIngresonota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ingresonota', 'IngresonotaQuery');
+    }
+
+    /**
      * Filter the query by a related Inventariomes object
      *
      * @param   Inventariomes|PropelObjectCollection $inventariomes  the related object to use as filter
@@ -2619,6 +2701,80 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinVentaRelatedByIdusuario($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'VentaRelatedByIdusuario', 'VentaQuery');
+    }
+
+    /**
+     * Filter the query by a related Ventanota object
+     *
+     * @param   Ventanota|PropelObjectCollection $ventanota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByVentanota($ventanota, $comparison = null)
+    {
+        if ($ventanota instanceof Ventanota) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $ventanota->getIdusuario(), $comparison);
+        } elseif ($ventanota instanceof PropelObjectCollection) {
+            return $this
+                ->useVentanotaQuery()
+                ->filterByPrimaryKeys($ventanota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByVentanota() only accepts arguments of type Ventanota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ventanota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinVentanota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ventanota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ventanota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ventanota relation Ventanota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   VentanotaQuery A secondary query class using the current class as primary query
+     */
+    public function useVentanotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinVentanota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ventanota', 'VentanotaQuery');
     }
 
     /**

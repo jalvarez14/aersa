@@ -603,6 +603,14 @@
                     caluclator(tr);
                 });
             });
+            
+            //COMENTARIOS
+            var id = $('input[name=idnotacredito]').val();
+            $('#comentarios_container').comentarios({
+                table:'notacreditonota',
+                id: id,
+                parent:'idnotacredito',
+            });
 
         }
 

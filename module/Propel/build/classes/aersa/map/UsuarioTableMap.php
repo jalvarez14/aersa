@@ -64,6 +64,7 @@ class UsuarioTableMap extends TableMap
         $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), null, null, 'Flujoefectivos');
         $this->addRelation('IngresoRelatedByIdauditor', 'Ingreso', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'IngresosRelatedByIdauditor');
         $this->addRelation('IngresoRelatedByIdusuario', 'Ingreso', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'IngresosRelatedByIdusuario');
+        $this->addRelation('Ingresonota', 'Ingresonota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Ingresonotas');
         $this->addRelation('InventariomesRelatedByIdauditor', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'InventariomessRelatedByIdauditor');
         $this->addRelation('InventariomesRelatedByIdusuario', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'InventariomessRelatedByIdusuario');
         $this->addRelation('Inventariomesdetallenota', 'Inventariomesdetallenota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Inventariomesdetallenotas');
@@ -80,6 +81,7 @@ class UsuarioTableMap extends TableMap
         $this->addRelation('Usuariosucursal', 'Usuariosucursal', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Usuariosucursals');
         $this->addRelation('VentaRelatedByIdauditor', 'Venta', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'VentasRelatedByIdauditor');
         $this->addRelation('VentaRelatedByIdusuario', 'Venta', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'VentasRelatedByIdusuario');
+        $this->addRelation('Ventanota', 'Ventanota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Ventanotas');
     } // buildRelations()
 
 } // UsuarioTableMap

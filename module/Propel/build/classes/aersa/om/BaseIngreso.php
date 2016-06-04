@@ -102,6 +102,27 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     protected $ingreso_fechacreacion;
 
     /**
+     * The value for the notaauditorempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditorempresa;
+
+    /**
+     * The value for the notaalmacenistaempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaalmacenistaempresa;
+
+    /**
+     * The value for the notaauditoraersa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditoraersa;
+
+    /**
      * @var        Usuario
      */
     protected $aUsuarioRelatedByIdauditor;
@@ -134,6 +155,12 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     protected $collIngresodetallesPartial;
 
     /**
+     * @var        PropelObjectCollection|Ingresonota[] Collection to store aggregation of Ingresonota objects.
+     */
+    protected $collIngresonotas;
+    protected $collIngresonotasPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -164,6 +191,35 @@ abstract class BaseIngreso extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $ingresodetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ingresonotasScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->notaauditorempresa = true;
+        $this->notaalmacenistaempresa = true;
+        $this->notaauditoraersa = true;
+    }
+
+    /**
+     * Initializes internal state of BaseIngreso object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idingreso] column value.
@@ -353,6 +409,39 @@ abstract class BaseIngreso extends BaseObject implements Persistent
 
         return $dt->format($format);
 
+    }
+
+    /**
+     * Get the [notaauditorempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditorempresa()
+    {
+
+        return $this->notaauditorempresa;
+    }
+
+    /**
+     * Get the [notaalmacenistaempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaalmacenistaempresa()
+    {
+
+        return $this->notaalmacenistaempresa;
+    }
+
+    /**
+     * Get the [notaauditoraersa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditoraersa()
+    {
+
+        return $this->notaauditoraersa;
     }
 
     /**
@@ -636,6 +725,93 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     } // setIngresoFechacreacion()
 
     /**
+     * Sets the value of the [notaauditorempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function setNotaauditorempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditorempresa !== $v) {
+            $this->notaauditorempresa = $v;
+            $this->modifiedColumns[] = IngresoPeer::NOTAAUDITOREMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaauditorempresa()
+
+    /**
+     * Sets the value of the [notaalmacenistaempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function setNotaalmacenistaempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaalmacenistaempresa !== $v) {
+            $this->notaalmacenistaempresa = $v;
+            $this->modifiedColumns[] = IngresoPeer::NOTAALMACENISTAEMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaalmacenistaempresa()
+
+    /**
+     * Sets the value of the [notaauditoraersa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function setNotaauditoraersa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditoraersa !== $v) {
+            $this->notaauditoraersa = $v;
+            $this->modifiedColumns[] = IngresoPeer::NOTAAUDITORAERSA;
+        }
+
+
+        return $this;
+    } // setNotaauditoraersa()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -645,6 +821,18 @@ abstract class BaseIngreso extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->notaauditorempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaalmacenistaempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaauditoraersa !== true) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -679,6 +867,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $this->ingreso_totalmiscelanea = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->ingreso_fecha = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->ingreso_fechacreacion = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->notaauditorempresa = ($row[$startcol + 12] !== null) ? (boolean) $row[$startcol + 12] : null;
+            $this->notaalmacenistaempresa = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
+            $this->notaauditoraersa = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -688,7 +879,7 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 12; // 12 = IngresoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 15; // 15 = IngresoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Ingreso object", $e);
@@ -769,6 +960,8 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $this->collFlujoefectivos = null;
 
             $this->collIngresodetalles = null;
+
+            $this->collIngresonotas = null;
 
         } // if (deep)
     }
@@ -962,6 +1155,23 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->ingresonotasScheduledForDeletion !== null) {
+                if (!$this->ingresonotasScheduledForDeletion->isEmpty()) {
+                    IngresonotaQuery::create()
+                        ->filterByPrimaryKeys($this->ingresonotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ingresonotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collIngresonotas !== null) {
+                foreach ($this->collIngresonotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -1024,6 +1234,15 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         if ($this->isColumnModified(IngresoPeer::INGRESO_FECHACREACION)) {
             $modifiedColumns[':p' . $index++]  = '`ingreso_fechacreacion`';
         }
+        if ($this->isColumnModified(IngresoPeer::NOTAAUDITOREMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditorempresa`';
+        }
+        if ($this->isColumnModified(IngresoPeer::NOTAALMACENISTAEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaalmacenistaempresa`';
+        }
+        if ($this->isColumnModified(IngresoPeer::NOTAAUDITORAERSA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditoraersa`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `ingreso` (%s) VALUES (%s)',
@@ -1070,6 +1289,15 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                         break;
                     case '`ingreso_fechacreacion`':
                         $stmt->bindValue($identifier, $this->ingreso_fechacreacion, PDO::PARAM_STR);
+                        break;
+                    case '`notaauditorempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditorempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaalmacenistaempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaalmacenistaempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaauditoraersa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditoraersa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1216,6 +1444,14 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collIngresonotas !== null) {
+                    foreach ($this->collIngresonotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1287,6 +1523,15 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             case 11:
                 return $this->getIngresoFechacreacion();
                 break;
+            case 12:
+                return $this->getNotaauditorempresa();
+                break;
+            case 13:
+                return $this->getNotaalmacenistaempresa();
+                break;
+            case 14:
+                return $this->getNotaauditoraersa();
+                break;
             default:
                 return null;
                 break;
@@ -1328,6 +1573,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $keys[9] => $this->getIngresoTotalmiscelanea(),
             $keys[10] => $this->getIngresoFecha(),
             $keys[11] => $this->getIngresoFechacreacion(),
+            $keys[12] => $this->getNotaauditorempresa(),
+            $keys[13] => $this->getNotaalmacenistaempresa(),
+            $keys[14] => $this->getNotaauditoraersa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1352,6 +1600,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             }
             if (null !== $this->collIngresodetalles) {
                 $result['Ingresodetalles'] = $this->collIngresodetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collIngresonotas) {
+                $result['Ingresonotas'] = $this->collIngresonotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1423,6 +1674,15 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             case 11:
                 $this->setIngresoFechacreacion($value);
                 break;
+            case 12:
+                $this->setNotaauditorempresa($value);
+                break;
+            case 13:
+                $this->setNotaalmacenistaempresa($value);
+                break;
+            case 14:
+                $this->setNotaauditoraersa($value);
+                break;
         } // switch()
     }
 
@@ -1459,6 +1719,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         if (array_key_exists($keys[9], $arr)) $this->setIngresoTotalmiscelanea($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setIngresoFecha($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setIngresoFechacreacion($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setNotaauditorempresa($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setNotaauditoraersa($arr[$keys[14]]);
     }
 
     /**
@@ -1482,6 +1745,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         if ($this->isColumnModified(IngresoPeer::INGRESO_TOTALMISCELANEA)) $criteria->add(IngresoPeer::INGRESO_TOTALMISCELANEA, $this->ingreso_totalmiscelanea);
         if ($this->isColumnModified(IngresoPeer::INGRESO_FECHA)) $criteria->add(IngresoPeer::INGRESO_FECHA, $this->ingreso_fecha);
         if ($this->isColumnModified(IngresoPeer::INGRESO_FECHACREACION)) $criteria->add(IngresoPeer::INGRESO_FECHACREACION, $this->ingreso_fechacreacion);
+        if ($this->isColumnModified(IngresoPeer::NOTAAUDITOREMPRESA)) $criteria->add(IngresoPeer::NOTAAUDITOREMPRESA, $this->notaauditorempresa);
+        if ($this->isColumnModified(IngresoPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(IngresoPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
+        if ($this->isColumnModified(IngresoPeer::NOTAAUDITORAERSA)) $criteria->add(IngresoPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
 
         return $criteria;
     }
@@ -1556,6 +1822,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         $copyObj->setIngresoTotalmiscelanea($this->getIngresoTotalmiscelanea());
         $copyObj->setIngresoFecha($this->getIngresoFecha());
         $copyObj->setIngresoFechacreacion($this->getIngresoFechacreacion());
+        $copyObj->setNotaauditorempresa($this->getNotaauditorempresa());
+        $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
+        $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1573,6 +1842,12 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             foreach ($this->getIngresodetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addIngresodetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getIngresonotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addIngresonota($relObj->copy($deepCopy));
                 }
             }
 
@@ -1850,6 +2125,9 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         }
         if ('Ingresodetalle' == $relationName) {
             $this->initIngresodetalles();
+        }
+        if ('Ingresonota' == $relationName) {
+            $this->initIngresonotas();
         }
     }
 
@@ -2529,6 +2807,256 @@ abstract class BaseIngreso extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collIngresonotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Ingreso The current object (for fluent API support)
+     * @see        addIngresonotas()
+     */
+    public function clearIngresonotas()
+    {
+        $this->collIngresonotas = null; // important to set this to null since that means it is uninitialized
+        $this->collIngresonotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collIngresonotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialIngresonotas($v = true)
+    {
+        $this->collIngresonotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collIngresonotas collection.
+     *
+     * By default this just sets the collIngresonotas collection to an empty array (like clearcollIngresonotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initIngresonotas($overrideExisting = true)
+    {
+        if (null !== $this->collIngresonotas && !$overrideExisting) {
+            return;
+        }
+        $this->collIngresonotas = new PropelObjectCollection();
+        $this->collIngresonotas->setModel('Ingresonota');
+    }
+
+    /**
+     * Gets an array of Ingresonota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Ingreso is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ingresonota[] List of Ingresonota objects
+     * @throws PropelException
+     */
+    public function getIngresonotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresonotasPartial && !$this->isNew();
+        if (null === $this->collIngresonotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collIngresonotas) {
+                // return empty collection
+                $this->initIngresonotas();
+            } else {
+                $collIngresonotas = IngresonotaQuery::create(null, $criteria)
+                    ->filterByIngreso($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collIngresonotasPartial && count($collIngresonotas)) {
+                      $this->initIngresonotas(false);
+
+                      foreach ($collIngresonotas as $obj) {
+                        if (false == $this->collIngresonotas->contains($obj)) {
+                          $this->collIngresonotas->append($obj);
+                        }
+                      }
+
+                      $this->collIngresonotasPartial = true;
+                    }
+
+                    $collIngresonotas->getInternalIterator()->rewind();
+
+                    return $collIngresonotas;
+                }
+
+                if ($partial && $this->collIngresonotas) {
+                    foreach ($this->collIngresonotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collIngresonotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collIngresonotas = $collIngresonotas;
+                $this->collIngresonotasPartial = false;
+            }
+        }
+
+        return $this->collIngresonotas;
+    }
+
+    /**
+     * Sets a collection of Ingresonota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ingresonotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function setIngresonotas(PropelCollection $ingresonotas, PropelPDO $con = null)
+    {
+        $ingresonotasToDelete = $this->getIngresonotas(new Criteria(), $con)->diff($ingresonotas);
+
+
+        $this->ingresonotasScheduledForDeletion = $ingresonotasToDelete;
+
+        foreach ($ingresonotasToDelete as $ingresonotaRemoved) {
+            $ingresonotaRemoved->setIngreso(null);
+        }
+
+        $this->collIngresonotas = null;
+        foreach ($ingresonotas as $ingresonota) {
+            $this->addIngresonota($ingresonota);
+        }
+
+        $this->collIngresonotas = $ingresonotas;
+        $this->collIngresonotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ingresonota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ingresonota objects.
+     * @throws PropelException
+     */
+    public function countIngresonotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collIngresonotasPartial && !$this->isNew();
+        if (null === $this->collIngresonotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collIngresonotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getIngresonotas());
+            }
+            $query = IngresonotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByIngreso($this)
+                ->count($con);
+        }
+
+        return count($this->collIngresonotas);
+    }
+
+    /**
+     * Method called to associate a Ingresonota object to this object
+     * through the Ingresonota foreign key attribute.
+     *
+     * @param    Ingresonota $l Ingresonota
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function addIngresonota(Ingresonota $l)
+    {
+        if ($this->collIngresonotas === null) {
+            $this->initIngresonotas();
+            $this->collIngresonotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collIngresonotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddIngresonota($l);
+
+            if ($this->ingresonotasScheduledForDeletion and $this->ingresonotasScheduledForDeletion->contains($l)) {
+                $this->ingresonotasScheduledForDeletion->remove($this->ingresonotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ingresonota $ingresonota The ingresonota object to add.
+     */
+    protected function doAddIngresonota($ingresonota)
+    {
+        $this->collIngresonotas[]= $ingresonota;
+        $ingresonota->setIngreso($this);
+    }
+
+    /**
+     * @param	Ingresonota $ingresonota The ingresonota object to remove.
+     * @return Ingreso The current object (for fluent API support)
+     */
+    public function removeIngresonota($ingresonota)
+    {
+        if ($this->getIngresonotas()->contains($ingresonota)) {
+            $this->collIngresonotas->remove($this->collIngresonotas->search($ingresonota));
+            if (null === $this->ingresonotasScheduledForDeletion) {
+                $this->ingresonotasScheduledForDeletion = clone $this->collIngresonotas;
+                $this->ingresonotasScheduledForDeletion->clear();
+            }
+            $this->ingresonotasScheduledForDeletion[]= clone $ingresonota;
+            $ingresonota->setIngreso(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ingreso is new, it will return
+     * an empty collection; or if this Ingreso has previously
+     * been saved, it will retrieve related Ingresonotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ingreso.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ingresonota[] List of Ingresonota objects
+     */
+    public function getIngresonotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = IngresonotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getIngresonotas($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -2545,10 +3073,14 @@ abstract class BaseIngreso extends BaseObject implements Persistent
         $this->ingreso_totalmiscelanea = null;
         $this->ingreso_fecha = null;
         $this->ingreso_fechacreacion = null;
+        $this->notaauditorempresa = null;
+        $this->notaalmacenistaempresa = null;
+        $this->notaauditoraersa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
@@ -2577,6 +3109,11 @@ abstract class BaseIngreso extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collIngresonotas) {
+                foreach ($this->collIngresonotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
               $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
             }
@@ -2601,6 +3138,10 @@ abstract class BaseIngreso extends BaseObject implements Persistent
             $this->collIngresodetalles->clearIterator();
         }
         $this->collIngresodetalles = null;
+        if ($this->collIngresonotas instanceof PropelCollection) {
+            $this->collIngresonotas->clearIterator();
+        }
+        $this->collIngresonotas = null;
         $this->aUsuarioRelatedByIdauditor = null;
         $this->aEmpresa = null;
         $this->aSucursal = null;

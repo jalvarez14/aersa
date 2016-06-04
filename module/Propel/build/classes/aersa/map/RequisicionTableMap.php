@@ -52,6 +52,9 @@ class RequisicionTableMap extends TableMap
         $this->addColumn('requisicion_revisada', 'RequisicionRevisada', 'BOOLEAN', true, 1, null);
         $this->addColumn('requisicion_folio', 'RequisicionFolio', 'VARCHAR', true, 10, null);
         $this->addColumn('requisicion_total', 'RequisicionTotal', 'DECIMAL', false, 15, null);
+        $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
         // validators
     } // initialize()
 

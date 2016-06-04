@@ -410,6 +410,9 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in IngresoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         IngresoPeer::clearInstancePool();
+        // Invalidate objects in IngresonotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        IngresonotaPeer::clearInstancePool();
         // Invalidate objects in InventariomesPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         InventariomesPeer::clearInstancePool();
@@ -458,6 +461,9 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in VentaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         VentaPeer::clearInstancePool();
+        // Invalidate objects in VentanotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        VentanotaPeer::clearInstancePool();
     }
 
     /**
@@ -1090,6 +1096,12 @@ abstract class BaseUsuarioPeer
             $criteria->add(IngresoPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += IngresoPeer::doDelete($criteria, $con);
 
+            // delete related Ingresonota objects
+            $criteria = new Criteria(IngresonotaPeer::DATABASE_NAME);
+
+            $criteria->add(IngresonotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += IngresonotaPeer::doDelete($criteria, $con);
+
             // delete related Inventariomes objects
             $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);
 
@@ -1185,6 +1197,12 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(VentaPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += VentaPeer::doDelete($criteria, $con);
+
+            // delete related Ventanota objects
+            $criteria = new Criteria(VentanotaPeer::DATABASE_NAME);
+
+            $criteria->add(VentanotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += VentanotaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

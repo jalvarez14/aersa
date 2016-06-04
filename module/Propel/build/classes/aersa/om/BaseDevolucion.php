@@ -127,6 +127,27 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     protected $devolucion_subtotal;
 
     /**
+     * The value for the notaauditorempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditorempresa;
+
+    /**
+     * The value for the notaalmacenistaempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaalmacenistaempresa;
+
+    /**
+     * The value for the notaauditoraersa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditoraersa;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -209,6 +230,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     public function applyDefaultValues()
     {
         $this->devolucion_revisada = false;
+        $this->notaauditorempresa = true;
+        $this->notaalmacenistaempresa = true;
+        $this->notaauditoraersa = true;
     }
 
     /**
@@ -453,6 +477,39 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     {
 
         return $this->devolucion_subtotal;
+    }
+
+    /**
+     * Get the [notaauditorempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditorempresa()
+    {
+
+        return $this->notaauditorempresa;
+    }
+
+    /**
+     * Get the [notaalmacenistaempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaalmacenistaempresa()
+    {
+
+        return $this->notaalmacenistaempresa;
+    }
+
+    /**
+     * Get the [notaauditoraersa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditoraersa()
+    {
+
+        return $this->notaauditoraersa;
     }
 
     /**
@@ -828,6 +885,93 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     } // setDevolucionSubtotal()
 
     /**
+     * Sets the value of the [notaauditorempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Devolucion The current object (for fluent API support)
+     */
+    public function setNotaauditorempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditorempresa !== $v) {
+            $this->notaauditorempresa = $v;
+            $this->modifiedColumns[] = DevolucionPeer::NOTAAUDITOREMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaauditorempresa()
+
+    /**
+     * Sets the value of the [notaalmacenistaempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Devolucion The current object (for fluent API support)
+     */
+    public function setNotaalmacenistaempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaalmacenistaempresa !== $v) {
+            $this->notaalmacenistaempresa = $v;
+            $this->modifiedColumns[] = DevolucionPeer::NOTAALMACENISTAEMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaalmacenistaempresa()
+
+    /**
+     * Sets the value of the [notaauditoraersa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Devolucion The current object (for fluent API support)
+     */
+    public function setNotaauditoraersa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditoraersa !== $v) {
+            $this->notaauditoraersa = $v;
+            $this->modifiedColumns[] = DevolucionPeer::NOTAAUDITORAERSA;
+        }
+
+
+        return $this;
+    } // setNotaauditoraersa()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -838,6 +982,18 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
     public function hasOnlyDefaultValues()
     {
             if ($this->devolucion_revisada !== false) {
+                return false;
+            }
+
+            if ($this->notaauditorempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaalmacenistaempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaauditoraersa !== true) {
                 return false;
             }
 
@@ -879,6 +1035,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $this->devolucion_iva = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->devolucion_total = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
             $this->devolucion_subtotal = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->notaauditorempresa = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
+            $this->notaalmacenistaempresa = ($row[$startcol + 17] !== null) ? (boolean) $row[$startcol + 17] : null;
+            $this->notaauditoraersa = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -888,7 +1047,7 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 16; // 16 = DevolucionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 19; // 19 = DevolucionPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Devolucion object", $e);
@@ -1257,6 +1416,15 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_SUBTOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`devolucion_subtotal`';
         }
+        if ($this->isColumnModified(DevolucionPeer::NOTAAUDITOREMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditorempresa`';
+        }
+        if ($this->isColumnModified(DevolucionPeer::NOTAALMACENISTAEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaalmacenistaempresa`';
+        }
+        if ($this->isColumnModified(DevolucionPeer::NOTAAUDITORAERSA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditoraersa`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `devolucion` (%s) VALUES (%s)',
@@ -1315,6 +1483,15 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
                         break;
                     case '`devolucion_subtotal`':
                         $stmt->bindValue($identifier, $this->devolucion_subtotal, PDO::PARAM_STR);
+                        break;
+                    case '`notaauditorempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditorempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaalmacenistaempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaalmacenistaempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaauditoraersa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditoraersa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1556,6 +1733,15 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             case 15:
                 return $this->getDevolucionSubtotal();
                 break;
+            case 16:
+                return $this->getNotaauditorempresa();
+                break;
+            case 17:
+                return $this->getNotaalmacenistaempresa();
+                break;
+            case 18:
+                return $this->getNotaauditoraersa();
+                break;
             default:
                 return null;
                 break;
@@ -1601,6 +1787,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             $keys[13] => $this->getDevolucionIva(),
             $keys[14] => $this->getDevolucionTotal(),
             $keys[15] => $this->getDevolucionSubtotal(),
+            $keys[16] => $this->getNotaauditorempresa(),
+            $keys[17] => $this->getNotaalmacenistaempresa(),
+            $keys[18] => $this->getNotaauditoraersa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1714,6 +1903,15 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
             case 15:
                 $this->setDevolucionSubtotal($value);
                 break;
+            case 16:
+                $this->setNotaauditorempresa($value);
+                break;
+            case 17:
+                $this->setNotaalmacenistaempresa($value);
+                break;
+            case 18:
+                $this->setNotaauditoraersa($value);
+                break;
         } // switch()
     }
 
@@ -1754,6 +1952,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if (array_key_exists($keys[13], $arr)) $this->setDevolucionIva($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setDevolucionTotal($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setDevolucionSubtotal($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setNotaauditorempresa($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setNotaauditoraersa($arr[$keys[18]]);
     }
 
     /**
@@ -1781,6 +1982,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_IVA)) $criteria->add(DevolucionPeer::DEVOLUCION_IVA, $this->devolucion_iva);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_TOTAL)) $criteria->add(DevolucionPeer::DEVOLUCION_TOTAL, $this->devolucion_total);
         if ($this->isColumnModified(DevolucionPeer::DEVOLUCION_SUBTOTAL)) $criteria->add(DevolucionPeer::DEVOLUCION_SUBTOTAL, $this->devolucion_subtotal);
+        if ($this->isColumnModified(DevolucionPeer::NOTAAUDITOREMPRESA)) $criteria->add(DevolucionPeer::NOTAAUDITOREMPRESA, $this->notaauditorempresa);
+        if ($this->isColumnModified(DevolucionPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(DevolucionPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
+        if ($this->isColumnModified(DevolucionPeer::NOTAAUDITORAERSA)) $criteria->add(DevolucionPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
 
         return $criteria;
     }
@@ -1859,6 +2063,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $copyObj->setDevolucionIva($this->getDevolucionIva());
         $copyObj->setDevolucionTotal($this->getDevolucionTotal());
         $copyObj->setDevolucionSubtotal($this->getDevolucionSubtotal());
+        $copyObj->setNotaauditorempresa($this->getNotaauditorempresa());
+        $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
+        $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2806,6 +3013,9 @@ abstract class BaseDevolucion extends BaseObject implements Persistent
         $this->devolucion_iva = null;
         $this->devolucion_total = null;
         $this->devolucion_subtotal = null;
+        $this->notaauditorempresa = null;
+        $this->notaalmacenistaempresa = null;
+        $this->notaauditoraersa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

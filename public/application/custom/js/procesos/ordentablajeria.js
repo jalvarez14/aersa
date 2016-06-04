@@ -701,7 +701,13 @@
                  $('input[name=producto_autocomplete]').prop('disabled',false);
             }
             
-            console.log(has_plantilla);
+            //COMENTARIOS
+            var id = $('input[name=idordentablajeria]').val();
+            $('#comentarios_container').comentarios({
+                table:'ordentablajerianota',
+                id: id,
+                parent:'idordentablajeria',
+            });
 
         }
 

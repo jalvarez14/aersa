@@ -61,6 +61,9 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addColumn('ordentablajeria_fecha', 'OrdentablajeriaFecha', 'TIMESTAMP', true, null, null);
         $this->addColumn('ordentablajeria_fechacreacion', 'OrdentablajeriaFechacreacion', 'TIMESTAMP', true, null, null);
         $this->addColumn('ordentablajeria_pesoporcion', 'OrdentablajeriaPesoporcion', 'FLOAT', false, null, null);
+        $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
         // validators
     } // initialize()
 

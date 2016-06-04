@@ -6,7 +6,7 @@
     #productos_table .fa-trash{
         color:red;
     }
-    #productos_table_tbody input{
+    #productos_table input{
         width: 80px;
     }
 </style>
@@ -19,7 +19,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/procesos/requisicion">Requisición</a>
+                <a href="/procesos/requisicion">Requisicion</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -27,10 +27,12 @@
             </li>
         </ul>
     </div>
+    <h3 class="page-title">Requisición - <?php echo '#'.$form->get('idrequisicion')->getValue()?></h3>
     <?php
     $form->setAttribute('action', '/procesos/requisicion/editar/'.$form->get('idrequisicion')->getValue());
     echo $this->form()->openTag($form);
     ?>
+    
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
@@ -73,7 +75,7 @@
                         <?php echo $this->formSelect($form->get('requisicion_revisada')) ?> 
                     </div>
                 </div>
-                <div class="row">
+                                <div class="row">
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Creado por</label>
@@ -93,14 +95,21 @@
                     </div>
                 </div>
                 
+                
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+            </div>
             
         </div>
     </div>
-</div>
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                <h3 class="form-section">Productos *</h3><br><br>
+                <h3 class="form-section">Productos *</h3>
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-4 col-md-offset-6">
@@ -119,9 +128,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="table-responsive">
                         <table class="table" id="productos_table">
                             <thead>
+                            <th>Tipo</th>
                             <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Precio unitario</th>
@@ -133,6 +142,9 @@
                                 <?php $detalle = new Requisiciondetalle()?>
                                 <?php foreach ($requisiciondetalle as $detalle) :?>
                                 <tr id="<?php echo $detalle->getIdrequisiciondetalle()?>" idpro="<?php echo $detalle->getIdproducto()?>">
+                                    <td>
+                                        <?php echo $detalle->getProducto()->getProductoTipo();?>
+                                    </td>
                                     <td>
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][requisiciondetalle_subtotal]" value="<?php echo $detalle->getRequisiciondetalleSubtotal()?>">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][preciounitario]" value="<?php echo $detalle->getRequisiciondetallePreciounitario()?>">
@@ -146,7 +158,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][requisiciondetalle_preciounitario]" value="<?php echo $detalle->getRequisiciondetallePreciounitario()?>"> 
                                     </td>
                                     <td class="requisiciondetalle_subtotal">
-                                        <?php echo "$".money_format('%(#10n',$detalle->getRequisiciondetalleSubtotal())?>
+                                        <?php echo money_format('%(#10n',$detalle->getRequisiciondetalleSubtotal())?>
                                     </td>
                                     <td>
                                         <?php if($detalle->getRequisiciondetalleRevisada()) :?>
@@ -168,22 +180,15 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4"></td>
+                                    <td colspan="5"></td>
                                     <td>TOTAL</td>
                                     <?php echo $this->formHidden($form->get('requisicion_total')) ?> 
-                                    <td id="total"><?php echo '$'.money_format('%(#10n',$entity->getRequisicionTotal())?></td>
+                                    <td id="total"><?php echo money_format('%(#10n',$entity->getRequisicionTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <br>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p>(*)Campos obligatorios</p>
-                    </div>
-                </div>
-            </div>
             </div>
             <div class="form-actions right">
                 <button class="btn blue" id="requisicion_save" type="submit">
@@ -193,7 +198,24 @@
             </div>
         </div>
     </div>
+    <div id="comentarios_container" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="btn-set pull-right">
+                        <a id="nota_nuevo" href="javascript:;" class="btn default">Nuevo comentario</a>
+                    </div>
+                     <h3 class="page-title">Comentarios</h3>
+                     <div class="mt-comments">
+
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="/application/custom/js/procesos/requisicion.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/comentarios.js"></script>
 <script>
     var $form = $('#form_container').requisicion();
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>);

@@ -114,6 +114,27 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     protected $requisicion_total;
 
     /**
+     * The value for the notaauditorempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditorempresa;
+
+    /**
+     * The value for the notaalmacenistaempresa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaalmacenistaempresa;
+
+    /**
+     * The value for the notaauditoraersa field.
+     * Note: this column has a database default value of: true
+     * @var        boolean
+     */
+    protected $notaauditoraersa;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacenRelatedByIdalmacendestino;
@@ -196,6 +217,29 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $requisicionnotasScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->notaauditorempresa = true;
+        $this->notaalmacenistaempresa = true;
+        $this->notaauditoraersa = true;
+    }
+
+    /**
+     * Initializes internal state of BaseRequisicion object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idrequisicion] column value.
@@ -407,6 +451,39 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     {
 
         return $this->requisicion_total;
+    }
+
+    /**
+     * Get the [notaauditorempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditorempresa()
+    {
+
+        return $this->notaauditorempresa;
+    }
+
+    /**
+     * Get the [notaalmacenistaempresa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaalmacenistaempresa()
+    {
+
+        return $this->notaalmacenistaempresa;
+    }
+
+    /**
+     * Get the [notaauditoraersa] column value.
+     *
+     * @return boolean
+     */
+    public function getNotaauditoraersa()
+    {
+
+        return $this->notaauditoraersa;
     }
 
     /**
@@ -748,6 +825,93 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
     } // setRequisicionTotal()
 
     /**
+     * Sets the value of the [notaauditorempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function setNotaauditorempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditorempresa !== $v) {
+            $this->notaauditorempresa = $v;
+            $this->modifiedColumns[] = RequisicionPeer::NOTAAUDITOREMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaauditorempresa()
+
+    /**
+     * Sets the value of the [notaalmacenistaempresa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function setNotaalmacenistaempresa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaalmacenistaempresa !== $v) {
+            $this->notaalmacenistaempresa = $v;
+            $this->modifiedColumns[] = RequisicionPeer::NOTAALMACENISTAEMPRESA;
+        }
+
+
+        return $this;
+    } // setNotaalmacenistaempresa()
+
+    /**
+     * Sets the value of the [notaauditoraersa] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Requisicion The current object (for fluent API support)
+     */
+    public function setNotaauditoraersa($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->notaauditoraersa !== $v) {
+            $this->notaauditoraersa = $v;
+            $this->modifiedColumns[] = RequisicionPeer::NOTAAUDITORAERSA;
+        }
+
+
+        return $this;
+    } // setNotaauditoraersa()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -757,6 +921,18 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->notaauditorempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaalmacenistaempresa !== true) {
+                return false;
+            }
+
+            if ($this->notaauditoraersa !== true) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -793,6 +969,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $this->requisicion_revisada = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
             $this->requisicion_folio = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
             $this->requisicion_total = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
+            $this->notaauditorempresa = ($row[$startcol + 14] !== null) ? (boolean) $row[$startcol + 14] : null;
+            $this->notaalmacenistaempresa = ($row[$startcol + 15] !== null) ? (boolean) $row[$startcol + 15] : null;
+            $this->notaauditoraersa = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -802,7 +981,7 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 14; // 14 = RequisicionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 17; // 17 = RequisicionPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Requisicion object", $e);
@@ -1187,6 +1366,15 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_TOTAL)) {
             $modifiedColumns[':p' . $index++]  = '`requisicion_total`';
         }
+        if ($this->isColumnModified(RequisicionPeer::NOTAAUDITOREMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditorempresa`';
+        }
+        if ($this->isColumnModified(RequisicionPeer::NOTAALMACENISTAEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaalmacenistaempresa`';
+        }
+        if ($this->isColumnModified(RequisicionPeer::NOTAAUDITORAERSA)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditoraersa`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `requisicion` (%s) VALUES (%s)',
@@ -1239,6 +1427,15 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
                         break;
                     case '`requisicion_total`':
                         $stmt->bindValue($identifier, $this->requisicion_total, PDO::PARAM_STR);
+                        break;
+                    case '`notaauditorempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditorempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaalmacenistaempresa`':
+                        $stmt->bindValue($identifier, (int) $this->notaalmacenistaempresa, PDO::PARAM_INT);
+                        break;
+                    case '`notaauditoraersa`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditoraersa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1486,6 +1683,15 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             case 13:
                 return $this->getRequisicionTotal();
                 break;
+            case 14:
+                return $this->getNotaauditorempresa();
+                break;
+            case 15:
+                return $this->getNotaalmacenistaempresa();
+                break;
+            case 16:
+                return $this->getNotaauditoraersa();
+                break;
             default:
                 return null;
                 break;
@@ -1529,6 +1735,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             $keys[11] => $this->getRequisicionRevisada(),
             $keys[12] => $this->getRequisicionFolio(),
             $keys[13] => $this->getRequisicionTotal(),
+            $keys[14] => $this->getNotaauditorempresa(),
+            $keys[15] => $this->getNotaalmacenistaempresa(),
+            $keys[16] => $this->getNotaauditoraersa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1642,6 +1851,15 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
             case 13:
                 $this->setRequisicionTotal($value);
                 break;
+            case 14:
+                $this->setNotaauditorempresa($value);
+                break;
+            case 15:
+                $this->setNotaalmacenistaempresa($value);
+                break;
+            case 16:
+                $this->setNotaauditoraersa($value);
+                break;
         } // switch()
     }
 
@@ -1680,6 +1898,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if (array_key_exists($keys[11], $arr)) $this->setRequisicionRevisada($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setRequisicionFolio($arr[$keys[12]]);
         if (array_key_exists($keys[13], $arr)) $this->setRequisicionTotal($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setNotaauditorempresa($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setNotaauditoraersa($arr[$keys[16]]);
     }
 
     /**
@@ -1705,6 +1926,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_REVISADA)) $criteria->add(RequisicionPeer::REQUISICION_REVISADA, $this->requisicion_revisada);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_FOLIO)) $criteria->add(RequisicionPeer::REQUISICION_FOLIO, $this->requisicion_folio);
         if ($this->isColumnModified(RequisicionPeer::REQUISICION_TOTAL)) $criteria->add(RequisicionPeer::REQUISICION_TOTAL, $this->requisicion_total);
+        if ($this->isColumnModified(RequisicionPeer::NOTAAUDITOREMPRESA)) $criteria->add(RequisicionPeer::NOTAAUDITOREMPRESA, $this->notaauditorempresa);
+        if ($this->isColumnModified(RequisicionPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(RequisicionPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
+        if ($this->isColumnModified(RequisicionPeer::NOTAAUDITORAERSA)) $criteria->add(RequisicionPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
 
         return $criteria;
     }
@@ -1781,6 +2005,9 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         $copyObj->setRequisicionRevisada($this->getRequisicionRevisada());
         $copyObj->setRequisicionFolio($this->getRequisicionFolio());
         $copyObj->setRequisicionTotal($this->getRequisicionTotal());
+        $copyObj->setNotaauditorempresa($this->getNotaauditorempresa());
+        $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
+        $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2830,10 +3057,14 @@ abstract class BaseRequisicion extends BaseObject implements Persistent
         $this->requisicion_revisada = null;
         $this->requisicion_folio = null;
         $this->requisicion_total = null;
+        $this->notaauditorempresa = null;
+        $this->notaalmacenistaempresa = null;
+        $this->notaauditoraersa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

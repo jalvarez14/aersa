@@ -345,11 +345,7 @@
 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
                 var tr = $('<tr id="'+$('input#idproducto').val()+' ">');
-                tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
-                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
-                tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
-                tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
-                tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                var tipopro;
                 $.ajax({
                     async: false,
                     type: "GET",
@@ -357,11 +353,19 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.length != 0) {
-                            if(data['ProductoTipo']!='simple')
-                                tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
+                            tipopro= data['ProductoTipo'];
+                                
                         }
                     },
                 });
+                tr.append('<td> '+ tipopro + '</td>');
+                tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
+                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
+                tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
+                tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
+                tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                if(tipopro!='simple')
+                    tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
                 //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
@@ -401,7 +405,7 @@
                     var tmpl2 = "";
                     var id = $(this).closest('tr').attr('id');
                     var can = 0;
-                    var value = $(this).closest('tr').find('td').eq(0).text();
+                    var value = $(this).closest('tr').find('td').eq(1).text();
                     var td = $(this).closest('tr').find('td.pro_cantidad').find("input:text").each(function() {
                     can =this.value
                     });
@@ -414,7 +418,7 @@
                             if (data.length != 0) {
                                 for (var k in data) {
                                     tmpl2 += [
-                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k]) + '</td>'
+                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k][0]) + '</td> <td>'+data[k][1]+' </td> <td>'+((can * data[k][0]) * data[k][1])+' </td>' 
                                     ];
                                 }
                                 
@@ -433,6 +437,8 @@
                             '<thead>',
                             '<th>Producto</th>',
                             '<th>Cantidad</th>',
+                            '<th>Precio unitario</th>',
+                            '<th>Subtotal</th>',
                             '</thead>',
                             '<tbody id="productos_table_tbody">',
                             tmpl2,
@@ -548,11 +554,7 @@
 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
                 var tr = $('<tr id="'+$('input#idproducto').val()+' ">');
-                tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
-                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
-                tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
-                tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
-                tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                var tipopro;
                 $.ajax({
                     async: false,
                     type: "GET",
@@ -560,11 +562,19 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.length != 0) {
-                            if(data['ProductoTipo']!='simple')
-                                tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
+                            tipopro= data['ProductoTipo'];
+                                
                         }
                     },
                 });
+                tr.append('<td> '+ tipopro + '</td>');
+                tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
+                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
+                tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
+                tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
+                tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                if(tipopro!='simple')
+                    tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
                 //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
@@ -617,7 +627,7 @@
                             if (data.length != 0) {
                                 for (var k in data) {
                                     tmpl2 += [
-                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k]) + '</td>'
+                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k][0]) + '</td> <td>'+data[k][1]+' </td> <td>'+((can * data[k][0]) * data[k][1])+' </td>' 
                                     ];
                                 }
                                 
@@ -636,6 +646,8 @@
                             '<thead>',
                             '<th>Producto</th>',
                             '<th>Cantidad</th>',
+                            '<th>Precio unitario</th>',
+                            '<th>Subtotal</th>',
                             '</thead>',
                             '<tbody id="productos_table_tbody">',
                             tmpl2,
@@ -706,7 +718,7 @@
                             if (data.length != 0) {
                                 for (var k in data) {
                                     tmpl2 += [
-                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k]) + '</td>'
+                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k][0]) + '</td> <td>'+data[k][1]+' </td> <td>'+((can * data[k][0]) * data[k][1])+' </td>' 
                                     ];
                                 }
                                 
@@ -725,6 +737,8 @@
                             '<thead>',
                             '<th>Producto</th>',
                             '<th>Cantidad</th>',
+                            '<th>Precio unitario</th>',
+                            '<th>Subtotal</th>',
                             '</thead>',
                             '<tbody id="productos_table_tbody">',
                             tmpl2,
@@ -765,7 +779,7 @@
                          
            });
            
-           //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
+            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
             var now = $('input[name=requisicion_fecha]').val();
             var now_array = now.split('/');
             var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
@@ -775,6 +789,14 @@
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
+            
+            //COMENTARIOS
+            var id = $('input[name=idrequisicion]').val();
+            $('#comentarios_container').comentarios({
+                table:'requisicionnota',
+                id: id,
+                parent:'idrequisicion',
+            });
 
         }
 

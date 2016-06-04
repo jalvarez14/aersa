@@ -29,6 +29,9 @@
  * @method OrdentablajeriaQuery orderByOrdentablajeriaFecha($order = Criteria::ASC) Order by the ordentablajeria_fecha column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaFechacreacion($order = Criteria::ASC) Order by the ordentablajeria_fechacreacion column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaPesoporcion($order = Criteria::ASC) Order by the ordentablajeria_pesoporcion column
+ * @method OrdentablajeriaQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
+ * @method OrdentablajeriaQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
+ * @method OrdentablajeriaQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  *
  * @method OrdentablajeriaQuery groupByIdordentablajeria() Group by the idordentablajeria column
  * @method OrdentablajeriaQuery groupByIdempresa() Group by the idempresa column
@@ -53,6 +56,9 @@
  * @method OrdentablajeriaQuery groupByOrdentablajeriaFecha() Group by the ordentablajeria_fecha column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaFechacreacion() Group by the ordentablajeria_fechacreacion column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaPesoporcion() Group by the ordentablajeria_pesoporcion column
+ * @method OrdentablajeriaQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
+ * @method OrdentablajeriaQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
+ * @method OrdentablajeriaQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  *
  * @method OrdentablajeriaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method OrdentablajeriaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -119,6 +125,9 @@
  * @method Ordentablajeria findOneByOrdentablajeriaFecha(string $ordentablajeria_fecha) Return the first Ordentablajeria filtered by the ordentablajeria_fecha column
  * @method Ordentablajeria findOneByOrdentablajeriaFechacreacion(string $ordentablajeria_fechacreacion) Return the first Ordentablajeria filtered by the ordentablajeria_fechacreacion column
  * @method Ordentablajeria findOneByOrdentablajeriaPesoporcion(double $ordentablajeria_pesoporcion) Return the first Ordentablajeria filtered by the ordentablajeria_pesoporcion column
+ * @method Ordentablajeria findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Ordentablajeria filtered by the notaauditorempresa column
+ * @method Ordentablajeria findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Ordentablajeria filtered by the notaalmacenistaempresa column
+ * @method Ordentablajeria findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Ordentablajeria filtered by the notaauditoraersa column
  *
  * @method array findByIdordentablajeria(int $idordentablajeria) Return Ordentablajeria objects filtered by the idordentablajeria column
  * @method array findByIdempresa(int $idempresa) Return Ordentablajeria objects filtered by the idempresa column
@@ -143,6 +152,9 @@
  * @method array findByOrdentablajeriaFecha(string $ordentablajeria_fecha) Return Ordentablajeria objects filtered by the ordentablajeria_fecha column
  * @method array findByOrdentablajeriaFechacreacion(string $ordentablajeria_fechacreacion) Return Ordentablajeria objects filtered by the ordentablajeria_fechacreacion column
  * @method array findByOrdentablajeriaPesoporcion(double $ordentablajeria_pesoporcion) Return Ordentablajeria objects filtered by the ordentablajeria_pesoporcion column
+ * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Ordentablajeria objects filtered by the notaauditorempresa column
+ * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Ordentablajeria objects filtered by the notaalmacenistaempresa column
+ * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Ordentablajeria objects filtered by the notaauditoraersa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -250,7 +262,7 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_esporcion`, `ordentablajeria_numeroporciones`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_totalbruto`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio`, `ordentablajeria_fecha`, `ordentablajeria_fechacreacion`, `ordentablajeria_pesoporcion` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
+        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_esporcion`, `ordentablajeria_numeroporciones`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_totalbruto`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio`, `ordentablajeria_fecha`, `ordentablajeria_fechacreacion`, `ordentablajeria_pesoporcion`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1276,6 +1288,87 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PESOPORCION, $ordentablajeriaPesoporcion, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditorempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditorempresa(true); // WHERE notaauditorempresa = true
+     * $query->filterByNotaauditorempresa('yes'); // WHERE notaauditorempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditorempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditorempresa($notaauditorempresa = null, $comparison = null)
+    {
+        if (is_string($notaauditorempresa)) {
+            $notaauditorempresa = in_array(strtolower($notaauditorempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::NOTAAUDITOREMPRESA, $notaauditorempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaalmacenistaempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaalmacenistaempresa(true); // WHERE notaalmacenistaempresa = true
+     * $query->filterByNotaalmacenistaempresa('yes'); // WHERE notaalmacenistaempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaalmacenistaempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByNotaalmacenistaempresa($notaalmacenistaempresa = null, $comparison = null)
+    {
+        if (is_string($notaalmacenistaempresa)) {
+            $notaalmacenistaempresa = in_array(strtolower($notaalmacenistaempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::NOTAALMACENISTAEMPRESA, $notaalmacenistaempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditoraersa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditoraersa(true); // WHERE notaauditoraersa = true
+     * $query->filterByNotaauditoraersa('yes'); // WHERE notaauditoraersa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditoraersa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditoraersa($notaauditoraersa = null, $comparison = null)
+    {
+        if (is_string($notaauditoraersa)) {
+            $notaauditoraersa = in_array(strtolower($notaauditoraersa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
     }
 
     /**

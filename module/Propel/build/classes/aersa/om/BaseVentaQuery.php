@@ -16,6 +16,9 @@
  * @method VentaQuery orderByVentaFechacreacion($order = Criteria::ASC) Order by the venta_fechacreacion column
  * @method VentaQuery orderByVentaTotal($order = Criteria::ASC) Order by the venta_total column
  * @method VentaQuery orderByVentaFolio($order = Criteria::ASC) Order by the venta_folio column
+ * @method VentaQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
+ * @method VentaQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
+ * @method VentaQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  *
  * @method VentaQuery groupByIdventa() Group by the idventa column
  * @method VentaQuery groupByIdempresa() Group by the idempresa column
@@ -27,6 +30,9 @@
  * @method VentaQuery groupByVentaFechacreacion() Group by the venta_fechacreacion column
  * @method VentaQuery groupByVentaTotal() Group by the venta_total column
  * @method VentaQuery groupByVentaFolio() Group by the venta_folio column
+ * @method VentaQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
+ * @method VentaQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
+ * @method VentaQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  *
  * @method VentaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method VentaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -52,6 +58,10 @@
  * @method VentaQuery rightJoinVentadetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ventadetalle relation
  * @method VentaQuery innerJoinVentadetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Ventadetalle relation
  *
+ * @method VentaQuery leftJoinVentanota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ventanota relation
+ * @method VentaQuery rightJoinVentanota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ventanota relation
+ * @method VentaQuery innerJoinVentanota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ventanota relation
+ *
  * @method Venta findOne(PropelPDO $con = null) Return the first Venta matching the query
  * @method Venta findOneOrCreate(PropelPDO $con = null) Return the first Venta matching the query, or a new Venta object populated from the query conditions when no match is found
  *
@@ -64,6 +74,9 @@
  * @method Venta findOneByVentaFechacreacion(string $venta_fechacreacion) Return the first Venta filtered by the venta_fechacreacion column
  * @method Venta findOneByVentaTotal(string $venta_total) Return the first Venta filtered by the venta_total column
  * @method Venta findOneByVentaFolio(string $venta_folio) Return the first Venta filtered by the venta_folio column
+ * @method Venta findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Venta filtered by the notaauditorempresa column
+ * @method Venta findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Venta filtered by the notaalmacenistaempresa column
+ * @method Venta findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Venta filtered by the notaauditoraersa column
  *
  * @method array findByIdventa(int $idventa) Return Venta objects filtered by the idventa column
  * @method array findByIdempresa(int $idempresa) Return Venta objects filtered by the idempresa column
@@ -75,6 +88,9 @@
  * @method array findByVentaFechacreacion(string $venta_fechacreacion) Return Venta objects filtered by the venta_fechacreacion column
  * @method array findByVentaTotal(string $venta_total) Return Venta objects filtered by the venta_total column
  * @method array findByVentaFolio(string $venta_folio) Return Venta objects filtered by the venta_folio column
+ * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Venta objects filtered by the notaauditorempresa column
+ * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Venta objects filtered by the notaalmacenistaempresa column
+ * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Venta objects filtered by the notaauditoraersa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -182,7 +198,7 @@ abstract class BaseVentaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idventa`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `venta_revisada`, `venta_fechaventa`, `venta_fechacreacion`, `venta_total`, `venta_folio` FROM `venta` WHERE `idventa` = :p0';
+        $sql = 'SELECT `idventa`, `idempresa`, `idsucursal`, `idusuario`, `idauditor`, `venta_revisada`, `venta_fechaventa`, `venta_fechacreacion`, `venta_total`, `venta_folio`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `venta` WHERE `idventa` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -674,6 +690,87 @@ abstract class BaseVentaQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the notaauditorempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditorempresa(true); // WHERE notaauditorempresa = true
+     * $query->filterByNotaauditorempresa('yes'); // WHERE notaauditorempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditorempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VentaQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditorempresa($notaauditorempresa = null, $comparison = null)
+    {
+        if (is_string($notaauditorempresa)) {
+            $notaauditorempresa = in_array(strtolower($notaauditorempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(VentaPeer::NOTAAUDITOREMPRESA, $notaauditorempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaalmacenistaempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaalmacenistaempresa(true); // WHERE notaalmacenistaempresa = true
+     * $query->filterByNotaalmacenistaempresa('yes'); // WHERE notaalmacenistaempresa = true
+     * </code>
+     *
+     * @param     boolean|string $notaalmacenistaempresa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VentaQuery The current query, for fluid interface
+     */
+    public function filterByNotaalmacenistaempresa($notaalmacenistaempresa = null, $comparison = null)
+    {
+        if (is_string($notaalmacenistaempresa)) {
+            $notaalmacenistaempresa = in_array(strtolower($notaalmacenistaempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(VentaPeer::NOTAALMACENISTAEMPRESA, $notaalmacenistaempresa, $comparison);
+    }
+
+    /**
+     * Filter the query on the notaauditoraersa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByNotaauditoraersa(true); // WHERE notaauditoraersa = true
+     * $query->filterByNotaauditoraersa('yes'); // WHERE notaauditoraersa = true
+     * </code>
+     *
+     * @param     boolean|string $notaauditoraersa The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return VentaQuery The current query, for fluid interface
+     */
+    public function filterByNotaauditoraersa($notaauditoraersa = null, $comparison = null)
+    {
+        if (is_string($notaauditoraersa)) {
+            $notaauditoraersa = in_array(strtolower($notaauditoraersa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(VentaPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
+    }
+
+    /**
      * Filter the query by a related Usuario object
      *
      * @param   Usuario|PropelObjectCollection $usuario The related object(s) to use as filter
@@ -1049,6 +1146,80 @@ abstract class BaseVentaQuery extends ModelCriteria
         return $this
             ->joinVentadetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ventadetalle', 'VentadetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Ventanota object
+     *
+     * @param   Ventanota|PropelObjectCollection $ventanota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 VentaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByVentanota($ventanota, $comparison = null)
+    {
+        if ($ventanota instanceof Ventanota) {
+            return $this
+                ->addUsingAlias(VentaPeer::IDVENTA, $ventanota->getIdventa(), $comparison);
+        } elseif ($ventanota instanceof PropelObjectCollection) {
+            return $this
+                ->useVentanotaQuery()
+                ->filterByPrimaryKeys($ventanota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByVentanota() only accepts arguments of type Ventanota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ventanota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return VentaQuery The current query, for fluid interface
+     */
+    public function joinVentanota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ventanota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ventanota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ventanota relation Ventanota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   VentanotaQuery A secondary query class using the current class as primary query
+     */
+    public function useVentanotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinVentanota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ventanota', 'VentanotaQuery');
     }
 
     /**

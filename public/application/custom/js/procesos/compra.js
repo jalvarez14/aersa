@@ -601,6 +601,14 @@
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
+            
+            //COMENTARIOS
+            var id = $('input[name=idcompra]').val();
+            $('#comentarios_container').comentarios({
+                table:'compranota',
+                id: id,
+                parent:'idcompra',
+            });
 
         }
 
