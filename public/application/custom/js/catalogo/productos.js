@@ -8,6 +8,14 @@ $( document ).ready(function() {
         
     });
     
+    $("[name=producto_rendimiento]").change(function () {
+        if($this.val() != "")
+        {
+            $("#btnSubmit").attr("disabled", "false");
+        }
+        
+    });
+    
     
     function getSubcategorias()
     {
@@ -16,10 +24,13 @@ $( document ).ready(function() {
         if(idcat != '2')
         {
             $("label[for=producto_rendimiento").hide();
+            $("[name=producto_rendimiento]").removeAttr("required");
             $("[name=producto_rendimiento]").hide();
+            
         }
         else
         {
+            $("[name=producto_rendimiento]").attr("required", "true");
             $("label[for=producto_rendimiento").show();
             $("[name=producto_rendimiento]").show();
         }
