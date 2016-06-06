@@ -60,6 +60,18 @@
         }
         
         plugin.list = function () {
+            
+            var table = $container.find('#datatable');
+            $.ajax({
+                url: '/application/json/datatable/lang_es.json',
+                dataType: 'json',
+                success: function (data) {
+                    table.dataTable({
+                        "language": data,
+                        "order": [],
+                    });
+                },
+            });
             //ELIMINAR CUENTA BANCARIA
             $('.delete_modal').click(function () {
                 var id = $(this).closest('tr').attr('id');

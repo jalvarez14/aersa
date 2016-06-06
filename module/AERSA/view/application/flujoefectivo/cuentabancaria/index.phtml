@@ -25,13 +25,13 @@
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable"  style="border-bottom-width: 0px;">
                     <thead>
                         <tr>
-                            <th class="text-center"> Banco </th>
-                            <th class="text-center"> No. Cuenta </th>
-                            <th class="text-center"> Saldo </th>
-                            <th class="text-center"> Opciones </th>
+                            <th class="text"> Banco </th>
+                            <th class="text"> No. Cuenta </th>
+                            <th class="text"> Saldo </th>
+                            <th class="text"> Opciones </th>
                         </tr>
                     </thead>
-                    <tbody class="text-center">
+                    <tbody class="text">
                         <?php $entity = new Cuentabancaria();foreach ($collection as $entity) : ?>
                         <tr id="<?php echo $entity->getIdcuentabancaria()?>">
                             <td><?php echo $entity->getCuentabancariaBanco() ?></td>
