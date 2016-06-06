@@ -38,14 +38,17 @@ class SaldoproveedoresController extends AbstractActionController {
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
         $id = $this->params()->fromRoute('id');
+        
         $exist = \AbonoproveedorQuery::create()->filterByIdproveedor($id)->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->exists();
+        
         if($exist) {
             //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL---
-            $abonoproveedor = \AbonoproveedorQuery::create()->findPk($id);
+            $abonoproveedor = \AbonoproveedorQuery::create()->filterByIdproveedor($id)->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->findOne();
+            $id=$abonoproveedor->getIdabonoproveedor();
             $abonoproveedordetalle = \AbonoproveedordetalleQuery::create()->filterByIdabonoproveedor($id)->find();
             $proveedor = $abonoproveedor->getProveedor();
             //INTANCIAMOS NUESTRA VISTA
-            $form = new \Application\Flujoefectivo\Form\SaldoproveedoresForm($proveedor_nombre);
+            $form = new \Application\Flujoefectivo\Form\SaldoproveedoresForm();
             $form->setData($abonoproveedor->toArray(\BasePeer::TYPE_FIELDNAME));
             $form->setData($proveedor->toArray(\BasePeer::TYPE_FIELDNAME));
 
@@ -73,17 +76,21 @@ class SaldoproveedoresController extends AbstractActionController {
         $id = $this->params()->fromRoute('id');
         $request = $this->getRequest();
         if ($request->isPost()) {
+            $idabonoproveedor = \AbonoproveedorQuery::create()->filterByIdproveedor($id)->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->findOne()->getIdabonoproveedor();
             $post_data = $request->getPost();
             $abonoproveedordetalle = new \Abonoproveedordetalle();
             $post_data["abonoproveedordetalle_fechaabono"]= date_create_from_format('d/m/Y', $post_data["abonoproveedordetalle_fechaabono"]);
+            if(isset($post_data["abonoproveedordetalle_fechacobrocheque"]))
+                $post_data["abonoproveedordetalle_fechacobrocheque"]= date_create_from_format('d/m/Y', $post_data["abonoproveedordetalle_fechacobrocheque"]);
             foreach ($post_data as $key => $value) {
                 if (\AbonoproveedordetallePeer::getTableMap()->hasColumn($key)) {
                     $abonoproveedordetalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
             }
             $abonoproveedordetalle->setIdusuario($idusuario);
-            $abonoproveedordetalle->setIdabonoproveedor($id);
+            $abonoproveedordetalle->setIdabonoproveedor($idabonoproveedor);
             $abonoproveedordetalle->setAbonoproveedordetalleTipo("abono");
+            
             if($abonoproveedordetalle->getAbonoproveedordetalleMediodepago()=='transferencia') {
                 $cuenta = new \Cuentabancaria();
                 $cuenta = \CuentabancariaQuery::create()->filterByIdcuentabancaria($abonoproveedordetalle->getIdcuentabancaria())->findOne();
@@ -91,10 +98,10 @@ class SaldoproveedoresController extends AbstractActionController {
                 $cuenta->setCuentabancariaBalance($balance);
                 $cuenta->save();
             } else {
-                $abonoproveedordetalle->setAbonoproveedordetalleMediodepago(NULL);
+                $abonoproveedordetalle->setIdcuentabancaria(NULL);
             }
             $abonoproveedor = new \Abonoproveedor();
-            $abonoproveedor = \AbonoproveedorQuery::create()->filterByIdabonoproveedor($id)->findOne();
+            $abonoproveedor = \AbonoproveedorQuery::create()->filterByIdabonoproveedor($idabonoproveedor)->findOne();
             $balance=$abonoproveedor->getAbonoproveedorBalance() + $abonoproveedordetalle->getAbonoproveedordetalleCantidad();
             $abonoproveedor->setAbonoproveedorBalance($balance);
             $abonoproveedor->save();
@@ -135,5 +142,16 @@ class SaldoproveedoresController extends AbstractActionController {
             }
         }
         return $this->getResponse()->setContent(json_encode($cuentas_array));
+    }
+    
+    public function validaterefAction(){
+        $referencia = $this->params()->fromQuery('referencia');
+        $edit = (!is_null($this->params()->fromQuery('edit'))) ?$this->params()->fromQuery('edit') : false;
+        if($edit){
+             $id = $this->params()->fromQuery('id');
+        }else{
+            $exist = \AbonoproveedordetalleQuery::create()->filterByAbonoproveedordetalleReferencia($referencia)->exists();
+        }
+        return $this->getResponse()->setContent(json_encode($exist));
     }
 }

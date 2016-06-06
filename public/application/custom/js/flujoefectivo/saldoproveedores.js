@@ -102,7 +102,27 @@
         }
 
         plugin.abono = function () {
-            
+            $('input[name=abonoproveedordetalle_referencia]').on('blur',function(){
+                var referencia = $(this).val();
+                var $this = $(this);
+                $this.removeClass('valid');
+                $.ajax({
+                    url: "/flujoefectivo/saldoproveedores/validateref",
+                    dataType: "json",
+                    data: {referencia:referencia},
+                    success: function (exist) {
+                        console.log(exist);
+                        if(exist){
+                            alert('La referencia "'+referencia+'" ya fue utilizada');
+                            $this.val('');
+                        }else{
+                            $this.addClass('valid');
+                        }
+                        
+                    },
+                });
+                         
+           });
             
             $container.find('select[name=idcuentabancaria]').on('change', function () {
                 saldo();

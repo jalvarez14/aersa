@@ -6,9 +6,6 @@
     #productos_table .fa-trash{
         color:red;
     }
-    #productos_table input{
-        width: 80px;
-    }
 </style>
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div id="form_container">
@@ -32,7 +29,6 @@
     $form->setAttribute('action', '/procesos/requisicion/editar/'.$form->get('idrequisicion')->getValue());
     echo $this->form()->openTag($form);
     ?>
-    
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
@@ -96,20 +92,7 @@
                 </div>
                 
                 
-                
-                <div class="row">
-                    <div class="col-md-12">
-                        <p>(*)Campos obligatorios</p>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
-        <div class="portlet-body form">
-            <div class="form-body">
-                <h3 class="form-section">Productos *</h3>
+                <h3 class="form-section">Productos *</h3><br><br>
                 <div class="row">
                     <div class="form-group">
                         <div class="col-md-4 col-md-offset-6">
@@ -158,7 +141,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][requisiciondetalle_preciounitario]" value="<?php echo $detalle->getRequisiciondetallePreciounitario()?>"> 
                                     </td>
                                     <td class="requisiciondetalle_subtotal">
-                                        <?php echo money_format('%(#10n',$detalle->getRequisiciondetalleSubtotal())?>
+                                        <?php echo "$".money_format('%(#10n',$detalle->getRequisiciondetalleSubtotal())?>
                                     </td>
                                     <td>
                                         <?php if($detalle->getRequisiciondetalleRevisada()) :?>
@@ -180,13 +163,19 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="5"></td>
+                                    <td colspan="8"></td>
                                     <td>TOTAL</td>
                                     <?php echo $this->formHidden($form->get('requisicion_total')) ?> 
-                                    <td id="total"><?php echo money_format('%(#10n',$entity->getRequisicionTotal())?></td>
+                                    <td id="total"><?php echo '$'.money_format('%(#10n',$entity->getRequisicionTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
                     </div>
                 </div>
             </div>
@@ -198,24 +187,8 @@
             </div>
         </div>
     </div>
-    <div id="comentarios_container" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
-        <div class="portlet-body form">
-            <div class="portlet-body form">
-                <div class="form-body">
-                    <div class="btn-set pull-right">
-                        <a id="nota_nuevo" href="javascript:;" class="btn default">Nuevo comentario</a>
-                    </div>
-                     <h3 class="page-title">Comentarios</h3>
-                     <div class="mt-comments">
-
-                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <script type="text/javascript" src="/application/custom/js/procesos/requisicion.js"></script>
-<script type="text/javascript" src="/application/custom/js/procesos/comentarios.js"></script>
 <script>
     var $form = $('#form_container').requisicion();
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>);

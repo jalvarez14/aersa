@@ -789,14 +789,6 @@
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
-            
-            //COMENTARIOS
-            var id = $('input[name=idrequisicion]').val();
-            $('#comentarios_container').comentarios({
-                table:'requisicionnota',
-                id: id,
-                parent:'idrequisicion',
-            });
 
         }
 
