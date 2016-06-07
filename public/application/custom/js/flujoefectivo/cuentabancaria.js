@@ -106,7 +106,7 @@
                     $this.removeClass('valid');
                     $('input[name=cuentabancaria_banco]').removeClass('valid');
                     $.ajax({
-                        url: "/catalogo/cuentabancaria/validarcuenta",
+                        url: "/flujoefectivo/cuentabancaria/validarcuenta",
                         dataType: "json",
                         data: {cuenta: cuenta,banco: banco},
                         success: function (exist) {
@@ -145,7 +145,7 @@
                     $this.removeClass('valid');
                     $('input[name=cuentabancaria_banco]').removeClass('valid');
                     $.ajax({
-                        url: "/catalogo/cuentabancaria/validarcuenta",
+                        url: "/flujoefectivo/cuentabancaria/validarcuenta",
                         dataType: "json",
                         data: {cuenta: cuenta,banco: banco,edit: true,id: $('input[name=idcuentabancaria]').val()},
                         success: function (exist) {
