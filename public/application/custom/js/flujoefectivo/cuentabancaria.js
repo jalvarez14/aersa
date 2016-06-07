@@ -82,7 +82,7 @@
                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
                     '<h4 class="modal-title">ADVERTENCIA</h4>',
                     '</div>',
-                    '<form method="post" action="/catalogo/cuentabancaria/eliminar/' + id + '">',
+                    '<form method="post" action="/flujoefectivo/cuentabancaria/eliminar/' + id + '">',
                     '<div class="modal-body">',
                     '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
                     '</div>',
