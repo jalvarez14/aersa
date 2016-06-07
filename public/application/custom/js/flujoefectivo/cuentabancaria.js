@@ -137,6 +137,7 @@
         }
 
         plugin.edit = function () {
+            $('input[name=cuentabancaria_balance]').attr('disabled',true);
             var validarcuenta = function () {
                 var cuenta = $('input[name=cuentabancaria_nocuenta]').val();
                 var banco = $('input[name=cuentabancaria_banco]').val();
