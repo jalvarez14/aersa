@@ -990,7 +990,7 @@ return array(
                                         ),
                                     ),
                                 ), 
-                            ),  
+                            ),    
                             'devolucion' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1387,6 +1387,7 @@ return array(
                                     ),
                                 ),
                             ),
+
                             'saldoproveedores' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1418,30 +1419,21 @@ return array(
                                                     ), 
                                                 ), 
                                             ), 
-                                            'editar' => array( 
-                                            'type' => 'Segment', 
-                                            'options' => array( 
-                                                'route' => '/editar[/:idch]', 
-                                                 'defaults' => array( 
-                                                     'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
-                                                     'action' => 'editar', 
-                                                     ), 
-                                                ), 
-                                            ), 
                                         ),
                                     ),
-                                    'saldo' => array( 
+                                    'validateref' => array( 
                                         'type' => 'Segment', 
                                         'options' => array( 
-                                            'route' => '/saldo', 
+                                            'route' => '/validateref', 
                                             'defaults' => array( 
                                                 'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
-                                                'action' => 'saldo',
+                                                'action' => 'validateref',
                                             ), 
                                         ), 
                                     ),
                                 ),
                             ),
+
                         ),
                     ),
                 ),
