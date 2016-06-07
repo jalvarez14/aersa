@@ -1385,9 +1385,18 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'validarcuenta' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validarcuenta', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
+                                                'action' => 'validarcuenta',
+                                            ), 
+                                        ), 
+                                    ),
                                 ),
                             ),
-
                             'saldoproveedores' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1433,7 +1442,6 @@ return array(
                                     ),
                                 ),
                             ),
-
                         ),
                     ),
                 ),
