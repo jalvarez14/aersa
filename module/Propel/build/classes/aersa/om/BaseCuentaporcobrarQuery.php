@@ -15,7 +15,10 @@
  * @method CuentaporcobrarQuery orderByCuentaporcobrarFecha($order = Criteria::ASC) Order by the cuentaporcobrar_fecha column
  * @method CuentaporcobrarQuery orderByCuentaporcobrarNota($order = Criteria::ASC) Order by the cuentaporcobrar_nota column
  * @method CuentaporcobrarQuery orderByCuentaporcobrarAbonado($order = Criteria::ASC) Order by the cuentaporcobrar_abonado column
+<<<<<<< HEAD
  * @method CuentaporcobrarQuery orderByCuentaporcobrarEstatuspago($order = Criteria::ASC) Order by the cuentaporcobrar_estatuspago column
+=======
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
  *
  * @method CuentaporcobrarQuery groupByIdcuentaporcobrar() Group by the idcuentaporcobrar column
  * @method CuentaporcobrarQuery groupByIdempresa() Group by the idempresa column
@@ -26,7 +29,10 @@
  * @method CuentaporcobrarQuery groupByCuentaporcobrarFecha() Group by the cuentaporcobrar_fecha column
  * @method CuentaporcobrarQuery groupByCuentaporcobrarNota() Group by the cuentaporcobrar_nota column
  * @method CuentaporcobrarQuery groupByCuentaporcobrarAbonado() Group by the cuentaporcobrar_abonado column
+<<<<<<< HEAD
  * @method CuentaporcobrarQuery groupByCuentaporcobrarEstatuspago() Group by the cuentaporcobrar_estatuspago column
+=======
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
  *
  * @method CuentaporcobrarQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CuentaporcobrarQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -59,7 +65,10 @@
  * @method Cuentaporcobrar findOneByCuentaporcobrarFecha(string $cuentaporcobrar_fecha) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_fecha column
  * @method Cuentaporcobrar findOneByCuentaporcobrarNota(string $cuentaporcobrar_nota) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_nota column
  * @method Cuentaporcobrar findOneByCuentaporcobrarAbonado(string $cuentaporcobrar_abonado) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_abonado column
+<<<<<<< HEAD
  * @method Cuentaporcobrar findOneByCuentaporcobrarEstatuspago(boolean $cuentaporcobrar_estatuspago) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_estatuspago column
+=======
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
  *
  * @method array findByIdcuentaporcobrar(int $idcuentaporcobrar) Return Cuentaporcobrar objects filtered by the idcuentaporcobrar column
  * @method array findByIdempresa(int $idempresa) Return Cuentaporcobrar objects filtered by the idempresa column
@@ -70,7 +79,10 @@
  * @method array findByCuentaporcobrarFecha(string $cuentaporcobrar_fecha) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_fecha column
  * @method array findByCuentaporcobrarNota(string $cuentaporcobrar_nota) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_nota column
  * @method array findByCuentaporcobrarAbonado(string $cuentaporcobrar_abonado) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_abonado column
+<<<<<<< HEAD
  * @method array findByCuentaporcobrarEstatuspago(boolean $cuentaporcobrar_estatuspago) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_estatuspago column
+=======
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
  *
  * @package    propel.generator.aersa.om
  */
@@ -178,7 +190,11 @@ abstract class BaseCuentaporcobrarQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
+<<<<<<< HEAD
         $sql = 'SELECT `idcuentaporcobrar`, `idempresa`, `idsucursal`, `idusuario`, `cuentaporcobrar_cantidad`, `cuentaporcobrar_cliente`, `cuentaporcobrar_fecha`, `cuentaporcobrar_nota`, `cuentaporcobrar_abonado`, `cuentaporcobrar_estatuspago` FROM `cuentaporcobrar` WHERE `idcuentaporcobrar` = :p0';
+=======
+        $sql = 'SELECT `idcuentaporcobrar`, `idempresa`, `idsucursal`, `idusuario`, `cuentaporcobrar_cantidad`, `cuentaporcobrar_cliente`, `cuentaporcobrar_fecha`, `cuentaporcobrar_nota`, `cuentaporcobrar_abonado` FROM `cuentaporcobrar` WHERE `idcuentaporcobrar` = :p0';
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -627,6 +643,7 @@ abstract class BaseCuentaporcobrarQuery extends ModelCriteria
     }
 
     /**
+<<<<<<< HEAD
      * Filter the query on the cuentaporcobrar_estatuspago column
      *
      * Example usage:
@@ -654,6 +671,8 @@ abstract class BaseCuentaporcobrarQuery extends ModelCriteria
     }
 
     /**
+=======
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
      * Filter the query by a related Empresa object
      *
      * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter

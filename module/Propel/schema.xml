@@ -132,7 +132,11 @@
     <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+<<<<<<< HEAD
     <column name="compra_estatuspago" phpName="CompraEstatuspago" type="CHAR" sqlType="enum('pagada','nopagada')" required="false" defaultValue="nopagada"/>
+=======
+    <column name="compra_estatuspago" phpName="CompraEstatuspago" type="CHAR" sqlType="enum('pagada','nopagada')" required="false"/>
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
     <foreign-key foreignTable="almacen" name="idalmacen_compra" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -281,7 +285,10 @@
     <column name="cuentaporcobrar_fecha" phpName="CuentaporcobrarFecha" type="TIMESTAMP" required="true"/>
     <column name="cuentaporcobrar_nota" phpName="CuentaporcobrarNota" type="LONGVARCHAR" required="false"/>
     <column name="cuentaporcobrar_abonado" phpName="CuentaporcobrarAbonado" type="DECIMAL" size="15" scale="5" required="false"/>
+<<<<<<< HEAD
     <column name="cuentaporcobrar_estatuspago" phpName="CuentaporcobrarEstatuspago" type="BOOLEAN" size="1" required="true"/>
+=======
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
     <foreign-key foreignTable="empresa" name="idempresa_cuentaporcobrar" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idempresa" foreign="idempresa"/>
     </foreign-key>

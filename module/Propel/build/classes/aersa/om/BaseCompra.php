@@ -161,7 +161,10 @@ abstract class BaseCompra extends BaseObject implements Persistent
 
     /**
      * The value for the compra_estatuspago field.
+<<<<<<< HEAD
      * Note: this column has a database default value of: 'nopagada'
+=======
+>>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
      * @var        string
      */
     protected $compra_estatuspago;
