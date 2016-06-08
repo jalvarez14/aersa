@@ -1344,7 +1344,17 @@ return array(
                             'route' => '/flujoefectivo', 
                         ),
                         'may_terminate' => true, 
-                        'child_routes' => array( 
+                        'child_routes' => array(
+                            'cuentasporpagar' => array(
+                                'type' => 'Literal',
+                                'options' => array( 
+                                    'route' => '/cuentasporpagar', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Flujoefectivo\Controller\Cuentasporpagar', 
+                                        'action' => 'index', 
+                                    ), 
+                                ),
+                            ), 
                             'cuentabancaria' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1527,6 +1537,8 @@ return array(
             
             'Application\Flujoefectivo\Controller\Cuentabancaria' => 'Application\Flujoefectivo\Controller\CuentabancariaController',
             'Application\Flujoefectivo\Controller\Saldoproveedores' => 'Application\Flujoefectivo\Controller\SaldoproveedoresController',
+            'Application\Flujoefectivo\Controller\Cuentasporpagar' => 'Application\Flujoefectivo\Controller\CuentasporpagarController',
+            
             /*
              * WEBSITE
              */
