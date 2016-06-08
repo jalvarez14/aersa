@@ -24,13 +24,13 @@ abstract class BaseCompraPeer
     const TM_CLASS = 'CompraTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 21;
+    const NUM_COLUMNS = 22;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 21;
+    const NUM_HYDRATE_COLUMNS = 22;
 
     /** the column name for the idcompra field */
     const IDCOMPRA = 'compra.idcompra';
@@ -95,10 +95,17 @@ abstract class BaseCompraPeer
     /** the column name for the notaauditoraersa field */
     const NOTAAUDITORAERSA = 'compra.notaauditoraersa';
 
+    /** the column name for the compra_estatuspago field */
+    const COMPRA_ESTATUSPAGO = 'compra.compra_estatuspago';
+
     /** The enumerated values for the compra_tipo field */
     const COMPRA_TIPO_ORDECOMPRA = 'ordecompra';
     const COMPRA_TIPO_COMPRA = 'compra';
     const COMPRA_TIPO_CONSIGNACION = 'consignacion';
+
+    /** The enumerated values for the compra_estatuspago field */
+    const COMPRA_ESTATUSPAGO_PAGADA = 'pagada';
+    const COMPRA_ESTATUSPAGO_NOPAGADA = 'nopagada';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -119,12 +126,12 @@ abstract class BaseCompraPeer
      * e.g. CompraPeer::$fieldNames[CompraPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcompra', 'Idempresa', 'Idsucursal', 'Idproveedor', 'Idusuario', 'Idauditor', 'Idalmacen', 'CompraFolio', 'CompraRevisada', 'CompraFactura', 'CompraFechacreacion', 'CompraFechacompra', 'CompraFechaentrega', 'CompraIeps', 'CompraIva', 'CompraSubtotal', 'CompraTotal', 'CompraTipo', 'Notaauditorempresa', 'Notaalmacenistaempresa', 'Notaauditoraersa', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compraFolio', 'compraRevisada', 'compraFactura', 'compraFechacreacion', 'compraFechacompra', 'compraFechaentrega', 'compraIeps', 'compraIva', 'compraSubtotal', 'compraTotal', 'compraTipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', ),
-        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA, CompraPeer::IDEMPRESA, CompraPeer::IDSUCURSAL, CompraPeer::IDPROVEEDOR, CompraPeer::IDUSUARIO, CompraPeer::IDAUDITOR, CompraPeer::IDALMACEN, CompraPeer::COMPRA_FOLIO, CompraPeer::COMPRA_REVISADA, CompraPeer::COMPRA_FACTURA, CompraPeer::COMPRA_FECHACREACION, CompraPeer::COMPRA_FECHACOMPRA, CompraPeer::COMPRA_FECHAENTREGA, CompraPeer::COMPRA_IEPS, CompraPeer::COMPRA_IVA, CompraPeer::COMPRA_SUBTOTAL, CompraPeer::COMPRA_TOTAL, CompraPeer::COMPRA_TIPO, CompraPeer::NOTAAUDITOREMPRESA, CompraPeer::NOTAALMACENISTAEMPRESA, CompraPeer::NOTAAUDITORAERSA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'COMPRA_FOLIO', 'COMPRA_REVISADA', 'COMPRA_FACTURA', 'COMPRA_FECHACREACION', 'COMPRA_FECHACOMPRA', 'COMPRA_FECHAENTREGA', 'COMPRA_IEPS', 'COMPRA_IVA', 'COMPRA_SUBTOTAL', 'COMPRA_TOTAL', 'COMPRA_TIPO', 'NOTAAUDITOREMPRESA', 'NOTAALMACENISTAEMPRESA', 'NOTAAUDITORAERSA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compra_folio', 'compra_revisada', 'compra_factura', 'compra_fechacreacion', 'compra_fechacompra', 'compra_fechaentrega', 'compra_ieps', 'compra_iva', 'compra_subtotal', 'compra_total', 'compra_tipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
+        BasePeer::TYPE_PHPNAME => array ('Idcompra', 'Idempresa', 'Idsucursal', 'Idproveedor', 'Idusuario', 'Idauditor', 'Idalmacen', 'CompraFolio', 'CompraRevisada', 'CompraFactura', 'CompraFechacreacion', 'CompraFechacompra', 'CompraFechaentrega', 'CompraIeps', 'CompraIva', 'CompraSubtotal', 'CompraTotal', 'CompraTipo', 'Notaauditorempresa', 'Notaalmacenistaempresa', 'Notaauditoraersa', 'CompraEstatuspago', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compraFolio', 'compraRevisada', 'compraFactura', 'compraFechacreacion', 'compraFechacompra', 'compraFechaentrega', 'compraIeps', 'compraIva', 'compraSubtotal', 'compraTotal', 'compraTipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', 'compraEstatuspago', ),
+        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA, CompraPeer::IDEMPRESA, CompraPeer::IDSUCURSAL, CompraPeer::IDPROVEEDOR, CompraPeer::IDUSUARIO, CompraPeer::IDAUDITOR, CompraPeer::IDALMACEN, CompraPeer::COMPRA_FOLIO, CompraPeer::COMPRA_REVISADA, CompraPeer::COMPRA_FACTURA, CompraPeer::COMPRA_FECHACREACION, CompraPeer::COMPRA_FECHACOMPRA, CompraPeer::COMPRA_FECHAENTREGA, CompraPeer::COMPRA_IEPS, CompraPeer::COMPRA_IVA, CompraPeer::COMPRA_SUBTOTAL, CompraPeer::COMPRA_TOTAL, CompraPeer::COMPRA_TIPO, CompraPeer::NOTAAUDITOREMPRESA, CompraPeer::NOTAALMACENISTAEMPRESA, CompraPeer::NOTAAUDITORAERSA, CompraPeer::COMPRA_ESTATUSPAGO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'COMPRA_FOLIO', 'COMPRA_REVISADA', 'COMPRA_FACTURA', 'COMPRA_FECHACREACION', 'COMPRA_FECHACOMPRA', 'COMPRA_FECHAENTREGA', 'COMPRA_IEPS', 'COMPRA_IVA', 'COMPRA_SUBTOTAL', 'COMPRA_TOTAL', 'COMPRA_TIPO', 'NOTAAUDITOREMPRESA', 'NOTAALMACENISTAEMPRESA', 'NOTAAUDITORAERSA', 'COMPRA_ESTATUSPAGO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compra_folio', 'compra_revisada', 'compra_factura', 'compra_fechacreacion', 'compra_fechacompra', 'compra_fechaentrega', 'compra_ieps', 'compra_iva', 'compra_subtotal', 'compra_total', 'compra_tipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', 'compra_estatuspago', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
     );
 
     /**
@@ -134,12 +141,12 @@ abstract class BaseCompraPeer
      * e.g. CompraPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcompra' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'Idalmacen' => 6, 'CompraFolio' => 7, 'CompraRevisada' => 8, 'CompraFactura' => 9, 'CompraFechacreacion' => 10, 'CompraFechacompra' => 11, 'CompraFechaentrega' => 12, 'CompraIeps' => 13, 'CompraIva' => 14, 'CompraSubtotal' => 15, 'CompraTotal' => 16, 'CompraTipo' => 17, 'Notaauditorempresa' => 18, 'Notaalmacenistaempresa' => 19, 'Notaauditoraersa' => 20, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compraFolio' => 7, 'compraRevisada' => 8, 'compraFactura' => 9, 'compraFechacreacion' => 10, 'compraFechacompra' => 11, 'compraFechaentrega' => 12, 'compraIeps' => 13, 'compraIva' => 14, 'compraSubtotal' => 15, 'compraTotal' => 16, 'compraTipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, ),
-        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA => 0, CompraPeer::IDEMPRESA => 1, CompraPeer::IDSUCURSAL => 2, CompraPeer::IDPROVEEDOR => 3, CompraPeer::IDUSUARIO => 4, CompraPeer::IDAUDITOR => 5, CompraPeer::IDALMACEN => 6, CompraPeer::COMPRA_FOLIO => 7, CompraPeer::COMPRA_REVISADA => 8, CompraPeer::COMPRA_FACTURA => 9, CompraPeer::COMPRA_FECHACREACION => 10, CompraPeer::COMPRA_FECHACOMPRA => 11, CompraPeer::COMPRA_FECHAENTREGA => 12, CompraPeer::COMPRA_IEPS => 13, CompraPeer::COMPRA_IVA => 14, CompraPeer::COMPRA_SUBTOTAL => 15, CompraPeer::COMPRA_TOTAL => 16, CompraPeer::COMPRA_TIPO => 17, CompraPeer::NOTAAUDITOREMPRESA => 18, CompraPeer::NOTAALMACENISTAEMPRESA => 19, CompraPeer::NOTAAUDITORAERSA => 20, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'IDALMACEN' => 6, 'COMPRA_FOLIO' => 7, 'COMPRA_REVISADA' => 8, 'COMPRA_FACTURA' => 9, 'COMPRA_FECHACREACION' => 10, 'COMPRA_FECHACOMPRA' => 11, 'COMPRA_FECHAENTREGA' => 12, 'COMPRA_IEPS' => 13, 'COMPRA_IVA' => 14, 'COMPRA_SUBTOTAL' => 15, 'COMPRA_TOTAL' => 16, 'COMPRA_TIPO' => 17, 'NOTAAUDITOREMPRESA' => 18, 'NOTAALMACENISTAEMPRESA' => 19, 'NOTAAUDITORAERSA' => 20, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compra_folio' => 7, 'compra_revisada' => 8, 'compra_factura' => 9, 'compra_fechacreacion' => 10, 'compra_fechacompra' => 11, 'compra_fechaentrega' => 12, 'compra_ieps' => 13, 'compra_iva' => 14, 'compra_subtotal' => 15, 'compra_total' => 16, 'compra_tipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
+        BasePeer::TYPE_PHPNAME => array ('Idcompra' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'Idalmacen' => 6, 'CompraFolio' => 7, 'CompraRevisada' => 8, 'CompraFactura' => 9, 'CompraFechacreacion' => 10, 'CompraFechacompra' => 11, 'CompraFechaentrega' => 12, 'CompraIeps' => 13, 'CompraIva' => 14, 'CompraSubtotal' => 15, 'CompraTotal' => 16, 'CompraTipo' => 17, 'Notaauditorempresa' => 18, 'Notaalmacenistaempresa' => 19, 'Notaauditoraersa' => 20, 'CompraEstatuspago' => 21, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compraFolio' => 7, 'compraRevisada' => 8, 'compraFactura' => 9, 'compraFechacreacion' => 10, 'compraFechacompra' => 11, 'compraFechaentrega' => 12, 'compraIeps' => 13, 'compraIva' => 14, 'compraSubtotal' => 15, 'compraTotal' => 16, 'compraTipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, 'compraEstatuspago' => 21, ),
+        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA => 0, CompraPeer::IDEMPRESA => 1, CompraPeer::IDSUCURSAL => 2, CompraPeer::IDPROVEEDOR => 3, CompraPeer::IDUSUARIO => 4, CompraPeer::IDAUDITOR => 5, CompraPeer::IDALMACEN => 6, CompraPeer::COMPRA_FOLIO => 7, CompraPeer::COMPRA_REVISADA => 8, CompraPeer::COMPRA_FACTURA => 9, CompraPeer::COMPRA_FECHACREACION => 10, CompraPeer::COMPRA_FECHACOMPRA => 11, CompraPeer::COMPRA_FECHAENTREGA => 12, CompraPeer::COMPRA_IEPS => 13, CompraPeer::COMPRA_IVA => 14, CompraPeer::COMPRA_SUBTOTAL => 15, CompraPeer::COMPRA_TOTAL => 16, CompraPeer::COMPRA_TIPO => 17, CompraPeer::NOTAAUDITOREMPRESA => 18, CompraPeer::NOTAALMACENISTAEMPRESA => 19, CompraPeer::NOTAAUDITORAERSA => 20, CompraPeer::COMPRA_ESTATUSPAGO => 21, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'IDALMACEN' => 6, 'COMPRA_FOLIO' => 7, 'COMPRA_REVISADA' => 8, 'COMPRA_FACTURA' => 9, 'COMPRA_FECHACREACION' => 10, 'COMPRA_FECHACOMPRA' => 11, 'COMPRA_FECHAENTREGA' => 12, 'COMPRA_IEPS' => 13, 'COMPRA_IVA' => 14, 'COMPRA_SUBTOTAL' => 15, 'COMPRA_TOTAL' => 16, 'COMPRA_TIPO' => 17, 'NOTAAUDITOREMPRESA' => 18, 'NOTAALMACENISTAEMPRESA' => 19, 'NOTAAUDITORAERSA' => 20, 'COMPRA_ESTATUSPAGO' => 21, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compra_folio' => 7, 'compra_revisada' => 8, 'compra_factura' => 9, 'compra_fechacreacion' => 10, 'compra_fechacompra' => 11, 'compra_fechaentrega' => 12, 'compra_ieps' => 13, 'compra_iva' => 14, 'compra_subtotal' => 15, 'compra_total' => 16, 'compra_tipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, 'compra_estatuspago' => 21, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
     );
 
     /** The enumerated values for this table */
@@ -148,6 +155,10 @@ abstract class BaseCompraPeer
             CompraPeer::COMPRA_TIPO_ORDECOMPRA,
             CompraPeer::COMPRA_TIPO_COMPRA,
             CompraPeer::COMPRA_TIPO_CONSIGNACION,
+        ),
+        CompraPeer::COMPRA_ESTATUSPAGO => array(
+            CompraPeer::COMPRA_ESTATUSPAGO_PAGADA,
+            CompraPeer::COMPRA_ESTATUSPAGO_NOPAGADA,
         ),
     );
 
@@ -288,6 +299,7 @@ abstract class BaseCompraPeer
             $criteria->addSelectColumn(CompraPeer::NOTAAUDITOREMPRESA);
             $criteria->addSelectColumn(CompraPeer::NOTAALMACENISTAEMPRESA);
             $criteria->addSelectColumn(CompraPeer::NOTAAUDITORAERSA);
+            $criteria->addSelectColumn(CompraPeer::COMPRA_ESTATUSPAGO);
         } else {
             $criteria->addSelectColumn($alias . '.idcompra');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -310,6 +322,7 @@ abstract class BaseCompraPeer
             $criteria->addSelectColumn($alias . '.notaauditorempresa');
             $criteria->addSelectColumn($alias . '.notaalmacenistaempresa');
             $criteria->addSelectColumn($alias . '.notaauditoraersa');
+            $criteria->addSelectColumn($alias . '.compra_estatuspago');
         }
     }
 

@@ -14,6 +14,8 @@
  * @method CuentaporcobrarQuery orderByCuentaporcobrarCliente($order = Criteria::ASC) Order by the cuentaporcobrar_cliente column
  * @method CuentaporcobrarQuery orderByCuentaporcobrarFecha($order = Criteria::ASC) Order by the cuentaporcobrar_fecha column
  * @method CuentaporcobrarQuery orderByCuentaporcobrarNota($order = Criteria::ASC) Order by the cuentaporcobrar_nota column
+ * @method CuentaporcobrarQuery orderByCuentaporcobrarAbonado($order = Criteria::ASC) Order by the cuentaporcobrar_abonado column
+ * @method CuentaporcobrarQuery orderByCuentaporcobrarEstatuspago($order = Criteria::ASC) Order by the cuentaporcobrar_estatuspago column
  *
  * @method CuentaporcobrarQuery groupByIdcuentaporcobrar() Group by the idcuentaporcobrar column
  * @method CuentaporcobrarQuery groupByIdempresa() Group by the idempresa column
@@ -23,6 +25,8 @@
  * @method CuentaporcobrarQuery groupByCuentaporcobrarCliente() Group by the cuentaporcobrar_cliente column
  * @method CuentaporcobrarQuery groupByCuentaporcobrarFecha() Group by the cuentaporcobrar_fecha column
  * @method CuentaporcobrarQuery groupByCuentaporcobrarNota() Group by the cuentaporcobrar_nota column
+ * @method CuentaporcobrarQuery groupByCuentaporcobrarAbonado() Group by the cuentaporcobrar_abonado column
+ * @method CuentaporcobrarQuery groupByCuentaporcobrarEstatuspago() Group by the cuentaporcobrar_estatuspago column
  *
  * @method CuentaporcobrarQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CuentaporcobrarQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -54,6 +58,8 @@
  * @method Cuentaporcobrar findOneByCuentaporcobrarCliente(string $cuentaporcobrar_cliente) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_cliente column
  * @method Cuentaporcobrar findOneByCuentaporcobrarFecha(string $cuentaporcobrar_fecha) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_fecha column
  * @method Cuentaporcobrar findOneByCuentaporcobrarNota(string $cuentaporcobrar_nota) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_nota column
+ * @method Cuentaporcobrar findOneByCuentaporcobrarAbonado(string $cuentaporcobrar_abonado) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_abonado column
+ * @method Cuentaporcobrar findOneByCuentaporcobrarEstatuspago(boolean $cuentaporcobrar_estatuspago) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_estatuspago column
  *
  * @method array findByIdcuentaporcobrar(int $idcuentaporcobrar) Return Cuentaporcobrar objects filtered by the idcuentaporcobrar column
  * @method array findByIdempresa(int $idempresa) Return Cuentaporcobrar objects filtered by the idempresa column
@@ -63,6 +69,8 @@
  * @method array findByCuentaporcobrarCliente(string $cuentaporcobrar_cliente) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_cliente column
  * @method array findByCuentaporcobrarFecha(string $cuentaporcobrar_fecha) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_fecha column
  * @method array findByCuentaporcobrarNota(string $cuentaporcobrar_nota) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_nota column
+ * @method array findByCuentaporcobrarAbonado(string $cuentaporcobrar_abonado) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_abonado column
+ * @method array findByCuentaporcobrarEstatuspago(boolean $cuentaporcobrar_estatuspago) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_estatuspago column
  *
  * @package    propel.generator.aersa.om
  */
@@ -170,7 +178,7 @@ abstract class BaseCuentaporcobrarQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcuentaporcobrar`, `idempresa`, `idsucursal`, `idusuario`, `cuentaporcobrar_cantidad`, `cuentaporcobrar_cliente`, `cuentaporcobrar_fecha`, `cuentaporcobrar_nota` FROM `cuentaporcobrar` WHERE `idcuentaporcobrar` = :p0';
+        $sql = 'SELECT `idcuentaporcobrar`, `idempresa`, `idsucursal`, `idusuario`, `cuentaporcobrar_cantidad`, `cuentaporcobrar_cliente`, `cuentaporcobrar_fecha`, `cuentaporcobrar_nota`, `cuentaporcobrar_abonado`, `cuentaporcobrar_estatuspago` FROM `cuentaporcobrar` WHERE `idcuentaporcobrar` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -574,6 +582,75 @@ abstract class BaseCuentaporcobrarQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA, $cuentaporcobrarNota, $comparison);
+    }
+
+    /**
+     * Filter the query on the cuentaporcobrar_abonado column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCuentaporcobrarAbonado(1234); // WHERE cuentaporcobrar_abonado = 1234
+     * $query->filterByCuentaporcobrarAbonado(array(12, 34)); // WHERE cuentaporcobrar_abonado IN (12, 34)
+     * $query->filterByCuentaporcobrarAbonado(array('min' => 12)); // WHERE cuentaporcobrar_abonado >= 12
+     * $query->filterByCuentaporcobrarAbonado(array('max' => 12)); // WHERE cuentaporcobrar_abonado <= 12
+     * </code>
+     *
+     * @param     mixed $cuentaporcobrarAbonado The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CuentaporcobrarQuery The current query, for fluid interface
+     */
+    public function filterByCuentaporcobrarAbonado($cuentaporcobrarAbonado = null, $comparison = null)
+    {
+        if (is_array($cuentaporcobrarAbonado)) {
+            $useMinMax = false;
+            if (isset($cuentaporcobrarAbonado['min'])) {
+                $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, $cuentaporcobrarAbonado['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($cuentaporcobrarAbonado['max'])) {
+                $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, $cuentaporcobrarAbonado['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, $cuentaporcobrarAbonado, $comparison);
+    }
+
+    /**
+     * Filter the query on the cuentaporcobrar_estatuspago column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCuentaporcobrarEstatuspago(true); // WHERE cuentaporcobrar_estatuspago = true
+     * $query->filterByCuentaporcobrarEstatuspago('yes'); // WHERE cuentaporcobrar_estatuspago = true
+     * </code>
+     *
+     * @param     boolean|string $cuentaporcobrarEstatuspago The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CuentaporcobrarQuery The current query, for fluid interface
+     */
+    public function filterByCuentaporcobrarEstatuspago($cuentaporcobrarEstatuspago = null, $comparison = null)
+    {
+        if (is_string($cuentaporcobrarEstatuspago)) {
+            $cuentaporcobrarEstatuspago = in_array(strtolower($cuentaporcobrarEstatuspago), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO, $cuentaporcobrarEstatuspago, $comparison);
     }
 
     /**

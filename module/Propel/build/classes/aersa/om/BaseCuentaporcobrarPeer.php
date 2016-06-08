@@ -24,13 +24,13 @@ abstract class BaseCuentaporcobrarPeer
     const TM_CLASS = 'CuentaporcobrarTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the idcuentaporcobrar field */
     const IDCUENTAPORCOBRAR = 'cuentaporcobrar.idcuentaporcobrar';
@@ -56,6 +56,12 @@ abstract class BaseCuentaporcobrarPeer
     /** the column name for the cuentaporcobrar_nota field */
     const CUENTAPORCOBRAR_NOTA = 'cuentaporcobrar.cuentaporcobrar_nota';
 
+    /** the column name for the cuentaporcobrar_abonado field */
+    const CUENTAPORCOBRAR_ABONADO = 'cuentaporcobrar.cuentaporcobrar_abonado';
+
+    /** the column name for the cuentaporcobrar_estatuspago field */
+    const CUENTAPORCOBRAR_ESTATUSPAGO = 'cuentaporcobrar.cuentaporcobrar_estatuspago';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -75,12 +81,12 @@ abstract class BaseCuentaporcobrarPeer
      * e.g. CuentaporcobrarPeer::$fieldNames[CuentaporcobrarPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcuentaporcobrar', 'Idempresa', 'Idsucursal', 'Idusuario', 'CuentaporcobrarCantidad', 'CuentaporcobrarCliente', 'CuentaporcobrarFecha', 'CuentaporcobrarNota', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcuentaporcobrar', 'idempresa', 'idsucursal', 'idusuario', 'cuentaporcobrarCantidad', 'cuentaporcobrarCliente', 'cuentaporcobrarFecha', 'cuentaporcobrarNota', ),
-        BasePeer::TYPE_COLNAME => array (CuentaporcobrarPeer::IDCUENTAPORCOBRAR, CuentaporcobrarPeer::IDEMPRESA, CuentaporcobrarPeer::IDSUCURSAL, CuentaporcobrarPeer::IDUSUARIO, CuentaporcobrarPeer::CUENTAPORCOBRAR_CANTIDAD, CuentaporcobrarPeer::CUENTAPORCOBRAR_CLIENTE, CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA, CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCUENTAPORCOBRAR', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'CUENTAPORCOBRAR_CANTIDAD', 'CUENTAPORCOBRAR_CLIENTE', 'CUENTAPORCOBRAR_FECHA', 'CUENTAPORCOBRAR_NOTA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcuentaporcobrar', 'idempresa', 'idsucursal', 'idusuario', 'cuentaporcobrar_cantidad', 'cuentaporcobrar_cliente', 'cuentaporcobrar_fecha', 'cuentaporcobrar_nota', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idcuentaporcobrar', 'Idempresa', 'Idsucursal', 'Idusuario', 'CuentaporcobrarCantidad', 'CuentaporcobrarCliente', 'CuentaporcobrarFecha', 'CuentaporcobrarNota', 'CuentaporcobrarAbonado', 'CuentaporcobrarEstatuspago', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcuentaporcobrar', 'idempresa', 'idsucursal', 'idusuario', 'cuentaporcobrarCantidad', 'cuentaporcobrarCliente', 'cuentaporcobrarFecha', 'cuentaporcobrarNota', 'cuentaporcobrarAbonado', 'cuentaporcobrarEstatuspago', ),
+        BasePeer::TYPE_COLNAME => array (CuentaporcobrarPeer::IDCUENTAPORCOBRAR, CuentaporcobrarPeer::IDEMPRESA, CuentaporcobrarPeer::IDSUCURSAL, CuentaporcobrarPeer::IDUSUARIO, CuentaporcobrarPeer::CUENTAPORCOBRAR_CANTIDAD, CuentaporcobrarPeer::CUENTAPORCOBRAR_CLIENTE, CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA, CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA, CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCUENTAPORCOBRAR', 'IDEMPRESA', 'IDSUCURSAL', 'IDUSUARIO', 'CUENTAPORCOBRAR_CANTIDAD', 'CUENTAPORCOBRAR_CLIENTE', 'CUENTAPORCOBRAR_FECHA', 'CUENTAPORCOBRAR_NOTA', 'CUENTAPORCOBRAR_ABONADO', 'CUENTAPORCOBRAR_ESTATUSPAGO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcuentaporcobrar', 'idempresa', 'idsucursal', 'idusuario', 'cuentaporcobrar_cantidad', 'cuentaporcobrar_cliente', 'cuentaporcobrar_fecha', 'cuentaporcobrar_nota', 'cuentaporcobrar_abonado', 'cuentaporcobrar_estatuspago', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -90,12 +96,12 @@ abstract class BaseCuentaporcobrarPeer
      * e.g. CuentaporcobrarPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcuentaporcobrar' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'CuentaporcobrarCantidad' => 4, 'CuentaporcobrarCliente' => 5, 'CuentaporcobrarFecha' => 6, 'CuentaporcobrarNota' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcuentaporcobrar' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'cuentaporcobrarCantidad' => 4, 'cuentaporcobrarCliente' => 5, 'cuentaporcobrarFecha' => 6, 'cuentaporcobrarNota' => 7, ),
-        BasePeer::TYPE_COLNAME => array (CuentaporcobrarPeer::IDCUENTAPORCOBRAR => 0, CuentaporcobrarPeer::IDEMPRESA => 1, CuentaporcobrarPeer::IDSUCURSAL => 2, CuentaporcobrarPeer::IDUSUARIO => 3, CuentaporcobrarPeer::CUENTAPORCOBRAR_CANTIDAD => 4, CuentaporcobrarPeer::CUENTAPORCOBRAR_CLIENTE => 5, CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA => 6, CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCUENTAPORCOBRAR' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'CUENTAPORCOBRAR_CANTIDAD' => 4, 'CUENTAPORCOBRAR_CLIENTE' => 5, 'CUENTAPORCOBRAR_FECHA' => 6, 'CUENTAPORCOBRAR_NOTA' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcuentaporcobrar' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'cuentaporcobrar_cantidad' => 4, 'cuentaporcobrar_cliente' => 5, 'cuentaporcobrar_fecha' => 6, 'cuentaporcobrar_nota' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idcuentaporcobrar' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idusuario' => 3, 'CuentaporcobrarCantidad' => 4, 'CuentaporcobrarCliente' => 5, 'CuentaporcobrarFecha' => 6, 'CuentaporcobrarNota' => 7, 'CuentaporcobrarAbonado' => 8, 'CuentaporcobrarEstatuspago' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcuentaporcobrar' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'cuentaporcobrarCantidad' => 4, 'cuentaporcobrarCliente' => 5, 'cuentaporcobrarFecha' => 6, 'cuentaporcobrarNota' => 7, 'cuentaporcobrarAbonado' => 8, 'cuentaporcobrarEstatuspago' => 9, ),
+        BasePeer::TYPE_COLNAME => array (CuentaporcobrarPeer::IDCUENTAPORCOBRAR => 0, CuentaporcobrarPeer::IDEMPRESA => 1, CuentaporcobrarPeer::IDSUCURSAL => 2, CuentaporcobrarPeer::IDUSUARIO => 3, CuentaporcobrarPeer::CUENTAPORCOBRAR_CANTIDAD => 4, CuentaporcobrarPeer::CUENTAPORCOBRAR_CLIENTE => 5, CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA => 6, CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA => 7, CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO => 8, CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCUENTAPORCOBRAR' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDUSUARIO' => 3, 'CUENTAPORCOBRAR_CANTIDAD' => 4, 'CUENTAPORCOBRAR_CLIENTE' => 5, 'CUENTAPORCOBRAR_FECHA' => 6, 'CUENTAPORCOBRAR_NOTA' => 7, 'CUENTAPORCOBRAR_ABONADO' => 8, 'CUENTAPORCOBRAR_ESTATUSPAGO' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcuentaporcobrar' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idusuario' => 3, 'cuentaporcobrar_cantidad' => 4, 'cuentaporcobrar_cliente' => 5, 'cuentaporcobrar_fecha' => 6, 'cuentaporcobrar_nota' => 7, 'cuentaporcobrar_abonado' => 8, 'cuentaporcobrar_estatuspago' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -177,6 +183,8 @@ abstract class BaseCuentaporcobrarPeer
             $criteria->addSelectColumn(CuentaporcobrarPeer::CUENTAPORCOBRAR_CLIENTE);
             $criteria->addSelectColumn(CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA);
             $criteria->addSelectColumn(CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA);
+            $criteria->addSelectColumn(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO);
+            $criteria->addSelectColumn(CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO);
         } else {
             $criteria->addSelectColumn($alias . '.idcuentaporcobrar');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -186,6 +194,8 @@ abstract class BaseCuentaporcobrarPeer
             $criteria->addSelectColumn($alias . '.cuentaporcobrar_cliente');
             $criteria->addSelectColumn($alias . '.cuentaporcobrar_fecha');
             $criteria->addSelectColumn($alias . '.cuentaporcobrar_nota');
+            $criteria->addSelectColumn($alias . '.cuentaporcobrar_abonado');
+            $criteria->addSelectColumn($alias . '.cuentaporcobrar_estatuspago');
         }
     }
 
