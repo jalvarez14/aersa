@@ -67,7 +67,7 @@ class FlujoefectivoTableMap extends TableMap
         $this->addForeignKey('idcuentabancaria', 'Idcuentabancaria', 'INTEGER', 'cuentabancaria', 'idcuentabancaria', false, null, null);
         $this->addColumn('flujoefectivo_cantidad', 'FlujoefectivoCantidad', 'DECIMAL', true, 15, null);
         $this->addColumn('flujoefectivo_fecha', 'FlujoefectivoFecha', 'TIMESTAMP', true, null, null);
-        $this->addColumn('flujoefectivo_referencia', 'FlujoefectivoReferencia', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('flujoefectivo_referencia', 'FlujoefectivoReferencia', 'LONGVARCHAR', false, null, null);
         $this->addColumn('flujoefectivo_comprobante', 'FlujoefectivoComprobante', 'LONGVARCHAR', false, null, null);
         $this->addColumn('flujoefectivo_mediodepago', 'FlujoefectivoMediodepago', 'CHAR', true, null, null);
         $this->getColumn('flujoefectivo_mediodepago', false)->setValueSet(array (

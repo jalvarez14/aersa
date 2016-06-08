@@ -549,7 +549,7 @@ CREATE TABLE `flujoefectivo`
     `idcuentabancaria` INTEGER,
     `flujoefectivo_cantidad` DECIMAL(15,5) NOT NULL,
     `flujoefectivo_fecha` DATETIME NOT NULL,
-    `flujoefectivo_referencia` TEXT NOT NULL,
+    `flujoefectivo_referencia` TEXT,
     `flujoefectivo_comprobante` TEXT,
     `flujoefectivo_mediodepago` enum('cheque','efectivo','transferencia','abono') NOT NULL,
     `flujoefectivo_tipo` enum('ingreso','egreso') NOT NULL,
