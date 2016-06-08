@@ -161,6 +161,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
 
     /**
      * The value for the compra_estatuspago field.
+     * Note: this column has a database default value of: 'nopagada'
      * @var        string
      */
     protected $compra_estatuspago;
@@ -263,6 +264,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $this->notaauditorempresa = true;
         $this->notaalmacenistaempresa = true;
         $this->notaauditoraersa = true;
+        $this->compra_estatuspago = 'nopagada';
     }
 
     /**
@@ -1151,6 +1153,10 @@ abstract class BaseCompra extends BaseObject implements Persistent
             }
 
             if ($this->notaauditoraersa !== true) {
+                return false;
+            }
+
+            if ($this->compra_estatuspago !== 'nopagada') {
                 return false;
             }
 
