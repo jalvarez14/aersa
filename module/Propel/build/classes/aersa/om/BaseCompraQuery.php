@@ -27,6 +27,7 @@
  * @method CompraQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
  * @method CompraQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
  * @method CompraQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
+ * @method CompraQuery orderByCompraEstatuspago($order = Criteria::ASC) Order by the compra_estatuspago column
  *
  * @method CompraQuery groupByIdcompra() Group by the idcompra column
  * @method CompraQuery groupByIdempresa() Group by the idempresa column
@@ -49,6 +50,7 @@
  * @method CompraQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
  * @method CompraQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
  * @method CompraQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
+ * @method CompraQuery groupByCompraEstatuspago() Group by the compra_estatuspago column
  *
  * @method CompraQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CompraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -113,6 +115,7 @@
  * @method Compra findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Compra filtered by the notaauditorempresa column
  * @method Compra findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Compra filtered by the notaalmacenistaempresa column
  * @method Compra findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Compra filtered by the notaauditoraersa column
+ * @method Compra findOneByCompraEstatuspago(string $compra_estatuspago) Return the first Compra filtered by the compra_estatuspago column
  *
  * @method array findByIdcompra(int $idcompra) Return Compra objects filtered by the idcompra column
  * @method array findByIdempresa(int $idempresa) Return Compra objects filtered by the idempresa column
@@ -135,6 +138,7 @@
  * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Compra objects filtered by the notaauditorempresa column
  * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Compra objects filtered by the notaalmacenistaempresa column
  * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Compra objects filtered by the notaauditoraersa column
+ * @method array findByCompraEstatuspago(string $compra_estatuspago) Return Compra objects filtered by the compra_estatuspago column
  *
  * @package    propel.generator.aersa.om
  */
@@ -242,7 +246,7 @@ abstract class BaseCompraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_subtotal`, `compra_total`, `compra_tipo`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `compra` WHERE `idcompra` = :p0';
+        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_subtotal`, `compra_total`, `compra_tipo`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa`, `compra_estatuspago` FROM `compra` WHERE `idcompra` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1127,6 +1131,35 @@ abstract class BaseCompraQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CompraPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
+    }
+
+    /**
+     * Filter the query on the compra_estatuspago column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCompraEstatuspago('fooValue');   // WHERE compra_estatuspago = 'fooValue'
+     * $query->filterByCompraEstatuspago('%fooValue%'); // WHERE compra_estatuspago LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $compraEstatuspago The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByCompraEstatuspago($compraEstatuspago = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($compraEstatuspago)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $compraEstatuspago)) {
+                $compraEstatuspago = str_replace('*', '%', $compraEstatuspago);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(CompraPeer::COMPRA_ESTATUSPAGO, $compraEstatuspago, $comparison);
     }
 
     /**

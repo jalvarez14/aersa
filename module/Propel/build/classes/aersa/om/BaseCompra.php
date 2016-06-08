@@ -160,6 +160,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
     protected $notaauditoraersa;
 
     /**
+     * The value for the compra_estatuspago field.
+     * @var        string
+     */
+    protected $compra_estatuspago;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -585,6 +591,17 @@ abstract class BaseCompra extends BaseObject implements Persistent
     {
 
         return $this->notaauditoraersa;
+    }
+
+    /**
+     * Get the [compra_estatuspago] column value.
+     *
+     * @return string
+     */
+    public function getCompraEstatuspago()
+    {
+
+        return $this->compra_estatuspago;
     }
 
     /**
@@ -1091,6 +1108,27 @@ abstract class BaseCompra extends BaseObject implements Persistent
     } // setNotaauditoraersa()
 
     /**
+     * Set the value of [compra_estatuspago] column.
+     *
+     * @param  string $v new value
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setCompraEstatuspago($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->compra_estatuspago !== $v) {
+            $this->compra_estatuspago = $v;
+            $this->modifiedColumns[] = CompraPeer::COMPRA_ESTATUSPAGO;
+        }
+
+
+        return $this;
+    } // setCompraEstatuspago()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1159,6 +1197,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $this->notaauditorempresa = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
             $this->notaalmacenistaempresa = ($row[$startcol + 19] !== null) ? (boolean) $row[$startcol + 19] : null;
             $this->notaauditoraersa = ($row[$startcol + 20] !== null) ? (boolean) $row[$startcol + 20] : null;
+            $this->compra_estatuspago = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1168,7 +1207,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 21; // 21 = CompraPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 22; // 22 = CompraPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Compra object", $e);
@@ -1572,6 +1611,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::NOTAAUDITORAERSA)) {
             $modifiedColumns[':p' . $index++]  = '`notaauditoraersa`';
         }
+        if ($this->isColumnModified(CompraPeer::COMPRA_ESTATUSPAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`compra_estatuspago`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `compra` (%s) VALUES (%s)',
@@ -1645,6 +1687,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
                         break;
                     case '`notaauditoraersa`':
                         $stmt->bindValue($identifier, (int) $this->notaauditoraersa, PDO::PARAM_INT);
+                        break;
+                    case '`compra_estatuspago`':
+                        $stmt->bindValue($identifier, $this->compra_estatuspago, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1909,6 +1954,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             case 20:
                 return $this->getNotaauditoraersa();
                 break;
+            case 21:
+                return $this->getCompraEstatuspago();
+                break;
             default:
                 return null;
                 break;
@@ -1959,6 +2007,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $keys[18] => $this->getNotaauditorempresa(),
             $keys[19] => $this->getNotaalmacenistaempresa(),
             $keys[20] => $this->getNotaauditoraersa(),
+            $keys[21] => $this->getCompraEstatuspago(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2090,6 +2139,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             case 20:
                 $this->setNotaauditoraersa($value);
                 break;
+            case 21:
+                $this->setCompraEstatuspago($value);
+                break;
         } // switch()
     }
 
@@ -2135,6 +2187,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if (array_key_exists($keys[18], $arr)) $this->setNotaauditorempresa($arr[$keys[18]]);
         if (array_key_exists($keys[19], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[19]]);
         if (array_key_exists($keys[20], $arr)) $this->setNotaauditoraersa($arr[$keys[20]]);
+        if (array_key_exists($keys[21], $arr)) $this->setCompraEstatuspago($arr[$keys[21]]);
     }
 
     /**
@@ -2167,6 +2220,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::NOTAAUDITOREMPRESA)) $criteria->add(CompraPeer::NOTAAUDITOREMPRESA, $this->notaauditorempresa);
         if ($this->isColumnModified(CompraPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(CompraPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
         if ($this->isColumnModified(CompraPeer::NOTAAUDITORAERSA)) $criteria->add(CompraPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
+        if ($this->isColumnModified(CompraPeer::COMPRA_ESTATUSPAGO)) $criteria->add(CompraPeer::COMPRA_ESTATUSPAGO, $this->compra_estatuspago);
 
         return $criteria;
     }
@@ -2250,6 +2304,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $copyObj->setNotaauditorempresa($this->getNotaauditorempresa());
         $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
         $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
+        $copyObj->setCompraEstatuspago($this->getCompraEstatuspago());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -3611,6 +3666,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $this->notaauditorempresa = null;
         $this->notaalmacenistaempresa = null;
         $this->notaauditoraersa = null;
+        $this->compra_estatuspago = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
