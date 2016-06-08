@@ -171,11 +171,7 @@ CREATE TABLE `compra`
     `notaauditorempresa` TINYINT(1) DEFAULT 1,
     `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
     `notaauditoraersa` TINYINT(1) DEFAULT 1,
-<<<<<<< HEAD
     `compra_estatuspago` enum('pagada','nopagada') DEFAULT 'nopagada',
-=======
-    `compra_estatuspago` enum('pagada','nopagada'),
->>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
     PRIMARY KEY (`idcompra`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -360,10 +356,7 @@ CREATE TABLE `cuentaporcobrar`
     `cuentaporcobrar_fecha` DATETIME NOT NULL,
     `cuentaporcobrar_nota` TEXT,
     `cuentaporcobrar_abonado` DECIMAL(15,5),
-<<<<<<< HEAD
     `cuentaporcobrar_estatuspago` TINYINT(1) NOT NULL,
-=======
->>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
     PRIMARY KEY (`idcuentaporcobrar`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),

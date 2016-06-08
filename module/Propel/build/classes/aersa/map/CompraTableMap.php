@@ -64,11 +64,7 @@ class CompraTableMap extends TableMap
         $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
         $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
         $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
-<<<<<<< HEAD
         $this->addColumn('compra_estatuspago', 'CompraEstatuspago', 'CHAR', false, null, 'nopagada');
-=======
-        $this->addColumn('compra_estatuspago', 'CompraEstatuspago', 'CHAR', false, null, null);
->>>>>>> fc0fb6af431cd2ef6eabc53fd587157b5180b930
         $this->getColumn('compra_estatuspago', false)->setValueSet(array (
   0 => 'pagada',
   1 => 'nopagada',
