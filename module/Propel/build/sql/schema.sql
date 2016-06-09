@@ -553,7 +553,7 @@ CREATE TABLE `flujoefectivo`
     `flujoefectivo_fecha` DATETIME NOT NULL,
     `flujoefectivo_referencia` TEXT,
     `flujoefectivo_comprobante` TEXT,
-    `flujoefectivo_mediodepago` enum('cheque','efectivo','transferencia','abono') NOT NULL,
+    `flujoefectivo_mediodepago` enum('cheque','efectivo','transferencia','abono','bonificacion') NOT NULL,
     `flujoefectivo_tipo` enum('ingreso','egreso') NOT NULL,
     `flujoefectivo_chequecirculacion` TINYINT(1),
     `flujoefectivo_fechacobrocheque` DATETIME,

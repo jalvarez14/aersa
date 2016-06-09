@@ -448,7 +448,7 @@
     <column name="flujoefectivo_fecha" phpName="FlujoefectivoFecha" type="TIMESTAMP" required="true"/>
     <column name="flujoefectivo_referencia" phpName="FlujoefectivoReferencia" type="LONGVARCHAR" required="false"/>
     <column name="flujoefectivo_comprobante" phpName="FlujoefectivoComprobante" type="LONGVARCHAR" required="false"/>
-    <column name="flujoefectivo_mediodepago" phpName="FlujoefectivoMediodepago" type="CHAR" sqlType="enum('cheque','efectivo','transferencia','abono')" required="true"/>
+    <column name="flujoefectivo_mediodepago" phpName="FlujoefectivoMediodepago" type="CHAR" sqlType="enum('cheque','efectivo','transferencia','abono','bonificacion')" required="true"/>
     <column name="flujoefectivo_tipo" phpName="FlujoefectivoTipo" type="CHAR" sqlType="enum('ingreso','egreso')" required="true"/>
     <column name="flujoefectivo_chequecirculacion" phpName="FlujoefectivoChequecirculacion" type="BOOLEAN" size="1" required="false"/>
     <column name="flujoefectivo_fechacobrocheque" phpName="FlujoefectivoFechacobrocheque" type="TIMESTAMP" required="false"/>

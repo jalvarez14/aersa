@@ -3,9 +3,6 @@
         padding-top: 0px;
         padding-left: 0px;
     }
-    #productos_table .fa-trash{
-        color:red;
-    }
     #productos_table input{
         width: 80px;
     }
@@ -53,6 +50,7 @@
                             <div class="col-md-6">
                                 <?php echo $this->formLabel($form->get('flujoefectivo_pago')) ?>  
                                 <?php echo $this->formSelect($form->get('flujoefectivo_pago')) ?> 
+                                <span id="abonoproveedor" style="display:none;color: green">Abono proveedor: <?php echo money_format('%(#10n',$abonoproveedor)?></span>
                             </div>
                             
                         </div>
@@ -105,10 +103,17 @@
                     </div>
                 </div>
                 <div class="form-actions right">
+                    <?php if($nuevo_movimiento) :?>
                     <button class="btn blue" type="submit">
                         <i class="fa fa-check"></i>
                         Guardar
                     </button>
+                    <?php else :?>
+                    <button disabled class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                    <?php endif;?>
                 </div>
             </div>
         </div>
@@ -142,15 +147,21 @@
                                             $medio = ucfirst($movimiento->getFlujoefectivoMediodepago());
                                         }
                                         $referencia = 'N/D';
+                                       
                                         if(!is_null($movimiento->getFlujoefectivoReferencia())){
                                             $referencia = $movimiento->getFlujoefectivoReferencia();
                                         }
+                                  
                                         $comprobante = 'N/D';
                                         if(!is_null($movimiento->getFlujoefectivoComprobante())){
                                             $comprobante = '<a target="_blank" href="'.$movimiento->getFlujoefectivoComprobante().'"><i class="fa fa-file"></i></a>';
                                         }
+                                        $editable = false;
+                                        if($movimiento->getFlujoefectivoPago() == 'cuenta' && $movimiento->getFlujoefectivoMediodepago() == 'cheque' && !$movimiento->getFlujoefectivoChequecirculacion()){
+                                            $editable = true;
+                                        }
                                     ?>
-                                    <tr>
+                                    <tr id="<?php echo $movimiento->getIdflujoefectivo()?>">
                                         <td><?php echo $movimiento->getFlujoefectivoFecha('d/m/Y')?></td>
                                         <td><span class="label label-sm label-info"> <?php echo ucfirst($movimiento->getFlujoefectivoPago()) ?> </span></td>
                                         <td><?php echo $cuenta?></td>
@@ -164,12 +175,14 @@
                                                     <i class="fa fa-angle-down"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" role="menu">
+                                                    <?php if($editable) :?>
                                                     <li>
-                                                        <a href="/flujoefectivo/cuentasporpagar/editarmovimiento/<?php echo $movimiento->getIdflujoefectivo() ?>">
+                                                        <a class="editarmovimiento" href="javascript:;">
                                                             <i class="fa fa-pencil"></i> Editar </a>
                                                     </li>
+                                                    <?php endif;?>
                                                     <li>
-                                                        <a href="/flujoefectivo/cuentasporpagar/eliminarmovimiento/<?php echo $movimiento->getIdflujoefectivo() ?>">
+                                                        <a class="eliminarmovimiento" href=javascript:;">
                                                             <i class="fa fa-trash"></i> Eliminar </a>
                                                     </li>
                                                 </ul>

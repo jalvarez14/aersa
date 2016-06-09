@@ -1386,6 +1386,27 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'eliminarmovimiento' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/eliminarmovimiento[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentasporpagar', 
+                                                'action' => 'eliminarmovimiento', 
+                                            ), 
+                                        ), 
+                                    ),
+                                    'editarmovimiento' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editarmovimiento[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentasporpagar', 
+                                                'action' => 'editarmovimiento', 
+                                            ), 
+                                        ), 
+                                    ),
+                                    
                                 ),
                             ), 
                             'cuentabancaria' => array( 

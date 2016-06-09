@@ -25,7 +25,7 @@ class CompraController extends AbstractActionController {
          $anio_activo = $sucursal->getSucursalAnioactivo();
          $mes_activo = $sucursal->getSucursalMesactivo();
         
-        $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->find();
+        $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByCompraFechacompra(\Criteria::DESC)->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->find();
         
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/compra/index');

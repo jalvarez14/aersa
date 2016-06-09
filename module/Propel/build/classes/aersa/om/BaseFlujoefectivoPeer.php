@@ -112,6 +112,7 @@ abstract class BaseFlujoefectivoPeer
     const FLUJOEFECTIVO_MEDIODEPAGO_EFECTIVO = 'efectivo';
     const FLUJOEFECTIVO_MEDIODEPAGO_TRANSFERENCIA = 'transferencia';
     const FLUJOEFECTIVO_MEDIODEPAGO_ABONO = 'abono';
+    const FLUJOEFECTIVO_MEDIODEPAGO_BONIFICACION = 'bonificacion';
 
     /** The enumerated values for the flujoefectivo_tipo field */
     const FLUJOEFECTIVO_TIPO_INGRESO = 'ingreso';
@@ -181,6 +182,7 @@ abstract class BaseFlujoefectivoPeer
             FlujoefectivoPeer::FLUJOEFECTIVO_MEDIODEPAGO_EFECTIVO,
             FlujoefectivoPeer::FLUJOEFECTIVO_MEDIODEPAGO_TRANSFERENCIA,
             FlujoefectivoPeer::FLUJOEFECTIVO_MEDIODEPAGO_ABONO,
+            FlujoefectivoPeer::FLUJOEFECTIVO_MEDIODEPAGO_BONIFICACION,
         ),
         FlujoefectivoPeer::FLUJOEFECTIVO_TIPO => array(
             FlujoefectivoPeer::FLUJOEFECTIVO_TIPO_INGRESO,
