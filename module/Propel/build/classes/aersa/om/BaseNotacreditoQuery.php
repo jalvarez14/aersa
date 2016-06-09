@@ -23,8 +23,8 @@
  * @method NotacreditoQuery orderByNotacreditoTotal($order = Criteria::ASC) Order by the notacredito_total column
  * @method NotacreditoQuery orderByNotacreditoSubtotal($order = Criteria::ASC) Order by the notacredito_subtotal column
  * @method NotacreditoQuery orderByNotaauditorempresa($order = Criteria::ASC) Order by the notaauditorempresa column
- * @method NotacreditoQuery orderByNotaalmacenistaempresaCopy1($order = Criteria::ASC) Order by the notaalmacenistaempresa_copy1 column
- * @method NotacreditoQuery orderByNotaauditoraersaCopy1($order = Criteria::ASC) Order by the notaauditoraersa_copy1 column
+ * @method NotacreditoQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
+ * @method NotacreditoQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  *
  * @method NotacreditoQuery groupByIdnotacredito() Group by the idnotacredito column
  * @method NotacreditoQuery groupByIdempresa() Group by the idempresa column
@@ -43,8 +43,8 @@
  * @method NotacreditoQuery groupByNotacreditoTotal() Group by the notacredito_total column
  * @method NotacreditoQuery groupByNotacreditoSubtotal() Group by the notacredito_subtotal column
  * @method NotacreditoQuery groupByNotaauditorempresa() Group by the notaauditorempresa column
- * @method NotacreditoQuery groupByNotaalmacenistaempresaCopy1() Group by the notaalmacenistaempresa_copy1 column
- * @method NotacreditoQuery groupByNotaauditoraersaCopy1() Group by the notaauditoraersa_copy1 column
+ * @method NotacreditoQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
+ * @method NotacreditoQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  *
  * @method NotacreditoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method NotacreditoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -101,8 +101,8 @@
  * @method Notacredito findOneByNotacreditoTotal(string $notacredito_total) Return the first Notacredito filtered by the notacredito_total column
  * @method Notacredito findOneByNotacreditoSubtotal(string $notacredito_subtotal) Return the first Notacredito filtered by the notacredito_subtotal column
  * @method Notacredito findOneByNotaauditorempresa(boolean $notaauditorempresa) Return the first Notacredito filtered by the notaauditorempresa column
- * @method Notacredito findOneByNotaalmacenistaempresaCopy1(boolean $notaalmacenistaempresa_copy1) Return the first Notacredito filtered by the notaalmacenistaempresa_copy1 column
- * @method Notacredito findOneByNotaauditoraersaCopy1(boolean $notaauditoraersa_copy1) Return the first Notacredito filtered by the notaauditoraersa_copy1 column
+ * @method Notacredito findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Notacredito filtered by the notaalmacenistaempresa column
+ * @method Notacredito findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Notacredito filtered by the notaauditoraersa column
  *
  * @method array findByIdnotacredito(int $idnotacredito) Return Notacredito objects filtered by the idnotacredito column
  * @method array findByIdempresa(int $idempresa) Return Notacredito objects filtered by the idempresa column
@@ -121,8 +121,8 @@
  * @method array findByNotacreditoTotal(string $notacredito_total) Return Notacredito objects filtered by the notacredito_total column
  * @method array findByNotacreditoSubtotal(string $notacredito_subtotal) Return Notacredito objects filtered by the notacredito_subtotal column
  * @method array findByNotaauditorempresa(boolean $notaauditorempresa) Return Notacredito objects filtered by the notaauditorempresa column
- * @method array findByNotaalmacenistaempresaCopy1(boolean $notaalmacenistaempresa_copy1) Return Notacredito objects filtered by the notaalmacenistaempresa_copy1 column
- * @method array findByNotaauditoraersaCopy1(boolean $notaauditoraersa_copy1) Return Notacredito objects filtered by the notaauditoraersa_copy1 column
+ * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Notacredito objects filtered by the notaalmacenistaempresa column
+ * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Notacredito objects filtered by the notaauditoraersa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -230,7 +230,7 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idnotacredito`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechanotacredito`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total`, `notacredito_subtotal`, `notaauditorempresa`, `notaalmacenistaempresa_copy1`, `notaauditoraersa_copy1` FROM `notacredito` WHERE `idnotacredito` = :p0';
+        $sql = 'SELECT `idnotacredito`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `notacredito_folio`, `notacredito_revisada`, `notacredito_factura`, `notacredito_fechacreacion`, `notacredito_fechanotacredito`, `notacredito_ieps`, `notacredito_iva`, `notacredito_total`, `notacredito_subtotal`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `notacredito` WHERE `idnotacredito` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -992,15 +992,15 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the notaalmacenistaempresa_copy1 column
+     * Filter the query on the notaalmacenistaempresa column
      *
      * Example usage:
      * <code>
-     * $query->filterByNotaalmacenistaempresaCopy1(true); // WHERE notaalmacenistaempresa_copy1 = true
-     * $query->filterByNotaalmacenistaempresaCopy1('yes'); // WHERE notaalmacenistaempresa_copy1 = true
+     * $query->filterByNotaalmacenistaempresa(true); // WHERE notaalmacenistaempresa = true
+     * $query->filterByNotaalmacenistaempresa('yes'); // WHERE notaalmacenistaempresa = true
      * </code>
      *
-     * @param     boolean|string $notaalmacenistaempresaCopy1 The value to use as filter.
+     * @param     boolean|string $notaalmacenistaempresa The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -1009,25 +1009,25 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      *
      * @return NotacreditoQuery The current query, for fluid interface
      */
-    public function filterByNotaalmacenistaempresaCopy1($notaalmacenistaempresaCopy1 = null, $comparison = null)
+    public function filterByNotaalmacenistaempresa($notaalmacenistaempresa = null, $comparison = null)
     {
-        if (is_string($notaalmacenistaempresaCopy1)) {
-            $notaalmacenistaempresaCopy1 = in_array(strtolower($notaalmacenistaempresaCopy1), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_string($notaalmacenistaempresa)) {
+            $notaalmacenistaempresa = in_array(strtolower($notaalmacenistaempresa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1, $notaalmacenistaempresaCopy1, $comparison);
+        return $this->addUsingAlias(NotacreditoPeer::NOTAALMACENISTAEMPRESA, $notaalmacenistaempresa, $comparison);
     }
 
     /**
-     * Filter the query on the notaauditoraersa_copy1 column
+     * Filter the query on the notaauditoraersa column
      *
      * Example usage:
      * <code>
-     * $query->filterByNotaauditoraersaCopy1(true); // WHERE notaauditoraersa_copy1 = true
-     * $query->filterByNotaauditoraersaCopy1('yes'); // WHERE notaauditoraersa_copy1 = true
+     * $query->filterByNotaauditoraersa(true); // WHERE notaauditoraersa = true
+     * $query->filterByNotaauditoraersa('yes'); // WHERE notaauditoraersa = true
      * </code>
      *
-     * @param     boolean|string $notaauditoraersaCopy1 The value to use as filter.
+     * @param     boolean|string $notaauditoraersa The value to use as filter.
      *              Non-boolean arguments are converted using the following rules:
      *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -1036,13 +1036,13 @@ abstract class BaseNotacreditoQuery extends ModelCriteria
      *
      * @return NotacreditoQuery The current query, for fluid interface
      */
-    public function filterByNotaauditoraersaCopy1($notaauditoraersaCopy1 = null, $comparison = null)
+    public function filterByNotaauditoraersa($notaauditoraersa = null, $comparison = null)
     {
-        if (is_string($notaauditoraersaCopy1)) {
-            $notaauditoraersaCopy1 = in_array(strtolower($notaauditoraersaCopy1), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_string($notaauditoraersa)) {
+            $notaauditoraersa = in_array(strtolower($notaauditoraersa), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
-        return $this->addUsingAlias(NotacreditoPeer::NOTAAUDITORAERSA_COPY1, $notaauditoraersaCopy1, $comparison);
+        return $this->addUsingAlias(NotacreditoPeer::NOTAAUDITORAERSA, $notaauditoraersa, $comparison);
     }
 
     /**
