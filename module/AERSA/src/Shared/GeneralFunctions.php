@@ -10,16 +10,16 @@ class GeneralFunctions {
         $array = array();
         foreach ($collection as $entity){
             $id = $entity->getByName($primary_key, \BasePeer::TYPE_FIELDNAME);
-            $value = $entity->getByName($value, \BasePeer::TYPE_FIELDNAME);
+            $val = $entity->getByName($value, \BasePeer::TYPE_FIELDNAME);
             
             foreach ($columns as $column){
-                $value.= $separator.$entity->getByName($column, \BasePeer::TYPE_FIELDNAME);
+                $val.= $separator.$entity->getByName($column, \BasePeer::TYPE_FIELDNAME);
             }
            
-            $array[$id] = $value;
-
+            $array[$id] = $val;
+            
         }
-        
+         
         return $array;
        
         
