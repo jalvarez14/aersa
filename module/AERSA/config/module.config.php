@@ -1365,7 +1365,27 @@ return array(
                                                 'action' => 'editar', 
                                             ), 
                                         ), 
-                                    ), 
+                                    ),
+                                    'getbalance' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/getbalance', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentasporpagar', 
+                                                'action' => 'getbalance', 
+                                            ), 
+                                        ), 
+                                    ),
+                                    'validarcantidad' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/validarcantidad', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentasporpagar', 
+                                                'action' => 'validarcantidad', 
+                                            ), 
+                                        ), 
+                                    ),
                                 ),
                             ), 
                             'cuentabancaria' => array( 

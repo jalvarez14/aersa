@@ -38,14 +38,88 @@ class CuentasporpagarController extends AbstractActionController {
 
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
+        $idusuario = $session['idusuario'];
         
         $request = $this->getRequest();
+        
         $id = $this->params()->fromRoute('id');
         
         $exist = \CompraQuery::create()->filterByIdcompra($id)->exists();
         if ($exist) {
             
             $compra = \CompraQuery::create()->findPk($id);
+            
+            if($request->isPost()){
+                $post_data = $request->getPost();
+                $post_files = $request->getFiles();
+                
+
+                $post_data['flujoefectivo_fecha'] = date_create_from_format('d/m/Y', $post_data['flujoefectivo_fecha']);
+                if(isset($post_data['flujoefectivo_fechacobrocheque'])){
+                    $post_data['flujoefectivo_fechacobrocheque'] = date_create_from_format('d/m/Y', $post_data['flujoefectivo_fechacobrocheque']);
+                }
+                
+                $entity = new \Flujoefectivo();
+                foreach ($post_data as $key => $value){
+                    if(\FlujoefectivoPeer::getTableMap()->hasColumn($key)){
+                        $entity->setByName($key, $value,  \BasePeer::TYPE_FIELDNAME);
+                    }
+                }
+                
+                $entity->setIdempresa($idempresa);
+                $entity->setIdsucursal($idsucursal);
+                $entity->setIdusuario($idusuario);
+                
+                $entity->setFlujoefectivoOrigen('compra');
+                $entity->setFlujoefectivoTipo('egreso');
+                
+                $entity->save();
+                
+                //DE ACUERDO AL PAGO REALIZAMOS CIERTAS ACCIONES
+                if($entity->getFlujoefectivoPago() == 'cuenta'){
+                    //Retiramos de cuenta bancaria
+                    $cuentabancaria = $entity->getCuentabancaria();
+                    $current_balace =$cuentabancaria->getCuentabancariaBalance();
+                    $new_balance =  $current_balace - $entity->getFlujoefectivoCantidad();
+                    $cuentabancaria->setCuentabancariaBalance($new_balance);
+                    if($entity->getFlujoefectivoMediodepago() != 'cheque'){
+                        $cuentabancaria->save();
+                    }else{
+                        if($entity->getFlujoefectivoChequecirculacion()){
+                            $cuentabancaria->save();
+                        }
+                    }
+                }
+                
+                //EL COMPROBANTE
+                if (!empty($post_files['flujoefectivo_comprobante']['name'])) {
+
+                    $type = $post_files['flujoefectivo_comprobante']['type'];
+                    $type = explode('/', $type);
+                    $type = $type[1];
+
+                    $target_path = "/application/files/cuentasporpagar/";
+                    if(!file_exists($_SERVER['DOCUMENT_ROOT'].$target_path)){
+                        mkdir($_SERVER['DOCUMENT_ROOT'].$target_path, 0777);
+                    }
+
+                    $target_path = $target_path . 'cuentasporpagar_' . $entity->getIdflujoefectivo() . '.' . $type;
+
+                    if (move_uploaded_file($_FILES['flujoefectivo_comprobante']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                        $entity->setFlujoefectivoComprobante($target_path);
+                        $entity->save();
+                    }
+                }
+                
+
+                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                return $this->redirect()->toUrl('/flujoefectivo/cuentasporpagar/editar/'.$entity->getIdcompra());
+
+                
+                
+                
+            }
+
             $cuentas_bancarias = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
             $cuentas_bancarias_array = \Shared\GeneralFunctions::collectionToSelectArray($cuentas_bancarias, 'idcuentabancaria', 'cuentabancaria_banco',array('cuentabancaria_nocuenta'),' - ');
 
@@ -58,7 +132,33 @@ class CuentasporpagarController extends AbstractActionController {
             $flujo_efectivo = \FlujoefectivoQuery::create()->filterByIdcompra($compra->getIdcompra())->filterByFlujoefectivoTipo('egreso')->withColumn('SUM(flujoefectivo_cantidad)','flujoefectivo_total')->findOne()->toArray();
             $pagado = (!is_null($flujo_efectivo['flujoefectivo_total'])) ? $flujo_efectivo['flujoefectivo_total'] : 0;
             $restan = $total - $pagado;
-           
+            if($restan <= 0){
+                $compra->setCompraEstatuspago('pagada')->save();
+            }
+            
+            //MOVIMIENTOS
+            $movimientos = \FlujoefectivoQuery::create()->filterByIdcompra($compra->getIdcompra())->orderByFlujoefectivoFecha(\Criteria::DESC)->find();
+            
+            if(\FlujoefectivoQuery::create()->filterByIdcompra($compra->getIdcompra())->filterByFlujoefectivoPago(array('abono','cuenta'))->exists()){
+                $form->remove('flujoefectivo_pago');
+                $form->add(array(
+                    'name' => 'flujoefectivo_pago',
+                    'type' => 'Select',
+                    'options' => array(
+                        'label' => 'Pago *',
+                        'empty_option' => 'Sin especificar',
+                        'value_options' => array(
+                            'cuenta' => 'Cuenta',
+                            'abono' => 'Abono',
+                        ),
+                    ),
+                    'attributes' => array(
+                        'required' => true,
+                        'class' => 'form-control',
+                    ),
+                ));
+            }
+            
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/flujoefectivo/cuentasporpagar/editar');
             $view_model->setVariables(array(
@@ -66,6 +166,8 @@ class CuentasporpagarController extends AbstractActionController {
                 'messages' => $this->flashMessenger(),
                 'total' => $total,
                 'restan' => $restan,
+                'compra' => $compra,
+                'movimientos' => $movimientos,
             ));
             return $view_model;
         } else {
@@ -73,43 +175,35 @@ class CuentasporpagarController extends AbstractActionController {
         }
     }
 
-    public function eliminarAction() {
+    public function getbalanceAction(){
+        
         $request = $this->getRequest();
-        if ($request->isPost()) {
-            $id = $this->params()->fromRoute('id');
-            $cuentabancaria = \CuentabancariaQuery::create()->findPk($id)->delete();
-            $this->flashMessenger()->addSuccessMessage('Cuenta bancaria eliminada satisfactoriamente!');
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            $cuentabancaria = \CuentabancariaQuery::create()->findPk($post_data['id']);
+            $balance = $cuentabancaria->getCuentabancariaBalance();
+            return $this->getResponse()->setContent(json_encode(array('response' => true, 'balance' => $balance)));
+            
         }
     }
+    
+    public function validarcantidadAction(){
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            $cuenbancaria = \CuentabancariaQuery::create()->findPk($post_data['cuentabancaria']);
+            $balance = $cuenbancaria->getCuentabancariaBalance();
+            $cantidad = $post_data['cantidad'];
+            
+            if($cantidad <= $balance){
+                return $this->getResponse()->setContent(json_encode(array('response' => true)));
+            }elseif($cantidad > $balance){
+                return $this->getResponse()->setContent(json_encode(array('response' => false,'msj' => 'Fondos insuficientes')));
+            }
 
-    public function validarcuentaAction() {
-        $session = new \Shared\Session\AouthSession();
-        $session = $session->getData();
-        $idempresa = $session['idempresa'];
-        $idsucursal = $session['idsucursal'];
-        $banco = $this->params()->fromQuery('banco');
-        $cuenta = $this->params()->fromQuery('cuenta');
-
-        $edit = (!is_null($this->params()->fromQuery('edit'))) ? $this->params()->fromQuery('edit') : false;
-        if ($edit) {
-            $id = $this->params()->fromQuery('id');
-            $exist = \CuentabancariaQuery::create()
-                    ->filterByIdempresa($idempresa)
-                    ->filterByIdsucursal($idsucursal)
-                    ->filterByCuentabancariaBanco($banco)
-                    ->filterByCuentabancariaNocuenta($cuenta)
-                    ->filterByIdcuentabancaria($id, \Criteria::NOT_EQUAL)
-                    ->exists();
-        } else {
-            $exist = \CuentabancariaQuery::create()
-                    ->filterByIdempresa($idempresa)
-                    ->filterByIdsucursal($idsucursal)
-                    ->filterByCuentabancariaBanco($banco)
-                    ->filterByCuentabancariaNocuenta($cuenta)
-                    ->exists();
         }
-        return $this->getResponse()->setContent(json_encode($exist));
     }
 
 }

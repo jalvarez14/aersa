@@ -17,7 +17,7 @@ class CuentaporpagarForm extends Form {
                 'required' => true, 
             ),
         ));
-        
+
         $this->add(array(
            'name' => 'idproveedor',
             'type' => 'Hidden',
@@ -76,6 +76,7 @@ class CuentaporpagarForm extends Form {
             'type' => 'Text',
             'attributes' => array(
                 'required' => true,
+                'disabled' => true,
                 'class' => 'form-control'
             ),
             'options' => array(
@@ -93,7 +94,6 @@ class CuentaporpagarForm extends Form {
                     'cheque' => 'Cheque',
                     'efectivo' => 'Efectivo',
                     'transferencia' => 'Transferencia',
-                    'abono' => 'Abono'
                 ),
             ),
             'attributes' => array(

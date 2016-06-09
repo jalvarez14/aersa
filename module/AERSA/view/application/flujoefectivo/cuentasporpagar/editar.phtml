@@ -18,7 +18,7 @@
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
-                <a href="/flujoefectivo/cuentasporpagar/">Cuentas por pagar</a>
+                <a href="/flujoefectivo/cuentasporpagar">Cuentas por pagar</a>
                  <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -26,13 +26,22 @@
             </li>
         </ul>
 </div>
+<?php foreach ($messages->getSuccessMessages() as $message): ?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message ?>
+    </div>
+<?php endforeach; ?>
 <div id="form_container">
-    <form class="form-horizontal" action="/procesos/compra/editar/<?php echo $form->get('idcompra')->getValue()?>" method="post" enctype="multipart/form-data">
+    <form class="form-horizontal" action="/flujoefectivo/cuentasporpagar/editar/<?php echo $form->get('idcompra')->getValue()?>" method="post" enctype="multipart/form-data">
         <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
             <div class="portlet-body form">
                 <div class="form-body">
                     <div class="form-body">
+                        
                         <h3 class="page-title">Información general</h3>
+                        <h5>Proveedor: <?php echo $compra->getProveedor()->getProveedorNombrecomercial()?>, Folio: <?php echo $compra->getCompraFolio()?>, Fecha: <?php echo $compra->getCompraFechacompra('d/m/Y')?></h5>
                         <h5>Total: <?php echo money_format('%(#10n',$total) ?>, Restan: <?php echo money_format('%(#10n',$restan) ?></h5>
                         <div class="form-group">
                             <div class="col-md-6">
@@ -50,7 +59,8 @@
                         <div class="form-group">
                             <div class="col-md-6">
                                 <?php echo $this->formLabel($form->get('idcuentabancaria')) ?>  
-                                <?php echo $this->formSelect($form->get('idcuentabancaria')) ?> 
+                                <?php echo $this->formSelect($form->get('idcuentabancaria')) ?>
+                                <span id="balance" style="display:none;color: green"></span>
                             </div>
                             <div class="col-md-6">
                                 <?php echo $this->formLabel($form->get('flujoefectivo_cantidad')) ?>  
@@ -119,6 +129,56 @@
                                     <th>Comprobante</th>
                                     <th>Opciones</th>
                                 </thead>
+                                <tbody>
+                                    <?php $movimiento = new Flujoefectivo()?>
+                                    <?php foreach ($movimientos as $movimiento) :?>
+                                    <?php
+                                        $cuenta = 'N/A';
+                                        if(!is_null($movimiento->getIdcuentabancaria())){
+                                            $cuenta = $movimiento->getCuentabancaria()->getCuentabancariaBanco().' - '.$movimiento->getCuentabancaria()->getCuentabancariaNocuenta();
+                                        }
+                                        $medio = 'N/A';
+                                        if(!is_null($movimiento->getFlujoefectivoMediodepago())){
+                                            $medio = ucfirst($movimiento->getFlujoefectivoMediodepago());
+                                        }
+                                        $referencia = 'N/D';
+                                        if(!is_null($movimiento->getFlujoefectivoReferencia())){
+                                            $referencia = $movimiento->getFlujoefectivoReferencia();
+                                        }
+                                        $comprobante = 'N/D';
+                                        if(!is_null($movimiento->getFlujoefectivoComprobante())){
+                                            $comprobante = '<a target="_blank" href="'.$movimiento->getFlujoefectivoComprobante().'"><i class="fa fa-file"></i></a>';
+                                        }
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $movimiento->getFlujoefectivoFecha('d/m/Y')?></td>
+                                        <td><span class="label label-sm label-info"> <?php echo ucfirst($movimiento->getFlujoefectivoPago()) ?> </span></td>
+                                        <td><?php echo $cuenta?></td>
+                                        <td> <?php echo money_format('%(#10n',$movimiento->getFlujoefectivoCantidad()) ?></td>
+                                        <td><?php echo $medio?></td>
+                                        <td><?php echo $referencia?></td>
+                                        <td><?php echo $comprobante?></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li>
+                                                        <a href="/flujoefectivo/cuentasporpagar/editarmovimiento/<?php echo $movimiento->getIdflujoefectivo() ?>">
+                                                            <i class="fa fa-pencil"></i> Editar </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="/flujoefectivo/cuentasporpagar/eliminarmovimiento/<?php echo $movimiento->getIdflujoefectivo() ?>">
+                                                            <i class="fa fa-trash"></i> Eliminar </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td> 
+                                      
+                                    </tr>
+                                    <?php endforeach;?>
+                                </tbody>
                             </table>
                         </div>
                     </div>
