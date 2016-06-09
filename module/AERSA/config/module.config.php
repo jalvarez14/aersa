@@ -1354,6 +1354,19 @@ return array(
                                         'action' => 'index', 
                                     ), 
                                 ),
+                                'may_terminate' => true, 
+                                'child_routes' => array(
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentasporpagar', 
+                                                'action' => 'editar', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                ),
                             ), 
                             'cuentabancaria' => array( 
                                 'type' => 'Literal', 

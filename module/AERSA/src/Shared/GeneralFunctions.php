@@ -5,12 +5,19 @@ namespace Shared;
 class GeneralFunctions {
    
     
-    public static function collectionToSelectArray($collection, $primary_key,$value){
+    public static function collectionToSelectArray($collection, $primary_key,$value,$columns = array(),$separator=" "){
        
         $array = array();
         foreach ($collection as $entity){
             $id = $entity->getByName($primary_key, \BasePeer::TYPE_FIELDNAME);
-            $array[$id] = $entity->getByName($value, \BasePeer::TYPE_FIELDNAME);
+            $value = $entity->getByName($value, \BasePeer::TYPE_FIELDNAME);
+            
+            foreach ($columns as $column){
+                $value.= $separator.$entity->getByName($column, \BasePeer::TYPE_FIELDNAME);
+            }
+           
+            $array[$id] = $value;
+
         }
         
         return $array;

@@ -28,18 +28,26 @@
                             <th class="text"> Fecha </th>
                             <th class="text"> Total </th>
                             <th class="text"> Pagada </th>
-                            <th class="text"> Por pagar </th>
                             <th class="text"> Opciones </th>
-                            <th class="text"> Fecha </th>
                         </tr>
                     </thead>
                     <tbody class="text">
                         <?php $entity = new Compra();
                         foreach ($collection as $entity) : ?>
-                        <tr id="<?php echo $entity->getProveedor()->getProveedorNombrecomercial()?>">
-                            <td><?php echo $entity->getCuentabancariaBanco() ?></td>
-                            <td><?php echo $entity->getCuentabancariaNocuenta() ?></td>
-                            <td><?php echo $entity->getCuentabancariaBalance() ?></td>
+                        <?php 
+                            $pagada = 'No pagada';
+                            $class = 'danger';
+                            if($entity->getCompraEstatuspago() == 'pagada'){
+                                $pagada = 'Pagada';
+                                $class = 'info';
+                            }
+                        ?>
+                        <tr id="<?php echo $entity->getCompraFolio()?>">
+                            <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
+                            <td><?php echo $entity->getCompraFolio() ?></td>
+                            <td><?php echo $entity->getCompraFechacompra('d/m/Y') ?></td>
+                            <td><?php echo money_format('%(#10n',$entity->getCompraTotal()) ?></td>
+                            <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $pagada ?> </span></td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
@@ -47,12 +55,8 @@
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/flujoefectivo/cuentabancaria/editar/<?php echo $entity->getIdcuentabancaria()?>">
-                                                    <i class="fa fa-pencil"></i> Editar </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:;" class="delete_modal">
-                                                    <i class="fa fa-trash"></i> Eliminar </a>
+                                                <a href="/flujoefectivo/cuentasporpagar/editar/<?php echo $entity->getIdcompra()?>">
+                                                    <i class="fa fa-pencil"></i> Movimientos </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -71,10 +75,10 @@
 <script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
 <script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
 <script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-<script src="/application/custom/js/flujoefectivo/cuentabancaria.js" type="text/javascript"></script>	
+<script src="/application/custom/js/flujoefectivo/cuentasporpagar.js" type="text/javascript"></script>	
 
 
 <script>
-    var $plugin = $('#my_container').cuentabancaria();
+    var $plugin = $('#my_container').cuentasporpagar();
     $plugin.list();
 </script>

@@ -17,7 +17,7 @@ class CuentasporpagarController extends AbstractActionController {
         $idsucursal = $session['idsucursal'];
 
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL
-        $collection = \CompraQuery::create()->filterByIdempresa()->filterByIdsucursal($idsucursal)->orderByCompraFechacompra(\Criteria::DESC)->find();
+        $collection = \CompraQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->orderByCompraFechacompra(\Criteria::DESC)->find();
 
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
@@ -30,68 +30,46 @@ class CuentasporpagarController extends AbstractActionController {
         return $view_model;
     }
 
-    public function nuevoAction() {
+    public function editarAction() {
+        
+        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
+
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $post_data = $request->getPost();
-            $post_data['idempresa'] = $session['idempresa'];
-            $post_data['idsucursal'] = $session['idsucursal'];
-            $cuentabancaria = new \Cuentabancaria();
-            foreach ($post_data as $key => $value) {
-                if (\CuentabancariaPeer::getTableMap()->hasColumn($key)) {
-                    $cuentabancaria->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                }
-            }
-            $cuentabancaria->setIdempresa($idempresa);
-            $cuentabancaria->setIdsucursal($idsucursal);
-            $cuentabancaria->save();
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
-        }
-        //INTANCIAMOS NUESTRA VISTA
-        $form = new \Application\Flujoefectivo\Form\CuentabancariaForm();
-        $view_model = new ViewModel();
-        $view_model->setVariables(array(
-            'form' => $form,
-            'messages' => $this->flashMessenger(),
-        ));
-        $view_model->setTemplate('/application/flujoefectivo/cuentabancaria/nuevo');
-        return $view_model;
-    }
-
-    public function editarAction() {
+        
         $request = $this->getRequest();
         $id = $this->params()->fromRoute('id');
-        $exist = \CuentabancariaQuery::create()->filterByIdcuentabancaria($id)->exists();
+        
+        $exist = \CompraQuery::create()->filterByIdcompra($id)->exists();
         if ($exist) {
-            $cuentabancaria = \CuentabancariaQuery::create()->findPk($id);
-            if ($request->isPost()) {
-                $post_data = $request->getPost();
-                foreach ($post_data as $key => $value) {
-                    if (\CuentabancariaPeer::getTableMap()->hasColumn($key))
-                        $cuentabancaria->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                }
-                $cuentabancaria->save();
-                //REDIRECCIONAMOS AL LISTADO
-                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
-            }
-            $form = new \Application\Flujoefectivo\Form\CuentabancariaForm();
-            $form->setData($cuentabancaria->toArray(\BasePeer::TYPE_FIELDNAME));
+            
+            $compra = \CompraQuery::create()->findPk($id);
+            $cuentas_bancarias = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
+            $cuentas_bancarias_array = \Shared\GeneralFunctions::collectionToSelectArray($cuentas_bancarias, 'idcuentabancaria', 'cuentabancaria_banco',array('cuentabancaria_nocuenta'),' - ');
 
+            $form = new \Application\Flujoefectivo\Form\CuentaporpagarForm($cuentas_bancarias_array);
+            $form->get('idcompra')->setValue($compra->getIdcompra());
+            $form->get('idproveedor')->setValue($compra->getIdproveedor());
+            
+            //TOTAL Y RESTANTE
+            $total = $compra->getCompraTotal();
+            $flujo_efectivo = \FlujoefectivoQuery::create()->filterByIdcompra($compra->getIdcompra())->filterByFlujoefectivoTipo('egreso')->withColumn('SUM(flujoefectivo_cantidad)','flujoefectivo_total')->findOne()->toArray();
+            $pagado = (!is_null($flujo_efectivo['flujoefectivo_total'])) ? $flujo_efectivo['flujoefectivo_total'] : 0;
+            $restan = $total - $pagado;
+           
             $view_model = new ViewModel();
-            $view_model->setTemplate('/application/flujoefectivo/cuentabancaria/editar');
+            $view_model->setTemplate('/application/flujoefectivo/cuentasporpagar/editar');
             $view_model->setVariables(array(
                 'form' => $form,
-                'cuentabancaria' => $cuentabancaria,
                 'messages' => $this->flashMessenger(),
+                'total' => $total,
+                'restan' => $restan,
             ));
             return $view_model;
         } else {
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
+            return $this->redirect()->toUrl('/flujoefectivo/cuentasporpagar');
         }
     }
 
