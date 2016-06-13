@@ -2,13 +2,15 @@
 
 namespace Application\Flujoefectivo\Form;
 
+use Zend\Form\Element;
+
 use Zend\Form\Form;
 
 class AbonoproveedordetalleForm extends Form {
     
     public function __construct($cuentas_array = array()) {
         parent::__construct('abonoproveedordetalleForm');
-        
+        $this->addElements();
         $this->add(array(
            'name' => 'idabonoproveedordetalle',
             'type' => 'Hidden',
@@ -104,13 +106,13 @@ class AbonoproveedordetalleForm extends Form {
         
         $this->add(array(
             'name' => 'abonoproveedordetalle_comprobante',
-            'type' => 'Text',
+            'type' => 'File',
             'attributes' => array(
                 'required' => false,
                 'class' => 'form-control',
             ),
             'options' => array(
-                'label' => 'Comprobante '
+                'label' => 'Comprobante'
             )
         ));
         
@@ -162,6 +164,15 @@ class AbonoproveedordetalleForm extends Form {
             )
         ));
         
+    }
+    
+     public function addElements()
+    {
+        // File Input
+        $file = new Element\File('image-file');
+        $file->setLabel('Avatar Image Upload')
+             ->setAttribute('id', 'image-file');
+        $this->add($file);
     }
    
 }

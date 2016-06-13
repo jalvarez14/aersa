@@ -1,0 +1,105 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div id="form_container">
+    <h3 class="page-title">Registro cuenta por cobrar - Pago </h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/flujoefectivo/cuentaporcobrar/movimientos/<?php echo $id ?>/pago">Cuenta por cobrar - Pago</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <span>Registro</span>
+            </li>
+        </ul>
+    </div>
+    <?php foreach ($messages->getSuccessMessages() as $message): ?>
+        <div class="alert alert-success alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Exito!</strong>
+            <?php echo $message ?>
+        </div>
+    <?php endforeach; ?>
+
+    <?php foreach ($messages->getErrorMessages() as $message): ?>
+        <div class="alert alert-danger alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Error!</strong>
+            <?php echo $message ?>
+        </div>
+    <?php endforeach; ?>
+    <?php
+    $form->setAttribute('action', '/flujoefectivo/cuentaporcobrar/movimientos/'.$id.'/pago');
+    $form->setAttribute('enctype','multipart/form-data');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="form-section">Información general</h3>
+                <h5>Cliente: <?php echo $cuentaporcobrar->getCuentaporcobrarCliente()?>, Fecha: <?php echo $cuentaporcobrar->getCuentaporcobrarFecha('d/m/Y')?></h5>
+                <h5>Total: <?php echo money_format('%(#10n',$cuentaporcobrar->getCuentaporcobrarCantidad()) ?>, Restan: <?php echo money_format('%(#10n',($cuentaporcobrar->getCuentaporcobrarCantidad() - $cuentaporcobrar->getCuentaporcobrarAbonado())) ?></h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('flujoefectivo_fecha')); ?>  
+                        <?php echo $this->formText($form->get('flujoefectivo_fecha')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('flujoefectivo_cantidad')); ?>  
+                        <?php echo $this->formText($form->get('flujoefectivo_cantidad')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('idcuentabancaria')); ?>  
+                        <?php echo $this->formSelect($form->get('idcuentabancaria')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('flujoefectivo_mediodepago')); ?>  
+                        <?php echo $this->formSelect($form->get('flujoefectivo_mediodepago')); ?>
+                    </div>
+                    <div id="cheque_select" style="display: none">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('flujoefectivo_chequecirculacion')) ?>  
+                            <?php echo $this->formSelect($form->get('flujoefectivo_chequecirculacion')) ?> 
+                        </div>
+                    </div>
+                    <div id="chequefecha_select" style="display: none">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('flujoefectivo_fechacobrocheque')); ?>  
+                            <?php echo $this->formText($form->get('flujoefectivo_fechacobrocheque')); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('flujoefectivo_referencia')); ?>  
+                        <?php echo $this->formText($form->get('flujoefectivo_referencia')); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('flujoefectivo_comprobante')); ?>  
+                        <?php echo $this->formFile($form->get('flujoefectivo_comprobante')); ?>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions right">
+                <button class="btn blue" id="plantilla_save" type="submit">
+                    <i class="fa fa-check"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/application/custom/js/flujoefectivo/cuentaporcobrar.js"></script>
+<script>
+    var $form = $('#form_container').cuentaporcobrar();
+    $form.pago(<?php echo ($cuentaporcobrar->getCuentaporcobrarCantidad() - $cuentaporcobrar->getCuentaporcobrarAbonado())?>);
+</script>

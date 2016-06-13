@@ -1,11 +1,11 @@
 <link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
 <link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 <div id="my_container">
-    <h3 class="page-title">Saldo proveedores</h3>
+    <h3 class="page-title">Cuenta por cobrar</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="/flujoefectivo/saldoproveedores">Saldo proveedores</a>
+                <a href="/flujoefectivo/cuentaporcobrar">Cuenta por cobrar</a>
             </li>
         </ul>
     </div>
@@ -19,34 +19,46 @@
     <div class="portlet box " style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
+                <div class="btn-set pull-right">
+                    <a href="/flujoefectivo/cuentaporcobrar/nuevo"><button class="btn default" type="button" style="margin-bottom: 15px;">Nueva cuenta por cobrar</button></a>
+                </div>
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable"  style="border-bottom-width: 0px;">
                     <thead>
                         <tr>
-                            <th class="text"> Proveedor </th>
-                            <th class="text"> Saldo </th>
+                            <th class="text"> Cliente </th>
+                            <th class="text"> Fecha </th>
+                            <th class="text"> Total </th>
+                            <th class="text"> Pagada </th>
+                            <th class="text"> Abonado </th>
                             <th class="text"> Opciones </th>
                         </tr>
                     </thead>
                     <tbody class="text">
-                        <?php $entity = new Abonoproveedor();foreach ($collection as $entity) : ?>
-                        <tr id="<?php echo $entity->getIdabonoproveedor()?>">
-                            <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
-                            <td><?php echo $entity->getAbonoproveedorBalance() ?></td>
+                        <?php $entity = new Cuentaporcobrar();foreach ($collection as $entity) : ?>
+                        <?php 
+                            $pagada = ((bool)$entity->getCuentaporcobrarEstatuspago()) ? "Pagada":  "No pagada";
+                            $class = ((bool)$entity->getCuentaporcobrarEstatuspago()) ? "info":  "danger";
+                        ?>
+                        <tr id="<?php echo $entity->getIdcuentaporcobrar()?>">
+                            <td><?php echo $entity->getCuentaporcobrarCliente() ?></td>
+                            <td><?php echo $entity->getCuentaporcobrarFecha('d/m/Y') ?></td>
+                            <td><?php echo $entity->getCuentaporcobrarCantidad() ?></td>
+                            
+                            <<td><span class="label label-sm label-<?php echo $class?>"> <?php echo $pagada ?> </span></td>
+                            <td><?php echo $entity->getCuentaporcobrarAbonado() ?></td>
                                 <td>
-                                    <div class="btn-group">
-                                        
-                                    </div>
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
                                             <i class="fa fa-angle-down"></i>
-                                        </button>   
+                                        </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/flujoefectivo/saldoproveedores/movimientos/<?php echo $entity->getIdproveedor()?>">
-                                                <i class="fa fa-list"></i> Movimientos </a>
+                                                <a href="/flujoefectivo/cuentaporcobrar/movimientos/<?php echo $entity->getIdcuentaporcobrar()?>">
+                                                    <i class="fa fa-list"></i> Movimientos </a>
                                             </li>
                                         </ul>
                                     </div>
+                                    
                                 </td>
                             </tr>                            
                         <?php endforeach; ?>
@@ -54,14 +66,15 @@
                 </table>
             </div>
         </div>
+        
     </div>
 </div>
 
 <script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
 <script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
 <script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-<script src="/application/custom/js/flujoefectivo/saldoproveedores.js" type="text/javascript"></script>	
+<script src="/application/custom/js/flujoefectivo/cuentaporcobrar.js" type="text/javascript"></script>	
 <script>
-    var $plugin = $('#my_container').saldoproveedores();
+    var $plugin = $('#my_container').cuentaporcobrar();
     $plugin.list();
 </script>

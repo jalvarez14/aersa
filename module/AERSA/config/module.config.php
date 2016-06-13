@@ -1345,6 +1345,62 @@ return array(
                         ),
                         'may_terminate' => true, 
                         'child_routes' => array(
+                            'cuentaporcobrar' => array( 
+                                'type' => 'Literal', 
+                                'options' => array( 
+                                    'route' => '/cuentaporcobrar', 
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Flujoefectivo\Controller\Cuentaporcobrar', 
+                                        'action' => 'index', 
+                                    ), 
+                                ),
+                                'may_terminate' => true, 
+                                'child_routes' => array( 
+                                    'nuevo' => array( 
+                                        'type' => 'Literal', 
+                                        'options' => array( 
+                                            'route' => '/nuevo', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentaporcobrar', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                    'movimientos' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/movimientos[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentaporcobrar', 
+                                                'action' => 'movimientos', 
+                                            ), 
+                                        ), 
+                                        'may_terminate' => true, 
+                                        'child_routes' => array(
+                                            'pago' => array(
+                                                'type' => 'Literal', 
+                                                'options' => array(
+                                                    'route' => '/pago', 
+                                                    'defaults' => array( 
+                                                        'controller' => 'Application\Flujoefectivo\Controller\Cuentaporcobrar', 
+                                                        'action' => 'pago', 
+                                                    ), 
+                                                ), 
+                                            ), 
+                                        ),
+                                    ), 
+                                    'editarmovimiento' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editarmovimiento[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentaporcobrar', 
+                                                'action' => 'editarmovimiento', 
+                                            ), 
+                                        ), 
+                                    ),
+                                ),
+                            ),
                             'cuentasporpagar' => array(
                                 'type' => 'Literal',
                                 'options' => array( 

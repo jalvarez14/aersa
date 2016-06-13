@@ -62,20 +62,25 @@
                     <tbody class="text">
                         <?php $entity = new Abonoproveedordetalle();foreach ($abonoproveedordetalle as $entity) : ?>
                         <tr id="<?php echo $entity->getIdabonoproveedordetalle()?>">
-                            <td><?php echo $entity->getAbonoproveedordetalleFechaabono() ?></td>
+                            <td><?php echo $entity->getAbonoproveedordetalleFechaabono('d/m/Y') ?></td>
                             <td><?php echo $entity->getAbonoproveedordetalleTipo() ?></td>
                             <td><?php echo $entity->getAbonoproveedordetalleCantidad() ?></td>
                             <td><?php if($entity->getIdcuentabancaria()!=null)echo $entity->getCuentabancaria()->getCuentabancariaBanco()." - ".$entity->getCuentabancaria()->getCuentabancariaNocuenta(); ?></td>
                             <td><?php echo $entity->getAbonoproveedordetalleMediodepago() ?></td>
                             <td><?php echo $entity->getAbonoproveedordetalleReferencia() ?></td>
-                            <td><?php echo $entity->getAbonoproveedordetalleComprobante() ?></td>
+                            <td><?php echo ($entity->getAbonoproveedordetalleComprobante()!=null) ? '<a target="_blank" href="'.$entity->getAbonoproveedordetalleComprobante().'"><i class="fa fa-file"></i></a>' : " ";?></td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
                                             <i class="fa fa-angle-down"></i>
                                         </button>   
                                         <ul class="dropdown-menu" role="menu">
-
+                                            <?php if ($entity->getAbonoproveedordetalleMediodepago() == 'cheque' && !$entity->getAbonoproveedordetalleChequecirculacion()) : ?>
+                                            <li>
+                                                <a class="editarmovimiento" href="javascript:;">
+                                                    <i class="fa fa-pencil"></i> Editar </a>
+                                            </li>
+                                            <?php endif; ?>
                                         </ul>
                                     </div>
                                 </td>
