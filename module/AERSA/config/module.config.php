@@ -1560,6 +1560,16 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'editarmovimiento' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editarmovimiento[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                                'action' => 'editarmovimiento',
+                                            ), 
+                                        ), 
+                                    ),
                                 ),
                             ),
                         ),
@@ -1648,6 +1658,7 @@ return array(
             'Application\Flujoefectivo\Controller\Cuentabancaria' => 'Application\Flujoefectivo\Controller\CuentabancariaController',
             'Application\Flujoefectivo\Controller\Saldoproveedores' => 'Application\Flujoefectivo\Controller\SaldoproveedoresController',
             'Application\Flujoefectivo\Controller\Cuentasporpagar' => 'Application\Flujoefectivo\Controller\CuentasporpagarController',
+            'Application\Flujoefectivo\Controller\Cuentaporcobrar' => 'Application\Flujoefectivo\Controller\CuentaporcobrarController',
             
             /*
              * WEBSITE
