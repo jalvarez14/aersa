@@ -53,9 +53,11 @@
                     </div>
                 </div>
                 <br><br>
+                <?php if(!(bool)$cuentaporcobrar->getCuentaporcobrarEstatuspago()):?>
                 <div class="btn-set pull-right">
                     <a href="/flujoefectivo/cuentaporcobrar/movimientos/<?php echo $cuentaporcobrar->getIdcuentaporcobrar(); ?>/pago"><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo pago</button></a>
                 </div>
+                <?php endif;?>
                 <br><br>
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable"  style="border-bottom-width: 0px;">
                     <thead>
@@ -72,12 +74,14 @@
                     <tbody class="text">
                         <?php $entity = new Flujoefectivo();
                         foreach ($flujoefectivo as $entity) :
+                            $cobrado = ($entity->getFlujoefectivoPago() == 'cuenta' && $entity->getFlujoefectivoMediodepago() == 'cheque' && $entity->getFlujoefectivoChequecirculacion()) ? "Cobrado":  "No cobrado";
+                            $class = ($entity->getFlujoefectivoPago() == 'cuenta' && $entity->getFlujoefectivoMediodepago() == 'cheque' && $entity->getFlujoefectivoChequecirculacion()) ? "info":  "danger";
                             ?>
                             <tr id="<?php echo $entity->getIdflujoefectivo() ?>">
                                 <td><?php echo $entity->getFlujoefectivoFecha('d/m/Y') ?></td>
                                 <td><?php echo $entity->getFlujoefectivoCantidad() ?></td>
                                 <td><?php echo $entity->getCuentabancaria()->getCuentabancariaBanco() . " - " . $entity->getCuentabancaria()->getCuentabancariaNocuenta() ?></td>
-                                <td><?php echo $entity->getFlujoefectivoMediodepago() ?></td>
+                                <td><?php echo $entity->getFlujoefectivoMediodepago()." "; if($entity->getFlujoefectivoMediodepago()=='cheque') {?><span class="label label-sm label-<?php echo $class?>"> <?php echo $cobrado ?> </span><?php  } ?></td>
                                 <td><?php echo $entity->getFlujoefectivoReferencia() ?></td>
                                 <td><?php echo ($entity->getFlujoefectivoComprobante()!=null) ? '<a target="_blank" href="'.$entity->getFlujoefectivoComprobante().'"><i class="fa fa-file"></i></a>' : " ";?></td>
                                 <td>
