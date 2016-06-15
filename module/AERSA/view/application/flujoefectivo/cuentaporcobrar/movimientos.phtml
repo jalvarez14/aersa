@@ -46,11 +46,13 @@
                         <?php echo $this->formLabel($form->get('cuentaporcobrar_referencia')); ?>  
                         <?php echo $this->formText($form->get('cuentaporcobrar_referencia')); ?>
                     </div>
+                    <?php if($cuentaporcobrar->getCuentaporcobrarComprobante()!=null):?>
                     <div class="col-md-6">
                         <?php echo $this->formLabel($form->get('cuentaporcobrar_comprobante')); ?>
                         <br>
                         <?php echo '<a target="_blank" href="'.$cuentaporcobrar->getCuentaporcobrarComprobante().'"><i class="fa fa-file"></i></a>'?>
                     </div>
+                    <?php endif;?>
                 </div>
                 <br><br>
                 <?php if(!(bool)$cuentaporcobrar->getCuentaporcobrarEstatuspago()):?>
