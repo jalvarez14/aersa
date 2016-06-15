@@ -137,6 +137,18 @@
         }
 
         plugin.edit = function () {
+            var table = $container.find('#datatable');
+            $.ajax({
+                url: '/application/json/datatable/lang_es.json',
+                dataType: 'json',
+                success: function (data) {
+                    table.dataTable({
+                        "language": data,
+                        "order": [],
+                    });
+                },
+            });
+            
             $('input[name=cuentabancaria_balance]').attr('disabled',true);
             var validarcuenta = function () {
                 var cuenta = $('input[name=cuentabancaria_nocuenta]').val();
