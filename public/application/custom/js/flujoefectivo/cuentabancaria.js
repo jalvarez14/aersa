@@ -98,6 +98,17 @@
         }
 
         plugin.new = function () {
+            $('input[name=cuentabancaria_balance]').on('blur', function () {
+                var $this = $(this);
+                $this.removeClass('valid');
+                if ($this.val() < 0) {
+                    alert('No se aceptan numeros negativos');
+                    $this.val("");
+                } else {
+                    $this.addClass('valid');
+                }
+            });
+            
             var validarcuenta = function () {
                 var cuenta = $('input[name=cuentabancaria_nocuenta]').val();
                 var banco = $('input[name=cuentabancaria_banco]').val();

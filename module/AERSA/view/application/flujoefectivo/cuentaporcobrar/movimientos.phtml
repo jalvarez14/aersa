@@ -1,3 +1,9 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+</style>
 <link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
 <link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
@@ -26,6 +32,12 @@
         <div class="portlet-body form">
             <div class="form-body">
                 <div class="row">
+                    <?php
+                    $form->setAttribute('action', '/flujoefectivo/cuentaporcobrar/movimientos/'.$cuentaporcobrar->getIdcuentaporcobrar());
+                    $form->setAttribute('method','post');
+                    $form->setAttribute('enctype','multipart/form-data');
+                    echo $this->form()->openTag($form);
+                    ?>
                     <div class="col-md-6">
                         <?php echo $this->formLabel($form->get('cuentaporcobrar_fecha')); ?>  
                         <?php echo $this->formText($form->get('cuentaporcobrar_fecha')); ?>
@@ -50,10 +62,40 @@
                     <div class="col-md-6">
                         <?php echo $this->formLabel($form->get('cuentaporcobrar_comprobante')); ?>
                         <br>
-                        <?php echo '<a target="_blank" href="'.$cuentaporcobrar->getCuentaporcobrarComprobante().'"><i class="fa fa-file"></i></a>'?>
+                        <div class="col-md-1">
+                        <?php echo '<a target="_blank" href="'.$cuentaporcobrar->getCuentaporcobrarComprobante().'"><i class="fa fa-file"></i></a>'; ?>
+                        </div>
+                        <div class="col-md-11">
+                        <?php echo $this->formFile($form->get('cuentaporcobrar_comprobante'));?>
+                        </div>
                     </div>
-                    <?php endif;?>
-                </div>
+                    <?php else: ?>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('cuentaporcobrar_comprobante')); ?>
+                        <?php echo $this->formFile($form->get('cuentaporcobrar_comprobante')); ?>
+                    </div>
+                    <?php endif; ?>
+                    <br>
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>    
+                    </div>
+                    
+                    <div class="row">
+                    
+                    
+                    <div class="form-actions right">
+                        <button class="btn blue" id="plantilla_save" type="submit">
+                            <i class="fa fa-check"></i>
+                            Guardar
+                        </button>
+                    </div>
+                        </div>
+                    <?php
+                    echo $this->form()->closeTag($form);
+                    ?>
+                    
+                
                 <br><br>
                 <?php if(!(bool)$cuentaporcobrar->getCuentaporcobrarEstatuspago()):?>
                 <div class="btn-set pull-right">

@@ -155,6 +155,17 @@
         }
 
         plugin.abono = function () {
+            $('input[name=abonoproveedordetalle_cantidad]').on('blur', function () {
+                var $this = $(this);
+                $this.removeClass('valid');
+                if ($this.val() < 0) {
+                    alert('No se aceptan numeros negativos');
+                    $this.val("");
+                } else {
+                    $this.addClass('valid');
+                }
+            });
+            
             $('input[name=abonoproveedordetalle_referencia]').on('blur',function(){
                 var referencia = $(this).val();
                 var $this = $(this);

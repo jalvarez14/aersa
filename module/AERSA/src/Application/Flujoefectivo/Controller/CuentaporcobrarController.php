@@ -57,8 +57,8 @@ class CuentaporcobrarController extends AbstractActionController {
                 $type = $type[1];
 
                 $target_path = "/application/files/cuentaporcobrar/";
-                if(!file_exists($_SERVER['DOCUMENT_ROOT'].$target_path)){
-                    mkdir($_SERVER['DOCUMENT_ROOT'].$target_path, 0777);
+                if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                    mkdir($_SERVER['DOCUMENT_ROOT'] . $target_path, 0777);
                 }
                 $target_path = $target_path . 'cuentaporcobrar_' . $cuentaporcobrar->getIdcuentaporcobrar() . '.' . $type;
 
@@ -67,7 +67,7 @@ class CuentaporcobrarController extends AbstractActionController {
                     $cuentaporcobrar->save();
                 }
             }
-            
+
             return $this->redirect()->toUrl('/flujoefectivo/cuentaporcobrar');
         }
         //INTANCIAMOS NUESTRA VISTA
@@ -82,14 +82,53 @@ class CuentaporcobrarController extends AbstractActionController {
     }
 
     public function movimientosAction() {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
         $id = $this->params()->fromRoute('id');
         $exit = \CuentaporcobrarQuery::create()->filterByIdcuentaporcobrar($id)->exists();
         if ($exit) {
             $request = $this->getRequest();
             $cuentaporcobrar = \CuentaporcobrarQuery::create()->findPk($id);
             if ($request->isPost()) {
-                
+                $idempresa = $session['idempresa'];
+                $idsucursal = $session['idsucursal'];
+                $idusuario = $session['idusuario'];
+                $post_data = $request->getPost();
+                $post_files = $request->getFiles();
+                $post_data["cuentaporcobrar_fecha"] = date_create_from_format('d/m/Y', $post_data["cuentaporcobrar_fecha"]);
+                if ($cuentaporcobrar->getCuentaporcobrarComprobante() != NULL)
+                    $comprobante = $cuentaporcobrar->getCuentaporcobrarComprobante();
+                foreach ($post_data as $key => $value) {
+                    if (\CuentaporcobrarPeer::getTableMap()->hasColumn($key)) {
+                        $cuentaporcobrar->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    }
+                }
+                $cuentaporcobrar->setIdempresa($idempresa);
+                $cuentaporcobrar->setIdsucursal($idsucursal);
+                $cuentaporcobrar->setIdusuario($idusuario);
+                $cuentaporcobrar->setCuentaporcobrarEstatuspago(FALSE);
+                if (!empty($post_files['cuentaporcobrar_comprobante']['name'])) {
+                    $type = $post_files['cuentaporcobrar_comprobante']['type'];
+                    $type = explode('/', $type);
+                    $type = $type[1];
+
+                    $target_path = "/application/files/cuentaporcobrar/";
+                    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                        mkdir($_SERVER['DOCUMENT_ROOT'] . $target_path, 0777);
+                    }
+                    $target_path = $target_path . 'cuentaporcobrar_' . $cuentaporcobrar->getIdcuentaporcobrar() . '.' . $type;
+
+                    if (move_uploaded_file($_FILES['cuentaporcobrar_comprobante']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                        $cuentaporcobrar->setCuentaporcobrarComprobante($target_path);
+                        $cuentaporcobrar->save();
+                    }
+                } else {
+                    $cuentaporcobrar->setCuentaporcobrarComprobante($comprobante);
+                    $cuentaporcobrar->save();
+                }
+                return $this->redirect()->toUrl('/flujoefectivo/cuentaporcobrar/movimientos/'.$cuentaporcobrar->getIdcuentaporcobrar());
             }
+
             $flujoefectivo = \FlujoefectivoQuery::create()->filterByIdcuentaporcobrar($cuentaporcobrar->getIdcuentaporcobrar())->filterByFlujoefectivoOrigen('cuentaporcobrar')->find();
             $form = new \Application\Flujoefectivo\Form\CuentaporcobrarForm();
             $form->setData($cuentaporcobrar->toArray(\BasePeer::TYPE_FIELDNAME));
@@ -120,7 +159,7 @@ class CuentaporcobrarController extends AbstractActionController {
                 $post_data = $request->getPost();
                 $post_files = $request->getFiles();
                 $post_data["flujoefectivo_fecha"] = date_create_from_format('d/m/Y', $post_data["flujoefectivo_fecha"]);
-                if(isset($post_data["flujoefectivo_fechacobrocheque"]))
+                if (isset($post_data["flujoefectivo_fechacobrocheque"]))
                     $post_data["flujoefectivo_fechacobrocheque"] = date_create_from_format('d/m/Y', $post_data["flujoefectivo_fechacobrocheque"]);
                 $flujoefectivo = new \Flujoefectivo();
                 foreach ($post_data as $key => $value) {
@@ -146,26 +185,26 @@ class CuentaporcobrarController extends AbstractActionController {
                     $cuentaporcobrar->setCuentaporcobrarEstatuspago(true);
                 $cuentaporcobrar->save();
                 $flujoefectivo->save();
-                if(($flujoefectivo->getFlujoefectivoMediodepago() != 'cheque')||($flujoefectivo->getFlujoefectivoMediodepago() == 'cheque')&&((bool)$flujoefectivo->getFlujoefectivoChequecirculacion()==true))
+                if (($flujoefectivo->getFlujoefectivoMediodepago() != 'cheque') || ($flujoefectivo->getFlujoefectivoMediodepago() == 'cheque') && ((bool) $flujoefectivo->getFlujoefectivoChequecirculacion() == true))
                     $cuentabancaria->save();
-                
+
                 if (!empty($post_files['flujoefectivo_comprobante']['name'])) {
-                $type = $post_files['flujoefectivo_comprobante']['type'];
-                $type = explode('/', $type);
-                $type = $type[1];
+                    $type = $post_files['flujoefectivo_comprobante']['type'];
+                    $type = explode('/', $type);
+                    $type = $type[1];
 
-                $target_path = "/application/files/flujoefectivocuentaporcobrar/";
-                if(!file_exists($_SERVER['DOCUMENT_ROOT'].$target_path)){
-                    mkdir($_SERVER['DOCUMENT_ROOT'].$target_path, 0777);
-                }
-                
-                $target_path = $target_path . 'flujoefectivocuentaporcobrar_' . $flujoefectivo->getIdflujoefectivo() . '.' . $type;
+                    $target_path = "/application/files/flujoefectivocuentaporcobrar/";
+                    if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                        mkdir($_SERVER['DOCUMENT_ROOT'] . $target_path, 0777);
+                    }
 
-                if (move_uploaded_file($_FILES['flujoefectivo_comprobante']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
-                    $flujoefectivo->setFlujoefectivoComprobante($target_path);
-                    $flujoefectivo->save();
+                    $target_path = $target_path . 'flujoefectivocuentaporcobrar_' . $flujoefectivo->getIdflujoefectivo() . '.' . $type;
+
+                    if (move_uploaded_file($_FILES['flujoefectivo_comprobante']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                        $flujoefectivo->setFlujoefectivoComprobante($target_path);
+                        $flujoefectivo->save();
+                    }
                 }
-            }
                 return $this->redirect()->toUrl('/flujoefectivo/cuentaporcobrar/movimientos/' . $id);
             }
 
@@ -190,39 +229,6 @@ class CuentaporcobrarController extends AbstractActionController {
             return $view_model;
         } else {
             return $this->redirect()->toUrl('/flujoefectivo/cuentaporcobrar');
-        }
-    }
-
-    public function editarAction() {
-        $request = $this->getRequest();
-        $id = $this->params()->fromRoute('id');
-        $exist = \CuentabancariaQuery::create()->filterByIdcuentabancaria($id)->exists();
-        if ($exist) {
-            $cuentabancaria = \CuentabancariaQuery::create()->findPk($id);
-            if ($request->isPost()) {
-                $post_data = $request->getPost();
-                foreach ($post_data as $key => $value) {
-                    if (\CuentabancariaPeer::getTableMap()->hasColumn($key))
-                        $cuentabancaria->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                }
-                $cuentabancaria->save();
-                //REDIRECCIONAMOS AL LISTADO
-                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
-            }
-            $form = new \Application\Flujoefectivo\Form\CuentabancariaForm();
-            $form->setData($cuentabancaria->toArray(\BasePeer::TYPE_FIELDNAME));
-
-            $view_model = new ViewModel();
-            $view_model->setTemplate('/application/flujoefectivo/cuentabancaria/editar');
-            $view_model->setVariables(array(
-                'form' => $form,
-                'cuentabancaria' => $cuentabancaria,
-                'messages' => $this->flashMessenger(),
-            ));
-            return $view_model;
-        } else {
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
         }
     }
 
@@ -284,7 +290,7 @@ class CuentaporcobrarController extends AbstractActionController {
             $current_balace = $cuentabancaria->getCuentabancariaBalance();
             $new_balance = $current_balace + $entity->getFlujoefectivoCantidad();
             $cuentabancaria->setCuentabancariaBalance($new_balance)->save();
-            
+
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
             return $this->redirect()->toUrl('/flujoefectivo/cuentaporcobrar/movimientos/' . $entity->getIdcuentaporcobrar());
         }
