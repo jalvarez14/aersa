@@ -109,16 +109,16 @@
             });
 
             var table = $container.find('#datatable');
-            $.ajax({
-                url: '/application/json/datatable/lang_es.json',
-                dataType: 'json',
-                success: function (data) {
-                    table.dataTable({
-                        "language": data,
-                        "order": [],
-                    });
-                },
-            });
+//            $.ajax({
+//                url: '/application/json/datatable/lang_es.json',
+//                dataType: 'json',
+//                success: function (data) {
+//                    table.dataTable({
+//                        "language": data,
+//                        "order": [],
+//                    });
+//                },
+//            });
             if (document.getElementById('datatable').getElementsByTagName("tr").length > 1) {
                 $container.find('input,select').attr('disabled', true);
                 $container.find('#plantilla_save').attr('disabled', true);
@@ -176,6 +176,48 @@
                     }
                 });
 
+            });
+            
+            $('.delete_modal').click(function () {
+                var id = $(this).closest('tr').attr('id');
+                var saldo=0;
+                $.ajax({
+                    async: false,
+                    type: "GET",
+                    url: "/flujoefectivo/cuentaporcobrar/saldocuentabancaria/" + id,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.length != 0) {
+                            saldo=data;
+                        }
+                    },
+                });
+                var idcuentaporcobrar=$container.find('input[name=idcuentaporcobrar]').val();
+                var abono=parseFloat($(this).closest('tr').find('td').eq(1).text());
+                if(abono<saldo) {
+                    var tmpl = [
+                    // tabindex is required for focus
+                    ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+                    '<div class="modal-header">',
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
+                    '<h4 class="modal-title">ADVERTENCIA</h4>',
+                    '</div>',
+                    '<form method="post" action="/flujoefectivo/cuentaporcobrar/movimientos/'+idcuentaporcobrar+'/eliminar/' + id + '">',
+                    '<div class="modal-body">',
+                    '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
+                    '</div>',
+                    '<div class="modal-footer">',
+                    '<a href="#" data-dismiss="modal" class="btn btn-default">Cancelar</a>',
+                    '<button class="btn btn-danger" type="submit">Eliminar</button>',
+                    '</div>',
+                    '</form>',
+                    '</div>'
+                ].join('');
+                $(tmpl).modal();
+                } else {
+                    alert("Cantidad excede el saldo a favor");
+                }
+                
             });
         }
 

@@ -196,5 +196,23 @@ class SaldoproveedoresController extends AbstractActionController {
             return $this->redirect()->toUrl('/flujoefectivo/saldoproveedores/movimientos/' . $entity->getAbonoproveedor()->getIdproveedor());
         }
     }
+    
+    public function eliminarmovimientoAction() {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+        $id = $this->params()->fromRoute('idm');
+        $abonodetalle= \AbonoproveedordetalleQuery::create()->findPk($id);
+        $cuentabancaria= $abonodetalle->getCuentabancaria();
+        $cuentabancaria->setCuentabancariaBalance($cuentabancaria->getCuentabancariaBalance()+$abonodetalle->getAbonoproveedordetalleCantidad());
+        $cuentabancaria->save();
+        $abonoproveedor=$abonodetalle->getAbonoproveedor();
+        $abonoproveedor=$abonoproveedor->setAbonoproveedorBalance($abonoproveedor->getAbonoproveedorBalance()-$abonodetalle->getAbonoproveedordetalleCantidad());
+        $abonoproveedor->save();
+        $abonodetalle->delete();
+        $this->flashMessenger()->addSuccessMessage('Abono proveedor eliminada satisfactoriamente!');
+        return $this->redirect()->toUrl('/flujoefectivo/saldoproveedores/movimientos/'.$this->params()->fromRoute('id'));
+        }
+        
+    }
 
 }

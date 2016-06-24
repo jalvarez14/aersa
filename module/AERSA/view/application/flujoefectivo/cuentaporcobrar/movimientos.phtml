@@ -39,6 +39,7 @@
                     echo $this->form()->openTag($form);
                     ?>
                     <div class="col-md-6">
+                        <?php echo $this->formHidden($form->get('idcuentaporcobrar'));?>
                         <?php echo $this->formLabel($form->get('cuentaporcobrar_fecha')); ?>  
                         <?php echo $this->formText($form->get('cuentaporcobrar_fecha')); ?>
                     </div>
@@ -135,11 +136,15 @@
                                         </button>   
                                         <ul class="dropdown-menu" role="menu">
     <?php if ($entity->getFlujoefectivoPago() == 'cuenta' && $entity->getFlujoefectivoMediodepago() == 'cheque' && !$entity->getFlujoefectivoChequecirculacion()) : ?>
-                                                <li>
-                                                    <a class="editarmovimiento" href="javascript:;">
-                                                        <i class="fa fa-pencil"></i> Editar </a>
-                                                </li>
-    <?php endif; ?>
+                                            <li>
+                                                <a class="editarmovimiento" href="javascript:;">
+                                                <i class="fa fa-pencil"></i> Editar </a>
+                                            </li>
+    <?php endif; ?> 
+                                            <li>
+                                                <a href="javascript:;" class="delete_modal">
+                                                <i class="fa fa-trash"></i> Eliminar </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
