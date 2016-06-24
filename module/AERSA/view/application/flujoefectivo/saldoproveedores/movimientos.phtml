@@ -33,6 +33,8 @@
             <div class="form-body">
                 <div class="row">
                     <div class="col-md-6">
+                        <?php echo $this->formHidden($form->get('idabonoproveedor')); ?>
+                        <?php echo $this->formHidden($form->get('idproveedor')); ?>
                         <?php echo $this->formLabel($form->get('proveedor_nombrecomercial')); ?>  
                         <?php echo $this->formText($form->get('proveedor_nombrecomercial')); ?>
                     </div>
@@ -83,6 +85,10 @@
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
                                             <?php endif; ?>
+                                            <li>
+                                                <a href="javascript:;" class="delete_modal">
+                                                    <i class="fa fa-trash"></i> Eliminar </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>

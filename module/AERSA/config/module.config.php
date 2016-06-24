@@ -1387,6 +1387,16 @@ return array(
                                                     ), 
                                                 ), 
                                             ), 
+                                            'eliminar' => array(
+                                                'type' => 'Segment', 
+                                                'options' => array(
+                                                    'route' => '/eliminar[/:idm]', 
+                                                    'defaults' => array( 
+                                                        'controller' => 'Application\Flujoefectivo\Controller\Cuentaporcobrar', 
+                                                        'action' => 'eliminarmovimiento', 
+                                                    ), 
+                                                ), 
+                                            ), 
                                         ),
                                     ), 
                                     'editarmovimiento' => array( 
@@ -1399,6 +1409,17 @@ return array(
                                             ), 
                                         ), 
                                     ),
+                                    'saldocuentabancaria' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/saldocuentabancaria[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentaporcobrar', 
+                                                'action' => 'saldocuentabancaria', 
+                                            ), 
+                                        ), 
+                                    ),
+                                    
                                 ),
                             ),
                             'cuentasporpagar' => array(
@@ -1540,11 +1561,22 @@ return array(
                                         'may_terminate' => true, 
                                         'child_routes' => array(
                                             'abono' => array(
-                                                'type' => 'Literal', 'options' => array(
+                                                'type' => 'Literal', 
+                                                'options' => array(
                                                     'route' => '/abono', 
                                                     'defaults' => array( 
                                                         'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
                                                         'action' => 'abono', 
+                                                    ), 
+                                                ), 
+                                            ), 
+                                            'eliminar' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '/eliminar[/:idm]', 
+                                                    'defaults' => array( 
+                                                        'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                                        'action' => 'eliminarmovimiento', 
                                                     ), 
                                                 ), 
                                             ), 

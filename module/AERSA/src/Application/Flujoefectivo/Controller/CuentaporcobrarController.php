@@ -132,7 +132,6 @@ class CuentaporcobrarController extends AbstractActionController {
             $flujoefectivo = \FlujoefectivoQuery::create()->filterByIdcuentaporcobrar($cuentaporcobrar->getIdcuentaporcobrar())->filterByFlujoefectivoOrigen('cuentaporcobrar')->find();
             $form = new \Application\Flujoefectivo\Form\CuentaporcobrarForm();
             $form->setData($cuentaporcobrar->toArray(\BasePeer::TYPE_FIELDNAME));
-
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/flujoefectivo/cuentaporcobrar/movimientos');
             $view_model->setVariables(array(
@@ -232,13 +231,21 @@ class CuentaporcobrarController extends AbstractActionController {
         }
     }
 
-    public function eliminarAction() {
+    public function eliminarmovimientoAction() {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $id = $this->params()->fromRoute('id');
-            $cuentabancaria = \CuentabancariaQuery::create()->findPk($id)->delete();
-            $this->flashMessenger()->addSuccessMessage('Cuenta bancaria eliminada satisfactoriamente!');
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
+            $id = $this->params()->fromRoute('idm');
+            $flujoefectivo = \FlujoefectivoQuery::create()->findPk($id);
+            $cuentabancaria= $flujoefectivo->getCuentabancaria();
+            $cuentabancaria->setCuentabancariaBalance($cuentabancaria->getCuentabancariaBalance()-$flujoefectivo->getFlujoefectivoCantidad());
+            $cuentabancaria->save();
+            $cuentaporcobrar=$flujoefectivo->getCuentaporcobrar();
+            $cuentaporcobrar=$cuentaporcobrar->setCuentaporcobrarAbonado($cuentaporcobrar->getCuentaporcobrarAbonado()-$flujoefectivo->getFlujoefectivoCantidad());
+            $cuentaporcobrar->setCuentaporcobrarEstatuspago(FALSE);
+            $cuentaporcobrar->save();
+            $flujoefectivo->delete();
+            $this->flashMessenger()->addSuccessMessage('Abono eliminada satisfactoriamente!');
+            return $this->redirect()->toUrl('/flujoefectivo/cuentaporcobrar/movimientos/'.$this->params()->fromRoute('id'));
         }
     }
 
@@ -269,6 +276,12 @@ class CuentaporcobrarController extends AbstractActionController {
                     ->exists();
         }
         return $this->getResponse()->setContent(json_encode($exist));
+    }
+    
+    public function saldocuentabancariaAction() {
+        $id = $this->params()->fromRoute('id');
+        $saldo = \CuentabancariaQuery::create()->findPk(\FlujoefectivoQuery::create()->findPk($id)->getIdcuentabancaria())->getCuentabancariaBalance();
+        return $this->getResponse()->setContent(json_encode($saldo));
     }
 
     public function editarmovimientoAction() {

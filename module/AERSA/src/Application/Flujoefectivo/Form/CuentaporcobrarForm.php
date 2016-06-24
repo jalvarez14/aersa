@@ -11,7 +11,7 @@ class CuentaporcobrarForm extends Form {
         parent::__construct('cuentaporcobrarForm');
         
         $this->add(array(
-           'name' => 'idcuentaporcobrar ',
+           'name' => 'idcuentaporcobrar',
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => true,
