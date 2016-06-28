@@ -31,7 +31,7 @@
                         <?php $entity = new Abonoproveedor();foreach ($collection as $entity) : ?>
                         <tr id="<?php echo $entity->getIdabonoproveedor()?>">
                             <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
-                            <td><?php echo $entity->getAbonoproveedorBalance() ?></td>
+                            <td><?php echo money_format('%(#10n',$entity->getAbonoproveedorBalance()) ?></td>
                                 <td>
                                     <div class="btn-group">
                                         

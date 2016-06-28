@@ -36,7 +36,7 @@
                         <tr id="<?php echo $entity->getIdcuentabancaria()?>">
                             <td><?php echo $entity->getCuentabancariaBanco() ?></td>
                             <td><?php echo $entity->getCuentabancariaNocuenta() ?></td>
-                            <td><?php echo $entity->getCuentabancariaBalance() ?></td>
+                            <td><?php echo money_format('%(#10n',$entity->getCuentabancariaBalance()) ?></td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
