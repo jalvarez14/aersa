@@ -1345,6 +1345,49 @@ return array(
                         ),
                         'may_terminate' => true, 
                         'child_routes' => array(
+                            'ingresos' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/ingresos',
+                                    'defaults' => array( 
+                                        'controller' => 'Application\Flujoefectivo\Controller\Ingresos', 
+                                        'action' => 'index', 
+                                    ), 
+                                ),
+                                'may_terminate' => true, 
+                                'child_routes' => array(
+                                    'editar' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/editar[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Ingresos', 
+                                                'action' => 'editar', 
+                                            ), 
+                                        ), 
+                                    ),
+                                    'nuevo' => array( 
+                                        'type' => 'Segment', 
+                                        'options' => array( 
+                                            'route' => '/nuevo[/:id]', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Ingresos', 
+                                                'action' => 'nuevo', 
+                                            ), 
+                                        ), 
+                                    ),
+                                    'getdetails' => array( 
+                                        'type' => 'Literal', 
+                                        'options' => array( 
+                                            'route' => '/getdetails', 
+                                            'defaults' => array( 
+                                                'controller' => 'Application\Flujoefectivo\Controller\Ingresos', 
+                                                'action' => 'getdetails', 
+                                            ), 
+                                        ), 
+                                    ), 
+                                ),
+                            ),
                             'cuentaporcobrar' => array( 
                                 'type' => 'Literal', 
                                 'options' => array( 
@@ -1691,7 +1734,7 @@ return array(
             'Application\Flujoefectivo\Controller\Saldoproveedores' => 'Application\Flujoefectivo\Controller\SaldoproveedoresController',
             'Application\Flujoefectivo\Controller\Cuentasporpagar' => 'Application\Flujoefectivo\Controller\CuentasporpagarController',
             'Application\Flujoefectivo\Controller\Cuentaporcobrar' => 'Application\Flujoefectivo\Controller\CuentaporcobrarController',
-            
+            'Application\Flujoefectivo\Controller\Ingresos' => 'Application\Flujoefectivo\Controller\IngresosController',
             /*
              * WEBSITE
              */
