@@ -10,3 +10,6 @@
 .bg-purple { background-color: #B13FED }
 
 .newcl { color: #6BC728 !important; }
+
+.navbar-right { margin-right: 5em !important;}
+.navbar-default {max-height: 10em;}

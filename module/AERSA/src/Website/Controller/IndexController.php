@@ -17,7 +17,12 @@ class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
-        $this->layout('website/layout/empty_layout');
+        $this->layout('website/layout/layout');
+        return new Viewmodel();
+    }
+    public function nosotrosAction()
+    {
+        
     }
 
 }

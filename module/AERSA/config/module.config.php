@@ -1449,11 +1449,31 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'aersa', //LOCAL
-                    'route'    => 'aersamx.com', //PRODUCCION
-                    'defaults' => array(
-                        'controller' => 'Website\Controller\Index',
-                        'action'     => 'index',
+                    'route'    => 'aersa', //LOCAL
+                    //'route'    => 'aersamx.com', //PRODUCCION
+                    
+                ),
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'index' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => '/',
+                            'defaults' => array(
+                                'controller' => 'Website\Controller\Index',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+                    'nosotros' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => '/nosotros',
+                            'defaults' => array(
+                                'controller'    => 'Website\Controller\Index',
+                                'action'        => 'index',
+                            ),
+                        ),
                     ),
                 ),
             ),
@@ -1530,7 +1550,7 @@ return array(
             /*
              * WEBSITE
              */
-            'Website\Controller\Index' => 'Website\Controller\IndexController',
+            'Website\Controller\index' => 'Website\Controller\IndexController',
         ),
     ),
     'view_manager' => array(
