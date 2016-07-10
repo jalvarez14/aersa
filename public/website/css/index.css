@@ -5,3 +5,13 @@
 .container-fluid
 {
 }
+
+.bg-green
+{
+
+  background: #ecffe6; /* Old browsers */
+  background: -moz-linear-gradient(left, #ecffe6 0%, #c6ffb3 21%, #8cc63e 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #ecffe6 0%,#c6ffb3 21%,#8cc63e 100%);
+  background: linear-gradient(to right, #ecffe6 0%,#c6ffb3 21%,#8cc63e 100%); 
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ecffe6', endColorstr='#8cc63e',GradientType=1 ); /* IE6-9 */
+}

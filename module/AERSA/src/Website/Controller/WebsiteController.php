@@ -13,7 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class IndexController extends AbstractActionController
+class WebsiteController extends AbstractActionController
 {
     public function indexAction()
     {
@@ -22,7 +22,13 @@ class IndexController extends AbstractActionController
     }
     public function nosotrosAction()
     {
-        
+      $this->layout('website/layout/layout');
+      return new Viewmodel();
+    }
+    public function diagnosticoAction()
+    {
+      $this->layout('website/layout/layout');
+      return new Viewmodel();
     }
 
 }

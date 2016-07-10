@@ -191,7 +191,7 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   
+
                                ),
                             ),
                            'almacen' => array(
@@ -404,7 +404,7 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   
+
                                ),
                             ),
                         'altaproductos' => array(
@@ -427,7 +427,7 @@ return array(
                                     ),
                                 ),
                             ),
-                        
+
                         'iva' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -563,7 +563,7 @@ return array(
                                             ),
                                         ),
                                     ),
-                                    
+
                               ),
                             ),
                            'empresa' => array(
@@ -607,7 +607,7 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   
+
                                    'eliminar' => array(
                                        'type' => 'Segment',
                                        'options' => array(
@@ -736,7 +736,7 @@ return array(
                                             ),
                                         ),
                                     ),
-                                    
+
                                 ),
                             ),
                         ),
@@ -744,240 +744,240 @@ return array(
                     /*
                      * PROCESOS
                      */
-                    'procesos' => array( 
+                    'procesos' => array(
                         'type' => 'Literal', 'options' => array(
-                            'route' => '/procesos', 
+                            'route' => '/procesos',
                         ),
-                        'may_terminate' => true, 
+                        'may_terminate' => true,
                         'child_routes' => array(
-                            'comentarios' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/comentarios', 
-                                    'defaults' => array( 
+                            'comentarios' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/comentarios',
+                                    'defaults' => array(
                                         'controller' => 'Application\Proceso\Controller\Comentarios',
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array(
-                                    'get' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/get', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
-                                                'action' => 'get', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'create' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/create', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
-                                                'action' => 'create', 
-                                            ), 
-                                        ), 
                                     ),
-                                    'delete' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/delete', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
-                                                'action' => 'delete', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'edit' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/edit', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Comentarios', 
-                                                'action' => 'edit', 
-                                            ), 
-                                        ), 
-                                    ), 
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'get' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/get',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Comentarios',
+                                                'action' => 'get',
+                                            ),
+                                        ),
+                                    ),
+                                    'create' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/create',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Comentarios',
+                                                'action' => 'create',
+                                            ),
+                                        ),
+                                    ),
+                                    'delete' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/delete',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Comentarios',
+                                                'action' => 'delete',
+                                            ),
+                                        ),
+                                    ),
+                                    'edit' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/edit',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Comentarios',
+                                                'action' => 'edit',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
-                            'compra' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/compra', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Compra', 'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevoregistro' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevoregistro', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Compra', 
-                                                'action' => 'nuevoregistro', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Compra', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Compra', 
-                                                'action' => 'eliminar',
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validatefolio', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Compra', 
-                                                'action' => 'validatefolio',
-                                            ), 
-                                        ), 
+                            'compra' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/compra',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Compra', 'action' => 'index',
                                     ),
-                                ), 
-                            ), 
-                            'consignacion' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/consignacion', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Consignacion', 'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevoregistro' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevoregistro', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Consignacion', 
-                                                'action' => 'nuevoregistro', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Consignacion', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Consignacion', 
-                                                'action' => 'eliminar',
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validatefolio', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Consignacion', 
-                                                'action' => 'validatefolio',
-                                            ), 
-                                        ), 
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevoregistro' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/nuevoregistro',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Compra',
+                                                'action' => 'nuevoregistro',
+                                            ),
+                                        ),
                                     ),
-                                ), 
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Compra',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Compra',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Compra',
+                                                'action' => 'validatefolio',
+                                            ),
+                                        ),
+                                    ),
+                                ),
                             ),
-                            'requisicion' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/requisicion', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Requisicion', 'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevo' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevo', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
-                                                'action' => 'nuevo', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Requisicion', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                            'consignacion' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/consignacion',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Consignacion', 'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevoregistro' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/nuevoregistro',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Consignacion',
+                                                'action' => 'nuevoregistro',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Consignacion',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Consignacion',
                                                 'action' => 'eliminar',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'getalmdes' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/getalmdes[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Consignacion',
+                                                'action' => 'validatefolio',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            'requisicion' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/requisicion',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Requisicion', 'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Requisicion',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+                                    'getalmdes' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/getalmdes[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
                                                 'action' => 'getalmdes',
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'getconcepsal' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/getconcepsal[/:almorg][/:almdes][/:sucorg][/:sucdes]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                            ),
+                                        ),
+                                    ),
+                                    'getconcepsal' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/getconcepsal[/:almorg][/:almdes][/:sucorg][/:sucdes]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
                                                 'action' => 'getconcepsal',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'gettipopro' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/gettipopro[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                    'gettipopro' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/gettipopro[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
                                                 'action' => 'gettipopro',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'getres' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/getres[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Requisicion', 
+                                    'getres' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/getres[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
                                                 'action' => 'getres',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
                                     'validatefolio' => array(
                                         'type' => 'Segment',
@@ -989,456 +989,456 @@ return array(
                                             ),
                                         ),
                                     ),
-                                ), 
-                            ),  
-                            'devolucion' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/devolucion', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Devolucion', 'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevoregistro' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevoregistro', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
-                                                'action' => 'nuevoregistro', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Devolucion', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
-                                                'action' => 'eliminar',
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validatefolio', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Devolucion', 
-                                                'action' => 'validatefolio',
-                                            ), 
-                                        ), 
-                                    ),
-                                ), 
+                                ),
                             ),
-                            'ingresos' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/ingresos', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Ingresos', 
-                                        'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevo' => array( 
-                                        'type' => 'Literal', 
-                                        'options' => array( 
-                                            'route' => '/nuevo', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
-                                                'action' => 'nuevo', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Ingresos', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
+                            'devolucion' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/devolucion',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Devolucion', 'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevoregistro' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/nuevoregistro',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Devolucion',
+                                                'action' => 'nuevoregistro',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Devolucion',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Devolucion',
                                                 'action' => 'eliminar',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validatefolio', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Ingresos', 
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Devolucion',
                                                 'action' => 'validatefolio',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                ), 
+                                ),
                             ),
-                            'notacredito' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/credito', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Notacredito', 'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevoregistro' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevoregistro', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
-                                                'action' => 'nuevoregistro', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Notacredito', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
-                                                'action' => 'eliminar',
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validatefolio', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Notacredito', 
-                                                'action' => 'validatefolio',
-                                            ), 
-                                        ), 
+                            'ingresos' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/ingresos',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Ingresos',
+                                        'action' => 'index',
                                     ),
-                                ), 
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ingresos',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Ingresos',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ingresos',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ingresos',
+                                                'action' => 'validatefolio',
+                                            ),
+                                        ),
+                                    ),
+                                ),
                             ),
-                            'venta' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/venta', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Venta', 
-                                        'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevo' => array( 
-                                        'type' => 'Literal', 
-                                        'options' => array( 
-                                            'route' => '/nuevo', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
-                                                'action' => 'nuevo', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Venta', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                            'notacredito' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/credito',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Notacredito', 'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevoregistro' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/nuevoregistro',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Notacredito',
+                                                'action' => 'nuevoregistro',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Notacredito',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Notacredito',
                                                 'action' => 'eliminar',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validatefolio', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Notacredito',
                                                 'action' => 'validatefolio',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'validateproduct' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validateproduct', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                ),
+                            ),
+                            'venta' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/venta',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Venta',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Venta',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
+                                                'action' => 'validatefolio',
+                                            ),
+                                        ),
+                                    ),
+                                    'validateproduct' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validateproduct',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
                                                 'action' => 'validateproduct',
-                                            ), 
-                                        ), 
-                                    ),   
-                                    'validateproductexist' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validateproductexist', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                            ),
+                                        ),
+                                    ),
+                                    'validateproductexist' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validateproductexist',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
                                                 'action' => 'validateproductexist',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'renameproduct' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/renameproduct', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                    'renameproduct' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/renameproduct',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
                                                 'action' => 'renameproduct',
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'getreceta' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/getreceta', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                            ),
+                                        ),
+                                    ),
+                                    'getreceta' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/getreceta',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
                                                 'action' => 'getreceta',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'nuevoproducto' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/nuevoproducto', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                    'nuevoproducto' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/nuevoproducto',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
                                                 'action' => 'nuevoproducto',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'nuevosubreceta' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/nuevosubreceta', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Venta', 
+                                    'nuevosubreceta' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/nuevosubreceta',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
                                                 'action' => 'nuevosubreceta',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                ), 
+                                ),
                             ),
-                            'ordentablajeria' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/tablajeria', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Proceso\Controller\Tablajeria', 
-                                        'action' => 'index', 
-                                    ), 
-                                ), 
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevoregistro' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevo', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
-                                                'action' => 'nuevo', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Proceso\Controller\Tablajeria', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                            'ordentablajeria' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/tablajeria',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Tablajeria',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevoregistro' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Tablajeria',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria',
                                                 'action' => 'eliminar',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'validatefolio' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/validatefolio', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                    'validatefolio' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validatefolio',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria',
                                                 'action' => 'validatefolio',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'getproductos' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/getproductos', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                    'getproductos' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/getproductos',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria',
                                                 'action' => 'getproductos',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    'gettablajeria' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/gettablajeria[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Proceso\Controller\Tablajeria', 
+                                    'gettablajeria' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/gettablajeria[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria',
                                                 'action' => 'gettablajeria',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
-                                    
-                                ), 
+
+                                ),
                             ),
-                            
-                        ), 
+
+                        ),
                     ),
                     /*
                     * FLUJO DE EFECTIVO
                     */
-                    'flujoefectivo' => array( 
-                        'type' => 'Literal', 
+                    'flujoefectivo' => array(
+                        'type' => 'Literal',
                         'options' => array(
-                            'route' => '/flujoefectivo', 
+                            'route' => '/flujoefectivo',
                         ),
-                        'may_terminate' => true, 
-                        'child_routes' => array( 
-                            'cuentabancaria' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/cuentabancaria', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
-                                        'action' => 'index', 
-                                    ), 
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'cuentabancaria' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/cuentabancaria',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria',
+                                        'action' => 'index',
+                                    ),
                                 ),
-                                'may_terminate' => true, 
-                                'child_routes' => array( 
-                                    'nuevo' => array( 
-                                        'type' => 'Literal', 'options' => array( 
-                                            'route' => '/nuevo', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
-                                                'action' => 'nuevo', 
-                                            ), 
-                                        ), 
-                                    ), 
-                                    'editar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/editar[/:id]', 
-                                             'defaults' => array( 
-                                                 'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
-                                                 'action' => 'editar', 
-                                                 ), 
-                                            ), 
-                                        ), 
-                                    'eliminar' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/eliminar[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria',
                                                 'action' => 'eliminar',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
                                 ),
                             ),
-                            'saldoproveedores' => array( 
-                                'type' => 'Literal', 
-                                'options' => array( 
-                                    'route' => '/saldoproveedores', 
-                                    'defaults' => array( 
-                                        'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
-                                        'action' => 'index', 
-                                    ), 
+                            'saldoproveedores' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/saldoproveedores',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores',
+                                        'action' => 'index',
+                                    ),
                                 ),
-                                'may_terminate' => true, 
+                                'may_terminate' => true,
                                 'child_routes' => array(
-                                    'movimientos' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/movimientos[/:id]', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                    'movimientos' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/movimientos[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores',
                                                 'action' => 'movimientos',
-                                            ), 
+                                            ),
                                         ),
-                                        'may_terminate' => true, 
+                                        'may_terminate' => true,
                                         'child_routes' => array(
                                             'abono' => array(
                                                 'type' => 'Literal', 'options' => array(
-                                                    'route' => '/abono', 
-                                                    'defaults' => array( 
-                                                        'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
-                                                        'action' => 'abono', 
-                                                    ), 
-                                                ), 
-                                            ), 
-                                            'editar' => array( 
-                                            'type' => 'Segment', 
-                                            'options' => array( 
-                                                'route' => '/editar[/:idch]', 
-                                                 'defaults' => array( 
-                                                     'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria', 
-                                                     'action' => 'editar', 
-                                                     ), 
-                                                ), 
-                                            ), 
+                                                    'route' => '/abono',
+                                                    'defaults' => array(
+                                                        'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores',
+                                                        'action' => 'abono',
+                                                    ),
+                                                ),
+                                            ),
+                                            'editar' => array(
+                                            'type' => 'Segment',
+                                            'options' => array(
+                                                'route' => '/editar[/:idch]',
+                                                 'defaults' => array(
+                                                     'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria',
+                                                     'action' => 'editar',
+                                                     ),
+                                                ),
+                                            ),
                                         ),
                                     ),
-                                    'saldo' => array( 
-                                        'type' => 'Segment', 
-                                        'options' => array( 
-                                            'route' => '/saldo', 
-                                            'defaults' => array( 
-                                                'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores', 
+                                    'saldo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/saldo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Flujoefectivo\Controller\Saldoproveedores',
                                                 'action' => 'saldo',
-                                            ), 
-                                        ), 
+                                            ),
+                                        ),
                                     ),
                                 ),
                             ),
@@ -1451,7 +1451,7 @@ return array(
                 'options' => array(
                     'route'    => 'aersa', //LOCAL
                     //'route'    => 'aersamx.com', //PRODUCCION
-                    
+
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
@@ -1460,7 +1460,7 @@ return array(
                         'options' => array(
                             'route'    => '/',
                             'defaults' => array(
-                                'controller' => 'Website\Controller\Index',
+                                'controller' => 'Website\Controller\Website',
                                 'action'     => 'index',
                             ),
                         ),
@@ -1470,14 +1470,24 @@ return array(
                         'options' => array(
                             'route'    => '/nosotros',
                             'defaults' => array(
-                                'controller'    => 'Website\Controller\Index',
-                                'action'        => 'index',
+                                'controller'    => 'Website\Controller\Website',
+                                'action'        => 'nosotros',
+                            ),
+                        ),
+                    ),
+                    'diagnostico' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => '/diagnostico',
+                            'defaults' => array(
+                                'controller'    => 'Website\Controller\Website',
+                                'action'        => 'diagnostico',
                             ),
                         ),
                     ),
                 ),
             ),
-            
+
 
         ),
     ),
@@ -1525,12 +1535,12 @@ return array(
             'Application\Catalogo\Controller\Altaproductos' => 'Application\Catalogo\Controller\AltaproductosController',
             'Application\Catalogo\Controller\Productosasociacion' => 'Application\Catalogo\Controller\ProductosasociacionController',
             'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
-            
+
             'Application\Catalogo\Controller\Trabajadorespromedio'  => 'Application\Catalogo\Controller\Trabajadorespromediocontroller',
             /*
              * PROCESO
              */
-            
+
             'Application\Proceso\Controller\Compra'         => 'Application\Proceso\Controller\CompraController',
             'Application\Proceso\Controller\Consignacion'   => 'Application\Proceso\Controller\ConsignacionController',
             'Application\Proceso\Controller\Requisicion'    => 'Application\Proceso\Controller\RequisicionController',
@@ -1540,17 +1550,17 @@ return array(
             'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
             'Application\Proceso\Controller\Venta'          => 'Application\Proceso\Controller\VentaController',
             'Application\Proceso\Controller\Comentarios'    => 'Application\Proceso\Controller\ComentariosController',
-            
+
             /*
              * FLUJO EFECTIVO
              */
-            
+
             'Application\Flujoefectivo\Controller\Cuentabancaria' => 'Application\Flujoefectivo\Controller\CuentabancariaController',
             'Application\Flujoefectivo\Controller\Saldoproveedores' => 'Application\Flujoefectivo\Controller\SaldoproveedoresController',
             /*
              * WEBSITE
              */
-            'Website\Controller\index' => 'Website\Controller\IndexController',
+            'Website\Controller\Website' => 'Website\Controller\WebsiteController',
         ),
     ),
     'view_manager' => array(

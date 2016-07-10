@@ -13,8 +13,11 @@
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
                         ->prependStylesheet($this->basePath() . '/website/css/style.css')
-                        ->prependStylesheet($this->basePath() . '/website/css/bootstrap.css') 
-                        ->prependStylesheet($this->basePath() . '/website/css/index.css') ?>
+                        ->prependStylesheet($this->basePath() . '/website/css/bootstrap.css')
+                        ->prependStylesheet($this->basePath() . '/website/css/font-awesome.min.css')
+                        ->prependStylesheet($this->basePath() . '/website/css/index.css')
+                        ->prependStylesheet($this->basePath() . '/website/css/diagnostico.css')
+                         ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
@@ -71,9 +74,50 @@
             <?php echo $this->content; ?>
 
 
-            <hr>
-            <footer>
 
+            <footer class="top">
+              <div class="row footer-container">
+                <div class="container">
+                  <div class="col-lg-4 col-lg-offset-4 top">
+                    <div class="col-lg-3">
+
+                    <a href="#"><img src="/website/img/icons/google-plus-logo-button.png"class=" img-center icon-footer" alt="" /></a></div>
+                    <div class="col-lg-3">
+
+                    <a href="#"><img src="/website/img/icons/facebook-logo-button.png"class=" img-center icon-footer" alt="" /></a></div>
+                    <div class="col-lg-3">
+
+                    <a href="#"><img src="/website/img/icons/twitter-logo-button.png"class=" img-center icon-footer" alt="" /></a></div>
+                    <div class="col-lg-3">
+
+                    <a href="#"><img src="/website/img/icons/instagram-logo.png"class=" img-center icon-footer" alt="" /></a></div>
+                  </div>
+                  <div class="col-lg-12 bot top">
+                    <div class="row">
+                      <div class="col-lg-1"></div>
+                      <div class="col-lg-2 text-center">
+                        <a href="#"><strong class="white">Inicio<div class="pull-right fa fa-circle"></div></strong></a>
+                      </div>
+                      <div class="col-lg-2 text-center">
+                        <a href="#"><strong class="white">Servicios<div class="pull-right fa fa-circle"></div></strong></a>
+                      </div>
+                      <div class="col-lg-2 text-center">
+                        <a href="#"><strong class="white">Nosotros<div class="pull-right fa fa-circle"></div></strong></a>
+                      </div>
+                      <div class="col-lg-2 text-center">
+                        <a href="#"><strong class="white">Diagnostico<div class="pull-right fa fa-circle"></div></strong></a>
+                      </div>
+                      <div class="col-lg-2 text-center">
+                        <a href="#"><strong class="white">Contacto</strong></a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="row copyright-container text-center">
+                <h5 class="mini-top mini-bot">AERSA 2016  |  TODOS LOS DERECHOS RESERVADOS</h5>
+              </div>
             </footer>
 
         </div>

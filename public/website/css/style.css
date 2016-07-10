@@ -6,10 +6,34 @@
 .navbar-default { background-color: white !important; border-color: white !important; }
 
 .top { margin-top: 3em; }
-
+.bot { margin-bottom: 3em; }
+.mini-top { margin-top: 1em; }
+.mini-bot { margin-bottom: : 1em; }
 .bg-purple { background-color: #B13FED }
 
 .newcl { color: #6BC728 !important; }
 
 .navbar-right { margin-right: 5em !important;}
 .navbar-default {max-height: 10em;}
+
+.white { color: white; }
+
+.green { color: #6BC728; }
+
+.border-nosotros
+{
+  height: 1px;
+  width: 15em;
+  border-bottom: 1px solid #cbcbcb;
+}
+.footer-container
+{
+  background-color: #3E3E40;
+}
+.icon-footer { width: 44px;}
+.icon-footer:hover { opacity: .7 }
+
+
+.fa-circle{ color: #8CC63E; }
+
+.copyright-container{ background-color: #8CC63E; color: white}
