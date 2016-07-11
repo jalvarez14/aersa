@@ -1673,11 +1673,69 @@ return array(
                                                 'action' => 'anual',
                                             ),
                                         ),
+                                        'may_terminate' => true,
+                                        'child_routes' => array(
+                                            'reporte' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '/reporte',
+                                                    'defaults' => array(
+                                                        'controller' => 'Application\Flujoefectivo\Controller\Reportes',
+                                                        'action' => 'reportea',
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
                                     ),
                                 ),
                             ),
                         ),
                     ),
+                    /*
+                     * REPORTES
+                     */
+                    'reportes' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/reportes',
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'variacioncostos' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/variacioncostos',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Reportes\Controller\Reportes',
+                                        'action' => 'variacioncostos',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'reportevc' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/reportevc',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Reportes\Controller\Reportes',
+                                                'action' => 'reportevc',
+                                            ),
+                                        ),
+                                    ),
+                                    'categoriavc' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/categoriavc',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Reportes\Controller\Reportes',
+                                                'action' => 'categoriavc',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    )
                 ),
             ),
             'website' => array(
@@ -1758,6 +1816,10 @@ return array(
             'Application\Flujoefectivo\Controller\Cuentaporcobrar' => 'Application\Flujoefectivo\Controller\CuentaporcobrarController',
             'Application\Flujoefectivo\Controller\Ingresos' => 'Application\Flujoefectivo\Controller\IngresosController',
             'Application\Flujoefectivo\Controller\Reportes' => 'Application\Flujoefectivo\Controller\ReportesController',
+            /*
+             * FLUJO EFECTIVO
+             */
+            'Application\Reportes\Controller\Reportes' => 'Application\Reportes\Controller\ReportesController',
             /*
              * WEBSITE
              */
