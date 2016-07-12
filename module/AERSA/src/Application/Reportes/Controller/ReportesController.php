@@ -68,18 +68,19 @@ class ReportesController extends AbstractActionController {
                 $costonew = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
                 $variacion = $costoold - $costonew;
                 $variacion = ($variacion<0) ? $variacion*-1:$variacion;
-                $porcentajevar = (($costonew / $costoold) * 100) - 100;
+                if($costoold==0)
+                    $porcentajevar=-100;
+                else 
+                    $porcentajevar = (($costonew / $costoold) * 100) - 100;
                 $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
                 $color = !$color;
-                $porcentajevar = ($costoold<$costonew)? $porcentajevar*-1: $porcentajevar;
+                $porcentajevar = ($costoold==0&&$costonew!=0)? $porcentajevar*-1: $porcentajevar;
                 $porcentajevar = ($variacion==0)? 0: $porcentajevar;
                 $reporte[$fila] = "<tr bgcolor='" . $bg . "'><td> " . $nombre . " </td><td> " . $unidad . " </td><td> " . $costoold . " </td><td> " . $costonew . " </td><td> " . $variacion . " </td><td> " . $porcentajevar . "% </td></tr>";
                 $fila++;
             }
-
             $view_model = new ViewModel();
             $view_model->setVariables(array(
-                'form' => $form,
                 'reporte' => $reporte,
                 'messages' => $this->flashMessenger(),
             ));
