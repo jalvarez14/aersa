@@ -80,13 +80,18 @@ class CuentabancariaController extends AbstractActionController {
             }
             $form = new \Application\Flujoefectivo\Form\CuentabancariaForm();
             $form->setData($cuentabancaria->toArray(\BasePeer::TYPE_FIELDNAME));
-
+            
+            $flujoefectivo = \FlujoefectivoQuery::create()->filterByIdcuentabancaria($cuentabancaria->getIdcuentabancaria())->find();
+            $saldoproveedor = \AbonoproveedordetalleQuery::create()->filterByIdcuentabancaria($cuentabancaria->getIdcuentabancaria())->find();
+            
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/flujoefectivo/cuentabancaria/editar');
             $view_model->setVariables(array(
                 'form' => $form,
                 'cuentabancaria' => $cuentabancaria,
                 'messages' => $this->flashMessenger(),
+                'flujoefectivo' => $flujoefectivo,
+                'saldoproveedor' => $saldoproveedor,
             ));
             return $view_model;
         } else {

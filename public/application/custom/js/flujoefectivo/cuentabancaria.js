@@ -60,6 +60,18 @@
         }
         
         plugin.list = function () {
+            
+            var table = $container.find('#datatable');
+            $.ajax({
+                url: '/application/json/datatable/lang_es.json',
+                dataType: 'json',
+                success: function (data) {
+                    table.dataTable({
+                        "language": data,
+                        "order": [],
+                    });
+                },
+            });
             //ELIMINAR CUENTA BANCARIA
             $('.delete_modal').click(function () {
                 var id = $(this).closest('tr').attr('id');
@@ -70,7 +82,7 @@
                     '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
                     '<h4 class="modal-title">ADVERTENCIA</h4>',
                     '</div>',
-                    '<form method="post" action="/catalogo/cuentabancaria/eliminar/' + id + '">',
+                    '<form method="post" action="/flujoefectivo/cuentabancaria/eliminar/' + id + '">',
                     '<div class="modal-body">',
                     '<p>¿Estas seguro que deseas eliminar el registro seleccionado?</p>',
                     '</div>',
@@ -86,6 +98,17 @@
         }
 
         plugin.new = function () {
+            $('input[name=cuentabancaria_balance]').on('blur', function () {
+                var $this = $(this);
+                $this.removeClass('valid');
+                if ($this.val() < 0) {
+                    alert('No se aceptan numeros negativos');
+                    $this.val("");
+                } else {
+                    $this.addClass('valid');
+                }
+            });
+            
             var validarcuenta = function () {
                 var cuenta = $('input[name=cuentabancaria_nocuenta]').val();
                 var banco = $('input[name=cuentabancaria_banco]').val();
@@ -94,7 +117,7 @@
                     $this.removeClass('valid');
                     $('input[name=cuentabancaria_banco]').removeClass('valid');
                     $.ajax({
-                        url: "/catalogo/cuentabancaria/validarcuenta",
+                        url: "/flujoefectivo/cuentabancaria/validarcuenta",
                         dataType: "json",
                         data: {cuenta: cuenta,banco: banco},
                         success: function (exist) {
@@ -125,6 +148,19 @@
         }
 
         plugin.edit = function () {
+            var table = $container.find('#datatable');
+            $.ajax({
+                url: '/application/json/datatable/lang_es.json',
+                dataType: 'json',
+                success: function (data) {
+                    table.dataTable({
+                        "language": data,
+                        "order": [],
+                    });
+                },
+            });
+            
+            $('input[name=cuentabancaria_balance]').attr('disabled',true);
             var validarcuenta = function () {
                 var cuenta = $('input[name=cuentabancaria_nocuenta]').val();
                 var banco = $('input[name=cuentabancaria_banco]').val();
@@ -133,7 +169,7 @@
                     $this.removeClass('valid');
                     $('input[name=cuentabancaria_banco]').removeClass('valid');
                     $.ajax({
-                        url: "/catalogo/cuentabancaria/validarcuenta",
+                        url: "/flujoefectivo/cuentabancaria/validarcuenta",
                         dataType: "json",
                         data: {cuenta: cuenta,banco: banco,edit: true,id: $('input[name=idcuentabancaria]').val()},
                         success: function (exist) {

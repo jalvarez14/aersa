@@ -1,0 +1,183 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+    #productos_table .fa-trash{
+        color:red;
+    }
+    .modal{
+        width: 800px;
+        left: 45%;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:;">Procesos</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/procesos/ingresos">Ingresos</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="javascript:;"><?php echo '#'.$form->get('idingreso')->getValue()?></a>
+            </li>
+        </ul>
+</div>
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+        <div class="alert alert-success alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Éxito!</strong>
+            <?php echo $message?>
+        </div>
+    <?php endforeach;?>
+<div id="form_container">
+    <form class="form-horizontal" action="/procesos/ingresos/editar/<?php echo $entity->getIdingreso()?>" method="post" enctype="multipart/form-data">
+  
+        
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="page-title">Información general</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ingreso_fecha')) ?>  
+                            <?php echo $this->formText($form->get('ingreso_fecha')) ?>
+                            <?php echo $this->formHidden($form->get('idingreso')) ?>
+                            <?php echo $this->formHidden($form->get('ingreso_fechacreacion')) ?>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ingreso_folio')) ?>  
+                            <?php echo $this->formText($form->get('ingreso_folio')) ?> 
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo $this->formLabel($form->get('ingreso_revisada')) ?>  
+                            <?php echo $this->formSelect($form->get('ingreso_revisada')) ?> 
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label>Creado por</label>
+                            <input class="form-control" type="text" value="<?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();?>" readonly="readonly"> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Auditor</label>
+                            <?php  
+                                if($entity->getIngresoRevisada()){
+                                    $auditor = $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre();
+                                }else{
+                                    $auditor = 'N/D';
+                                } 
+                            ?>
+                            <input class="form-control" type="text" value="<?php echo $auditor;?>" readonly="readonly"> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php $rubro = new Rubroingreso() ?>
+    <?php foreach ($rubros as $rubro) :?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="page-title"><?php echo $rubro->getRubroingresoNombre()?></h3><br><br>
+          
+                    <table class="table" id="<?php echo strtolower($rubro->getRubroingresoNombre())?>">
+                    <thead>
+                        <th>Conceptos</th>
+                        <th>Subtotal</th>
+                        <th>IVA</th>
+                        <th>Total</th>
+                       
+                    </thead>
+                    <tbody>
+                        <?php $concepto = new Conceptoingreso();?>
+                        <?php foreach ($concepto_ingresos as $concepto) :?>
+                        <tr>
+                            <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][subtotal]" value="<?php echo $detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleSub']?>">
+                            <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][iva]" value="<?php echo $detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleIva']?>">
+                            <td><?php echo $concepto->getConceptoingresoNombre()?></td>
+                            <td><?php echo money_format('%(#10n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleSub']) ?></td>
+                             <td><?php echo money_format('%(#10n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleIva']) ?></td>
+                            <td><input disabled name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][total]" type="text" class="form-control" value="<?php echo money_format('%(#1n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleTotal'])?>"></td>
+                            
+                        </tr>
+                        <?php endforeach;?>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <?php endforeach;?>
+        
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Total bebidas: </label>
+                            <div class="col-md-7">
+                                <input type="hidden" name="ingreso_totalbebida" value="<?php echo $entity->getIngresoTotalbebida() ?>">
+                                <p id="total_bebidas" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalbebida()  - $flujoefectivo['bebidas']) ?><a id="bebidas" href="javascript:;"><span class="fa fa-money"></span></a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Total alimentos: </label>
+                            <div class="col-md-7">
+                                <input type="hidden" name="ingreso_totalalimento" value="<?php echo $entity->getIngresoTotalalimento() ?>">
+                                <p id="total_alimentos" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalalimento() - $flujoefectivo['alimentos'] ) ?><a id="alimentos" href="javascript:;"><span class="fa fa-money"></span></a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Total miscelanea: </label>
+                            <div class="col-md-7">
+                                 <input type="hidden" name="ingreso_totalmiscelanea" value="<?php echo $entity->getIngresoTotalmiscelanea() ?>">
+                                 <p id="total_miscelanea" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalmiscelanea() - $flujoefectivo['miscelanea']) ?><a id="miscelanea" href="javascript:;"><span class="fa fa-money"></span></a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+        <div id="comentarios_container" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="portlet-body form">
+                <div class="form-body">
+  
+                     <h3 class="page-title">Comentarios</h3>
+                     <div class="mt-comments">
+
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<script type="text/javascript" src="/application/custom/js/flujoefectivo/ingresos.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/comentarios.js"></script>
+<script>
+    var $form = $('#form_container').ingresos();
+    $form.edit();
+</script>

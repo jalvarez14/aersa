@@ -41,7 +41,9 @@
         var $table;
 
         
-        var defaults = {};
+        var defaults = {
+            editable:true,
+        };
         
         /*
         * Private methods
@@ -241,23 +243,37 @@
                 success: function (data) {
                     if(data.response){
                         $.each(data.data,function(){
-                            var tmpl = [
-                                '<div id="'+this.id+'" class="mt-comment">',
-                                    '<div class="mt-comment-body">',
-                                        '<div class="mt-comment-info">',
-                                            '<span class="mt-comment-author">'+this.usuario+'</span>',
-                                            '<span class="mt-comment-date">'+this.fecha+'</span>',
-                                        '</div>',
-                                        '<div class="mt-comment-text">'+this.nota+'</div>',
-                                        '<div class="mt-comment-details">',
-                                            '<ul class="mt-comment-actions">',
-                                                '<li><a class="editar_nota" href="javascript:;">Editar</a></li>',
-                                                '<li><a class="eliminar_nota" href="javascript:;">Eliminar</a></li>',
-                                            '</ul>',
+                            if(settings.editable){
+                                var tmpl = [
+                                    '<div id="'+this.id+'" class="mt-comment">',
+                                        '<div class="mt-comment-body">',
+                                            '<div class="mt-comment-info">',
+                                                '<span class="mt-comment-author">'+this.usuario+'</span>',
+                                                '<span class="mt-comment-date">'+this.fecha+'</span>',
+                                            '</div>',
+                                            '<div class="mt-comment-text">'+this.nota+'</div>',
+                                            '<div class="mt-comment-details">',
+                                                '<ul class="mt-comment-actions">',
+                                                    '<li><a class="editar_nota" href="javascript:;">Editar</a></li>',
+                                                    '<li><a class="eliminar_nota" href="javascript:;">Eliminar</a></li>',
+                                                '</ul>',
+                                            '</div>',
                                         '</div>',
                                     '</div>',
-                                '</div>',
-                            ].join('');
+                                ].join('');
+                            }else{
+                                var tmpl = [
+                                    '<div id="'+this.id+'" class="mt-comment">',
+                                        '<div class="mt-comment-body">',
+                                            '<div class="mt-comment-info">',
+                                                '<span class="mt-comment-author">'+this.usuario+'</span>',
+                                                '<span class="mt-comment-date">'+this.fecha+'</span>',
+                                            '</div>',
+                                            '<div class="mt-comment-text">'+this.nota+'</div>',
+                                        '</div>',
+                                    '</div>',
+                                ].join('');
+                            }
                             tmpl = $(tmpl);
                             if(this.idusuario != data.usuario_session){
                                

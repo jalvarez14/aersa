@@ -1,0 +1,207 @@
+<style>
+    input[type=file]{
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+    #productos_table input{
+        width: 80px;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="javascript:;">Flujo de efectivo</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="/flujoefectivo/cuentasporpagar">Cuentas por pagar</a>
+                 <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="javascript:;"><?php echo '#'.$form->get('idcompra')->getValue()?></a>
+            </li>
+        </ul>
+</div>
+<?php foreach ($messages->getSuccessMessages() as $message): ?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message ?>
+    </div>
+<?php endforeach; ?>
+<div id="form_container">
+    <form class="form-horizontal" action="/flujoefectivo/cuentasporpagar/editar/<?php echo $form->get('idcompra')->getValue()?>" method="post" enctype="multipart/form-data">
+        <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="form-body">
+                        
+                        <h3 class="page-title">Información general</h3>
+                        <h5>Proveedor: <?php echo $compra->getProveedor()->getProveedorNombrecomercial()?>, Folio: <?php echo $compra->getCompraFolio()?>, Fecha: <?php echo $compra->getCompraFechacompra('d/m/Y')?></h5>
+                        <h5>Total: <?php echo money_format('%(#10n',$total) ?>, Restan: <?php echo money_format('%(#10n',$restan) ?></h5>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <?php echo $this->formHidden($form->get('idcompra')) ?> 
+                                <?php echo $this->formHidden($form->get('idproveedor')) ?>
+                                <?php echo $this->formLabel($form->get('flujoefectivo_fecha')) ?>  
+                                <?php echo $this->formText($form->get('flujoefectivo_fecha')) ?> 
+                            </div>
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('flujoefectivo_pago')) ?>  
+                                <?php echo $this->formSelect($form->get('flujoefectivo_pago')) ?> 
+                                <span id="abonoproveedor" style="display:none;color: green">Abono proveedor: <?php echo money_format('%(#10n',$abonoproveedor)?></span>
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('idcuentabancaria')) ?>  
+                                <?php echo $this->formSelect($form->get('idcuentabancaria')) ?>
+                                <span id="balance" style="display:none;color: green"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('flujoefectivo_cantidad')) ?>  
+                                <?php echo $this->formText($form->get('flujoefectivo_cantidad')) ?> 
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('flujoefectivo_mediodepago')) ?>  
+                                <?php echo $this->formSelect($form->get('flujoefectivo_mediodepago')) ?> 
+                            </div>
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('flujoefectivo_referencia')) ?>  
+                                <?php echo $this->formText($form->get('flujoefectivo_referencia')) ?> 
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('flujoefectivo_chequecirculacion')) ?>  
+                                <?php echo $this->formSelect($form->get('flujoefectivo_chequecirculacion')) ?> 
+                            </div>
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('flujoefectivo_fechacobrocheque')) ?>  
+                                <?php echo $this->formText($form->get('flujoefectivo_fechacobrocheque')) ?> 
+                            </div>
+                            
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <?php echo $this->formLabel($form->get('flujoefectivo_comprobante')) ?>  
+                                <?php echo $this->formFile($form->get('flujoefectivo_comprobante')) ?> 
+                            </div>
+                            <div class="col-md-6">
+                               
+                                
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <?php if($nuevo_movimiento) :?>
+                    <button class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                    <?php else :?>
+                    <button disabled class="btn blue" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                    <?php endif;?>
+                </div>
+            </div>
+        </div>
+        <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="row">
+                        <h3 class="page-title">Movimientos</h3>
+                        <div class="table-responsive">
+                            <table class="table" id="productos_table">
+                                <thead>
+                                    <th>Fecha</th>
+                                    <th>Pago</th>
+                                    <th>Cuenta</th>
+                                    <th>Cantidad</th>
+                                    <th>Medio</th>
+                                    <th>Referencia</th>
+                                    <th>Comprobante</th>
+                                    <th>Opciones</th>
+                                </thead>
+                                <tbody>
+                                    <?php $movimiento = new Flujoefectivo()?>
+                                    <?php foreach ($movimientos as $movimiento) :?>
+                                    <?php
+                                        $cuenta = 'N/A';
+                                        if(!is_null($movimiento->getIdcuentabancaria())){
+                                            $cuenta = $movimiento->getCuentabancaria()->getCuentabancariaBanco().' - '.$movimiento->getCuentabancaria()->getCuentabancariaNocuenta();
+                                        }
+                                        $medio = 'N/A';
+                                        if(!is_null($movimiento->getFlujoefectivoMediodepago())){
+                                            $medio = ucfirst($movimiento->getFlujoefectivoMediodepago());
+                                        }
+                                        $referencia = 'N/D';
+                                       
+                                        if(!is_null($movimiento->getFlujoefectivoReferencia())){
+                                            $referencia = $movimiento->getFlujoefectivoReferencia();
+                                        }
+                                  
+                                        $comprobante = 'N/D';
+                                        if(!is_null($movimiento->getFlujoefectivoComprobante())){
+                                            $comprobante = '<a target="_blank" href="'.$movimiento->getFlujoefectivoComprobante().'"><i class="fa fa-file"></i></a>';
+                                        }
+                                        $editable = false;
+                                        if($movimiento->getFlujoefectivoPago() == 'cuenta' && $movimiento->getFlujoefectivoMediodepago() == 'cheque' && !$movimiento->getFlujoefectivoChequecirculacion()){
+                                            $editable = true;
+                                        }
+                                    ?>
+                                    <tr id="<?php echo $movimiento->getIdflujoefectivo()?>">
+                                        <td><?php echo $movimiento->getFlujoefectivoFecha('d/m/Y')?></td>
+                                        <td><span class="label label-sm label-info"> <?php echo ucfirst($movimiento->getFlujoefectivoPago()) ?> </span></td>
+                                        <td><?php echo $cuenta?></td>
+                                        <td> <?php echo money_format('%(#10n',$movimiento->getFlujoefectivoCantidad()) ?></td>
+                                        <td><?php echo $medio?></td>
+                                        <td><?php echo $referencia?></td>
+                                        <td><?php echo $comprobante?></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <?php if($editable) :?>
+                                                    <li>
+                                                        <a class="editarmovimiento" href="javascript:;">
+                                                            <i class="fa fa-pencil"></i> Editar </a>
+                                                    </li>
+                                                    <?php endif;?>
+                                                    <li>
+                                                        <a class="eliminarmovimiento" href=javascript:;">
+                                                            <i class="fa fa-trash"></i> Eliminar </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td> 
+                                      
+                                    </tr>
+                                    <?php endforeach;?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </form>
+</div>
+<script type="text/javascript" src="/application/custom/js/flujoefectivo/cuentasporpagar.js"></script>
+<script>
+    var $form = $('#form_container').cuentasporpagar();
+    $form.edit();
+</script>

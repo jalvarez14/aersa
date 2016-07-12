@@ -22,16 +22,16 @@
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable"  style="border-bottom-width: 0px;">
                     <thead>
                         <tr>
-                            <th class="text-center"> Proveedor </th>
-                            <th class="text-center"> Saldo </th>
-                            <th class="text-center"> Opciones </th>
+                            <th class="text"> Proveedor </th>
+                            <th class="text"> Saldo </th>
+                            <th class="text"> Opciones </th>
                         </tr>
                     </thead>
-                    <tbody class="text-center">
+                    <tbody class="text">
                         <?php $entity = new Abonoproveedor();foreach ($collection as $entity) : ?>
                         <tr id="<?php echo $entity->getIdabonoproveedor()?>">
                             <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
-                            <td><?php echo $entity->getAbonoproveedorBalance() ?></td>
+                            <td><?php echo money_format('%(#10n',$entity->getAbonoproveedorBalance()) ?></td>
                                 <td>
                                     <div class="btn-group">
                                         
@@ -42,8 +42,8 @@
                                         </button>   
                                         <ul class="dropdown-menu" role="menu">
                                             <li>
-                                                <a href="/flujoefectivo/saldoproveedores/movimientos/<?php echo $entity->getIdabonoproveedor()?>">
-                                                <i class="fa fa-pencil"></i> Movimientos </a>
+                                                <a href="/flujoefectivo/saldoproveedores/movimientos/<?php echo $entity->getIdproveedor()?>">
+                                                <i class="fa fa-list"></i> Movimientos </a>
                                             </li>
                                         </ul>
                                     </div>

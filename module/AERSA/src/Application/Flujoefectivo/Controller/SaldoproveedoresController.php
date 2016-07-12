@@ -4,6 +4,7 @@ namespace Application\Flujoefectivo\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Http\PhpEnvironment\Request;
 use Zend\Console\Request as ConsoleRequest;
 
 class SaldoproveedoresController extends AbstractActionController {
@@ -18,7 +19,7 @@ class SaldoproveedoresController extends AbstractActionController {
 
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL---
         $collection = \AbonoproveedorQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
-        
+
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/flujoefectivo/saldoproveedores/index');
@@ -28,9 +29,9 @@ class SaldoproveedoresController extends AbstractActionController {
         ));
         return $view_model;
     }
-    
+
     public function movimientosAction() {
-        
+
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -38,14 +39,17 @@ class SaldoproveedoresController extends AbstractActionController {
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
         $id = $this->params()->fromRoute('id');
+
         $exist = \AbonoproveedorQuery::create()->filterByIdproveedor($id)->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->exists();
-        if($exist) {
+
+        if ($exist) {
             //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL---
-            $abonoproveedor = \AbonoproveedorQuery::create()->findPk($id);
+            $abonoproveedor = \AbonoproveedorQuery::create()->filterByIdproveedor($id)->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->findOne();
+            $id = $abonoproveedor->getIdabonoproveedor();
             $abonoproveedordetalle = \AbonoproveedordetalleQuery::create()->filterByIdabonoproveedor($id)->find();
             $proveedor = $abonoproveedor->getProveedor();
             //INTANCIAMOS NUESTRA VISTA
-            $form = new \Application\Flujoefectivo\Form\SaldoproveedoresForm($proveedor_nombre);
+            $form = new \Application\Flujoefectivo\Form\SaldoproveedoresForm();
             $form->setData($abonoproveedor->toArray(\BasePeer::TYPE_FIELDNAME));
             $form->setData($proveedor->toArray(\BasePeer::TYPE_FIELDNAME));
 
@@ -63,7 +67,7 @@ class SaldoproveedoresController extends AbstractActionController {
             return $this->redirect()->toUrl('/flujoefectivo/saldoproveedores');
         }
     }
-    
+
     public function abonoAction() {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -74,41 +78,61 @@ class SaldoproveedoresController extends AbstractActionController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
+            $post_files = $request->getFiles();
+            
+            $idabonoproveedor = \AbonoproveedorQuery::create()->filterByIdproveedor($id)->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->findOne()->getIdabonoproveedor();
             $abonoproveedordetalle = new \Abonoproveedordetalle();
-            $post_data["abonoproveedordetalle_fechaabono"]= date_create_from_format('d/m/Y', $post_data["abonoproveedordetalle_fechaabono"]);
+            $post_data["abonoproveedordetalle_fechaabono"] = date_create_from_format('d/m/Y', $post_data["abonoproveedordetalle_fechaabono"]);
+            if (isset($post_data["abonoproveedordetalle_fechacobrocheque"]))
+                $post_data["abonoproveedordetalle_fechacobrocheque"] = date_create_from_format('d/m/Y', $post_data["abonoproveedordetalle_fechacobrocheque"]);
             foreach ($post_data as $key => $value) {
                 if (\AbonoproveedordetallePeer::getTableMap()->hasColumn($key)) {
                     $abonoproveedordetalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
             }
             $abonoproveedordetalle->setIdusuario($idusuario);
-            $abonoproveedordetalle->setIdabonoproveedor($id);
+            $abonoproveedordetalle->setIdabonoproveedor($idabonoproveedor);
             $abonoproveedordetalle->setAbonoproveedordetalleTipo("abono");
-            if($abonoproveedordetalle->getAbonoproveedordetalleMediodepago()=='transferencia') {
-                $cuenta = new \Cuentabancaria();
-                $cuenta = \CuentabancariaQuery::create()->filterByIdcuentabancaria($abonoproveedordetalle->getIdcuentabancaria())->findOne();
-                $balance = $cuenta->getCuentabancariaBalance() - $abonoproveedordetalle->getAbonoproveedordetalleCantidad();
-                $cuenta->setCuentabancariaBalance($balance);
-                $cuenta->save();
-            } else {
-                $abonoproveedordetalle->setAbonoproveedordetalleMediodepago(NULL);
-            }
+            $cuenta = new \Cuentabancaria();
+            $cuenta = \CuentabancariaQuery::create()->filterByIdcuentabancaria($abonoproveedordetalle->getIdcuentabancaria())->findOne();
+            $balance = $cuenta->getCuentabancariaBalance() - $abonoproveedordetalle->getAbonoproveedordetalleCantidad();
+            $cuenta->setCuentabancariaBalance($balance);
+            
             $abonoproveedor = new \Abonoproveedor();
-            $abonoproveedor = \AbonoproveedorQuery::create()->filterByIdabonoproveedor($id)->findOne();
-            $balance=$abonoproveedor->getAbonoproveedorBalance() + $abonoproveedordetalle->getAbonoproveedordetalleCantidad();
+            $abonoproveedor = \AbonoproveedorQuery::create()->filterByIdabonoproveedor($idabonoproveedor)->findOne();
+            $balance = $abonoproveedor->getAbonoproveedorBalance() + $abonoproveedordetalle->getAbonoproveedordetalleCantidad();
+            
             $abonoproveedor->setAbonoproveedorBalance($balance);
+            if(($abonoproveedordetalle->getAbonoproveedordetalleMediodepago() != 'cheque')||($abonoproveedordetalle->getAbonoproveedordetalleMediodepago() == 'cheque')&&((bool)$abonoproveedordetalle->getAbonoproveedordetalleChequecirculacion()==true))
+                $cuenta->save();
             $abonoproveedor->save();
             $abonoproveedordetalle->save();
-            return $this->redirect()->toUrl('/flujoefectivo/saldoproveedores/movimientos/'.$id);
+            if (!empty($post_files['abonoproveedordetalle_comprobante']['name'])) {
+                $type = $post_files['abonoproveedordetalle_comprobante']['type'];
+                $type = explode('/', $type);
+                $type = $type[1];
+
+                $target_path = "/application/files/abonoproveedordetalle/";
+                if(!file_exists($_SERVER['DOCUMENT_ROOT'].$target_path)){
+                    mkdir($_SERVER['DOCUMENT_ROOT'].$target_path, 0777);
+                }
+                $target_path = $target_path . 'abonoproveedordetalle_' . $abonoproveedordetalle->getIdabonoproveedordetalle() . '.' . $type;
+
+                if (move_uploaded_file($_FILES['abonoproveedordetalle_comprobante']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
+                    $abonoproveedordetalle->setAbonoproveedordetalleComprobante($target_path);
+                    $abonoproveedordetalle->save();
+                }
+            }
+            return $this->redirect()->toUrl('/flujoefectivo/saldoproveedores/movimientos/' . $id);
         }
         //INTANCIAMOS NUESTRA VISTA
         $cuentas_array = array();
         $cuentas = \CuentabancariaQuery::create()->filterByIdsucursal($idsucursal)->find();
         foreach ($cuentas as $cuenta) {
             $idcuenta = $cuenta->getIdcuentabancaria();
-            $cuentas_array[$idcuenta] = $cuenta->getCuentabancariaBanco()." - ".$cuenta->getCuentabancariaNocuenta()." - ".$cuenta->getCuentabancariaBalance();
+            $cuentas_array[$idcuenta] = $cuenta->getCuentabancariaBanco() . " - " . $cuenta->getCuentabancariaNocuenta() . " - " . $cuenta->getCuentabancariaBalance();
         }
-        
+
         $proveedor = \ProveedorQuery::create()->filterByIdproveedor($id)->findOne()->getProveedorNombrecomercial();
         $form = new \Application\Flujoefectivo\Form\AbonoproveedordetalleForm($cuentas_array);
         $view_model = new ViewModel();
@@ -121,7 +145,7 @@ class SaldoproveedoresController extends AbstractActionController {
         $view_model->setTemplate('/application/flujoefectivo/saldoproveedores/abono');
         return $view_model;
     }
-    
+
     public function saldoAction() {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -130,10 +154,65 @@ class SaldoproveedoresController extends AbstractActionController {
         $cuentas_array = array();
         $cuentas = \CuentabancariaQuery::create()->filterByIdsucursal($idsucursal)->find();
         foreach ($cuentas as $cuenta) {
-            if($cantidad <= $cuenta->getCuentabancariaBalance()) {
+            if ($cantidad <= $cuenta->getCuentabancariaBalance()) {
                 array_push($cuentas_array, $cuenta->toArray());
             }
         }
         return $this->getResponse()->setContent(json_encode($cuentas_array));
     }
+
+    public function validaterefAction() {
+        $referencia = $this->params()->fromQuery('referencia');
+        $edit = (!is_null($this->params()->fromQuery('edit'))) ? $this->params()->fromQuery('edit') : false;
+        if ($edit) {
+            $id = $this->params()->fromQuery('id');
+        } else {
+            $exist = \AbonoproveedordetalleQuery::create()->filterByAbonoproveedordetalleReferencia($referencia)->exists();
+        }
+        return $this->getResponse()->setContent(json_encode($exist));
+    }
+    
+    public function editarmovimientoAction() {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+
+            $id = $this->params()->fromRoute('id');
+            $entity = \AbonoproveedordetalleQuery::create()->findPk($id);
+
+            $post_data = $request->getPost();
+            $post_data['abonoproveedordetalle_fechacobrocheque'] = date_create_from_format('d/m/Y', $post_data['abonoproveedordetalle_fechacobrocheque']);
+
+            $entity->setAbonoproveedordetalleChequecirculacion(1)
+                    ->setAbonoproveedordetalleFechacobrocheque($post_data['abonoproveedordetalle_fechacobrocheque'])
+                    ->save();
+            
+            //DESCONTAMOS DE LA CUENTA BANCARIA
+            $cuentabancaria = $entity->getCuentabancaria();
+            $current_balace = $cuentabancaria->getCuentabancariaBalance();
+            $new_balance = $current_balace - $entity->getAbonoproveedordetalleCantidad();
+            $cuentabancaria->setCuentabancariaBalance($new_balance)->save();
+            
+            $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+            return $this->redirect()->toUrl('/flujoefectivo/saldoproveedores/movimientos/' . $entity->getAbonoproveedor()->getIdproveedor());
+        }
+    }
+    
+    public function eliminarmovimientoAction() {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+        $id = $this->params()->fromRoute('idm');
+        $abonodetalle= \AbonoproveedordetalleQuery::create()->findPk($id);
+        $cuentabancaria= $abonodetalle->getCuentabancaria();
+        $cuentabancaria->setCuentabancariaBalance($cuentabancaria->getCuentabancariaBalance()+$abonodetalle->getAbonoproveedordetalleCantidad());
+        $cuentabancaria->save();
+        $abonoproveedor=$abonodetalle->getAbonoproveedor();
+        $abonoproveedor=$abonoproveedor->setAbonoproveedorBalance($abonoproveedor->getAbonoproveedorBalance()-$abonodetalle->getAbonoproveedordetalleCantidad());
+        $abonoproveedor->save();
+        $abonodetalle->delete();
+        $this->flashMessenger()->addSuccessMessage('Abono proveedor eliminada satisfactoriamente!');
+        return $this->redirect()->toUrl('/flujoefectivo/saldoproveedores/movimientos/'.$this->params()->fromRoute('id'));
+        }
+        
+    }
+
 }

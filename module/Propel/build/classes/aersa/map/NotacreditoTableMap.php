@@ -55,8 +55,8 @@ class NotacreditoTableMap extends TableMap
         $this->addColumn('notacredito_total', 'NotacreditoTotal', 'DECIMAL', false, 15, null);
         $this->addColumn('notacredito_subtotal', 'NotacreditoSubtotal', 'DECIMAL', false, 15, null);
         $this->addColumn('notaauditorempresa', 'Notaauditorempresa', 'BOOLEAN', false, 1, true);
-        $this->addColumn('notaalmacenistaempresa_copy1', 'NotaalmacenistaempresaCopy1', 'BOOLEAN', false, 1, true);
-        $this->addColumn('notaauditoraersa_copy1', 'NotaauditoraersaCopy1', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaalmacenistaempresa', 'Notaalmacenistaempresa', 'BOOLEAN', false, 1, true);
+        $this->addColumn('notaauditoraersa', 'Notaauditoraersa', 'BOOLEAN', false, 1, true);
         // validators
     } // initialize()
 

@@ -72,10 +72,29 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
     protected $cuentaporcobrar_fecha;
 
     /**
-     * The value for the cuentaporcobrar_nota field.
+     * The value for the cuentaporcobrar_referencia field.
      * @var        string
      */
-    protected $cuentaporcobrar_nota;
+    protected $cuentaporcobrar_referencia;
+
+    /**
+     * The value for the cuentaporcobrar_abonado field.
+     * Note: this column has a database default value of: '0.00000'
+     * @var        string
+     */
+    protected $cuentaporcobrar_abonado;
+
+    /**
+     * The value for the cuentaporcobrar_estatuspago field.
+     * @var        boolean
+     */
+    protected $cuentaporcobrar_estatuspago;
+
+    /**
+     * The value for the cuentaporcobrar_comprobante field.
+     * @var        string
+     */
+    protected $cuentaporcobrar_comprobante;
 
     /**
      * @var        Empresa
@@ -123,6 +142,27 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $flujoefectivosScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->cuentaporcobrar_abonado = '0.00000';
+    }
+
+    /**
+     * Initializes internal state of BaseCuentaporcobrar object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idcuentaporcobrar] column value.
@@ -231,14 +271,47 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [cuentaporcobrar_nota] column value.
+     * Get the [cuentaporcobrar_referencia] column value.
      *
      * @return string
      */
-    public function getCuentaporcobrarNota()
+    public function getCuentaporcobrarReferencia()
     {
 
-        return $this->cuentaporcobrar_nota;
+        return $this->cuentaporcobrar_referencia;
+    }
+
+    /**
+     * Get the [cuentaporcobrar_abonado] column value.
+     *
+     * @return string
+     */
+    public function getCuentaporcobrarAbonado()
+    {
+
+        return $this->cuentaporcobrar_abonado;
+    }
+
+    /**
+     * Get the [cuentaporcobrar_estatuspago] column value.
+     *
+     * @return boolean
+     */
+    public function getCuentaporcobrarEstatuspago()
+    {
+
+        return $this->cuentaporcobrar_estatuspago;
+    }
+
+    /**
+     * Get the [cuentaporcobrar_comprobante] column value.
+     *
+     * @return string
+     */
+    public function getCuentaporcobrarComprobante()
+    {
+
+        return $this->cuentaporcobrar_comprobante;
     }
 
     /**
@@ -403,25 +476,96 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
     } // setCuentaporcobrarFecha()
 
     /**
-     * Set the value of [cuentaporcobrar_nota] column.
+     * Set the value of [cuentaporcobrar_referencia] column.
      *
      * @param  string $v new value
      * @return Cuentaporcobrar The current object (for fluent API support)
      */
-    public function setCuentaporcobrarNota($v)
+    public function setCuentaporcobrarReferencia($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->cuentaporcobrar_nota !== $v) {
-            $this->cuentaporcobrar_nota = $v;
-            $this->modifiedColumns[] = CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA;
+        if ($this->cuentaporcobrar_referencia !== $v) {
+            $this->cuentaporcobrar_referencia = $v;
+            $this->modifiedColumns[] = CuentaporcobrarPeer::CUENTAPORCOBRAR_REFERENCIA;
         }
 
 
         return $this;
-    } // setCuentaporcobrarNota()
+    } // setCuentaporcobrarReferencia()
+
+    /**
+     * Set the value of [cuentaporcobrar_abonado] column.
+     *
+     * @param  string $v new value
+     * @return Cuentaporcobrar The current object (for fluent API support)
+     */
+    public function setCuentaporcobrarAbonado($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->cuentaporcobrar_abonado !== $v) {
+            $this->cuentaporcobrar_abonado = $v;
+            $this->modifiedColumns[] = CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO;
+        }
+
+
+        return $this;
+    } // setCuentaporcobrarAbonado()
+
+    /**
+     * Sets the value of the [cuentaporcobrar_estatuspago] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Cuentaporcobrar The current object (for fluent API support)
+     */
+    public function setCuentaporcobrarEstatuspago($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->cuentaporcobrar_estatuspago !== $v) {
+            $this->cuentaporcobrar_estatuspago = $v;
+            $this->modifiedColumns[] = CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO;
+        }
+
+
+        return $this;
+    } // setCuentaporcobrarEstatuspago()
+
+    /**
+     * Set the value of [cuentaporcobrar_comprobante] column.
+     *
+     * @param  string $v new value
+     * @return Cuentaporcobrar The current object (for fluent API support)
+     */
+    public function setCuentaporcobrarComprobante($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->cuentaporcobrar_comprobante !== $v) {
+            $this->cuentaporcobrar_comprobante = $v;
+            $this->modifiedColumns[] = CuentaporcobrarPeer::CUENTAPORCOBRAR_COMPROBANTE;
+        }
+
+
+        return $this;
+    } // setCuentaporcobrarComprobante()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -433,6 +577,10 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->cuentaporcobrar_abonado !== '0.00000') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -462,7 +610,10 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
             $this->cuentaporcobrar_cantidad = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
             $this->cuentaporcobrar_cliente = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->cuentaporcobrar_fecha = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-            $this->cuentaporcobrar_nota = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->cuentaporcobrar_referencia = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->cuentaporcobrar_abonado = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->cuentaporcobrar_estatuspago = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
+            $this->cuentaporcobrar_comprobante = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -472,7 +623,7 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = CuentaporcobrarPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 11; // 11 = CuentaporcobrarPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Cuentaporcobrar object", $e);
@@ -763,8 +914,17 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
         if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA)) {
             $modifiedColumns[':p' . $index++]  = '`cuentaporcobrar_fecha`';
         }
-        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA)) {
-            $modifiedColumns[':p' . $index++]  = '`cuentaporcobrar_nota`';
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_REFERENCIA)) {
+            $modifiedColumns[':p' . $index++]  = '`cuentaporcobrar_referencia`';
+        }
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO)) {
+            $modifiedColumns[':p' . $index++]  = '`cuentaporcobrar_abonado`';
+        }
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`cuentaporcobrar_estatuspago`';
+        }
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_COMPROBANTE)) {
+            $modifiedColumns[':p' . $index++]  = '`cuentaporcobrar_comprobante`';
         }
 
         $sql = sprintf(
@@ -798,8 +958,17 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
                     case '`cuentaporcobrar_fecha`':
                         $stmt->bindValue($identifier, $this->cuentaporcobrar_fecha, PDO::PARAM_STR);
                         break;
-                    case '`cuentaporcobrar_nota`':
-                        $stmt->bindValue($identifier, $this->cuentaporcobrar_nota, PDO::PARAM_STR);
+                    case '`cuentaporcobrar_referencia`':
+                        $stmt->bindValue($identifier, $this->cuentaporcobrar_referencia, PDO::PARAM_STR);
+                        break;
+                    case '`cuentaporcobrar_abonado`':
+                        $stmt->bindValue($identifier, $this->cuentaporcobrar_abonado, PDO::PARAM_STR);
+                        break;
+                    case '`cuentaporcobrar_estatuspago`':
+                        $stmt->bindValue($identifier, (int) $this->cuentaporcobrar_estatuspago, PDO::PARAM_INT);
+                        break;
+                    case '`cuentaporcobrar_comprobante`':
+                        $stmt->bindValue($identifier, $this->cuentaporcobrar_comprobante, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -989,7 +1158,16 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
                 return $this->getCuentaporcobrarFecha();
                 break;
             case 7:
-                return $this->getCuentaporcobrarNota();
+                return $this->getCuentaporcobrarReferencia();
+                break;
+            case 8:
+                return $this->getCuentaporcobrarAbonado();
+                break;
+            case 9:
+                return $this->getCuentaporcobrarEstatuspago();
+                break;
+            case 10:
+                return $this->getCuentaporcobrarComprobante();
                 break;
             default:
                 return null;
@@ -1027,7 +1205,10 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
             $keys[4] => $this->getCuentaporcobrarCantidad(),
             $keys[5] => $this->getCuentaporcobrarCliente(),
             $keys[6] => $this->getCuentaporcobrarFecha(),
-            $keys[7] => $this->getCuentaporcobrarNota(),
+            $keys[7] => $this->getCuentaporcobrarReferencia(),
+            $keys[8] => $this->getCuentaporcobrarAbonado(),
+            $keys[9] => $this->getCuentaporcobrarEstatuspago(),
+            $keys[10] => $this->getCuentaporcobrarComprobante(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1103,7 +1284,16 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
                 $this->setCuentaporcobrarFecha($value);
                 break;
             case 7:
-                $this->setCuentaporcobrarNota($value);
+                $this->setCuentaporcobrarReferencia($value);
+                break;
+            case 8:
+                $this->setCuentaporcobrarAbonado($value);
+                break;
+            case 9:
+                $this->setCuentaporcobrarEstatuspago($value);
+                break;
+            case 10:
+                $this->setCuentaporcobrarComprobante($value);
                 break;
         } // switch()
     }
@@ -1136,7 +1326,10 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setCuentaporcobrarCantidad($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setCuentaporcobrarCliente($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setCuentaporcobrarFecha($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setCuentaporcobrarNota($arr[$keys[7]]);
+        if (array_key_exists($keys[7], $arr)) $this->setCuentaporcobrarReferencia($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setCuentaporcobrarAbonado($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setCuentaporcobrarEstatuspago($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setCuentaporcobrarComprobante($arr[$keys[10]]);
     }
 
     /**
@@ -1155,7 +1348,10 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
         if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_CANTIDAD)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_CANTIDAD, $this->cuentaporcobrar_cantidad);
         if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_CLIENTE)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_CLIENTE, $this->cuentaporcobrar_cliente);
         if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_FECHA, $this->cuentaporcobrar_fecha);
-        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA, $this->cuentaporcobrar_nota);
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_REFERENCIA)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_REFERENCIA, $this->cuentaporcobrar_referencia);
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, $this->cuentaporcobrar_abonado);
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO, $this->cuentaporcobrar_estatuspago);
+        if ($this->isColumnModified(CuentaporcobrarPeer::CUENTAPORCOBRAR_COMPROBANTE)) $criteria->add(CuentaporcobrarPeer::CUENTAPORCOBRAR_COMPROBANTE, $this->cuentaporcobrar_comprobante);
 
         return $criteria;
     }
@@ -1225,7 +1421,10 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
         $copyObj->setCuentaporcobrarCantidad($this->getCuentaporcobrarCantidad());
         $copyObj->setCuentaporcobrarCliente($this->getCuentaporcobrarCliente());
         $copyObj->setCuentaporcobrarFecha($this->getCuentaporcobrarFecha());
-        $copyObj->setCuentaporcobrarNota($this->getCuentaporcobrarNota());
+        $copyObj->setCuentaporcobrarReferencia($this->getCuentaporcobrarReferencia());
+        $copyObj->setCuentaporcobrarAbonado($this->getCuentaporcobrarAbonado());
+        $copyObj->setCuentaporcobrarEstatuspago($this->getCuentaporcobrarEstatuspago());
+        $copyObj->setCuentaporcobrarComprobante($this->getCuentaporcobrarComprobante());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1874,11 +2073,15 @@ abstract class BaseCuentaporcobrar extends BaseObject implements Persistent
         $this->cuentaporcobrar_cantidad = null;
         $this->cuentaporcobrar_cliente = null;
         $this->cuentaporcobrar_fecha = null;
-        $this->cuentaporcobrar_nota = null;
+        $this->cuentaporcobrar_referencia = null;
+        $this->cuentaporcobrar_abonado = null;
+        $this->cuentaporcobrar_estatuspago = null;
+        $this->cuentaporcobrar_comprobante = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

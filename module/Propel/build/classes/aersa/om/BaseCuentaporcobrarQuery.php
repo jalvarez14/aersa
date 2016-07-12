@@ -13,7 +13,10 @@
  * @method CuentaporcobrarQuery orderByCuentaporcobrarCantidad($order = Criteria::ASC) Order by the cuentaporcobrar_cantidad column
  * @method CuentaporcobrarQuery orderByCuentaporcobrarCliente($order = Criteria::ASC) Order by the cuentaporcobrar_cliente column
  * @method CuentaporcobrarQuery orderByCuentaporcobrarFecha($order = Criteria::ASC) Order by the cuentaporcobrar_fecha column
- * @method CuentaporcobrarQuery orderByCuentaporcobrarNota($order = Criteria::ASC) Order by the cuentaporcobrar_nota column
+ * @method CuentaporcobrarQuery orderByCuentaporcobrarReferencia($order = Criteria::ASC) Order by the cuentaporcobrar_referencia column
+ * @method CuentaporcobrarQuery orderByCuentaporcobrarAbonado($order = Criteria::ASC) Order by the cuentaporcobrar_abonado column
+ * @method CuentaporcobrarQuery orderByCuentaporcobrarEstatuspago($order = Criteria::ASC) Order by the cuentaporcobrar_estatuspago column
+ * @method CuentaporcobrarQuery orderByCuentaporcobrarComprobante($order = Criteria::ASC) Order by the cuentaporcobrar_comprobante column
  *
  * @method CuentaporcobrarQuery groupByIdcuentaporcobrar() Group by the idcuentaporcobrar column
  * @method CuentaporcobrarQuery groupByIdempresa() Group by the idempresa column
@@ -22,7 +25,10 @@
  * @method CuentaporcobrarQuery groupByCuentaporcobrarCantidad() Group by the cuentaporcobrar_cantidad column
  * @method CuentaporcobrarQuery groupByCuentaporcobrarCliente() Group by the cuentaporcobrar_cliente column
  * @method CuentaporcobrarQuery groupByCuentaporcobrarFecha() Group by the cuentaporcobrar_fecha column
- * @method CuentaporcobrarQuery groupByCuentaporcobrarNota() Group by the cuentaporcobrar_nota column
+ * @method CuentaporcobrarQuery groupByCuentaporcobrarReferencia() Group by the cuentaporcobrar_referencia column
+ * @method CuentaporcobrarQuery groupByCuentaporcobrarAbonado() Group by the cuentaporcobrar_abonado column
+ * @method CuentaporcobrarQuery groupByCuentaporcobrarEstatuspago() Group by the cuentaporcobrar_estatuspago column
+ * @method CuentaporcobrarQuery groupByCuentaporcobrarComprobante() Group by the cuentaporcobrar_comprobante column
  *
  * @method CuentaporcobrarQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CuentaporcobrarQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -53,7 +59,10 @@
  * @method Cuentaporcobrar findOneByCuentaporcobrarCantidad(string $cuentaporcobrar_cantidad) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_cantidad column
  * @method Cuentaporcobrar findOneByCuentaporcobrarCliente(string $cuentaporcobrar_cliente) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_cliente column
  * @method Cuentaporcobrar findOneByCuentaporcobrarFecha(string $cuentaporcobrar_fecha) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_fecha column
- * @method Cuentaporcobrar findOneByCuentaporcobrarNota(string $cuentaporcobrar_nota) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_nota column
+ * @method Cuentaporcobrar findOneByCuentaporcobrarReferencia(string $cuentaporcobrar_referencia) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_referencia column
+ * @method Cuentaporcobrar findOneByCuentaporcobrarAbonado(string $cuentaporcobrar_abonado) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_abonado column
+ * @method Cuentaporcobrar findOneByCuentaporcobrarEstatuspago(boolean $cuentaporcobrar_estatuspago) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_estatuspago column
+ * @method Cuentaporcobrar findOneByCuentaporcobrarComprobante(string $cuentaporcobrar_comprobante) Return the first Cuentaporcobrar filtered by the cuentaporcobrar_comprobante column
  *
  * @method array findByIdcuentaporcobrar(int $idcuentaporcobrar) Return Cuentaporcobrar objects filtered by the idcuentaporcobrar column
  * @method array findByIdempresa(int $idempresa) Return Cuentaporcobrar objects filtered by the idempresa column
@@ -62,7 +71,10 @@
  * @method array findByCuentaporcobrarCantidad(string $cuentaporcobrar_cantidad) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_cantidad column
  * @method array findByCuentaporcobrarCliente(string $cuentaporcobrar_cliente) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_cliente column
  * @method array findByCuentaporcobrarFecha(string $cuentaporcobrar_fecha) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_fecha column
- * @method array findByCuentaporcobrarNota(string $cuentaporcobrar_nota) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_nota column
+ * @method array findByCuentaporcobrarReferencia(string $cuentaporcobrar_referencia) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_referencia column
+ * @method array findByCuentaporcobrarAbonado(string $cuentaporcobrar_abonado) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_abonado column
+ * @method array findByCuentaporcobrarEstatuspago(boolean $cuentaporcobrar_estatuspago) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_estatuspago column
+ * @method array findByCuentaporcobrarComprobante(string $cuentaporcobrar_comprobante) Return Cuentaporcobrar objects filtered by the cuentaporcobrar_comprobante column
  *
  * @package    propel.generator.aersa.om
  */
@@ -170,7 +182,7 @@ abstract class BaseCuentaporcobrarQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcuentaporcobrar`, `idempresa`, `idsucursal`, `idusuario`, `cuentaporcobrar_cantidad`, `cuentaporcobrar_cliente`, `cuentaporcobrar_fecha`, `cuentaporcobrar_nota` FROM `cuentaporcobrar` WHERE `idcuentaporcobrar` = :p0';
+        $sql = 'SELECT `idcuentaporcobrar`, `idempresa`, `idsucursal`, `idusuario`, `cuentaporcobrar_cantidad`, `cuentaporcobrar_cliente`, `cuentaporcobrar_fecha`, `cuentaporcobrar_referencia`, `cuentaporcobrar_abonado`, `cuentaporcobrar_estatuspago`, `cuentaporcobrar_comprobante` FROM `cuentaporcobrar` WHERE `idcuentaporcobrar` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -548,32 +560,130 @@ abstract class BaseCuentaporcobrarQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the cuentaporcobrar_nota column
+     * Filter the query on the cuentaporcobrar_referencia column
      *
      * Example usage:
      * <code>
-     * $query->filterByCuentaporcobrarNota('fooValue');   // WHERE cuentaporcobrar_nota = 'fooValue'
-     * $query->filterByCuentaporcobrarNota('%fooValue%'); // WHERE cuentaporcobrar_nota LIKE '%fooValue%'
+     * $query->filterByCuentaporcobrarReferencia('fooValue');   // WHERE cuentaporcobrar_referencia = 'fooValue'
+     * $query->filterByCuentaporcobrarReferencia('%fooValue%'); // WHERE cuentaporcobrar_referencia LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $cuentaporcobrarNota The value to use as filter.
+     * @param     string $cuentaporcobrarReferencia The value to use as filter.
      *              Accepts wildcards (* and % trigger a LIKE)
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return CuentaporcobrarQuery The current query, for fluid interface
      */
-    public function filterByCuentaporcobrarNota($cuentaporcobrarNota = null, $comparison = null)
+    public function filterByCuentaporcobrarReferencia($cuentaporcobrarReferencia = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($cuentaporcobrarNota)) {
+            if (is_array($cuentaporcobrarReferencia)) {
                 $comparison = Criteria::IN;
-            } elseif (preg_match('/[\%\*]/', $cuentaporcobrarNota)) {
-                $cuentaporcobrarNota = str_replace('*', '%', $cuentaporcobrarNota);
+            } elseif (preg_match('/[\%\*]/', $cuentaporcobrarReferencia)) {
+                $cuentaporcobrarReferencia = str_replace('*', '%', $cuentaporcobrarReferencia);
                 $comparison = Criteria::LIKE;
             }
         }
 
-        return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_NOTA, $cuentaporcobrarNota, $comparison);
+        return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_REFERENCIA, $cuentaporcobrarReferencia, $comparison);
+    }
+
+    /**
+     * Filter the query on the cuentaporcobrar_abonado column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCuentaporcobrarAbonado(1234); // WHERE cuentaporcobrar_abonado = 1234
+     * $query->filterByCuentaporcobrarAbonado(array(12, 34)); // WHERE cuentaporcobrar_abonado IN (12, 34)
+     * $query->filterByCuentaporcobrarAbonado(array('min' => 12)); // WHERE cuentaporcobrar_abonado >= 12
+     * $query->filterByCuentaporcobrarAbonado(array('max' => 12)); // WHERE cuentaporcobrar_abonado <= 12
+     * </code>
+     *
+     * @param     mixed $cuentaporcobrarAbonado The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CuentaporcobrarQuery The current query, for fluid interface
+     */
+    public function filterByCuentaporcobrarAbonado($cuentaporcobrarAbonado = null, $comparison = null)
+    {
+        if (is_array($cuentaporcobrarAbonado)) {
+            $useMinMax = false;
+            if (isset($cuentaporcobrarAbonado['min'])) {
+                $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, $cuentaporcobrarAbonado['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($cuentaporcobrarAbonado['max'])) {
+                $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, $cuentaporcobrarAbonado['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ABONADO, $cuentaporcobrarAbonado, $comparison);
+    }
+
+    /**
+     * Filter the query on the cuentaporcobrar_estatuspago column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCuentaporcobrarEstatuspago(true); // WHERE cuentaporcobrar_estatuspago = true
+     * $query->filterByCuentaporcobrarEstatuspago('yes'); // WHERE cuentaporcobrar_estatuspago = true
+     * </code>
+     *
+     * @param     boolean|string $cuentaporcobrarEstatuspago The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CuentaporcobrarQuery The current query, for fluid interface
+     */
+    public function filterByCuentaporcobrarEstatuspago($cuentaporcobrarEstatuspago = null, $comparison = null)
+    {
+        if (is_string($cuentaporcobrarEstatuspago)) {
+            $cuentaporcobrarEstatuspago = in_array(strtolower($cuentaporcobrarEstatuspago), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_ESTATUSPAGO, $cuentaporcobrarEstatuspago, $comparison);
+    }
+
+    /**
+     * Filter the query on the cuentaporcobrar_comprobante column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCuentaporcobrarComprobante('fooValue');   // WHERE cuentaporcobrar_comprobante = 'fooValue'
+     * $query->filterByCuentaporcobrarComprobante('%fooValue%'); // WHERE cuentaporcobrar_comprobante LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $cuentaporcobrarComprobante The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CuentaporcobrarQuery The current query, for fluid interface
+     */
+    public function filterByCuentaporcobrarComprobante($cuentaporcobrarComprobante = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($cuentaporcobrarComprobante)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $cuentaporcobrarComprobante)) {
+                $cuentaporcobrarComprobante = str_replace('*', '%', $cuentaporcobrarComprobante);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(CuentaporcobrarPeer::CUENTAPORCOBRAR_COMPROBANTE, $cuentaporcobrarComprobante, $comparison);
     }
 
     /**
