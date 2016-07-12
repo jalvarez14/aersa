@@ -4,11 +4,11 @@ namespace Application\Flujoefectivo\Form;
 
 use Zend\Form\Form;
 
-class ReportemensualForm extends Form {
+class ReporteForm extends Form {
 
     public function __construct($ano_array = array()) {
 
-        parent::__construct('reportemensualForm');
+        parent::__construct('reporteForm');
 
         $this->add(array(
             'name' => 'ano',

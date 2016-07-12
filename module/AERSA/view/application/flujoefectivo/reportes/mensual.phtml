@@ -9,15 +9,7 @@
             </li>
         </ul>
     </div>
-    <?php foreach ($messages->getSuccessMessages() as $message): ?>
-        <div class="alert alert-success alert-dismissable">
-            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
-            <strong>Éxito!</strong>
-            <?php echo $message ?>
-        </div>
-    <?php endforeach; ?>
     <?php
-    //$form->setAttribute();
     echo $this->form()->openTag($form);
     ?>
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">

@@ -1,0 +1,113 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">Reporte variación de los costos</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/reportes/variacioncostos">Reporte variación de los costos</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    $form->setAttribute('action', '/reportes/variacioncostos');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h5>Mes y año inicial</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('ano_inicial')) ?>  
+                        <?php echo $this->formSelect($form->get('ano_inicial')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('mes_inicial')) ?>  
+                        <?php echo $this->formSelect($form->get('mes_inicial')) ?> 
+                    </div>
+                </div>
+                <h5>Mes y año final</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('ano_final')) ?>  
+                        <?php echo $this->formSelect($form->get('ano_final')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('mes_final')) ?>  
+                        <?php echo $this->formSelect($form->get('mes_final')) ?> 
+                    </div>
+                </div>
+                <h5 class="form-section">Categorias</h5>
+                <div class="icheck-list">
+                    <div class="col-md-3">
+                        <label><input id="todos" type="checkbox" class="icheck"> Todos </label>
+                    </div>
+                    <?php $categoria = new Categoria();foreach ($categorias as $categoria):?>
+                    <div class="col-md-3">
+                        <label><input id="<?php echo $categoria->getIdcategoria();?>" name="<?php ucfirst($categoria->getCategoriaNombre()) ?>" value="<?php echo ucfirst($categoria->getCategoriaNombre())?>" type="checkbox" class="icheck generadoc"> <?php echo ucfirst($categoria->getCategoriaNombre())?> </label>
+                    </div>
+                    <?php endforeach;?>
+                </div>
+                <h5 class="form-section">Productos</h5>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        <input id="producto_search" class="form-control" type="text">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" id="reporte_table">
+                            <thead>
+                            <th></th>
+                            <th>Producto</th>
+                            </thead>
+                            <tbody id="tbody">
+                                <?php $color=true;$producto = new Producto();
+                                foreach ($productos as $producto): ?>
+                                    <tr id="<?php echo $producto->getIdproducto() ?>"  bgcolor="<?php echo ($color)? '#FFFFFF' : '#F2F2F2';$color=!$color;?>">
+                                        <?php 
+                                        $cat=$producto->getCategoriaRelatedByIdcategoria();
+                                        if($cat->getIdcategoriapadre()!=NULL)
+                                            $cat=$cat->getCategoriaRelatedByIdcategoriapadre();
+                                        ?>
+                                        
+                                        <td>
+                                            
+                                            <input type="checkbox" id="generado-<?php echo $producto->getIdproducto() ?>" name="generado-<?php echo $producto->getIdproducto() ?>" class="icheck generado <?php echo ucfirst($cat->getCategoriaNombre()); ?>" >
+                                        </td>
+                                        <td name="nombre_producto" id="nombre_producto"><?php echo ucfirst($producto->getProductoNombre()); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button disabled class="btn blue" id="generar_reporte" type="submit">
+                        <i class="fa fa-check"></i>
+                        Generar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="/application/custom/js/reportes/reportes.js" type="text/javascript"></script>	
+<script>
+    var $plugin = $('#my_container').reportes();
+    $plugin.variacioncostos();
+</script>
