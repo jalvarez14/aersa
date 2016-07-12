@@ -1,0 +1,27 @@
+.panel-green
+{
+  text-align: left !important;
+  border-radius: 0px !important;
+  background-color: #6BC728;
+  color: white;
+  font-size: 25px !important;
+}
+.panel-green:hover,
+.panel-green:focus
+{
+  color: rgba(255,255,255,.7) !important;
+}
+
+.panel-blue
+{
+  text-align: left !important;
+  border-radius: 0px !important;
+  background-color: #01A4B6;
+  color: white;
+  font-size: 25px !important;
+}
+.panel-blue:hover,
+.panel-blue:focus
+{
+  color: rgba(255,255,255,.7) !important;
+}

@@ -1410,8 +1410,8 @@ a.bg-danger:focus {
 }
 .page-header {
   padding-bottom: 9px;
-  margin: 40px 0 20px;
-  border-bottom: 1px solid #eee;
+  margin: 1em 0 20px;
+  border-bottom: 1px solid #CCCCCC;
 }
 ul,
 ol {
@@ -3643,6 +3643,7 @@ tbody.collapse.in {
   .navbar-right .dropdown-menu-left {
     right: auto;
     left: 0;
+
   }
 }
 .btn-group,
