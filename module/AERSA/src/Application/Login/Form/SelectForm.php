@@ -6,11 +6,39 @@ use Zend\Form\Form;
 
 class SelectForm extends Form
 {
-    public function __construct($idrol,$empresas=array())
+    public function __construct($idrol,$empresas=array(),$sucursales=array())
     {
         // we want to ignore the name passed
         parent::__construct('select_form');
         $this->setAttribute('method', 'post');
+        
+        $this->add(array(
+            'name' => 'idempresa',
+            'type' => 'Select',
+            'options' => array(
+                'empty_option' => 'Empresa',
+                'value_options' => $empresas,
+            ),
+            'attributes' => array(
+                'required' => false,
+                'class' => 'form-control placeholder-no-fix',
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'idsucursal',
+            'type' => 'Select',
+            'options' => array(
+                'empty_option' => 'Sucursal',
+                'value_options' => array(),
+            ),
+            'attributes' => array(
+                'required' => false,
+                'disabled' => true,
+                'class' => 'form-control placeholder-no-fix',
+            ),
+        ));
+        
         
         if($idrol == 1){
             
@@ -39,33 +67,39 @@ class SelectForm extends Form
                     'value' => 2,
                 ),
             ));
+        }elseif ($idrol == 3) {
+            
+            $this->add(array(
+                'name' => 'idempresa',
+                'type' => 'Select',
+                'options' => array(
+                    //'empty_option' => 'Empresa',
+                    'value_options' => $empresas,
+                ),
+                'attributes' => array(
+                    'required' => false,
+                    'class' => 'form-control placeholder-no-fix',
+                ),
+            ));
+            
+            $this->add(array(
+                'name' => 'idsucursal',
+                'type' => 'Select',
+                'options' => array(
+                    'empty_option' => 'Sucursal',
+                    'value_options' => $sucursales,
+                ),
+                'attributes' => array(
+                    'required' => true,
+                    'disabled' => false,
+                    'class' => 'form-control placeholder-no-fix',
+                ),
+            ));
         }
-        $this->add(array(
-            'name' => 'idempresa',
-            'type' => 'Select',
-            'options' => array(
-                'empty_option' => 'Empresa',
-                'value_options' => $empresas,
-            ),
-            'attributes' => array(
-                'required' => false,
-                'class' => 'form-control placeholder-no-fix',
-            ),
-        ));
         
-        $this->add(array(
-            'name' => 'idsucursal',
-            'type' => 'Select',
-            'options' => array(
-                'empty_option' => 'Sucursal',
-                'value_options' => array(),
-            ),
-            'attributes' => array(
-                'required' => false,
-                'disabled' => true,
-                'class' => 'form-control placeholder-no-fix',
-            ),
-        ));
+        
+        
+        
         
         
 

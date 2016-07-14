@@ -34,7 +34,7 @@ class LoginController extends AbstractActionController
             if($exist){
                 
                 $usuario = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->findOne();
-                
+              
                 //CREAMOS NUESTRA PRESESSION
                 $session = new \Shared\Session\AouthSession();
                 $session->Create(array(
@@ -73,27 +73,33 @@ class LoginController extends AbstractActionController
         
         if($request->isPost()){
             $post_data = $request->getPost();
-            
-            if($post_data['area_trabajo'] == 1){
-                return $this->redirect()->toUrl('/');
-                
-            }elseif ($post_data['area_trabajo'] == 2) {
-                
-                if($post_data["idsucursal"] != 'admin'){
-                    
-                    $session = new \Shared\Session\AouthSession();
-                    $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
-                    return $this->redirect()->toUrl('/');
-                
-                }else{
-                    $session = new \Shared\Session\AouthSession();
-                    $session->setEmpresa($post_data['idempresa']);
-                    return $this->redirect()->toUrl('/');
-                }
-
-            }
            
+            if(isset($post_data['area_trabajo'])){
+                if($post_data['area_trabajo'] == 1){
+                    return $this->redirect()->toUrl('/');
+
+                }elseif ($post_data['area_trabajo'] == 2) {
+
+                    if($post_data["idsucursal"] != 'admin'){
+
+                        $session = new \Shared\Session\AouthSession();
+                        $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
+                        return $this->redirect()->toUrl('/');
+
+                    }else{
+                        $session = new \Shared\Session\AouthSession();
+                        $session->setEmpresa($post_data['idempresa']);
+                        return $this->redirect()->toUrl('/');
+                    }
+                }
+            }else{
+                $session = new \Shared\Session\AouthSession();
+                $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
+                return $this->redirect()->toUrl('/');
+            }
+            
         }
+        
         
         $this->layout('application/layout/select_layout');
         
@@ -120,10 +126,30 @@ class LoginController extends AbstractActionController
                 $id = $usuario_empresa->getIdempresa();
                 $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
             }
-
         }
+        
+        if($session['idrol'] == 3){ //ADMINISTRADOR AERSA
+            $view_model->setTemplate('/application/login/select_admin_empresa');
+            
+            $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->find();
+            $empresa = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->findOne();
+            $empresas = array();
+            $usuario_empresa = new \Usuarioempresa();
+            foreach ($usuario_empresas as $usuario_empresa){
+                $id = $usuario_empresa->getIdempresa();
+                $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
+            }
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->find();
+            $sucursales_array = array();
+            $sucursal = new \Sucursal();
+            foreach ($sucursales as $sucursal){
+                $id = $sucursal->getIdsucursal();
+                $sucursales_array[$id] = $sucursal->getSucursalNombre();
+            }
+        }
+        
 
-        $form = new \Application\Login\Form\SelectForm($session['idrol'],$empresas);
+        $form = new \Application\Login\Form\SelectForm($session['idrol'],$empresas,$sucursales_array);
         
         $view_model->setVariables(array(
             'session' => $session,
