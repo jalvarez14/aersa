@@ -25,3 +25,31 @@
 {
   color: rgba(255,255,255,.7) !important;
 }
+
+.panel-purple
+{
+  text-align: left !important;
+  border-radius: 0px !important;
+  background-color: #B13FED;
+  color: white;
+  font-size: 25px !important;
+}
+.panel-purple:hover,
+.panel-purple:focus
+{
+  color: rgba(255,255,255,.7) !important;
+}
+
+.panel-pink
+{
+  text-align: left !important;
+  border-radius: 0px !important;
+  background-color: #CC0066;
+  color: white;
+  font-size: 25px !important;
+}
+.panel-pink:hover,
+.panel-pink:focus
+{
+  color: rgba(255,255,255,.7) !important;
+}
