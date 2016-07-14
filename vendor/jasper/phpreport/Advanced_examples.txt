@@ -1,0 +1,125 @@
+## 1.
+Invoice example. We create excel file like template with formatting and placeholders for data. Some placeholders are static and some are dynamic, for repeating data.  
+
+View excel template file for this example http://github.com/vernes/PHPReport/raw/master/examples/template/invoice.xls  
+
+First, we collect some data:
+<pre>
+
+include '../PHPReport.php';
+
+//which template to use
+$template='invoice.xls';
+	
+//set absolute path to directory with template files
+$templateDir='path/to/directory';
+
+//we get some products, e.g. from database
+$products=array(
+	array('description'=>'Example product','qty'=>2,'price'=>4.5,'total'=>9),
+	array('description'=>'Another product','qty'=>1,'price'=>13.9,'total'=>13.9),
+	array('description'=>'Super product!','qty'=>3,'price'=>1.5,'total'=>4.5),
+	array('description'=>'Yet another great product','qty'=>2,'price'=>10.8,'total'=>21.6),
+	array('description'=>'Awesome','qty'=>1,'price'=>19.9,'total'=>19.9)
+);
+
+//set config for report
+$config=array(
+		'template'=>$template,
+		'templateDir'=>$templateDir
+	);
+</pre>
+Then, we export it
+<pre>
+$R=new PHPReport($config);
+$R->load(array(
+			array(
+				'id'=>'inv',
+				'data'=>array('date'=>date('Y-m-d'),'number'=>312,'customerid'=>12,'orderid'=>517,'company'=>'Example Inc.','address'=>'Some address','city'=>'Some City, 1122','phone'=>'+111222333'),
+				'format'=>array(
+						'date'=>array('datetime'=>'d/m/Y')
+					)
+				),
+			array(
+				'id'=>'prod',
+				'repeat'=>true,
+				'data'=>$products,
+				'minRows'=>2,
+				'format'=>array(
+						'price'=>array('number'=>array('prefix'=>'$','decimals'=>2)),
+						'total'=>array('number'=>array('prefix'=>'$','decimals'=>2))
+					)
+				),
+			array(
+				'id'=>'total',
+				'data'=>array('price'=>68.9),
+				'format'=>array(
+						'price'=>array('number'=>array('prefix'=>'$','decimals'=>2))
+					)
+				)
+			)
+        );
+//we can render html, excel, excel2003 or PDF
+echo $R->render('html');
+exit();
+</pre>
+
+## 2.
+Statistical report. Dynamic data consists of more than one row, with complex merging.  
+
+View template file http://github.com/vernes/PHPReport/raw/master/examples/template/stats.xls  
+
+`<pre>
+
+include '../PHPReport.php';
+
+//which template to use
+$template='stats.xls';
+	
+//set absolute path to directory with template files
+$templateDir='path/to/directory';
+
+//we get some data, e.g. from database
+//function generates some random data
+function getData($n=1,$cols=array('A'),$rows=1,$c=array('Some country'))
+{
+	//data is an array with 34 elements for each row!
+	$data=array();
+	for($i=1;$i<=$n;$i++)
+	{
+		$d['country']=$c[$i-1];
+		foreach($cols as $col)
+		{
+			for($r=1;$r<=$rows;$r++)
+			{
+				$d[$col.$r]=rand(0,20);
+			}
+		}
+		$data[]=$d;
+	}
+	return $data;
+}
+
+$data=getData(3,array('A','B','C'),11,array('Italy','Germany','France'));
+
+//set config for report
+$config=array(
+		'template'=>$template,
+		'templateDir'=>$templateDir
+	);
+
+$R=new PHPReport($config);
+$R->load(array(
+				'id'=>'v',
+				'repeat'=>true,
+				'data'=>$data,
+			)
+        );
+
+//we can set heading for report
+$R->setHeading('Report: Visitors in January');
+echo $R->render('html');
+exit();
+</pre>
+
+View examples without templates http://github.com/vernes/PHPReport/wiki/Examples
