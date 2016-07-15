@@ -48,7 +48,6 @@ class TemplateMapListener implements ListenerAggregateInterface
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         
-
         switch ($section[0])
         {
             case 'Website':
@@ -111,6 +110,17 @@ class TemplateMapListener implements ListenerAggregateInterface
                     break;
                     
                     
+                }elseif($session['idrol'] == 2 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
+                  
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_3.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                    
+                    
                 }elseif($session['idrol'] == 3 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
                     
                     $template_map->merge(
@@ -121,12 +131,45 @@ class TemplateMapListener implements ListenerAggregateInterface
                     ));
                     break;
                     
+                //ADMINISTRADOR DE EMPRESA
+                }elseif($session['idrol'] == 3 && !is_null($session['idempresa']) && is_null($session['idsucursal'])){
+                    
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_2.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                    
+                    
+                }elseif($session['idrol'] == 4 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
+                    
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_4.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                    
+                //ALMACENISTA 
+                }elseif($session['idrol'] == 5 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
+                    
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_5.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                    
                     
                 }else{
                 
                     $template_map->merge(
                         array(
-                            'layout/layout'      => __DIR__.'/../../../view/application/layout/layout.phtml',
+                            'layout/layout'      => __DIR__.'/../../../view/application/layout/layout404.phtml',
                             'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                             'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                         ));

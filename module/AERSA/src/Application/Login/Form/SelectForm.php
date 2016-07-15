@@ -96,6 +96,63 @@ class SelectForm extends Form
                 ),
             ));
         }
+        elseif ($idrol == 4) {
+            
+            $this->add(array(
+                'name' => 'idempresa',
+                'type' => 'Select',
+                'options' => array(
+                    //'empty_option' => 'Empresa',
+                    'value_options' => $empresas,
+                ),
+                'attributes' => array(
+                    'required' => false,
+                    'class' => 'form-control placeholder-no-fix',
+                ),
+            ));
+            
+            $this->add(array(
+                'name' => 'idsucursal',
+                'type' => 'Select',
+                'options' => array(
+                    'empty_option' => 'Sucursal',
+                    'value_options' => $sucursales,
+                ),
+                'attributes' => array(
+                    'required' => true,
+                    'disabled' => false,
+                    'class' => 'form-control placeholder-no-fix',
+                ),
+            ));
+        }elseif ($idrol == 5) {
+            
+            $this->add(array(
+                'name' => 'idempresa',
+                'type' => 'Select',
+                'options' => array(
+                    //'empty_option' => 'Empresa',
+                    'value_options' => $empresas,
+                ),
+                'attributes' => array(
+                    'required' => false,
+                    'class' => 'form-control placeholder-no-fix',
+                ),
+            ));
+            
+            $this->add(array(
+                'name' => 'idsucursal',
+                'type' => 'Select',
+                'options' => array(
+                    //'empty_option' => 'Sucursal',
+                    'value_options' => $sucursales,
+                ),
+                'attributes' => array(
+                    'required' => true,
+                    'disabled' => false,
+                    'class' => 'form-control placeholder-no-fix',
+                ),
+            ));
+        }
         
         
         

@@ -1,0 +1,37 @@
+<div class="page-lock">
+    <div class="page-logo">
+        <a class="brand" href="index.html">
+            <img src="/application/login/login_logo.png" alt="logo" /> </a>
+    </div>
+    <div class="page-body">
+        <div class="lock-head"> Bienvenido </div>
+        <div class="lock-body">
+            <?php
+                $form->setAttribute('action', '/login/select');
+                $form->setAttribute('class', 'lock-form pull-left');
+                echo $this->form()->openTag($form);
+            ?>
+                <h4><?php echo $session['usuario_nombre']?></h4>
+                <div id="sucursal_select" style="display: block">
+                    <div class="form-group ">
+                        <?php echo $this->formSelect($form->get('idempresa')) ?>
+                    </div>
+                    <div class="form-group ">
+                        <?php echo $this->formSelect($form->get('idsucursal')) ?>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn red uppercase">Entrar</button>
+                </div>
+            <?php $this->form()->closeTag($form); ?>
+        </div>
+        <div class="lock-bottom">
+
+        </div>
+    </div>
+    <div class="page-footer-custom"> Copyright &copy; AERSA 2016 </div>
+</div>
+<script src="/application/custom/js/login/login.js"></script>
+<script>
+   $('.page-lock').login(); 
+</script>

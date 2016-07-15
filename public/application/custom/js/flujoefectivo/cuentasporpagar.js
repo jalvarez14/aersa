@@ -72,6 +72,16 @@
                     });
                 },
             });
+            
+            //ACL
+            if(settings.session.idrol == 4){
+                
+                $container.find('#datatable thead tr th:last-child').hide();
+                $container.find('#datatable tbody tr').filter(function(){
+                    $(this).find('td:last-child').hide();
+                });
+            }
+            
         }
         
         formControl = function(pago){
@@ -101,6 +111,7 @@
         }
         
         plugin.edit = function () {
+            
             
             container.find('input[name=flujoefectivo_fecha]').datepicker({
                 format: 'dd/mm/yyyy',
@@ -270,6 +281,8 @@
               });
               
             });
+            
+        
         }
 
         /*

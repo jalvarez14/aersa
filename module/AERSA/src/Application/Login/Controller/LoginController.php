@@ -16,8 +16,7 @@ use Zend\Console\Request as ConsoleRequest;
 class LoginController extends AbstractActionController
 {
     public function inAction()
-    {
-
+    {        
         //REMPLAZAMOS EL LAYOUT
         $this->layout('application/layout/loign_layout');
         
@@ -76,10 +75,11 @@ class LoginController extends AbstractActionController
            
             if(isset($post_data['area_trabajo'])){
                 if($post_data['area_trabajo'] == 1){
+                    
                     return $this->redirect()->toUrl('/');
 
                 }elseif ($post_data['area_trabajo'] == 2) {
-
+                   
                     if($post_data["idsucursal"] != 'admin'){
 
                         $session = new \Shared\Session\AouthSession();
@@ -93,9 +93,18 @@ class LoginController extends AbstractActionController
                     }
                 }
             }else{
-                $session = new \Shared\Session\AouthSession();
-                $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
-                return $this->redirect()->toUrl('/');
+               
+                if($post_data["idsucursal"] != 'admin'){
+                    $session = new \Shared\Session\AouthSession();
+                    $session->setEmpresaAndSucursal($post_data['idempresa'], $post_data['idsucursal']);
+                    return $this->redirect()->toUrl('/');
+                }else{
+                    $session = new \Shared\Session\AouthSession();
+                    $session->setEmpresa($post_data['idempresa']);
+
+                    return $this->redirect()->toUrl('/');
+                }
+                
             }
             
         }
@@ -110,13 +119,14 @@ class LoginController extends AbstractActionController
         $view_model = new ViewModel();
         
         $empresas = array();
-        
+         $sucursales_array = array();
+         
         if($session['idrol'] == 1){ //ADMINISTRADOR AERSA
             $view_model->setTemplate('/application/login/select_admin_aersa');
             $empresas = \Shared\GeneralFunctions::collectionToSelectArray(\EmpresaQuery::create()->find(),'idempresa','empresa_nombrecomercial');
         }
         
-        if($session['idrol'] == 2){ //ADMINISTRADOR AERSA
+        if($session['idrol'] == 2){ //AUDITOR AERSA
             $view_model->setTemplate('/application/login/select_auditor_aersa');
             
             $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->find();
@@ -128,7 +138,7 @@ class LoginController extends AbstractActionController
             }
         }
         
-        if($session['idrol'] == 3){ //ADMINISTRADOR AERSA
+        if($session['idrol'] == 3){ //ADMINISTRADOR EMPRESA
             $view_model->setTemplate('/application/login/select_admin_empresa');
             
             $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->find();
@@ -139,14 +149,89 @@ class LoginController extends AbstractActionController
                 $id = $usuario_empresa->getIdempresa();
                 $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
             }
+            
             $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->find();
-            $sucursales_array = array();
+            
+            $sucursal = new \Sucursal();
+            $sucursales_array['admin'] ='Administración';
+            foreach ($sucursales as $sucursal){
+                $id = $sucursal->getIdsucursal();
+                $sucursales_array[$id] = $sucursal->getSucursalNombre();
+            }
+            
+        }
+        
+        if($session['idrol'] == 4){ //AUDITOR EMPRESA
+            $view_model->setTemplate('/application/login/select_auditor_empresa');
+            
+            $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->find();
+          
+            $empresa = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->findOne();
+            $empresas = array();
+            $usuario_empresa = new \Usuarioempresa();
+            foreach ($usuario_empresas as $usuario_empresa){
+                $id = $usuario_empresa->getIdempresa();
+                $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
+            }
+            
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->find();
+            
+            $sucursal = new \Sucursal();
+            $sucursales_array['admin'] ='Administración';
+            foreach ($sucursales as $sucursal){
+                $id = $sucursal->getIdsucursal();
+                $sucursales_array[$id] = $sucursal->getSucursalNombre();
+            }
+            
+        }
+        
+        if($session['idrol'] == 4){ //AUDITOR EMPRESA
+            $view_model->setTemplate('/application/login/select_auditor_empresa');
+            
+            $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->find();
+          
+            $empresa = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->findOne();
+            $empresas = array();
+            $usuario_empresa = new \Usuarioempresa();
+            foreach ($usuario_empresas as $usuario_empresa){
+                $id = $usuario_empresa->getIdempresa();
+                $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
+            }
+            
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->find();
+            
+            $sucursal = new \Sucursal();
+            $sucursales_array['admin'] ='Administración';
+            foreach ($sucursales as $sucursal){
+                $id = $sucursal->getIdsucursal();
+                $sucursales_array[$id] = $sucursal->getSucursalNombre();
+            }
+            
+        }
+        
+        if($session['idrol'] == 5){ //AUDITOR EMPRESA
+            $view_model->setTemplate('/application/login/select_almacenista_empresa');
+            
+            $usuario_empresas = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->find();
+          
+            $empresa = \UsuarioempresaQuery::create()->filterByIdusuario($session['idusuario'])->findOne();
+            $empresas = array();
+            $usuario_empresa = new \Usuarioempresa();
+            foreach ($usuario_empresas as $usuario_empresa){
+                $id = $usuario_empresa->getIdempresa();
+                $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
+            }
+            
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->find();
+            
             $sucursal = new \Sucursal();
             foreach ($sucursales as $sucursal){
                 $id = $sucursal->getIdsucursal();
                 $sucursales_array[$id] = $sucursal->getSucursalNombre();
             }
+            
         }
+        
         
 
         $form = new \Application\Login\Form\SelectForm($session['idrol'],$empresas,$sucursales_array);

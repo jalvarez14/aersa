@@ -25,6 +25,7 @@ class CuentasporpagarController extends AbstractActionController {
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
+            'session' => $session,
         ));
         
         return $view_model;
@@ -74,7 +75,7 @@ class CuentasporpagarController extends AbstractActionController {
         }
     }
     
-    public function editarmovimientoAction(){
+    public function editarmovimientoAction() {
          $request = $this->getRequest();
           if ($request->isPost()) {
               
@@ -263,7 +264,7 @@ class CuentasporpagarController extends AbstractActionController {
             if($restan <= 0){
                 $nuevo_movimiento = false;
             }
-            
+           
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/flujoefectivo/cuentasporpagar/editar');
             $view_model->setVariables(array(
@@ -275,6 +276,7 @@ class CuentasporpagarController extends AbstractActionController {
                 'movimientos' => $movimientos,
                 'abonoproveedor' => $abono_proveedor,
                 'nuevo_movimiento' => $nuevo_movimiento,
+                'session' => $session,
             ));
             return $view_model;
         } else {
