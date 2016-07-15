@@ -63,8 +63,7 @@ class TemplateMapListener implements ListenerAggregateInterface
                 break;
             }
             case 'Application':{
-                
-                
+
                 //ADMINISTRADOR AERSA
                 if($session['idrol'] == 1 && is_null($session['idempresa']) && is_null($session['idsucursal'])){
                     
@@ -112,7 +111,7 @@ class TemplateMapListener implements ListenerAggregateInterface
                     break;
                     
                     
-                }elseif($session['idrol'] == 2 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
+                }elseif($session['idrol'] == 3 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
                     
                     $template_map->merge(
                     array(
