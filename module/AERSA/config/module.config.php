@@ -1791,6 +1791,16 @@ return array(
                             ),
                         ),
                     ),
+                    'contacto' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => '/contacto',
+                            'defaults' => array(
+                                'controller'    => 'Website\Controller\Website',
+                                'action'        => 'contacto',
+                            ),
+                        ),
+                    ),
                 ),
             ),
 

@@ -1,3 +1,8 @@
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
 .color-green { color: #6BC728 !important; }
 
 
@@ -10,6 +15,8 @@
 .mini-top { margin-top: 1em; }
 .mini-bot { margin-bottom: : 1em; }
 .bg-purple { background-color: #B13FED }
+
+.no-bot { margin-bottom: -3em; }
 
 .newcl { color: #6BC728 !important; }
 
@@ -37,3 +44,9 @@
 .fa-circle{ color: #8CC63E; }
 
 .copyright-container{ background-color: #8CC63E; color: white}
+
+input[type=text],
+textarea
+{
+  border-radius: 0px !important;
+}

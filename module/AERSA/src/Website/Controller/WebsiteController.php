@@ -28,6 +28,13 @@ class WebsiteController extends AbstractActionController
     public function diagnosticoAction()
     {
       $this->layout('website/layout/layout');
+      $php = new \PHPMailer();
+      return new Viewmodel();
+    }
+    public function contactoAction()
+    {
+      $this->layout('website/layout/layout');
+      $php = new \PHPMailer();
       return new Viewmodel();
     }
 
