@@ -1724,24 +1724,25 @@ return array(
                                     ),
                                 ),
                                 'may_terminate' => true,
-                                'child_routes' => array(
-                                    'reportevc' => array(
-                                        'type' => 'Segment',
-                                        'options' => array(
-                                            'route' => '/reportevc',
-                                            'defaults' => array(
-                                                'controller' => 'Application\Reportes\Controller\Reportes',
-                                                'action' => 'reportevc',
-                                            ),
-                                        ),
+                            ),
+                            'formatoinventario' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/formatoinventario',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Reportes\Controller\Reportes',
+                                        'action' => 'formatoinventario',
                                     ),
-                                    'categoriavc' => array(
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'getrecientes' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/categoriavc',
+                                            'route' => '/getrecientes',
                                             'defaults' => array(
                                                 'controller' => 'Application\Reportes\Controller\Reportes',
-                                                'action' => 'categoriavc',
+                                                'action' => 'getrecientes',
                                             ),
                                         ),
                                     ),

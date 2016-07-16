@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\Reportes\Controller;
-
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
@@ -36,9 +36,9 @@ class ReportesController extends AbstractActionController {
                 $nombre = $objproducto->getProductoNombre();
                 $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                 $compras = \CompraQuery::create()
-                        ->filterByCompraFechacompra
-                        (array('min' => $ano_inicio . '-' . $mes_inicio . '-01 00:00:00', 'max' => $ano_inicio . '-' . $mes_inicio . '-31 23:59:59'))->find();
-                
+                                ->filterByCompraFechacompra
+                                        (array('min' => $ano_inicio . '-' . $mes_inicio . '-01 00:00:00', 'max' => $ano_inicio . '-' . $mes_inicio . '-31 23:59:59'))->find();
+
                 $total = 0;
                 $cantidad = 0;
                 foreach ($compras as $compra) {
@@ -50,11 +50,11 @@ class ReportesController extends AbstractActionController {
                     }
                 }
                 $costoold = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
-                $search=$ano_fin.'-'.$mes_fin;
-                
+                $search = $ano_fin . '-' . $mes_fin;
+
                 $compras = \CompraQuery::create()
-                        ->filterByCompraFechacompra
-                        (array('min' => $ano_fin . '-' . $mes_fin . '-01 00:00:00', 'max' => $ano_fin . '-' . $mes_fin . '-31 23:59:59'))->find();
+                                ->filterByCompraFechacompra
+                                        (array('min' => $ano_fin . '-' . $mes_fin . '-01 00:00:00', 'max' => $ano_fin . '-' . $mes_fin . '-31 23:59:59'))->find();
                 $total = 0;
                 $cantidad = 0;
                 foreach ($compras as $compra) {
@@ -67,15 +67,15 @@ class ReportesController extends AbstractActionController {
                 }
                 $costonew = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
                 $variacion = $costoold - $costonew;
-                $variacion = ($variacion<0) ? $variacion*-1:$variacion;
-                if($costoold==0)
-                    $porcentajevar=-100;
-                else 
+                $variacion = ($variacion < 0) ? $variacion * -1 : $variacion;
+                if ($costoold == 0)
+                    $porcentajevar = -100;
+                else
                     $porcentajevar = (($costonew / $costoold) * 100) - 100;
                 $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
                 $color = !$color;
-                $porcentajevar = ($costoold==0&&$costonew!=0)? $porcentajevar*-1: $porcentajevar;
-                $porcentajevar = ($variacion==0)? 0: $porcentajevar;
+                $porcentajevar = ($costoold == 0 && $costonew != 0) ? $porcentajevar * -1 : $porcentajevar;
+                $porcentajevar = ($variacion == 0) ? 0 : $porcentajevar;
                 $reporte[$fila] = "<tr bgcolor='" . $bg . "'><td> " . $nombre . " </td><td> " . $unidad . " </td><td> " . $costoold . " </td><td> " . $costonew . " </td><td> " . $variacion . " </td><td> " . $porcentajevar . "% </td></tr>";
                 $fila++;
             }
@@ -109,118 +109,143 @@ class ReportesController extends AbstractActionController {
         return $view_model;
     }
 
-    public function reportevcaAction() {
-        $session = new \Shared\Session\AouthSession();
-        $session = $session->getData();
-        $mes = $this->params()->fromQuery('mes');
-        $ano = $this->params()->fromQuery('ano');
-        $added = array();
-        $reporte = array();
-        $compras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-31 23:59:59'))->find();
-        $compra = new \Compra();
-        $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-31 23:59:59'))->filterByFlujoefectivoOrigen('compra')->find();
-        $flujoefectivo = new \Flujoefectivo();
-        foreach ($flujosefectivos as $flujoefectivo) {
-            $adding = true;
-            $idcompra = $flujoefectivo->getIdcompra();
-            $com = \CompraQuery::create()->filterByIdcompra($idcompra)->find();
-            $a = true;
-            foreach ($com as $com2) {
-                if ($com2->getCompraEstatuspago() != "pagada")
-                    $a = false;
-            }
-            if ($a) {
-                foreach ($added as $add) {
-                    if ($idcompra == $add)
-                        $adding = false;
-                }
-                if ($adding) {
-                    $flujos = \FlujoefectivoQuery::create()->filterByIdcompra($idcompra)->find();
-                    $flujo = new \Flujoefectivo();
-                    $band = true;
-                    foreach ($flujos as $flujo) {
-                        $fecha = $ano . '-' . $mes;
-                        $string = $flujo->getFlujoefectivoFecha();
-                        if ((substr($string, 0, strlen($fecha))) != $fecha)
-                            $band = false;
-                    }
-                    if ($band) {
-                        array_push($added, $idcompra);
-                        $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
-                        $compradetalle = new \Compradetalle();
-                        foreach ($comprasdetalles as $compradetalle) {
-                            $key = $compradetalle->getProducto()->getIdcategoria();
-                            $value = $compradetalle->getCompradetalleSubtotal();
-                            //echo $compradetalle->getIdcompradetalle()." precio ".$compradetalle->getCompradetalleSubtotal()." cat ".$compradetalle->getProducto()->getIdcategoria()." | ";
-                            if (isset($reporte[$key])) {
-                                $reporte[$key] = $value + $reporte[$key];
-                            } else {
-                                $reporte[$key] = $value;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-//        foreach ($compras as $compra) {
-//            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
-//            $compradetalle = new \Compradetalle();
-//            foreach ($comprasdetalles as $compradetalle) {
-//                $key = $compradetalle->getProducto()->getIdcategoria();
-//                $value = $compradetalle->getCompradetalleSubtotal();
-//                //echo $compradetalle->getIdcompradetalle()." precio ".$compradetalle->getCompradetalleSubtotal()." cat ".$compradetalle->getProducto()->getIdcategoria()." | ";
-//                if (isset($reporte[$key])) {
-//                    $reporte[$key] = $value + $reporte[$key];
-//                } else {
-//                    $reporte[$key] = $value;
-//                }
-//            }
-//        }
-        $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
-        $categoria = new \Categoria();
-        $reporteg = array();
-        $totalg = 0;
-        foreach ($reporte as $report) {
-            $totalg+=$report;
-        }
-        foreach ($categorias as $categoria) {
-            $reporteg["<h5>" . $categoria->getCategoriaNombre() . "</h5>"][0] = 0;
-            $total = 0;
-            $subcategorias = \CategoriaQuery::create()->filterByIdcategoriapadre($categoria->getIdcategoria())->find();
-            $subcategoria = new \Categoria();
-            foreach ($subcategorias as $subcategoria) {
-                if (isset($reporte[$subcategoria->getIdcategoria()])) {
-                    $reporteg[$subcategoria->getCategoriaNombre()][0] = $reporte[$subcategoria->getIdcategoria()];
-                    $reporteg[$subcategoria->getCategoriaNombre()][1] = ($reporte[$subcategoria->getIdcategoria()] * 100) / $totalg;
-                    $total+=$reporte[$subcategoria->getIdcategoria()];
-                } else {
-                    $reporteg[$subcategoria->getCategoriaNombre()][0] = 0;
-                }
-            }
-            if (isset($reporte[$categoria->getIdcategoria()])) {
-                $reporteg['Otros ' . $categoria->getCategoriaNombre()][0] = $reporte[$categoria->getIdcategoria()];
-                $reporteg['Otros ' . $categoria->getCategoriaNombre()][1] = ($reporte[$categoria->getIdcategoria()] * 100) / $totalg;
-                $total += $reporte[$categoria->getIdcategoria()];
-            }
-            $reporteg["<h5>" . $categoria->getCategoriaNombre() . "</h5>"][0] = $total;
-            $reporteg["<h5>" . $categoria->getCategoriaNombre() . "</h5>"][1] = ($total * 100) / $totalg;
-        }
-        return $this->getResponse()->setContent(json_encode($reporteg));
-    }
+    public function formatoinventarioAction() {
 
-    public function reportevcAction() {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         $idempresa = $session['idempresa'];
-        $productos = $this->params()->fromQuery('productos');
-        $mes_inicio = $this->params()->fromQuery('imes');
-        $mes_fin = $this->params()->fromQuery('fmes');
-        $ano_inicio = $this->params()->fromQuery('iano');
-        $ano_fin = $this->params()->fromQuery('fano');
+        $idsucursal = $session['idsucursal'];
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            
+            $productos = array();
+            $idproductos = array();
+            $post_data = $request->getPost();
+            $template = '/inventarios.xls';
+            $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
+            $formato = $post_data['formato'];
 
-        exit;
+            foreach ($post_data as $key => $value) {
+                if (strpos($key, '-'))
+                    array_push($productos, substr($key, 9));
+            }
+            //array('nombre'=>'Example product','unidad'=>kilo,'cantidad'=>4.5),
+            foreach ($post_data as $key => $value) {
+                if (strpos($key, '-'))
+                    array_push($idproductos, substr($key, 9));
+            }
+            $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+            $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+            $fila=0;
+            foreach ($idproductos as $idproducto) {
+                $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                $nombre = $objproducto->getProductoNombre();
+                $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                $productos[$fila]= array('clave' => $objproducto->getIdproducto(),'nombre' => $nombre, 'unidad' => $unidad, 'cantidad' => '');
+                $fila++;
+            }
+            $nombreEmpresa= \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+            $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+            
+            $config = array(
+                'template' => $template,
+                'templateDir' => $templateDir
+            );
+            $R = new \PHPReport($config);
+//            $R->setConfig();
+            $R->load(array(
+                array(
+                    'id' => 'compania',
+                    'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal, 'almacen' => $almacen),
+                    'format' => array(
+                        'date' => array('datetime' => 'd/m/Y')
+                    )
+                ),
+                array(
+                    'id' => 'prod',
+                    'repeat' => true,
+                    'data' => $productos,
+                    'minRows' => 2,
+                    'format' => array(
+                        'price' => array('number' => array('prefix' => '$', 'decimals' => 2)),
+                        'total' => array('number' => array('prefix' => '$', 'decimals' => 2))
+                    )
+                )
+                    )
+            );
+            if($formato=="PDF")
+                echo $R->render();
+            else
+                echo $R->render('excel');
+            exit();
 
-        return $this->getResponse()->setContent(json_encode($subcategorias));
+            $view_model = new ViewModel();
+            $view_model->setVariables(array(
+                'reporte' => $reporte,
+                'messages' => $this->flashMessenger(),
+            ));
+            $view_model->setTemplate('/application/reportes/reportes/variacioncostosreporte');
+            return $view_model;
+        }
+
+        $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
+        $objalmacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->find();
+        $almacenes = array();
+        foreach ($objalmacenes as $objalmacen) {
+            $almacenes[$objalmacen->getIdalmacen()] = $objalmacen->getAlmacenNombre();
+        }
+        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
+        $form = new \Application\Reportes\Form\FormatoinventarioForm($almacenes);
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'form' => $form,
+            'categorias' => $categorias,
+            'productos' => $productos,
+            'messages' => $this->flashMessenger(),
+        ));
+        $view_model->setTemplate('/application/reportes/reportes/formatoinventario');
+        return $view_model;
+    }
+
+    public function getrecientesAction() {
+        $dias = $this->params()->fromQuery('dias');
+        $fecha = date('Y-m-d', strtotime('-' . $dias . ' day'));
+        $hoy = date('Y-m-d');
+        $fecha.=' 00:00:00';
+        $hoy.=' 23:59:59';
+        $idproductos = array();
+        $compras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $fecha, 'max' => $hoy))->find();
+        $compra = new \Compra();
+        foreach ($compras as $compra) {
+            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
+            $compradetalle = new \Compradetalle();
+            foreach ($comprasdetalles as $compradetalle) {
+                if (!in_array($compradetalle->getIdproducto(), $idproductos))
+                    array_push($idproductos, $compradetalle->getIdproducto());
+            }
+        }
+        $requisiciones = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $fecha, 'max' => $hoy))->find();
+        $requisicion = new \Requisicion();
+        foreach ($requisiciones as $requisicion) {
+            $requisicionesdetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
+            $requisiciondetalle = new \Requisiciondetalle();
+            foreach ($requisicionesdetalles as $requisiciondetalle) {
+                if (!in_array($requisiciondetalle->getIdproducto(), $idproductos))
+                    array_push($idproductos, $requisiciondetalle->getIdproducto());
+            }
+        }
+        $ordenestablajeria = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $fecha, 'max' => $hoy))->find();
+        $ordentablajeria = new \Ordentablajeria();
+        foreach ($ordenestablajeria as $ordentablajeria) {
+            $ordenestablajeriadetalles = \OrdentablajeriadetalleQuery::create()->filterByIdordentablajeria($ordentablajeria->getIdordentablajeria())->find();
+            $ordentablajeriadetalle = new \Ordentablajeriadetalle();
+            foreach ($ordenestablajeriadetalles as $ordentablajeriadetalle) {
+                if (!in_array($ordentablajeriadetalle->getIdproducto(), $idproductos))
+                    array_push($idproductos, $ordentablajeriadetalle->getIdproducto());
+            }
+        }
+
+        return $this->getResponse()->setContent(json_encode($idproductos));
     }
 
 }

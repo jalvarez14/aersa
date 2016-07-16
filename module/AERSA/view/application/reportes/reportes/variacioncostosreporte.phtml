@@ -9,13 +9,20 @@
             </li>
         </ul>
     </div>
+
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
                 <div class="row">
+                    <div class="form-actions right">
+                        <button class="btn blue" id="back" type="button" onClick="history.go(-1);return true;">
+                            <i class="fa fa-refresh"></i>
+                            Generar otro reporte
+                        </button>
+                    </div>
                     <div class="col-md-12">
                         <table class="table" id="reporte_table">
-                            <?php 
+                            <?php
                             echo $reporte[0];
                             echo $reporte[1];
                             unset($reporte[0]);
@@ -30,9 +37,11 @@
                             <th>PctVar</th>
                             </thead>
                             <tbody id="tbody">
-                                <?php foreach ($reporte as $tr): 
+                                <?php
+                                foreach ($reporte as $tr):
                                     echo $tr;
-                                    endforeach; ?>
+                                endforeach;
+                                ?>
                             </tbody>
                         </table>
                     </div>
@@ -53,6 +62,6 @@
 <script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 <script src="/application/custom/js/reportes/reportes.js" type="text/javascript"></script>	
 <script>
-    var $plugin = $('#my_container').reportes();
-    $plugin.variacioncostos();
+                        var $plugin = $('#my_container').reportes();
+                        $plugin.variacioncostos();
 </script>
