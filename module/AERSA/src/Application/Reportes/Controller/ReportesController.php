@@ -1,7 +1,9 @@
 <?php
 
 namespace Application\Reportes\Controller;
+
 include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
@@ -21,15 +23,21 @@ class ReportesController extends AbstractActionController {
             $mes_inicio = $post_data['mes_inicial'];
             $ano_fin = $post_data['ano_final'];
             $mes_fin = $post_data['mes_final'];
+            $documento = true;
+            if (isset($post_data['generar_reporte']))
+                $documento = false;
             foreach ($post_data as $key => $value) {
                 if (strpos($key, '-'))
                     array_push($productos, substr($key, 9));
             }
             $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
-            $reporte = array("<div align='center'><h3>" . ucfirst($empresa) . "</h3></div>");
-            $reporte[1] = "<div align='center'><h3>VARIACIONES DE LOS COSTOS DEL " . $mes_inicio . "/" . $ano_inicio . " VS " . $mes_fin . "/" . $ano_fin . "</h3></div>";
+            $fila = 0;
+            if (!$documento) {
+                $reporte = array("<div align='center'><h3>" . ucfirst($empresa) . "</h3></div>");
+                $reporte[1] = "<div align='center'><h3>VARIACIONES DE LOS COSTOS DEL " . $mes_inicio . "/" . $ano_inicio . " VS " . $mes_fin . "/" . $ano_fin . "</h3></div>";
+                $fila = 2;
+            }
             $color = true;
-            $fila = 2;
             $compra = new \Compra();
             foreach ($productos as $idproducto) {
                 $objproducto = \ProductoQuery::create()->findPk($idproducto);
@@ -76,16 +84,66 @@ class ReportesController extends AbstractActionController {
                 $color = !$color;
                 $porcentajevar = ($costoold == 0 && $costonew != 0) ? $porcentajevar * -1 : $porcentajevar;
                 $porcentajevar = ($variacion == 0) ? 0 : $porcentajevar;
-                $reporte[$fila] = "<tr bgcolor='" . $bg . "'><td> " . $nombre . " </td><td> " . $unidad . " </td><td> " . $costoold . " </td><td> " . $costonew . " </td><td> " . $variacion . " </td><td> " . $porcentajevar . "% </td></tr>";
+                $idproducto;
+                if ($documento)
+                    $reporte[$fila] = array('clave' => $idproducto, 'nombre' => $nombre, 'unidad' => $unidad, 'costold' => $costoold, 'costnew' => $costonew, 'var' => $variacion, 'pctvar' => $porcentajevar.'%');
+                else
+                    $reporte[$fila] = "<tr bgcolor='" . $bg . "'><td> " . $nombre . " </td><td> " . $unidad . " </td><td> " . $costoold . " </td><td> " . $costonew . " </td><td> " . $variacion . " </td><td> " . $porcentajevar . "% </td></tr>";
                 $fila++;
             }
-            $view_model = new ViewModel();
-            $view_model->setVariables(array(
-                'reporte' => $reporte,
-                'messages' => $this->flashMessenger(),
-            ));
-            $view_model->setTemplate('/application/reportes/reportes/variacioncostosreporte');
-            return $view_model;
+            if ($documento) {
+                $template = '/variacioncostos.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
+                $inicio = $mes_inicio . "/" . $ano_inicio;
+                $fin = $mes_fin . "/" . $ano_fin;
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+                $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal),
+                        'format' => array(
+                            'date' => array('datetime' => 'd/m/Y')
+                        )
+                    ),
+                    array(
+                        'id' => 'fecha',
+                        'data' => array('inicial' => $inicio, 'final' => $fin),
+                        'format' => array(
+                            'date' => array('datetime' => 'd/m/Y')
+                        )
+                    ),
+                    array(
+                        'id' => 'prod',
+                        'repeat' => true,
+                        'data' => $reporte,
+                        'minRows' => 2,
+                        'format' => array(
+                            'price' => array('number' => array('prefix' => '$', 'decimals' => 2)),
+                            'total' => array('number' => array('prefix' => '$', 'decimals' => 2))
+                        )
+                    )
+                        )
+                );
+                if (isset($post_data['generar_pdf']))
+                    echo $R->render();
+                else
+                    echo $R->render('excel');
+                exit();
+            } else {
+                $view_model = new ViewModel();
+                $view_model->setVariables(array(
+                    'reporte' => $reporte,
+                    'messages' => $this->flashMessenger(),
+                ));
+                $view_model->setTemplate('/application/reportes/reportes/variacioncostosreporte');
+                return $view_model;
+            }
         }
 
         //INTANCIAMOS NUESTRA VISTA
@@ -117,7 +175,7 @@ class ReportesController extends AbstractActionController {
         $idsucursal = $session['idsucursal'];
         $request = $this->getRequest();
         if ($request->isPost()) {
-            
+
             $productos = array();
             $idproductos = array();
             $post_data = $request->getPost();
@@ -136,17 +194,17 @@ class ReportesController extends AbstractActionController {
             }
             $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
             $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
-            $fila=0;
+            $fila = 0;
             foreach ($idproductos as $idproducto) {
                 $objproducto = \ProductoQuery::create()->findPk($idproducto);
                 $nombre = $objproducto->getProductoNombre();
                 $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
-                $productos[$fila]= array('clave' => $objproducto->getIdproducto(),'nombre' => $nombre, 'unidad' => $unidad, 'cantidad' => '');
+                $productos[$fila] = array('clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad, 'cantidad' => '');
                 $fila++;
             }
-            $nombreEmpresa= \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+            $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
             $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
-            
+
             $config = array(
                 'template' => $template,
                 'templateDir' => $templateDir
@@ -173,19 +231,11 @@ class ReportesController extends AbstractActionController {
                 )
                     )
             );
-            if($formato=="PDF")
-                echo $R->render();
+            if ($formato == "PDF")
+                echo $R->render('pdf');
             else
                 echo $R->render('excel');
             exit();
-
-            $view_model = new ViewModel();
-            $view_model->setVariables(array(
-                'reporte' => $reporte,
-                'messages' => $this->flashMessenger(),
-            ));
-            $view_model->setTemplate('/application/reportes/reportes/variacioncostosreporte');
-            return $view_model;
         }
 
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
