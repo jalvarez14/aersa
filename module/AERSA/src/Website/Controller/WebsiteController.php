@@ -37,5 +37,85 @@ class WebsiteController extends AbstractActionController
       $php = new \PHPMailer();
       return new Viewmodel();
     }
+    public function sendCotizacionAction()
+    {
+      $request = $this->getRequest();
+
+      if ($request->isPost())
+      {
+          $post_data = $request->getPost();
+
+          $mail = new \PHPMailer;
+          $mail->isSMTP();                                      // Set mailer to use SMTP
+          $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers
+          $mail->SMTPAuth = true;                               // Enable SMTP authentication
+          $mail->Username = 'lopez.victor94@gmail.com';                 // SMTP username
+          $mail->Password = '********************';                           // SMTP password
+          $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+          $mail->Port = 587;
+          $mail->setFrom('lopez.victor94@gmail.com', 'Mailer');
+          $mail->addAddress('lopez.victor94@gmail.com', '');
+          $mail->isHTML(true);
+          $mail->Subject = 'Contacto';
+          $mail->CharSet = 'UTF-8';
+
+          $body = "";
+          // return $this->getResponse()->setContent(json_encode($post_data['administracion']));
+
+          $admin        = $post_data['administracion'];
+          $almacen      = $post_data['almacen'];
+          $almacenText  = $post_data['almacenText'];
+          $sistemas     = $post_data['sistemas'];
+          $finanzas     = $post_data['finanzas'];
+          $finanzasText = $post_data['finanzasText'];
+          $compras      = $post_data['compras'];
+          $comprasText  = $post_data['comprasText'];
+
+          $body    = $body.'<b>Bloque administracion</b>';
+          for ($i=0; $i < count($admin) ; $i++)
+            $body    = $body.'<br><br>'.$admin[$i];
+
+          // Llenado de almacén
+          $body    = $body.'<br><br><b>Bloque almacén</b>';
+          for ($i=0; $i < count($almacen) ; $i++)
+            $body    = $body.'<br><br>'.$almacen[$i];
+          for ($i=0; $i < count($almacenText) ; $i++)
+            $body    = $body.'<br><br>'.$almacenText[$i];
+          // Llenado de almacén
+
+          // Llenado de sistemas
+          $body    = $body.'<br><br><b>Bloque sistemas</b>';
+          for ($i=0; $i < count($sistemas) ; $i++)
+            $body    = $body.'<br><br>'.$sistemas[$i];
+          // Llenado de sistemas
+
+          // Llenado de finanzas
+          $body    = $body.'<br><br><b>Bloque finanzas</b>';
+          for ($i=0; $i < count($finanzas) ; $i++)
+            $body    = $body.'<br><br>'.$finanzas[$i];
+          for ($i=0; $i < count($finanzasText) ; $i++)
+            $body    = $body.'<br><br>'.$finanzasText[$i];
+          // Llenado de finanzas
+
+          // Llenado de compras
+          $body    = $body.'<br><br><b>Bloque compras</b>';
+          for ($i=0; $i < count($compras) ; $i++)
+            $body    = $body.'<br><br>'.$compras[$i];
+          for ($i=0; $i < count($comprasText) ; $i++)
+            $body    = $body.'<br><br>'.$comprasText[$i];
+          // Llenado de compras
+
+
+          $mail->Body    = $body;
+          if(!$mail->send()) {
+              return $this->getResponse()->setContent(json_encode($mail->ErrorInfo));
+          } else {
+              return $this->getResponse()->setContent(json_encode('good'));
+          }
+      }
+
+
+    }
+
 
 }
