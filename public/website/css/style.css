@@ -5,6 +5,11 @@ body, html {
 
 .color-green { color: #6BC728 !important; }
 
+.img-center {
+    display: block;
+    margin: 0 auto;
+}
+
 
 .color-green:hover{ text-decoration: underline !important; font-weight: bold; }
 
