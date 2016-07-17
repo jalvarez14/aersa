@@ -65,6 +65,8 @@
             if (checkbox && select)
                 activar = false;
             $('#generar_reporte').attr('disabled', activar);
+            $('#generar_pdf').attr('disabled', activar);
+            $('#generar_excel').attr('disabled', activar);
         }
 
         var controlBotonFormatoInventario = function () {
