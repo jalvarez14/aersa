@@ -24,13 +24,13 @@ abstract class BaseProductoPeer
     const TM_CLASS = 'ProductoTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 13;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /** the column name for the idproducto field */
     const IDPRODUCTO = 'producto.idproducto';
@@ -68,6 +68,9 @@ abstract class BaseProductoPeer
     /** the column name for the producto_iva field */
     const PRODUCTO_IVA = 'producto.producto_iva';
 
+    /** the column name for the producto_precio field */
+    const PRODUCTO_PRECIO = 'producto.producto_precio';
+
     /** The enumerated values for the producto_tipo field */
     const PRODUCTO_TIPO_SIMPLE = 'simple';
     const PRODUCTO_TIPO_SUBRECETA = 'subreceta';
@@ -92,12 +95,12 @@ abstract class BaseProductoPeer
      * e.g. ProductoPeer::$fieldNames[ProductoPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproducto', 'Idempresa', 'Idunidadmedida', 'ProductoNombre', 'Idcategoria', 'Idsubcategoria', 'ProductoRendimiento', 'ProductoUltimocosto', 'ProductoBaja', 'ProductoTipo', 'ProductoCosto', 'ProductoIva', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto', 'idempresa', 'idunidadmedida', 'productoNombre', 'idcategoria', 'idsubcategoria', 'productoRendimiento', 'productoUltimocosto', 'productoBaja', 'productoTipo', 'productoCosto', 'productoIva', ),
-        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO, ProductoPeer::IDEMPRESA, ProductoPeer::IDUNIDADMEDIDA, ProductoPeer::PRODUCTO_NOMBRE, ProductoPeer::IDCATEGORIA, ProductoPeer::IDSUBCATEGORIA, ProductoPeer::PRODUCTO_RENDIMIENTO, ProductoPeer::PRODUCTO_ULTIMOCOSTO, ProductoPeer::PRODUCTO_BAJA, ProductoPeer::PRODUCTO_TIPO, ProductoPeer::PRODUCTO_COSTO, ProductoPeer::PRODUCTO_IVA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO', 'IDEMPRESA', 'IDUNIDADMEDIDA', 'PRODUCTO_NOMBRE', 'IDCATEGORIA', 'IDSUBCATEGORIA', 'PRODUCTO_RENDIMIENTO', 'PRODUCTO_ULTIMOCOSTO', 'PRODUCTO_BAJA', 'PRODUCTO_TIPO', 'PRODUCTO_COSTO', 'PRODUCTO_IVA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idproducto', 'idempresa', 'idunidadmedida', 'producto_nombre', 'idcategoria', 'idsubcategoria', 'producto_rendimiento', 'producto_ultimocosto', 'producto_baja', 'producto_tipo', 'producto_costo', 'producto_iva', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('Idproducto', 'Idempresa', 'Idunidadmedida', 'ProductoNombre', 'Idcategoria', 'Idsubcategoria', 'ProductoRendimiento', 'ProductoUltimocosto', 'ProductoBaja', 'ProductoTipo', 'ProductoCosto', 'ProductoIva', 'ProductoPrecio', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto', 'idempresa', 'idunidadmedida', 'productoNombre', 'idcategoria', 'idsubcategoria', 'productoRendimiento', 'productoUltimocosto', 'productoBaja', 'productoTipo', 'productoCosto', 'productoIva', 'productoPrecio', ),
+        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO, ProductoPeer::IDEMPRESA, ProductoPeer::IDUNIDADMEDIDA, ProductoPeer::PRODUCTO_NOMBRE, ProductoPeer::IDCATEGORIA, ProductoPeer::IDSUBCATEGORIA, ProductoPeer::PRODUCTO_RENDIMIENTO, ProductoPeer::PRODUCTO_ULTIMOCOSTO, ProductoPeer::PRODUCTO_BAJA, ProductoPeer::PRODUCTO_TIPO, ProductoPeer::PRODUCTO_COSTO, ProductoPeer::PRODUCTO_IVA, ProductoPeer::PRODUCTO_PRECIO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO', 'IDEMPRESA', 'IDUNIDADMEDIDA', 'PRODUCTO_NOMBRE', 'IDCATEGORIA', 'IDSUBCATEGORIA', 'PRODUCTO_RENDIMIENTO', 'PRODUCTO_ULTIMOCOSTO', 'PRODUCTO_BAJA', 'PRODUCTO_TIPO', 'PRODUCTO_COSTO', 'PRODUCTO_IVA', 'PRODUCTO_PRECIO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idproducto', 'idempresa', 'idunidadmedida', 'producto_nombre', 'idcategoria', 'idsubcategoria', 'producto_rendimiento', 'producto_ultimocosto', 'producto_baja', 'producto_tipo', 'producto_costo', 'producto_iva', 'producto_precio', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -107,12 +110,12 @@ abstract class BaseProductoPeer
      * e.g. ProductoPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproducto' => 0, 'Idempresa' => 1, 'Idunidadmedida' => 2, 'ProductoNombre' => 3, 'Idcategoria' => 4, 'Idsubcategoria' => 5, 'ProductoRendimiento' => 6, 'ProductoUltimocosto' => 7, 'ProductoBaja' => 8, 'ProductoTipo' => 9, 'ProductoCosto' => 10, 'ProductoIva' => 11, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto' => 0, 'idempresa' => 1, 'idunidadmedida' => 2, 'productoNombre' => 3, 'idcategoria' => 4, 'idsubcategoria' => 5, 'productoRendimiento' => 6, 'productoUltimocosto' => 7, 'productoBaja' => 8, 'productoTipo' => 9, 'productoCosto' => 10, 'productoIva' => 11, ),
-        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO => 0, ProductoPeer::IDEMPRESA => 1, ProductoPeer::IDUNIDADMEDIDA => 2, ProductoPeer::PRODUCTO_NOMBRE => 3, ProductoPeer::IDCATEGORIA => 4, ProductoPeer::IDSUBCATEGORIA => 5, ProductoPeer::PRODUCTO_RENDIMIENTO => 6, ProductoPeer::PRODUCTO_ULTIMOCOSTO => 7, ProductoPeer::PRODUCTO_BAJA => 8, ProductoPeer::PRODUCTO_TIPO => 9, ProductoPeer::PRODUCTO_COSTO => 10, ProductoPeer::PRODUCTO_IVA => 11, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO' => 0, 'IDEMPRESA' => 1, 'IDUNIDADMEDIDA' => 2, 'PRODUCTO_NOMBRE' => 3, 'IDCATEGORIA' => 4, 'IDSUBCATEGORIA' => 5, 'PRODUCTO_RENDIMIENTO' => 6, 'PRODUCTO_ULTIMOCOSTO' => 7, 'PRODUCTO_BAJA' => 8, 'PRODUCTO_TIPO' => 9, 'PRODUCTO_COSTO' => 10, 'PRODUCTO_IVA' => 11, ),
-        BasePeer::TYPE_FIELDNAME => array ('idproducto' => 0, 'idempresa' => 1, 'idunidadmedida' => 2, 'producto_nombre' => 3, 'idcategoria' => 4, 'idsubcategoria' => 5, 'producto_rendimiento' => 6, 'producto_ultimocosto' => 7, 'producto_baja' => 8, 'producto_tipo' => 9, 'producto_costo' => 10, 'producto_iva' => 11, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        BasePeer::TYPE_PHPNAME => array ('Idproducto' => 0, 'Idempresa' => 1, 'Idunidadmedida' => 2, 'ProductoNombre' => 3, 'Idcategoria' => 4, 'Idsubcategoria' => 5, 'ProductoRendimiento' => 6, 'ProductoUltimocosto' => 7, 'ProductoBaja' => 8, 'ProductoTipo' => 9, 'ProductoCosto' => 10, 'ProductoIva' => 11, 'ProductoPrecio' => 12, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproducto' => 0, 'idempresa' => 1, 'idunidadmedida' => 2, 'productoNombre' => 3, 'idcategoria' => 4, 'idsubcategoria' => 5, 'productoRendimiento' => 6, 'productoUltimocosto' => 7, 'productoBaja' => 8, 'productoTipo' => 9, 'productoCosto' => 10, 'productoIva' => 11, 'productoPrecio' => 12, ),
+        BasePeer::TYPE_COLNAME => array (ProductoPeer::IDPRODUCTO => 0, ProductoPeer::IDEMPRESA => 1, ProductoPeer::IDUNIDADMEDIDA => 2, ProductoPeer::PRODUCTO_NOMBRE => 3, ProductoPeer::IDCATEGORIA => 4, ProductoPeer::IDSUBCATEGORIA => 5, ProductoPeer::PRODUCTO_RENDIMIENTO => 6, ProductoPeer::PRODUCTO_ULTIMOCOSTO => 7, ProductoPeer::PRODUCTO_BAJA => 8, ProductoPeer::PRODUCTO_TIPO => 9, ProductoPeer::PRODUCTO_COSTO => 10, ProductoPeer::PRODUCTO_IVA => 11, ProductoPeer::PRODUCTO_PRECIO => 12, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTO' => 0, 'IDEMPRESA' => 1, 'IDUNIDADMEDIDA' => 2, 'PRODUCTO_NOMBRE' => 3, 'IDCATEGORIA' => 4, 'IDSUBCATEGORIA' => 5, 'PRODUCTO_RENDIMIENTO' => 6, 'PRODUCTO_ULTIMOCOSTO' => 7, 'PRODUCTO_BAJA' => 8, 'PRODUCTO_TIPO' => 9, 'PRODUCTO_COSTO' => 10, 'PRODUCTO_IVA' => 11, 'PRODUCTO_PRECIO' => 12, ),
+        BasePeer::TYPE_FIELDNAME => array ('idproducto' => 0, 'idempresa' => 1, 'idunidadmedida' => 2, 'producto_nombre' => 3, 'idcategoria' => 4, 'idsubcategoria' => 5, 'producto_rendimiento' => 6, 'producto_ultimocosto' => 7, 'producto_baja' => 8, 'producto_tipo' => 9, 'producto_costo' => 10, 'producto_iva' => 11, 'producto_precio' => 12, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /** The enumerated values for this table */
@@ -252,6 +255,7 @@ abstract class BaseProductoPeer
             $criteria->addSelectColumn(ProductoPeer::PRODUCTO_TIPO);
             $criteria->addSelectColumn(ProductoPeer::PRODUCTO_COSTO);
             $criteria->addSelectColumn(ProductoPeer::PRODUCTO_IVA);
+            $criteria->addSelectColumn(ProductoPeer::PRODUCTO_PRECIO);
         } else {
             $criteria->addSelectColumn($alias . '.idproducto');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -265,6 +269,7 @@ abstract class BaseProductoPeer
             $criteria->addSelectColumn($alias . '.producto_tipo');
             $criteria->addSelectColumn($alias . '.producto_costo');
             $criteria->addSelectColumn($alias . '.producto_iva');
+            $criteria->addSelectColumn($alias . '.producto_precio');
         }
     }
 

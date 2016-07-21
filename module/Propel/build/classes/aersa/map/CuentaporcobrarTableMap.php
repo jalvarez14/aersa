@@ -45,10 +45,9 @@ class CuentaporcobrarTableMap extends TableMap
         $this->addColumn('cuentaporcobrar_cantidad', 'CuentaporcobrarCantidad', 'DECIMAL', true, 15, null);
         $this->addColumn('cuentaporcobrar_cliente', 'CuentaporcobrarCliente', 'VARCHAR', true, 255, null);
         $this->addColumn('cuentaporcobrar_fecha', 'CuentaporcobrarFecha', 'TIMESTAMP', true, null, null);
-        $this->addColumn('cuentaporcobrar_referencia', 'CuentaporcobrarReferencia', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('cuentaporcobrar_abonado', 'CuentaporcobrarAbonado', 'DECIMAL', false, 15, 0);
+        $this->addColumn('cuentaporcobrar_nota', 'CuentaporcobrarNota', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('cuentaporcobrar_abonado', 'CuentaporcobrarAbonado', 'DECIMAL', false, 15, null);
         $this->addColumn('cuentaporcobrar_estatuspago', 'CuentaporcobrarEstatuspago', 'BOOLEAN', true, 1, null);
-        $this->addColumn('cuentaporcobrar_comprobante', 'CuentaporcobrarComprobante', 'LONGVARCHAR', false, null, null);
         // validators
     } // initialize()
 

@@ -148,6 +148,19 @@ class ProductosForm extends Form
         ));
         
         $this->add(array(
+            'name' => 'producto_precio',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'Precio *',
+            ),
+            'attributes' => array(
+                'required' => false,
+                'disabled' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        $this->add(array(
             'name' => 'producto_stock',
             'type' => 'Text',
             'options' => array(

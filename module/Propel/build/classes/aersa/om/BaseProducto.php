@@ -103,6 +103,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
     protected $producto_iva;
 
     /**
+     * The value for the producto_precio field.
+     * @var        double
+     */
+    protected $producto_precio;
+
+    /**
      * @var        Categoria
      */
     protected $aCategoriaRelatedByIdcategoria;
@@ -452,6 +458,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [producto_precio] column value.
+     *
+     * @return double
+     */
+    public function getProductoPrecio()
+    {
+
+        return $this->producto_precio;
+    }
+
+    /**
      * Set the value of [idproducto] column.
      *
      * @param  int $v new value
@@ -736,6 +753,27 @@ abstract class BaseProducto extends BaseObject implements Persistent
     } // setProductoIva()
 
     /**
+     * Set the value of [producto_precio] column.
+     *
+     * @param  double $v new value
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setProductoPrecio($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->producto_precio !== $v) {
+            $this->producto_precio = $v;
+            $this->modifiedColumns[] = ProductoPeer::PRODUCTO_PRECIO;
+        }
+
+
+        return $this;
+    } // setProductoPrecio()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -783,6 +821,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->producto_tipo = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
             $this->producto_costo = ($row[$startcol + 10] !== null) ? (double) $row[$startcol + 10] : null;
             $this->producto_iva = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
+            $this->producto_precio = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -792,7 +831,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 12; // 12 = ProductoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = ProductoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Producto object", $e);
@@ -1336,6 +1375,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_IVA)) {
             $modifiedColumns[':p' . $index++]  = '`producto_iva`';
         }
+        if ($this->isColumnModified(ProductoPeer::PRODUCTO_PRECIO)) {
+            $modifiedColumns[':p' . $index++]  = '`producto_precio`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `producto` (%s) VALUES (%s)',
@@ -1382,6 +1424,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
                         break;
                     case '`producto_iva`':
                         $stmt->bindValue($identifier, (int) $this->producto_iva, PDO::PARAM_INT);
+                        break;
+                    case '`producto_precio`':
+                        $stmt->bindValue($identifier, $this->producto_precio, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1687,6 +1732,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             case 11:
                 return $this->getProductoIva();
                 break;
+            case 12:
+                return $this->getProductoPrecio();
+                break;
             default:
                 return null;
                 break;
@@ -1728,6 +1776,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $keys[9] => $this->getProductoTipo(),
             $keys[10] => $this->getProductoCosto(),
             $keys[11] => $this->getProductoIva(),
+            $keys[12] => $this->getProductoPrecio(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1856,6 +1905,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             case 11:
                 $this->setProductoIva($value);
                 break;
+            case 12:
+                $this->setProductoPrecio($value);
+                break;
         } // switch()
     }
 
@@ -1892,6 +1944,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if (array_key_exists($keys[9], $arr)) $this->setProductoTipo($arr[$keys[9]]);
         if (array_key_exists($keys[10], $arr)) $this->setProductoCosto($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setProductoIva($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setProductoPrecio($arr[$keys[12]]);
     }
 
     /**
@@ -1915,6 +1968,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_TIPO)) $criteria->add(ProductoPeer::PRODUCTO_TIPO, $this->producto_tipo);
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_COSTO)) $criteria->add(ProductoPeer::PRODUCTO_COSTO, $this->producto_costo);
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_IVA)) $criteria->add(ProductoPeer::PRODUCTO_IVA, $this->producto_iva);
+        if ($this->isColumnModified(ProductoPeer::PRODUCTO_PRECIO)) $criteria->add(ProductoPeer::PRODUCTO_PRECIO, $this->producto_precio);
 
         return $criteria;
     }
@@ -1989,6 +2043,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $copyObj->setProductoTipo($this->getProductoTipo());
         $copyObj->setProductoCosto($this->getProductoCosto());
         $copyObj->setProductoIva($this->getProductoIva());
+        $copyObj->setProductoPrecio($this->getProductoPrecio());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -5902,6 +5957,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $this->producto_tipo = null;
         $this->producto_costo = null;
         $this->producto_iva = null;
+        $this->producto_precio = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

@@ -1,7 +1,8 @@
 
 $( document ).ready(function() {
     
-    
+    $("label[for=producto_rendimiento").hide();
+    $("[name=producto_rendimiento]").hide();
     
     $("[name=idcategoria]").change(function () {
         getSubcategorias();
@@ -15,6 +16,46 @@ $( document ).ready(function() {
         }
         
     });
+    
+    $("[name=idunidadmedida]").change(function () {
+         var idcat = $(this).val();
+        if(idcat != '5')
+        {
+            $("label[for=producto_rendimiento").hide();
+            $("[name=producto_rendimiento]").removeAttr("required");
+            $("[name=producto_rendimiento]").hide();
+            
+        }
+        else
+        {
+            $("[name=producto_rendimiento]").attr("required", "true");
+            $("label[for=producto_rendimiento").show();
+            $("[name=producto_rendimiento]").show();
+        }
+        
+    });
+    
+    $("[name=producto_tipo]").change(function () {
+         var idcat = $(this).val();
+        
+        if(idcat != 'plu')
+        {
+            
+            $("[name=producto_precio]").removeAttr("required");
+            $("[name=producto_precio]").attr("disabled", "true");
+            
+
+            
+        }
+        else
+        {
+            $("[name=producto_precio]").removeAttr("disabled");
+            $("[name=producto_precio]").attr("required", "true");
+        }
+        
+    });
+    
+    
     
     
     function getSubcategorias()

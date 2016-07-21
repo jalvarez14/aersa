@@ -75,7 +75,6 @@ class FlujoefectivoTableMap extends TableMap
   1 => 'efectivo',
   2 => 'transferencia',
   3 => 'abono',
-  4 => 'bonificacion',
 ));
         $this->addColumn('flujoefectivo_tipo', 'FlujoefectivoTipo', 'CHAR', true, null, null);
         $this->getColumn('flujoefectivo_tipo', false)->setValueSet(array (

@@ -83,11 +83,11 @@ abstract class BaseNotacreditoPeer
     /** the column name for the notaauditorempresa field */
     const NOTAAUDITOREMPRESA = 'notacredito.notaauditorempresa';
 
-    /** the column name for the notaalmacenistaempresa field */
-    const NOTAALMACENISTAEMPRESA = 'notacredito.notaalmacenistaempresa';
+    /** the column name for the notaalmacenistaempresa_copy1 field */
+    const NOTAALMACENISTAEMPRESA_COPY1 = 'notacredito.notaalmacenistaempresa_copy1';
 
-    /** the column name for the notaauditoraersa field */
-    const NOTAAUDITORAERSA = 'notacredito.notaauditoraersa';
+    /** the column name for the notaauditoraersa_copy1 field */
+    const NOTAAUDITORAERSA_COPY1 = 'notacredito.notaauditoraersa_copy1';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +108,11 @@ abstract class BaseNotacreditoPeer
      * e.g. NotacreditoPeer::$fieldNames[NotacreditoPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacredito', 'Idempresa', 'Idsucursal', 'Idproveedor', 'Idusuario', 'Idauditor', 'Idalmacen', 'NotacreditoFolio', 'NotacreditoRevisada', 'NotacreditoFactura', 'NotacreditoFechacreacion', 'NotacreditoFechanotacredito', 'NotacreditoIeps', 'NotacreditoIva', 'NotacreditoTotal', 'NotacreditoSubtotal', 'Notaauditorempresa', 'Notaalmacenistaempresa', 'Notaauditoraersa', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'notacreditoFolio', 'notacreditoRevisada', 'notacreditoFactura', 'notacreditoFechacreacion', 'notacreditoFechanotacredito', 'notacreditoIeps', 'notacreditoIva', 'notacreditoTotal', 'notacreditoSubtotal', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', ),
-        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO, NotacreditoPeer::IDEMPRESA, NotacreditoPeer::IDSUCURSAL, NotacreditoPeer::IDPROVEEDOR, NotacreditoPeer::IDUSUARIO, NotacreditoPeer::IDAUDITOR, NotacreditoPeer::IDALMACEN, NotacreditoPeer::NOTACREDITO_FOLIO, NotacreditoPeer::NOTACREDITO_REVISADA, NotacreditoPeer::NOTACREDITO_FACTURA, NotacreditoPeer::NOTACREDITO_FECHACREACION, NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO, NotacreditoPeer::NOTACREDITO_IEPS, NotacreditoPeer::NOTACREDITO_IVA, NotacreditoPeer::NOTACREDITO_TOTAL, NotacreditoPeer::NOTACREDITO_SUBTOTAL, NotacreditoPeer::NOTAAUDITOREMPRESA, NotacreditoPeer::NOTAALMACENISTAEMPRESA, NotacreditoPeer::NOTAAUDITORAERSA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'NOTACREDITO_FOLIO', 'NOTACREDITO_REVISADA', 'NOTACREDITO_FACTURA', 'NOTACREDITO_FECHACREACION', 'NOTACREDITO_FECHANOTACREDITO', 'NOTACREDITO_IEPS', 'NOTACREDITO_IVA', 'NOTACREDITO_TOTAL', 'NOTACREDITO_SUBTOTAL', 'NOTAAUDITOREMPRESA', 'NOTAALMACENISTAEMPRESA', 'NOTAAUDITORAERSA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'notacredito_folio', 'notacredito_revisada', 'notacredito_factura', 'notacredito_fechacreacion', 'notacredito_fechanotacredito', 'notacredito_ieps', 'notacredito_iva', 'notacredito_total', 'notacredito_subtotal', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', ),
+        BasePeer::TYPE_PHPNAME => array ('Idnotacredito', 'Idempresa', 'Idsucursal', 'Idproveedor', 'Idusuario', 'Idauditor', 'Idalmacen', 'NotacreditoFolio', 'NotacreditoRevisada', 'NotacreditoFactura', 'NotacreditoFechacreacion', 'NotacreditoFechanotacredito', 'NotacreditoIeps', 'NotacreditoIva', 'NotacreditoTotal', 'NotacreditoSubtotal', 'Notaauditorempresa', 'NotaalmacenistaempresaCopy1', 'NotaauditoraersaCopy1', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'notacreditoFolio', 'notacreditoRevisada', 'notacreditoFactura', 'notacreditoFechacreacion', 'notacreditoFechanotacredito', 'notacreditoIeps', 'notacreditoIva', 'notacreditoTotal', 'notacreditoSubtotal', 'notaauditorempresa', 'notaalmacenistaempresaCopy1', 'notaauditoraersaCopy1', ),
+        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO, NotacreditoPeer::IDEMPRESA, NotacreditoPeer::IDSUCURSAL, NotacreditoPeer::IDPROVEEDOR, NotacreditoPeer::IDUSUARIO, NotacreditoPeer::IDAUDITOR, NotacreditoPeer::IDALMACEN, NotacreditoPeer::NOTACREDITO_FOLIO, NotacreditoPeer::NOTACREDITO_REVISADA, NotacreditoPeer::NOTACREDITO_FACTURA, NotacreditoPeer::NOTACREDITO_FECHACREACION, NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO, NotacreditoPeer::NOTACREDITO_IEPS, NotacreditoPeer::NOTACREDITO_IVA, NotacreditoPeer::NOTACREDITO_TOTAL, NotacreditoPeer::NOTACREDITO_SUBTOTAL, NotacreditoPeer::NOTAAUDITOREMPRESA, NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1, NotacreditoPeer::NOTAAUDITORAERSA_COPY1, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'NOTACREDITO_FOLIO', 'NOTACREDITO_REVISADA', 'NOTACREDITO_FACTURA', 'NOTACREDITO_FECHACREACION', 'NOTACREDITO_FECHANOTACREDITO', 'NOTACREDITO_IEPS', 'NOTACREDITO_IVA', 'NOTACREDITO_TOTAL', 'NOTACREDITO_SUBTOTAL', 'NOTAAUDITOREMPRESA', 'NOTAALMACENISTAEMPRESA_COPY1', 'NOTAAUDITORAERSA_COPY1', ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotacredito', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'notacredito_folio', 'notacredito_revisada', 'notacredito_factura', 'notacredito_fechacreacion', 'notacredito_fechanotacredito', 'notacredito_ieps', 'notacredito_iva', 'notacredito_total', 'notacredito_subtotal', 'notaauditorempresa', 'notaalmacenistaempresa_copy1', 'notaauditoraersa_copy1', ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
@@ -123,11 +123,11 @@ abstract class BaseNotacreditoPeer
      * e.g. NotacreditoPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotacredito' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'Idalmacen' => 6, 'NotacreditoFolio' => 7, 'NotacreditoRevisada' => 8, 'NotacreditoFactura' => 9, 'NotacreditoFechacreacion' => 10, 'NotacreditoFechanotacredito' => 11, 'NotacreditoIeps' => 12, 'NotacreditoIva' => 13, 'NotacreditoTotal' => 14, 'NotacreditoSubtotal' => 15, 'Notaauditorempresa' => 16, 'Notaalmacenistaempresa' => 17, 'Notaauditoraersa' => 18, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'notacreditoFolio' => 7, 'notacreditoRevisada' => 8, 'notacreditoFactura' => 9, 'notacreditoFechacreacion' => 10, 'notacreditoFechanotacredito' => 11, 'notacreditoIeps' => 12, 'notacreditoIva' => 13, 'notacreditoTotal' => 14, 'notacreditoSubtotal' => 15, 'notaauditorempresa' => 16, 'notaalmacenistaempresa' => 17, 'notaauditoraersa' => 18, ),
-        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO => 0, NotacreditoPeer::IDEMPRESA => 1, NotacreditoPeer::IDSUCURSAL => 2, NotacreditoPeer::IDPROVEEDOR => 3, NotacreditoPeer::IDUSUARIO => 4, NotacreditoPeer::IDAUDITOR => 5, NotacreditoPeer::IDALMACEN => 6, NotacreditoPeer::NOTACREDITO_FOLIO => 7, NotacreditoPeer::NOTACREDITO_REVISADA => 8, NotacreditoPeer::NOTACREDITO_FACTURA => 9, NotacreditoPeer::NOTACREDITO_FECHACREACION => 10, NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO => 11, NotacreditoPeer::NOTACREDITO_IEPS => 12, NotacreditoPeer::NOTACREDITO_IVA => 13, NotacreditoPeer::NOTACREDITO_TOTAL => 14, NotacreditoPeer::NOTACREDITO_SUBTOTAL => 15, NotacreditoPeer::NOTAAUDITOREMPRESA => 16, NotacreditoPeer::NOTAALMACENISTAEMPRESA => 17, NotacreditoPeer::NOTAAUDITORAERSA => 18, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'IDALMACEN' => 6, 'NOTACREDITO_FOLIO' => 7, 'NOTACREDITO_REVISADA' => 8, 'NOTACREDITO_FACTURA' => 9, 'NOTACREDITO_FECHACREACION' => 10, 'NOTACREDITO_FECHANOTACREDITO' => 11, 'NOTACREDITO_IEPS' => 12, 'NOTACREDITO_IVA' => 13, 'NOTACREDITO_TOTAL' => 14, 'NOTACREDITO_SUBTOTAL' => 15, 'NOTAAUDITOREMPRESA' => 16, 'NOTAALMACENISTAEMPRESA' => 17, 'NOTAAUDITORAERSA' => 18, ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'notacredito_folio' => 7, 'notacredito_revisada' => 8, 'notacredito_factura' => 9, 'notacredito_fechacreacion' => 10, 'notacredito_fechanotacredito' => 11, 'notacredito_ieps' => 12, 'notacredito_iva' => 13, 'notacredito_total' => 14, 'notacredito_subtotal' => 15, 'notaauditorempresa' => 16, 'notaalmacenistaempresa' => 17, 'notaauditoraersa' => 18, ),
+        BasePeer::TYPE_PHPNAME => array ('Idnotacredito' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'Idalmacen' => 6, 'NotacreditoFolio' => 7, 'NotacreditoRevisada' => 8, 'NotacreditoFactura' => 9, 'NotacreditoFechacreacion' => 10, 'NotacreditoFechanotacredito' => 11, 'NotacreditoIeps' => 12, 'NotacreditoIva' => 13, 'NotacreditoTotal' => 14, 'NotacreditoSubtotal' => 15, 'Notaauditorempresa' => 16, 'NotaalmacenistaempresaCopy1' => 17, 'NotaauditoraersaCopy1' => 18, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'notacreditoFolio' => 7, 'notacreditoRevisada' => 8, 'notacreditoFactura' => 9, 'notacreditoFechacreacion' => 10, 'notacreditoFechanotacredito' => 11, 'notacreditoIeps' => 12, 'notacreditoIva' => 13, 'notacreditoTotal' => 14, 'notacreditoSubtotal' => 15, 'notaauditorempresa' => 16, 'notaalmacenistaempresaCopy1' => 17, 'notaauditoraersaCopy1' => 18, ),
+        BasePeer::TYPE_COLNAME => array (NotacreditoPeer::IDNOTACREDITO => 0, NotacreditoPeer::IDEMPRESA => 1, NotacreditoPeer::IDSUCURSAL => 2, NotacreditoPeer::IDPROVEEDOR => 3, NotacreditoPeer::IDUSUARIO => 4, NotacreditoPeer::IDAUDITOR => 5, NotacreditoPeer::IDALMACEN => 6, NotacreditoPeer::NOTACREDITO_FOLIO => 7, NotacreditoPeer::NOTACREDITO_REVISADA => 8, NotacreditoPeer::NOTACREDITO_FACTURA => 9, NotacreditoPeer::NOTACREDITO_FECHACREACION => 10, NotacreditoPeer::NOTACREDITO_FECHANOTACREDITO => 11, NotacreditoPeer::NOTACREDITO_IEPS => 12, NotacreditoPeer::NOTACREDITO_IVA => 13, NotacreditoPeer::NOTACREDITO_TOTAL => 14, NotacreditoPeer::NOTACREDITO_SUBTOTAL => 15, NotacreditoPeer::NOTAAUDITOREMPRESA => 16, NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1 => 17, NotacreditoPeer::NOTAAUDITORAERSA_COPY1 => 18, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTACREDITO' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'IDALMACEN' => 6, 'NOTACREDITO_FOLIO' => 7, 'NOTACREDITO_REVISADA' => 8, 'NOTACREDITO_FACTURA' => 9, 'NOTACREDITO_FECHACREACION' => 10, 'NOTACREDITO_FECHANOTACREDITO' => 11, 'NOTACREDITO_IEPS' => 12, 'NOTACREDITO_IVA' => 13, 'NOTACREDITO_TOTAL' => 14, 'NOTACREDITO_SUBTOTAL' => 15, 'NOTAAUDITOREMPRESA' => 16, 'NOTAALMACENISTAEMPRESA_COPY1' => 17, 'NOTAAUDITORAERSA_COPY1' => 18, ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotacredito' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'notacredito_folio' => 7, 'notacredito_revisada' => 8, 'notacredito_factura' => 9, 'notacredito_fechacreacion' => 10, 'notacredito_fechanotacredito' => 11, 'notacredito_ieps' => 12, 'notacredito_iva' => 13, 'notacredito_total' => 14, 'notacredito_subtotal' => 15, 'notaauditorempresa' => 16, 'notaalmacenistaempresa_copy1' => 17, 'notaauditoraersa_copy1' => 18, ),
         BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
     );
 
@@ -219,8 +219,8 @@ abstract class BaseNotacreditoPeer
             $criteria->addSelectColumn(NotacreditoPeer::NOTACREDITO_TOTAL);
             $criteria->addSelectColumn(NotacreditoPeer::NOTACREDITO_SUBTOTAL);
             $criteria->addSelectColumn(NotacreditoPeer::NOTAAUDITOREMPRESA);
-            $criteria->addSelectColumn(NotacreditoPeer::NOTAALMACENISTAEMPRESA);
-            $criteria->addSelectColumn(NotacreditoPeer::NOTAAUDITORAERSA);
+            $criteria->addSelectColumn(NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1);
+            $criteria->addSelectColumn(NotacreditoPeer::NOTAAUDITORAERSA_COPY1);
         } else {
             $criteria->addSelectColumn($alias . '.idnotacredito');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -239,8 +239,8 @@ abstract class BaseNotacreditoPeer
             $criteria->addSelectColumn($alias . '.notacredito_total');
             $criteria->addSelectColumn($alias . '.notacredito_subtotal');
             $criteria->addSelectColumn($alias . '.notaauditorempresa');
-            $criteria->addSelectColumn($alias . '.notaalmacenistaempresa');
-            $criteria->addSelectColumn($alias . '.notaauditoraersa');
+            $criteria->addSelectColumn($alias . '.notaalmacenistaempresa_copy1');
+            $criteria->addSelectColumn($alias . '.notaauditoraersa_copy1');
         }
     }
 

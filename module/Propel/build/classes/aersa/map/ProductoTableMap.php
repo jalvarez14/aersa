@@ -55,6 +55,7 @@ class ProductoTableMap extends TableMap
 ));
         $this->addColumn('producto_costo', 'ProductoCosto', 'FLOAT', false, null, null);
         $this->addColumn('producto_iva', 'ProductoIva', 'BOOLEAN', true, 1, null);
+        $this->addColumn('producto_precio', 'ProductoPrecio', 'FLOAT', false, null, null);
         // validators
     } // initialize()
 

@@ -134,18 +134,18 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     protected $notaauditorempresa;
 
     /**
-     * The value for the notaalmacenistaempresa field.
+     * The value for the notaalmacenistaempresa_copy1 field.
      * Note: this column has a database default value of: true
      * @var        boolean
      */
-    protected $notaalmacenistaempresa;
+    protected $notaalmacenistaempresa_copy1;
 
     /**
-     * The value for the notaauditoraersa field.
+     * The value for the notaauditoraersa_copy1 field.
      * Note: this column has a database default value of: true
      * @var        boolean
      */
-    protected $notaauditoraersa;
+    protected $notaauditoraersa_copy1;
 
     /**
      * @var        Almacen
@@ -231,8 +231,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     {
         $this->notacredito_revisada = false;
         $this->notaauditorempresa = true;
-        $this->notaalmacenistaempresa = true;
-        $this->notaauditoraersa = true;
+        $this->notaalmacenistaempresa_copy1 = true;
+        $this->notaauditoraersa_copy1 = true;
     }
 
     /**
@@ -491,25 +491,25 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [notaalmacenistaempresa] column value.
+     * Get the [notaalmacenistaempresa_copy1] column value.
      *
      * @return boolean
      */
-    public function getNotaalmacenistaempresa()
+    public function getNotaalmacenistaempresaCopy1()
     {
 
-        return $this->notaalmacenistaempresa;
+        return $this->notaalmacenistaempresa_copy1;
     }
 
     /**
-     * Get the [notaauditoraersa] column value.
+     * Get the [notaauditoraersa_copy1] column value.
      *
      * @return boolean
      */
-    public function getNotaauditoraersa()
+    public function getNotaauditoraersaCopy1()
     {
 
-        return $this->notaauditoraersa;
+        return $this->notaauditoraersa_copy1;
     }
 
     /**
@@ -914,7 +914,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
     } // setNotaauditorempresa()
 
     /**
-     * Sets the value of the [notaalmacenistaempresa] column.
+     * Sets the value of the [notaalmacenistaempresa_copy1] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -923,7 +923,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
      * @param boolean|integer|string $v The new value
      * @return Notacredito The current object (for fluent API support)
      */
-    public function setNotaalmacenistaempresa($v)
+    public function setNotaalmacenistaempresaCopy1($v)
     {
         if ($v !== null) {
             if (is_string($v)) {
@@ -933,17 +933,17 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             }
         }
 
-        if ($this->notaalmacenistaempresa !== $v) {
-            $this->notaalmacenistaempresa = $v;
-            $this->modifiedColumns[] = NotacreditoPeer::NOTAALMACENISTAEMPRESA;
+        if ($this->notaalmacenistaempresa_copy1 !== $v) {
+            $this->notaalmacenistaempresa_copy1 = $v;
+            $this->modifiedColumns[] = NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1;
         }
 
 
         return $this;
-    } // setNotaalmacenistaempresa()
+    } // setNotaalmacenistaempresaCopy1()
 
     /**
-     * Sets the value of the [notaauditoraersa] column.
+     * Sets the value of the [notaauditoraersa_copy1] column.
      * Non-boolean arguments are converted using the following rules:
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
@@ -952,7 +952,7 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
      * @param boolean|integer|string $v The new value
      * @return Notacredito The current object (for fluent API support)
      */
-    public function setNotaauditoraersa($v)
+    public function setNotaauditoraersaCopy1($v)
     {
         if ($v !== null) {
             if (is_string($v)) {
@@ -962,14 +962,14 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             }
         }
 
-        if ($this->notaauditoraersa !== $v) {
-            $this->notaauditoraersa = $v;
-            $this->modifiedColumns[] = NotacreditoPeer::NOTAAUDITORAERSA;
+        if ($this->notaauditoraersa_copy1 !== $v) {
+            $this->notaauditoraersa_copy1 = $v;
+            $this->modifiedColumns[] = NotacreditoPeer::NOTAAUDITORAERSA_COPY1;
         }
 
 
         return $this;
-    } // setNotaauditoraersa()
+    } // setNotaauditoraersaCopy1()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -989,11 +989,11 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 return false;
             }
 
-            if ($this->notaalmacenistaempresa !== true) {
+            if ($this->notaalmacenistaempresa_copy1 !== true) {
                 return false;
             }
 
-            if ($this->notaauditoraersa !== true) {
+            if ($this->notaauditoraersa_copy1 !== true) {
                 return false;
             }
 
@@ -1036,8 +1036,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $this->notacredito_total = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
             $this->notacredito_subtotal = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
             $this->notaauditorempresa = ($row[$startcol + 16] !== null) ? (boolean) $row[$startcol + 16] : null;
-            $this->notaalmacenistaempresa = ($row[$startcol + 17] !== null) ? (boolean) $row[$startcol + 17] : null;
-            $this->notaauditoraersa = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
+            $this->notaalmacenistaempresa_copy1 = ($row[$startcol + 17] !== null) ? (boolean) $row[$startcol + 17] : null;
+            $this->notaauditoraersa_copy1 = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1419,11 +1419,11 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::NOTAAUDITOREMPRESA)) {
             $modifiedColumns[':p' . $index++]  = '`notaauditorempresa`';
         }
-        if ($this->isColumnModified(NotacreditoPeer::NOTAALMACENISTAEMPRESA)) {
-            $modifiedColumns[':p' . $index++]  = '`notaalmacenistaempresa`';
+        if ($this->isColumnModified(NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1)) {
+            $modifiedColumns[':p' . $index++]  = '`notaalmacenistaempresa_copy1`';
         }
-        if ($this->isColumnModified(NotacreditoPeer::NOTAAUDITORAERSA)) {
-            $modifiedColumns[':p' . $index++]  = '`notaauditoraersa`';
+        if ($this->isColumnModified(NotacreditoPeer::NOTAAUDITORAERSA_COPY1)) {
+            $modifiedColumns[':p' . $index++]  = '`notaauditoraersa_copy1`';
         }
 
         $sql = sprintf(
@@ -1487,11 +1487,11 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                     case '`notaauditorempresa`':
                         $stmt->bindValue($identifier, (int) $this->notaauditorempresa, PDO::PARAM_INT);
                         break;
-                    case '`notaalmacenistaempresa`':
-                        $stmt->bindValue($identifier, (int) $this->notaalmacenistaempresa, PDO::PARAM_INT);
+                    case '`notaalmacenistaempresa_copy1`':
+                        $stmt->bindValue($identifier, (int) $this->notaalmacenistaempresa_copy1, PDO::PARAM_INT);
                         break;
-                    case '`notaauditoraersa`':
-                        $stmt->bindValue($identifier, (int) $this->notaauditoraersa, PDO::PARAM_INT);
+                    case '`notaauditoraersa_copy1`':
+                        $stmt->bindValue($identifier, (int) $this->notaauditoraersa_copy1, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1737,10 +1737,10 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 return $this->getNotaauditorempresa();
                 break;
             case 17:
-                return $this->getNotaalmacenistaempresa();
+                return $this->getNotaalmacenistaempresaCopy1();
                 break;
             case 18:
-                return $this->getNotaauditoraersa();
+                return $this->getNotaauditoraersaCopy1();
                 break;
             default:
                 return null;
@@ -1788,8 +1788,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
             $keys[14] => $this->getNotacreditoTotal(),
             $keys[15] => $this->getNotacreditoSubtotal(),
             $keys[16] => $this->getNotaauditorempresa(),
-            $keys[17] => $this->getNotaalmacenistaempresa(),
-            $keys[18] => $this->getNotaauditoraersa(),
+            $keys[17] => $this->getNotaalmacenistaempresaCopy1(),
+            $keys[18] => $this->getNotaauditoraersaCopy1(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1907,10 +1907,10 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
                 $this->setNotaauditorempresa($value);
                 break;
             case 17:
-                $this->setNotaalmacenistaempresa($value);
+                $this->setNotaalmacenistaempresaCopy1($value);
                 break;
             case 18:
-                $this->setNotaauditoraersa($value);
+                $this->setNotaauditoraersaCopy1($value);
                 break;
         } // switch()
     }
@@ -1953,8 +1953,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if (array_key_exists($keys[14], $arr)) $this->setNotacreditoTotal($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setNotacreditoSubtotal($arr[$keys[15]]);
         if (array_key_exists($keys[16], $arr)) $this->setNotaauditorempresa($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[17]]);
-        if (array_key_exists($keys[18], $arr)) $this->setNotaauditoraersa($arr[$keys[18]]);
+        if (array_key_exists($keys[17], $arr)) $this->setNotaalmacenistaempresaCopy1($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setNotaauditoraersaCopy1($arr[$keys[18]]);
     }
 
     /**
@@ -1983,8 +1983,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_TOTAL)) $criteria->add(NotacreditoPeer::NOTACREDITO_TOTAL, $this->notacredito_total);
         if ($this->isColumnModified(NotacreditoPeer::NOTACREDITO_SUBTOTAL)) $criteria->add(NotacreditoPeer::NOTACREDITO_SUBTOTAL, $this->notacredito_subtotal);
         if ($this->isColumnModified(NotacreditoPeer::NOTAAUDITOREMPRESA)) $criteria->add(NotacreditoPeer::NOTAAUDITOREMPRESA, $this->notaauditorempresa);
-        if ($this->isColumnModified(NotacreditoPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(NotacreditoPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
-        if ($this->isColumnModified(NotacreditoPeer::NOTAAUDITORAERSA)) $criteria->add(NotacreditoPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
+        if ($this->isColumnModified(NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1)) $criteria->add(NotacreditoPeer::NOTAALMACENISTAEMPRESA_COPY1, $this->notaalmacenistaempresa_copy1);
+        if ($this->isColumnModified(NotacreditoPeer::NOTAAUDITORAERSA_COPY1)) $criteria->add(NotacreditoPeer::NOTAAUDITORAERSA_COPY1, $this->notaauditoraersa_copy1);
 
         return $criteria;
     }
@@ -2064,8 +2064,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $copyObj->setNotacreditoTotal($this->getNotacreditoTotal());
         $copyObj->setNotacreditoSubtotal($this->getNotacreditoSubtotal());
         $copyObj->setNotaauditorempresa($this->getNotaauditorempresa());
-        $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
-        $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
+        $copyObj->setNotaalmacenistaempresaCopy1($this->getNotaalmacenistaempresaCopy1());
+        $copyObj->setNotaauditoraersaCopy1($this->getNotaauditoraersaCopy1());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -3014,8 +3014,8 @@ abstract class BaseNotacredito extends BaseObject implements Persistent
         $this->notacredito_total = null;
         $this->notacredito_subtotal = null;
         $this->notaauditorempresa = null;
-        $this->notaalmacenistaempresa = null;
-        $this->notaauditoraersa = null;
+        $this->notaalmacenistaempresa_copy1 = null;
+        $this->notaauditoraersa_copy1 = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
