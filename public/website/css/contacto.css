@@ -3,7 +3,10 @@
 {
     background: url('../img/banners/Contacto.jpg') no-repeat;
     background-size: 100%;
+    background-color: #01A89E;
 }
+
+
 .btn-submit
 {
   color: white ;
@@ -26,3 +29,12 @@
 
 a { color: inherit;}
 a:hover { color: inherit;}
+
+@media  (max-width: 991px) {
+  .bg-contacto
+  {
+    background-image: none;
+      background-size: 100%;
+      background-color: #01A89E;
+  }
+}

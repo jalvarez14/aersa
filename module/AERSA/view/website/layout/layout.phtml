@@ -17,13 +17,14 @@
                         ->prependStylesheet($this->basePath() . '/website/css/index.css')
                         ->prependStylesheet($this->basePath() . '/website/css/diagnostico.css')
                         ->prependStylesheet($this->basePath() . '/website/css/contacto.css')
-
+                        ->prependStylesheet($this->basePath() . '/website/css/jasny-bootstrap.css')
                         ->prependStylesheet($this->basePath() . '/website/css/bootstrap.css')
                          ?>
 
         <!-- Scripts -->
         <?php echo $this->headScript()
             ->prependFile($this->basePath() . '/website/js/bootstrap.js')
+            ->prependFile($this->basePath() . '/website/js/jasny-bootstrap.min.js')
             ->prependFile($this->basePath() . '/website/js/jquery.min.js')
         ; ?>
 
@@ -31,11 +32,22 @@
     <body>
         <div class="container-fluid">
 
+
+            <!-- Navbar versión móvil -->
+            <nav id="navMovil" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation">
+              <ul class="nav navmenu-nav">
+                <li><a class="text-center color-green" href="#">Servicios</a></li>
+                <li><a class="text-center color-green" href="/nosotros">Nosotros</a></li>
+                <li><a class="text-center color-green" href="/diagnostico">Diagnóstico</a></li>
+                <li><a class="text-center color-green" href="/contacto">Contacto</a></li>
+              </ul>
+            </nav>
+
             <nav class="navbar navbar-default">
 
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                      <button type="button" class="navbar-toggle collapsed" data-toggle="offcanvas" data-canvas="body" data-target="#navMovil" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -47,7 +59,7 @@
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
 
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <div class="collapse navbar-collapse hidden-xd" id="">
                             <div class="col-lg-2 col-md-2 hidden-xs">
                                 <ul class="nav navbar-nav ">
                                     <li><a class="color-green" href="/"><img src="/website/img/aersa.png" class="img-responsive"alt=""></a></li>
@@ -72,7 +84,6 @@
                         </div><!-- /.navbar-collapse -->
             </nav>
 
-
             <?php echo $this->content; ?>
 
 
@@ -80,37 +91,37 @@
             <footer class="top">
               <div class="row footer-container">
                 <div class="container">
-                  <div class="col-lg-4 col-lg-offset-4 top">
-                    <div class="col-lg-3">
+                  <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0 top">
+                    <div class="col-md-3 col-sm-3 col-xs-3 ">
 
                     <a href="#"><img src="/website/img/icons/google-plus-logo-button.png"class=" img-center icon-footer" alt="" /></a></div>
-                    <div class="col-lg-3">
+                    <div class="col-md-3 col-sm-3 col-xs-3 ">
 
                     <a href="#"><img src="/website/img/icons/facebook-logo-button.png"class=" img-center icon-footer" alt="" /></a></div>
-                    <div class="col-lg-3">
+                    <div class="col-md-3 col-sm-3 col-xs-3 ">
 
                     <a href="#"><img src="/website/img/icons/twitter-logo-button.png"class=" img-center icon-footer" alt="" /></a></div>
-                    <div class="col-lg-3">
+                    <div class="col-md-3 col-sm-3 col-xs-3 ">
 
                     <a href="#"><img src="/website/img/icons/instagram-logo.png"class=" img-center icon-footer" alt="" /></a></div>
                   </div>
-                  <div class="col-lg-12 bot top">
-                    <div class="row">
-                      <div class="col-lg-1"></div>
-                      <div class="col-lg-2 text-center">
-                        <a href="#"><strong class="white">Inicio<div class="pull-right fa fa-circle"></div></strong></a>
+                  <div class="col-xs-12 bot top">
+                    <div class="row footer-menu">
+                      <div class="col-md-1 col-sm-1"></div>
+                      <div class="col-md-2  col-sm-2 col-xs-12 text-center top-xs">
+                        <a href="/"><strong class="white">Inicio<div class="pull-right fa fa-circle hidden-sm hidden-xs"></div></strong></a>
                       </div>
-                      <div class="col-lg-2 text-center">
-                        <a href="#"><strong class="white">Servicios<div class="pull-right fa fa-circle"></div></strong></a>
+                      <div class="col-md-2  col-sm-2 col-xs-12 text-center top-xs">
+                        <a href="#"><strong class="white">Servicios<div class="pull-right fa fa-circle hidden-sm hidden-xs"></div></strong></a>
                       </div>
-                      <div class="col-lg-2 text-center">
-                        <a href="#"><strong class="white">Nosotros<div class="pull-right fa fa-circle"></div></strong></a>
+                      <div class="col-md-2  col-sm-2 col-xs-12 text-center top-xs">
+                        <a href="/nosotros"><strong class="white">Nosotros<div class="pull-right fa fa-circle hidden-sm hidden-xs"></div></strong></a>
                       </div>
-                      <div class="col-lg-2 text-center">
-                        <a href="#"><strong class="white">Diagnostico<div class="pull-right fa fa-circle"></div></strong></a>
+                      <div class="col-md-2  col-sm-2 col-xs-12 text-center top-xs">
+                        <a href="/diagnostico"><strong class="white">Diagnostico<div class="pull-right fa fa-circle hidden-sm hidden-xs"></div></strong></a>
                       </div>
-                      <div class="col-lg-2 text-center">
-                        <a href="#"><strong class="white">Contacto</strong></a>
+                      <div class="col-md-2  col-sm-2 col-xs-12 text-center top-xs">
+                        <a href="/contacto"><strong class="white">Contacto</strong></a>
                       </div>
                     </div>
 

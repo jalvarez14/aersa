@@ -50,7 +50,7 @@ class WebsiteController extends AbstractActionController
           $mail->Host = 'smtp.gmail.com';                       // Specify main and backup SMTP servers
           $mail->SMTPAuth = true;                               // Enable SMTP authentication
           $mail->Username = 'lopez.victor94@gmail.com';                 // SMTP username
-          $mail->Password = '********************';                           // SMTP password
+          $mail->Password = '******************' ;                          // SMTP password;
           $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
           $mail->Port = 587;
           $mail->setFrom('lopez.victor94@gmail.com', 'Mailer');
@@ -61,7 +61,7 @@ class WebsiteController extends AbstractActionController
 
           $body = "";
           // return $this->getResponse()->setContent(json_encode($post_data['administracion']));
-
+          $giro         = $post_data['giro'];
           $admin        = $post_data['administracion'];
           $almacen      = $post_data['almacen'];
           $almacenText  = $post_data['almacenText'];
@@ -71,12 +71,13 @@ class WebsiteController extends AbstractActionController
           $compras      = $post_data['compras'];
           $comprasText  = $post_data['comprasText'];
 
-          $body    = $body.'<b>Bloque administracion</b>';
+          $body    = $body.'<h2 style="color: #0E0959">Bloque administracion</h2>';
+          $body    = $body.'<br>Giro de la empresa: <b>'.$giro.'</b>';
           for ($i=0; $i < count($admin) ; $i++)
             $body    = $body.'<br><br>'.$admin[$i];
 
           // Llenado de almacén
-          $body    = $body.'<br><br><b>Bloque almacén</b>';
+          $body    = $body.'<br><br><h2 style="color: #0E0959">Bloque almacén</h2>';
           for ($i=0; $i < count($almacen) ; $i++)
             $body    = $body.'<br><br>'.$almacen[$i];
           for ($i=0; $i < count($almacenText) ; $i++)
@@ -84,13 +85,13 @@ class WebsiteController extends AbstractActionController
           // Llenado de almacén
 
           // Llenado de sistemas
-          $body    = $body.'<br><br><b>Bloque sistemas</b>';
+          $body    = $body.'<br><br><h2 style="color: #0E0959">Bloque sistemas</h2>';
           for ($i=0; $i < count($sistemas) ; $i++)
             $body    = $body.'<br><br>'.$sistemas[$i];
           // Llenado de sistemas
 
           // Llenado de finanzas
-          $body    = $body.'<br><br><b>Bloque finanzas</b>';
+          $body    = $body.'<br><br><h2 style="color: #0E0959">Bloque finanzas</h2>';
           for ($i=0; $i < count($finanzas) ; $i++)
             $body    = $body.'<br><br>'.$finanzas[$i];
           for ($i=0; $i < count($finanzasText) ; $i++)
@@ -98,7 +99,7 @@ class WebsiteController extends AbstractActionController
           // Llenado de finanzas
 
           // Llenado de compras
-          $body    = $body.'<br><br><b>Bloque compras</b>';
+          $body    = $body.'<br><br><h2 style="color: #0E0959">Bloque compras</h2>';
           for ($i=0; $i < count($compras) ; $i++)
             $body    = $body.'<br><br>'.$compras[$i];
           for ($i=0; $i < count($comprasText) ; $i++)
