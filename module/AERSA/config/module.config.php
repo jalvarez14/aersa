@@ -1886,6 +1886,7 @@ return array(
             'Application\Flujoefectivo\Controller\Cuentasporpagar' => 'Application\Flujoefectivo\Controller\CuentasporpagarController',
             'Application\Flujoefectivo\Controller\Cuentaporcobrar' => 'Application\Flujoefectivo\Controller\CuentaporcobrarController',
             'Application\Flujoefectivo\Controller\Ingresos' => 'Application\Flujoefectivo\Controller\IngresosController',
+            'Application\Flujoefectivo\Controller\Reportes' => 'Application\Flujoefectivo\Controller\ReportesController',
             /*
              * FLUJO EFECTIVO
              */

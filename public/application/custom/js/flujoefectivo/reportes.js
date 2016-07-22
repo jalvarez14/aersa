@@ -49,127 +49,121 @@
 
 
         }
-        
+
         plugin.mensual = function () {
             $('select[name=ano]').on('change', function () {
-                if($('select[name=ano] option:selected').val()!="") {
-                    if($('select[name=mes] option:selected').val()!="")
+                if ($('select[name=ano] option:selected').val() != "") {
+                    if ($('select[name=mes] option:selected').val() != "") {
+                        $('#generar_pdf').attr('disabled', false);
+                        $('#generar_excel').attr('disabled', false);
                         $('#mensual_generar').attr('disabled', false);
-                    else 
+                    } else {
+                        $('#generar_pdf').attr('disabled', true);
+                        $('#generar_excel').attr('disabled', true);
                         $('#mensual_generar').attr('disabled', true);
+                    }
                 } else {
+                    $('#generar_pdf').attr('disabled', true);
+                    $('#generar_excel').attr('disabled', true);
                     $('#mensual_generar').attr('disabled', true);
                 }
             });
-            
+
             $('select[name=mes]').on('change', function () {
-                if($('select[name=ano] option:selected').val()!=""){
-                    if($('select[name=mes] option:selected').val()!="") 
+                if ($('select[name=ano] option:selected').val() != "") {
+                    if ($('select[name=mes] option:selected').val() != "") {
+                        $('#generar_pdf').attr('disabled', false);
+                        $('#generar_excel').attr('disabled', false);
                         $('#mensual_generar').attr('disabled', false);
-                    else 
+                    } else {
+                        $('#generar_pdf').attr('disabled', true);
+                        $('#generar_excel').attr('disabled', true);
                         $('#mensual_generar').attr('disabled', true);
+                    }
                 } else {
+                    $('#generar_pdf').attr('disabled', true);
+                    $('#generar_excel').attr('disabled', true);
                     $('#mensual_generar').attr('disabled', true);
                 }
             });
-            
-            
+
+
             $('#mensual_generar').on('click', function () {
                 $("#reporte_table").find("tr:gt(0)").remove();
                 var mes = $('select[name=mes] option:selected').val();
                 var ano = $('select[name=ano] option:selected').val();
-                var total=0;
+                var table = $('#reporte_table');
                 $.ajax({
                     async: false,
                     type: "GET",
                     url: "/flujoefectivo/reportes/mensual/reporte",
                     dataType: "json",
-                    data: {mes:mes,ano:ano},
+                    data: {mes: mes, ano: ano},
                     success: function (data) {
                         if (data.length != 0) {
+                            table.empty();
                             for (var k in data) {
-                                //bgcolor="#ADD8E6"
-                                if(k.includes("<h5>")) {
-                                    var tr = $('<tr bgcolor="#ADD8E6">');
-                                    total+=parseFloat(data[k][0]);
-                                } else {
-                                    var tr = $('<tr>');
-                                }
-                                tr.append('<td> '+ k + '</td>');
-                                tr.append('<td>'+data[k][0]+' </td>');
-                                if(data[k][1] == false)
-                                    tr.append('<td>0% </td>');    
-                                else if (typeof data[k][1] == "undefined")
-                                    tr.append('<td>0% </td>');    
-                                else
-                                    tr.append('<td>'+data[k][1]+'% </td>');
-                                $('#reporte_table tbody').append(tr);
-                                //console.log(k);
+                                table.append(data[k]);
                             }
-                            var tr = $('<tr>');
-                            tr.append('<td> </td>');
-                            tr.append('<td> '+total+'</td>');
-                            tr.append('<td> 100% </td>');
-                            $('#reporte_table tbody').append(tr);
                         } else {
-                            alert("No existen datos para el año "+ano+" y mes "+mes);
+                            alert("No existen datos para el año " + ano + " y mes " + mes);
                         }
                     },
                 });
             });
         }
-        
+
 
         plugin.anual = function () {
             $('select[name=ano]').on('change', function () {
-                if($('select[name=ano] option:selected').val()!="") 
+                if ($('select[name=ano] option:selected').val() != "")
                     $('#anual_generar').attr('disabled', false);
-                 else 
+                else
                     $('#anual_generar').attr('disabled', true);
             });
-            
+
             $('#anual_generar').on('click', function () {
                 $("#reporte_table").find("tr:gt(0)").remove();
                 var ano = $('select[name=ano] option:selected').val();
-                var total=0;
+                var total = 0;
                 $.ajax({
                     async: false,
                     type: "GET",
                     url: "/flujoefectivo/reportes/anual/reporte",
                     dataType: "json",
-                    data: {ano:ano},
+                    data: {ano: ano},
                     success: function (data) {
                         if (data.length != 0) {
                             for (var k in data) {
                                 //bgcolor="#ADD8E6"
-                                if(k.includes("<h5>")) {
+                                if (k.includes("<h5>")) {
                                     var tr = $('<tr bgcolor="#ADD8E6">');
-                                    total+=parseFloat(data[k][0]);
+                                    total += parseFloat(data[k][0]);
                                 } else {
                                     var tr = $('<tr>');
                                 }
-                                tr.append('<td> '+ k + '</td>');
-                                tr.append('<td>'+data[k][0]+' </td>');
-                                if(data[k][1] == false)
-                                    tr.append('<td>0% </td>');    
+                                tr.append('<td> ' + k + '</td>');
+                                tr.append('<td>' + data[k][0] + ' </td>');
+                                if (data[k][1] == false)
+                                    tr.append('<td>0% </td>');
                                 else if (typeof data[k][1] == "undefined")
-                                    tr.append('<td>0% </td>');    
+                                    tr.append('<td>0% </td>');
                                 else
-                                    tr.append('<td>'+data[k][1]+'% </td>');
+                                    tr.append('<td>' + data[k][1] + '% </td>');
                                 $('#reporte_table tbody').append(tr);
                                 //console.log(k);
                             }
                             var tr = $('<tr>');
                             tr.append('<td> </td>');
-                            tr.append('<td> '+total+'</td>');
+                            tr.append('<td> ' + total + '</td>');
                             tr.append('<td> 100% </td>');
                             $('#reporte_table tbody').append(tr);
                         } else {
-                            alert("No existen datos para el año "+ano+".");
+                            alert("No existen datos para el año " + ano + ".");
                         }
                     },
                 });
-            });    
+            });
         }
 
         /*
