@@ -13,6 +13,93 @@ class ReportesController extends AbstractActionController {
         $session = $session->getData();
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post_data = $request->getPost();
+            $mes = $post_data['mes'];
+            $ano = $post_data['ano'];
+            $reporte = array();
+            $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-31 23:59:59'))->filterByFlujoefectivoOrigen('compra')->orderByIdcompra()->find();
+            $flujoefectivo = new \Flujoefectivo();
+            $pagos = array();
+            $inicio = $ano . '-' . $mes . '-01 00:00:00';
+            $fin = $ano . '-' . $mes . '-31 23:59:59';
+            foreach ($flujosefectivos as $flujoefectivo) {
+                $cheque = true;
+                if ($flujoefectivo->getFlujoefectivoMediodepago() == 'cheque') {
+                    $fecha = $flujoefectivo->getFlujoefectivoFechacobrocheque();
+                    if (!($inicio < $fecha) && ($fecha < $fin))
+                        $cheque = false;
+                }
+                if ($cheque) {
+                    array_push($pagos, array('idcompra' => $flujoefectivo->getIdcompra(), 'banco' => $flujoefectivo->getCuentabancaria()->getCuentabancariaBanco(), 'saldo' => $flujoefectivo->getFlujoefectivoCantidad()));
+                }
+            }
+            for ($i = 0; $i < count($pagos); $i++) {
+                $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($pagos[$i]['idcompra'])->find();
+                $compradetalle = new \Compradetalle();
+                $saldo = number_format($pagos[$i]['saldo'], 5);
+                $pendiente = 0;
+                $cantidadpagar = 0;
+                foreach ($comprasdetalles as $compradetalle) {
+                    do {
+                        if ($saldo < 0) {
+                            $i++;
+                            $saldo = number_format($pagos[$i]['saldo'], 5);
+                        }
+                        if ($pendiente != 0) {
+                            if ($saldo >= $pendiente) {
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']]))
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $pendiente;
+                                else
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $pendiente;
+                                $saldo = number_format($saldo - $pendiente, 5);
+                                $pendiente = 0;
+                                $cantidadpagar = 0;
+                            } else {
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
+                                    $pendiente -= number_format($saldo, 5);
+                                } else {
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
+                                    $pendiente -= number_format($saldo, 5);
+                                }
+                                $saldo = -number_format($pendiente, 5);
+                            }
+                        } else {
+                            $categoria = $compradetalle->getProducto()->getIdcategoria();
+                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * 1.16), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                            if ($saldo >= $cantidadpagar) {
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']]))
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $cantidadpagar;
+                                else
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $cantidadpagar;
+                                $saldo = number_format($saldo - $cantidadpagar, 5);
+                                $cantidadpagar = 0;
+                            } else {
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
+                                    $pendiente = number_format(($cantidadpagar - $saldo), 5);
+                                } else {
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
+                                    $pendiente = number_format(($cantidadpagar - $saldo), 5);
+                                }
+                                $saldo = number_format(($saldo - $cantidadpagar), 5);
+                                $cantidadpagar = number_format($pendiente, 5);
+                            }
+                        }
+                    } while ($cantidadpagar != 0);
+                }
+            }
+            
+            var_dump($reporte);
+            
+            $template = '/flujoefectivomensual.xlsx';
+            $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
+            
+            
+            exit;
+        }
         //INTANCIAMOS NUESTRA VISTA
         $min = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->findOne()->getCuentaporcobrarFecha('Y');
         $max = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('desc')->findOne()->getCuentaporcobrarFecha('Y');
@@ -34,16 +121,11 @@ class ReportesController extends AbstractActionController {
     public function reportemAction() {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
+        $idempresa = $session['idempresa'];
         $mes = $this->params()->fromQuery('mes');
         $ano = $this->params()->fromQuery('ano');
-        $added = array();
         $reporte = array();
-        $compras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-31 23:59:59'))->find();
-        $compra = new \Compra();
-
-
         $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-31 23:59:59'))->filterByFlujoefectivoOrigen('compra')->orderByIdcompra()->find();
-
         $flujoefectivo = new \Flujoefectivo();
         $pagos = array();
         $inicio = $ano . '-' . $mes . '-01 00:00:00';
@@ -59,227 +141,136 @@ class ReportesController extends AbstractActionController {
                 array_push($pagos, array('idcompra' => $flujoefectivo->getIdcompra(), 'banco' => $flujoefectivo->getCuentabancaria()->getCuentabancariaBanco(), 'saldo' => $flujoefectivo->getFlujoefectivoCantidad()));
             }
         }
-
-//        foreach ($pagos as $key1 => $key2) {
-//            foreach ($key2 as $key3 => $value) {
-//            }
-//        }
-//        exit;
         for ($i = 0; $i < count($pagos); $i++) {
             $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($pagos[$i]['idcompra'])->find();
             $compradetalle = new \Compradetalle();
-            $saldo = floatval($pagos[$i]['saldo']);
-            $pendiente=0;
-            $cantidadpagar=0;
-            
-            $x=0;
+            $saldo = number_format($pagos[$i]['saldo'], 5);
+            $pendiente = 0;
+            $cantidadpagar = 0;
             foreach ($comprasdetalles as $compradetalle) {
-                $x++;
-                if($x==10)
-                    exit;
                 do {
-                    echo " iteracion ".$x."<br>";
-                    echo " saldo ".$saldo."<br>";
-                    echo " i ".$i."<br>";
-                    echo " idcompra ".$pagos[$i]['idcompra']."<br>";
-                    if($i==20)
-                        exit;
-                    if($saldo<0) {
-                        
+                    if ($saldo < 0) {
                         $i++;
-                        $saldo=floatval($pagos[$i]['saldo']);
-                        echo " aumento saldo ".$saldo."<br>";
+                        $saldo = number_format($pagos[$i]['saldo'], 5);
                     }
                     if ($pendiente != 0) {
-                        if ($saldo > $pendiente) {
+                        if ($saldo >= $pendiente) {
                             if (isset($reporte[$categoria][$pagos[$i]['banco']]))
                                 $reporte[$categoria][$pagos[$i]['banco']] += $pendiente;
                             else
                                 $reporte[$categoria][$pagos[$i]['banco']] = $pendiente;
-                            echo "asaldo   $saldo   <br>";
-                            echo " pendiente   baaa$pendiente   <br>";
-                                $saldo2=  floatval($saldo-$pendiente);
-                            echo "dsaldo   $saldo2   <br>";
-                            $saldo=$saldo2;
-                            echo 6.8 - 6.8;
-                            echo "if pendienteaaaa<br>";
+                            $saldo = number_format($saldo - $pendiente, 5);
                             $pendiente = 0;
-                            $cantidadpagar= 0;
+                            $cantidadpagar = 0;
                         } else {
                             if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                 $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
-                                $pendiente -= $saldo;
+                                $pendiente -= number_format($saldo, 5);
                             } else {
                                 $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
-                                $pendiente -= $saldo;
+                                $pendiente -= number_format($saldo, 5);
                             }
-                            $saldo=-$pendiente;
+                            $saldo = -number_format($pendiente, 5);
                         }
-                        
                     } else {
                         $categoria = $compradetalle->getProducto()->getIdcategoria();
-                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? ($compradetalle->getCompradetalleSubtotal() * 1.16) : floatval($compradetalle->getCompradetalleSubtotal());
-                        echo " cantidadpagar dentro".$cantidadpagar."<br>";
+                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * 1.16), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
                         if ($saldo >= $cantidadpagar) {
-                            echo "if<br>";
                             if (isset($reporte[$categoria][$pagos[$i]['banco']]))
                                 $reporte[$categoria][$pagos[$i]['banco']] += $cantidadpagar;
                             else
                                 $reporte[$categoria][$pagos[$i]['banco']] = $cantidadpagar;
-                            echo "saldoif ".$saldo."<br>";
-                            echo "cantidadpagarif ".$cantidadpagar."<br>";
-                            echo "saldo resta antes ".$saldo."<br>";
-                            echo  "cantidad $cantidadpagar<br>";
-                            $saldo=$saldo-$cantidadpagar;
-                            echo "saldo resta ".$saldo."<br>";
+                            $saldo = number_format($saldo - $cantidadpagar, 5);
                             $cantidadpagar = 0;
                         } else {
-                            echo "else<br>";
                             if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                 $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
-                                $pendiente = $cantidadpagar - $saldo;
+                                $pendiente = number_format(($cantidadpagar - $saldo), 5);
                             } else {
                                 $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
-                                $pendiente = $cantidadpagar - $saldo;
-                                
+                                $pendiente = number_format(($cantidadpagar - $saldo), 5);
                             }
-                            //$cantidadpagar = $cantidadpagar - $saldo;
-                            $saldo=$saldo-$cantidadpagar;
-                            $cantidadpagar=$pendiente;
+                            $saldo = number_format(($saldo - $cantidadpagar), 5);
+                            $cantidadpagar = number_format($pendiente, 5);
                         }
-                    }   
-                    echo " cantidadpagar ".$cantidadpagar."<br>";
-                    echo " saldoa ".$saldo."<br>";
-                        echo " pendiente ".$pendiente."<br>";
-                        
-                        echo " validacion".($cantidadpagar!= 0)."<br>";
-                        echo " ------------<br>";
+                    }
                 } while ($cantidadpagar != 0);
             }
         }
-        
-        exit;
-        foreach ($pagos as $idcompra => $objbanco) {
-
-            foreach ($objbanco as $banco => $saldo) { {
-                    do {
-                        do {
-                            if ($pendiente != 0) {
-                                if ($saldo > $pendiente) {
-                                    if (isset($reporte[$categoria][$banco]))
-                                        $reporte[$categoria][$banco] += $pendiente;
-                                    else
-                                        $reporte[$categoria][$banco] = $pendiente;
-                                    $pendiente = 0;
-                                } else {
-                                    if (isset($reporte[$categoria][$banco])) {
-                                        $reporte[$categoria][$banco] += $saldo;
-                                        $pendiente -= $saldo;
-                                    } else {
-                                        $reporte[$categoria][$banco] = $saldo;
-                                        $pendiente -= $saldo;
-                                    }
-                                }
-                                $saldo-=$pendiente;
-                            } else {
-                                
-                            }
-                        } while ($saldo >= 0 || $cantidadpagar != 0);
-                        if ($saldo >= 0)
-                            next($objbanco);
-                    } while ($cantidadpagar != 0);
-                }
-            }
-        }
-
-        var_dump($reporte);
-        exit;
-
-        foreach ($flujosefectivos as $flujoefectivo) {
-            $adding = true;
-            $idcompra = $flujoefectivo->getIdcompra();
-            $com = \CompraQuery::create()->filterByIdcompra($idcompra)->find();
-            $a = true;
-            foreach ($com as $com2) {
-                if ($com2->getCompraEstatuspago() != "pagada")
-                    $a = false;
-            }
-            if ($a) {
-                foreach ($added as $add) {
-                    if ($idcompra == $add)
-                        $adding = false;
-                }
-                if ($adding) {
-                    $flujos = \FlujoefectivoQuery::create()->filterByIdcompra($idcompra)->find();
-                    $flujo = new \Flujoefectivo();
-                    $band = true;
-                    foreach ($flujos as $flujo) {
-                        $fecha = $ano . '-' . $mes;
-                        $string = $flujo->getFlujoefectivoFecha();
-                        if ((substr($string, 0, strlen($fecha))) != $fecha)
-                            $band = false;
-                    }
-                    if ($band) {
-                        array_push($added, $idcompra);
-                        $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
-                        $compradetalle = new \Compradetalle();
-                        foreach ($comprasdetalles as $compradetalle) {
-                            $key = $compradetalle->getProducto()->getIdcategoria();
-                            $value = $compradetalle->getCompradetalleSubtotal();
-                            if (isset($reporte[$key])) {
-                                $reporte[$key] = $value + $reporte[$key];
-                            } else {
-                                $reporte[$key] = $value;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-//        foreach ($compras as $compra) {
-//            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
-//            $compradetalle = new \Compradetalle();
-//            foreach ($comprasdetalles as $compradetalle) {
-//                $key = $compradetalle->getProducto()->getIdcategoria();
-//                $value = $compradetalle->getCompradetalleSubtotal();
-//                if (isset($reporte[$key])) {
-//                    $reporte[$key] = $value + $reporte[$key];
-//                } else {
-//                    $reporte[$key] = $value;
-//                }
-//            }
-//        }
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
         $categoria = new \Categoria();
-        $reporteg = array();
         $totalg = 0;
-        foreach ($reporte as $report) {
-            $totalg+=$report;
+        $bancos = 0;
+        $nombrebancos = "";
+        $totales = array();
+        foreach ($reporte as $banco) {
+            foreach ($banco as $key => $value) {
+                if (isset($totales[$key]))
+                    $totales[$key]+=$value;
+                else
+                    $totales[$key] = $value;
+                $totalg+=$value;
+            }
         }
+        $objbancos = \CuentabancariaQuery::create()->filterByIdsucursal($idempresa)->orderByCuentabancariaBanco()->find();
+        $objbanco = new \Cuentabancaria();
+        $arraybancos = array();
+        foreach ($objbancos as $objbanco) {
+            $nombrebancos.="<th> " . $objbanco->getCuentabancariaBanco() . " </th>";
+            array_push($arraybancos, $objbanco->getCuentabancariaBanco());
+        }
+        $thead = "<thead> <th>Concepto</th> " . $nombrebancos . " <th>Total</th> </thead>";
+        $reporteg = array();
+        $reporteg[0] = $thead;
+        $reporteg[1] = '<tbody id="tbody">';
+        $fila = 2;
+        $colorcat = "bgcolor='#ADD8E6'";
+        $colorfila = "bgcolor='#F2F2F2'";
         foreach ($categorias as $categoria) {
-            $reporteg["<h5>" . $categoria->getCategoriaNombre() . "</h5>"][0] = 0;
+            $totalf = 0;
+            $textofila = "<tr $colorcat> <td>" . $categoria->getCategoriaNombre() . " </td> ";
+            foreach ($arraybancos as $bank) {
+                if (isset($reporte[$categoria->getIdcategoria()][$bank])) {
+                    $textofila.="<td>" . $reporte[$categoria->getIdcategoria()][$bank] . "</td>";
+                    $totalf+=$reporte[$categoria->getIdcategoria()][$bank];
+                } else
+                    $textofila.="<td></td>";
+            }
+            $textofila.="<td>$totalf</td></tr>";
+            $reporteg[$fila] = $textofila;
+
             $total = 0;
             $subcategorias = \CategoriaQuery::create()->filterByIdcategoriapadre($categoria->getIdcategoria())->find();
             $subcategoria = new \Categoria();
             foreach ($subcategorias as $subcategoria) {
-                if (isset($reporte[$subcategoria->getIdcategoria()])) {
-                    $reporteg[$subcategoria->getCategoriaNombre()][0] = $reporte[$subcategoria->getIdcategoria()];
-                    $reporteg[$subcategoria->getCategoriaNombre()][1] = ($reporte[$subcategoria->getIdcategoria()] * 100) / $totalg;
-                    $total+=$reporte[$subcategoria->getIdcategoria()];
-                } else {
-                    $reporteg[$subcategoria->getCategoriaNombre()][0] = 0;
+                $fila++;
+                $totalf = 0;
+                $textofila = (($fila % 2) == 1) ? "<tr $colorfila> " : "<tr> ";
+                $textofila.= "<td>" . $subcategoria->getCategoriaNombre() . " </td> ";
+                foreach ($arraybancos as $bank) {
+                    if (isset($reporte[$categoria->getIdcategoria()][$bank])) {
+                        $textofila.="<td>" . $reporte[$subcategoria->getIdcategoria()][$bank] . "</td>";
+                        $totalf+=$reporte[$subcategoria->getIdcategoria()][$bank];
+                    } else
+                        $textofila.="<td></td>";
                 }
+                $textofila.="<td>$totalf</td></tr>";
+                $reporteg[$fila] = $textofila;
             }
-            if (isset($reporte[$categoria->getIdcategoria()])) {
-                $reporteg['Otros ' . $categoria->getCategoriaNombre()][0] = $reporte[$categoria->getIdcategoria()];
-                $reporteg['Otros ' . $categoria->getCategoriaNombre()][1] = ($reporte[$categoria->getIdcategoria()] * 100) / $totalg;
-                $total += $reporte[$categoria->getIdcategoria()];
-            }
-            $reporteg["<h5>" . $categoria->getCategoriaNombre() . "</h5>"][0] = $total;
-            $reporteg["<h5>" . $categoria->getCategoriaNombre() . "</h5>"][1] = ($total * 100) / $totalg;
+            $fila++;
         }
-
-        //$flujoefectivo = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->filterByFlujoefectivoFecha(array('min' => $ano.'-'.$mes.'-01 00:00:00','max' => $ano.'-'.$mes.'-31 23:59:59'))->find();
+        $textofila = (($fila % 2) == 1) ? "<tr $colorfila> " : "<tr> ";
+        $textofila.= "<td> Total </td> ";
+        foreach ($arraybancos as $bank) {
+            if (isset($totales[$bank]))
+                $textofila.="<td>" . $totales[$bank] . "</td>";
+            else
+                $textofila.="<td></td>";
+        }
+        $textofila.="<td>$totalg</td></tr>";
+        $reporteg[$fila] = $textofila;
+        $fila++;
+        $reporteg[$fila] = '</tbody>';
         return $this->getResponse()->setContent(json_encode($reporteg));
     }
 
