@@ -1,7 +1,7 @@
 {
     "name" : "vernes/PHPReport",
     "require": {
-	"phpoffice/phpexcel" : "1.7.6",
+	"phpoffice/phpexcel" : “1.7.6”,
 	"php" : ">=5.2.0",
 	"ext-xml" : "*",
 	"ext-xmlwriter" : "*"
