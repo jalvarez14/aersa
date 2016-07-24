@@ -61,10 +61,16 @@
                         <?php echo $this->formSelect  ($form->get('idunidadmedida')) ?>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_tipo')) ?>  
                         <?php echo $this->formSelect  ($form->get('producto_tipo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_precio')) ?>  
+                        <?php echo $this->formText ($form->get('producto_precio')) ?>
                     </div>
                 </div>
                 <div class="col-md-6">

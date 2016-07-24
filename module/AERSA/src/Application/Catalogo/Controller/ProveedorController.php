@@ -52,7 +52,7 @@ class ProveedorController extends AbstractActionController
         if ($request->isPost()) 
         {
             $post_data = $request->getPost();
-
+          
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $exist = \ProveedorQuery::create()->filterByProveedorNombrecomercial($post_data['proveedor_nombrecomercial'])->exists();
 
@@ -69,8 +69,24 @@ class ProveedorController extends AbstractActionController
 
                 //SETEAMOS EL STATUS Y EL PASSWORD
                 $entity->setIdempresa($session['idempresa']);
-
+                 
                 $entity->save();
+                
+                /*
+                 * Cada vez que se registre un proveedor a nivel de empresa se debe de crear un registro en tabla abonoproveedor 
+                 * para cada una de las sucursales y el balance seteado en 0
+                 */
+                $sucursales = \SucursalQuery::create()->filterByIdempresa($session['idempresa'])->find();
+                foreach ($sucursales as $sucursal){
+                    $abonoproveedor = new \Abonoproveedor();
+                    $abonoproveedor->setIdempresa($session['idempresa'])
+                                   ->setIdsucursal($sucursal->getIdsucursal())
+                                   ->setIdproveedor($entity->getIdproveedor())
+                                   ->setAbonoproveedorBalance(0)
+                                   ->save();
+                   
+                }
+
                 $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
                 return $this->redirect()->toUrl('/catalogo/proveedor');
 

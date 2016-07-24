@@ -36,6 +36,10 @@ class SucursalController extends AbstractActionController
     
     public function nuevoAction()
     {
+        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
         $id = $this->params()->fromRoute('id');
         $empresa_nombre = \EmpresaQuery::create()->findPk($id);
         
@@ -48,7 +52,7 @@ class SucursalController extends AbstractActionController
         {
             
             $post_data = $request->getPost();
-                
+            
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
             $almacenista    = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['almacenista_username'])->exists();
             $auditor        = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['auditor_username'])->exists();
@@ -70,10 +74,25 @@ class SucursalController extends AbstractActionController
                 $relacion1->save();
                 $relacion2 = setUsuarioSucursal($auditorEntity->getIdusuario() ,$sucursalEntity->getIdsucursal());
                 $relacion2->save();
-                
-                
+
                 //Creamos los 6 almacenes por defecto
                 createAlmacenes($sucursalEntity->getIdsucursal());
+                
+                /*
+                 * Cada vez que se registre una sucursal  se debe de crear un registro en tabla abonoproveedor para cada uno de los 
+                 * proveedores de la empresa  y el balance seteado en 0
+                 */
+                $proveedores = \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->find();
+
+                foreach ($proveedores as $proveedor){
+                    $abonoproveedor = new \Abonoproveedor();
+                    $abonoproveedor->setIdempresa($session['idempresa'])
+                                   ->setIdsucursal($sucursalEntity->getIdsucursal())
+                                   ->setIdproveedor($proveedor->getIdproveedor())
+                                   ->setAbonoproveedorBalance(0)
+                                   ->save();
+                }
+                
 
                 $this->flashMessenger()->addSuccessMessage('Sucursal agregada correctamente!');
 
