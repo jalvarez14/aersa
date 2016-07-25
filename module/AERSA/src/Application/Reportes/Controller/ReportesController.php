@@ -84,11 +84,14 @@ class ReportesController extends AbstractActionController {
                 $color = !$color;
                 $porcentajevar = ($costoold == 0 && $costonew != 0) ? $porcentajevar * -1 : $porcentajevar;
                 $porcentajevar = ($variacion == 0) ? 0 : $porcentajevar;
-                $idproducto;
+                $costoold=($costoold==0)?"NA":$costoold;
+                $costonew=($costonew==0)?"NA":$costonew;
+                $variacion=($variacion==0)?"NA":$variacion;
+                $porcentajevar=($porcentajevar==0)?"NA":$porcentajevar.'%';
                 if ($documento)
-                    $reporte[$fila] = array('clave' => $idproducto, 'nombre' => $nombre, 'unidad' => $unidad, 'costold' => $costoold, 'costnew' => $costonew, 'var' => $variacion, 'pctvar' => $porcentajevar.'%');
+                    $reporte[$fila] = array('clave' => $idproducto, 'nombre' => $nombre, 'unidad' => $unidad, 'costold' => $costoold, 'costnew' => $costonew, 'var' => $variacion, 'pctvar' => $porcentajevar);
                 else
-                    $reporte[$fila] = "<tr bgcolor='" . $bg . "'><td> " . $nombre . " </td><td> " . $unidad . " </td><td> " . $costoold . " </td><td> " . $costonew . " </td><td> " . $variacion . " </td><td> " . $porcentajevar . "% </td></tr>";
+                    $reporte[$fila] = "<tr bgcolor='" . $bg . "'><td> " . $nombre . " </td><td> " . $unidad . " </td><td> " . $costoold . " </td><td> " . $costonew . " </td><td> " . $variacion . " </td><td> " . $porcentajevar . " </td></tr>";
                 $fila++;
             }
             if ($documento) {
@@ -179,7 +182,7 @@ class ReportesController extends AbstractActionController {
             $productos = array();
             $idproductos = array();
             $post_data = $request->getPost();
-            $template = '/inventarios.xls';
+            $template = '/inventarios.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
             $formato = $post_data['formato'];
 
@@ -232,7 +235,7 @@ class ReportesController extends AbstractActionController {
                     )
             );
             if ($formato == "PDF")
-                echo $R->render('pdf');
+                echo $R->render('PDF');
             else
                 echo $R->render('excel');
             exit();
