@@ -89,7 +89,6 @@
 
 
             $('#mensual_generar').on('click', function () {
-                $("#reporte_table").find("tr:gt(0)").remove();
                 var mes = $('select[name=mes] option:selected').val();
                 var ano = $('select[name=ano] option:selected').val();
                 var table = $('#reporte_table');
@@ -123,9 +122,8 @@
             });
 
             $('#anual_generar').on('click', function () {
-                $("#reporte_table").find("tr:gt(0)").remove();
                 var ano = $('select[name=ano] option:selected').val();
-                var total = 0;
+                var table = $('#reporte_table');
                 $.ajax({
                     async: false,
                     type: "GET",
@@ -134,30 +132,10 @@
                     data: {ano: ano},
                     success: function (data) {
                         if (data.length != 0) {
+                            table.empty();
                             for (var k in data) {
-                                //bgcolor="#ADD8E6"
-                                if (k.includes("<h5>")) {
-                                    var tr = $('<tr bgcolor="#ADD8E6">');
-                                    total += parseFloat(data[k][0]);
-                                } else {
-                                    var tr = $('<tr>');
-                                }
-                                tr.append('<td> ' + k + '</td>');
-                                tr.append('<td>' + data[k][0] + ' </td>');
-                                if (data[k][1] == false)
-                                    tr.append('<td>0% </td>');
-                                else if (typeof data[k][1] == "undefined")
-                                    tr.append('<td>0% </td>');
-                                else
-                                    tr.append('<td>' + data[k][1] + '% </td>');
-                                $('#reporte_table tbody').append(tr);
-                                //console.log(k);
+                                table.append(data[k]);
                             }
-                            var tr = $('<tr>');
-                            tr.append('<td> </td>');
-                            tr.append('<td> ' + total + '</td>');
-                            tr.append('<td> 100% </td>');
-                            $('#reporte_table tbody').append(tr);
                         } else {
                             alert("No existen datos para el año " + ano + ".");
                         }
