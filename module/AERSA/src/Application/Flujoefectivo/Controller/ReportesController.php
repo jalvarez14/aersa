@@ -2,6 +2,8 @@
 
 namespace Application\Flujoefectivo\Controller;
 
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
@@ -91,13 +93,149 @@ class ReportesController extends AbstractActionController {
                     } while ($cantidadpagar != 0);
                 }
             }
+            $objbancos = \CuentabancariaQuery::create()->filterByIdsucursal($idempresa)->orderByCuentabancariaBanco()->find();
+            $objbanco = new \Cuentabancaria();
+            $arraybancos = array();
+            $arraybancos2 = array();
+            $numero = 1;
+            foreach ($objbancos as $key => $objbanco) {
+                array_push($arraybancos2, $objbanco->getCuentabancariaBanco());
+            }
             
-            var_dump($reporte);
+            foreach ($arraybancos2 as $key => $value) {
+                $arraybancos['banco' . ($key+1)] =$value;
+            }
             
+            
+            for($i=(count($arraybancos));$i<8;$i++) {
+                $arraybancos['banco'.($i+1)]="";
+            }
+            
+            $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+            $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+            //{}	{categoria:banco5}	{categoria:banco6}	{categoria:banco7}	{categoria:total}
+            $objcategorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
+            $categoria = new \Categoria();
+            $reportec = array();
+            $fila = 0;
+            foreach ($objcategorias as $categoria) {
+                $valuefila = array();
+                $valuefila['nombre'] = $categoria->getCategoriaNombre();
+                $totalf = 0;
+                $limite=(count($arraybancos2))<8? count($arraybancos2)+1 : 8;
+                for ($i = 1; $i < $limite; $i++) {
+                    $cantidadbanco = "";
+                    if (isset($reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]])) {
+                        $cantidadbanco = $reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                        $totalf+=$reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                    }
+                    $valuefila['banco' . $i] = $cantidadbanco;
+                }
+                for($limite;$limite<8;$limite++) {
+                    $valuefila['banco'. $limite ]= "";
+                }
+                $valuefila['total'] =$totalf;
+                $reportec[$fila] = $valuefila;
+                $fila++;
+            }
+
+            $totales = array();
+            $totalg=0;
+            foreach ($reporte as $banco) {
+                foreach ($banco as $key => $value) {
+                    if (isset($totales[$key]))
+                        $totales[$key]+=$value;
+                    else
+                        $totales[$key] = $value;
+                    $totalg+=$value;
+                }
+            }
+            
+            $arraytotales = array();
+            $limite=(count($arraybancos2))<7? count($arraybancos2) : 7;
+            for ($i = 0; $i < $limite; $i++) {
+                $value = "";
+                if (isset($totales[$arraybancos2[$i]]))
+                    $value = $totales[$arraybancos2[$i]];
+                $arraytotales['banco' . ($i + 1)] = $value;
+            }
+            $limite++;
+            for($limite;$limite<8;$limite++) {
+                    $arraytotales['banco'. $limite ]= "";
+                }
+            $arraytotales['totales'] = $totalg;
+            
+            
+            $objcategorias = \CategoriaQuery::create()->find();
+            $categoria = new \Categoria();
+            $reportesc=array();
+            $fila = 0;
+            foreach ($objcategorias as $categoria) {
+                if($categoria->getIdcategoriapadre()!=null) {
+                $valuefila = array();
+                $valuefila['nombre'] = $categoria->getCategoriaNombre();
+                $totalf = 0;
+                $limite=(count($arraybancos2))<8? count($arraybancos2)+1 : 8;
+                for ($i = 1; $i < $limite; $i++) {
+                    $cantidadbanco = "";
+                    if (isset($reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]])) {
+                        $cantidadbanco = $reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                        $totalf+=$reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                    }
+                    $valuefila['banco'. $i ]= $cantidadbanco;
+                }
+                for($limite;$limite<8;$limite++) {
+                    $valuefila['banco'. $limite ]= "";
+                }
+                $valuefila['total'] = $totalf;
+                $reportesc[$fila] = $valuefila;
+                $fila++;
+                }
+            }
+
             $template = '/flujoefectivomensual.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
-            
-            
+            $config = array(
+                'template' => $template,
+                'templateDir' => $templateDir
+            );
+            $a= array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal);
+
+            $R = new \PHPReport($config);
+            $R->load(
+                    array(
+                        array(
+                            'id' => 'compania',
+                            'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal),
+                        ),
+                        array(
+                            'id' => 'reporte',
+                            'data' => array('mes' => $mes, 'ano' => $ano),
+                        ),
+                        array(
+                            'id' => 'banco',
+                            'data' => $arraybancos,
+                        ),
+                        array(
+                            'id' => 'categoria',
+                            'repeat' => true,
+                            'data' => $reportec,
+                        ),
+                        array(
+                            'id' => 'total',
+                            'data' => $arraytotales,
+                        ),
+                        array(
+                            'id' => 'subcat',
+                            'repeat' => true,
+                            'data' => $reportesc,
+                        )
+                    )
+            );
+            if(isset($post_data['generar_pdf']))
+                echo $R->render('PDF');
+            else
+                echo $R->render('excel');
             exit;
         }
         //INTANCIAMOS NUESTRA VISTA
