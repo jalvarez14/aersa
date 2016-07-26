@@ -48,7 +48,18 @@
         * Private methods
         */
 
-       
+        
+        function to_json(workbook) {
+            var result = {};
+            workbook.SheetNames.forEach(function (sheetName) {
+                var rObjArr = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                if (rObjArr.length > 0) {
+                    result[sheetName] = rObjArr;
+                }
+            });
+            return result;
+        }
+        
        /*
         * Public methods
         */
@@ -92,6 +103,49 @@
                 '</div>'
               ].join('');
               $(tmpl).modal();
+            });
+            
+            //SUBIR PROVEEDORES
+            var proveedores_array = {};
+            $('#subir_proveedor').on('click',function(){
+                $('input[name=batch_proveedores]').trigger('click');
+            });
+            $('input[name=batch_proveedores]').on('change',function(){
+                
+                var empty = false;
+                var val = $('input[name=batch_proveedores]').val();
+                if(val == ""){
+                    empty = true;
+                }
+               
+                if(!empty){
+                   
+                    var files = $('input[name=batch_proveedores]').get(0).files;
+                    
+                    var i, f;
+                    for (i = 0, f = files[i]; i != files.length; ++i) {
+                         
+                         var reader = new FileReader();
+                         var name = f.name;
+                         reader.onload = function (e) {
+                             
+                            var data = e.target.result;
+                            var workbook = XLSX.read(data, {type: 'binary'});
+                            //console.log(workbook);
+                            var first_sheet_name = workbook.SheetNames[0];
+                            //console.log(first_sheet_name);
+                            var workbook_array = to_json(workbook);
+                            
+                            if(workbook_array[first_sheet_name].length > 0){
+                                
+                            }
+                         }
+                         reader.readAsBinaryString(f);
+                         
+                    }
+                   
+                }
+                
             });
         }
 
