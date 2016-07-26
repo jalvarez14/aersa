@@ -135,9 +135,23 @@
                             var first_sheet_name = workbook.SheetNames[0];
                             //console.log(first_sheet_name);
                             var workbook_array = to_json(workbook);
-                            
+                           
                             if(workbook_array[first_sheet_name].length > 0){
-                                
+                                $.ajax({
+                                    url:'/catalogo/proveedor/batch',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data:{proveedores:workbook_array[first_sheet_name]},
+                                    beforeSend: function (xhr) {
+                                        $('body').addClass('loading');
+                                    },
+                                    success: function (data, textStatus, jqXHR) {
+                                        $('body').removeClass('loading');
+                                        if(data.response){
+                                            window.location = '/catalogo/proveedor';
+                                        }
+                                    }
+                                })
                             }
                          }
                          reader.readAsBinaryString(f);

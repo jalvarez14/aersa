@@ -301,6 +301,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                   'batch' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/batch[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Proveedor',
+                                                'action' => 'batch',
+                                            ),
+                                        ),
+                                    ),
                                ),
                             ),
                            'producto' => array(

@@ -167,4 +167,43 @@ class ProveedorController extends AbstractActionController
         return $view_model;
     }
     
+    public function batchAction(){
+        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            foreach ($post_data['proveedores'] as $proveedor){
+                $exist = \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->filterByProveedorNombrecomercial($proveedor['Nombre'])->exists();
+                if(!$exist){
+                    $entity = new \Proveedor();
+                    $entity->setIdempresa($session['idempresa'])
+                           ->setProveedorNombrecomercial($proveedor['Nombre'])
+                           ->setProveedorRazonsocial($proveedor['Razon social'])
+                           ->setProveedorRfc($proveedor['RFC']) 
+                           ->setProveedorTelefono($proveedor['Telefono'])
+                           ->save();
+                }
+                $sucursales = \SucursalQuery::create()->filterByIdempresa($session['idempresa'])->find();
+                $sucursal = new \Sucursal();
+                foreach ($sucursales as $sucursal){
+                    $abono_proveedor = new \Abonoproveedor();
+                    $abono_proveedor->setIdempresa($session['idempresa'])
+                                    ->setIdsucursal($sucursal->getIdsucursal())
+                                    ->setIdproveedor($entity->getIdproveedor())
+                                    ->setAbonoproveedorBalance(0)
+                                    ->save();
+                            
+                }
+            }
+            
+            $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+            return $this->getResponse()->setContent(json_encode(array('response' => true)));
+            
+        }
+    }
+    
 }
