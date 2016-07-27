@@ -17,6 +17,8 @@ class ReportesController extends AbstractActionController {
         $idsucursal = $session['idsucursal'];
         $request = $this->getRequest();
         if ($request->isPost()) {
+            $iva = \TasaivaQuery::create()->filterByIdtasaiva(1)->findOne()->getTasaivaValor();
+            $iva = $iva / 100 + 1;
             $post_data = $request->getPost();
             $mes = $post_data['mes'];
             $ano = $post_data['ano'];
@@ -34,23 +36,36 @@ class ReportesController extends AbstractActionController {
                         $cheque = false;
                 }
                 if ($cheque) {
-                    array_push($pagos, array('idcompra' => $flujoefectivo->getIdcompra(), 'banco' => $flujoefectivo->getCuentabancaria()->getCuentabancariaBanco(), 'saldo' => $flujoefectivo->getFlujoefectivoCantidad()));
+                    array_push($pagos, array('idcompra' => $flujoefectivo->getIdcompra(), 'banco' => $flujoefectivo->getCuentabancaria()->getCuentabancariaBanco(), 'saldo' => str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad())));
                 }
             }
             for ($i = 0; $i < count($pagos); $i++) {
-                $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($pagos[$i]['idcompra'])->find();
+                $idcompra = $pagos[$i]['idcompra'];
+                $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
                 $compradetalle = new \Compradetalle();
-                $saldo = number_format($pagos[$i]['saldo'], 5);
                 $pendiente = 0;
                 $cantidadpagar = 0;
+                $saldo = number_format($pagos[$i]['saldo'], 5);
+                $saldo = str_replace(",", "", $saldo);
+                //echo "saldo inicial $saldo <br>";
                 foreach ($comprasdetalles as $compradetalle) {
                     do {
+                        $categoria = $compradetalle->getProducto()->getIdcategoria();
                         if ($saldo < 0) {
-                            $i++;
-                            $saldo = number_format($pagos[$i]['saldo'], 5);
+                            if (isset($pagos[$i + 1]['idcompra'])) {
+                                if ($pagos[$i + 1]['idcompra'] == $idcompra) {
+                                    $i++;
+                                    $saldo = number_format($pagos[$i]['saldo'], 5);
+                                } else
+                                    break;
+                            } else
+                                break;
+                            $saldo = str_replace(",", "", $saldo);
+                            //echo "aumento de saldo $saldo <br>";
                         }
                         if ($pendiente != 0) {
                             if ($saldo >= $pendiente) {
+                                //echo "if de pendiente $pendiente <br>";
                                 if (isset($reporte[$categoria][$pagos[$i]['banco']]))
                                     $reporte[$categoria][$pagos[$i]['banco']] += $pendiente;
                                 else
@@ -59,6 +74,7 @@ class ReportesController extends AbstractActionController {
                                 $pendiente = 0;
                                 $cantidadpagar = 0;
                             } else {
+                                //echo "else de pendiente $pendiente <br>";
                                 if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                     $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
                                     $pendiente -= number_format($saldo, 5);
@@ -66,34 +82,43 @@ class ReportesController extends AbstractActionController {
                                     $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
                                     $pendiente -= number_format($saldo, 5);
                                 }
-                                $saldo = -number_format($pendiente, 5);
+                                $saldo = number_format($pendiente, 5);
+                                $saldo = $saldo * -1;
                             }
                         } else {
-                            $categoria = $compradetalle->getProducto()->getIdcategoria();
-                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * 1.16), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                            //echo "sin pendiente <br>";
+                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                            $cantidadpagar = str_replace(",", "", $cantidadpagar);
+                            //echo "cantidad a pagar $cantidadpagar y saldo $saldo <br>";
                             if ($saldo >= $cantidadpagar) {
+                                //echo "saldo mayor = $saldo <br>";
                                 if (isset($reporte[$categoria][$pagos[$i]['banco']]))
                                     $reporte[$categoria][$pagos[$i]['banco']] += $cantidadpagar;
                                 else
                                     $reporte[$categoria][$pagos[$i]['banco']] = $cantidadpagar;
                                 $saldo = number_format($saldo - $cantidadpagar, 5);
+                                $saldo = str_replace(",", "", $saldo);
                                 $cantidadpagar = 0;
                             } else {
+                                //echo "saldo menor = $saldo <br>";
                                 if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
+                                    //echo "envio de saldo a reporte if<br>";
                                     $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
                                     $pendiente = number_format(($cantidadpagar - $saldo), 5);
                                 } else {
+                                    //echo "envio de saldo a reporte else<br>";
                                     $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
                                     $pendiente = number_format(($cantidadpagar - $saldo), 5);
                                 }
                                 $saldo = number_format(($saldo - $cantidadpagar), 5);
+                                $saldo = str_replace(",", "", $saldo);
                                 $cantidadpagar = number_format($pendiente, 5);
                             }
                         }
-                    } while ($cantidadpagar != 0);
+                    } while ($cantidadpagar != 0 || $i < count($pagos));
                 }
             }
-            $objbancos = \CuentabancariaQuery::create()->filterByIdsucursal($idempresa)->orderByCuentabancariaBanco()->find();
+            $objbancos = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->orderByCuentabancariaBanco()->find();
             $objbanco = new \Cuentabancaria();
             $arraybancos = array();
             $arraybancos2 = array();
@@ -110,35 +135,6 @@ class ReportesController extends AbstractActionController {
             for ($i = (count($arraybancos)); $i < 8; $i++) {
                 $arraybancos['banco' . ($i + 1)] = "";
             }
-
-            $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
-            $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
-            //{}	{categoria:banco5}	{categoria:banco6}	{categoria:banco7}	{categoria:total}
-            $objcategorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
-            $categoria = new \Categoria();
-            $reportec = array();
-            $fila = 0;
-            foreach ($objcategorias as $categoria) {
-                $valuefila = array();
-                $valuefila['nombre'] = $categoria->getCategoriaNombre();
-                $totalf = 0;
-                $limite = (count($arraybancos2)) < 8 ? count($arraybancos2) + 1 : 8;
-                for ($i = 1; $i < $limite; $i++) {
-                    $cantidadbanco = "";
-                    if (isset($reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]])) {
-                        $cantidadbanco = $reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
-                        $totalf+=$reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
-                    }
-                    $valuefila['banco' . $i] = $cantidadbanco;
-                }
-                for ($limite; $limite < 8; $limite++) {
-                    $valuefila['banco' . $limite] = "";
-                }
-                $valuefila['total'] = $totalf;
-                $reportec[$fila] = $valuefila;
-                $fila++;
-            }
-
             $totales = array();
             $totalg = 0;
             foreach ($reporte as $banco) {
@@ -152,20 +148,42 @@ class ReportesController extends AbstractActionController {
             }
 
             $arraytotales = array();
-            $limite = (count($arraybancos2)) < 7 ? count($arraybancos2) : 7;
-            for ($i = 0; $i < $limite; $i++) {
+            for ($i = 0; $i < count($arraybancos2); $i++) {
                 $value = "";
                 if (isset($totales[$arraybancos2[$i]]))
                     $value = $totales[$arraybancos2[$i]];
                 $arraytotales['banco' . ($i + 1)] = $value;
             }
-            $limite++;
-            for ($limite; $limite < 8; $limite++) {
-                $arraytotales['banco' . $limite] = "";
+            $arraytotales['total'] = $totalg;
+            $arraytotales['pct'] = "100";
+            
+            
+            $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+            $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+            
+            $objcategorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
+            $categoria = new \Categoria();
+            $reportec = array();
+            $fila = 0;
+            foreach ($objcategorias as $categoria) {
+                $valuefila = array();
+                $valuefila['nombre'] = $categoria->getCategoriaNombre();
+                $totalf = 0;
+                for ($i = 1; $i < count($arraybancos2)+1; $i++) {
+                    $cantidadbanco = "";
+                    if (isset($reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]])) {
+                        $cantidadbanco = $reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                        $totalf+=$reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                    }
+                    $valuefila['banco' . $i] = $cantidadbanco;
+                }
+                $valuefila['total'] = $totalf;
+                $porcentaje = number_format(($totalf * 100) / $totalg, 2);
+                $valuefila['pct'] = $porcentaje;
+                $reportec[$fila] = $valuefila;
+                
+                $fila++;
             }
-            $arraytotales['totales'] = $totalg;
-
-
             $objcategorias = \CategoriaQuery::create()->find();
             $categoria = new \Categoria();
             $reportesc = array();
@@ -175,8 +193,7 @@ class ReportesController extends AbstractActionController {
                     $valuefila = array();
                     $valuefila['nombre'] = $categoria->getCategoriaNombre();
                     $totalf = 0;
-                    $limite = (count($arraybancos2)) < 8 ? count($arraybancos2) + 1 : 8;
-                    for ($i = 1; $i < $limite; $i++) {
+                    for ($i = 1; $i < count($arraybancos2)+1; $i++) {
                         $cantidadbanco = "";
                         if (isset($reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]])) {
                             $cantidadbanco = $reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
@@ -184,23 +201,20 @@ class ReportesController extends AbstractActionController {
                         }
                         $valuefila['banco' . $i] = $cantidadbanco;
                     }
-                    for ($limite; $limite < 8; $limite++) {
-                        $valuefila['banco' . $limite] = "";
-                    }
                     $valuefila['total'] = $totalf;
+                    $porcentaje = number_format(($totalf * 100) / $totalg, 2);
+                    $valuefila['pct'] = $porcentaje;
                     $reportesc[$fila] = $valuefila;
                     $fila++;
                 }
             }
-
-            $template = '/flujoefectivomensual.xlsx';
+            $template = '/flujoefectivomensual'.count($arraybancos2).'B.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
             $config = array(
                 'template' => $template,
                 'templateDir' => $templateDir
             );
             $a = array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal);
-
             $R = new \PHPReport($config);
             $R->load(
                     array(
@@ -257,6 +271,8 @@ class ReportesController extends AbstractActionController {
     }
 
     public function reportemAction() {
+        $iva = \TasaivaQuery::create()->filterByIdtasaiva(1)->findOne()->getTasaivaValor();
+        $iva = $iva / 100 + 1;
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         $idempresa = $session['idempresa'];
@@ -265,6 +281,7 @@ class ReportesController extends AbstractActionController {
         $reporte = array();
         $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-31 23:59:59'))->filterByFlujoefectivoOrigen('compra')->orderByIdcompra()->find();
         $flujoefectivo = new \Flujoefectivo();
+        //var_dump($flujosefectivos->toArray());exit;
         $pagos = array();
         $inicio = $ano . '-' . $mes . '-01 00:00:00';
         $fin = $ano . '-' . $mes . '-31 23:59:59';
@@ -276,23 +293,36 @@ class ReportesController extends AbstractActionController {
                     $cheque = false;
             }
             if ($cheque) {
-                array_push($pagos, array('idcompra' => $flujoefectivo->getIdcompra(), 'banco' => $flujoefectivo->getCuentabancaria()->getCuentabancariaBanco(), 'saldo' => $flujoefectivo->getFlujoefectivoCantidad()));
+                array_push($pagos, array('idcompra' => $flujoefectivo->getIdcompra(), 'banco' => $flujoefectivo->getCuentabancaria()->getCuentabancariaBanco(), 'saldo' => str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad())));
             }
         }
         for ($i = 0; $i < count($pagos); $i++) {
-            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($pagos[$i]['idcompra'])->find();
+            $idcompra = $pagos[$i]['idcompra'];
+            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
             $compradetalle = new \Compradetalle();
-            $saldo = number_format($pagos[$i]['saldo'], 5);
             $pendiente = 0;
             $cantidadpagar = 0;
+            $saldo = number_format($pagos[$i]['saldo'], 5);
+            $saldo = str_replace(",", "", $saldo);
+            //echo "saldo inicial $saldo <br>";
             foreach ($comprasdetalles as $compradetalle) {
                 do {
+                    $categoria = $compradetalle->getProducto()->getIdcategoria();
                     if ($saldo < 0) {
-                        $i++;
-                        $saldo = number_format($pagos[$i]['saldo'], 5);
+                        if (isset($pagos[$i + 1]['idcompra'])) {
+                            if ($pagos[$i + 1]['idcompra'] == $idcompra) {
+                                $i++;
+                                $saldo = number_format($pagos[$i]['saldo'], 5);
+                            } else
+                                break;
+                        } else
+                            break;
+                        $saldo = str_replace(",", "", $saldo);
+                        //echo "aumento de saldo $saldo <br>";
                     }
                     if ($pendiente != 0) {
                         if ($saldo >= $pendiente) {
+                            //echo "if de pendiente $pendiente <br>";
                             if (isset($reporte[$categoria][$pagos[$i]['banco']]))
                                 $reporte[$categoria][$pagos[$i]['banco']] += $pendiente;
                             else
@@ -301,6 +331,7 @@ class ReportesController extends AbstractActionController {
                             $pendiente = 0;
                             $cantidadpagar = 0;
                         } else {
+                            //echo "else de pendiente $pendiente <br>";
                             if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                 $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
                                 $pendiente -= number_format($saldo, 5);
@@ -308,31 +339,40 @@ class ReportesController extends AbstractActionController {
                                 $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
                                 $pendiente -= number_format($saldo, 5);
                             }
-                            $saldo = -number_format($pendiente, 5);
+                            $saldo = number_format($pendiente, 5);
+                            $saldo = $saldo * -1;
                         }
                     } else {
-                        $categoria = $compradetalle->getProducto()->getIdcategoria();
-                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * 1.16), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                        //echo "sin pendiente <br>";
+                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                        $cantidadpagar = str_replace(",", "", $cantidadpagar);
+                        //echo "cantidad a pagar $cantidadpagar y saldo $saldo <br>";
                         if ($saldo >= $cantidadpagar) {
+                            //echo "saldo mayor = $saldo <br>";
                             if (isset($reporte[$categoria][$pagos[$i]['banco']]))
                                 $reporte[$categoria][$pagos[$i]['banco']] += $cantidadpagar;
                             else
                                 $reporte[$categoria][$pagos[$i]['banco']] = $cantidadpagar;
                             $saldo = number_format($saldo - $cantidadpagar, 5);
+                            $saldo = str_replace(",", "", $saldo);
                             $cantidadpagar = 0;
                         } else {
+                            //echo "saldo menor = $saldo <br>";
                             if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
+                                //echo "envio de saldo a reporte if<br>";
                                 $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
                                 $pendiente = number_format(($cantidadpagar - $saldo), 5);
                             } else {
+                                //echo "envio de saldo a reporte else<br>";
                                 $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
                                 $pendiente = number_format(($cantidadpagar - $saldo), 5);
                             }
                             $saldo = number_format(($saldo - $cantidadpagar), 5);
+                            $saldo = str_replace(",", "", $saldo);
                             $cantidadpagar = number_format($pendiente, 5);
                         }
                     }
-                } while ($cantidadpagar != 0);
+                } while ($cantidadpagar != 0 || $i < count($pagos));
             }
         }
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
@@ -350,7 +390,7 @@ class ReportesController extends AbstractActionController {
                 $totalg+=$value;
             }
         }
-        $objbancos = \CuentabancariaQuery::create()->filterByIdsucursal($idempresa)->orderByCuentabancariaBanco()->find();
+        $objbancos = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->orderByCuentabancariaBanco()->find();
         $objbanco = new \Cuentabancaria();
         $arraybancos = array();
         foreach ($objbancos as $objbanco) {
@@ -386,7 +426,7 @@ class ReportesController extends AbstractActionController {
                 $textofila = (($fila % 2) == 1) ? "<tr $colorfila> " : "<tr> ";
                 $textofila.= "<td>" . $subcategoria->getCategoriaNombre() . " </td> ";
                 foreach ($arraybancos as $bank) {
-                    if (isset($reporte[$categoria->getIdcategoria()][$bank])) {
+                    if (isset($reporte[$subcategoria->getIdcategoria()][$bank])) {
                         $textofila.="<td>" . $reporte[$subcategoria->getIdcategoria()][$bank] . "</td>";
                         $totalf+=$reporte[$subcategoria->getIdcategoria()][$bank];
                     } else
@@ -409,6 +449,12 @@ class ReportesController extends AbstractActionController {
         $reporteg[$fila] = $textofila;
         $fila++;
         $reporteg[$fila] = '</tbody>';
+//        echo "<table>";
+//        for($i=0;$i<count($reporteg);$i++) {
+//            echo $reporteg[$i];
+//        }
+//        echo "</table>";
+//        exit;
         return $this->getResponse()->setContent(json_encode($reporteg));
     }
 
@@ -436,6 +482,8 @@ class ReportesController extends AbstractActionController {
     }
 
     public function reporteaAction() {
+        $iva = \TasaivaQuery::create()->filterByIdtasaiva(1)->findOne()->getTasaivaValor();
+        $iva = $iva / 100 + 1;
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         $idempresa = $session['idempresa'];
@@ -458,9 +506,9 @@ class ReportesController extends AbstractActionController {
                 }
                 if ($cheque) {
                     if (isset($pagos[$flujoefectivo->getIdcompra()]))
-                        $pagos[$i][$flujoefectivo->getIdcompra()]+=$flujoefectivo->getFlujoefectivoCantidad();
+                        $pagos[$i][$flujoefectivo->getIdcompra()]+=str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
                     else
-                        $pagos[$i][$flujoefectivo->getIdcompra()] = $flujoefectivo->getFlujoefectivoCantidad();
+                        $pagos[$i][$flujoefectivo->getIdcompra()] = str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
                 }
             }
         }
@@ -473,7 +521,7 @@ class ReportesController extends AbstractActionController {
                 $compradetalle = new \Compradetalle();
                 foreach ($comprasdetalles as $compradetalle) {
                     $categoria = $compradetalle->getProducto()->getIdcategoria();
-                    $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * 1.16), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                    $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
                     if ($saldo >= $cantidadpagar) {
                         if (isset($reporte[$categoria]['mes' . $i]))
                             $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $cantidadpagar);
@@ -525,7 +573,7 @@ class ReportesController extends AbstractActionController {
                     $textofila.="<td></td>";
             }
             $textofila.="<td>$totalf</td>";
-            $porcentaje = number_format(($totalf * 100) / $totalg,2);
+            $porcentaje = number_format(($totalf * 100) / $totalg, 2);
             $textofila.="<td>$porcentaje%</td></tr>";
             $reporteg[$fila] = $textofila;
 
@@ -545,26 +593,26 @@ class ReportesController extends AbstractActionController {
                         $textofila.="<td></td>";
                 }
                 $textofila.="<td>$totalf</td>";
-                $porcentaje = number_format(($totalf * 100) / $totalg,2);
+                $porcentaje = number_format(($totalf * 100) / $totalg, 2);
                 $textofila.="<td>$porcentaje%</td></tr>";
                 $reporteg[$fila] = $textofila;
             }
             $fila++;
         }
         $textofila = "<tr $colorcat><td>Totales</td>";
-        $totales=array();
+        $totales = array();
         foreach ($reporte as $repot) {
             foreach ($repot as $repo => $value) {
                 $value = str_replace(",", "", $value);
-                if(isset($totales[$repo]))
-                $totales[$repo]+=$value;
+                if (isset($totales[$repo]))
+                    $totales[$repo]+=$value;
                 else
-                $totales[$repo]=$value;
+                    $totales[$repo] = $value;
             }
         }
-        for($i=1;$i<13;$i++) {
-            if(isset($totales['mes'.$i]))
-                $textofila.="<td>".$totales['mes'.$i]."</td>";
+        for ($i = 1; $i < 13; $i++) {
+            if (isset($totales['mes' . $i]))
+                $textofila.="<td>" . $totales['mes' . $i] . "</td>";
             else
                 $textofila.="<td></td>";
         }
