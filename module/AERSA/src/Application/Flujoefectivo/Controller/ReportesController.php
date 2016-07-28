@@ -50,7 +50,7 @@ class ReportesController extends AbstractActionController {
                 //echo "saldo inicial $saldo <br>";
                 foreach ($comprasdetalles as $compradetalle) {
                     do {
-                        $categoria = $compradetalle->getProducto()->getIdcategoria();
+                        $categoria = $compradetalle->getProducto()->getIdsubcategoria();
                         if ($saldo < 0) {
                             if (isset($pagos[$i + 1]['idcompra'])) {
                                 if ($pagos[$i + 1]['idcompra'] == $idcompra) {
@@ -307,7 +307,7 @@ class ReportesController extends AbstractActionController {
             //echo "saldo inicial $saldo <br>";
             foreach ($comprasdetalles as $compradetalle) {
                 do {
-                    $categoria = $compradetalle->getProducto()->getIdcategoria();
+                    $categoria = $compradetalle->getProducto()->getIdsubcategoria();
                     if ($saldo < 0) {
                         if (isset($pagos[$i + 1]['idcompra'])) {
                             if ($pagos[$i + 1]['idcompra'] == $idcompra) {
@@ -520,7 +520,7 @@ class ReportesController extends AbstractActionController {
                 $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
                 $compradetalle = new \Compradetalle();
                 foreach ($comprasdetalles as $compradetalle) {
-                    $categoria = $compradetalle->getProducto()->getIdcategoria();
+                    $categoria = $compradetalle->getProducto()->getIdsubcategoria();
                     $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
                     if ($saldo >= $cantidadpagar) {
                         if (isset($reporte[$categoria]['mes' . $i]))
