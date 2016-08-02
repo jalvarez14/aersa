@@ -511,40 +511,40 @@ class ReportesController extends AbstractActionController {
                 }
             }
             for ($i = 1; $i < 13; $i++) {
-                if(isset($pagos[$i]))
-                foreach ($pagos[$i] as $idcompra => $cantidad) {
-                    $saldo = number_format($cantidad, 5);
-                    $saldo = str_replace(",", "", $saldo);
-                    $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
-                    $compradetalle = new \Compradetalle();
-                    foreach ($comprasdetalles as $compradetalle) {
-                        $categoria = $compradetalle->getProducto()->getIdsubcategoria();
-                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
-                        $cantidadpagar = str_replace(",", "", $cantidadpagar);
-                        if ($saldo >= $cantidadpagar) {
-                            if (isset($reporte[$categoria]['mes' . $i]))
-                                $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $cantidadpagar);
-                            else
-                                $reporte[$categoria]['mes' . $i] = str_replace(",", "", $cantidadpagar);
-                            $saldo = $saldo - $cantidadpagar;
-                            $saldo = str_replace(",", "", $saldo);
-                        } else {
-                            if (isset($reporte[$categoria]['mes' . $i]))
-                                $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $saldo);
-                            else
-                                $reporte[$categoria]['mes' . $i] = str_replace(",", "", $saldo);
-                            $saldo = ($saldo - $cantidadpagar);
-                            $saldo = str_replace(",", "", $saldo);
+                if (isset($pagos[$i]))
+                    foreach ($pagos[$i] as $idcompra => $cantidad) {
+                        $saldo = number_format($cantidad, 5);
+                        $saldo = str_replace(",", "", $saldo);
+                        $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
+                        $compradetalle = new \Compradetalle();
+                        foreach ($comprasdetalles as $compradetalle) {
+                            $categoria = $compradetalle->getProducto()->getIdsubcategoria();
+                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                            $cantidadpagar = str_replace(",", "", $cantidadpagar);
+                            if ($saldo >= $cantidadpagar) {
+                                if (isset($reporte[$categoria]['mes' . $i]))
+                                    $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $cantidadpagar);
+                                else
+                                    $reporte[$categoria]['mes' . $i] = str_replace(",", "", $cantidadpagar);
+                                $saldo = $saldo - $cantidadpagar;
+                                $saldo = str_replace(",", "", $saldo);
+                            } else {
+                                if (isset($reporte[$categoria]['mes' . $i]))
+                                    $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $saldo);
+                                else
+                                    $reporte[$categoria]['mes' . $i] = str_replace(",", "", $saldo);
+                                $saldo = ($saldo - $cantidadpagar);
+                                $saldo = str_replace(",", "", $saldo);
+                            }
+                            if ($saldo <= 0)//siempre se comprueba para saber si se tiene saldo suficioente
+                                break;
                         }
-                        if ($saldo <= 0)//siempre se comprueba para saber si se tiene saldo suficioente
-                            break;
                     }
-                }
             }
             $reportesc = array();
             $totales = array();
             foreach ($reporte as $repot) {
-                
+
                 foreach ($repot as $repo => $value) {
                     $value = str_replace(",", "", $value);
                     if (isset($totales[$repo]))
@@ -552,9 +552,8 @@ class ReportesController extends AbstractActionController {
                     else
                         $totales[$repo] = $value;
                 }
-                
             }
-            
+
             $totalg = 0;
             foreach ($reporte as $cat) {
                 foreach ($cat as $saldo) {
@@ -562,7 +561,7 @@ class ReportesController extends AbstractActionController {
                     $totalg+=$saldo;
                 }
             }
-            $fila=0;
+            $fila = 0;
             $arraytotales = array();
             for ($i = 1; $i < 13; $i++) {
                 $value = "";
@@ -594,6 +593,60 @@ class ReportesController extends AbstractActionController {
                     $fila++;
                 }
             }
+            $totali = 0;
+            for ($i = 1; $i < 13; $i++) {
+                if ($i == 1 || $i == 3 || $i == 5 || $i == 7 || $i == 8 || $i == 10 || $i == 12)
+                    $dias = 31;
+                else if ($i == 4 || $i == 6 || $i == 9 || $i == 11)
+                    $dias = 30;
+                else
+                    $dias = (checkdate($i, 29, $ano)) ? 29 : 28;
+                $mes = sprintf("%02d", $i);
+                $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-' . $dias . ' 23:59:59'))->filterByFlujoefectivoOrigen('ingreso')->orderByIdcompra()->find();
+                $flujoefectivo = new \Flujoefectivo();
+                $inicio = $ano . '-' . $mes . '-01 00:00:00';
+                $fin = $ano . '-' . $mes . '-' . $dias . ' 23:59:59';
+                foreach ($flujosefectivos as $flujoefectivo) {
+                    $cheque = true;
+                    if ($flujoefectivo->getFlujoefectivoMediodepago() == 'cheque') {
+                        $fecha = $flujoefectivo->getFlujoefectivoFechacobrocheque();
+                        if (!($inicio < $fecha) && ($fecha < $fin))
+                            $cheque = false;
+                    }
+
+                    if ($cheque) {
+                        if (isset($ingresos[$flujoefectivo->getIngresorubro()]['mes' . $i])) {
+                            $ingresos[$flujoefectivo->getIngresorubro()]['mes' . $i]+=str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                        } else {
+                            $ingresos[$flujoefectivo->getIngresorubro()]['mes' . $i] = str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                        }
+                        $totali+=str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                    }
+                }
+            }
+            $reportei=array();
+            $rubrosingresos = \RubroingresoQuery::create()->find();
+            $rubroingreso = new \Rubroingreso();
+            $rubroingresoarray = array();
+            $fila=0;
+            foreach ($rubrosingresos as $rubroingreso) {
+                    $valuefila = array();
+                    $valuefila['nombre'] = $rubroingreso->getRubroingresoNombre();
+                    $totalf = 0;
+                    for ($i = 1; $i < 13; $i++) {
+                        $cantidadmes = "";
+                        if (isset($ingresos[strtolower($rubroingreso->getRubroingresoNombre())]['mes' . $i])) {
+                            $cantidadmes = $ingresos[strtolower($rubroingreso->getRubroingresoNombre())]['mes' . $i];
+                            $totalf+=$ingresos[strtolower($rubroingreso->getRubroingresoNombre())]['mes' . $i];
+                        }
+                        $valuefila['mes' . $i] = $cantidadmes;
+                    }
+                    $valuefila['total'] = $totalf;
+                    $porcentaje = number_format(($totalf * 100) / $totali, 2);
+                    $valuefila['pct'] = $porcentaje;
+                    $reportei[$fila] = $valuefila;
+                    $fila++;
+            }
             $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
             $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
             $template = '/flujoefectivoanual.xlsx';
@@ -602,6 +655,8 @@ class ReportesController extends AbstractActionController {
                 'template' => $template,
                 'templateDir' => $templateDir
             );
+
+
             $R = new \PHPReport($config);
             $R->load(
                     array(
@@ -616,7 +671,7 @@ class ReportesController extends AbstractActionController {
                         array(
                             'id' => 'categoria',
                             'repeat' => true,
-                            'data' => "",
+                            'data' => $reportei,
                         ),
                         array(
                             'id' => 'tot',
@@ -662,6 +717,9 @@ class ReportesController extends AbstractActionController {
         $ano = $this->params()->fromQuery('ano');
         $reporte = array();
         $pagos = array();
+
+        $reporte[$categoria]['mes' . $i] = str_replace(",", "", $saldo);
+
         for ($i = 1; $i < 13; $i++) {
             if ($i == 1 || $i == 3 || $i == 5 || $i == 7 || $i == 8 || $i == 10 || $i == 12)
                 $dias = 31;
@@ -690,36 +748,37 @@ class ReportesController extends AbstractActionController {
             }
         }
         for ($i = 1; $i < 13; $i++) {
-            if(isset($pagos[$i]))
-            foreach ($pagos[$i] as $idcompra => $cantidad) {
-                $saldo = number_format($cantidad, 5);
-                $saldo = str_replace(",", "", $saldo);
-                $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
-                $compradetalle = new \Compradetalle();
-                foreach ($comprasdetalles as $compradetalle) {
-                    $categoria = $compradetalle->getProducto()->getIdsubcategoria();
-                    $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
-                    $cantidadpagar = str_replace(",", "", $cantidadpagar);
-                    if ($saldo >= $cantidadpagar) {
-                        if (isset($reporte[$categoria]['mes' . $i]))
-                            $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $cantidadpagar);
-                        else
-                            $reporte[$categoria]['mes' . $i] = str_replace(",", "", $cantidadpagar);
-                        $saldo = $saldo - $cantidadpagar;
-                        $saldo = str_replace(",", "", $saldo);
-                    } else {
-                        if (isset($reporte[$categoria]['mes' . $i]))
-                            $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $saldo);
-                        else
-                            $reporte[$categoria]['mes' . $i] = str_replace(",", "", $saldo);
-                        $saldo = ($saldo - $cantidadpagar);
-                        $saldo = str_replace(",", "", $saldo);
+            if (isset($pagos[$i]))
+                foreach ($pagos[$i] as $idcompra => $cantidad) {
+                    $saldo = number_format($cantidad, 5);
+                    $saldo = str_replace(",", "", $saldo);
+                    $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
+                    $compradetalle = new \Compradetalle();
+                    foreach ($comprasdetalles as $compradetalle) {
+                        $categoria = $compradetalle->getProducto()->getIdsubcategoria();
+                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                        $cantidadpagar = str_replace(",", "", $cantidadpagar);
+                        if ($saldo >= $cantidadpagar) {
+                            if (isset($reporte[$categoria]['mes' . $i]))
+                                $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $cantidadpagar);
+                            else
+                                $reporte[$categoria]['mes' . $i] = str_replace(",", "", $cantidadpagar);
+                            $saldo = $saldo - $cantidadpagar;
+                            $saldo = str_replace(",", "", $saldo);
+                        } else {
+                            if (isset($reporte[$categoria]['mes' . $i]))
+                                $reporte[$categoria]['mes' . $i]+= str_replace(",", "", $saldo);
+                            else
+                                $reporte[$categoria]['mes' . $i] = str_replace(",", "", $saldo);
+                            $saldo = ($saldo - $cantidadpagar);
+                            $saldo = str_replace(",", "", $saldo);
+                        }
+                        if ($saldo <= 0)//siempre se comprueba para saber si se tiene saldo suficioente
+                            break;
                     }
-                    if ($saldo <= 0)//siempre se comprueba para saber si se tiene saldo suficioente
-                        break;
                 }
-            }
         }
+
 
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
         $categoria = new \Categoria();
@@ -735,12 +794,64 @@ class ReportesController extends AbstractActionController {
         $fila = 2;
         $colorcat = "bgcolor='#ADD8E6'";
         $colorfila = "bgcolor='#F2F2F2'";
+        $colori = "bgcolor='#819FF7'";
         $totalg = 0;
         foreach ($reporte as $cat) {
             foreach ($cat as $saldo) {
                 $saldo = str_replace(",", "", $saldo);
                 $totalg+=$saldo;
             }
+        }
+        $ingresos = array();
+        $totali = 0;
+        for ($i = 1; $i < 13; $i++) {
+            if ($i == 1 || $i == 3 || $i == 5 || $i == 7 || $i == 8 || $i == 10 || $i == 12)
+                $dias = 31;
+            else if ($i == 4 || $i == 6 || $i == 9 || $i == 11)
+                $dias = 30;
+            else
+                $dias = (checkdate($i, 29, $ano)) ? 29 : 28;
+            $mes = sprintf("%02d", $i);
+            $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-' . $dias . ' 23:59:59'))->filterByFlujoefectivoOrigen('ingreso')->orderByIdcompra()->find();
+            $flujoefectivo = new \Flujoefectivo();
+            $inicio = $ano . '-' . $mes . '-01 00:00:00';
+            $fin = $ano . '-' . $mes . '-' . $dias . ' 23:59:59';
+            foreach ($flujosefectivos as $flujoefectivo) {
+                $cheque = true;
+                if ($flujoefectivo->getFlujoefectivoMediodepago() == 'cheque') {
+                    $fecha = $flujoefectivo->getFlujoefectivoFechacobrocheque();
+                    if (!($inicio < $fecha) && ($fecha < $fin))
+                        $cheque = false;
+                }
+
+                if ($cheque) {
+                    if (isset($ingresos[$flujoefectivo->getIngresorubro()]['mes' . $i])) {
+                        $ingresos[$flujoefectivo->getIngresorubro()]['mes' . $i]+=str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                    } else {
+                        $ingresos[$flujoefectivo->getIngresorubro()]['mes' . $i] = str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                    }
+                    $totali+=str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                }
+            }
+        }
+
+        $rubrosingresos = \RubroingresoQuery::create()->find();
+        $rubroingreso = new \Rubroingreso();
+        foreach ($rubrosingresos as $rubroingreso) {
+            $totalf = 0;
+            $textofila = "<tr $colori> <td>" . $rubroingreso->getRubroingresoNombre() . " </td> ";
+            for ($i = 1; $i < 13; $i++) {
+                if (isset($ingresos[strtolower($rubroingreso->getRubroingresoNombre())]['mes' . $i])) {
+                    $textofila.="<td>" . $ingresos[strtolower($rubroingreso->getRubroingresoNombre())]['mes' . $i] . "</td>";
+                    $totalf+=$ingresos[strtolower($rubroingreso->getRubroingresoNombre())]['mes' . $i];
+                } else
+                    $textofila.="<td></td>";
+            }
+            $textofila.="<td>$totalf</td>";
+            $porcentaje = number_format(($totalf * 100) / $totali, 2);
+            $textofila.="<td>$porcentaje%</td></tr>";
+            $reporteg[$fila] = $textofila;
+            $fila++;
         }
         foreach ($categorias as $categoria) {
             $totalf = 0;
