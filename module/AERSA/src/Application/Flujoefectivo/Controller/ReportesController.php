@@ -1038,7 +1038,7 @@ class ReportesController extends AbstractActionController {
                     $textofila.="<td></td>";
             }
             $textofila.="<td>$totalf</td>";
-            $porcentaje = number_format(($totalf * 100) / $totali, 2);
+            $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totali, 2) : 0;
             $textofila.="<td>$porcentaje%</td></tr>";
             $reporteg[$fila] = $textofila;
             $fila++;
