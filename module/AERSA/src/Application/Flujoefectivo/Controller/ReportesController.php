@@ -253,7 +253,7 @@ class ReportesController extends AbstractActionController {
                     $valuefila['banco' . $i] = $cantidadbanco;
                 }
                 $valuefila['total'] = $totalf;
-                $porcentaje = number_format(($totalf * 100) / $totalg, 2);
+                $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
                 $valuefila['pct'] = $porcentaje;
                 $reportec[$fila] = $valuefila;
 
@@ -277,7 +277,7 @@ class ReportesController extends AbstractActionController {
                         $valuefila['banco' . $i] = $cantidadbanco;
                     }
                     $valuefila['total'] = $totalf;
-                    $porcentaje = number_format(($totalf * 100) / $totalg, 2);
+                    $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
                     $valuefila['pct'] = $porcentaje;
                     $reportesc[$fila] = $valuefila;
                     $fila++;
@@ -549,7 +549,7 @@ class ReportesController extends AbstractActionController {
             $nombrebancos.="<th> " . $objbanco->getCuentabancariaBanco() . " </th>";
             array_push($arraybancos, $objbanco->getCuentabancariaBanco());
         }
-        $thead = "<thead> <th>Concepto</th> " . $nombrebancos . " <th>Total</th> </thead>";
+        $thead = "<thead> <th>Concepto</th> " . $nombrebancos . " <th>Total</th><th>Total</th> </thead>";
         $reporteg = array();
         $reporteg[0] = $thead;
         $reporteg[1] = '<tbody id="tbody">';
@@ -561,13 +561,16 @@ class ReportesController extends AbstractActionController {
             $textofila = "<tr $colori> <td>" . $reportei1['nombre'] . " </td> ";
             for($i=1;$i<=count($objbancos);$i++) {
                 $textofila.="<td>" . $reportei1['banco'.$i] . "</td>";
-                $totalesi[$key]+=($value != "") ? $value : 0;
+                if(isset($totalesi[$key]))
+                    $totalesi[$key]+=($value != "") ? $value : 0;
+                else 
+                    $totalesi[$key]=($value != "") ? $value : 0;
                 if(isset($arraytotalesi['banco'.$i]))
                 $arraytotalesi['banco'.$i]+=($reportei1['banco'.$i] != "") ? $reportei1['banco'.$i] : 0;
                 else 
                     $arraytotalesi['banco'.$i]=($reportei1['banco'.$i] != "") ? $reportei1['banco'.$i] : 0;
             }
-            $textofila.="<td>".$reportei1['total']."</td></tr>";
+            $textofila.="<td>".$reportei1['total']."</td><td>".$reportei1['pct']."%</td></tr>";
             $reporteg[$fila] = $textofila;
             $fila++;
         }
@@ -577,7 +580,7 @@ class ReportesController extends AbstractActionController {
                 $textofila.="<td>" . $arraytotalesi['banco'.$i] . "</td>";
                 $totalf+=$arraytotalesi['banco'.$i];
             }
-            $textofila.="<td>".$totalf."</td></tr>";
+            $textofila.="<td>".$totalf."</td><td>100%</td></tr>";
             $reporteg[$fila] = $textofila;
             $fila++;
         foreach ($categorias as $categoria) {
@@ -590,7 +593,9 @@ class ReportesController extends AbstractActionController {
                 } else
                     $textofila.="<td></td>";
             }
-            $textofila.="<td>$totalf</td></tr>";
+            
+            $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
+            $textofila.="<td>".$totalf."</td><td>$porcentaje%</td></tr>";
             $reporteg[$fila] = $textofila;
 
             $total = 0;
@@ -608,7 +613,8 @@ class ReportesController extends AbstractActionController {
                     } else
                         $textofila.="<td></td>";
                 }
-                $textofila.="<td>$totalf</td></tr>";
+                $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
+                $textofila.="<td>".$totalf."</td><td>$porcentaje%</td></tr>";
                 $reporteg[$fila] = $textofila;
             }
             $fila++;
@@ -621,7 +627,7 @@ class ReportesController extends AbstractActionController {
             else
                 $textofila.="<td></td>";
         }
-        $textofila.="<td>$totalg</td></tr>";
+        $textofila.="<td>$totalg</td><td>100%</td></tr>";
         $reporteg[$fila] = $textofila;
         $fila++;
         $reporteg[$fila] = '</tbody>';
@@ -910,7 +916,6 @@ class ReportesController extends AbstractActionController {
         $ano = $this->params()->fromQuery('ano');
         $reporte = array();
         $pagos = array();
-        $reporte[$categoria]['mes' . $i] = str_replace(",", "", $saldo);
         for ($i = 1; $i < 13; $i++) {
             if ($i == 1 || $i == 3 || $i == 5 || $i == 7 || $i == 8 || $i == 10 || $i == 12)
                 $dias = 31;

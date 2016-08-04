@@ -1342,6 +1342,59 @@ return array(
 
                                 ),
                             ),
+                            'ajustesinventarios' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/ajustesinventarios',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Proceso\Controller\Ajustesinventarios',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal', 
+                                        'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ajustesinventarios',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/editar[/:id]',
+                                             'defaults' => array(
+                                                 'controller' => 'Application\Proceso\Controller\Ajustesinventarios',
+                                                 'action' => 'editar',
+                                                 ),
+                                            ),
+                                        ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ajustesinventarios',
+                                                'action' => 'eliminar',
+                                            ),
+                                        ),
+                                    ),
+                                    'validarcuenta' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validarcuenta',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ajustesinventarios',
+                                                'action' => 'validarcuenta',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
 
                         ),
                     ),
@@ -1886,7 +1939,8 @@ return array(
             'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
             'Application\Proceso\Controller\Venta'          => 'Application\Proceso\Controller\VentaController',
             'Application\Proceso\Controller\Comentarios'    => 'Application\Proceso\Controller\ComentariosController',
-
+            'Application\Proceso\Controller\Ajustesinventarios'    => 'Application\Proceso\Controller\AjustesinventariosController',
+            
             /*
              * FLUJO EFECTIVO
              */
