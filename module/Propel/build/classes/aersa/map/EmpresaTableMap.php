@@ -52,6 +52,7 @@ class EmpresaTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Abonoproveedor', 'Abonoproveedor', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Abonoproveedors');
+        $this->addRelation('Ajusteinventario', 'Ajusteinventario', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Ajusteinventarios');
         $this->addRelation('Compra', 'Compra', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Compras');
         $this->addRelation('Cuentabancaria', 'Cuentabancaria', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Cuentabancarias');
         $this->addRelation('Cuentaporcobrar', 'Cuentaporcobrar', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Cuentaporcobrars');
@@ -63,6 +64,7 @@ class EmpresaTableMap extends TableMap
         $this->addRelation('Ordentablajeria', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Ordentablajerias');
         $this->addRelation('Plantillatablajeria', 'Plantillatablajeria', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Plantillatablajerias');
         $this->addRelation('Producto', 'Producto', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Productos');
+        $this->addRelation('Productocfdi', 'Productocfdi', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Productocfdis');
         $this->addRelation('Productosucursalalmacen', 'Productosucursalalmacen', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Productosucursalalmacens');
         $this->addRelation('Proveedor', 'Proveedor', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Proveedors');
         $this->addRelation('Requisicion', 'Requisicion', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Requisicions');

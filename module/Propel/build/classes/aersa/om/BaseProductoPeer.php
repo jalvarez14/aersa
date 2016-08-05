@@ -474,6 +474,9 @@ abstract class BaseProductoPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in AjusteinventarioPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AjusteinventarioPeer::clearInstancePool();
         // Invalidate objects in CodigobarrasPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CodigobarrasPeer::clearInstancePool();
@@ -498,6 +501,9 @@ abstract class BaseProductoPeer
         // Invalidate objects in PlantillatablajeriadetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         PlantillatablajeriadetallePeer::clearInstancePool();
+        // Invalidate objects in ProductocfdiPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductocfdiPeer::clearInstancePool();
         // Invalidate objects in ProductosucursalalmacenPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ProductosucursalalmacenPeer::clearInstancePool();
@@ -2170,6 +2176,12 @@ abstract class BaseProductoPeer
         foreach ($objects as $obj) {
 
 
+            // delete related Ajusteinventario objects
+            $criteria = new Criteria(AjusteinventarioPeer::DATABASE_NAME);
+
+            $criteria->add(AjusteinventarioPeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += AjusteinventarioPeer::doDelete($criteria, $con);
+
             // delete related Codigobarras objects
             $criteria = new Criteria(CodigobarrasPeer::DATABASE_NAME);
 
@@ -2217,6 +2229,12 @@ abstract class BaseProductoPeer
 
             $criteria->add(PlantillatablajeriadetallePeer::IDPRODUCTO, $obj->getIdproducto());
             $affectedRows += PlantillatablajeriadetallePeer::doDelete($criteria, $con);
+
+            // delete related Productocfdi objects
+            $criteria = new Criteria(ProductocfdiPeer::DATABASE_NAME);
+
+            $criteria->add(ProductocfdiPeer::IDPRODUCTO, $obj->getIdproducto());
+            $affectedRows += ProductocfdiPeer::doDelete($criteria, $con);
 
             // delete related Productosucursalalmacen objects
             $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);

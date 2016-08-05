@@ -92,6 +92,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $collAbonoproveedorsPartial;
 
     /**
+     * @var        PropelObjectCollection|Ajusteinventario[] Collection to store aggregation of Ajusteinventario objects.
+     */
+    protected $collAjusteinventarios;
+    protected $collAjusteinventariosPartial;
+
+    /**
      * @var        PropelObjectCollection|Almacen[] Collection to store aggregation of Almacen objects.
      */
     protected $collAlmacens;
@@ -212,6 +218,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $abonoproveedorsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ajusteinventariosScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -745,6 +757,8 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->aEmpresa = null;
             $this->collAbonoproveedors = null;
 
+            $this->collAjusteinventarios = null;
+
             $this->collAlmacens = null;
 
             $this->collCompras = null;
@@ -924,6 +938,23 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             if ($this->collAbonoproveedors !== null) {
                 foreach ($this->collAbonoproveedors as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ajusteinventariosScheduledForDeletion !== null) {
+                if (!$this->ajusteinventariosScheduledForDeletion->isEmpty()) {
+                    AjusteinventarioQuery::create()
+                        ->filterByPrimaryKeys($this->ajusteinventariosScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ajusteinventariosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAjusteinventarios !== null) {
+                foreach ($this->collAjusteinventarios as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1406,6 +1437,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collAjusteinventarios !== null) {
+                    foreach ($this->collAjusteinventarios as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collAlmacens !== null) {
                     foreach ($this->collAlmacens as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1642,6 +1681,9 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             }
             if (null !== $this->collAbonoproveedors) {
                 $result['Abonoproveedors'] = $this->collAbonoproveedors->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collAjusteinventarios) {
+                $result['Ajusteinventarios'] = $this->collAjusteinventarios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collAlmacens) {
                 $result['Almacens'] = $this->collAlmacens->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1884,6 +1926,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getAjusteinventarios() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAjusteinventario($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getAlmacens() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addAlmacen($relObj->copy($deepCopy));
@@ -2095,6 +2143,9 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     {
         if ('Abonoproveedor' == $relationName) {
             $this->initAbonoproveedors();
+        }
+        if ('Ajusteinventario' == $relationName) {
+            $this->initAjusteinventarios();
         }
         if ('Almacen' == $relationName) {
             $this->initAlmacens();
@@ -2419,6 +2470,331 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         $query->joinWith('Proveedor', $join_behavior);
 
         return $this->getAbonoproveedors($query, $con);
+    }
+
+    /**
+     * Clears out the collAjusteinventarios collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addAjusteinventarios()
+     */
+    public function clearAjusteinventarios()
+    {
+        $this->collAjusteinventarios = null; // important to set this to null since that means it is uninitialized
+        $this->collAjusteinventariosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAjusteinventarios collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAjusteinventarios($v = true)
+    {
+        $this->collAjusteinventariosPartial = $v;
+    }
+
+    /**
+     * Initializes the collAjusteinventarios collection.
+     *
+     * By default this just sets the collAjusteinventarios collection to an empty array (like clearcollAjusteinventarios());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAjusteinventarios($overrideExisting = true)
+    {
+        if (null !== $this->collAjusteinventarios && !$overrideExisting) {
+            return;
+        }
+        $this->collAjusteinventarios = new PropelObjectCollection();
+        $this->collAjusteinventarios->setModel('Ajusteinventario');
+    }
+
+    /**
+     * Gets an array of Ajusteinventario objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     * @throws PropelException
+     */
+    public function getAjusteinventarios($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventariosPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarios || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarios) {
+                // return empty collection
+                $this->initAjusteinventarios();
+            } else {
+                $collAjusteinventarios = AjusteinventarioQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAjusteinventariosPartial && count($collAjusteinventarios)) {
+                      $this->initAjusteinventarios(false);
+
+                      foreach ($collAjusteinventarios as $obj) {
+                        if (false == $this->collAjusteinventarios->contains($obj)) {
+                          $this->collAjusteinventarios->append($obj);
+                        }
+                      }
+
+                      $this->collAjusteinventariosPartial = true;
+                    }
+
+                    $collAjusteinventarios->getInternalIterator()->rewind();
+
+                    return $collAjusteinventarios;
+                }
+
+                if ($partial && $this->collAjusteinventarios) {
+                    foreach ($this->collAjusteinventarios as $obj) {
+                        if ($obj->isNew()) {
+                            $collAjusteinventarios[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAjusteinventarios = $collAjusteinventarios;
+                $this->collAjusteinventariosPartial = false;
+            }
+        }
+
+        return $this->collAjusteinventarios;
+    }
+
+    /**
+     * Sets a collection of Ajusteinventario objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ajusteinventarios A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setAjusteinventarios(PropelCollection $ajusteinventarios, PropelPDO $con = null)
+    {
+        $ajusteinventariosToDelete = $this->getAjusteinventarios(new Criteria(), $con)->diff($ajusteinventarios);
+
+
+        $this->ajusteinventariosScheduledForDeletion = $ajusteinventariosToDelete;
+
+        foreach ($ajusteinventariosToDelete as $ajusteinventarioRemoved) {
+            $ajusteinventarioRemoved->setSucursal(null);
+        }
+
+        $this->collAjusteinventarios = null;
+        foreach ($ajusteinventarios as $ajusteinventario) {
+            $this->addAjusteinventario($ajusteinventario);
+        }
+
+        $this->collAjusteinventarios = $ajusteinventarios;
+        $this->collAjusteinventariosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ajusteinventario objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ajusteinventario objects.
+     * @throws PropelException
+     */
+    public function countAjusteinventarios(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventariosPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarios || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarios) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAjusteinventarios());
+            }
+            $query = AjusteinventarioQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collAjusteinventarios);
+    }
+
+    /**
+     * Method called to associate a Ajusteinventario object to this object
+     * through the Ajusteinventario foreign key attribute.
+     *
+     * @param    Ajusteinventario $l Ajusteinventario
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addAjusteinventario(Ajusteinventario $l)
+    {
+        if ($this->collAjusteinventarios === null) {
+            $this->initAjusteinventarios();
+            $this->collAjusteinventariosPartial = true;
+        }
+
+        if (!in_array($l, $this->collAjusteinventarios->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAjusteinventario($l);
+
+            if ($this->ajusteinventariosScheduledForDeletion and $this->ajusteinventariosScheduledForDeletion->contains($l)) {
+                $this->ajusteinventariosScheduledForDeletion->remove($this->ajusteinventariosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ajusteinventario $ajusteinventario The ajusteinventario object to add.
+     */
+    protected function doAddAjusteinventario($ajusteinventario)
+    {
+        $this->collAjusteinventarios[]= $ajusteinventario;
+        $ajusteinventario->setSucursal($this);
+    }
+
+    /**
+     * @param	Ajusteinventario $ajusteinventario The ajusteinventario object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeAjusteinventario($ajusteinventario)
+    {
+        if ($this->getAjusteinventarios()->contains($ajusteinventario)) {
+            $this->collAjusteinventarios->remove($this->collAjusteinventarios->search($ajusteinventario));
+            if (null === $this->ajusteinventariosScheduledForDeletion) {
+                $this->ajusteinventariosScheduledForDeletion = clone $this->collAjusteinventarios;
+                $this->ajusteinventariosScheduledForDeletion->clear();
+            }
+            $this->ajusteinventariosScheduledForDeletion[]= clone $ajusteinventario;
+            $ajusteinventario->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
     }
 
     /**
@@ -7512,6 +7888,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collAjusteinventarios) {
+                foreach ($this->collAjusteinventarios as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collAlmacens) {
                 foreach ($this->collAlmacens as $o) {
                     $o->clearAllReferences($deep);
@@ -7603,6 +7984,10 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->collAbonoproveedors->clearIterator();
         }
         $this->collAbonoproveedors = null;
+        if ($this->collAjusteinventarios instanceof PropelCollection) {
+            $this->collAjusteinventarios->clearIterator();
+        }
+        $this->collAjusteinventarios = null;
         if ($this->collAlmacens instanceof PropelCollection) {
             $this->collAlmacens->clearIterator();
         }

@@ -79,6 +79,57 @@ CREATE TABLE `abonoproveedordetalle`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- ajusteinventario
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ajusteinventario`;
+
+CREATE TABLE `ajusteinventario`
+(
+    `idajusteinventario` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `idalmacen` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `idusuario` INTEGER NOT NULL,
+    `ajusteinventario_cantidad` DECIMAL(10,5) NOT NULL,
+    `ajusteinventario_comentario` TEXT,
+    `ajusteinventario_fecha` DATETIME NOT NULL,
+    `ajusteinventario_tipo` enum('sobrante','faltante') NOT NULL,
+    PRIMARY KEY (`idajusteinventario`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    INDEX `idalmacen` (`idalmacen`),
+    INDEX `idproducto` (`idproducto`),
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `idalmacen_ajusteinventario`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_ajusteinventario`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_ajusteinventario`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_ajusteinventario`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_ajusteinventario`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- almacen
 -- ---------------------------------------------------------------------
 
@@ -354,9 +405,10 @@ CREATE TABLE `cuentaporcobrar`
     `cuentaporcobrar_cantidad` DECIMAL(15,5) NOT NULL,
     `cuentaporcobrar_cliente` VARCHAR(255) NOT NULL,
     `cuentaporcobrar_fecha` DATETIME NOT NULL,
-    `cuentaporcobrar_nota` TEXT,
-    `cuentaporcobrar_abonado` DECIMAL(15,5),
+    `cuentaporcobrar_referencia` TEXT,
+    `cuentaporcobrar_abonado` DECIMAL(15,5) DEFAULT 0.00000,
     `cuentaporcobrar_estatuspago` TINYINT(1) NOT NULL,
+    `cuentaporcobrar_comprobante` TEXT,
     PRIMARY KEY (`idcuentaporcobrar`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -552,7 +604,7 @@ CREATE TABLE `flujoefectivo`
     `flujoefectivo_fecha` DATETIME NOT NULL,
     `flujoefectivo_referencia` TEXT,
     `flujoefectivo_comprobante` TEXT,
-    `flujoefectivo_mediodepago` enum('cheque','efectivo','transferencia','abono') NOT NULL,
+    `flujoefectivo_mediodepago` enum('cheque','efectivo','transferencia','abono','bonificacion') NOT NULL,
     `flujoefectivo_tipo` enum('ingreso','egreso') NOT NULL,
     `flujoefectivo_chequecirculacion` TINYINT(1),
     `flujoefectivo_fechacobrocheque` DATETIME,
@@ -840,8 +892,8 @@ CREATE TABLE `notacredito`
     `notacredito_total` DECIMAL(15,5),
     `notacredito_subtotal` DECIMAL(15,5),
     `notaauditorempresa` TINYINT(1) DEFAULT 1,
-    `notaalmacenistaempresa_copy1` TINYINT(1) DEFAULT 1,
-    `notaauditoraersa_copy1` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idnotacredito`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idusuario` (`idusuario`),
@@ -1186,6 +1238,33 @@ CREATE TABLE `producto`
     CONSTRAINT `idunidadmedida_producto`
         FOREIGN KEY (`idunidadmedida`)
         REFERENCES `unidadmedida` (`idunidadmedida`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- productocfdi
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `productocfdi`;
+
+CREATE TABLE `productocfdi`
+(
+    `idproductocfdi` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `productocfdi_nombre` TEXT NOT NULL,
+    PRIMARY KEY (`idproductocfdi`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idempresa_productocfdi`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_empresacfdi`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 ) ENGINE=InnoDB;

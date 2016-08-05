@@ -65,6 +65,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $aSucursal;
 
     /**
+     * @var        PropelObjectCollection|Ajusteinventario[] Collection to store aggregation of Ajusteinventario objects.
+     */
+    protected $collAjusteinventarios;
+    protected $collAjusteinventariosPartial;
+
+    /**
      * @var        PropelObjectCollection|Compra[] Collection to store aggregation of Compra objects.
      */
     protected $collCompras;
@@ -161,6 +167,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ajusteinventariosScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -524,6 +536,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         if ($deep) {  // also de-associate any related objects?
 
             $this->aSucursal = null;
+            $this->collAjusteinventarios = null;
+
             $this->collCompras = null;
 
             $this->collCompradetalles = null;
@@ -684,6 +698,23 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->ajusteinventariosScheduledForDeletion !== null) {
+                if (!$this->ajusteinventariosScheduledForDeletion->isEmpty()) {
+                    AjusteinventarioQuery::create()
+                        ->filterByPrimaryKeys($this->ajusteinventariosScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ajusteinventariosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAjusteinventarios !== null) {
+                foreach ($this->collAjusteinventarios as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->comprasScheduledForDeletion !== null) {
@@ -1085,6 +1116,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             }
 
 
+                if ($this->collAjusteinventarios !== null) {
+                    foreach ($this->collAjusteinventarios as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collCompras !== null) {
                     foreach ($this->collCompras as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1282,6 +1321,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         if ($includeForeignObjects) {
             if (null !== $this->aSucursal) {
                 $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collAjusteinventarios) {
+                $result['Ajusteinventarios'] = $this->collAjusteinventarios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collCompras) {
                 $result['Compras'] = $this->collCompras->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1491,6 +1533,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getAjusteinventarios() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAjusteinventario($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getCompras() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCompra($relObj->copy($deepCopy));
@@ -1682,6 +1730,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('Ajusteinventario' == $relationName) {
+            $this->initAjusteinventarios();
+        }
         if ('Compra' == $relationName) {
             $this->initCompras();
         }
@@ -1721,6 +1772,331 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         if ('Ventadetalle' == $relationName) {
             $this->initVentadetalles();
         }
+    }
+
+    /**
+     * Clears out the collAjusteinventarios collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addAjusteinventarios()
+     */
+    public function clearAjusteinventarios()
+    {
+        $this->collAjusteinventarios = null; // important to set this to null since that means it is uninitialized
+        $this->collAjusteinventariosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAjusteinventarios collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAjusteinventarios($v = true)
+    {
+        $this->collAjusteinventariosPartial = $v;
+    }
+
+    /**
+     * Initializes the collAjusteinventarios collection.
+     *
+     * By default this just sets the collAjusteinventarios collection to an empty array (like clearcollAjusteinventarios());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAjusteinventarios($overrideExisting = true)
+    {
+        if (null !== $this->collAjusteinventarios && !$overrideExisting) {
+            return;
+        }
+        $this->collAjusteinventarios = new PropelObjectCollection();
+        $this->collAjusteinventarios->setModel('Ajusteinventario');
+    }
+
+    /**
+     * Gets an array of Ajusteinventario objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     * @throws PropelException
+     */
+    public function getAjusteinventarios($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventariosPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarios || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarios) {
+                // return empty collection
+                $this->initAjusteinventarios();
+            } else {
+                $collAjusteinventarios = AjusteinventarioQuery::create(null, $criteria)
+                    ->filterByAlmacen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAjusteinventariosPartial && count($collAjusteinventarios)) {
+                      $this->initAjusteinventarios(false);
+
+                      foreach ($collAjusteinventarios as $obj) {
+                        if (false == $this->collAjusteinventarios->contains($obj)) {
+                          $this->collAjusteinventarios->append($obj);
+                        }
+                      }
+
+                      $this->collAjusteinventariosPartial = true;
+                    }
+
+                    $collAjusteinventarios->getInternalIterator()->rewind();
+
+                    return $collAjusteinventarios;
+                }
+
+                if ($partial && $this->collAjusteinventarios) {
+                    foreach ($this->collAjusteinventarios as $obj) {
+                        if ($obj->isNew()) {
+                            $collAjusteinventarios[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAjusteinventarios = $collAjusteinventarios;
+                $this->collAjusteinventariosPartial = false;
+            }
+        }
+
+        return $this->collAjusteinventarios;
+    }
+
+    /**
+     * Sets a collection of Ajusteinventario objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ajusteinventarios A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setAjusteinventarios(PropelCollection $ajusteinventarios, PropelPDO $con = null)
+    {
+        $ajusteinventariosToDelete = $this->getAjusteinventarios(new Criteria(), $con)->diff($ajusteinventarios);
+
+
+        $this->ajusteinventariosScheduledForDeletion = $ajusteinventariosToDelete;
+
+        foreach ($ajusteinventariosToDelete as $ajusteinventarioRemoved) {
+            $ajusteinventarioRemoved->setAlmacen(null);
+        }
+
+        $this->collAjusteinventarios = null;
+        foreach ($ajusteinventarios as $ajusteinventario) {
+            $this->addAjusteinventario($ajusteinventario);
+        }
+
+        $this->collAjusteinventarios = $ajusteinventarios;
+        $this->collAjusteinventariosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ajusteinventario objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ajusteinventario objects.
+     * @throws PropelException
+     */
+    public function countAjusteinventarios(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventariosPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarios || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarios) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAjusteinventarios());
+            }
+            $query = AjusteinventarioQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacen($this)
+                ->count($con);
+        }
+
+        return count($this->collAjusteinventarios);
+    }
+
+    /**
+     * Method called to associate a Ajusteinventario object to this object
+     * through the Ajusteinventario foreign key attribute.
+     *
+     * @param    Ajusteinventario $l Ajusteinventario
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addAjusteinventario(Ajusteinventario $l)
+    {
+        if ($this->collAjusteinventarios === null) {
+            $this->initAjusteinventarios();
+            $this->collAjusteinventariosPartial = true;
+        }
+
+        if (!in_array($l, $this->collAjusteinventarios->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAjusteinventario($l);
+
+            if ($this->ajusteinventariosScheduledForDeletion and $this->ajusteinventariosScheduledForDeletion->contains($l)) {
+                $this->ajusteinventariosScheduledForDeletion->remove($this->ajusteinventariosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ajusteinventario $ajusteinventario The ajusteinventario object to add.
+     */
+    protected function doAddAjusteinventario($ajusteinventario)
+    {
+        $this->collAjusteinventarios[]= $ajusteinventario;
+        $ajusteinventario->setAlmacen($this);
+    }
+
+    /**
+     * @param	Ajusteinventario $ajusteinventario The ajusteinventario object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeAjusteinventario($ajusteinventario)
+    {
+        if ($this->getAjusteinventarios()->contains($ajusteinventario)) {
+            $this->collAjusteinventarios->remove($this->collAjusteinventarios->search($ajusteinventario));
+            if (null === $this->ajusteinventariosScheduledForDeletion) {
+                $this->ajusteinventariosScheduledForDeletion = clone $this->collAjusteinventarios;
+                $this->ajusteinventariosScheduledForDeletion->clear();
+            }
+            $this->ajusteinventariosScheduledForDeletion[]= clone $ajusteinventario;
+            $ajusteinventario->setAlmacen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
     }
 
     /**
@@ -6005,6 +6381,11 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collAjusteinventarios) {
+                foreach ($this->collAjusteinventarios as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCompras) {
                 foreach ($this->collCompras as $o) {
                     $o->clearAllReferences($deep);
@@ -6077,6 +6458,10 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collAjusteinventarios instanceof PropelCollection) {
+            $this->collAjusteinventarios->clearIterator();
+        }
+        $this->collAjusteinventarios = null;
         if ($this->collCompras instanceof PropelCollection) {
             $this->collCompras->clearIterator();
         }

@@ -129,6 +129,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
     protected $aUnidadmedida;
 
     /**
+     * @var        PropelObjectCollection|Ajusteinventario[] Collection to store aggregation of Ajusteinventario objects.
+     */
+    protected $collAjusteinventarios;
+    protected $collAjusteinventariosPartial;
+
+    /**
      * @var        PropelObjectCollection|Codigobarras[] Collection to store aggregation of Codigobarras objects.
      */
     protected $collCodigobarrass;
@@ -175,6 +181,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
      */
     protected $collPlantillatablajeriadetalles;
     protected $collPlantillatablajeriadetallesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Productocfdi[] Collection to store aggregation of Productocfdi objects.
+     */
+    protected $collProductocfdis;
+    protected $collProductocfdisPartial;
 
     /**
      * @var        PropelObjectCollection|Productosucursalalmacen[] Collection to store aggregation of Productosucursalalmacen objects.
@@ -230,6 +242,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $ajusteinventariosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $codigobarrassScheduledForDeletion = null;
 
     /**
@@ -273,6 +291,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $plantillatablajeriadetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $productocfdisScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -909,6 +933,8 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->aEmpresa = null;
             $this->aCategoriaRelatedByIdsubcategoria = null;
             $this->aUnidadmedida = null;
+            $this->collAjusteinventarios = null;
+
             $this->collCodigobarrass = null;
 
             $this->collCompradetalles = null;
@@ -924,6 +950,8 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collPlantillatablajerias = null;
 
             $this->collPlantillatablajeriadetalles = null;
+
+            $this->collProductocfdis = null;
 
             $this->collProductosucursalalmacens = null;
 
@@ -1092,6 +1120,23 @@ abstract class BaseProducto extends BaseObject implements Persistent
                 $this->resetModified();
             }
 
+            if ($this->ajusteinventariosScheduledForDeletion !== null) {
+                if (!$this->ajusteinventariosScheduledForDeletion->isEmpty()) {
+                    AjusteinventarioQuery::create()
+                        ->filterByPrimaryKeys($this->ajusteinventariosScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ajusteinventariosScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAjusteinventarios !== null) {
+                foreach ($this->collAjusteinventarios as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->codigobarrassScheduledForDeletion !== null) {
                 if (!$this->codigobarrassScheduledForDeletion->isEmpty()) {
                     CodigobarrasQuery::create()
@@ -1222,6 +1267,23 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
             if ($this->collPlantillatablajeriadetalles !== null) {
                 foreach ($this->collPlantillatablajeriadetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->productocfdisScheduledForDeletion !== null) {
+                if (!$this->productocfdisScheduledForDeletion->isEmpty()) {
+                    ProductocfdiQuery::create()
+                        ->filterByPrimaryKeys($this->productocfdisScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->productocfdisScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProductocfdis !== null) {
+                foreach ($this->collProductocfdis as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1557,6 +1619,14 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
 
 
+                if ($this->collAjusteinventarios !== null) {
+                    foreach ($this->collAjusteinventarios as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collCodigobarrass !== null) {
                     foreach ($this->collCodigobarrass as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1615,6 +1685,14 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
                 if ($this->collPlantillatablajeriadetalles !== null) {
                     foreach ($this->collPlantillatablajeriadetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collProductocfdis !== null) {
+                    foreach ($this->collProductocfdis as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1796,6 +1874,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             if (null !== $this->aUnidadmedida) {
                 $result['Unidadmedida'] = $this->aUnidadmedida->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->collAjusteinventarios) {
+                $result['Ajusteinventarios'] = $this->collAjusteinventarios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collCodigobarrass) {
                 $result['Codigobarrass'] = $this->collCodigobarrass->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -1819,6 +1900,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             if (null !== $this->collPlantillatablajeriadetalles) {
                 $result['Plantillatablajeriadetalles'] = $this->collPlantillatablajeriadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collProductocfdis) {
+                $result['Productocfdis'] = $this->collProductocfdis->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collProductosucursalalmacens) {
                 $result['Productosucursalalmacens'] = $this->collProductosucursalalmacens->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2052,6 +2136,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
             // store object hash to prevent cycle
             $this->startCopy = true;
 
+            foreach ($this->getAjusteinventarios() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAjusteinventario($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getCodigobarrass() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCodigobarras($relObj->copy($deepCopy));
@@ -2097,6 +2187,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
             foreach ($this->getPlantillatablajeriadetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPlantillatablajeriadetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getProductocfdis() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProductocfdi($relObj->copy($deepCopy));
                 }
             }
 
@@ -2399,6 +2495,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('Ajusteinventario' == $relationName) {
+            $this->initAjusteinventarios();
+        }
         if ('Codigobarras' == $relationName) {
             $this->initCodigobarrass();
         }
@@ -2423,6 +2522,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ('Plantillatablajeriadetalle' == $relationName) {
             $this->initPlantillatablajeriadetalles();
         }
+        if ('Productocfdi' == $relationName) {
+            $this->initProductocfdis();
+        }
         if ('Productosucursalalmacen' == $relationName) {
             $this->initProductosucursalalmacens();
         }
@@ -2438,6 +2540,331 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ('Ventadetalle' == $relationName) {
             $this->initVentadetalles();
         }
+    }
+
+    /**
+     * Clears out the collAjusteinventarios collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Producto The current object (for fluent API support)
+     * @see        addAjusteinventarios()
+     */
+    public function clearAjusteinventarios()
+    {
+        $this->collAjusteinventarios = null; // important to set this to null since that means it is uninitialized
+        $this->collAjusteinventariosPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAjusteinventarios collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAjusteinventarios($v = true)
+    {
+        $this->collAjusteinventariosPartial = $v;
+    }
+
+    /**
+     * Initializes the collAjusteinventarios collection.
+     *
+     * By default this just sets the collAjusteinventarios collection to an empty array (like clearcollAjusteinventarios());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAjusteinventarios($overrideExisting = true)
+    {
+        if (null !== $this->collAjusteinventarios && !$overrideExisting) {
+            return;
+        }
+        $this->collAjusteinventarios = new PropelObjectCollection();
+        $this->collAjusteinventarios->setModel('Ajusteinventario');
+    }
+
+    /**
+     * Gets an array of Ajusteinventario objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Producto is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     * @throws PropelException
+     */
+    public function getAjusteinventarios($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventariosPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarios || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarios) {
+                // return empty collection
+                $this->initAjusteinventarios();
+            } else {
+                $collAjusteinventarios = AjusteinventarioQuery::create(null, $criteria)
+                    ->filterByProducto($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAjusteinventariosPartial && count($collAjusteinventarios)) {
+                      $this->initAjusteinventarios(false);
+
+                      foreach ($collAjusteinventarios as $obj) {
+                        if (false == $this->collAjusteinventarios->contains($obj)) {
+                          $this->collAjusteinventarios->append($obj);
+                        }
+                      }
+
+                      $this->collAjusteinventariosPartial = true;
+                    }
+
+                    $collAjusteinventarios->getInternalIterator()->rewind();
+
+                    return $collAjusteinventarios;
+                }
+
+                if ($partial && $this->collAjusteinventarios) {
+                    foreach ($this->collAjusteinventarios as $obj) {
+                        if ($obj->isNew()) {
+                            $collAjusteinventarios[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAjusteinventarios = $collAjusteinventarios;
+                $this->collAjusteinventariosPartial = false;
+            }
+        }
+
+        return $this->collAjusteinventarios;
+    }
+
+    /**
+     * Sets a collection of Ajusteinventario objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ajusteinventarios A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setAjusteinventarios(PropelCollection $ajusteinventarios, PropelPDO $con = null)
+    {
+        $ajusteinventariosToDelete = $this->getAjusteinventarios(new Criteria(), $con)->diff($ajusteinventarios);
+
+
+        $this->ajusteinventariosScheduledForDeletion = $ajusteinventariosToDelete;
+
+        foreach ($ajusteinventariosToDelete as $ajusteinventarioRemoved) {
+            $ajusteinventarioRemoved->setProducto(null);
+        }
+
+        $this->collAjusteinventarios = null;
+        foreach ($ajusteinventarios as $ajusteinventario) {
+            $this->addAjusteinventario($ajusteinventario);
+        }
+
+        $this->collAjusteinventarios = $ajusteinventarios;
+        $this->collAjusteinventariosPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ajusteinventario objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ajusteinventario objects.
+     * @throws PropelException
+     */
+    public function countAjusteinventarios(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventariosPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarios || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarios) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAjusteinventarios());
+            }
+            $query = AjusteinventarioQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProducto($this)
+                ->count($con);
+        }
+
+        return count($this->collAjusteinventarios);
+    }
+
+    /**
+     * Method called to associate a Ajusteinventario object to this object
+     * through the Ajusteinventario foreign key attribute.
+     *
+     * @param    Ajusteinventario $l Ajusteinventario
+     * @return Producto The current object (for fluent API support)
+     */
+    public function addAjusteinventario(Ajusteinventario $l)
+    {
+        if ($this->collAjusteinventarios === null) {
+            $this->initAjusteinventarios();
+            $this->collAjusteinventariosPartial = true;
+        }
+
+        if (!in_array($l, $this->collAjusteinventarios->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAjusteinventario($l);
+
+            if ($this->ajusteinventariosScheduledForDeletion and $this->ajusteinventariosScheduledForDeletion->contains($l)) {
+                $this->ajusteinventariosScheduledForDeletion->remove($this->ajusteinventariosScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ajusteinventario $ajusteinventario The ajusteinventario object to add.
+     */
+    protected function doAddAjusteinventario($ajusteinventario)
+    {
+        $this->collAjusteinventarios[]= $ajusteinventario;
+        $ajusteinventario->setProducto($this);
+    }
+
+    /**
+     * @param	Ajusteinventario $ajusteinventario The ajusteinventario object to remove.
+     * @return Producto The current object (for fluent API support)
+     */
+    public function removeAjusteinventario($ajusteinventario)
+    {
+        if ($this->getAjusteinventarios()->contains($ajusteinventario)) {
+            $this->collAjusteinventarios->remove($this->collAjusteinventarios->search($ajusteinventario));
+            if (null === $this->ajusteinventariosScheduledForDeletion) {
+                $this->ajusteinventariosScheduledForDeletion = clone $this->collAjusteinventarios;
+                $this->ajusteinventariosScheduledForDeletion->clear();
+            }
+            $this->ajusteinventariosScheduledForDeletion[]= clone $ajusteinventario;
+            $ajusteinventario->setProducto(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Ajusteinventarios from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventario[] List of Ajusteinventario objects
+     */
+    public function getAjusteinventariosJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarioQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getAjusteinventarios($query, $con);
     }
 
     /**
@@ -4616,6 +5043,256 @@ abstract class BaseProducto extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collProductocfdis collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Producto The current object (for fluent API support)
+     * @see        addProductocfdis()
+     */
+    public function clearProductocfdis()
+    {
+        $this->collProductocfdis = null; // important to set this to null since that means it is uninitialized
+        $this->collProductocfdisPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProductocfdis collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProductocfdis($v = true)
+    {
+        $this->collProductocfdisPartial = $v;
+    }
+
+    /**
+     * Initializes the collProductocfdis collection.
+     *
+     * By default this just sets the collProductocfdis collection to an empty array (like clearcollProductocfdis());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProductocfdis($overrideExisting = true)
+    {
+        if (null !== $this->collProductocfdis && !$overrideExisting) {
+            return;
+        }
+        $this->collProductocfdis = new PropelObjectCollection();
+        $this->collProductocfdis->setModel('Productocfdi');
+    }
+
+    /**
+     * Gets an array of Productocfdi objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Producto is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Productocfdi[] List of Productocfdi objects
+     * @throws PropelException
+     */
+    public function getProductocfdis($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProductocfdisPartial && !$this->isNew();
+        if (null === $this->collProductocfdis || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProductocfdis) {
+                // return empty collection
+                $this->initProductocfdis();
+            } else {
+                $collProductocfdis = ProductocfdiQuery::create(null, $criteria)
+                    ->filterByProducto($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProductocfdisPartial && count($collProductocfdis)) {
+                      $this->initProductocfdis(false);
+
+                      foreach ($collProductocfdis as $obj) {
+                        if (false == $this->collProductocfdis->contains($obj)) {
+                          $this->collProductocfdis->append($obj);
+                        }
+                      }
+
+                      $this->collProductocfdisPartial = true;
+                    }
+
+                    $collProductocfdis->getInternalIterator()->rewind();
+
+                    return $collProductocfdis;
+                }
+
+                if ($partial && $this->collProductocfdis) {
+                    foreach ($this->collProductocfdis as $obj) {
+                        if ($obj->isNew()) {
+                            $collProductocfdis[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProductocfdis = $collProductocfdis;
+                $this->collProductocfdisPartial = false;
+            }
+        }
+
+        return $this->collProductocfdis;
+    }
+
+    /**
+     * Sets a collection of Productocfdi objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $productocfdis A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setProductocfdis(PropelCollection $productocfdis, PropelPDO $con = null)
+    {
+        $productocfdisToDelete = $this->getProductocfdis(new Criteria(), $con)->diff($productocfdis);
+
+
+        $this->productocfdisScheduledForDeletion = $productocfdisToDelete;
+
+        foreach ($productocfdisToDelete as $productocfdiRemoved) {
+            $productocfdiRemoved->setProducto(null);
+        }
+
+        $this->collProductocfdis = null;
+        foreach ($productocfdis as $productocfdi) {
+            $this->addProductocfdi($productocfdi);
+        }
+
+        $this->collProductocfdis = $productocfdis;
+        $this->collProductocfdisPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Productocfdi objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Productocfdi objects.
+     * @throws PropelException
+     */
+    public function countProductocfdis(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProductocfdisPartial && !$this->isNew();
+        if (null === $this->collProductocfdis || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProductocfdis) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProductocfdis());
+            }
+            $query = ProductocfdiQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProducto($this)
+                ->count($con);
+        }
+
+        return count($this->collProductocfdis);
+    }
+
+    /**
+     * Method called to associate a Productocfdi object to this object
+     * through the Productocfdi foreign key attribute.
+     *
+     * @param    Productocfdi $l Productocfdi
+     * @return Producto The current object (for fluent API support)
+     */
+    public function addProductocfdi(Productocfdi $l)
+    {
+        if ($this->collProductocfdis === null) {
+            $this->initProductocfdis();
+            $this->collProductocfdisPartial = true;
+        }
+
+        if (!in_array($l, $this->collProductocfdis->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProductocfdi($l);
+
+            if ($this->productocfdisScheduledForDeletion and $this->productocfdisScheduledForDeletion->contains($l)) {
+                $this->productocfdisScheduledForDeletion->remove($this->productocfdisScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Productocfdi $productocfdi The productocfdi object to add.
+     */
+    protected function doAddProductocfdi($productocfdi)
+    {
+        $this->collProductocfdis[]= $productocfdi;
+        $productocfdi->setProducto($this);
+    }
+
+    /**
+     * @param	Productocfdi $productocfdi The productocfdi object to remove.
+     * @return Producto The current object (for fluent API support)
+     */
+    public function removeProductocfdi($productocfdi)
+    {
+        if ($this->getProductocfdis()->contains($productocfdi)) {
+            $this->collProductocfdis->remove($this->collProductocfdis->search($productocfdi));
+            if (null === $this->productocfdisScheduledForDeletion) {
+                $this->productocfdisScheduledForDeletion = clone $this->collProductocfdis;
+                $this->productocfdisScheduledForDeletion->clear();
+            }
+            $this->productocfdisScheduledForDeletion[]= clone $productocfdi;
+            $productocfdi->setProducto(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Productocfdis from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Productocfdi[] List of Productocfdi objects
+     */
+    public function getProductocfdisJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProductocfdiQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getProductocfdis($query, $con);
+    }
+
+    /**
      * Clears out the collProductosucursalalmacens collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -5981,6 +6658,11 @@ abstract class BaseProducto extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collAjusteinventarios) {
+                foreach ($this->collAjusteinventarios as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCodigobarrass) {
                 foreach ($this->collCodigobarrass as $o) {
                     $o->clearAllReferences($deep);
@@ -6018,6 +6700,11 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             if ($this->collPlantillatablajeriadetalles) {
                 foreach ($this->collPlantillatablajeriadetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collProductocfdis) {
+                foreach ($this->collProductocfdis as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -6062,6 +6749,10 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collAjusteinventarios instanceof PropelCollection) {
+            $this->collAjusteinventarios->clearIterator();
+        }
+        $this->collAjusteinventarios = null;
         if ($this->collCodigobarrass instanceof PropelCollection) {
             $this->collCodigobarrass->clearIterator();
         }
@@ -6094,6 +6785,10 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collPlantillatablajeriadetalles->clearIterator();
         }
         $this->collPlantillatablajeriadetalles = null;
+        if ($this->collProductocfdis instanceof PropelCollection) {
+            $this->collProductocfdis->clearIterator();
+        }
+        $this->collProductocfdis = null;
         if ($this->collProductosucursalalmacens instanceof PropelCollection) {
             $this->collProductosucursalalmacens->clearIterator();
         }

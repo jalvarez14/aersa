@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'cuentaporcobrar' table.
+ * This class defines the structure of the 'ajusteinventario' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.aersa.map
  */
-class CuentaporcobrarTableMap extends TableMap
+class AjusteinventarioTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'aersa.map.CuentaporcobrarTableMap';
+    const CLASS_NAME = 'aersa.map.AjusteinventarioTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,23 +32,26 @@ class CuentaporcobrarTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('cuentaporcobrar');
-        $this->setPhpName('Cuentaporcobrar');
-        $this->setClassname('Cuentaporcobrar');
+        $this->setName('ajusteinventario');
+        $this->setPhpName('Ajusteinventario');
+        $this->setClassname('Ajusteinventario');
         $this->setPackage('aersa');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('idcuentaporcobrar', 'Idcuentaporcobrar', 'INTEGER', true, null, null);
+        $this->addPrimaryKey('idajusteinventario', 'Idajusteinventario', 'INTEGER', true, null, null);
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
+        $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
+        $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
         $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addColumn('cuentaporcobrar_cantidad', 'CuentaporcobrarCantidad', 'DECIMAL', true, 15, null);
-        $this->addColumn('cuentaporcobrar_cliente', 'CuentaporcobrarCliente', 'VARCHAR', true, 255, null);
-        $this->addColumn('cuentaporcobrar_fecha', 'CuentaporcobrarFecha', 'TIMESTAMP', true, null, null);
-        $this->addColumn('cuentaporcobrar_referencia', 'CuentaporcobrarReferencia', 'LONGVARCHAR', false, null, null);
-        $this->addColumn('cuentaporcobrar_abonado', 'CuentaporcobrarAbonado', 'DECIMAL', false, 15, 0);
-        $this->addColumn('cuentaporcobrar_estatuspago', 'CuentaporcobrarEstatuspago', 'BOOLEAN', true, 1, null);
-        $this->addColumn('cuentaporcobrar_comprobante', 'CuentaporcobrarComprobante', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('ajusteinventario_cantidad', 'AjusteinventarioCantidad', 'DECIMAL', true, 10, null);
+        $this->addColumn('ajusteinventario_comentario', 'AjusteinventarioComentario', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('ajusteinventario_fecha', 'AjusteinventarioFecha', 'TIMESTAMP', true, null, null);
+        $this->addColumn('ajusteinventario_tipo', 'AjusteinventarioTipo', 'CHAR', true, null, null);
+        $this->getColumn('ajusteinventario_tipo', false)->setValueSet(array (
+  0 => 'sobrante',
+  1 => 'faltante',
+));
         // validators
     } // initialize()
 
@@ -57,10 +60,11 @@ class CuentaporcobrarTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Almacen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Usuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idcuentaporcobrar' => 'idcuentaporcobrar', ), null, null, 'Flujoefectivos');
     } // buildRelations()
 
-} // CuentaporcobrarTableMap
+} // AjusteinventarioTableMap

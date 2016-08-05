@@ -393,6 +393,9 @@ abstract class BaseSucursalPeer
         // Invalidate objects in AbonoproveedorPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AbonoproveedorPeer::clearInstancePool();
+        // Invalidate objects in AjusteinventarioPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AjusteinventarioPeer::clearInstancePool();
         // Invalidate objects in AlmacenPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AlmacenPeer::clearInstancePool();
@@ -1015,6 +1018,12 @@ abstract class BaseSucursalPeer
 
             $criteria->add(AbonoproveedorPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += AbonoproveedorPeer::doDelete($criteria, $con);
+
+            // delete related Ajusteinventario objects
+            $criteria = new Criteria(AjusteinventarioPeer::DATABASE_NAME);
+
+            $criteria->add(AjusteinventarioPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += AjusteinventarioPeer::doDelete($criteria, $con);
 
             // delete related Almacen objects
             $criteria = new Criteria(AlmacenPeer::DATABASE_NAME);

@@ -378,6 +378,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in AbonoproveedorPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AbonoproveedorPeer::clearInstancePool();
+        // Invalidate objects in AjusteinventarioPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AjusteinventarioPeer::clearInstancePool();
         // Invalidate objects in CompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompraPeer::clearInstancePool();
@@ -408,6 +411,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in ProductoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ProductoPeer::clearInstancePool();
+        // Invalidate objects in ProductocfdiPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProductocfdiPeer::clearInstancePool();
         // Invalidate objects in ProductosucursalalmacenPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ProductosucursalalmacenPeer::clearInstancePool();
@@ -769,6 +775,12 @@ abstract class BaseEmpresaPeer
             $criteria->add(AbonoproveedorPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += AbonoproveedorPeer::doDelete($criteria, $con);
 
+            // delete related Ajusteinventario objects
+            $criteria = new Criteria(AjusteinventarioPeer::DATABASE_NAME);
+
+            $criteria->add(AjusteinventarioPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += AjusteinventarioPeer::doDelete($criteria, $con);
+
             // delete related Compra objects
             $criteria = new Criteria(CompraPeer::DATABASE_NAME);
 
@@ -828,6 +840,12 @@ abstract class BaseEmpresaPeer
 
             $criteria->add(ProductoPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += ProductoPeer::doDelete($criteria, $con);
+
+            // delete related Productocfdi objects
+            $criteria = new Criteria(ProductocfdiPeer::DATABASE_NAME);
+
+            $criteria->add(ProductocfdiPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += ProductocfdiPeer::doDelete($criteria, $con);
 
             // delete related Productosucursalalmacen objects
             $criteria = new Criteria(ProductosucursalalmacenPeer::DATABASE_NAME);

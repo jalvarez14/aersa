@@ -54,6 +54,10 @@
  * @method ProductoQuery rightJoinUnidadmedida($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Unidadmedida relation
  * @method ProductoQuery innerJoinUnidadmedida($relationAlias = null) Adds a INNER JOIN clause to the query using the Unidadmedida relation
  *
+ * @method ProductoQuery leftJoinAjusteinventario($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ajusteinventario relation
+ * @method ProductoQuery rightJoinAjusteinventario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ajusteinventario relation
+ * @method ProductoQuery innerJoinAjusteinventario($relationAlias = null) Adds a INNER JOIN clause to the query using the Ajusteinventario relation
+ *
  * @method ProductoQuery leftJoinCodigobarras($relationAlias = null) Adds a LEFT JOIN clause to the query using the Codigobarras relation
  * @method ProductoQuery rightJoinCodigobarras($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Codigobarras relation
  * @method ProductoQuery innerJoinCodigobarras($relationAlias = null) Adds a INNER JOIN clause to the query using the Codigobarras relation
@@ -85,6 +89,10 @@
  * @method ProductoQuery leftJoinPlantillatablajeriadetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Plantillatablajeriadetalle relation
  * @method ProductoQuery rightJoinPlantillatablajeriadetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Plantillatablajeriadetalle relation
  * @method ProductoQuery innerJoinPlantillatablajeriadetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Plantillatablajeriadetalle relation
+ *
+ * @method ProductoQuery leftJoinProductocfdi($relationAlias = null) Adds a LEFT JOIN clause to the query using the Productocfdi relation
+ * @method ProductoQuery rightJoinProductocfdi($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Productocfdi relation
+ * @method ProductoQuery innerJoinProductocfdi($relationAlias = null) Adds a INNER JOIN clause to the query using the Productocfdi relation
  *
  * @method ProductoQuery leftJoinProductosucursalalmacen($relationAlias = null) Adds a LEFT JOIN clause to the query using the Productosucursalalmacen relation
  * @method ProductoQuery rightJoinProductosucursalalmacen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Productosucursalalmacen relation
@@ -1134,6 +1142,80 @@ abstract class BaseProductoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Ajusteinventario object
+     *
+     * @param   Ajusteinventario|PropelObjectCollection $ajusteinventario  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAjusteinventario($ajusteinventario, $comparison = null)
+    {
+        if ($ajusteinventario instanceof Ajusteinventario) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDPRODUCTO, $ajusteinventario->getIdproducto(), $comparison);
+        } elseif ($ajusteinventario instanceof PropelObjectCollection) {
+            return $this
+                ->useAjusteinventarioQuery()
+                ->filterByPrimaryKeys($ajusteinventario->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAjusteinventario() only accepts arguments of type Ajusteinventario or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ajusteinventario relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinAjusteinventario($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ajusteinventario');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ajusteinventario');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ajusteinventario relation Ajusteinventario object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AjusteinventarioQuery A secondary query class using the current class as primary query
+     */
+    public function useAjusteinventarioQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAjusteinventario($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ajusteinventario', 'AjusteinventarioQuery');
+    }
+
+    /**
      * Filter the query by a related Codigobarras object
      *
      * @param   Codigobarras|PropelObjectCollection $codigobarras  the related object to use as filter
@@ -1723,6 +1805,80 @@ abstract class BaseProductoQuery extends ModelCriteria
         return $this
             ->joinPlantillatablajeriadetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Plantillatablajeriadetalle', 'PlantillatablajeriadetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Productocfdi object
+     *
+     * @param   Productocfdi|PropelObjectCollection $productocfdi  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProductocfdi($productocfdi, $comparison = null)
+    {
+        if ($productocfdi instanceof Productocfdi) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDPRODUCTO, $productocfdi->getIdproducto(), $comparison);
+        } elseif ($productocfdi instanceof PropelObjectCollection) {
+            return $this
+                ->useProductocfdiQuery()
+                ->filterByPrimaryKeys($productocfdi->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProductocfdi() only accepts arguments of type Productocfdi or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Productocfdi relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinProductocfdi($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Productocfdi');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Productocfdi');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Productocfdi relation Productocfdi object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProductocfdiQuery A secondary query class using the current class as primary query
+     */
+    public function useProductocfdiQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProductocfdi($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Productocfdi', 'ProductocfdiQuery');
     }
 
     /**

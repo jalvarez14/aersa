@@ -54,6 +54,7 @@ class UsuarioTableMap extends TableMap
     {
         $this->addRelation('Rol', 'Rol', RelationMap::MANY_TO_ONE, array('idrol' => 'idrol', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Abonoproveedordetalle', 'Abonoproveedordetalle', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Abonoproveedordetalles');
+        $this->addRelation('Ajusteinventario', 'Ajusteinventario', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Ajusteinventarios');
         $this->addRelation('CompraRelatedByIdauditor', 'Compra', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'ComprasRelatedByIdauditor');
         $this->addRelation('CompraRelatedByIdusuario', 'Compra', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'ComprasRelatedByIdusuario');
         $this->addRelation('Compranota', 'Compranota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Compranotas');

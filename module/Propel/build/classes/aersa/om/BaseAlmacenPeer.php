@@ -375,6 +375,9 @@ abstract class BaseAlmacenPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in AjusteinventarioPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AjusteinventarioPeer::clearInstancePool();
         // Invalidate objects in CompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompraPeer::clearInstancePool();
@@ -985,6 +988,12 @@ abstract class BaseAlmacenPeer
         $objects = AlmacenPeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+
+            // delete related Ajusteinventario objects
+            $criteria = new Criteria(AjusteinventarioPeer::DATABASE_NAME);
+
+            $criteria->add(AjusteinventarioPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += AjusteinventarioPeer::doDelete($criteria, $con);
 
             // delete related Compra objects
             $criteria = new Criteria(CompraPeer::DATABASE_NAME);

@@ -52,6 +52,7 @@ class AlmacenTableMap extends TableMap
     public function buildRelations()
     {
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Ajusteinventario', 'Ajusteinventario', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Ajusteinventarios');
         $this->addRelation('Compra', 'Compra', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Compras');
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Compradetalles');
         $this->addRelation('Devolucion', 'Devolucion', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Devolucions');

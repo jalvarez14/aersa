@@ -68,6 +68,7 @@ class ProductoTableMap extends TableMap
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
         $this->addRelation('CategoriaRelatedByIdsubcategoria', 'Categoria', RelationMap::MANY_TO_ONE, array('idsubcategoria' => 'idcategoria', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Unidadmedida', 'Unidadmedida', RelationMap::MANY_TO_ONE, array('idunidadmedida' => 'idunidadmedida', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Ajusteinventario', 'Ajusteinventario', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Ajusteinventarios');
         $this->addRelation('Codigobarras', 'Codigobarras', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Codigobarrass');
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Compradetalles');
         $this->addRelation('Devoluciondetalle', 'Devoluciondetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Devoluciondetalles');
@@ -76,6 +77,7 @@ class ProductoTableMap extends TableMap
         $this->addRelation('Ordentablajeriadetalle', 'Ordentablajeriadetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Ordentablajeriadetalles');
         $this->addRelation('Plantillatablajeria', 'Plantillatablajeria', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Plantillatablajerias');
         $this->addRelation('Plantillatablajeriadetalle', 'Plantillatablajeriadetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Plantillatablajeriadetalles');
+        $this->addRelation('Productocfdi', 'Productocfdi', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Productocfdis');
         $this->addRelation('Productosucursalalmacen', 'Productosucursalalmacen', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Productosucursalalmacens');
         $this->addRelation('RecetaRelatedByIdproducto', 'Receta', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'RecetasRelatedByIdproducto');
         $this->addRelation('RecetaRelatedByIdproductoreceta', 'Receta', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproductoreceta', ), 'CASCADE', 'CASCADE', 'RecetasRelatedByIdproductoreceta');

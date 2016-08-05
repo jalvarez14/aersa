@@ -383,6 +383,9 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in AbonoproveedordetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AbonoproveedordetallePeer::clearInstancePool();
+        // Invalidate objects in AjusteinventarioPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AjusteinventarioPeer::clearInstancePool();
         // Invalidate objects in CompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompraPeer::clearInstancePool();
@@ -1041,6 +1044,12 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(AbonoproveedordetallePeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += AbonoproveedordetallePeer::doDelete($criteria, $con);
+
+            // delete related Ajusteinventario objects
+            $criteria = new Criteria(AjusteinventarioPeer::DATABASE_NAME);
+
+            $criteria->add(AjusteinventarioPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += AjusteinventarioPeer::doDelete($criteria, $con);
 
             // delete related Compra objects
             $criteria = new Criteria(CompraPeer::DATABASE_NAME);
