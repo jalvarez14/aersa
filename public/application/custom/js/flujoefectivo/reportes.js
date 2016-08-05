@@ -115,10 +115,15 @@
 
         plugin.anual = function () {
             $('select[name=ano]').on('change', function () {
-                if ($('select[name=ano] option:selected').val() != "")
+                if ($('select[name=ano] option:selected').val() != "") {
                     $('#anual_generar').attr('disabled', false);
-                else
+                    $('#generar_excel').attr('disabled', false);
+                    $('#generar_pdf').attr('disabled', false);
+                } else {
                     $('#anual_generar').attr('disabled', true);
+                    $('#generar_excel').attr('disabled', true);
+                    $('#generar_pdf').attr('disabled', true);
+                }
             });
 
             $('#anual_generar').on('click', function () {
