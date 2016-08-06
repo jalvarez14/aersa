@@ -1,0 +1,176 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">Reporte variación de los costos</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/reportes/entradasporcompras">Relación de entradas por compras</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    $form->setAttribute('action', '/reportes/entradasporcompras');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <br>
+                <h5>Movimientos</h5>
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('fecha_inicial')) ?>  
+                        <?php echo $this->formText($form->get('fecha_inicial')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('fecha_final')) ?>  
+                        <?php echo $this->formText($form->get('fecha_final')) ?> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                <h5 class="form-section">Proveedor</h5>
+                <div class="row">
+                <div class="col-md-6">
+                    <button type="button" id="proveedores_sel" name="proveedor_sel" class="btn blue btn-outline"><i class="fa fa-check"></i>Seleccionar todos</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="proveedores_des" name="proveedor_des" class="btn red btn-outline"><i class="fa fa-close"></i>Deseleccionar todos</button>
+                </div>
+                <br>
+                <br>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" id="proveedores_table">
+                            <thead>
+                            <th></th>
+                            <th>Proveedor</th>
+                            </thead>
+                            <tbody id="tbody">
+                                <?php $color=true;$proveedor = new Proveedor();
+                                foreach ($proveedores as $proveedor): ?>
+                                <tr id="<?php echo $proveedor->getIdproveedor() ?>">
+                                        <td>
+                                            <input type="checkbox" id="proveedor-<?php echo $proveedor->getIdproveedor() ?>" class="icheck proveedor" >
+                                        </td>
+                                        <td name="nombre_proveedor" id="nombre_proveedor"><?php echo ucfirst($proveedor->getProveedorNombrecomercial()); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                    
+                    <div class="col-md-6">
+                <h5 class="form-section">Almacenes</h5>
+                <div class="row">
+                <div class="col-md-6">
+                    <button type="button" id="almacenes_sel" name="almacen_sel" class="btn blue btn-outline"><i class="fa fa-check"></i>Seleccionar todos</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="almacenes_des" name="almacen_des" class="btn red btn-outline"><i class="fa fa-close"></i>Deseleccionar todos</button>
+                </div>
+                <br>
+                <br>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" id="almacenes_table">
+                            <thead>
+                            <th></th>
+                            <th>Almacen</th>
+                            </thead>
+                            <tbody id="tbody">
+                                <?php $almacen = new Almacen();
+                                foreach ($almacenes as $almacen): ?>
+                                <tr id="<?php echo $almacen->getIdalmacen() ?>">
+                                        <td>
+                                            <input type="checkbox" id="almacen-<?php echo $almacen->getIdalmacen() ?>" class="icheck almacen" >
+                                        </td>
+                                        <td name="nombre_almacen" id="nombre_almacen"><?php echo ucfirst($almacen->getAlmacenNombre()); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                <h5 class="form-section">Productos</h5>
+                <div class="row">
+                <div class="col-md-6">
+                    <button type="button" id="productos_sel" name="productos_sel" class="btn blue btn-outline"><i class="fa fa-check"></i>Seleccionar todos</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="productos_des" name="productos_des" class="btn red btn-outline"><i class="fa fa-close"></i>Deseleccionar todos</button>
+                </div>
+                <br>
+                <br>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table" id="productos_table">
+                            <thead>
+                            <th></th>
+                            <th>Producto</th>
+                            </thead>
+                            <tbody id="tbody">
+                                <?php $color=true;$producto = new Producto();
+                                foreach ($productos as $producto): ?>
+                                    <tr id="<?php echo $producto->getIdproducto() ?>">
+                                        <td>
+                                            <input type="checkbox" id="producto-<?php echo $producto->getIdproducto() ?>" class="icheck producto" >
+                                        </td>
+                                        <td name="nombre_producto" id="nombre_producto"><?php echo ucfirst($producto->getProductoNombre()); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+<!--                    <div class="left col-md-2">
+                        <button disabled class="btn blue" id="generar_pdf" name="generar_pdf" type="submit">
+                            <i class="fa fa-file-pdf-o"></i>
+                            PDF
+                        </button>
+                    </div>
+                    <div class="left col-md-2">
+                        <button disabled class="btn blue" id="generar_excel" name="generar_excel" type="submit">
+                            <i class="fa fa-file-excel-o"></i>
+                            Excel
+                        </button>
+                    </div>-->
+                    <div class="right col-md-12" align="right">
+                        <button disabled class="btn blue" id="generar_reporte" name="generar_reporte" type="submit">
+                        <i class="fa fa-check"></i>
+                            Generar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="/application/custom/js/reportes/reportes.js" type="text/javascript"></script>	
+<script>
+    var $plugin = $('#my_container').reportes();
+    $plugin.entradasporcompras(<?php echo $mes_min?>,<?php echo $anio_min?>,<?php echo $mes_max?>,<?php echo $anio_max?>);
+</script>

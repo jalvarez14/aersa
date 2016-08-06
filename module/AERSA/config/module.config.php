@@ -1811,6 +1811,29 @@ return array(
                                     ),
                                 ),
                             ),
+                            'entradasporcompras' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/entradasporcompras',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Reportes\Controller\Reportes',
+                                        'action' => 'entradasporcompras',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'getrecientes' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/getrecientes',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Reportes\Controller\Reportes',
+                                                'action' => 'getrecientes',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
                         ),
                     )
                 ),

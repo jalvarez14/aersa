@@ -138,7 +138,28 @@
             });
             $('#todos').prop('checked', all_checked);
         }
-        
+        var revisarCheckboxEntradasporcompra = function () {
+            var proveedor = false;
+            var almacen = false;
+            var producto = false;
+            $container.find('.proveedor').filter(function () {
+                if ($(this).prop('checked'))
+                    proveedor = true;
+            });
+
+            $container.find('.almacen').filter(function () {
+                if ($(this).prop('checked'))
+                    almacen = true;
+            });
+
+            $container.find('.producto').filter(function () {
+                if ($(this).prop('checked'))
+                    producto = true;
+            });
+            var activar = (proveedor && almacen && producto) ? false : true;
+            $('#generar_reporte').attr('disabled', activar);
+        }
+
         plugin.variacioncostos = function () {
             $container.find('input:checkbox').on('click', function () {
                 var $this = $(this);
@@ -243,6 +264,94 @@
                     var palabra = $(this).find('td').eq(1).text();
                     $(this).attr("hidden", !palabra.includes(busqueda));
                 });
+            });
+        }
+
+        plugin.entradasporcompras = function (mes_min, anio_min, mes_max, anio_max) {
+
+            var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
+            var maxDate = new Date(anio_max + '/' + mes_max + '/' + '31');
+
+            container.find('input[name=fecha_inicial]').datepicker({
+                startDate: minDate,
+                endDate: maxDate,
+                format: 'dd/mm/yyyy',
+            });
+
+            container.find('input[name=fecha_final]').datepicker({
+                startDate: minDate,
+                endDate: maxDate,
+                format: 'dd/mm/yyyy',
+            });
+
+            var productos_table = $container.find('#productos_table');
+            $.ajax({
+                url: '/application/json/datatable/lang_es.json',
+                dataType: 'json',
+                success: function (data) {
+                    productos_table.dataTable({
+                        "language": data,
+                        "order": [],
+                    });
+                },
+            });
+
+            var proveedores_table = $container.find('#proveedores_table');
+            $.ajax({
+                url: '/application/json/datatable/lang_es.json',
+                dataType: 'json',
+                success: function (data) {
+                    proveedores_table.dataTable({
+                        "language": data,
+                        "order": [],
+                    });
+                },
+            });
+
+            var almacenes_table = $container.find('#almacenes_table');
+            $.ajax({
+                url: '/application/json/datatable/lang_es.json',
+                dataType: 'json',
+                success: function (data) {
+                    almacenes_table.dataTable({
+                        "language": data,
+                        "order": [],
+                    });
+                },
+            });
+
+            $('#proveedores_sel').on('click', function () {
+                $container.find('#proveedores_table input:checkbox').prop('checked', true);
+                revisarCheckboxEntradasporcompra();
+            });
+
+            $('#proveedores_des').on('click', function () {
+                $container.find('#proveedores_table input:checkbox').prop('checked', false);
+                revisarCheckboxEntradasporcompra();
+            });
+
+            $('#almacenes_sel').on('click', function () {
+                $container.find('#almacenes_table input:checkbox').prop('checked', true);
+                revisarCheckboxEntradasporcompra();
+            });
+
+            $('#almacenes_des').on('click', function () {
+                $container.find('#almacenes_table input:checkbox').prop('checked', false);
+                revisarCheckboxEntradasporcompra();
+            });
+
+            $('#productos_sel').on('click', function () {
+                $container.find('#productos_table input:checkbox').prop('checked', true);
+                revisarCheckboxEntradasporcompra();
+            });
+
+            $('#productos_des').on('click', function () {
+                $container.find('#productos_table input:checkbox').prop('checked', false);
+                revisarCheckboxEntradasporcompra();
+            });
+
+            $container.find('input:checkbox').on('click', function () {
+                revisarCheckboxEntradasporcompra();
             });
         }
 

@@ -6,7 +6,7 @@ use Zend\Form\Form;
 
 class AjustesinventariosForm extends Form {
     
-    public function __construct() {
+    public function __construct($almacen_array = array()) {
         
         parent::__construct('ajusteinventarioForm');
         
@@ -35,10 +35,16 @@ class AjustesinventariosForm extends Form {
         ));
         
         $this->add(array(
-           'name' => 'idalmacen',
-            'type' => 'Hidden',
+            'name' => 'idalmacen',
+            'type' => 'Select',
+            'options' => array(
+                'empty_option' => 'Sin especificar',
+                'label' => 'Almacen *',
+                'value_options' => $almacen_array,
+            ),
             'attributes' => array(
                 'required' => true,
+                'class' => 'form-control',
             ),
         ));
         
@@ -47,6 +53,18 @@ class AjustesinventariosForm extends Form {
             'type' => 'Hidden',
             'attributes' => array(
                 'required' => true,
+            ),
+        ));
+        
+        $this->add(array(
+           'name' => 'idproducto_autocomplete',
+            'type' => 'Text',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+              'options' => array(
+                'label' => 'Producto *',
             ),
         ));
         
@@ -75,7 +93,9 @@ class AjustesinventariosForm extends Form {
             'type' => 'Text',
             'attributes' => array(
                 'required' => false,
-                'class' => 'form-control'
+                'class' => 'form-control',
+                'data-autosize-on' => 'true',
+                'style' => 'resize: vertical',
             ),
             'options' => array(
                 'label' => 'Comentario ',
