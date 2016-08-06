@@ -1,10 +1,10 @@
 <link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <div id="form_container">
-    <h3 class="page-title">Registro cuenta bancaria </h3>
+    <h3 class="page-title">Registro ajuste de inventario </h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="/flujoefectivo/cuentabancaria">Cuenta bancaria</a>
+                <a href="/procesos/ajustesinventarios">Ajustes de inventarios</a>
                 <i class="fa fa-angle-right"></i>
             </li>
             <li>
@@ -28,7 +28,7 @@
         </div>
     <?php endforeach; ?>
     <?php
-    $form->setAttribute('action', '/flujoefectivo/cuentabancaria/nuevo');
+    $form->setAttribute('action', '/procesos/ajustesinventarios/nuevo');
     echo $this->form()->openTag($form);
     ?>
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
@@ -37,16 +37,36 @@
                 <h3 class="form-section">Información general</h3>
                 <div class="row">
                     <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('cuentabancaria_banco')); ?>  
-                    <?php echo  $this->formText($form->get('cuentabancaria_banco'));?>
+                        <?php echo $this->formLabel($form->get('ajusteinventario_fecha')) ?>  
+                        <?php echo $this->formText($form->get('ajusteinventario_fecha')) ?> 
                     </div>
                     <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('cuentabancaria_nocuenta')); ?>  
-                    <?php echo  $this->formText($form->get('cuentabancaria_nocuenta'));?>
+                        <?php echo $this->formLabel($form->get('idalmacen')); ?>  
+                        <?php echo $this->formSelect($form->get('idalmacen')); ?>
+                    </div>
+                    <div class="form-group">
+                    <div class="col-md-6">
+                        <label>Producto*</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                            </span>
+                            <?php echo $this->formHidden($form->get('idproducto')); ?>
+                            <input id="producto_autocomplete" class="form-control" type="text">
+                        </div>
+                    </div>
                     </div>
                     <div class="col-md-6">
-                    <?php echo $this->formLabel($form->get('cuentabancaria_balance')); ?>  
-                    <?php echo  $this->formText($form->get('cuentabancaria_balance'));?>
+                        <?php echo $this->formLabel($form->get('ajusteinventario_tipo')); ?>  
+                        <?php echo $this->formSelect($form->get('ajusteinventario_tipo')); ?>
+                    </div>
+                    <div class="col-md-6">
+                    <?php echo $this->formLabel($form->get('ajusteinventario_cantidad')); ?>  
+                    <?php echo  $this->formText($form->get('ajusteinventario_cantidad'));?>
+                    </div>
+                    <div class="col-md-12">
+                    <?php echo $this->formLabel($form->get('ajusteinventario_comentario')) ?>  
+                    <?php echo $this->formTextarea($form->get('ajusteinventario_comentario')) ?>
                     </div>
                 </div>
                 <br>
@@ -57,7 +77,7 @@
                 </div>
             </div>
             <div class="form-actions right">
-                <button class="btn blue" id="plantilla_save" type="submit">
+                <button class="btn blue" id="guardar_ajusteinventario" type="submit">
                     <i class="fa fa-check"></i>
                     Guardar
                 </button>
@@ -65,8 +85,8 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/application/custom/js/flujoefectivo/cuentabancaria.js"></script>
+<script type="text/javascript" src="/application/custom/js/procesos/ajustesinventarios.js"></script>
 <script>
-    var $form = $('#form_container').cuentabancaria();
-    $form.new();
+    var $form = $('#form_container').ajustesinventarios();
+    $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

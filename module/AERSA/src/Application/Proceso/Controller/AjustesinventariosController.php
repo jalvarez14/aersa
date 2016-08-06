@@ -17,7 +17,7 @@ class AjustesinventariosController extends AbstractActionController {
         $idsucursal = $session['idsucursal'];
 
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL---
-        $collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
+        $collection = \AjusteinventarioQuery::create()->filterByIdsucursal($idsucursal)->find();
 
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
@@ -39,63 +39,86 @@ class AjustesinventariosController extends AbstractActionController {
             $post_data = $request->getPost();
             $post_data['idempresa'] = $session['idempresa'];
             $post_data['idsucursal'] = $session['idsucursal'];
-            $cuentabancaria = new \Ajustesinventarios();
+            $post_data['idusuario'] = $session['idusuario'];
+            $post_data["ajusteinventario_fecha"] = date_create_from_format('d/m/Y', $post_data["ajusteinventario_fecha"]);
+            $ajusteinventario = new \Ajusteinventario();
             foreach ($post_data as $key => $value) {
-                if (\AjustesinventariosPeer::getTableMap()->hasColumn($key)) {
-                    $cuentabancaria->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                if (\AjusteinventarioPeer::getTableMap()->hasColumn($key)) {
+                    $ajusteinventario->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
             }
-            $cuentabancaria->setIdempresa($idempresa);
-            $cuentabancaria->setIdsucursal($idsucursal);
-            $cuentabancaria->save();
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
+            $ajusteinventario->save();
+            return $this->redirect()->toUrl('/procesos/ajustesinventarios');
+        }
+        $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+        $anio_activo = $sucursal->getSucursalAnioactivo();
+        $mes_activo = $sucursal->getSucursalMesactivo();
+        
+        $almacen_array = array();
+        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+        foreach ($almacenes as $almacen) {
+            $id = $almacen->getIdalmacen();
+            $almacen_array[$id] = $almacen->getAlmacenNombre();
         }
         //INTANCIAMOS NUESTRA VISTA
-        $form = new \Application\Flujoefectivo\Form\AjustesinventariosForm();
+        $form = new \Application\Proceso\Form\AjustesinventariosForm($almacen_array);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
+            'anio_activo' => $anio_activo,
+            'mes_activo' => $mes_activo,
         ));
-        $view_model->setTemplate('/application/flujoefectivo/cuentabancaria/nuevo');
+        $view_model->setTemplate('/application/proceso/ajusteinventario/nuevo');
         return $view_model;
     }
 
     public function editarAction() {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
         $request = $this->getRequest();
         $id = $this->params()->fromRoute('id');
-        $exist = \AjustesinventariosQuery::create()->filterByIdcuentabancaria($id)->exists();
+        $exist = \AjusteinventarioQuery::create()->filterByIdajusteinventario($id)->exists();
         if ($exist) {
-            $cuentabancaria = \AjustesinventariosQuery::create()->findPk($id);
+            $ajusteinventario = \AjusteinventarioQuery::create()->findPk($id);
             if ($request->isPost()) {
                 $post_data = $request->getPost();
                 foreach ($post_data as $key => $value) {
-                    if (\AjustesinventariosPeer::getTableMap()->hasColumn($key))
-                        $cuentabancaria->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    if (\AjusteinventarioPeer::getTableMap()->hasColumn($key))
+                        $ajusteinventario->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
-                $cuentabancaria->save();
+                $ajusteinventario->save();
                 //REDIRECCIONAMOS AL LISTADO
                 $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
+                return $this->redirect()->toUrl('/procesos/ajustesinventarios');
             }
-            $form = new \Application\Flujoefectivo\Form\AjustesinventariosForm();
-            $form->setData($cuentabancaria->toArray(\BasePeer::TYPE_FIELDNAME));
+            $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+            $anio_activo = $sucursal->getSucursalAnioactivo();
+            $mes_activo = $sucursal->getSucursalMesactivo();
+            $producto_nombre=$ajusteinventario->getProducto()->getProductoNombre();
             
-            $flujoefectivo = \FlujoefectivoQuery::create()->filterByIdcuentabancaria($cuentabancaria->getIdcuentabancaria())->find();
-            $saldoproveedor = \AbonoproveedordetalleQuery::create()->filterByIdcuentabancaria($cuentabancaria->getIdcuentabancaria())->find();
-            
+            $almacen_array = array();
+            $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+            foreach ($almacenes as $almacen) {
+                $id = $almacen->getIdalmacen();
+                $almacen_array[$id] = $almacen->getAlmacenNombre();
+            }
+            $form = new \Application\Proceso\Form\AjustesinventariosForm($almacen_array);
+            $form->setData($ajusteinventario->toArray(\BasePeer::TYPE_FIELDNAME));
+            $form->get('ajusteinventario_fecha')->setValue($ajusteinventario->getAjusteinventarioFecha('d/m/Y'));
             $view_model = new ViewModel();
-            $view_model->setTemplate('/application/flujoefectivo/cuentabancaria/editar');
+            $view_model->setTemplate('/application/proceso/ajusteinventario/editar');
             $view_model->setVariables(array(
                 'form' => $form,
-                'cuentabancaria' => $cuentabancaria,
+                'cuentabancaria' => $ajusteinventario,
                 'messages' => $this->flashMessenger(),
-                'flujoefectivo' => $flujoefectivo,
-                'saldoproveedor' => $saldoproveedor,
+                'anio_activo' => $anio_activo,
+                'mes_activo' => $mes_activo,
+                'producto_nombre' => $producto_nombre,
             ));
             return $view_model;
         } else {
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
+            return $this->redirect()->toUrl('/procesos/ajustesinventarios');
         }
     }
 
@@ -103,9 +126,9 @@ class AjustesinventariosController extends AbstractActionController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $id = $this->params()->fromRoute('id');
-            $cuentabancaria = \AjustesinventariosQuery::create()->findPk($id)->delete();
-            $this->flashMessenger()->addSuccessMessage('Cuenta bancaria eliminada satisfactoriamente!');
-            return $this->redirect()->toUrl('/flujoefectivo/cuentabancaria');
+            $ajusteinventario = \AjusteinventarioQuery::create()->findPk($id)->delete();
+            $this->flashMessenger()->addSuccessMessage('Ajuste de inventario eliminada satisfactoriamente!');
+            return $this->redirect()->toUrl('/procesos/ajustesinventarios');
         }
     }
 
