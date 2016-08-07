@@ -158,6 +158,9 @@
             });
             var activar = (proveedor && almacen && producto) ? false : true;
             $('#generar_reporte').attr('disabled', activar);
+            $('#generar_excel').attr('disabled', activar);
+            $('#generar_pdf').attr('disabled', activar);
+            alert("aaa");
         }
 
         plugin.variacioncostos = function () {
@@ -268,7 +271,7 @@
         }
 
         plugin.entradasporcompras = function (mes_min, anio_min, mes_max, anio_max) {
-
+            revisarCheckboxEntradasporcompra();
             var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
             var maxDate = new Date(anio_max + '/' + mes_max + '/' + '31');
 
