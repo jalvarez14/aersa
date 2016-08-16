@@ -120,6 +120,19 @@ class ProductosForm extends Form
             'attributes' => array(
                 'required' => false,
                 'class' => 'form-control',
+                 'step' => 'any',
+            ),
+        ));
+        $this->add(array(
+            'name' => 'producto_rendimientooriginal',
+            'type' => 'Number',
+            'options' => array(
+                'label' => 'Rendimiento normalizado*',
+            ),
+            'attributes' => array(
+                'required' => false,
+                'class' => 'form-control',
+                'step' => 'any',
             ),
         ));
         
@@ -132,6 +145,7 @@ class ProductosForm extends Form
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
+                'step' => 'any',
             ),
         ));
         
@@ -144,6 +158,7 @@ class ProductosForm extends Form
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
+                'step' => 'any',
             ),
         ));
         

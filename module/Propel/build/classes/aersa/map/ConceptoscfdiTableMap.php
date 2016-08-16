@@ -3,7 +3,7 @@
 
 
 /**
- * This class defines the structure of the 'receta' table.
+ * This class defines the structure of the 'conceptoscfdi' table.
  *
  *
  *
@@ -14,13 +14,13 @@
  *
  * @package    propel.generator.aersa.map
  */
-class RecetaTableMap extends TableMap
+class ConceptoscfdiTableMap extends TableMap
 {
 
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'aersa.map.RecetaTableMap';
+    const CLASS_NAME = 'aersa.map.ConceptoscfdiTableMap';
 
     /**
      * Initialize the table attributes, columns and validators
@@ -32,17 +32,16 @@ class RecetaTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('receta');
-        $this->setPhpName('Receta');
-        $this->setClassname('Receta');
+        $this->setName('conceptoscfdi');
+        $this->setPhpName('Conceptoscfdi');
+        $this->setClassname('Conceptoscfdi');
         $this->setPackage('aersa');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('idreceta', 'Idreceta', 'INTEGER', true, null, null);
+        $this->addPrimaryKey('idconceptoscfdi', 'Idconceptoscfdi', 'INTEGER', true, null, null);
+        $this->addColumn('conceptoscfdi_nombre', 'ConceptoscfdiNombre', 'LONGVARCHAR', true, null, null);
         $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
-        $this->addForeignKey('idproductoreceta', 'Idproductoreceta', 'INTEGER', 'producto', 'idproducto', true, null, null);
-        $this->addColumn('receta_cantidad', 'RecetaCantidad', 'FLOAT', true, null, null);
-        $this->addColumn('receta_cantidadoriginal', 'RecetaCantidadoriginal', 'FLOAT', false, null, null);
+        $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', false, null, null);
         // validators
     } // initialize()
 
@@ -51,8 +50,8 @@ class RecetaTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('ProductoRelatedByIdproducto', 'Producto', RelationMap::MANY_TO_ONE, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('ProductoRelatedByIdproductoreceta', 'Producto', RelationMap::MANY_TO_ONE, array('idproductoreceta' => 'idproducto', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
-} // RecetaTableMap
+} // ConceptoscfdiTableMap

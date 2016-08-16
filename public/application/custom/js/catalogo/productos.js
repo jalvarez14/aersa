@@ -3,6 +3,8 @@ $( document ).ready(function() {
     
     $("label[for=producto_rendimiento").hide();
     $("[name=producto_rendimiento]").hide();
+    $("label[for=producto_rendimientooriginal").hide();
+    $("[name=producto_rendimientooriginal]").hide();
     
     $("[name=idcategoria]").change(function () {
         getSubcategorias();
@@ -55,7 +57,24 @@ $( document ).ready(function() {
         
     });
     
-    
+    $('select[name=idcategoria],select[name=producto_tipo]').on('change',function(){
+        var idcategoria = $('select[name=idcategoria] option:selected').val();
+        var producto_tipo = $('select[name=producto_tipo] option:selected').val(); 
+        if(idcategoria == 1 && producto_tipo == 'subreceta')
+        {
+            $("label[for=producto_rendimiento").show();
+            $("[name=producto_rendimiento]").attr("required",true).show();
+            $("label[for=producto_rendimientooriginal").show();
+            $("[name=producto_rendimientooriginal]").attr("required",true).show();
+            $("[name=producto_costo]").attr("readonly",true);
+        }else{
+            $("label[for=producto_rendimiento").hide();
+            $("[name=producto_rendimiento]").attr("required",false).hide();
+            $("label[for=producto_rendimientooriginal").hide();
+            $("[name=producto_rendimientooriginal]").attr("required",false).hide();
+            $("[name=producto_costo]").attr("readonly",false);
+        }
+    });
     
     
     function getSubcategorias()

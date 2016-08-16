@@ -2,59 +2,56 @@
 
 
 /**
- * Base static class for performing query and update operations on the 'receta' table.
+ * Base static class for performing query and update operations on the 'conceptoscfdi' table.
  *
  *
  *
  * @package propel.generator.aersa.om
  */
-abstract class BaseRecetaPeer
+abstract class BaseConceptoscfdiPeer
 {
 
     /** the default database name for this class */
     const DATABASE_NAME = 'aersa';
 
     /** the table name for this class */
-    const TABLE_NAME = 'receta';
+    const TABLE_NAME = 'conceptoscfdi';
 
     /** the related Propel class for this table */
-    const OM_CLASS = 'Receta';
+    const OM_CLASS = 'Conceptoscfdi';
 
     /** the related TableMap class for this table */
-    const TM_CLASS = 'RecetaTableMap';
+    const TM_CLASS = 'ConceptoscfdiTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 4;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 4;
 
-    /** the column name for the idreceta field */
-    const IDRECETA = 'receta.idreceta';
+    /** the column name for the idconceptoscfdi field */
+    const IDCONCEPTOSCFDI = 'conceptoscfdi.idconceptoscfdi';
+
+    /** the column name for the conceptoscfdi_nombre field */
+    const CONCEPTOSCFDI_NOMBRE = 'conceptoscfdi.conceptoscfdi_nombre';
 
     /** the column name for the idproducto field */
-    const IDPRODUCTO = 'receta.idproducto';
+    const IDPRODUCTO = 'conceptoscfdi.idproducto';
 
-    /** the column name for the idproductoreceta field */
-    const IDPRODUCTORECETA = 'receta.idproductoreceta';
-
-    /** the column name for the receta_cantidad field */
-    const RECETA_CANTIDAD = 'receta.receta_cantidad';
-
-    /** the column name for the receta_cantidadoriginal field */
-    const RECETA_CANTIDADORIGINAL = 'receta.receta_cantidadoriginal';
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'conceptoscfdi.idempresa';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
     /**
-     * An identity map to hold any loaded instances of Receta objects.
+     * An identity map to hold any loaded instances of Conceptoscfdi objects.
      * This must be public so that other peer classes can access this when hydrating from JOIN
      * queries.
-     * @var        array Receta[]
+     * @var        array Conceptoscfdi[]
      */
     public static $instances = array();
 
@@ -63,30 +60,30 @@ abstract class BaseRecetaPeer
      * holds an array of fieldnames
      *
      * first dimension keys are the type constants
-     * e.g. RecetaPeer::$fieldNames[RecetaPeer::TYPE_PHPNAME][0] = 'Id'
+     * e.g. ConceptoscfdiPeer::$fieldNames[ConceptoscfdiPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idreceta', 'Idproducto', 'Idproductoreceta', 'RecetaCantidad', 'RecetaCantidadoriginal', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idreceta', 'idproducto', 'idproductoreceta', 'recetaCantidad', 'recetaCantidadoriginal', ),
-        BasePeer::TYPE_COLNAME => array (RecetaPeer::IDRECETA, RecetaPeer::IDPRODUCTO, RecetaPeer::IDPRODUCTORECETA, RecetaPeer::RECETA_CANTIDAD, RecetaPeer::RECETA_CANTIDADORIGINAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDRECETA', 'IDPRODUCTO', 'IDPRODUCTORECETA', 'RECETA_CANTIDAD', 'RECETA_CANTIDADORIGINAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('idreceta', 'idproducto', 'idproductoreceta', 'receta_cantidad', 'receta_cantidadoriginal', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idconceptoscfdi', 'ConceptoscfdiNombre', 'Idproducto', 'Idempresa', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idconceptoscfdi', 'conceptoscfdiNombre', 'idproducto', 'idempresa', ),
+        BasePeer::TYPE_COLNAME => array (ConceptoscfdiPeer::IDCONCEPTOSCFDI, ConceptoscfdiPeer::CONCEPTOSCFDI_NOMBRE, ConceptoscfdiPeer::IDPRODUCTO, ConceptoscfdiPeer::IDEMPRESA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCONCEPTOSCFDI', 'CONCEPTOSCFDI_NOMBRE', 'IDPRODUCTO', 'IDEMPRESA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idconceptoscfdi', 'conceptoscfdi_nombre', 'idproducto', 'idempresa', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
      * holds an array of keys for quick access to the fieldnames array
      *
      * first dimension keys are the type constants
-     * e.g. RecetaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
+     * e.g. ConceptoscfdiPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idreceta' => 0, 'Idproducto' => 1, 'Idproductoreceta' => 2, 'RecetaCantidad' => 3, 'RecetaCantidadoriginal' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idreceta' => 0, 'idproducto' => 1, 'idproductoreceta' => 2, 'recetaCantidad' => 3, 'recetaCantidadoriginal' => 4, ),
-        BasePeer::TYPE_COLNAME => array (RecetaPeer::IDRECETA => 0, RecetaPeer::IDPRODUCTO => 1, RecetaPeer::IDPRODUCTORECETA => 2, RecetaPeer::RECETA_CANTIDAD => 3, RecetaPeer::RECETA_CANTIDADORIGINAL => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDRECETA' => 0, 'IDPRODUCTO' => 1, 'IDPRODUCTORECETA' => 2, 'RECETA_CANTIDAD' => 3, 'RECETA_CANTIDADORIGINAL' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('idreceta' => 0, 'idproducto' => 1, 'idproductoreceta' => 2, 'receta_cantidad' => 3, 'receta_cantidadoriginal' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idconceptoscfdi' => 0, 'ConceptoscfdiNombre' => 1, 'Idproducto' => 2, 'Idempresa' => 3, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idconceptoscfdi' => 0, 'conceptoscfdiNombre' => 1, 'idproducto' => 2, 'idempresa' => 3, ),
+        BasePeer::TYPE_COLNAME => array (ConceptoscfdiPeer::IDCONCEPTOSCFDI => 0, ConceptoscfdiPeer::CONCEPTOSCFDI_NOMBRE => 1, ConceptoscfdiPeer::IDPRODUCTO => 2, ConceptoscfdiPeer::IDEMPRESA => 3, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCONCEPTOSCFDI' => 0, 'CONCEPTOSCFDI_NOMBRE' => 1, 'IDPRODUCTO' => 2, 'IDEMPRESA' => 3, ),
+        BasePeer::TYPE_FIELDNAME => array ('idconceptoscfdi' => 0, 'conceptoscfdi_nombre' => 1, 'idproducto' => 2, 'idempresa' => 3, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
     );
 
     /**
@@ -101,10 +98,10 @@ abstract class BaseRecetaPeer
      */
     public static function translateFieldName($name, $fromType, $toType)
     {
-        $toNames = RecetaPeer::getFieldNames($toType);
-        $key = isset(RecetaPeer::$fieldKeys[$fromType][$name]) ? RecetaPeer::$fieldKeys[$fromType][$name] : null;
+        $toNames = ConceptoscfdiPeer::getFieldNames($toType);
+        $key = isset(ConceptoscfdiPeer::$fieldKeys[$fromType][$name]) ? ConceptoscfdiPeer::$fieldKeys[$fromType][$name] : null;
         if ($key === null) {
-            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(RecetaPeer::$fieldKeys[$fromType], true));
+            throw new PropelException("'$name' could not be found in the field names of type '$fromType'. These are: " . print_r(ConceptoscfdiPeer::$fieldKeys[$fromType], true));
         }
 
         return $toNames[$key];
@@ -121,11 +118,11 @@ abstract class BaseRecetaPeer
      */
     public static function getFieldNames($type = BasePeer::TYPE_PHPNAME)
     {
-        if (!array_key_exists($type, RecetaPeer::$fieldNames)) {
+        if (!array_key_exists($type, ConceptoscfdiPeer::$fieldNames)) {
             throw new PropelException('Method getFieldNames() expects the parameter $type to be one of the class constants BasePeer::TYPE_PHPNAME, BasePeer::TYPE_STUDLYPHPNAME, BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM. ' . $type . ' was given.');
         }
 
-        return RecetaPeer::$fieldNames[$type];
+        return ConceptoscfdiPeer::$fieldNames[$type];
     }
 
     /**
@@ -137,12 +134,12 @@ abstract class BaseRecetaPeer
      *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
      * </code>
      * @param      string $alias The alias for the current table.
-     * @param      string $column The column name for current table. (i.e. RecetaPeer::COLUMN_NAME).
+     * @param      string $column The column name for current table. (i.e. ConceptoscfdiPeer::COLUMN_NAME).
      * @return string
      */
     public static function alias($alias, $column)
     {
-        return str_replace(RecetaPeer::TABLE_NAME.'.', $alias.'.', $column);
+        return str_replace(ConceptoscfdiPeer::TABLE_NAME.'.', $alias.'.', $column);
     }
 
     /**
@@ -160,17 +157,15 @@ abstract class BaseRecetaPeer
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(RecetaPeer::IDRECETA);
-            $criteria->addSelectColumn(RecetaPeer::IDPRODUCTO);
-            $criteria->addSelectColumn(RecetaPeer::IDPRODUCTORECETA);
-            $criteria->addSelectColumn(RecetaPeer::RECETA_CANTIDAD);
-            $criteria->addSelectColumn(RecetaPeer::RECETA_CANTIDADORIGINAL);
+            $criteria->addSelectColumn(ConceptoscfdiPeer::IDCONCEPTOSCFDI);
+            $criteria->addSelectColumn(ConceptoscfdiPeer::CONCEPTOSCFDI_NOMBRE);
+            $criteria->addSelectColumn(ConceptoscfdiPeer::IDPRODUCTO);
+            $criteria->addSelectColumn(ConceptoscfdiPeer::IDEMPRESA);
         } else {
-            $criteria->addSelectColumn($alias . '.idreceta');
+            $criteria->addSelectColumn($alias . '.idconceptoscfdi');
+            $criteria->addSelectColumn($alias . '.conceptoscfdi_nombre');
             $criteria->addSelectColumn($alias . '.idproducto');
-            $criteria->addSelectColumn($alias . '.idproductoreceta');
-            $criteria->addSelectColumn($alias . '.receta_cantidad');
-            $criteria->addSelectColumn($alias . '.receta_cantidadoriginal');
+            $criteria->addSelectColumn($alias . '.idempresa');
         }
     }
 
@@ -190,21 +185,21 @@ abstract class BaseRecetaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RecetaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ConceptoscfdiPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RecetaPeer::addSelectColumns($criteria);
+            ConceptoscfdiPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME); // Set the correct dbName
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME); // Set the correct dbName
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
         // BasePeer returns a PDOStatement
         $stmt = BasePeer::doCount($criteria, $con);
@@ -223,7 +218,7 @@ abstract class BaseRecetaPeer
      *
      * @param      Criteria $criteria object used to create the SELECT statement.
      * @param      PropelPDO $con
-     * @return Receta
+     * @return Conceptoscfdi
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -231,7 +226,7 @@ abstract class BaseRecetaPeer
     {
         $critcopy = clone $criteria;
         $critcopy->setLimit(1);
-        $objects = RecetaPeer::doSelect($critcopy, $con);
+        $objects = ConceptoscfdiPeer::doSelect($critcopy, $con);
         if ($objects) {
             return $objects[0];
         }
@@ -249,7 +244,7 @@ abstract class BaseRecetaPeer
      */
     public static function doSelect(Criteria $criteria, PropelPDO $con = null)
     {
-        return RecetaPeer::populateObjects(RecetaPeer::doSelectStmt($criteria, $con));
+        return ConceptoscfdiPeer::populateObjects(ConceptoscfdiPeer::doSelectStmt($criteria, $con));
     }
     /**
      * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -267,16 +262,16 @@ abstract class BaseRecetaPeer
     public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         if (!$criteria->hasSelectClause()) {
             $criteria = clone $criteria;
-            RecetaPeer::addSelectColumns($criteria);
+            ConceptoscfdiPeer::addSelectColumns($criteria);
         }
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         // BasePeer returns a PDOStatement
         return BasePeer::doSelect($criteria, $con);
@@ -290,16 +285,16 @@ abstract class BaseRecetaPeer
      * to the cache in order to ensure that the same objects are always returned by doSelect*()
      * and retrieveByPK*() calls.
      *
-     * @param Receta $obj A Receta object.
+     * @param Conceptoscfdi $obj A Conceptoscfdi object.
      * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if ($key === null) {
-                $key = (string) $obj->getIdreceta();
+                $key = (string) $obj->getIdconceptoscfdi();
             } // if key === null
-            RecetaPeer::$instances[$key] = $obj;
+            ConceptoscfdiPeer::$instances[$key] = $obj;
         }
     }
 
@@ -311,7 +306,7 @@ abstract class BaseRecetaPeer
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param      mixed $value A Receta object or a primary key value.
+     * @param      mixed $value A Conceptoscfdi object or a primary key value.
      *
      * @return void
      * @throws PropelException - if the value is invalid.
@@ -319,17 +314,17 @@ abstract class BaseRecetaPeer
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && $value !== null) {
-            if (is_object($value) && $value instanceof Receta) {
-                $key = (string) $value->getIdreceta();
+            if (is_object($value) && $value instanceof Conceptoscfdi) {
+                $key = (string) $value->getIdconceptoscfdi();
             } elseif (is_scalar($value)) {
                 // assume we've been passed a primary key
                 $key = (string) $value;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Receta object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Conceptoscfdi object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
                 throw $e;
             }
 
-            unset(RecetaPeer::$instances[$key]);
+            unset(ConceptoscfdiPeer::$instances[$key]);
         }
     } // removeInstanceFromPool()
 
@@ -340,14 +335,14 @@ abstract class BaseRecetaPeer
      * a multi-column primary key, a serialize()d version of the primary key will be returned.
      *
      * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-     * @return Receta Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+     * @return Conceptoscfdi Found object or null if 1) no instance exists for specified key or 2) instance pooling has been disabled.
      * @see        getPrimaryKeyHash()
      */
     public static function getInstanceFromPool($key)
     {
         if (Propel::isInstancePoolingEnabled()) {
-            if (isset(RecetaPeer::$instances[$key])) {
-                return RecetaPeer::$instances[$key];
+            if (isset(ConceptoscfdiPeer::$instances[$key])) {
+                return ConceptoscfdiPeer::$instances[$key];
             }
         }
 
@@ -362,15 +357,15 @@ abstract class BaseRecetaPeer
     public static function clearInstancePool($and_clear_all_references = false)
     {
       if ($and_clear_all_references) {
-        foreach (RecetaPeer::$instances as $instance) {
+        foreach (ConceptoscfdiPeer::$instances as $instance) {
           $instance->clearAllReferences(true);
         }
       }
-        RecetaPeer::$instances = array();
+        ConceptoscfdiPeer::$instances = array();
     }
 
     /**
-     * Method to invalidate the instance pool of all tables related to receta
+     * Method to invalidate the instance pool of all tables related to conceptoscfdi
      * by a foreign key with ON DELETE CASCADE
      */
     public static function clearRelatedInstancePool()
@@ -424,11 +419,11 @@ abstract class BaseRecetaPeer
         $results = array();
 
         // set the class once to avoid overhead in the loop
-        $cls = RecetaPeer::getOMClass();
+        $cls = ConceptoscfdiPeer::getOMClass();
         // populate the object(s)
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key = RecetaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj = RecetaPeer::getInstanceFromPool($key))) {
+            $key = ConceptoscfdiPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj = ConceptoscfdiPeer::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -437,7 +432,7 @@ abstract class BaseRecetaPeer
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                RecetaPeer::addInstanceToPool($obj, $key);
+                ConceptoscfdiPeer::addInstanceToPool($obj, $key);
             } // if key exists
         }
         $stmt->closeCursor();
@@ -451,21 +446,21 @@ abstract class BaseRecetaPeer
      * @param      int $startcol The 0-based offset for reading from the resultset row.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
-     * @return array (Receta object, last column rank)
+     * @return array (Conceptoscfdi object, last column rank)
      */
     public static function populateObject($row, $startcol = 0)
     {
-        $key = RecetaPeer::getPrimaryKeyHashFromRow($row, $startcol);
-        if (null !== ($obj = RecetaPeer::getInstanceFromPool($key))) {
+        $key = ConceptoscfdiPeer::getPrimaryKeyHashFromRow($row, $startcol);
+        if (null !== ($obj = ConceptoscfdiPeer::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $startcol, true); // rehydrate
-            $col = $startcol + RecetaPeer::NUM_HYDRATE_COLUMNS;
+            $col = $startcol + ConceptoscfdiPeer::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = RecetaPeer::OM_CLASS;
+            $cls = ConceptoscfdiPeer::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $startcol);
-            RecetaPeer::addInstanceToPool($obj, $key);
+            ConceptoscfdiPeer::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -473,7 +468,7 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related ProductoRelatedByIdproducto table
+     * Returns the number of rows matching criteria, joining the related Empresa table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -481,7 +476,7 @@ abstract class BaseRecetaPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinProductoRelatedByIdproducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -489,26 +484,26 @@ abstract class BaseRecetaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RecetaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ConceptoscfdiPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RecetaPeer::addSelectColumns($criteria);
+            ConceptoscfdiPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -524,7 +519,7 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related ProductoRelatedByIdproductoreceta table
+     * Returns the number of rows matching criteria, joining the related Producto table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -532,7 +527,7 @@ abstract class BaseRecetaPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinProductoRelatedByIdproductoreceta(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -540,26 +535,26 @@ abstract class BaseRecetaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RecetaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ConceptoscfdiPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RecetaPeer::addSelectColumns($criteria);
+            ConceptoscfdiPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTORECETA, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -575,61 +570,61 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Selects a collection of Receta objects pre-filled with their Producto objects.
+     * Selects a collection of Conceptoscfdi objects pre-filled with their Empresa objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Receta objects.
+     * @return array           Array of Conceptoscfdi objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinProductoRelatedByIdproducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+            $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
         }
 
-        RecetaPeer::addSelectColumns($criteria);
-        $startcol = RecetaPeer::NUM_HYDRATE_COLUMNS;
-        ProductoPeer::addSelectColumns($criteria);
+        ConceptoscfdiPeer::addSelectColumns($criteria);
+        $startcol = ConceptoscfdiPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RecetaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RecetaPeer::getInstanceFromPool($key1))) {
+            $key1 = ConceptoscfdiPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ConceptoscfdiPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = RecetaPeer::getOMClass();
+                $cls = ConceptoscfdiPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RecetaPeer::addInstanceToPool($obj1, $key1);
+                ConceptoscfdiPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
-            $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol);
             if ($key2 !== null) {
-                $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = ProductoPeer::getOMClass();
+                    $cls = EmpresaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol);
-                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Receta) to $obj2 (Producto)
-                $obj2->addRecetaRelatedByIdproducto($obj1);
+                // Add the $obj1 (Conceptoscfdi) to $obj2 (Empresa)
+                $obj2->addConceptoscfdi($obj1);
 
             } // if joined row was not null
 
@@ -642,45 +637,45 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Selects a collection of Receta objects pre-filled with their Producto objects.
+     * Selects a collection of Conceptoscfdi objects pre-filled with their Producto objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Receta objects.
+     * @return array           Array of Conceptoscfdi objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinProductoRelatedByIdproductoreceta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+            $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
         }
 
-        RecetaPeer::addSelectColumns($criteria);
-        $startcol = RecetaPeer::NUM_HYDRATE_COLUMNS;
+        ConceptoscfdiPeer::addSelectColumns($criteria);
+        $startcol = ConceptoscfdiPeer::NUM_HYDRATE_COLUMNS;
         ProductoPeer::addSelectColumns($criteria);
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTORECETA, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RecetaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RecetaPeer::getInstanceFromPool($key1))) {
+            $key1 = ConceptoscfdiPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ConceptoscfdiPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
 
-                $cls = RecetaPeer::getOMClass();
+                $cls = ConceptoscfdiPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RecetaPeer::addInstanceToPool($obj1, $key1);
+                ConceptoscfdiPeer::addInstanceToPool($obj1, $key1);
             } // if $obj1 already loaded
 
             $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol);
@@ -695,8 +690,8 @@ abstract class BaseRecetaPeer
                     ProductoPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 already loaded
 
-                // Add the $obj1 (Receta) to $obj2 (Producto)
-                $obj2->addRecetaRelatedByIdproductoreceta($obj1);
+                // Add the $obj1 (Conceptoscfdi) to $obj2 (Producto)
+                $obj2->addConceptoscfdi($obj1);
 
             } // if joined row was not null
 
@@ -725,28 +720,28 @@ abstract class BaseRecetaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RecetaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ConceptoscfdiPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RecetaPeer::addSelectColumns($criteria);
+            ConceptoscfdiPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTORECETA, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -761,12 +756,12 @@ abstract class BaseRecetaPeer
     }
 
     /**
-     * Selects a collection of Receta objects pre-filled with all related objects.
+     * Selects a collection of Conceptoscfdi objects pre-filled with all related objects.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Receta objects.
+     * @return array           Array of Conceptoscfdi objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
@@ -776,55 +771,55 @@ abstract class BaseRecetaPeer
 
         // Set the correct dbName if it has not been overridden
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+            $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
         }
 
-        RecetaPeer::addSelectColumns($criteria);
-        $startcol2 = RecetaPeer::NUM_HYDRATE_COLUMNS;
+        ConceptoscfdiPeer::addSelectColumns($criteria);
+        $startcol2 = ConceptoscfdiPeer::NUM_HYDRATE_COLUMNS;
 
-        ProductoPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         ProductoPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + ProductoPeer::NUM_HYDRATE_COLUMNS;
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
-        $criteria->addJoin(RecetaPeer::IDPRODUCTORECETA, ProductoPeer::IDPRODUCTO, $join_behavior);
+        $criteria->addJoin(ConceptoscfdiPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RecetaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RecetaPeer::getInstanceFromPool($key1))) {
+            $key1 = ConceptoscfdiPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ConceptoscfdiPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = RecetaPeer::getOMClass();
+                $cls = ConceptoscfdiPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RecetaPeer::addInstanceToPool($obj1, $key1);
+                ConceptoscfdiPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
 
-            // Add objects for joined Producto rows
+            // Add objects for joined Empresa rows
 
-            $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+            $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
             if ($key2 !== null) {
-                $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                $obj2 = EmpresaPeer::getInstanceFromPool($key2);
                 if (!$obj2) {
 
-                    $cls = ProductoPeer::getOMClass();
+                    $cls = EmpresaPeer::getOMClass();
 
                     $obj2 = new $cls();
                     $obj2->hydrate($row, $startcol2);
-                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
                 } // if obj2 loaded
 
-                // Add the $obj1 (Receta) to the collection in $obj2 (Producto)
-                $obj2->addRecetaRelatedByIdproducto($obj1);
+                // Add the $obj1 (Conceptoscfdi) to the collection in $obj2 (Empresa)
+                $obj2->addConceptoscfdi($obj1);
             } // if joined row not null
 
             // Add objects for joined Producto rows
@@ -841,8 +836,8 @@ abstract class BaseRecetaPeer
                     ProductoPeer::addInstanceToPool($obj3, $key3);
                 } // if obj3 loaded
 
-                // Add the $obj1 (Receta) to the collection in $obj3 (Producto)
-                $obj3->addRecetaRelatedByIdproductoreceta($obj1);
+                // Add the $obj1 (Conceptoscfdi) to the collection in $obj3 (Producto)
+                $obj3->addConceptoscfdi($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -854,7 +849,7 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related ProductoRelatedByIdproducto table
+     * Returns the number of rows matching criteria, joining the related Empresa table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -862,7 +857,7 @@ abstract class BaseRecetaPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptProductoRelatedByIdproducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptEmpresa(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -870,24 +865,26 @@ abstract class BaseRecetaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RecetaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ConceptoscfdiPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RecetaPeer::addSelectColumns($criteria);
+            ConceptoscfdiPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(ConceptoscfdiPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -903,7 +900,7 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Returns the number of rows matching criteria, joining the related ProductoRelatedByIdproductoreceta table
+     * Returns the number of rows matching criteria, joining the related Producto table
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -911,7 +908,7 @@ abstract class BaseRecetaPeer
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
      * @return int Number of matching rows.
      */
-    public static function doCountJoinAllExceptProductoRelatedByIdproductoreceta(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doCountJoinAllExceptProducto(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         // we're going to modify criteria, so copy it first
         $criteria = clone $criteria;
@@ -919,24 +916,26 @@ abstract class BaseRecetaPeer
         // We need to set the primary table name, since in the case that there are no WHERE columns
         // it will be impossible for the BasePeer::createSelectSql() method to determine which
         // tables go into the FROM clause.
-        $criteria->setPrimaryTableName(RecetaPeer::TABLE_NAME);
+        $criteria->setPrimaryTableName(ConceptoscfdiPeer::TABLE_NAME);
 
         if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
             $criteria->setDistinct();
         }
 
         if (!$criteria->hasSelectClause()) {
-            RecetaPeer::addSelectColumns($criteria);
+            ConceptoscfdiPeer::addSelectColumns($criteria);
         }
 
         $criteria->clearOrderByColumns(); // ORDER BY should not affect count
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
+
+        $criteria->addJoin(ConceptoscfdiPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -952,16 +951,16 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Selects a collection of Receta objects pre-filled with all related objects except ProductoRelatedByIdproducto.
+     * Selects a collection of Conceptoscfdi objects pre-filled with all related objects except Empresa.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Receta objects.
+     * @return array           Array of Conceptoscfdi objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptProductoRelatedByIdproducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -969,29 +968,53 @@ abstract class BaseRecetaPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+            $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
         }
 
-        RecetaPeer::addSelectColumns($criteria);
-        $startcol2 = RecetaPeer::NUM_HYDRATE_COLUMNS;
+        ConceptoscfdiPeer::addSelectColumns($criteria);
+        $startcol2 = ConceptoscfdiPeer::NUM_HYDRATE_COLUMNS;
+
+        ProductoPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + ProductoPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(ConceptoscfdiPeer::IDPRODUCTO, ProductoPeer::IDPRODUCTO, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RecetaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RecetaPeer::getInstanceFromPool($key1))) {
+            $key1 = ConceptoscfdiPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ConceptoscfdiPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = RecetaPeer::getOMClass();
+                $cls = ConceptoscfdiPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RecetaPeer::addInstanceToPool($obj1, $key1);
+                ConceptoscfdiPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
+
+                // Add objects for joined Producto rows
+
+                $key2 = ProductoPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = ProductoPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = ProductoPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    ProductoPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Conceptoscfdi) to the collection in $obj2 (Producto)
+                $obj2->addConceptoscfdi($obj1);
+
+            } // if joined row is not null
 
             $results[] = $obj1;
         }
@@ -1002,16 +1025,16 @@ abstract class BaseRecetaPeer
 
 
     /**
-     * Selects a collection of Receta objects pre-filled with all related objects except ProductoRelatedByIdproductoreceta.
+     * Selects a collection of Conceptoscfdi objects pre-filled with all related objects except Producto.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
      * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Receta objects.
+     * @return array           Array of Conceptoscfdi objects.
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptProductoRelatedByIdproductoreceta(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptProducto(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -1019,29 +1042,53 @@ abstract class BaseRecetaPeer
         // $criteria->getDbName() will return the same object if not set to another value
         // so == check is okay and faster
         if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+            $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
         }
 
-        RecetaPeer::addSelectColumns($criteria);
-        $startcol2 = RecetaPeer::NUM_HYDRATE_COLUMNS;
+        ConceptoscfdiPeer::addSelectColumns($criteria);
+        $startcol2 = ConceptoscfdiPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(ConceptoscfdiPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
         $results = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = RecetaPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = RecetaPeer::getInstanceFromPool($key1))) {
+            $key1 = ConceptoscfdiPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = ConceptoscfdiPeer::getInstanceFromPool($key1))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj1->hydrate($row, 0, true); // rehydrate
             } else {
-                $cls = RecetaPeer::getOMClass();
+                $cls = ConceptoscfdiPeer::getOMClass();
 
                 $obj1 = new $cls();
                 $obj1->hydrate($row);
-                RecetaPeer::addInstanceToPool($obj1, $key1);
+                ConceptoscfdiPeer::addInstanceToPool($obj1, $key1);
             } // if obj1 already loaded
+
+                // Add objects for joined Empresa rows
+
+                $key2 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = EmpresaPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    EmpresaPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Conceptoscfdi) to the collection in $obj2 (Empresa)
+                $obj2->addConceptoscfdi($obj1);
+
+            } // if joined row is not null
 
             $results[] = $obj1;
         }
@@ -1059,7 +1106,7 @@ abstract class BaseRecetaPeer
      */
     public static function getTableMap()
     {
-        return Propel::getDatabaseMap(RecetaPeer::DATABASE_NAME)->getTable(RecetaPeer::TABLE_NAME);
+        return Propel::getDatabaseMap(ConceptoscfdiPeer::DATABASE_NAME)->getTable(ConceptoscfdiPeer::TABLE_NAME);
     }
 
     /**
@@ -1067,9 +1114,9 @@ abstract class BaseRecetaPeer
      */
     public static function buildTableMap()
     {
-      $dbMap = Propel::getDatabaseMap(BaseRecetaPeer::DATABASE_NAME);
-      if (!$dbMap->hasTable(BaseRecetaPeer::TABLE_NAME)) {
-        $dbMap->addTableObject(new \RecetaTableMap());
+      $dbMap = Propel::getDatabaseMap(BaseConceptoscfdiPeer::DATABASE_NAME);
+      if (!$dbMap->hasTable(BaseConceptoscfdiPeer::TABLE_NAME)) {
+        $dbMap->addTableObject(new \ConceptoscfdiTableMap());
       }
     }
 
@@ -1081,13 +1128,13 @@ abstract class BaseRecetaPeer
      */
     public static function getOMClass($row = 0, $colnum = 0)
     {
-        return RecetaPeer::OM_CLASS;
+        return ConceptoscfdiPeer::OM_CLASS;
     }
 
     /**
-     * Performs an INSERT on the database, given a Receta or Criteria object.
+     * Performs an INSERT on the database, given a Conceptoscfdi or Criteria object.
      *
-     * @param      mixed $values Criteria or Receta object containing data that is used to create the INSERT statement.
+     * @param      mixed $values Criteria or Conceptoscfdi object containing data that is used to create the INSERT statement.
      * @param      PropelPDO $con the PropelPDO connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1096,22 +1143,22 @@ abstract class BaseRecetaPeer
     public static function doInsert($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
         } else {
-            $criteria = $values->buildCriteria(); // build Criteria from Receta object
+            $criteria = $values->buildCriteria(); // build Criteria from Conceptoscfdi object
         }
 
-        if ($criteria->containsKey(RecetaPeer::IDRECETA) && $criteria->keyContainsValue(RecetaPeer::IDRECETA) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.RecetaPeer::IDRECETA.')');
+        if ($criteria->containsKey(ConceptoscfdiPeer::IDCONCEPTOSCFDI) && $criteria->keyContainsValue(ConceptoscfdiPeer::IDCONCEPTOSCFDI) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ConceptoscfdiPeer::IDCONCEPTOSCFDI.')');
         }
 
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         try {
             // use transaction because $criteria could contain info
@@ -1128,9 +1175,9 @@ abstract class BaseRecetaPeer
     }
 
     /**
-     * Performs an UPDATE on the database, given a Receta or Criteria object.
+     * Performs an UPDATE on the database, given a Conceptoscfdi or Criteria object.
      *
-     * @param      mixed $values Criteria or Receta object containing data that is used to create the UPDATE statement.
+     * @param      mixed $values Criteria or Conceptoscfdi object containing data that is used to create the UPDATE statement.
      * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
      * @return int             The number of affected rows (if supported by underlying database driver).
      * @throws PropelException Any exceptions caught during processing will be
@@ -1139,35 +1186,35 @@ abstract class BaseRecetaPeer
     public static function doUpdate($values, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
-        $selectCriteria = new Criteria(RecetaPeer::DATABASE_NAME);
+        $selectCriteria = new Criteria(ConceptoscfdiPeer::DATABASE_NAME);
 
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(RecetaPeer::IDRECETA);
-            $value = $criteria->remove(RecetaPeer::IDRECETA);
+            $comparison = $criteria->getComparison(ConceptoscfdiPeer::IDCONCEPTOSCFDI);
+            $value = $criteria->remove(ConceptoscfdiPeer::IDCONCEPTOSCFDI);
             if ($value) {
-                $selectCriteria->add(RecetaPeer::IDRECETA, $value, $comparison);
+                $selectCriteria->add(ConceptoscfdiPeer::IDCONCEPTOSCFDI, $value, $comparison);
             } else {
-                $selectCriteria->setPrimaryTableName(RecetaPeer::TABLE_NAME);
+                $selectCriteria->setPrimaryTableName(ConceptoscfdiPeer::TABLE_NAME);
             }
 
-        } else { // $values is Receta object
+        } else { // $values is Conceptoscfdi object
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
         }
 
         // set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         return BasePeer::doUpdate($selectCriteria, $criteria, $con);
     }
 
     /**
-     * Deletes all rows from the receta table.
+     * Deletes all rows from the conceptoscfdi table.
      *
      * @param      PropelPDO $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).
@@ -1176,19 +1223,19 @@ abstract class BaseRecetaPeer
     public static function doDeleteAll(PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
         $affectedRows = 0; // initialize var to track total num of affected rows
         try {
             // use transaction because $criteria could contain info
             // for more than one table or we could emulating ON DELETE CASCADE, etc.
             $con->beginTransaction();
-            $affectedRows += BasePeer::doDeleteAll(RecetaPeer::TABLE_NAME, $con, RecetaPeer::DATABASE_NAME);
+            $affectedRows += BasePeer::doDeleteAll(ConceptoscfdiPeer::TABLE_NAME, $con, ConceptoscfdiPeer::DATABASE_NAME);
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            RecetaPeer::clearInstancePool();
-            RecetaPeer::clearRelatedInstancePool();
+            ConceptoscfdiPeer::clearInstancePool();
+            ConceptoscfdiPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1199,9 +1246,9 @@ abstract class BaseRecetaPeer
     }
 
     /**
-     * Performs a DELETE on the database, given a Receta or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Conceptoscfdi or Criteria object OR a primary key value.
      *
-     * @param      mixed $values Criteria or Receta object or primary key or array of primary keys
+     * @param      mixed $values Criteria or Conceptoscfdi object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param      PropelPDO $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -1212,32 +1259,32 @@ abstract class BaseRecetaPeer
      public static function doDelete($values, PropelPDO $con = null)
      {
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         if ($values instanceof Criteria) {
             // invalidate the cache for all objects of this type, since we have no
             // way of knowing (without running a query) what objects should be invalidated
             // from the cache based on this Criteria.
-            RecetaPeer::clearInstancePool();
+            ConceptoscfdiPeer::clearInstancePool();
             // rename for clarity
             $criteria = clone $values;
-        } elseif ($values instanceof Receta) { // it's a model object
+        } elseif ($values instanceof Conceptoscfdi) { // it's a model object
             // invalidate the cache for this single object
-            RecetaPeer::removeInstanceFromPool($values);
+            ConceptoscfdiPeer::removeInstanceFromPool($values);
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(RecetaPeer::DATABASE_NAME);
-            $criteria->add(RecetaPeer::IDRECETA, (array) $values, Criteria::IN);
+            $criteria = new Criteria(ConceptoscfdiPeer::DATABASE_NAME);
+            $criteria->add(ConceptoscfdiPeer::IDCONCEPTOSCFDI, (array) $values, Criteria::IN);
             // invalidate the cache for this object(s)
             foreach ((array) $values as $singleval) {
-                RecetaPeer::removeInstanceFromPool($singleval);
+                ConceptoscfdiPeer::removeInstanceFromPool($singleval);
             }
         }
 
         // Set the correct dbName
-        $criteria->setDbName(RecetaPeer::DATABASE_NAME);
+        $criteria->setDbName(ConceptoscfdiPeer::DATABASE_NAME);
 
         $affectedRows = 0; // initialize var to track total num of affected rows
 
@@ -1247,7 +1294,7 @@ abstract class BaseRecetaPeer
             $con->beginTransaction();
 
             $affectedRows += BasePeer::doDelete($criteria, $con);
-            RecetaPeer::clearRelatedInstancePool();
+            ConceptoscfdiPeer::clearRelatedInstancePool();
             $con->commit();
 
             return $affectedRows;
@@ -1258,13 +1305,13 @@ abstract class BaseRecetaPeer
     }
 
     /**
-     * Validates all modified columns of given Receta object.
+     * Validates all modified columns of given Conceptoscfdi object.
      * If parameter $columns is either a single column name or an array of column names
      * than only those columns are validated.
      *
      * NOTICE: This does not apply to primary or foreign keys for now.
      *
-     * @param Receta $obj The object to validate.
+     * @param Conceptoscfdi $obj The object to validate.
      * @param      mixed $cols Column name or array of column names.
      *
      * @return mixed TRUE if all columns are valid or the error message of the first invalid column.
@@ -1274,8 +1321,8 @@ abstract class BaseRecetaPeer
         $columns = array();
 
         if ($cols) {
-            $dbMap = Propel::getDatabaseMap(RecetaPeer::DATABASE_NAME);
-            $tableMap = $dbMap->getTable(RecetaPeer::TABLE_NAME);
+            $dbMap = Propel::getDatabaseMap(ConceptoscfdiPeer::DATABASE_NAME);
+            $tableMap = $dbMap->getTable(ConceptoscfdiPeer::TABLE_NAME);
 
             if (! is_array($cols)) {
                 $cols = array($cols);
@@ -1291,7 +1338,7 @@ abstract class BaseRecetaPeer
 
         }
 
-        return BasePeer::doValidate(RecetaPeer::DATABASE_NAME, RecetaPeer::TABLE_NAME, $columns);
+        return BasePeer::doValidate(ConceptoscfdiPeer::DATABASE_NAME, ConceptoscfdiPeer::TABLE_NAME, $columns);
     }
 
     /**
@@ -1299,23 +1346,23 @@ abstract class BaseRecetaPeer
      *
      * @param int $pk the primary key.
      * @param      PropelPDO $con the connection to use
-     * @return Receta
+     * @return Conceptoscfdi
      */
     public static function retrieveByPK($pk, PropelPDO $con = null)
     {
 
-        if (null !== ($obj = RecetaPeer::getInstanceFromPool((string) $pk))) {
+        if (null !== ($obj = ConceptoscfdiPeer::getInstanceFromPool((string) $pk))) {
             return $obj;
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
-        $criteria = new Criteria(RecetaPeer::DATABASE_NAME);
-        $criteria->add(RecetaPeer::IDRECETA, $pk);
+        $criteria = new Criteria(ConceptoscfdiPeer::DATABASE_NAME);
+        $criteria->add(ConceptoscfdiPeer::IDCONCEPTOSCFDI, $pk);
 
-        $v = RecetaPeer::doSelect($criteria, $con);
+        $v = ConceptoscfdiPeer::doSelect($criteria, $con);
 
         return !empty($v) > 0 ? $v[0] : null;
     }
@@ -1325,31 +1372,31 @@ abstract class BaseRecetaPeer
      *
      * @param      array $pks List of primary keys
      * @param      PropelPDO $con the connection to use
-     * @return Receta[]
+     * @return Conceptoscfdi[]
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
     public static function retrieveByPKs($pks, PropelPDO $con = null)
     {
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         $objs = null;
         if (empty($pks)) {
             $objs = array();
         } else {
-            $criteria = new Criteria(RecetaPeer::DATABASE_NAME);
-            $criteria->add(RecetaPeer::IDRECETA, $pks, Criteria::IN);
-            $objs = RecetaPeer::doSelect($criteria, $con);
+            $criteria = new Criteria(ConceptoscfdiPeer::DATABASE_NAME);
+            $criteria->add(ConceptoscfdiPeer::IDCONCEPTOSCFDI, $pks, Criteria::IN);
+            $objs = ConceptoscfdiPeer::doSelect($criteria, $con);
         }
 
         return $objs;
     }
 
-} // BaseRecetaPeer
+} // BaseConceptoscfdiPeer
 
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-BaseRecetaPeer::buildTableMap();
+BaseConceptoscfdiPeer::buildTableMap();
 

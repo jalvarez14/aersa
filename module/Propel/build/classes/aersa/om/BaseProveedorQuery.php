@@ -62,6 +62,10 @@
  * @method ProveedorQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
  * @method ProveedorQuery innerJoinNotacredito($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacredito relation
  *
+ * @method ProveedorQuery leftJoinProveedorescfdi($relationAlias = null) Adds a LEFT JOIN clause to the query using the Proveedorescfdi relation
+ * @method ProveedorQuery rightJoinProveedorescfdi($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Proveedorescfdi relation
+ * @method ProveedorQuery innerJoinProveedorescfdi($relationAlias = null) Adds a INNER JOIN clause to the query using the Proveedorescfdi relation
+ *
  * @method Proveedor findOne(PropelPDO $con = null) Return the first Proveedor matching the query
  * @method Proveedor findOneOrCreate(PropelPDO $con = null) Return the first Proveedor matching the query, or a new Proveedor object populated from the query conditions when no match is found
  *
@@ -1136,6 +1140,80 @@ abstract class BaseProveedorQuery extends ModelCriteria
         return $this
             ->joinNotacredito($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacredito', 'NotacreditoQuery');
+    }
+
+    /**
+     * Filter the query by a related Proveedorescfdi object
+     *
+     * @param   Proveedorescfdi|PropelObjectCollection $proveedorescfdi  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProveedorQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProveedorescfdi($proveedorescfdi, $comparison = null)
+    {
+        if ($proveedorescfdi instanceof Proveedorescfdi) {
+            return $this
+                ->addUsingAlias(ProveedorPeer::IDPROVEEDOR, $proveedorescfdi->getIdproveedor(), $comparison);
+        } elseif ($proveedorescfdi instanceof PropelObjectCollection) {
+            return $this
+                ->useProveedorescfdiQuery()
+                ->filterByPrimaryKeys($proveedorescfdi->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProveedorescfdi() only accepts arguments of type Proveedorescfdi or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Proveedorescfdi relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProveedorQuery The current query, for fluid interface
+     */
+    public function joinProveedorescfdi($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Proveedorescfdi');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Proveedorescfdi');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Proveedorescfdi relation Proveedorescfdi object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProveedorescfdiQuery A secondary query class using the current class as primary query
+     */
+    public function useProveedorescfdiQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProveedorescfdi($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Proveedorescfdi', 'ProveedorescfdiQuery');
     }
 
     /**

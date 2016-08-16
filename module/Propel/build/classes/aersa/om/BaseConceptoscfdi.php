@@ -2,24 +2,24 @@
 
 
 /**
- * Base class that represents a row from the 'receta' table.
+ * Base class that represents a row from the 'conceptoscfdi' table.
  *
  *
  *
  * @package    propel.generator.aersa.om
  */
-abstract class BaseReceta extends BaseObject implements Persistent
+abstract class BaseConceptoscfdi extends BaseObject implements Persistent
 {
     /**
      * Peer class name
      */
-    const PEER = 'RecetaPeer';
+    const PEER = 'ConceptoscfdiPeer';
 
     /**
      * The Peer class.
      * Instance provides a convenient way of calling static methods on a class
      * that calling code may not be able to identify.
-     * @var        RecetaPeer
+     * @var        ConceptoscfdiPeer
      */
     protected static $peer;
 
@@ -30,10 +30,16 @@ abstract class BaseReceta extends BaseObject implements Persistent
     protected $startCopy = false;
 
     /**
-     * The value for the idreceta field.
+     * The value for the idconceptoscfdi field.
      * @var        int
      */
-    protected $idreceta;
+    protected $idconceptoscfdi;
+
+    /**
+     * The value for the conceptoscfdi_nombre field.
+     * @var        string
+     */
+    protected $conceptoscfdi_nombre;
 
     /**
      * The value for the idproducto field.
@@ -42,32 +48,20 @@ abstract class BaseReceta extends BaseObject implements Persistent
     protected $idproducto;
 
     /**
-     * The value for the idproductoreceta field.
+     * The value for the idempresa field.
      * @var        int
      */
-    protected $idproductoreceta;
+    protected $idempresa;
 
     /**
-     * The value for the receta_cantidad field.
-     * @var        double
+     * @var        Empresa
      */
-    protected $receta_cantidad;
-
-    /**
-     * The value for the receta_cantidadoriginal field.
-     * @var        double
-     */
-    protected $receta_cantidadoriginal;
+    protected $aEmpresa;
 
     /**
      * @var        Producto
      */
-    protected $aProductoRelatedByIdproducto;
-
-    /**
-     * @var        Producto
-     */
-    protected $aProductoRelatedByIdproductoreceta;
+    protected $aProducto;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -90,14 +84,25 @@ abstract class BaseReceta extends BaseObject implements Persistent
     protected $alreadyInClearAllReferencesDeep = false;
 
     /**
-     * Get the [idreceta] column value.
+     * Get the [idconceptoscfdi] column value.
      *
      * @return int
      */
-    public function getIdreceta()
+    public function getIdconceptoscfdi()
     {
 
-        return $this->idreceta;
+        return $this->idconceptoscfdi;
+    }
+
+    /**
+     * Get the [conceptoscfdi_nombre] column value.
+     *
+     * @return string
+     */
+    public function getConceptoscfdiNombre()
+    {
+
+        return $this->conceptoscfdi_nombre;
     }
 
     /**
@@ -112,64 +117,63 @@ abstract class BaseReceta extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [idproductoreceta] column value.
+     * Get the [idempresa] column value.
      *
      * @return int
      */
-    public function getIdproductoreceta()
+    public function getIdempresa()
     {
 
-        return $this->idproductoreceta;
+        return $this->idempresa;
     }
 
     /**
-     * Get the [receta_cantidad] column value.
-     *
-     * @return double
-     */
-    public function getRecetaCantidad()
-    {
-
-        return $this->receta_cantidad;
-    }
-
-    /**
-     * Get the [receta_cantidadoriginal] column value.
-     *
-     * @return double
-     */
-    public function getRecetaCantidadoriginal()
-    {
-
-        return $this->receta_cantidadoriginal;
-    }
-
-    /**
-     * Set the value of [idreceta] column.
+     * Set the value of [idconceptoscfdi] column.
      *
      * @param  int $v new value
-     * @return Receta The current object (for fluent API support)
+     * @return Conceptoscfdi The current object (for fluent API support)
      */
-    public function setIdreceta($v)
+    public function setIdconceptoscfdi($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idreceta !== $v) {
-            $this->idreceta = $v;
-            $this->modifiedColumns[] = RecetaPeer::IDRECETA;
+        if ($this->idconceptoscfdi !== $v) {
+            $this->idconceptoscfdi = $v;
+            $this->modifiedColumns[] = ConceptoscfdiPeer::IDCONCEPTOSCFDI;
         }
 
 
         return $this;
-    } // setIdreceta()
+    } // setIdconceptoscfdi()
+
+    /**
+     * Set the value of [conceptoscfdi_nombre] column.
+     *
+     * @param  string $v new value
+     * @return Conceptoscfdi The current object (for fluent API support)
+     */
+    public function setConceptoscfdiNombre($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->conceptoscfdi_nombre !== $v) {
+            $this->conceptoscfdi_nombre = $v;
+            $this->modifiedColumns[] = ConceptoscfdiPeer::CONCEPTOSCFDI_NOMBRE;
+        }
+
+
+        return $this;
+    } // setConceptoscfdiNombre()
 
     /**
      * Set the value of [idproducto] column.
      *
      * @param  int $v new value
-     * @return Receta The current object (for fluent API support)
+     * @return Conceptoscfdi The current object (for fluent API support)
      */
     public function setIdproducto($v)
     {
@@ -179,11 +183,11 @@ abstract class BaseReceta extends BaseObject implements Persistent
 
         if ($this->idproducto !== $v) {
             $this->idproducto = $v;
-            $this->modifiedColumns[] = RecetaPeer::IDPRODUCTO;
+            $this->modifiedColumns[] = ConceptoscfdiPeer::IDPRODUCTO;
         }
 
-        if ($this->aProductoRelatedByIdproducto !== null && $this->aProductoRelatedByIdproducto->getIdproducto() !== $v) {
-            $this->aProductoRelatedByIdproducto = null;
+        if ($this->aProducto !== null && $this->aProducto->getIdproducto() !== $v) {
+            $this->aProducto = null;
         }
 
 
@@ -191,71 +195,29 @@ abstract class BaseReceta extends BaseObject implements Persistent
     } // setIdproducto()
 
     /**
-     * Set the value of [idproductoreceta] column.
+     * Set the value of [idempresa] column.
      *
      * @param  int $v new value
-     * @return Receta The current object (for fluent API support)
+     * @return Conceptoscfdi The current object (for fluent API support)
      */
-    public function setIdproductoreceta($v)
+    public function setIdempresa($v)
     {
         if ($v !== null && is_numeric($v)) {
             $v = (int) $v;
         }
 
-        if ($this->idproductoreceta !== $v) {
-            $this->idproductoreceta = $v;
-            $this->modifiedColumns[] = RecetaPeer::IDPRODUCTORECETA;
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = ConceptoscfdiPeer::IDEMPRESA;
         }
 
-        if ($this->aProductoRelatedByIdproductoreceta !== null && $this->aProductoRelatedByIdproductoreceta->getIdproducto() !== $v) {
-            $this->aProductoRelatedByIdproductoreceta = null;
-        }
-
-
-        return $this;
-    } // setIdproductoreceta()
-
-    /**
-     * Set the value of [receta_cantidad] column.
-     *
-     * @param  double $v new value
-     * @return Receta The current object (for fluent API support)
-     */
-    public function setRecetaCantidad($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->receta_cantidad !== $v) {
-            $this->receta_cantidad = $v;
-            $this->modifiedColumns[] = RecetaPeer::RECETA_CANTIDAD;
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
         }
 
 
         return $this;
-    } // setRecetaCantidad()
-
-    /**
-     * Set the value of [receta_cantidadoriginal] column.
-     *
-     * @param  double $v new value
-     * @return Receta The current object (for fluent API support)
-     */
-    public function setRecetaCantidadoriginal($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (double) $v;
-        }
-
-        if ($this->receta_cantidadoriginal !== $v) {
-            $this->receta_cantidadoriginal = $v;
-            $this->modifiedColumns[] = RecetaPeer::RECETA_CANTIDADORIGINAL;
-        }
-
-
-        return $this;
-    } // setRecetaCantidadoriginal()
+    } // setIdempresa()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -289,11 +251,10 @@ abstract class BaseReceta extends BaseObject implements Persistent
     {
         try {
 
-            $this->idreceta = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-            $this->idproducto = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-            $this->idproductoreceta = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->receta_cantidad = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
-            $this->receta_cantidadoriginal = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
+            $this->idconceptoscfdi = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
+            $this->conceptoscfdi_nombre = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+            $this->idproducto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idempresa = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -303,10 +264,10 @@ abstract class BaseReceta extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = RecetaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = ConceptoscfdiPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException("Error populating Receta object", $e);
+            throw new PropelException("Error populating Conceptoscfdi object", $e);
         }
     }
 
@@ -326,11 +287,11 @@ abstract class BaseReceta extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aProductoRelatedByIdproducto !== null && $this->idproducto !== $this->aProductoRelatedByIdproducto->getIdproducto()) {
-            $this->aProductoRelatedByIdproducto = null;
+        if ($this->aProducto !== null && $this->idproducto !== $this->aProducto->getIdproducto()) {
+            $this->aProducto = null;
         }
-        if ($this->aProductoRelatedByIdproductoreceta !== null && $this->idproductoreceta !== $this->aProductoRelatedByIdproductoreceta->getIdproducto()) {
-            $this->aProductoRelatedByIdproductoreceta = null;
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
         }
     } // ensureConsistency
 
@@ -355,13 +316,13 @@ abstract class BaseReceta extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_READ);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $stmt = RecetaPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+        $stmt = ConceptoscfdiPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
         $row = $stmt->fetch(PDO::FETCH_NUM);
         $stmt->closeCursor();
         if (!$row) {
@@ -371,8 +332,8 @@ abstract class BaseReceta extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aProductoRelatedByIdproducto = null;
-            $this->aProductoRelatedByIdproductoreceta = null;
+            $this->aEmpresa = null;
+            $this->aProducto = null;
         } // if (deep)
     }
 
@@ -393,12 +354,12 @@ abstract class BaseReceta extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
         try {
-            $deleteQuery = RecetaQuery::create()
+            $deleteQuery = ConceptoscfdiQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -436,7 +397,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
         }
 
         if ($con === null) {
-            $con = Propel::getConnection(RecetaPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+            $con = Propel::getConnection(ConceptoscfdiPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
         }
 
         $con->beginTransaction();
@@ -456,7 +417,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                RecetaPeer::addInstanceToPool($this);
+                ConceptoscfdiPeer::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -491,18 +452,18 @@ abstract class BaseReceta extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aProductoRelatedByIdproducto !== null) {
-                if ($this->aProductoRelatedByIdproducto->isModified() || $this->aProductoRelatedByIdproducto->isNew()) {
-                    $affectedRows += $this->aProductoRelatedByIdproducto->save($con);
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
                 }
-                $this->setProductoRelatedByIdproducto($this->aProductoRelatedByIdproducto);
+                $this->setEmpresa($this->aEmpresa);
             }
 
-            if ($this->aProductoRelatedByIdproductoreceta !== null) {
-                if ($this->aProductoRelatedByIdproductoreceta->isModified() || $this->aProductoRelatedByIdproductoreceta->isNew()) {
-                    $affectedRows += $this->aProductoRelatedByIdproductoreceta->save($con);
+            if ($this->aProducto !== null) {
+                if ($this->aProducto->isModified() || $this->aProducto->isNew()) {
+                    $affectedRows += $this->aProducto->save($con);
                 }
-                $this->setProductoRelatedByIdproductoreceta($this->aProductoRelatedByIdproductoreceta);
+                $this->setProducto($this->aProducto);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -536,30 +497,27 @@ abstract class BaseReceta extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[] = RecetaPeer::IDRECETA;
-        if (null !== $this->idreceta) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RecetaPeer::IDRECETA . ')');
+        $this->modifiedColumns[] = ConceptoscfdiPeer::IDCONCEPTOSCFDI;
+        if (null !== $this->idconceptoscfdi) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . ConceptoscfdiPeer::IDCONCEPTOSCFDI . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(RecetaPeer::IDRECETA)) {
-            $modifiedColumns[':p' . $index++]  = '`idreceta`';
+        if ($this->isColumnModified(ConceptoscfdiPeer::IDCONCEPTOSCFDI)) {
+            $modifiedColumns[':p' . $index++]  = '`idconceptoscfdi`';
         }
-        if ($this->isColumnModified(RecetaPeer::IDPRODUCTO)) {
+        if ($this->isColumnModified(ConceptoscfdiPeer::CONCEPTOSCFDI_NOMBRE)) {
+            $modifiedColumns[':p' . $index++]  = '`conceptoscfdi_nombre`';
+        }
+        if ($this->isColumnModified(ConceptoscfdiPeer::IDPRODUCTO)) {
             $modifiedColumns[':p' . $index++]  = '`idproducto`';
         }
-        if ($this->isColumnModified(RecetaPeer::IDPRODUCTORECETA)) {
-            $modifiedColumns[':p' . $index++]  = '`idproductoreceta`';
-        }
-        if ($this->isColumnModified(RecetaPeer::RECETA_CANTIDAD)) {
-            $modifiedColumns[':p' . $index++]  = '`receta_cantidad`';
-        }
-        if ($this->isColumnModified(RecetaPeer::RECETA_CANTIDADORIGINAL)) {
-            $modifiedColumns[':p' . $index++]  = '`receta_cantidadoriginal`';
+        if ($this->isColumnModified(ConceptoscfdiPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
         }
 
         $sql = sprintf(
-            'INSERT INTO `receta` (%s) VALUES (%s)',
+            'INSERT INTO `conceptoscfdi` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -568,20 +526,17 @@ abstract class BaseReceta extends BaseObject implements Persistent
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`idreceta`':
-                        $stmt->bindValue($identifier, $this->idreceta, PDO::PARAM_INT);
+                    case '`idconceptoscfdi`':
+                        $stmt->bindValue($identifier, $this->idconceptoscfdi, PDO::PARAM_INT);
+                        break;
+                    case '`conceptoscfdi_nombre`':
+                        $stmt->bindValue($identifier, $this->conceptoscfdi_nombre, PDO::PARAM_STR);
                         break;
                     case '`idproducto`':
                         $stmt->bindValue($identifier, $this->idproducto, PDO::PARAM_INT);
                         break;
-                    case '`idproductoreceta`':
-                        $stmt->bindValue($identifier, $this->idproductoreceta, PDO::PARAM_INT);
-                        break;
-                    case '`receta_cantidad`':
-                        $stmt->bindValue($identifier, $this->receta_cantidad, PDO::PARAM_STR);
-                        break;
-                    case '`receta_cantidadoriginal`':
-                        $stmt->bindValue($identifier, $this->receta_cantidadoriginal, PDO::PARAM_STR);
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -596,7 +551,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', $e);
         }
-        $this->setIdreceta($pk);
+        $this->setIdconceptoscfdi($pk);
 
         $this->setNew(false);
     }
@@ -682,20 +637,20 @@ abstract class BaseReceta extends BaseObject implements Persistent
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aProductoRelatedByIdproducto !== null) {
-                if (!$this->aProductoRelatedByIdproducto->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aProductoRelatedByIdproducto->getValidationFailures());
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
                 }
             }
 
-            if ($this->aProductoRelatedByIdproductoreceta !== null) {
-                if (!$this->aProductoRelatedByIdproductoreceta->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aProductoRelatedByIdproductoreceta->getValidationFailures());
+            if ($this->aProducto !== null) {
+                if (!$this->aProducto->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aProducto->getValidationFailures());
                 }
             }
 
 
-            if (($retval = RecetaPeer::doValidate($this, $columns)) !== true) {
+            if (($retval = ConceptoscfdiPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
@@ -719,7 +674,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = RecetaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ConceptoscfdiPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -736,19 +691,16 @@ abstract class BaseReceta extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                return $this->getIdreceta();
+                return $this->getIdconceptoscfdi();
                 break;
             case 1:
-                return $this->getIdproducto();
+                return $this->getConceptoscfdiNombre();
                 break;
             case 2:
-                return $this->getIdproductoreceta();
+                return $this->getIdproducto();
                 break;
             case 3:
-                return $this->getRecetaCantidad();
-                break;
-            case 4:
-                return $this->getRecetaCantidadoriginal();
+                return $this->getIdempresa();
                 break;
             default:
                 return null;
@@ -773,17 +725,16 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-        if (isset($alreadyDumpedObjects['Receta'][$this->getPrimaryKey()])) {
+        if (isset($alreadyDumpedObjects['Conceptoscfdi'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Receta'][$this->getPrimaryKey()] = true;
-        $keys = RecetaPeer::getFieldNames($keyType);
+        $alreadyDumpedObjects['Conceptoscfdi'][$this->getPrimaryKey()] = true;
+        $keys = ConceptoscfdiPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getIdreceta(),
-            $keys[1] => $this->getIdproducto(),
-            $keys[2] => $this->getIdproductoreceta(),
-            $keys[3] => $this->getRecetaCantidad(),
-            $keys[4] => $this->getRecetaCantidadoriginal(),
+            $keys[0] => $this->getIdconceptoscfdi(),
+            $keys[1] => $this->getConceptoscfdiNombre(),
+            $keys[2] => $this->getIdproducto(),
+            $keys[3] => $this->getIdempresa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -791,11 +742,11 @@ abstract class BaseReceta extends BaseObject implements Persistent
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aProductoRelatedByIdproducto) {
-                $result['ProductoRelatedByIdproducto'] = $this->aProductoRelatedByIdproducto->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aProductoRelatedByIdproductoreceta) {
-                $result['ProductoRelatedByIdproductoreceta'] = $this->aProductoRelatedByIdproductoreceta->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            if (null !== $this->aProducto) {
+                $result['Producto'] = $this->aProducto->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -815,7 +766,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
     {
-        $pos = RecetaPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+        $pos = ConceptoscfdiPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 
         $this->setByPosition($pos, $value);
     }
@@ -832,19 +783,16 @@ abstract class BaseReceta extends BaseObject implements Persistent
     {
         switch ($pos) {
             case 0:
-                $this->setIdreceta($value);
+                $this->setIdconceptoscfdi($value);
                 break;
             case 1:
-                $this->setIdproducto($value);
+                $this->setConceptoscfdiNombre($value);
                 break;
             case 2:
-                $this->setIdproductoreceta($value);
+                $this->setIdproducto($value);
                 break;
             case 3:
-                $this->setRecetaCantidad($value);
-                break;
-            case 4:
-                $this->setRecetaCantidadoriginal($value);
+                $this->setIdempresa($value);
                 break;
         } // switch()
     }
@@ -868,13 +816,12 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
     {
-        $keys = RecetaPeer::getFieldNames($keyType);
+        $keys = ConceptoscfdiPeer::getFieldNames($keyType);
 
-        if (array_key_exists($keys[0], $arr)) $this->setIdreceta($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setIdproducto($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdproductoreceta($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setRecetaCantidad($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setRecetaCantidadoriginal($arr[$keys[4]]);
+        if (array_key_exists($keys[0], $arr)) $this->setIdconceptoscfdi($arr[$keys[0]]);
+        if (array_key_exists($keys[1], $arr)) $this->setConceptoscfdiNombre($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdproducto($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdempresa($arr[$keys[3]]);
     }
 
     /**
@@ -884,13 +831,12 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(RecetaPeer::DATABASE_NAME);
+        $criteria = new Criteria(ConceptoscfdiPeer::DATABASE_NAME);
 
-        if ($this->isColumnModified(RecetaPeer::IDRECETA)) $criteria->add(RecetaPeer::IDRECETA, $this->idreceta);
-        if ($this->isColumnModified(RecetaPeer::IDPRODUCTO)) $criteria->add(RecetaPeer::IDPRODUCTO, $this->idproducto);
-        if ($this->isColumnModified(RecetaPeer::IDPRODUCTORECETA)) $criteria->add(RecetaPeer::IDPRODUCTORECETA, $this->idproductoreceta);
-        if ($this->isColumnModified(RecetaPeer::RECETA_CANTIDAD)) $criteria->add(RecetaPeer::RECETA_CANTIDAD, $this->receta_cantidad);
-        if ($this->isColumnModified(RecetaPeer::RECETA_CANTIDADORIGINAL)) $criteria->add(RecetaPeer::RECETA_CANTIDADORIGINAL, $this->receta_cantidadoriginal);
+        if ($this->isColumnModified(ConceptoscfdiPeer::IDCONCEPTOSCFDI)) $criteria->add(ConceptoscfdiPeer::IDCONCEPTOSCFDI, $this->idconceptoscfdi);
+        if ($this->isColumnModified(ConceptoscfdiPeer::CONCEPTOSCFDI_NOMBRE)) $criteria->add(ConceptoscfdiPeer::CONCEPTOSCFDI_NOMBRE, $this->conceptoscfdi_nombre);
+        if ($this->isColumnModified(ConceptoscfdiPeer::IDPRODUCTO)) $criteria->add(ConceptoscfdiPeer::IDPRODUCTO, $this->idproducto);
+        if ($this->isColumnModified(ConceptoscfdiPeer::IDEMPRESA)) $criteria->add(ConceptoscfdiPeer::IDEMPRESA, $this->idempresa);
 
         return $criteria;
     }
@@ -905,8 +851,8 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function buildPkeyCriteria()
     {
-        $criteria = new Criteria(RecetaPeer::DATABASE_NAME);
-        $criteria->add(RecetaPeer::IDRECETA, $this->idreceta);
+        $criteria = new Criteria(ConceptoscfdiPeer::DATABASE_NAME);
+        $criteria->add(ConceptoscfdiPeer::IDCONCEPTOSCFDI, $this->idconceptoscfdi);
 
         return $criteria;
     }
@@ -917,18 +863,18 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function getPrimaryKey()
     {
-        return $this->getIdreceta();
+        return $this->getIdconceptoscfdi();
     }
 
     /**
-     * Generic method to set the primary key (idreceta column).
+     * Generic method to set the primary key (idconceptoscfdi column).
      *
      * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setIdreceta($key);
+        $this->setIdconceptoscfdi($key);
     }
 
     /**
@@ -938,7 +884,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
     public function isPrimaryKeyNull()
     {
 
-        return null === $this->getIdreceta();
+        return null === $this->getIdconceptoscfdi();
     }
 
     /**
@@ -947,17 +893,16 @@ abstract class BaseReceta extends BaseObject implements Persistent
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param object $copyObj An object of Receta (or compatible) type.
+     * @param object $copyObj An object of Conceptoscfdi (or compatible) type.
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setConceptoscfdiNombre($this->getConceptoscfdiNombre());
         $copyObj->setIdproducto($this->getIdproducto());
-        $copyObj->setIdproductoreceta($this->getIdproductoreceta());
-        $copyObj->setRecetaCantidad($this->getRecetaCantidad());
-        $copyObj->setRecetaCantidadoriginal($this->getRecetaCantidadoriginal());
+        $copyObj->setIdempresa($this->getIdempresa());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -972,7 +917,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setIdreceta(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setIdconceptoscfdi(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -985,7 +930,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
      * objects.
      *
      * @param boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return Receta Clone of current object.
+     * @return Conceptoscfdi Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1005,25 +950,77 @@ abstract class BaseReceta extends BaseObject implements Persistent
      * same instance for all member of this class. The method could therefore
      * be static, but this would prevent one from overriding the behavior.
      *
-     * @return RecetaPeer
+     * @return ConceptoscfdiPeer
      */
     public function getPeer()
     {
         if (self::$peer === null) {
-            self::$peer = new RecetaPeer();
+            self::$peer = new ConceptoscfdiPeer();
         }
 
         return self::$peer;
     }
 
     /**
+     * Declares an association between this object and a Empresa object.
+     *
+     * @param                  Empresa $v
+     * @return Conceptoscfdi The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEmpresa(Empresa $v = null)
+    {
+        if ($v === null) {
+            $this->setIdempresa(NULL);
+        } else {
+            $this->setIdempresa($v->getIdempresa());
+        }
+
+        $this->aEmpresa = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Empresa object, it will not be re-added.
+        if ($v !== null) {
+            $v->addConceptoscfdi($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Empresa object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Empresa The associated Empresa object.
+     * @throws PropelException
+     */
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEmpresa->addConceptoscfdis($this);
+             */
+        }
+
+        return $this->aEmpresa;
+    }
+
+    /**
      * Declares an association between this object and a Producto object.
      *
      * @param                  Producto $v
-     * @return Receta The current object (for fluent API support)
+     * @return Conceptoscfdi The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setProductoRelatedByIdproducto(Producto $v = null)
+    public function setProducto(Producto $v = null)
     {
         if ($v === null) {
             $this->setIdproducto(NULL);
@@ -1031,12 +1028,12 @@ abstract class BaseReceta extends BaseObject implements Persistent
             $this->setIdproducto($v->getIdproducto());
         }
 
-        $this->aProductoRelatedByIdproducto = $v;
+        $this->aProducto = $v;
 
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the Producto object, it will not be re-added.
         if ($v !== null) {
-            $v->addRecetaRelatedByIdproducto($this);
+            $v->addConceptoscfdi($this);
         }
 
 
@@ -1052,72 +1049,20 @@ abstract class BaseReceta extends BaseObject implements Persistent
      * @return Producto The associated Producto object.
      * @throws PropelException
      */
-    public function getProductoRelatedByIdproducto(PropelPDO $con = null, $doQuery = true)
+    public function getProducto(PropelPDO $con = null, $doQuery = true)
     {
-        if ($this->aProductoRelatedByIdproducto === null && ($this->idproducto !== null) && $doQuery) {
-            $this->aProductoRelatedByIdproducto = ProductoQuery::create()->findPk($this->idproducto, $con);
+        if ($this->aProducto === null && ($this->idproducto !== null) && $doQuery) {
+            $this->aProducto = ProductoQuery::create()->findPk($this->idproducto, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aProductoRelatedByIdproducto->addRecetasRelatedByIdproducto($this);
+                $this->aProducto->addConceptoscfdis($this);
              */
         }
 
-        return $this->aProductoRelatedByIdproducto;
-    }
-
-    /**
-     * Declares an association between this object and a Producto object.
-     *
-     * @param                  Producto $v
-     * @return Receta The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setProductoRelatedByIdproductoreceta(Producto $v = null)
-    {
-        if ($v === null) {
-            $this->setIdproductoreceta(NULL);
-        } else {
-            $this->setIdproductoreceta($v->getIdproducto());
-        }
-
-        $this->aProductoRelatedByIdproductoreceta = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Producto object, it will not be re-added.
-        if ($v !== null) {
-            $v->addRecetaRelatedByIdproductoreceta($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Producto object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Producto The associated Producto object.
-     * @throws PropelException
-     */
-    public function getProductoRelatedByIdproductoreceta(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aProductoRelatedByIdproductoreceta === null && ($this->idproductoreceta !== null) && $doQuery) {
-            $this->aProductoRelatedByIdproductoreceta = ProductoQuery::create()->findPk($this->idproductoreceta, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aProductoRelatedByIdproductoreceta->addRecetasRelatedByIdproductoreceta($this);
-             */
-        }
-
-        return $this->aProductoRelatedByIdproductoreceta;
+        return $this->aProducto;
     }
 
     /**
@@ -1125,11 +1070,10 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function clear()
     {
-        $this->idreceta = null;
+        $this->idconceptoscfdi = null;
+        $this->conceptoscfdi_nombre = null;
         $this->idproducto = null;
-        $this->idproductoreceta = null;
-        $this->receta_cantidad = null;
-        $this->receta_cantidadoriginal = null;
+        $this->idempresa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1152,18 +1096,18 @@ abstract class BaseReceta extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aProductoRelatedByIdproducto instanceof Persistent) {
-              $this->aProductoRelatedByIdproducto->clearAllReferences($deep);
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
             }
-            if ($this->aProductoRelatedByIdproductoreceta instanceof Persistent) {
-              $this->aProductoRelatedByIdproductoreceta->clearAllReferences($deep);
+            if ($this->aProducto instanceof Persistent) {
+              $this->aProducto->clearAllReferences($deep);
             }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aProductoRelatedByIdproducto = null;
-        $this->aProductoRelatedByIdproductoreceta = null;
+        $this->aEmpresa = null;
+        $this->aProducto = null;
     }
 
     /**
@@ -1173,7 +1117,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
      */
     public function __toString()
     {
-        return (string) $this->exportTo(RecetaPeer::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(ConceptoscfdiPeer::DEFAULT_STRING_FORMAT);
     }
 
     /**

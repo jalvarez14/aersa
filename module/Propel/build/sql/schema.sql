@@ -362,6 +362,33 @@ CREATE TABLE `conceptosalida`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- conceptoscfdi
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `conceptoscfdi`;
+
+CREATE TABLE `conceptoscfdi`
+(
+    `idconceptoscfdi` INTEGER NOT NULL AUTO_INCREMENT,
+    `conceptoscfdi_nombre` TEXT NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `idempresa` INTEGER,
+    PRIMARY KEY (`idconceptoscfdi`),
+    INDEX `idproducto` (`idproducto`),
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_conceptoscfdi`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_conceptoscfdi`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- cuentabancaria
 -- ---------------------------------------------------------------------
 
@@ -1215,6 +1242,7 @@ CREATE TABLE `producto`
     `producto_costo` FLOAT,
     `producto_iva` TINYINT(1) NOT NULL,
     `producto_precio` FLOAT,
+    `producto_rendimientooriginal` FLOAT,
     PRIMARY KEY (`idproducto`),
     INDEX `idunidadmedida` (`idunidadmedida`),
     INDEX `idempresa` (`idempresa`),
@@ -1340,6 +1368,33 @@ CREATE TABLE `proveedor`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- proveedorescfdi
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `proveedorescfdi`;
+
+CREATE TABLE `proveedorescfdi`
+(
+    `idproveedorescfdi` INTEGER NOT NULL AUTO_INCREMENT,
+    `proveedorescfdi_nombre` TEXT NOT NULL,
+    `idproveedor` INTEGER NOT NULL,
+    `idempresa` INTEGER NOT NULL,
+    PRIMARY KEY (`idproveedorescfdi`),
+    INDEX `idproveedor` (`idproveedor`),
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_proveedorescfdi`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproveedor_proveedorescfdi`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- receta
 -- ---------------------------------------------------------------------
 
@@ -1351,6 +1406,7 @@ CREATE TABLE `receta`
     `idproducto` INTEGER NOT NULL,
     `idproductoreceta` INTEGER NOT NULL,
     `receta_cantidad` FLOAT NOT NULL,
+    `receta_cantidadoriginal` FLOAT,
     PRIMARY KEY (`idreceta`),
     INDEX `idproducto` (`idproducto`),
     INDEX `idproductoreceta` (`idproductoreceta`),

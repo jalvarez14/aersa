@@ -79,6 +79,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collComprasPartial;
 
     /**
+     * @var        PropelObjectCollection|Conceptoscfdi[] Collection to store aggregation of Conceptoscfdi objects.
+     */
+    protected $collConceptoscfdis;
+    protected $collConceptoscfdisPartial;
+
+    /**
      * @var        PropelObjectCollection|Cuentabancaria[] Collection to store aggregation of Cuentabancaria objects.
      */
     protected $collCuentabancarias;
@@ -157,6 +163,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collProveedorsPartial;
 
     /**
+     * @var        PropelObjectCollection|Proveedorescfdi[] Collection to store aggregation of Proveedorescfdi objects.
+     */
+    protected $collProveedorescfdis;
+    protected $collProveedorescfdisPartial;
+
+    /**
      * @var        PropelObjectCollection|Requisicion[] Collection to store aggregation of Requisicion objects.
      */
     protected $collRequisicions;
@@ -223,6 +235,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $comprasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $conceptoscfdisScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -301,6 +319,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $proveedorsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $proveedorescfdisScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -647,6 +671,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             $this->collCompras = null;
 
+            $this->collConceptoscfdis = null;
+
             $this->collCuentabancarias = null;
 
             $this->collCuentaporcobrars = null;
@@ -672,6 +698,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collProductosucursalalmacens = null;
 
             $this->collProveedors = null;
+
+            $this->collProveedorescfdis = null;
 
             $this->collRequisicions = null;
 
@@ -852,6 +880,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collCompras !== null) {
                 foreach ($this->collCompras as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->conceptoscfdisScheduledForDeletion !== null) {
+                if (!$this->conceptoscfdisScheduledForDeletion->isEmpty()) {
+                    ConceptoscfdiQuery::create()
+                        ->filterByPrimaryKeys($this->conceptoscfdisScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->conceptoscfdisScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collConceptoscfdis !== null) {
+                foreach ($this->collConceptoscfdis as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1073,6 +1118,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collProveedors !== null) {
                 foreach ($this->collProveedors as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->proveedorescfdisScheduledForDeletion !== null) {
+                if (!$this->proveedorescfdisScheduledForDeletion->isEmpty()) {
+                    ProveedorescfdiQuery::create()
+                        ->filterByPrimaryKeys($this->proveedorescfdisScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->proveedorescfdisScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collProveedorescfdis !== null) {
+                foreach ($this->collProveedorescfdis as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1354,6 +1416,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collConceptoscfdis !== null) {
+                    foreach ($this->collConceptoscfdis as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collCuentabancarias !== null) {
                     foreach ($this->collCuentabancarias as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1452,6 +1522,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
                 if ($this->collProveedors !== null) {
                     foreach ($this->collProveedors as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collProveedorescfdis !== null) {
+                    foreach ($this->collProveedorescfdis as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1598,6 +1676,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             if (null !== $this->collCompras) {
                 $result['Compras'] = $this->collCompras->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collConceptoscfdis) {
+                $result['Conceptoscfdis'] = $this->collConceptoscfdis->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collCuentabancarias) {
                 $result['Cuentabancarias'] = $this->collCuentabancarias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
@@ -1636,6 +1717,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collProveedors) {
                 $result['Proveedors'] = $this->collProveedors->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collProveedorescfdis) {
+                $result['Proveedorescfdis'] = $this->collProveedorescfdis->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collRequisicions) {
                 $result['Requisicions'] = $this->collRequisicions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1839,6 +1923,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getConceptoscfdis() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addConceptoscfdi($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getCuentabancarias() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCuentabancaria($relObj->copy($deepCopy));
@@ -1914,6 +2004,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             foreach ($this->getProveedors() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addProveedor($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getProveedorescfdis() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addProveedorescfdi($relObj->copy($deepCopy));
                 }
             }
 
@@ -2017,6 +2113,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ('Compra' == $relationName) {
             $this->initCompras();
         }
+        if ('Conceptoscfdi' == $relationName) {
+            $this->initConceptoscfdis();
+        }
         if ('Cuentabancaria' == $relationName) {
             $this->initCuentabancarias();
         }
@@ -2055,6 +2154,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
         if ('Proveedor' == $relationName) {
             $this->initProveedors();
+        }
+        if ('Proveedorescfdi' == $relationName) {
+            $this->initProveedorescfdis();
         }
         if ('Requisicion' == $relationName) {
             $this->initRequisicions();
@@ -3021,6 +3123,256 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
 
         return $this->getCompras($query, $con);
+    }
+
+    /**
+     * Clears out the collConceptoscfdis collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addConceptoscfdis()
+     */
+    public function clearConceptoscfdis()
+    {
+        $this->collConceptoscfdis = null; // important to set this to null since that means it is uninitialized
+        $this->collConceptoscfdisPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collConceptoscfdis collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialConceptoscfdis($v = true)
+    {
+        $this->collConceptoscfdisPartial = $v;
+    }
+
+    /**
+     * Initializes the collConceptoscfdis collection.
+     *
+     * By default this just sets the collConceptoscfdis collection to an empty array (like clearcollConceptoscfdis());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initConceptoscfdis($overrideExisting = true)
+    {
+        if (null !== $this->collConceptoscfdis && !$overrideExisting) {
+            return;
+        }
+        $this->collConceptoscfdis = new PropelObjectCollection();
+        $this->collConceptoscfdis->setModel('Conceptoscfdi');
+    }
+
+    /**
+     * Gets an array of Conceptoscfdi objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Conceptoscfdi[] List of Conceptoscfdi objects
+     * @throws PropelException
+     */
+    public function getConceptoscfdis($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collConceptoscfdisPartial && !$this->isNew();
+        if (null === $this->collConceptoscfdis || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collConceptoscfdis) {
+                // return empty collection
+                $this->initConceptoscfdis();
+            } else {
+                $collConceptoscfdis = ConceptoscfdiQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collConceptoscfdisPartial && count($collConceptoscfdis)) {
+                      $this->initConceptoscfdis(false);
+
+                      foreach ($collConceptoscfdis as $obj) {
+                        if (false == $this->collConceptoscfdis->contains($obj)) {
+                          $this->collConceptoscfdis->append($obj);
+                        }
+                      }
+
+                      $this->collConceptoscfdisPartial = true;
+                    }
+
+                    $collConceptoscfdis->getInternalIterator()->rewind();
+
+                    return $collConceptoscfdis;
+                }
+
+                if ($partial && $this->collConceptoscfdis) {
+                    foreach ($this->collConceptoscfdis as $obj) {
+                        if ($obj->isNew()) {
+                            $collConceptoscfdis[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collConceptoscfdis = $collConceptoscfdis;
+                $this->collConceptoscfdisPartial = false;
+            }
+        }
+
+        return $this->collConceptoscfdis;
+    }
+
+    /**
+     * Sets a collection of Conceptoscfdi objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $conceptoscfdis A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setConceptoscfdis(PropelCollection $conceptoscfdis, PropelPDO $con = null)
+    {
+        $conceptoscfdisToDelete = $this->getConceptoscfdis(new Criteria(), $con)->diff($conceptoscfdis);
+
+
+        $this->conceptoscfdisScheduledForDeletion = $conceptoscfdisToDelete;
+
+        foreach ($conceptoscfdisToDelete as $conceptoscfdiRemoved) {
+            $conceptoscfdiRemoved->setEmpresa(null);
+        }
+
+        $this->collConceptoscfdis = null;
+        foreach ($conceptoscfdis as $conceptoscfdi) {
+            $this->addConceptoscfdi($conceptoscfdi);
+        }
+
+        $this->collConceptoscfdis = $conceptoscfdis;
+        $this->collConceptoscfdisPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Conceptoscfdi objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Conceptoscfdi objects.
+     * @throws PropelException
+     */
+    public function countConceptoscfdis(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collConceptoscfdisPartial && !$this->isNew();
+        if (null === $this->collConceptoscfdis || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collConceptoscfdis) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getConceptoscfdis());
+            }
+            $query = ConceptoscfdiQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collConceptoscfdis);
+    }
+
+    /**
+     * Method called to associate a Conceptoscfdi object to this object
+     * through the Conceptoscfdi foreign key attribute.
+     *
+     * @param    Conceptoscfdi $l Conceptoscfdi
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addConceptoscfdi(Conceptoscfdi $l)
+    {
+        if ($this->collConceptoscfdis === null) {
+            $this->initConceptoscfdis();
+            $this->collConceptoscfdisPartial = true;
+        }
+
+        if (!in_array($l, $this->collConceptoscfdis->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddConceptoscfdi($l);
+
+            if ($this->conceptoscfdisScheduledForDeletion and $this->conceptoscfdisScheduledForDeletion->contains($l)) {
+                $this->conceptoscfdisScheduledForDeletion->remove($this->conceptoscfdisScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Conceptoscfdi $conceptoscfdi The conceptoscfdi object to add.
+     */
+    protected function doAddConceptoscfdi($conceptoscfdi)
+    {
+        $this->collConceptoscfdis[]= $conceptoscfdi;
+        $conceptoscfdi->setEmpresa($this);
+    }
+
+    /**
+     * @param	Conceptoscfdi $conceptoscfdi The conceptoscfdi object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeConceptoscfdi($conceptoscfdi)
+    {
+        if ($this->getConceptoscfdis()->contains($conceptoscfdi)) {
+            $this->collConceptoscfdis->remove($this->collConceptoscfdis->search($conceptoscfdi));
+            if (null === $this->conceptoscfdisScheduledForDeletion) {
+                $this->conceptoscfdisScheduledForDeletion = clone $this->collConceptoscfdis;
+                $this->conceptoscfdisScheduledForDeletion->clear();
+            }
+            $this->conceptoscfdisScheduledForDeletion[]= $conceptoscfdi;
+            $conceptoscfdi->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Conceptoscfdis from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Conceptoscfdi[] List of Conceptoscfdi objects
+     */
+    public function getConceptoscfdisJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ConceptoscfdiQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getConceptoscfdis($query, $con);
     }
 
     /**
@@ -6974,6 +7326,256 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collProveedorescfdis collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addProveedorescfdis()
+     */
+    public function clearProveedorescfdis()
+    {
+        $this->collProveedorescfdis = null; // important to set this to null since that means it is uninitialized
+        $this->collProveedorescfdisPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collProveedorescfdis collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialProveedorescfdis($v = true)
+    {
+        $this->collProveedorescfdisPartial = $v;
+    }
+
+    /**
+     * Initializes the collProveedorescfdis collection.
+     *
+     * By default this just sets the collProveedorescfdis collection to an empty array (like clearcollProveedorescfdis());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initProveedorescfdis($overrideExisting = true)
+    {
+        if (null !== $this->collProveedorescfdis && !$overrideExisting) {
+            return;
+        }
+        $this->collProveedorescfdis = new PropelObjectCollection();
+        $this->collProveedorescfdis->setModel('Proveedorescfdi');
+    }
+
+    /**
+     * Gets an array of Proveedorescfdi objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Proveedorescfdi[] List of Proveedorescfdi objects
+     * @throws PropelException
+     */
+    public function getProveedorescfdis($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collProveedorescfdisPartial && !$this->isNew();
+        if (null === $this->collProveedorescfdis || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collProveedorescfdis) {
+                // return empty collection
+                $this->initProveedorescfdis();
+            } else {
+                $collProveedorescfdis = ProveedorescfdiQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collProveedorescfdisPartial && count($collProveedorescfdis)) {
+                      $this->initProveedorescfdis(false);
+
+                      foreach ($collProveedorescfdis as $obj) {
+                        if (false == $this->collProveedorescfdis->contains($obj)) {
+                          $this->collProveedorescfdis->append($obj);
+                        }
+                      }
+
+                      $this->collProveedorescfdisPartial = true;
+                    }
+
+                    $collProveedorescfdis->getInternalIterator()->rewind();
+
+                    return $collProveedorescfdis;
+                }
+
+                if ($partial && $this->collProveedorescfdis) {
+                    foreach ($this->collProveedorescfdis as $obj) {
+                        if ($obj->isNew()) {
+                            $collProveedorescfdis[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collProveedorescfdis = $collProveedorescfdis;
+                $this->collProveedorescfdisPartial = false;
+            }
+        }
+
+        return $this->collProveedorescfdis;
+    }
+
+    /**
+     * Sets a collection of Proveedorescfdi objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $proveedorescfdis A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setProveedorescfdis(PropelCollection $proveedorescfdis, PropelPDO $con = null)
+    {
+        $proveedorescfdisToDelete = $this->getProveedorescfdis(new Criteria(), $con)->diff($proveedorescfdis);
+
+
+        $this->proveedorescfdisScheduledForDeletion = $proveedorescfdisToDelete;
+
+        foreach ($proveedorescfdisToDelete as $proveedorescfdiRemoved) {
+            $proveedorescfdiRemoved->setEmpresa(null);
+        }
+
+        $this->collProveedorescfdis = null;
+        foreach ($proveedorescfdis as $proveedorescfdi) {
+            $this->addProveedorescfdi($proveedorescfdi);
+        }
+
+        $this->collProveedorescfdis = $proveedorescfdis;
+        $this->collProveedorescfdisPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Proveedorescfdi objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Proveedorescfdi objects.
+     * @throws PropelException
+     */
+    public function countProveedorescfdis(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collProveedorescfdisPartial && !$this->isNew();
+        if (null === $this->collProveedorescfdis || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collProveedorescfdis) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getProveedorescfdis());
+            }
+            $query = ProveedorescfdiQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collProveedorescfdis);
+    }
+
+    /**
+     * Method called to associate a Proveedorescfdi object to this object
+     * through the Proveedorescfdi foreign key attribute.
+     *
+     * @param    Proveedorescfdi $l Proveedorescfdi
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addProveedorescfdi(Proveedorescfdi $l)
+    {
+        if ($this->collProveedorescfdis === null) {
+            $this->initProveedorescfdis();
+            $this->collProveedorescfdisPartial = true;
+        }
+
+        if (!in_array($l, $this->collProveedorescfdis->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddProveedorescfdi($l);
+
+            if ($this->proveedorescfdisScheduledForDeletion and $this->proveedorescfdisScheduledForDeletion->contains($l)) {
+                $this->proveedorescfdisScheduledForDeletion->remove($this->proveedorescfdisScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Proveedorescfdi $proveedorescfdi The proveedorescfdi object to add.
+     */
+    protected function doAddProveedorescfdi($proveedorescfdi)
+    {
+        $this->collProveedorescfdis[]= $proveedorescfdi;
+        $proveedorescfdi->setEmpresa($this);
+    }
+
+    /**
+     * @param	Proveedorescfdi $proveedorescfdi The proveedorescfdi object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeProveedorescfdi($proveedorescfdi)
+    {
+        if ($this->getProveedorescfdis()->contains($proveedorescfdi)) {
+            $this->collProveedorescfdis->remove($this->collProveedorescfdis->search($proveedorescfdi));
+            if (null === $this->proveedorescfdisScheduledForDeletion) {
+                $this->proveedorescfdisScheduledForDeletion = clone $this->collProveedorescfdis;
+                $this->proveedorescfdisScheduledForDeletion->clear();
+            }
+            $this->proveedorescfdisScheduledForDeletion[]= clone $proveedorescfdi;
+            $proveedorescfdi->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Proveedorescfdis from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Proveedorescfdi[] List of Proveedorescfdi objects
+     */
+    public function getProveedorescfdisJoinProveedor($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ProveedorescfdiQuery::create(null, $criteria);
+        $query->joinWith('Proveedor', $join_behavior);
+
+        return $this->getProveedorescfdis($query, $con);
+    }
+
+    /**
      * Clears out the collRequisicions collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -8446,6 +9048,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collConceptoscfdis) {
+                foreach ($this->collConceptoscfdis as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCuentabancarias) {
                 foreach ($this->collCuentabancarias as $o) {
                     $o->clearAllReferences($deep);
@@ -8511,6 +9118,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collProveedorescfdis) {
+                foreach ($this->collProveedorescfdis as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collRequisicions) {
                 foreach ($this->collRequisicions as $o) {
                     $o->clearAllReferences($deep);
@@ -8552,6 +9164,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collCompras->clearIterator();
         }
         $this->collCompras = null;
+        if ($this->collConceptoscfdis instanceof PropelCollection) {
+            $this->collConceptoscfdis->clearIterator();
+        }
+        $this->collConceptoscfdis = null;
         if ($this->collCuentabancarias instanceof PropelCollection) {
             $this->collCuentabancarias->clearIterator();
         }
@@ -8604,6 +9220,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collProveedors->clearIterator();
         }
         $this->collProveedors = null;
+        if ($this->collProveedorescfdis instanceof PropelCollection) {
+            $this->collProveedorescfdis->clearIterator();
+        }
+        $this->collProveedorescfdis = null;
         if ($this->collRequisicions instanceof PropelCollection) {
             $this->collRequisicions->clearIterator();
         }

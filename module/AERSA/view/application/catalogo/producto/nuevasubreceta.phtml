@@ -1,5 +1,5 @@
 
-
+<?php $product = new Producto(); ?>
 <h3 class="page-title">Registro de subreceta</h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -8,7 +8,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <span>Registro de codigo</span>
+            <span>Registro de subreceta</span>
         </li>
     </ul>
 </div>
@@ -46,6 +46,8 @@
                             </span>
                             <input id="idproducto" name="idproductoreceta" type="hidden">
                             <input id="producto_iva" type="hidden">
+                            <input id="producto_rendimientooriginal" type="hidden" value="<?php echo $producto->getProductoRendimientooriginal()?>">
+                            <input id="producto_rendimiento" type="hidden" value="<?php echo $producto->getProductoRendimiento()?>">
                             <input id="producto_autocomplete" class="form-control" type="text">
                         </div>
                     </div>
@@ -56,7 +58,14 @@
                         <?php echo $this->formText($form->get('receta_cantidad')) ?>
                     </div>
                 </div>
-                
+                <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <?php echo $this->formLabel($form->get('receta_cantidadoriginal')) ?>  
+                            <?php echo $this->formText($form->get('receta_cantidadoriginal')) ?>
+                        </div>
+                    </div>
+                <?php endif;?>
             </div>
            
             
@@ -72,4 +81,23 @@
 
 <script type="text/javascript" src="/application/custom/js/catalogo/subreceta.js"></script>
 
-<script>     $("[name=receta_cantidad]").numeric();  </script>
+<script>     
+
+    $("[name=receta_cantidad]").numeric();
+    
+    var producto_rendimientooriginal = $('#producto_rendimientooriginal').val();
+    var producto_rendimiento = $('#producto_rendimiento').val();
+    
+    if(producto_rendimientooriginal != "" && producto_rendimiento != "")
+    {   
+        $("[name=receta_cantidad]").on('change',function(){
+            
+            
+            var cantidad = $("[name=receta_cantidad]").val();
+            var cantidad_normalizada = (producto_rendimientooriginal * producto_rendimiento)/cantidad;
+            $('[name=receta_cantidadoriginal]').val(cantidad_normalizada.toFixed(2));
+        });
+    } 
+    
+
+</script>

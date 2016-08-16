@@ -56,6 +56,7 @@ class ProductoController extends AbstractActionController
             
             $post_data = $request->getPost();
            
+
             //VALIDACION PENDIENTE
             //$exist = \ProductoQuery::create()->filterByProductoNombre($post_data['producto_nombre'])->exists();
 
@@ -67,7 +68,7 @@ class ProductoController extends AbstractActionController
                     $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
             $entity->setIdempresa($session['idempresa']);
-            
+         
             $entity->save();
             
             if($post_data['producto_tipo'] == 'plu')
@@ -362,6 +363,7 @@ class ProductoController extends AbstractActionController
                 $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
             $entity->setIdproducto($id);
+          
             $entity->save();
 
             $this->flashMessenger()->addSuccessMessage('Sub receta registrada correctamente!');
@@ -412,8 +414,14 @@ class ProductoController extends AbstractActionController
             if ($request->isPost()) 
             {
                 $post_data = $request->getPost();
+                
+                
                 //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                $entity->setRecetaCantidad($post_data[receta_cantidad]);
+                foreach ($post_data as $key => $value) {
+                
+                $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                }
+                
                 $entity->save();
 
                 $this->flashMessenger()->addSuccessMessage('Sub receta modificada correctamente!');

@@ -384,6 +384,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in CompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompraPeer::clearInstancePool();
+        // Invalidate objects in ConceptoscfdiPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ConceptoscfdiPeer::clearInstancePool();
         // Invalidate objects in CuentabancariaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CuentabancariaPeer::clearInstancePool();
@@ -420,6 +423,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in ProveedorPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         ProveedorPeer::clearInstancePool();
+        // Invalidate objects in ProveedorescfdiPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProveedorescfdiPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -787,6 +793,12 @@ abstract class BaseEmpresaPeer
             $criteria->add(CompraPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += CompraPeer::doDelete($criteria, $con);
 
+            // delete related Conceptoscfdi objects
+            $criteria = new Criteria(ConceptoscfdiPeer::DATABASE_NAME);
+
+            $criteria->add(ConceptoscfdiPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += ConceptoscfdiPeer::doDelete($criteria, $con);
+
             // delete related Cuentabancaria objects
             $criteria = new Criteria(CuentabancariaPeer::DATABASE_NAME);
 
@@ -858,6 +870,12 @@ abstract class BaseEmpresaPeer
 
             $criteria->add(ProveedorPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += ProveedorPeer::doDelete($criteria, $con);
+
+            // delete related Proveedorescfdi objects
+            $criteria = new Criteria(ProveedorescfdiPeer::DATABASE_NAME);
+
+            $criteria->add(ProveedorescfdiPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += ProveedorescfdiPeer::doDelete($criteria, $con);
 
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);

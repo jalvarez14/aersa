@@ -5,7 +5,7 @@
         <?php echo $message?>
     </div>
 <?php endforeach;?>
-
+<?php $product = new Producto()?>
 <h3 class="page-title"><?php echo $producto->getProductonombre() ?></h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -89,28 +89,22 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('producto_ultimocosto')) ?>  
-                        <?php echo $this->formText  ($form->get('producto_ultimocosto')) ?>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_stock')) ?>  
                         <?php echo $this->formText  ($form->get('producto_stock')) ?>
                     </div>
                 </div>
-                
-                <?php if($isBebida):?>
-                    <div class="col-md-6">
-                        <div class="form-group">
-
-                            <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
-                            <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
-                        </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_rendimiento')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_rendimiento')) ?>
                     </div>
-                <?php endif ?>
-                
-                
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_rendimientooriginal')) ?>  
+                        <?php echo $this->formText  ($form->get('producto_rendimientooriginal')) ?>
+                    </div>
+                </div>
             </div>
             
         </div>
@@ -192,7 +186,11 @@
                                 <tr>
                                     <th> Producto </th>
                                     <th> Cantidad </th>
+                                    <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
+                                        <th> Cantidad normalizada </th>
+                                    <?php endif;?>
                                     <th> Opciones </th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -201,7 +199,9 @@
                                     <tr id="<?php echo $entity->getIdreceta() ?>">
                                         <td><?php echo $nombreProducto->getProductoNombre() ?></td>
                                         <td><?php echo $entity->getRecetaCantidad() ?></td>
-
+                                        <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
+                                            <td><?php echo $entity->getRecetaCantidadoriginal() ?></td>
+                                        <?php endif;?>
                                         <td class="text-left">                                    
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
@@ -245,7 +245,32 @@
 <?php echo '<script> var prod = '.$producto->getIdproducto().'</script>'; ?>
 <script>
     $(document).ready(function(){
-
+         
+         //INIT FORM
+         $("label[for=producto_rendimiento").hide();
+         $("[name=producto_rendimiento]").attr("required",false).hide();
+         $("label[for=producto_rendimientooriginal").hide();
+         $("[name=producto_rendimientooriginal]").attr("required",false).hide();
+         $("[name=producto_costo]").attr("readonly",false);
+         
+         var is_bebida =  <?php echo json_encode($isBebida)?>;
+         var idcategoria = $('select[name=idcategoria] option:selected').val();
+         var producto_tipo = $('select[name=producto_tipo] option:selected').val(); 
+         
+         if(is_bebida){
+            $("label[for=producto_rendimiento").show();
+            $("[name=producto_rendimiento]").attr("required",true).show();
+         }
+         if(idcategoria == 1 && producto_tipo == 'subreceta')
+        {
+           
+            $("label[for=producto_rendimiento").show();
+            $("[name=producto_rendimiento]").attr("required",true).show();
+            $("label[for=producto_rendimientooriginal").show();
+            $("[name=producto_rendimientooriginal]").attr("required",true).show();
+            $("[name=producto_costo]").attr("readonly",true);
+        }   
+            
         $('.delete_code').click(function(){
 
           var id = $(this).closest('tr').attr('id');
@@ -293,6 +318,24 @@
             '</div>'
           ].join('');
           $(tmpl).modal();
+        });
+        $('select[name=idcategoria],select[name=producto_tipo]').on('change',function(){
+            var idcategoria = $('select[name=idcategoria] option:selected').val();
+            var producto_tipo = $('select[name=producto_tipo] option:selected').val(); 
+            if(idcategoria == 1 && producto_tipo == 'subreceta')
+            {
+                $("label[for=producto_rendimiento").show();
+                $("[name=producto_rendimiento]").attr("required",true).show();
+                $("label[for=producto_rendimientooriginal").show();
+                $("[name=producto_rendimientooriginal]").attr("required",true).show();
+                $("[name=producto_costo]").attr("readonly",true);
+            }else{
+                $("label[for=producto_rendimiento").hide();
+                $("[name=producto_rendimiento]").attr("required",false).hide();
+                $("label[for=producto_rendimientooriginal").hide();
+                $("[name=producto_rendimientooriginal]").attr("required",false).hide();
+                $("[name=producto_costo]").attr("readonly",false);
+            }
         });
         
     }); 

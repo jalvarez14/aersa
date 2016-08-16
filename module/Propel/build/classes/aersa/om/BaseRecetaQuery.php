@@ -10,11 +10,13 @@
  * @method RecetaQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
  * @method RecetaQuery orderByIdproductoreceta($order = Criteria::ASC) Order by the idproductoreceta column
  * @method RecetaQuery orderByRecetaCantidad($order = Criteria::ASC) Order by the receta_cantidad column
+ * @method RecetaQuery orderByRecetaCantidadoriginal($order = Criteria::ASC) Order by the receta_cantidadoriginal column
  *
  * @method RecetaQuery groupByIdreceta() Group by the idreceta column
  * @method RecetaQuery groupByIdproducto() Group by the idproducto column
  * @method RecetaQuery groupByIdproductoreceta() Group by the idproductoreceta column
  * @method RecetaQuery groupByRecetaCantidad() Group by the receta_cantidad column
+ * @method RecetaQuery groupByRecetaCantidadoriginal() Group by the receta_cantidadoriginal column
  *
  * @method RecetaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RecetaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -34,11 +36,13 @@
  * @method Receta findOneByIdproducto(int $idproducto) Return the first Receta filtered by the idproducto column
  * @method Receta findOneByIdproductoreceta(int $idproductoreceta) Return the first Receta filtered by the idproductoreceta column
  * @method Receta findOneByRecetaCantidad(double $receta_cantidad) Return the first Receta filtered by the receta_cantidad column
+ * @method Receta findOneByRecetaCantidadoriginal(double $receta_cantidadoriginal) Return the first Receta filtered by the receta_cantidadoriginal column
  *
  * @method array findByIdreceta(int $idreceta) Return Receta objects filtered by the idreceta column
  * @method array findByIdproducto(int $idproducto) Return Receta objects filtered by the idproducto column
  * @method array findByIdproductoreceta(int $idproductoreceta) Return Receta objects filtered by the idproductoreceta column
  * @method array findByRecetaCantidad(double $receta_cantidad) Return Receta objects filtered by the receta_cantidad column
+ * @method array findByRecetaCantidadoriginal(double $receta_cantidadoriginal) Return Receta objects filtered by the receta_cantidadoriginal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -146,7 +150,7 @@ abstract class BaseRecetaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idreceta`, `idproducto`, `idproductoreceta`, `receta_cantidad` FROM `receta` WHERE `idreceta` = :p0';
+        $sql = 'SELECT `idreceta`, `idproducto`, `idproductoreceta`, `receta_cantidad`, `receta_cantidadoriginal` FROM `receta` WHERE `idreceta` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -405,6 +409,48 @@ abstract class BaseRecetaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RecetaPeer::RECETA_CANTIDAD, $recetaCantidad, $comparison);
+    }
+
+    /**
+     * Filter the query on the receta_cantidadoriginal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRecetaCantidadoriginal(1234); // WHERE receta_cantidadoriginal = 1234
+     * $query->filterByRecetaCantidadoriginal(array(12, 34)); // WHERE receta_cantidadoriginal IN (12, 34)
+     * $query->filterByRecetaCantidadoriginal(array('min' => 12)); // WHERE receta_cantidadoriginal >= 12
+     * $query->filterByRecetaCantidadoriginal(array('max' => 12)); // WHERE receta_cantidadoriginal <= 12
+     * </code>
+     *
+     * @param     mixed $recetaCantidadoriginal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RecetaQuery The current query, for fluid interface
+     */
+    public function filterByRecetaCantidadoriginal($recetaCantidadoriginal = null, $comparison = null)
+    {
+        if (is_array($recetaCantidadoriginal)) {
+            $useMinMax = false;
+            if (isset($recetaCantidadoriginal['min'])) {
+                $this->addUsingAlias(RecetaPeer::RECETA_CANTIDADORIGINAL, $recetaCantidadoriginal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($recetaCantidadoriginal['max'])) {
+                $this->addUsingAlias(RecetaPeer::RECETA_CANTIDADORIGINAL, $recetaCantidadoriginal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RecetaPeer::RECETA_CANTIDADORIGINAL, $recetaCantidadoriginal, $comparison);
     }
 
     /**

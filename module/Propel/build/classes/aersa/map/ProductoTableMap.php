@@ -56,6 +56,7 @@ class ProductoTableMap extends TableMap
         $this->addColumn('producto_costo', 'ProductoCosto', 'FLOAT', false, null, null);
         $this->addColumn('producto_iva', 'ProductoIva', 'BOOLEAN', true, 1, null);
         $this->addColumn('producto_precio', 'ProductoPrecio', 'FLOAT', false, null, null);
+        $this->addColumn('producto_rendimientooriginal', 'ProductoRendimientooriginal', 'FLOAT', false, null, null);
         // validators
     } // initialize()
 
@@ -71,6 +72,7 @@ class ProductoTableMap extends TableMap
         $this->addRelation('Ajusteinventario', 'Ajusteinventario', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Ajusteinventarios');
         $this->addRelation('Codigobarras', 'Codigobarras', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Codigobarrass');
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Compradetalles');
+        $this->addRelation('Conceptoscfdi', 'Conceptoscfdi', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Conceptoscfdis');
         $this->addRelation('Devoluciondetalle', 'Devoluciondetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Devoluciondetalles');
         $this->addRelation('Notacreditodetalle', 'Notacreditodetalle', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Notacreditodetalles');
         $this->addRelation('Ordentablajeria', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE', 'Ordentablajerias');

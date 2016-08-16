@@ -427,6 +427,9 @@ abstract class BaseProveedorPeer
         // Invalidate objects in NotacreditoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditoPeer::clearInstancePool();
+        // Invalidate objects in ProveedorescfdiPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ProveedorescfdiPeer::clearInstancePool();
     }
 
     /**
@@ -1022,6 +1025,12 @@ abstract class BaseProveedorPeer
 
             $criteria->add(NotacreditoPeer::IDPROVEEDOR, $obj->getIdproveedor());
             $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
+
+            // delete related Proveedorescfdi objects
+            $criteria = new Criteria(ProveedorescfdiPeer::DATABASE_NAME);
+
+            $criteria->add(ProveedorescfdiPeer::IDPROVEEDOR, $obj->getIdproveedor());
+            $affectedRows += ProveedorescfdiPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

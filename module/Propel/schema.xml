@@ -293,6 +293,27 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="conceptoscfdi" phpName="Conceptoscfdi" idMethod="native">
+    <column name="idconceptoscfdi" phpName="Idconceptoscfdi" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="conceptoscfdi_nombre" phpName="ConceptoscfdiNombre" type="LONGVARCHAR" required="true"/>
+    <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="false"/>
+    <foreign-key foreignTable="empresa" name="idempresa_conceptoscfdi" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_conceptoscfdi" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <index name="idproducto">
+      <index-column name="idproducto"/>
+    </index>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="cuentabancaria" phpName="Cuentabancaria" idMethod="native">
     <column name="idcuentabancaria" phpName="Idcuentabancaria" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
@@ -1030,6 +1051,7 @@
     <column name="producto_costo" phpName="ProductoCosto" type="FLOAT" required="false"/>
     <column name="producto_iva" phpName="ProductoIva" type="BOOLEAN" size="1" required="true"/>
     <column name="producto_precio" phpName="ProductoPrecio" type="FLOAT" required="false"/>
+    <column name="producto_rendimientooriginal" phpName="ProductoRendimientooriginal" type="FLOAT" required="false"/>
     <foreign-key foreignTable="categoria" name="idcategoria_producto" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idcategoria" foreign="idcategoria"/>
     </foreign-key>
@@ -1137,11 +1159,33 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="proveedorescfdi" phpName="Proveedorescfdi" idMethod="native">
+    <column name="idproveedorescfdi" phpName="Idproveedorescfdi" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="proveedorescfdi_nombre" phpName="ProveedorescfdiNombre" type="LONGVARCHAR" required="true"/>
+    <column name="idproveedor" phpName="Idproveedor" type="INTEGER" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_proveedorescfdi" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="proveedor" name="idproveedor_proveedorescfdi" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproveedor" foreign="idproveedor"/>
+    </foreign-key>
+    <index name="idproveedor">
+      <index-column name="idproveedor"/>
+    </index>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="receta" phpName="Receta" idMethod="native">
     <column name="idreceta" phpName="Idreceta" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="idproductoreceta" phpName="Idproductoreceta" type="INTEGER" required="true"/>
     <column name="receta_cantidad" phpName="RecetaCantidad" type="FLOAT" required="true"/>
+    <column name="receta_cantidadoriginal" phpName="RecetaCantidadoriginal" type="FLOAT" required="false"/>
     <foreign-key foreignTable="producto" name="idproducto_receta" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idproducto" foreign="idproducto"/>
     </foreign-key>

@@ -34,6 +34,10 @@
  * @method EmpresaQuery rightJoinCompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compra relation
  * @method EmpresaQuery innerJoinCompra($relationAlias = null) Adds a INNER JOIN clause to the query using the Compra relation
  *
+ * @method EmpresaQuery leftJoinConceptoscfdi($relationAlias = null) Adds a LEFT JOIN clause to the query using the Conceptoscfdi relation
+ * @method EmpresaQuery rightJoinConceptoscfdi($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Conceptoscfdi relation
+ * @method EmpresaQuery innerJoinConceptoscfdi($relationAlias = null) Adds a INNER JOIN clause to the query using the Conceptoscfdi relation
+ *
  * @method EmpresaQuery leftJoinCuentabancaria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cuentabancaria relation
  * @method EmpresaQuery rightJoinCuentabancaria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cuentabancaria relation
  * @method EmpresaQuery innerJoinCuentabancaria($relationAlias = null) Adds a INNER JOIN clause to the query using the Cuentabancaria relation
@@ -85,6 +89,10 @@
  * @method EmpresaQuery leftJoinProveedor($relationAlias = null) Adds a LEFT JOIN clause to the query using the Proveedor relation
  * @method EmpresaQuery rightJoinProveedor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Proveedor relation
  * @method EmpresaQuery innerJoinProveedor($relationAlias = null) Adds a INNER JOIN clause to the query using the Proveedor relation
+ *
+ * @method EmpresaQuery leftJoinProveedorescfdi($relationAlias = null) Adds a LEFT JOIN clause to the query using the Proveedorescfdi relation
+ * @method EmpresaQuery rightJoinProveedorescfdi($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Proveedorescfdi relation
+ * @method EmpresaQuery innerJoinProveedorescfdi($relationAlias = null) Adds a INNER JOIN clause to the query using the Proveedorescfdi relation
  *
  * @method EmpresaQuery leftJoinRequisicion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Requisicion relation
  * @method EmpresaQuery rightJoinRequisicion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Requisicion relation
@@ -689,6 +697,80 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         return $this
             ->joinCompra($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Compra', 'CompraQuery');
+    }
+
+    /**
+     * Filter the query by a related Conceptoscfdi object
+     *
+     * @param   Conceptoscfdi|PropelObjectCollection $conceptoscfdi  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByConceptoscfdi($conceptoscfdi, $comparison = null)
+    {
+        if ($conceptoscfdi instanceof Conceptoscfdi) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $conceptoscfdi->getIdempresa(), $comparison);
+        } elseif ($conceptoscfdi instanceof PropelObjectCollection) {
+            return $this
+                ->useConceptoscfdiQuery()
+                ->filterByPrimaryKeys($conceptoscfdi->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByConceptoscfdi() only accepts arguments of type Conceptoscfdi or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Conceptoscfdi relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinConceptoscfdi($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Conceptoscfdi');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Conceptoscfdi');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Conceptoscfdi relation Conceptoscfdi object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ConceptoscfdiQuery A secondary query class using the current class as primary query
+     */
+    public function useConceptoscfdiQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinConceptoscfdi($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Conceptoscfdi', 'ConceptoscfdiQuery');
     }
 
     /**
@@ -1651,6 +1733,80 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         return $this
             ->joinProveedor($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Proveedor', 'ProveedorQuery');
+    }
+
+    /**
+     * Filter the query by a related Proveedorescfdi object
+     *
+     * @param   Proveedorescfdi|PropelObjectCollection $proveedorescfdi  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByProveedorescfdi($proveedorescfdi, $comparison = null)
+    {
+        if ($proveedorescfdi instanceof Proveedorescfdi) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $proveedorescfdi->getIdempresa(), $comparison);
+        } elseif ($proveedorescfdi instanceof PropelObjectCollection) {
+            return $this
+                ->useProveedorescfdiQuery()
+                ->filterByPrimaryKeys($proveedorescfdi->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByProveedorescfdi() only accepts arguments of type Proveedorescfdi or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Proveedorescfdi relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinProveedorescfdi($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Proveedorescfdi');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Proveedorescfdi');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Proveedorescfdi relation Proveedorescfdi object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ProveedorescfdiQuery A secondary query class using the current class as primary query
+     */
+    public function useProveedorescfdiQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinProveedorescfdi($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Proveedorescfdi', 'ProveedorescfdiQuery');
     }
 
     /**

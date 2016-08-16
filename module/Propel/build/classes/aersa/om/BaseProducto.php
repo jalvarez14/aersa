@@ -109,6 +109,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
     protected $producto_precio;
 
     /**
+     * The value for the producto_rendimientooriginal field.
+     * @var        double
+     */
+    protected $producto_rendimientooriginal;
+
+    /**
      * @var        Categoria
      */
     protected $aCategoriaRelatedByIdcategoria;
@@ -145,6 +151,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
      */
     protected $collCompradetalles;
     protected $collCompradetallesPartial;
+
+    /**
+     * @var        PropelObjectCollection|Conceptoscfdi[] Collection to store aggregation of Conceptoscfdi objects.
+     */
+    protected $collConceptoscfdis;
+    protected $collConceptoscfdisPartial;
 
     /**
      * @var        PropelObjectCollection|Devoluciondetalle[] Collection to store aggregation of Devoluciondetalle objects.
@@ -255,6 +267,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $compradetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $conceptoscfdisScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -490,6 +508,17 @@ abstract class BaseProducto extends BaseObject implements Persistent
     {
 
         return $this->producto_precio;
+    }
+
+    /**
+     * Get the [producto_rendimientooriginal] column value.
+     *
+     * @return double
+     */
+    public function getProductoRendimientooriginal()
+    {
+
+        return $this->producto_rendimientooriginal;
     }
 
     /**
@@ -798,6 +827,27 @@ abstract class BaseProducto extends BaseObject implements Persistent
     } // setProductoPrecio()
 
     /**
+     * Set the value of [producto_rendimientooriginal] column.
+     *
+     * @param  double $v new value
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setProductoRendimientooriginal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->producto_rendimientooriginal !== $v) {
+            $this->producto_rendimientooriginal = $v;
+            $this->modifiedColumns[] = ProductoPeer::PRODUCTO_RENDIMIENTOORIGINAL;
+        }
+
+
+        return $this;
+    } // setProductoRendimientooriginal()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -846,6 +896,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->producto_costo = ($row[$startcol + 10] !== null) ? (double) $row[$startcol + 10] : null;
             $this->producto_iva = ($row[$startcol + 11] !== null) ? (boolean) $row[$startcol + 11] : null;
             $this->producto_precio = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
+            $this->producto_rendimientooriginal = ($row[$startcol + 13] !== null) ? (double) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -855,7 +906,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = ProductoPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = ProductoPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Producto object", $e);
@@ -938,6 +989,8 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collCodigobarrass = null;
 
             $this->collCompradetalles = null;
+
+            $this->collConceptoscfdis = null;
 
             $this->collDevoluciondetalles = null;
 
@@ -1165,6 +1218,23 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
             if ($this->collCompradetalles !== null) {
                 foreach ($this->collCompradetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->conceptoscfdisScheduledForDeletion !== null) {
+                if (!$this->conceptoscfdisScheduledForDeletion->isEmpty()) {
+                    ConceptoscfdiQuery::create()
+                        ->filterByPrimaryKeys($this->conceptoscfdisScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->conceptoscfdisScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collConceptoscfdis !== null) {
+                foreach ($this->collConceptoscfdis as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1440,6 +1510,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_PRECIO)) {
             $modifiedColumns[':p' . $index++]  = '`producto_precio`';
         }
+        if ($this->isColumnModified(ProductoPeer::PRODUCTO_RENDIMIENTOORIGINAL)) {
+            $modifiedColumns[':p' . $index++]  = '`producto_rendimientooriginal`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `producto` (%s) VALUES (%s)',
@@ -1489,6 +1562,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
                         break;
                     case '`producto_precio`':
                         $stmt->bindValue($identifier, $this->producto_precio, PDO::PARAM_STR);
+                        break;
+                    case '`producto_rendimientooriginal`':
+                        $stmt->bindValue($identifier, $this->producto_rendimientooriginal, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1637,6 +1713,14 @@ abstract class BaseProducto extends BaseObject implements Persistent
 
                 if ($this->collCompradetalles !== null) {
                     foreach ($this->collCompradetalles as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collConceptoscfdis !== null) {
+                    foreach ($this->collConceptoscfdis as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1813,6 +1897,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             case 12:
                 return $this->getProductoPrecio();
                 break;
+            case 13:
+                return $this->getProductoRendimientooriginal();
+                break;
             default:
                 return null;
                 break;
@@ -1855,6 +1942,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $keys[10] => $this->getProductoCosto(),
             $keys[11] => $this->getProductoIva(),
             $keys[12] => $this->getProductoPrecio(),
+            $keys[13] => $this->getProductoRendimientooriginal(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1882,6 +1970,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             if (null !== $this->collCompradetalles) {
                 $result['Compradetalles'] = $this->collCompradetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collConceptoscfdis) {
+                $result['Conceptoscfdis'] = $this->collConceptoscfdis->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDevoluciondetalles) {
                 $result['Devoluciondetalles'] = $this->collDevoluciondetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1992,6 +2083,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
             case 12:
                 $this->setProductoPrecio($value);
                 break;
+            case 13:
+                $this->setProductoRendimientooriginal($value);
+                break;
         } // switch()
     }
 
@@ -2029,6 +2123,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if (array_key_exists($keys[10], $arr)) $this->setProductoCosto($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setProductoIva($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setProductoPrecio($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setProductoRendimientooriginal($arr[$keys[13]]);
     }
 
     /**
@@ -2053,6 +2148,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_COSTO)) $criteria->add(ProductoPeer::PRODUCTO_COSTO, $this->producto_costo);
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_IVA)) $criteria->add(ProductoPeer::PRODUCTO_IVA, $this->producto_iva);
         if ($this->isColumnModified(ProductoPeer::PRODUCTO_PRECIO)) $criteria->add(ProductoPeer::PRODUCTO_PRECIO, $this->producto_precio);
+        if ($this->isColumnModified(ProductoPeer::PRODUCTO_RENDIMIENTOORIGINAL)) $criteria->add(ProductoPeer::PRODUCTO_RENDIMIENTOORIGINAL, $this->producto_rendimientooriginal);
 
         return $criteria;
     }
@@ -2128,6 +2224,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $copyObj->setProductoCosto($this->getProductoCosto());
         $copyObj->setProductoIva($this->getProductoIva());
         $copyObj->setProductoPrecio($this->getProductoPrecio());
+        $copyObj->setProductoRendimientooriginal($this->getProductoRendimientooriginal());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2151,6 +2248,12 @@ abstract class BaseProducto extends BaseObject implements Persistent
             foreach ($this->getCompradetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCompradetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getConceptoscfdis() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addConceptoscfdi($relObj->copy($deepCopy));
                 }
             }
 
@@ -2503,6 +2606,9 @@ abstract class BaseProducto extends BaseObject implements Persistent
         }
         if ('Compradetalle' == $relationName) {
             $this->initCompradetalles();
+        }
+        if ('Conceptoscfdi' == $relationName) {
+            $this->initConceptoscfdis();
         }
         if ('Devoluciondetalle' == $relationName) {
             $this->initDevoluciondetalles();
@@ -3365,6 +3471,256 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $query->joinWith('Compra', $join_behavior);
 
         return $this->getCompradetalles($query, $con);
+    }
+
+    /**
+     * Clears out the collConceptoscfdis collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Producto The current object (for fluent API support)
+     * @see        addConceptoscfdis()
+     */
+    public function clearConceptoscfdis()
+    {
+        $this->collConceptoscfdis = null; // important to set this to null since that means it is uninitialized
+        $this->collConceptoscfdisPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collConceptoscfdis collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialConceptoscfdis($v = true)
+    {
+        $this->collConceptoscfdisPartial = $v;
+    }
+
+    /**
+     * Initializes the collConceptoscfdis collection.
+     *
+     * By default this just sets the collConceptoscfdis collection to an empty array (like clearcollConceptoscfdis());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initConceptoscfdis($overrideExisting = true)
+    {
+        if (null !== $this->collConceptoscfdis && !$overrideExisting) {
+            return;
+        }
+        $this->collConceptoscfdis = new PropelObjectCollection();
+        $this->collConceptoscfdis->setModel('Conceptoscfdi');
+    }
+
+    /**
+     * Gets an array of Conceptoscfdi objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Producto is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Conceptoscfdi[] List of Conceptoscfdi objects
+     * @throws PropelException
+     */
+    public function getConceptoscfdis($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collConceptoscfdisPartial && !$this->isNew();
+        if (null === $this->collConceptoscfdis || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collConceptoscfdis) {
+                // return empty collection
+                $this->initConceptoscfdis();
+            } else {
+                $collConceptoscfdis = ConceptoscfdiQuery::create(null, $criteria)
+                    ->filterByProducto($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collConceptoscfdisPartial && count($collConceptoscfdis)) {
+                      $this->initConceptoscfdis(false);
+
+                      foreach ($collConceptoscfdis as $obj) {
+                        if (false == $this->collConceptoscfdis->contains($obj)) {
+                          $this->collConceptoscfdis->append($obj);
+                        }
+                      }
+
+                      $this->collConceptoscfdisPartial = true;
+                    }
+
+                    $collConceptoscfdis->getInternalIterator()->rewind();
+
+                    return $collConceptoscfdis;
+                }
+
+                if ($partial && $this->collConceptoscfdis) {
+                    foreach ($this->collConceptoscfdis as $obj) {
+                        if ($obj->isNew()) {
+                            $collConceptoscfdis[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collConceptoscfdis = $collConceptoscfdis;
+                $this->collConceptoscfdisPartial = false;
+            }
+        }
+
+        return $this->collConceptoscfdis;
+    }
+
+    /**
+     * Sets a collection of Conceptoscfdi objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $conceptoscfdis A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Producto The current object (for fluent API support)
+     */
+    public function setConceptoscfdis(PropelCollection $conceptoscfdis, PropelPDO $con = null)
+    {
+        $conceptoscfdisToDelete = $this->getConceptoscfdis(new Criteria(), $con)->diff($conceptoscfdis);
+
+
+        $this->conceptoscfdisScheduledForDeletion = $conceptoscfdisToDelete;
+
+        foreach ($conceptoscfdisToDelete as $conceptoscfdiRemoved) {
+            $conceptoscfdiRemoved->setProducto(null);
+        }
+
+        $this->collConceptoscfdis = null;
+        foreach ($conceptoscfdis as $conceptoscfdi) {
+            $this->addConceptoscfdi($conceptoscfdi);
+        }
+
+        $this->collConceptoscfdis = $conceptoscfdis;
+        $this->collConceptoscfdisPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Conceptoscfdi objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Conceptoscfdi objects.
+     * @throws PropelException
+     */
+    public function countConceptoscfdis(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collConceptoscfdisPartial && !$this->isNew();
+        if (null === $this->collConceptoscfdis || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collConceptoscfdis) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getConceptoscfdis());
+            }
+            $query = ConceptoscfdiQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByProducto($this)
+                ->count($con);
+        }
+
+        return count($this->collConceptoscfdis);
+    }
+
+    /**
+     * Method called to associate a Conceptoscfdi object to this object
+     * through the Conceptoscfdi foreign key attribute.
+     *
+     * @param    Conceptoscfdi $l Conceptoscfdi
+     * @return Producto The current object (for fluent API support)
+     */
+    public function addConceptoscfdi(Conceptoscfdi $l)
+    {
+        if ($this->collConceptoscfdis === null) {
+            $this->initConceptoscfdis();
+            $this->collConceptoscfdisPartial = true;
+        }
+
+        if (!in_array($l, $this->collConceptoscfdis->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddConceptoscfdi($l);
+
+            if ($this->conceptoscfdisScheduledForDeletion and $this->conceptoscfdisScheduledForDeletion->contains($l)) {
+                $this->conceptoscfdisScheduledForDeletion->remove($this->conceptoscfdisScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Conceptoscfdi $conceptoscfdi The conceptoscfdi object to add.
+     */
+    protected function doAddConceptoscfdi($conceptoscfdi)
+    {
+        $this->collConceptoscfdis[]= $conceptoscfdi;
+        $conceptoscfdi->setProducto($this);
+    }
+
+    /**
+     * @param	Conceptoscfdi $conceptoscfdi The conceptoscfdi object to remove.
+     * @return Producto The current object (for fluent API support)
+     */
+    public function removeConceptoscfdi($conceptoscfdi)
+    {
+        if ($this->getConceptoscfdis()->contains($conceptoscfdi)) {
+            $this->collConceptoscfdis->remove($this->collConceptoscfdis->search($conceptoscfdi));
+            if (null === $this->conceptoscfdisScheduledForDeletion) {
+                $this->conceptoscfdisScheduledForDeletion = clone $this->collConceptoscfdis;
+                $this->conceptoscfdisScheduledForDeletion->clear();
+            }
+            $this->conceptoscfdisScheduledForDeletion[]= clone $conceptoscfdi;
+            $conceptoscfdi->setProducto(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Producto is new, it will return
+     * an empty collection; or if this Producto has previously
+     * been saved, it will retrieve related Conceptoscfdis from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Producto.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Conceptoscfdi[] List of Conceptoscfdi objects
+     */
+    public function getConceptoscfdisJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ConceptoscfdiQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getConceptoscfdis($query, $con);
     }
 
     /**
@@ -6635,6 +6991,7 @@ abstract class BaseProducto extends BaseObject implements Persistent
         $this->producto_costo = null;
         $this->producto_iva = null;
         $this->producto_precio = null;
+        $this->producto_rendimientooriginal = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -6670,6 +7027,11 @@ abstract class BaseProducto extends BaseObject implements Persistent
             }
             if ($this->collCompradetalles) {
                 foreach ($this->collCompradetalles as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collConceptoscfdis) {
+                foreach ($this->collConceptoscfdis as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -6761,6 +7123,10 @@ abstract class BaseProducto extends BaseObject implements Persistent
             $this->collCompradetalles->clearIterator();
         }
         $this->collCompradetalles = null;
+        if ($this->collConceptoscfdis instanceof PropelCollection) {
+            $this->collConceptoscfdis->clearIterator();
+        }
+        $this->collConceptoscfdis = null;
         if ($this->collDevoluciondetalles instanceof PropelCollection) {
             $this->collDevoluciondetalles->clearIterator();
         }

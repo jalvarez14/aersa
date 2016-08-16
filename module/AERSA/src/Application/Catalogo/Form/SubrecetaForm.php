@@ -43,5 +43,23 @@ class SubrecetaForm extends Form
             ),
         ));
         
+        $this->add(array(
+            'name' => 'receta_cantidadoriginal',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'Cantidad normalizada *',
+            ),
+            'attributes' => array(
+                'required' => false,
+                'readonly' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        
+        
+        
+        
+        
     }
 }

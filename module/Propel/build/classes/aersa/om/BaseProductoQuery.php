@@ -19,6 +19,7 @@
  * @method ProductoQuery orderByProductoCosto($order = Criteria::ASC) Order by the producto_costo column
  * @method ProductoQuery orderByProductoIva($order = Criteria::ASC) Order by the producto_iva column
  * @method ProductoQuery orderByProductoPrecio($order = Criteria::ASC) Order by the producto_precio column
+ * @method ProductoQuery orderByProductoRendimientooriginal($order = Criteria::ASC) Order by the producto_rendimientooriginal column
  *
  * @method ProductoQuery groupByIdproducto() Group by the idproducto column
  * @method ProductoQuery groupByIdempresa() Group by the idempresa column
@@ -33,6 +34,7 @@
  * @method ProductoQuery groupByProductoCosto() Group by the producto_costo column
  * @method ProductoQuery groupByProductoIva() Group by the producto_iva column
  * @method ProductoQuery groupByProductoPrecio() Group by the producto_precio column
+ * @method ProductoQuery groupByProductoRendimientooriginal() Group by the producto_rendimientooriginal column
  *
  * @method ProductoQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProductoQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -65,6 +67,10 @@
  * @method ProductoQuery leftJoinCompradetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compradetalle relation
  * @method ProductoQuery rightJoinCompradetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compradetalle relation
  * @method ProductoQuery innerJoinCompradetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Compradetalle relation
+ *
+ * @method ProductoQuery leftJoinConceptoscfdi($relationAlias = null) Adds a LEFT JOIN clause to the query using the Conceptoscfdi relation
+ * @method ProductoQuery rightJoinConceptoscfdi($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Conceptoscfdi relation
+ * @method ProductoQuery innerJoinConceptoscfdi($relationAlias = null) Adds a INNER JOIN clause to the query using the Conceptoscfdi relation
  *
  * @method ProductoQuery leftJoinDevoluciondetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devoluciondetalle relation
  * @method ProductoQuery rightJoinDevoluciondetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devoluciondetalle relation
@@ -129,6 +135,7 @@
  * @method Producto findOneByProductoCosto(double $producto_costo) Return the first Producto filtered by the producto_costo column
  * @method Producto findOneByProductoIva(boolean $producto_iva) Return the first Producto filtered by the producto_iva column
  * @method Producto findOneByProductoPrecio(double $producto_precio) Return the first Producto filtered by the producto_precio column
+ * @method Producto findOneByProductoRendimientooriginal(double $producto_rendimientooriginal) Return the first Producto filtered by the producto_rendimientooriginal column
  *
  * @method array findByIdproducto(int $idproducto) Return Producto objects filtered by the idproducto column
  * @method array findByIdempresa(int $idempresa) Return Producto objects filtered by the idempresa column
@@ -143,6 +150,7 @@
  * @method array findByProductoCosto(double $producto_costo) Return Producto objects filtered by the producto_costo column
  * @method array findByProductoIva(boolean $producto_iva) Return Producto objects filtered by the producto_iva column
  * @method array findByProductoPrecio(double $producto_precio) Return Producto objects filtered by the producto_precio column
+ * @method array findByProductoRendimientooriginal(double $producto_rendimientooriginal) Return Producto objects filtered by the producto_rendimientooriginal column
  *
  * @package    propel.generator.aersa.om
  */
@@ -250,7 +258,7 @@ abstract class BaseProductoQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idproducto`, `idempresa`, `idunidadmedida`, `producto_nombre`, `idcategoria`, `idsubcategoria`, `producto_rendimiento`, `producto_ultimocosto`, `producto_baja`, `producto_tipo`, `producto_costo`, `producto_iva`, `producto_precio` FROM `producto` WHERE `idproducto` = :p0';
+        $sql = 'SELECT `idproducto`, `idempresa`, `idunidadmedida`, `producto_nombre`, `idcategoria`, `idsubcategoria`, `producto_rendimiento`, `producto_ultimocosto`, `producto_baja`, `producto_tipo`, `producto_costo`, `producto_iva`, `producto_precio`, `producto_rendimientooriginal` FROM `producto` WHERE `idproducto` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -838,6 +846,48 @@ abstract class BaseProductoQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the producto_rendimientooriginal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByProductoRendimientooriginal(1234); // WHERE producto_rendimientooriginal = 1234
+     * $query->filterByProductoRendimientooriginal(array(12, 34)); // WHERE producto_rendimientooriginal IN (12, 34)
+     * $query->filterByProductoRendimientooriginal(array('min' => 12)); // WHERE producto_rendimientooriginal >= 12
+     * $query->filterByProductoRendimientooriginal(array('max' => 12)); // WHERE producto_rendimientooriginal <= 12
+     * </code>
+     *
+     * @param     mixed $productoRendimientooriginal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function filterByProductoRendimientooriginal($productoRendimientooriginal = null, $comparison = null)
+    {
+        if (is_array($productoRendimientooriginal)) {
+            $useMinMax = false;
+            if (isset($productoRendimientooriginal['min'])) {
+                $this->addUsingAlias(ProductoPeer::PRODUCTO_RENDIMIENTOORIGINAL, $productoRendimientooriginal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($productoRendimientooriginal['max'])) {
+                $this->addUsingAlias(ProductoPeer::PRODUCTO_RENDIMIENTOORIGINAL, $productoRendimientooriginal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ProductoPeer::PRODUCTO_RENDIMIENTOORIGINAL, $productoRendimientooriginal, $comparison);
+    }
+
+    /**
      * Filter the query by a related Categoria object
      *
      * @param   Categoria|PropelObjectCollection $categoria The related object(s) to use as filter
@@ -1361,6 +1411,80 @@ abstract class BaseProductoQuery extends ModelCriteria
         return $this
             ->joinCompradetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Compradetalle', 'CompradetalleQuery');
+    }
+
+    /**
+     * Filter the query by a related Conceptoscfdi object
+     *
+     * @param   Conceptoscfdi|PropelObjectCollection $conceptoscfdi  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 ProductoQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByConceptoscfdi($conceptoscfdi, $comparison = null)
+    {
+        if ($conceptoscfdi instanceof Conceptoscfdi) {
+            return $this
+                ->addUsingAlias(ProductoPeer::IDPRODUCTO, $conceptoscfdi->getIdproducto(), $comparison);
+        } elseif ($conceptoscfdi instanceof PropelObjectCollection) {
+            return $this
+                ->useConceptoscfdiQuery()
+                ->filterByPrimaryKeys($conceptoscfdi->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByConceptoscfdi() only accepts arguments of type Conceptoscfdi or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Conceptoscfdi relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return ProductoQuery The current query, for fluid interface
+     */
+    public function joinConceptoscfdi($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Conceptoscfdi');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Conceptoscfdi');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Conceptoscfdi relation Conceptoscfdi object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ConceptoscfdiQuery A secondary query class using the current class as primary query
+     */
+    public function useConceptoscfdiQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinConceptoscfdi($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Conceptoscfdi', 'ConceptoscfdiQuery');
     }
 
     /**
