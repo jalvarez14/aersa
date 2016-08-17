@@ -72,6 +72,7 @@ class CompraController extends AbstractActionController {
         if($request->isPost()){
             
             $post_data = $request->getPost();
+            
             $post_files = $request->getFiles();
            
             $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
@@ -131,6 +132,11 @@ class CompraController extends AbstractActionController {
                 
                 if($entity->getCompraTipo() == 'compra'){
                     $compra_detalle->setIdalmacen($producto['almacen']);
+                    if (isset($producto['revisada'])) {
+                        $product = \ProductoQuery::create()->findPk($producto['idproducto']);
+                        $product->setProductoCosto($producto['costo_unitario'])->save();
+                        \Application\Catalogo\Controller\ProductoController::updateSubreceta($product->getIdproducto());
+                    }
                 }
                 
                 if(isset($producto['revisada'])){
@@ -248,6 +254,15 @@ class CompraController extends AbstractActionController {
                             ->setCompradetalleDescuento($producto['descuento'])
                             ->setCompradetalleIeps($producto['ieps'])
                             ->setCompradetalleSubtotal($producto['subtotal']);
+                    
+                    if ($entity->getCompraTipo() == 'compra') {
+                        $compra_detalle->setIdalmacen($producto['almacen']);
+                        if (isset($producto['revisada'])) {
+                            $product = \ProductoQuery::create()->findPk($producto['idproducto']);
+                            $product->setProductoCosto($producto['costo_unitario'])->save();
+                            \Application\Catalogo\Controller\ProductoController::updateSubreceta($product->getIdproducto());
+                        }
+                    }
 
                     if (isset($producto['revisada'])) {
                         $compra_detalle->setCompradetalleRevisada(1);

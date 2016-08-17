@@ -363,8 +363,19 @@ class ProductoController extends AbstractActionController
                 $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
             }
             $entity->setIdproducto($id);
-          
+            
             $entity->save();
+            
+            //Actualizamos el costo del producto padre
+            $producto_padre = \ProductoQuery::create()->findPk($entity->getIdproducto());
+            if ($producto_padre->getProductoTipo('subreceta') && $producto_padre->getIdcategoria() == 1) {
+                $costo_padre = \RecetaQuery::create()->filterByIdproducto($producto_padre->getIdproducto())->joinProductoRelatedByIdproductoreceta()->withColumn('SUM(producto_costo)')->findOne()->toArray();
+                $costo_padre = !is_null($costo_padre['SUMproducto_costo']) ? $costo_padre['SUMproducto_costo'] : 0;
+                $costo_padre = $costo_padre * $entity->getRecetaCantidad();
+                $producto_padre->setProductoCosto($costo_padre)->save();
+            }
+
+
 
             $this->flashMessenger()->addSuccessMessage('Sub receta registrada correctamente!');
             return $this->redirect()->toUrl('/catalogo/producto/editar/'.$id);
@@ -423,7 +434,17 @@ class ProductoController extends AbstractActionController
                 }
                 
                 $entity->save();
+                
+                //Actualizamos el costo del producto padre
+                $producto_padre = \ProductoQuery::create()->findPk($entity->getIdproducto());
+                if($producto_padre->getProductoTipo('subreceta') && $producto_padre->getIdcategoria() == 1){
+                    $costo_padre = \RecetaQuery::create()->filterByIdproducto($producto_padre->getIdproducto())->joinProductoRelatedByIdproductoreceta()->withColumn('SUM(producto_costo)')->findOne()->toArray();
+                    $costo_padre = !is_null($costo_padre['SUMproducto_costo']) ? $costo_padre['SUMproducto_costo'] : 0;
+                    $costo_padre = $costo_padre * $entity->getRecetaCantidad();
+                    $producto_padre->setProductoCosto($costo_padre)->save();
+                }
 
+            
                 $this->flashMessenger()->addSuccessMessage('Sub receta modificada correctamente!');
                 return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
             }
@@ -472,6 +493,23 @@ class ProductoController extends AbstractActionController
         $id = $this->params()->fromRoute('id');
         $result = \ProductoQuery::create()->findPk($id)->toArray();
         return $this->getResponse()->setContent(json_encode($result));      
+    }
+    
+    //RECIBE EL IDPRODUCTO DE EL PRODUCTO TIPO SIMPLE Y ACTUALIZA EL COSTO DEL PRODUCTO TIPO SUBRECETA
+    public static function updateSubreceta($idproducto){
+        $recetas = \RecetaQuery::create()->filterByIdproductoreceta($idproducto)->find();
+        $receta = new \Receta();
+        foreach ($recetas as $receta){
+            $producto_padre = \ProductoQuery::create()->findPk($receta->getIdproducto());
+            if($producto_padre->getProductoTipo('subreceta') && $producto_padre->getIdcategoria() == 1){
+                $costo_padre = \RecetaQuery::create()->filterByIdproducto($producto_padre->getIdproducto())->joinProductoRelatedByIdproductoreceta()->withColumn('SUM(producto_costo)')->findOne()->toArray();
+                $costo_padre = !is_null($costo_padre['SUMproducto_costo']) ? $costo_padre['SUMproducto_costo'] : 0;
+                $costo_padre = $costo_padre * $receta->getRecetaCantidad();
+                $producto_padre->setProductoCosto($costo_padre)->save();
+            }
+            
+        }
+
     }
     
 }
