@@ -6,7 +6,7 @@ use Zend\Form\Form;
 
 class SucursalForm extends Form
 {
-    public function __construct()
+    public function __construct($array_weeks = array())
     {
         // we want to ignore the name passed
         parent::__construct('sucursal_form');
@@ -84,22 +84,9 @@ class SucursalForm extends Form
             'name' => 'sucursal_mesactivo',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Mes activo *',
+                'label' => 'Semana activa *',
                 'empty_option' => 'Sin especificar',
-                'value_options' => array(
-                    1   => 'Enero',
-                    2   => 'Febrero',
-                    3   => 'Marzo',
-                    4   => 'Abril',
-                    5   => 'Mayo',
-                    6   => 'Junio',
-                    7   => 'Julio',
-                    8   => 'Agosto',
-                    9   => 'Septiembre',
-                    10  => 'Octubre',
-                    11  => 'Noviembre',
-                    12  => 'Diciembre'
-                ),
+                'value_options' => $array_weeks,
             ),
             'attributes' => array(
                 'required' => true,

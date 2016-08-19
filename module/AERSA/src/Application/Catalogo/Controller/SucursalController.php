@@ -129,6 +129,9 @@ class SucursalController extends AbstractActionController
     
     public function editarAction()
     {
+        
+        \Shared\GeneralFunctions::getWeekArray(2017);
+        
         $id = $this->params()->fromRoute('id');
         $emp = $this->params()->fromRoute('emp');
         
@@ -144,7 +147,8 @@ class SucursalController extends AbstractActionController
             $entity = \SucursalQuery::create()->findPk($id);
 
             //INTANCIAMOS NUESTRO FORMULARIO
-            $form = new \Application\Catalogo\Form\SucursalForm();
+            $array_weeks = \Shared\GeneralFunctions::getWeekArray($entity->getSucursalAnioactivo());
+            $form = new \Application\Catalogo\Form\SucursalForm($array_weeks);
             /*
             $element = $form->get('sucursal_nombre');
             $element->setAttribute('disabled', 'disabled');
@@ -177,7 +181,10 @@ class SucursalController extends AbstractActionController
             }
             
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
+            
+            
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
+   
             
             $entityUsers = \UsuariosucursalQuery::create()->select(array('idusuario'))->filterByIdsucursal($id)->find()->toArray();
             $administradores = \UsuarioQuery::create()->filterByIdusuario($entityUsers)->find();
@@ -221,6 +228,16 @@ class SucursalController extends AbstractActionController
             
         }
         
+    }
+    
+    public function getweekarrayAction(){
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            $week_array = \Shared\GeneralFunctions::getWeekArray($post_data['anio']);
+            return $this->getResponse()->setContent(json_encode($week_array));
+    
+        }
     }
     
     public function checkuserAction()

@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route'    => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -679,6 +679,16 @@ return array(
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Sucursal',
                                                 'action' => 'checkuser',
+                                            ),
+                                        ),
+                                    ),
+                                   'getweekarray' => array(
+                                       'type' => 'Segment',
+                                       'options' => array(
+                                            'route' => '/getweekarray',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Sucursal',
+                                                'action' => 'getweekarray',
                                             ),
                                         ),
                                     ),

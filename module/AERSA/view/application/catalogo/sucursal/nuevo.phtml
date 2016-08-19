@@ -162,8 +162,26 @@
         </div>
     </div>
 </div>
-    
-
 <script src="/application/custom/js/validaciones.js"></script>
 <script src="/application/custom/js/catalogo/sucursal.js"></script>
+<script>
+    $(document).ready(function(){
+        $('input[name=sucursal_anioactivo]').on('change',function(){
+            anio = $('input[name=sucursal_anioactivo]').val();
+            $.ajax({
+                type: 'POST',
+                data:{anio:anio},
+                dataType:'JSON',
+                url:'/catalogo/empresa/sucursal/getweekarray',
+                success: function (data, textStatus, jqXHR) {
+                    $('select[name=sucursal_mesactivo] option').remove();
+                    $.each(data,function(index){
+                        var $option = $('<option>').text(this).val(index);
+                        $('select[name=sucursal_mesactivo]').append($option);
+                    });
+                }
+            });
+        });
+    });
+</script> 
 

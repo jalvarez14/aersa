@@ -220,6 +220,45 @@
         /*
          * Public methods
          */
+        function getWeekNumber(d) {
+            // Copy date so don't modify original
+            d = new Date(+d);
+            d.setHours(0,0,0);
+            // Set to nearest Thursday: current date + 4 - current day number
+            // Make Sunday's day number 7
+            d.setDate(d.getDate() + 4 - (d.getDay()||7));
+            // Get first day of year
+            var yearStart = new Date(d.getFullYear(),0,1);
+            // Calculate full weeks to nearest Thursday
+            var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+            // Return array of year and week number
+            return weekNo;
+        }
+        function firstDayOfWeek(year, week) {
+
+            // Jan 1 of 'year'
+            var d = new Date(year, 0, 1),
+                    offset = d.getTimezoneOffset();
+
+            // ISO: week 1 is the one with the year's first Thursday 
+            // so nearest Thursday: current date + 4 - current day number
+            // Sunday is converted from 0 to 7
+            d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+
+            // 7 days * (week - overlapping first week)
+            d.setTime(d.getTime() + 7 * 24 * 60 * 60 * 1000
+                    * (week + (year == d.getFullYear() ? -1 : 0)));
+
+            // daylight savings fix
+            d.setTime(d.getTime()
+                    + (d.getTimezoneOffset() - offset) * 60 * 1000);
+
+            // back to Monday (from Thursday)
+            d.setDate(d.getDate() - 3);
+
+            return d;
+        }
+        
         plugin.list = function (anio, mes) {
 
             //INICIALIZAMOS DATATABLES
@@ -263,7 +302,7 @@
             //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE ELIMINAR CADA UNO DE LOS REGISTROS
             $container.find('#datatable tbody tr').filter(function () {
                 var date = new Date($(this).attr('date'));
-                if ((date.getMonth() + 1) != mes || (date.getFullYear()) != anio) {
+                if (getWeekNumber(new Date())  != mes || (date.getFullYear()) != anio) {
                     $(this).find('.delete_modal').unbind();
                     $(this).find('.delete_modal').css('cursor', 'not-allowed');
                 }
@@ -302,9 +341,9 @@
 
             $('[name=requisicion_folio]').attr('maxlength', '10');
 
-            var minDate = new Date(anio + '/' + mes + '/' + '01');
-            var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 1));
-            maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate() - 1));
+            var minDate = firstDayOfWeek(anio,mes);
+            var maxDate = new Date(minDate);
+            maxDate.setDate(minDate.getDate() + 6);
 
             container.find('input[name=requisicion_fecha]').datepicker({
                 startDate: minDate,
@@ -513,9 +552,9 @@
 
             $('[name=requisicion_folio]').attr('maxlength', '10');
 
-            var minDate = new Date(anio + '/' + mes + '/' + '01');
-            var maxDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 1));
-            maxDate = new Date(new Date(maxDate).setDate(maxDate.getDate() - 1));
+            var minDate = firstDayOfWeek(anio,mes);
+            var maxDate = new Date(minDate);
+            maxDate.setDate(minDate.getDate() + 6);
 
             container.find('input[name=requisicion_fecha]').datepicker({
                 startDate: minDate,
