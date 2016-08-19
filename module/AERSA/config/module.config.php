@@ -1831,6 +1831,17 @@ return array(
                                     ),
                                 ),
                                 'may_terminate' => true,
+                            ),
+                            'informeacumulados' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/informeacumulados',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Reportes\Controller\Reportes',
+                                        'action' => 'informeacumulados',
+                                    ),
+                                ),
+                                'may_terminate' => true,
                                 'child_routes' => array(
                                     'getrecientes' => array(
                                         'type' => 'Segment',
