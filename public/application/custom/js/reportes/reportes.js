@@ -160,7 +160,6 @@
             $('#generar_reporte').attr('disabled', activar);
             $('#generar_excel').attr('disabled', activar);
             $('#generar_pdf').attr('disabled', activar);
-            alert("aaa");
         }
 
         plugin.variacioncostos = function () {
@@ -355,6 +354,60 @@
 
             $container.find('input:checkbox').on('click', function () {
                 revisarCheckboxEntradasporcompra();
+            });
+        }
+        
+        plugin.informeacumulados = function (mes_min, anio_min, mes_max, anio_max,dia_max) {
+            
+            var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
+            var maxDate = new Date(anio_max + '/' + mes_max + '/' + dia_max);
+
+            container.find('input[name=fecha_inicial]').datepicker({
+                startDate: minDate,
+                endDate: maxDate,
+                format: 'dd/mm/yyyy',
+            });
+
+            container.find('input[name=fecha_final]').datepicker({
+                startDate: minDate,
+                endDate: maxDate,
+                format: 'dd/mm/yyyy',
+            });
+            $('input[name=fecha_inicial]').on('blur', function () {
+                if($(this).val()!=""&&$('input[name=fecha_final]').val()!="")
+                    $('#generar_reporte').prop("type", "button");
+                else
+                    $('#generar_reporte').prop("type", "submit");
+            });
+            
+            $('input[name=fecha_final]').on('blur', function () {
+                if($(this).val()!=""&&$('input[name=fecha_inicial]').val()!="")
+                    $("#generar_reporte").prop("type", "button");
+                else
+                    $('#generar_reporte').prop("type", "submit");
+            });
+            
+            $("#generar_reporte").on('click', function () {
+                if($(this).attr('type')=="button") {
+                    var inicio= $('input[name=fecha_inicial]').val();
+                    var fin=$('input[name=fecha_final]').val();
+                    var table = $('#reporte_table');
+                    $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "/reportes/informeacumulados",
+                    dataType: "json",
+                    data: {fecha_inicial: inicio, fecha_final: fin},
+                    success: function (data) {
+                        if (data.length != 0) {
+                            $('#reporte_table > tbody').empty();
+                            for (var k in data) {
+                                table.append(data[k]);
+                            } 
+                        }
+                    },
+                });
+                }
             });
         }
 
