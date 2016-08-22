@@ -3,6 +3,7 @@ body, html {
   width: 100%;
 }
 
+.container { max-width: 1000px; }
 .color-green { color: #6BC728 !important; }
 
 .img-center {
@@ -66,3 +67,29 @@ textarea
     font-size: 20px;
   }
 }
+
+.content  
+{
+  margin-left: 1em;
+  /*margin-top: 1em;*/
+  margin-right: 1em;
+  text-align: justify;
+}
+
+
+.icon-close 
+{ 
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 10px;
+  color: white;
+}
+
+
+.icon-close:hover
+{
+  color: rgba(255,255,255,.7);
+}
+
+.img-100 { width: 100%; }

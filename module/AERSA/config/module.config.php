@@ -1690,6 +1690,16 @@ return array(
                             ),
                         ),
                     ),
+                    'servicios' => array(
+                        'type'    => 'Literal',
+                        'options' => array(
+                            'route'    => '/servicios',
+                            'defaults' => array(
+                                'controller'    => 'Website\Controller\Website',
+                                'action'        => 'servicios',
+                            ),
+                        ),
+                    ),
                     'contacto' => array(
                         'type'    => 'Literal',
                         'options' => array(
