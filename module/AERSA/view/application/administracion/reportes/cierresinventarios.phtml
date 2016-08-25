@@ -1,0 +1,98 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">Inventario cierre de mes</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/administracion/reportes/cierresinventarios">Inventario cierre de mes</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    $form->setAttribute('action', '/administracion/reportes/cierresinventarios');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('almacen')) ?>  
+                        <?php echo $this->formSelect($form->get('almacen')) ?> 
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('fecha')) ?>  
+                        <?php echo $this->formText($form->get('fecha')) ?> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('auditor')) ?>  
+                        <?php echo $this->formSelect($form->get('auditor')) ?> 
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <br>
+                        <div class="btn-set pull-right">
+                            <input type="file" name="batch_inventario" style="display: none" accept=".xls,.xlsx">
+                            <a id="subir_inventario" href="#"><button class="btn default" type="button" style="margin-bottom: 15px; margin-right: 10px">Subir inventario</button></a>
+                        </div>
+                    </div>                        
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="right col-md-12" align="right">
+                        <button class="btn blue" id="generar_reporte" name="generar_reporte" type="submit">
+                        <i class="fa fa-check"></i>
+                            Generar
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="overflow: scroll; white-space: nowrap;">
+                        <table class="table" id="reporte_table">
+                            <thead>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Existencia Inicial</th>
+                                <th>Compra</th>
+                                <th>Requisicion</th>
+                                <th>???</th>
+                                <th>Venta</th>
+                                <th>Requisicion Egreso</th>
+                                <th>????</th>
+                                <th>Devolucion</th>
+                                <th>Stock Teorico</th>
+                                <th>Saldo Teorico</th>
+                                <th>Unidad</th>
+                                <th>Stock Fisico</th>
+                                <th>Diferencia</th>
+                                <th>Costo Promedio</th>
+                            </thead>
+                            <tbody id="tbody">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
+<script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="/application/custom/js/administracion/reportes.js" type="text/javascript"></script>
+<script>
+    var $plugin = $('#my_container').reportes();
+    $plugin.cierresinventarios();
+</script>

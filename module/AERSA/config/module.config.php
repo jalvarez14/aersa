@@ -1856,6 +1856,50 @@ return array(
                                 ),
                             ),
                         ),
+                    ),
+                    /*
+                     * ADMINISTRACION
+                     */
+                    'administracion' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/administracion',
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'reportes' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/reportes',
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'cierresinventarios' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/cierresinventarios',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes',
+                                                'action' => 'cierresinventarios',
+                                            ),
+                                            'may_terminate' => true,
+                                            'child_routes' => array(
+                                                'batch' => array(
+                                                    'type' => 'Segment',
+                                                    'options' => array(
+                                                        'route' => '/batch[/:id]',
+                                                        'defaults' => array(
+                                                            'controller' => 'Application\Administracion\Controller\Reportes',
+                                                            'action' => 'batch',
+                                                        ),
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
                     )
                 ),
             ),
@@ -1996,9 +2040,16 @@ return array(
             'Application\Flujoefectivo\Controller\Ingresos' => 'Application\Flujoefectivo\Controller\IngresosController',
             'Application\Flujoefectivo\Controller\Reportes' => 'Application\Flujoefectivo\Controller\ReportesController',
             /*
-             * FLUJO EFECTIVO
+             * REPORTES
              */
+            
             'Application\Reportes\Controller\Reportes' => 'Application\Reportes\Controller\ReportesController',
+            //administracion
+            /*
+             * ADMINISTRACION
+             */
+            
+            'Application\Administracion\Controller\Reportes' => 'Application\Administracion\Controller\ReportesController',
             /*
              * WEBSITE
              */
