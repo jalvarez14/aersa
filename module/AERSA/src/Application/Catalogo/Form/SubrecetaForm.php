@@ -32,7 +32,7 @@ class SubrecetaForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'receta_cantidad',
+            'name' => 'receta_cantidadoriginal',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Cantidad *',
@@ -44,7 +44,7 @@ class SubrecetaForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'receta_cantidadoriginal',
+            'name' => 'receta_cantidad',
             'type' => 'Text',
             'options' => array(
                 'label' => 'Cantidad normalizada *',

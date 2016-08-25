@@ -54,15 +54,15 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('receta_cantidad')) ?>  
-                        <?php echo $this->formText($form->get('receta_cantidad')) ?>
+                        <?php echo $this->formLabel($form->get('receta_cantidadoriginal')) ?>  
+                        <?php echo $this->formText($form->get('receta_cantidadoriginal')) ?>
                     </div>
                 </div>
                 <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <?php echo $this->formLabel($form->get('receta_cantidadoriginal')) ?>  
-                            <?php echo $this->formText($form->get('receta_cantidadoriginal')) ?>
+                            <?php echo $this->formLabel($form->get('receta_cantidad')) ?>  
+                            <?php echo $this->formText($form->get('receta_cantidad')) ?>
                         </div>
                     </div>
                 <?php endif;?>
