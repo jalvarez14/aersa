@@ -112,7 +112,7 @@ class ProductosForm extends Form
         ));
         
         $this->add(array(
-            'name' => 'producto_rendimiento',
+            'name' => 'producto_rendimientooriginal',
             'type' => 'Number',
             'options' => array(
                 'label' => 'Rendimiento *',
@@ -124,7 +124,7 @@ class ProductosForm extends Form
             ),
         ));
         $this->add(array(
-            'name' => 'producto_rendimientooriginal',
+            'name' => 'producto_rendimiento',
             'type' => 'Number',
             'options' => array(
                 'label' => 'Rendimiento normalizado*',
