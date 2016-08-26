@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Administracion\Form;
+namespace Application\Administracion\Form\Reportes;
 
 use Zend\Form\Form;
 
@@ -19,6 +19,7 @@ class CierresinventariosForm extends Form {
             ),
             'options' => array(
                 'label' => 'Alamacen *',
+                'empty_option' => 'Seleccione un almacen',
                 'value_options' => $almacen_array,
             ),
         ));
@@ -46,6 +47,7 @@ class CierresinventariosForm extends Form {
             ),
             'options' => array(
                 'label' => 'Auditor *',
+                'empty_option' => 'Seleccione un auditor',
                 'value_options' => $auditor_array,
             ),
         ));

@@ -1875,27 +1875,48 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'cierresinventarios' => array(
-                                        'type' => 'Segment',
+                                        'type' => 'Literal',
                                         'options' => array(
                                             'route' => '/cierresinventarios',
                                             'defaults' => array(
-                                                'controller' => 'Application\Administracion\Controller\Reportes',
-                                                'action' => 'cierresinventarios',
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                'action' => 'index',
                                             ),
-                                            'may_terminate' => true,
+                                            
+                                        ),
+                                        'may_terminate' => true,
                                             'child_routes' => array(
+                                                'nuevo' => array(
+                                                    'type' => 'Segment',
+                                                    'options' => array(
+                                                        'route' => '/nuevo',
+                                                        'defaults' => array(
+                                                            'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                            'action' => 'nuevo',
+                                                        ),
+                                                    ),
+                                                ),
                                                 'batch' => array(
                                                     'type' => 'Segment',
                                                     'options' => array(
                                                         'route' => '/batch[/:id]',
                                                         'defaults' => array(
-                                                            'controller' => 'Application\Administracion\Controller\Reportes',
+                                                            'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                            'action' => 'batch',
+                                                        ),
+                                                    ),
+                                                ),
+                                                'batch' => array(
+                                                    'type' => 'Segment',
+                                                    'options' => array(
+                                                        'route' => '/batch[/:id]',
+                                                        'defaults' => array(
+                                                            'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
                                                             'action' => 'batch',
                                                         ),
                                                     ),
                                                 ),
                                             ),
-                                        ),
                                     ),
                                 ),
                             ),
@@ -2049,7 +2070,7 @@ return array(
              * ADMINISTRACION
              */
             
-            'Application\Administracion\Controller\Reportes' => 'Application\Administracion\Controller\ReportesController',
+            'Application\Administracion\Controller\Reportes\Cierresinventarios' => 'Application\Administracion\Controller\Reportes\CierresinventariosController',
             /*
              * WEBSITE
              */
