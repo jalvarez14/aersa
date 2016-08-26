@@ -92,12 +92,12 @@
     
     if(producto_rendimientooriginal != "" && producto_rendimiento != "")
     {   
-        $("[name=receta_cantidad]").on('change',function(){
+        $("[name=receta_cantidadoriginal]").on('change',function(){
             
             
-            var cantidad = $("[name=receta_cantidad]").val();
+            var cantidad = $("[name=receta_cantidadoriginal]").val();
              var cantidad_normalizada = (cantidad*producto_rendimiento)/producto_rendimientooriginal;
-            $('[name=receta_cantidadoriginal]').val(cantidad_normalizada.toFixed(2));
+            $('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(2));
         });
     } 
     

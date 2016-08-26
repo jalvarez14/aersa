@@ -198,9 +198,9 @@
                                 <?php $nombreProducto = \ProductoQuery::create()->findPk($entity->getIdproductoreceta())?>
                                     <tr id="<?php echo $entity->getIdreceta() ?>">
                                         <td><?php echo $nombreProducto->getProductoNombre() ?></td>
-                                        <td><?php echo $entity->getRecetaCantidad() ?></td>
+                                        <td><?php echo $entity->getRecetaCantidadoriginal() ?></td>
                                         <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
-                                            <td><?php echo $entity->getRecetaCantidadoriginal() ?></td>
+                                            <td><?php echo $entity->getRecetaCantidad() ?></td>
                                         <?php endif;?>
                                         <td class="text-left">                                    
                                             <div class="btn-group">
