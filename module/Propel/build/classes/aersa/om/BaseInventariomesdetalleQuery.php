@@ -21,6 +21,9 @@
  * @method InventariomesdetalleQuery orderByInventariomesdetalleIngresoordentablajeria($order = Criteria::ASC) Order by the inventariomesdetalle_ingresoordentablajeria column
  * @method InventariomesdetalleQuery orderByInventariomesdetalleEgresoordentablajeria($order = Criteria::ASC) Order by the inventariomesdetalle_egresoordentablajeria column
  * @method InventariomesdetalleQuery orderByInventariomesdetalleEgresodevolucion($order = Criteria::ASC) Order by the inventariomesdetalle_egresodevolucion column
+ * @method InventariomesdetalleQuery orderByInventariomesdetalleCostopromedio($order = Criteria::ASC) Order by the inventariomesdetalle_costopromedio column
+ * @method InventariomesdetalleQuery orderByInventariomesdetalleDifimporte($order = Criteria::ASC) Order by the inventariomesdetalle_difimporte column
+ * @method InventariomesdetalleQuery orderByInventariomesdetalleImportefisico($order = Criteria::ASC) Order by the inventariomesdetalle_importefisico column
  *
  * @method InventariomesdetalleQuery groupByIdinventariomesdetalle() Group by the idinventariomesdetalle column
  * @method InventariomesdetalleQuery groupByIdinventariomes() Group by the idinventariomes column
@@ -37,6 +40,9 @@
  * @method InventariomesdetalleQuery groupByInventariomesdetalleIngresoordentablajeria() Group by the inventariomesdetalle_ingresoordentablajeria column
  * @method InventariomesdetalleQuery groupByInventariomesdetalleEgresoordentablajeria() Group by the inventariomesdetalle_egresoordentablajeria column
  * @method InventariomesdetalleQuery groupByInventariomesdetalleEgresodevolucion() Group by the inventariomesdetalle_egresodevolucion column
+ * @method InventariomesdetalleQuery groupByInventariomesdetalleCostopromedio() Group by the inventariomesdetalle_costopromedio column
+ * @method InventariomesdetalleQuery groupByInventariomesdetalleDifimporte() Group by the inventariomesdetalle_difimporte column
+ * @method InventariomesdetalleQuery groupByInventariomesdetalleImportefisico() Group by the inventariomesdetalle_importefisico column
  *
  * @method InventariomesdetalleQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method InventariomesdetalleQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -67,6 +73,9 @@
  * @method Inventariomesdetalle findOneByInventariomesdetalleIngresoordentablajeria(double $inventariomesdetalle_ingresoordentablajeria) Return the first Inventariomesdetalle filtered by the inventariomesdetalle_ingresoordentablajeria column
  * @method Inventariomesdetalle findOneByInventariomesdetalleEgresoordentablajeria(double $inventariomesdetalle_egresoordentablajeria) Return the first Inventariomesdetalle filtered by the inventariomesdetalle_egresoordentablajeria column
  * @method Inventariomesdetalle findOneByInventariomesdetalleEgresodevolucion(double $inventariomesdetalle_egresodevolucion) Return the first Inventariomesdetalle filtered by the inventariomesdetalle_egresodevolucion column
+ * @method Inventariomesdetalle findOneByInventariomesdetalleCostopromedio(string $inventariomesdetalle_costopromedio) Return the first Inventariomesdetalle filtered by the inventariomesdetalle_costopromedio column
+ * @method Inventariomesdetalle findOneByInventariomesdetalleDifimporte(string $inventariomesdetalle_difimporte) Return the first Inventariomesdetalle filtered by the inventariomesdetalle_difimporte column
+ * @method Inventariomesdetalle findOneByInventariomesdetalleImportefisico(string $inventariomesdetalle_importefisico) Return the first Inventariomesdetalle filtered by the inventariomesdetalle_importefisico column
  *
  * @method array findByIdinventariomesdetalle(int $idinventariomesdetalle) Return Inventariomesdetalle objects filtered by the idinventariomesdetalle column
  * @method array findByIdinventariomes(int $idinventariomes) Return Inventariomesdetalle objects filtered by the idinventariomes column
@@ -83,6 +92,9 @@
  * @method array findByInventariomesdetalleIngresoordentablajeria(double $inventariomesdetalle_ingresoordentablajeria) Return Inventariomesdetalle objects filtered by the inventariomesdetalle_ingresoordentablajeria column
  * @method array findByInventariomesdetalleEgresoordentablajeria(double $inventariomesdetalle_egresoordentablajeria) Return Inventariomesdetalle objects filtered by the inventariomesdetalle_egresoordentablajeria column
  * @method array findByInventariomesdetalleEgresodevolucion(double $inventariomesdetalle_egresodevolucion) Return Inventariomesdetalle objects filtered by the inventariomesdetalle_egresodevolucion column
+ * @method array findByInventariomesdetalleCostopromedio(string $inventariomesdetalle_costopromedio) Return Inventariomesdetalle objects filtered by the inventariomesdetalle_costopromedio column
+ * @method array findByInventariomesdetalleDifimporte(string $inventariomesdetalle_difimporte) Return Inventariomesdetalle objects filtered by the inventariomesdetalle_difimporte column
+ * @method array findByInventariomesdetalleImportefisico(string $inventariomesdetalle_importefisico) Return Inventariomesdetalle objects filtered by the inventariomesdetalle_importefisico column
  *
  * @package    propel.generator.aersa.om
  */
@@ -190,7 +202,7 @@ abstract class BaseInventariomesdetalleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idinventariomesdetalle`, `idinventariomes`, `idproducto`, `inventariomesdetalle_stockinicial`, `inventariomesdetalle_stockteorico`, `inventariomesdetalle_stockfisico`, `inventariomesdetalle_diferencia`, `inventariomesdetalle_revisada`, `inventariomesdetalle_ingresocompra`, `inventariomesdetalle_ingresorequisicion`, `inventariomesdetalle_egresorequisicion`, `inventariomesdetalle_egresoventa`, `inventariomesdetalle_ingresoordentablajeria`, `inventariomesdetalle_egresoordentablajeria`, `inventariomesdetalle_egresodevolucion` FROM `inventariomesdetalle` WHERE `idinventariomesdetalle` = :p0';
+        $sql = 'SELECT `idinventariomesdetalle`, `idinventariomes`, `idproducto`, `inventariomesdetalle_stockinicial`, `inventariomesdetalle_stockteorico`, `inventariomesdetalle_stockfisico`, `inventariomesdetalle_diferencia`, `inventariomesdetalle_revisada`, `inventariomesdetalle_ingresocompra`, `inventariomesdetalle_ingresorequisicion`, `inventariomesdetalle_egresorequisicion`, `inventariomesdetalle_egresoventa`, `inventariomesdetalle_ingresoordentablajeria`, `inventariomesdetalle_egresoordentablajeria`, `inventariomesdetalle_egresodevolucion`, `inventariomesdetalle_costopromedio`, `inventariomesdetalle_difimporte`, `inventariomesdetalle_importefisico` FROM `inventariomesdetalle` WHERE `idinventariomesdetalle` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -894,6 +906,132 @@ abstract class BaseInventariomesdetalleQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_EGRESODEVOLUCION, $inventariomesdetalleEgresodevolucion, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomesdetalle_costopromedio column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesdetalleCostopromedio(1234); // WHERE inventariomesdetalle_costopromedio = 1234
+     * $query->filterByInventariomesdetalleCostopromedio(array(12, 34)); // WHERE inventariomesdetalle_costopromedio IN (12, 34)
+     * $query->filterByInventariomesdetalleCostopromedio(array('min' => 12)); // WHERE inventariomesdetalle_costopromedio >= 12
+     * $query->filterByInventariomesdetalleCostopromedio(array('max' => 12)); // WHERE inventariomesdetalle_costopromedio <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesdetalleCostopromedio The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesdetalleQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesdetalleCostopromedio($inventariomesdetalleCostopromedio = null, $comparison = null)
+    {
+        if (is_array($inventariomesdetalleCostopromedio)) {
+            $useMinMax = false;
+            if (isset($inventariomesdetalleCostopromedio['min'])) {
+                $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_COSTOPROMEDIO, $inventariomesdetalleCostopromedio['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesdetalleCostopromedio['max'])) {
+                $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_COSTOPROMEDIO, $inventariomesdetalleCostopromedio['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_COSTOPROMEDIO, $inventariomesdetalleCostopromedio, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomesdetalle_difimporte column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesdetalleDifimporte(1234); // WHERE inventariomesdetalle_difimporte = 1234
+     * $query->filterByInventariomesdetalleDifimporte(array(12, 34)); // WHERE inventariomesdetalle_difimporte IN (12, 34)
+     * $query->filterByInventariomesdetalleDifimporte(array('min' => 12)); // WHERE inventariomesdetalle_difimporte >= 12
+     * $query->filterByInventariomesdetalleDifimporte(array('max' => 12)); // WHERE inventariomesdetalle_difimporte <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesdetalleDifimporte The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesdetalleQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesdetalleDifimporte($inventariomesdetalleDifimporte = null, $comparison = null)
+    {
+        if (is_array($inventariomesdetalleDifimporte)) {
+            $useMinMax = false;
+            if (isset($inventariomesdetalleDifimporte['min'])) {
+                $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFIMPORTE, $inventariomesdetalleDifimporte['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesdetalleDifimporte['max'])) {
+                $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFIMPORTE, $inventariomesdetalleDifimporte['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFIMPORTE, $inventariomesdetalleDifimporte, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomesdetalle_importefisico column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesdetalleImportefisico(1234); // WHERE inventariomesdetalle_importefisico = 1234
+     * $query->filterByInventariomesdetalleImportefisico(array(12, 34)); // WHERE inventariomesdetalle_importefisico IN (12, 34)
+     * $query->filterByInventariomesdetalleImportefisico(array('min' => 12)); // WHERE inventariomesdetalle_importefisico >= 12
+     * $query->filterByInventariomesdetalleImportefisico(array('max' => 12)); // WHERE inventariomesdetalle_importefisico <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesdetalleImportefisico The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesdetalleQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesdetalleImportefisico($inventariomesdetalleImportefisico = null, $comparison = null)
+    {
+        if (is_array($inventariomesdetalleImportefisico)) {
+            $useMinMax = false;
+            if (isset($inventariomesdetalleImportefisico['min'])) {
+                $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_IMPORTEFISICO, $inventariomesdetalleImportefisico['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesdetalleImportefisico['max'])) {
+                $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_IMPORTEFISICO, $inventariomesdetalleImportefisico['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesdetallePeer::INVENTARIOMESDETALLE_IMPORTEFISICO, $inventariomesdetalleImportefisico, $comparison);
     }
 
     /**

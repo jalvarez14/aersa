@@ -121,6 +121,24 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
     protected $inventariomesdetalle_egresodevolucion;
 
     /**
+     * The value for the inventariomesdetalle_costopromedio field.
+     * @var        string
+     */
+    protected $inventariomesdetalle_costopromedio;
+
+    /**
+     * The value for the inventariomesdetalle_difimporte field.
+     * @var        string
+     */
+    protected $inventariomesdetalle_difimporte;
+
+    /**
+     * The value for the inventariomesdetalle_importefisico field.
+     * @var        string
+     */
+    protected $inventariomesdetalle_importefisico;
+
+    /**
      * @var        Inventariomes
      */
     protected $aInventariomes;
@@ -341,6 +359,39 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
     {
 
         return $this->inventariomesdetalle_egresodevolucion;
+    }
+
+    /**
+     * Get the [inventariomesdetalle_costopromedio] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesdetalleCostopromedio()
+    {
+
+        return $this->inventariomesdetalle_costopromedio;
+    }
+
+    /**
+     * Get the [inventariomesdetalle_difimporte] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesdetalleDifimporte()
+    {
+
+        return $this->inventariomesdetalle_difimporte;
+    }
+
+    /**
+     * Get the [inventariomesdetalle_importefisico] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesdetalleImportefisico()
+    {
+
+        return $this->inventariomesdetalle_importefisico;
     }
 
     /**
@@ -671,6 +722,69 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
     } // setInventariomesdetalleEgresodevolucion()
 
     /**
+     * Set the value of [inventariomesdetalle_costopromedio] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomesdetalle The current object (for fluent API support)
+     */
+    public function setInventariomesdetalleCostopromedio($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomesdetalle_costopromedio !== $v) {
+            $this->inventariomesdetalle_costopromedio = $v;
+            $this->modifiedColumns[] = InventariomesdetallePeer::INVENTARIOMESDETALLE_COSTOPROMEDIO;
+        }
+
+
+        return $this;
+    } // setInventariomesdetalleCostopromedio()
+
+    /**
+     * Set the value of [inventariomesdetalle_difimporte] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomesdetalle The current object (for fluent API support)
+     */
+    public function setInventariomesdetalleDifimporte($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomesdetalle_difimporte !== $v) {
+            $this->inventariomesdetalle_difimporte = $v;
+            $this->modifiedColumns[] = InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFIMPORTE;
+        }
+
+
+        return $this;
+    } // setInventariomesdetalleDifimporte()
+
+    /**
+     * Set the value of [inventariomesdetalle_importefisico] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomesdetalle The current object (for fluent API support)
+     */
+    public function setInventariomesdetalleImportefisico($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomesdetalle_importefisico !== $v) {
+            $this->inventariomesdetalle_importefisico = $v;
+            $this->modifiedColumns[] = InventariomesdetallePeer::INVENTARIOMESDETALLE_IMPORTEFISICO;
+        }
+
+
+        return $this;
+    } // setInventariomesdetalleImportefisico()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -721,6 +835,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             $this->inventariomesdetalle_ingresoordentablajeria = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
             $this->inventariomesdetalle_egresoordentablajeria = ($row[$startcol + 13] !== null) ? (double) $row[$startcol + 13] : null;
             $this->inventariomesdetalle_egresodevolucion = ($row[$startcol + 14] !== null) ? (double) $row[$startcol + 14] : null;
+            $this->inventariomesdetalle_costopromedio = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
+            $this->inventariomesdetalle_difimporte = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
+            $this->inventariomesdetalle_importefisico = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -730,7 +847,7 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 15; // 15 = InventariomesdetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 18; // 18 = InventariomesdetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Inventariomesdetalle object", $e);
@@ -1022,6 +1139,15 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_EGRESODEVOLUCION)) {
             $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_egresodevolucion`';
         }
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_COSTOPROMEDIO)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_costopromedio`';
+        }
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFIMPORTE)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_difimporte`';
+        }
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_IMPORTEFISICO)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_importefisico`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `inventariomesdetalle` (%s) VALUES (%s)',
@@ -1077,6 +1203,15 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
                         break;
                     case '`inventariomesdetalle_egresodevolucion`':
                         $stmt->bindValue($identifier, $this->inventariomesdetalle_egresodevolucion, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomesdetalle_costopromedio`':
+                        $stmt->bindValue($identifier, $this->inventariomesdetalle_costopromedio, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomesdetalle_difimporte`':
+                        $stmt->bindValue($identifier, $this->inventariomesdetalle_difimporte, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomesdetalle_importefisico`':
+                        $stmt->bindValue($identifier, $this->inventariomesdetalle_importefisico, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1277,6 +1412,15 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             case 14:
                 return $this->getInventariomesdetalleEgresodevolucion();
                 break;
+            case 15:
+                return $this->getInventariomesdetalleCostopromedio();
+                break;
+            case 16:
+                return $this->getInventariomesdetalleDifimporte();
+                break;
+            case 17:
+                return $this->getInventariomesdetalleImportefisico();
+                break;
             default:
                 return null;
                 break;
@@ -1321,6 +1465,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             $keys[12] => $this->getInventariomesdetalleIngresoordentablajeria(),
             $keys[13] => $this->getInventariomesdetalleEgresoordentablajeria(),
             $keys[14] => $this->getInventariomesdetalleEgresodevolucion(),
+            $keys[15] => $this->getInventariomesdetalleCostopromedio(),
+            $keys[16] => $this->getInventariomesdetalleDifimporte(),
+            $keys[17] => $this->getInventariomesdetalleImportefisico(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1413,6 +1560,15 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             case 14:
                 $this->setInventariomesdetalleEgresodevolucion($value);
                 break;
+            case 15:
+                $this->setInventariomesdetalleCostopromedio($value);
+                break;
+            case 16:
+                $this->setInventariomesdetalleDifimporte($value);
+                break;
+            case 17:
+                $this->setInventariomesdetalleImportefisico($value);
+                break;
         } // switch()
     }
 
@@ -1452,6 +1608,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[12], $arr)) $this->setInventariomesdetalleIngresoordentablajeria($arr[$keys[12]]);
         if (array_key_exists($keys[13], $arr)) $this->setInventariomesdetalleEgresoordentablajeria($arr[$keys[13]]);
         if (array_key_exists($keys[14], $arr)) $this->setInventariomesdetalleEgresodevolucion($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setInventariomesdetalleCostopromedio($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setInventariomesdetalleDifimporte($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setInventariomesdetalleImportefisico($arr[$keys[17]]);
     }
 
     /**
@@ -1478,6 +1637,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_INGRESOORDENTABLAJERIA)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_INGRESOORDENTABLAJERIA, $this->inventariomesdetalle_ingresoordentablajeria);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_EGRESOORDENTABLAJERIA)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_EGRESOORDENTABLAJERIA, $this->inventariomesdetalle_egresoordentablajeria);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_EGRESODEVOLUCION)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_EGRESODEVOLUCION, $this->inventariomesdetalle_egresodevolucion);
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_COSTOPROMEDIO)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_COSTOPROMEDIO, $this->inventariomesdetalle_costopromedio);
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFIMPORTE)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFIMPORTE, $this->inventariomesdetalle_difimporte);
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_IMPORTEFISICO)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_IMPORTEFISICO, $this->inventariomesdetalle_importefisico);
 
         return $criteria;
     }
@@ -1555,6 +1717,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         $copyObj->setInventariomesdetalleIngresoordentablajeria($this->getInventariomesdetalleIngresoordentablajeria());
         $copyObj->setInventariomesdetalleEgresoordentablajeria($this->getInventariomesdetalleEgresoordentablajeria());
         $copyObj->setInventariomesdetalleEgresodevolucion($this->getInventariomesdetalleEgresodevolucion());
+        $copyObj->setInventariomesdetalleCostopromedio($this->getInventariomesdetalleCostopromedio());
+        $copyObj->setInventariomesdetalleDifimporte($this->getInventariomesdetalleDifimporte());
+        $copyObj->setInventariomesdetalleImportefisico($this->getInventariomesdetalleImportefisico());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1957,6 +2122,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         $this->inventariomesdetalle_ingresoordentablajeria = null;
         $this->inventariomesdetalle_egresoordentablajeria = null;
         $this->inventariomesdetalle_egresodevolucion = null;
+        $this->inventariomesdetalle_costopromedio = null;
+        $this->inventariomesdetalle_difimporte = null;
+        $this->inventariomesdetalle_importefisico = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

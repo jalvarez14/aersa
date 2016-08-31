@@ -79,6 +79,42 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     protected $inventariomes_revisada;
 
     /**
+     * The value for the inventariomes_finalalimentos field.
+     * @var        string
+     */
+    protected $inventariomes_finalalimentos;
+
+    /**
+     * The value for the inventariomes_finalbebidas field.
+     * @var        string
+     */
+    protected $inventariomes_finalbebidas;
+
+    /**
+     * The value for the inventariomes_faltantes field.
+     * @var        string
+     */
+    protected $inventariomes_faltantes;
+
+    /**
+     * The value for the inventariomes_sobrantes field.
+     * @var        string
+     */
+    protected $inventariomes_sobrantes;
+
+    /**
+     * The value for the inventariomes_total field.
+     * @var        string
+     */
+    protected $inventariomes_total;
+
+    /**
+     * The value for the inventariomes_totalimportefisico field.
+     * @var        string
+     */
+    protected $inventariomes_totalimportefisico;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -271,6 +307,72 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     {
 
         return $this->inventariomes_revisada;
+    }
+
+    /**
+     * Get the [inventariomes_finalalimentos] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesFinalalimentos()
+    {
+
+        return $this->inventariomes_finalalimentos;
+    }
+
+    /**
+     * Get the [inventariomes_finalbebidas] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesFinalbebidas()
+    {
+
+        return $this->inventariomes_finalbebidas;
+    }
+
+    /**
+     * Get the [inventariomes_faltantes] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesFaltantes()
+    {
+
+        return $this->inventariomes_faltantes;
+    }
+
+    /**
+     * Get the [inventariomes_sobrantes] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesSobrantes()
+    {
+
+        return $this->inventariomes_sobrantes;
+    }
+
+    /**
+     * Get the [inventariomes_total] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesTotal()
+    {
+
+        return $this->inventariomes_total;
+    }
+
+    /**
+     * Get the [inventariomes_totalimportefisico] column value.
+     *
+     * @return string
+     */
+    public function getInventariomesTotalimportefisico()
+    {
+
+        return $this->inventariomes_totalimportefisico;
     }
 
     /**
@@ -472,6 +574,132 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     } // setInventariomesRevisada()
 
     /**
+     * Set the value of [inventariomes_finalalimentos] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setInventariomesFinalalimentos($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomes_finalalimentos !== $v) {
+            $this->inventariomes_finalalimentos = $v;
+            $this->modifiedColumns[] = InventariomesPeer::INVENTARIOMES_FINALALIMENTOS;
+        }
+
+
+        return $this;
+    } // setInventariomesFinalalimentos()
+
+    /**
+     * Set the value of [inventariomes_finalbebidas] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setInventariomesFinalbebidas($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomes_finalbebidas !== $v) {
+            $this->inventariomes_finalbebidas = $v;
+            $this->modifiedColumns[] = InventariomesPeer::INVENTARIOMES_FINALBEBIDAS;
+        }
+
+
+        return $this;
+    } // setInventariomesFinalbebidas()
+
+    /**
+     * Set the value of [inventariomes_faltantes] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setInventariomesFaltantes($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomes_faltantes !== $v) {
+            $this->inventariomes_faltantes = $v;
+            $this->modifiedColumns[] = InventariomesPeer::INVENTARIOMES_FALTANTES;
+        }
+
+
+        return $this;
+    } // setInventariomesFaltantes()
+
+    /**
+     * Set the value of [inventariomes_sobrantes] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setInventariomesSobrantes($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomes_sobrantes !== $v) {
+            $this->inventariomes_sobrantes = $v;
+            $this->modifiedColumns[] = InventariomesPeer::INVENTARIOMES_SOBRANTES;
+        }
+
+
+        return $this;
+    } // setInventariomesSobrantes()
+
+    /**
+     * Set the value of [inventariomes_total] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setInventariomesTotal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomes_total !== $v) {
+            $this->inventariomes_total = $v;
+            $this->modifiedColumns[] = InventariomesPeer::INVENTARIOMES_TOTAL;
+        }
+
+
+        return $this;
+    } // setInventariomesTotal()
+
+    /**
+     * Set the value of [inventariomes_totalimportefisico] column.
+     *
+     * @param  string $v new value
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setInventariomesTotalimportefisico($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inventariomes_totalimportefisico !== $v) {
+            $this->inventariomes_totalimportefisico = $v;
+            $this->modifiedColumns[] = InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO;
+        }
+
+
+        return $this;
+    } // setInventariomesTotalimportefisico()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -515,6 +743,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             $this->idauditor = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
             $this->inventariomes_fecha = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->inventariomes_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->inventariomes_finalalimentos = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+            $this->inventariomes_finalbebidas = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+            $this->inventariomes_faltantes = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+            $this->inventariomes_sobrantes = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+            $this->inventariomes_total = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->inventariomes_totalimportefisico = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -524,7 +758,7 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = InventariomesPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = InventariomesPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Inventariomes object", $e);
@@ -839,6 +1073,24 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_REVISADA)) {
             $modifiedColumns[':p' . $index++]  = '`inventariomes_revisada`';
         }
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FINALALIMENTOS)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomes_finalalimentos`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FINALBEBIDAS)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomes_finalbebidas`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FALTANTES)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomes_faltantes`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_SOBRANTES)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomes_sobrantes`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_TOTAL)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomes_total`';
+        }
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomes_totalimportefisico`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `inventariomes` (%s) VALUES (%s)',
@@ -873,6 +1125,24 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
                         break;
                     case '`inventariomes_revisada`':
                         $stmt->bindValue($identifier, (int) $this->inventariomes_revisada, PDO::PARAM_INT);
+                        break;
+                    case '`inventariomes_finalalimentos`':
+                        $stmt->bindValue($identifier, $this->inventariomes_finalalimentos, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomes_finalbebidas`':
+                        $stmt->bindValue($identifier, $this->inventariomes_finalbebidas, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomes_faltantes`':
+                        $stmt->bindValue($identifier, $this->inventariomes_faltantes, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomes_sobrantes`':
+                        $stmt->bindValue($identifier, $this->inventariomes_sobrantes, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomes_total`':
+                        $stmt->bindValue($identifier, $this->inventariomes_total, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomes_totalimportefisico`':
+                        $stmt->bindValue($identifier, $this->inventariomes_totalimportefisico, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1076,6 +1346,24 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             case 7:
                 return $this->getInventariomesRevisada();
                 break;
+            case 8:
+                return $this->getInventariomesFinalalimentos();
+                break;
+            case 9:
+                return $this->getInventariomesFinalbebidas();
+                break;
+            case 10:
+                return $this->getInventariomesFaltantes();
+                break;
+            case 11:
+                return $this->getInventariomesSobrantes();
+                break;
+            case 12:
+                return $this->getInventariomesTotal();
+                break;
+            case 13:
+                return $this->getInventariomesTotalimportefisico();
+                break;
             default:
                 return null;
                 break;
@@ -1113,6 +1401,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             $keys[5] => $this->getIdauditor(),
             $keys[6] => $this->getInventariomesFecha(),
             $keys[7] => $this->getInventariomesRevisada(),
+            $keys[8] => $this->getInventariomesFinalalimentos(),
+            $keys[9] => $this->getInventariomesFinalbebidas(),
+            $keys[10] => $this->getInventariomesFaltantes(),
+            $keys[11] => $this->getInventariomesSobrantes(),
+            $keys[12] => $this->getInventariomesTotal(),
+            $keys[13] => $this->getInventariomesTotalimportefisico(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1196,6 +1490,24 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             case 7:
                 $this->setInventariomesRevisada($value);
                 break;
+            case 8:
+                $this->setInventariomesFinalalimentos($value);
+                break;
+            case 9:
+                $this->setInventariomesFinalbebidas($value);
+                break;
+            case 10:
+                $this->setInventariomesFaltantes($value);
+                break;
+            case 11:
+                $this->setInventariomesSobrantes($value);
+                break;
+            case 12:
+                $this->setInventariomesTotal($value);
+                break;
+            case 13:
+                $this->setInventariomesTotalimportefisico($value);
+                break;
         } // switch()
     }
 
@@ -1228,6 +1540,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         if (array_key_exists($keys[5], $arr)) $this->setIdauditor($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setInventariomesFecha($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setInventariomesRevisada($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setInventariomesFinalalimentos($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setInventariomesFinalbebidas($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setInventariomesFaltantes($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setInventariomesSobrantes($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setInventariomesTotal($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setInventariomesTotalimportefisico($arr[$keys[13]]);
     }
 
     /**
@@ -1247,6 +1565,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         if ($this->isColumnModified(InventariomesPeer::IDAUDITOR)) $criteria->add(InventariomesPeer::IDAUDITOR, $this->idauditor);
         if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FECHA)) $criteria->add(InventariomesPeer::INVENTARIOMES_FECHA, $this->inventariomes_fecha);
         if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_REVISADA)) $criteria->add(InventariomesPeer::INVENTARIOMES_REVISADA, $this->inventariomes_revisada);
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FINALALIMENTOS)) $criteria->add(InventariomesPeer::INVENTARIOMES_FINALALIMENTOS, $this->inventariomes_finalalimentos);
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FINALBEBIDAS)) $criteria->add(InventariomesPeer::INVENTARIOMES_FINALBEBIDAS, $this->inventariomes_finalbebidas);
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_FALTANTES)) $criteria->add(InventariomesPeer::INVENTARIOMES_FALTANTES, $this->inventariomes_faltantes);
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_SOBRANTES)) $criteria->add(InventariomesPeer::INVENTARIOMES_SOBRANTES, $this->inventariomes_sobrantes);
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_TOTAL)) $criteria->add(InventariomesPeer::INVENTARIOMES_TOTAL, $this->inventariomes_total);
+        if ($this->isColumnModified(InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO)) $criteria->add(InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO, $this->inventariomes_totalimportefisico);
 
         return $criteria;
     }
@@ -1317,6 +1641,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         $copyObj->setIdauditor($this->getIdauditor());
         $copyObj->setInventariomesFecha($this->getInventariomesFecha());
         $copyObj->setInventariomesRevisada($this->getInventariomesRevisada());
+        $copyObj->setInventariomesFinalalimentos($this->getInventariomesFinalalimentos());
+        $copyObj->setInventariomesFinalbebidas($this->getInventariomesFinalbebidas());
+        $copyObj->setInventariomesFaltantes($this->getInventariomesFaltantes());
+        $copyObj->setInventariomesSobrantes($this->getInventariomesSobrantes());
+        $copyObj->setInventariomesTotal($this->getInventariomesTotal());
+        $copyObj->setInventariomesTotalimportefisico($this->getInventariomesTotalimportefisico());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1895,6 +2225,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
         $this->idauditor = null;
         $this->inventariomes_fecha = null;
         $this->inventariomes_revisada = null;
+        $this->inventariomes_finalalimentos = null;
+        $this->inventariomes_finalbebidas = null;
+        $this->inventariomes_faltantes = null;
+        $this->inventariomes_sobrantes = null;
+        $this->inventariomes_total = null;
+        $this->inventariomes_totalimportefisico = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

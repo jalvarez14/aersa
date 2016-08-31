@@ -24,13 +24,13 @@ abstract class BaseInventariomesPeer
     const TM_CLASS = 'InventariomesTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 14;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /** the column name for the idinventariomes field */
     const IDINVENTARIOMES = 'inventariomes.idinventariomes';
@@ -56,6 +56,24 @@ abstract class BaseInventariomesPeer
     /** the column name for the inventariomes_revisada field */
     const INVENTARIOMES_REVISADA = 'inventariomes.inventariomes_revisada';
 
+    /** the column name for the inventariomes_finalalimentos field */
+    const INVENTARIOMES_FINALALIMENTOS = 'inventariomes.inventariomes_finalalimentos';
+
+    /** the column name for the inventariomes_finalbebidas field */
+    const INVENTARIOMES_FINALBEBIDAS = 'inventariomes.inventariomes_finalbebidas';
+
+    /** the column name for the inventariomes_faltantes field */
+    const INVENTARIOMES_FALTANTES = 'inventariomes.inventariomes_faltantes';
+
+    /** the column name for the inventariomes_sobrantes field */
+    const INVENTARIOMES_SOBRANTES = 'inventariomes.inventariomes_sobrantes';
+
+    /** the column name for the inventariomes_total field */
+    const INVENTARIOMES_TOTAL = 'inventariomes.inventariomes_total';
+
+    /** the column name for the inventariomes_totalimportefisico field */
+    const INVENTARIOMES_TOTALIMPORTEFISICO = 'inventariomes.inventariomes_totalimportefisico';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -75,12 +93,12 @@ abstract class BaseInventariomesPeer
      * e.g. InventariomesPeer::$fieldNames[InventariomesPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idinventariomes', 'Idempresa', 'Idsucursal', 'Idalmacen', 'Idusuario', 'Idauditor', 'InventariomesFecha', 'InventariomesRevisada', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'inventariomesFecha', 'inventariomesRevisada', ),
-        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES, InventariomesPeer::IDEMPRESA, InventariomesPeer::IDSUCURSAL, InventariomesPeer::IDALMACEN, InventariomesPeer::IDUSUARIO, InventariomesPeer::IDAUDITOR, InventariomesPeer::INVENTARIOMES_FECHA, InventariomesPeer::INVENTARIOMES_REVISADA, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACEN', 'IDUSUARIO', 'IDAUDITOR', 'INVENTARIOMES_FECHA', 'INVENTARIOMES_REVISADA', ),
-        BasePeer::TYPE_FIELDNAME => array ('idinventariomes', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'inventariomes_fecha', 'inventariomes_revisada', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idinventariomes', 'Idempresa', 'Idsucursal', 'Idalmacen', 'Idusuario', 'Idauditor', 'InventariomesFecha', 'InventariomesRevisada', 'InventariomesFinalalimentos', 'InventariomesFinalbebidas', 'InventariomesFaltantes', 'InventariomesSobrantes', 'InventariomesTotal', 'InventariomesTotalimportefisico', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'inventariomesFecha', 'inventariomesRevisada', 'inventariomesFinalalimentos', 'inventariomesFinalbebidas', 'inventariomesFaltantes', 'inventariomesSobrantes', 'inventariomesTotal', 'inventariomesTotalimportefisico', ),
+        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES, InventariomesPeer::IDEMPRESA, InventariomesPeer::IDSUCURSAL, InventariomesPeer::IDALMACEN, InventariomesPeer::IDUSUARIO, InventariomesPeer::IDAUDITOR, InventariomesPeer::INVENTARIOMES_FECHA, InventariomesPeer::INVENTARIOMES_REVISADA, InventariomesPeer::INVENTARIOMES_FINALALIMENTOS, InventariomesPeer::INVENTARIOMES_FINALBEBIDAS, InventariomesPeer::INVENTARIOMES_FALTANTES, InventariomesPeer::INVENTARIOMES_SOBRANTES, InventariomesPeer::INVENTARIOMES_TOTAL, InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES', 'IDEMPRESA', 'IDSUCURSAL', 'IDALMACEN', 'IDUSUARIO', 'IDAUDITOR', 'INVENTARIOMES_FECHA', 'INVENTARIOMES_REVISADA', 'INVENTARIOMES_FINALALIMENTOS', 'INVENTARIOMES_FINALBEBIDAS', 'INVENTARIOMES_FALTANTES', 'INVENTARIOMES_SOBRANTES', 'INVENTARIOMES_TOTAL', 'INVENTARIOMES_TOTALIMPORTEFISICO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idinventariomes', 'idempresa', 'idsucursal', 'idalmacen', 'idusuario', 'idauditor', 'inventariomes_fecha', 'inventariomes_revisada', 'inventariomes_finalalimentos', 'inventariomes_finalbebidas', 'inventariomes_faltantes', 'inventariomes_sobrantes', 'inventariomes_total', 'inventariomes_totalimportefisico', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -90,12 +108,12 @@ abstract class BaseInventariomesPeer
      * e.g. InventariomesPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idinventariomes' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacen' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'InventariomesFecha' => 6, 'InventariomesRevisada' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'inventariomesFecha' => 6, 'inventariomesRevisada' => 7, ),
-        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES => 0, InventariomesPeer::IDEMPRESA => 1, InventariomesPeer::IDSUCURSAL => 2, InventariomesPeer::IDALMACEN => 3, InventariomesPeer::IDUSUARIO => 4, InventariomesPeer::IDAUDITOR => 5, InventariomesPeer::INVENTARIOMES_FECHA => 6, InventariomesPeer::INVENTARIOMES_REVISADA => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACEN' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'INVENTARIOMES_FECHA' => 6, 'INVENTARIOMES_REVISADA' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('idinventariomes' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'inventariomes_fecha' => 6, 'inventariomes_revisada' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idinventariomes' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idalmacen' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'InventariomesFecha' => 6, 'InventariomesRevisada' => 7, 'InventariomesFinalalimentos' => 8, 'InventariomesFinalbebidas' => 9, 'InventariomesFaltantes' => 10, 'InventariomesSobrantes' => 11, 'InventariomesTotal' => 12, 'InventariomesTotalimportefisico' => 13, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idinventariomes' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'inventariomesFecha' => 6, 'inventariomesRevisada' => 7, 'inventariomesFinalalimentos' => 8, 'inventariomesFinalbebidas' => 9, 'inventariomesFaltantes' => 10, 'inventariomesSobrantes' => 11, 'inventariomesTotal' => 12, 'inventariomesTotalimportefisico' => 13, ),
+        BasePeer::TYPE_COLNAME => array (InventariomesPeer::IDINVENTARIOMES => 0, InventariomesPeer::IDEMPRESA => 1, InventariomesPeer::IDSUCURSAL => 2, InventariomesPeer::IDALMACEN => 3, InventariomesPeer::IDUSUARIO => 4, InventariomesPeer::IDAUDITOR => 5, InventariomesPeer::INVENTARIOMES_FECHA => 6, InventariomesPeer::INVENTARIOMES_REVISADA => 7, InventariomesPeer::INVENTARIOMES_FINALALIMENTOS => 8, InventariomesPeer::INVENTARIOMES_FINALBEBIDAS => 9, InventariomesPeer::INVENTARIOMES_FALTANTES => 10, InventariomesPeer::INVENTARIOMES_SOBRANTES => 11, InventariomesPeer::INVENTARIOMES_TOTAL => 12, InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO => 13, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDINVENTARIOMES' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDALMACEN' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'INVENTARIOMES_FECHA' => 6, 'INVENTARIOMES_REVISADA' => 7, 'INVENTARIOMES_FINALALIMENTOS' => 8, 'INVENTARIOMES_FINALBEBIDAS' => 9, 'INVENTARIOMES_FALTANTES' => 10, 'INVENTARIOMES_SOBRANTES' => 11, 'INVENTARIOMES_TOTAL' => 12, 'INVENTARIOMES_TOTALIMPORTEFISICO' => 13, ),
+        BasePeer::TYPE_FIELDNAME => array ('idinventariomes' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idalmacen' => 3, 'idusuario' => 4, 'idauditor' => 5, 'inventariomes_fecha' => 6, 'inventariomes_revisada' => 7, 'inventariomes_finalalimentos' => 8, 'inventariomes_finalbebidas' => 9, 'inventariomes_faltantes' => 10, 'inventariomes_sobrantes' => 11, 'inventariomes_total' => 12, 'inventariomes_totalimportefisico' => 13, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -177,6 +195,12 @@ abstract class BaseInventariomesPeer
             $criteria->addSelectColumn(InventariomesPeer::IDAUDITOR);
             $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_FECHA);
             $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_REVISADA);
+            $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_FINALALIMENTOS);
+            $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_FINALBEBIDAS);
+            $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_FALTANTES);
+            $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_SOBRANTES);
+            $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_TOTAL);
+            $criteria->addSelectColumn(InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO);
         } else {
             $criteria->addSelectColumn($alias . '.idinventariomes');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -186,6 +210,12 @@ abstract class BaseInventariomesPeer
             $criteria->addSelectColumn($alias . '.idauditor');
             $criteria->addSelectColumn($alias . '.inventariomes_fecha');
             $criteria->addSelectColumn($alias . '.inventariomes_revisada');
+            $criteria->addSelectColumn($alias . '.inventariomes_finalalimentos');
+            $criteria->addSelectColumn($alias . '.inventariomes_finalbebidas');
+            $criteria->addSelectColumn($alias . '.inventariomes_faltantes');
+            $criteria->addSelectColumn($alias . '.inventariomes_sobrantes');
+            $criteria->addSelectColumn($alias . '.inventariomes_total');
+            $criteria->addSelectColumn($alias . '.inventariomes_totalimportefisico');
         }
     }
 

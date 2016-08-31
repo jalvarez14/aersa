@@ -53,6 +53,9 @@ class InventariomesdetalleTableMap extends TableMap
         $this->addColumn('inventariomesdetalle_ingresoordentablajeria', 'InventariomesdetalleIngresoordentablajeria', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_egresoordentablajeria', 'InventariomesdetalleEgresoordentablajeria', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_egresodevolucion', 'InventariomesdetalleEgresodevolucion', 'FLOAT', true, null, null);
+        $this->addColumn('inventariomesdetalle_costopromedio', 'InventariomesdetalleCostopromedio', 'DECIMAL', true, 16, null);
+        $this->addColumn('inventariomesdetalle_difimporte', 'InventariomesdetalleDifimporte', 'DECIMAL', true, 16, null);
+        $this->addColumn('inventariomesdetalle_importefisico', 'InventariomesdetalleImportefisico', 'DECIMAL', true, 16, null);
         // validators
     } // initialize()
 

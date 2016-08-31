@@ -676,6 +676,12 @@
     <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="inventariomes_fecha" phpName="InventariomesFecha" type="DATE" required="true"/>
     <column name="inventariomes_revisada" phpName="InventariomesRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <column name="inventariomes_finalalimentos" phpName="InventariomesFinalalimentos" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_finalbebidas" phpName="InventariomesFinalbebidas" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_faltantes" phpName="InventariomesFaltantes" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_sobrantes" phpName="InventariomesSobrantes" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_total" phpName="InventariomesTotal" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_totalimportefisico" phpName="InventariomesTotalimportefisico" type="DECIMAL" size="16" scale="6" required="true"/>
     <foreign-key foreignTable="almacen" name="idalmacen_inventariomes" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idalmacen" foreign="idalmacen"/>
     </foreign-key>
@@ -726,6 +732,9 @@
     <column name="inventariomesdetalle_ingresoordentablajeria" phpName="InventariomesdetalleIngresoordentablajeria" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_egresoordentablajeria" phpName="InventariomesdetalleEgresoordentablajeria" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_egresodevolucion" phpName="InventariomesdetalleEgresodevolucion" type="FLOAT" required="true"/>
+    <column name="inventariomesdetalle_costopromedio" phpName="InventariomesdetalleCostopromedio" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomesdetalle_difimporte" phpName="InventariomesdetalleDifimporte" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomesdetalle_importefisico" phpName="InventariomesdetalleImportefisico" type="DECIMAL" size="16" scale="6" required="true"/>
     <foreign-key foreignTable="inventariomes" name="idinventariomes_inventariomesdetalle" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idinventariomes" foreign="idinventariomes"/>
     </foreign-key>

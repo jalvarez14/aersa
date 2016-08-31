@@ -14,6 +14,12 @@
  * @method InventariomesQuery orderByIdauditor($order = Criteria::ASC) Order by the idauditor column
  * @method InventariomesQuery orderByInventariomesFecha($order = Criteria::ASC) Order by the inventariomes_fecha column
  * @method InventariomesQuery orderByInventariomesRevisada($order = Criteria::ASC) Order by the inventariomes_revisada column
+ * @method InventariomesQuery orderByInventariomesFinalalimentos($order = Criteria::ASC) Order by the inventariomes_finalalimentos column
+ * @method InventariomesQuery orderByInventariomesFinalbebidas($order = Criteria::ASC) Order by the inventariomes_finalbebidas column
+ * @method InventariomesQuery orderByInventariomesFaltantes($order = Criteria::ASC) Order by the inventariomes_faltantes column
+ * @method InventariomesQuery orderByInventariomesSobrantes($order = Criteria::ASC) Order by the inventariomes_sobrantes column
+ * @method InventariomesQuery orderByInventariomesTotal($order = Criteria::ASC) Order by the inventariomes_total column
+ * @method InventariomesQuery orderByInventariomesTotalimportefisico($order = Criteria::ASC) Order by the inventariomes_totalimportefisico column
  *
  * @method InventariomesQuery groupByIdinventariomes() Group by the idinventariomes column
  * @method InventariomesQuery groupByIdempresa() Group by the idempresa column
@@ -23,6 +29,12 @@
  * @method InventariomesQuery groupByIdauditor() Group by the idauditor column
  * @method InventariomesQuery groupByInventariomesFecha() Group by the inventariomes_fecha column
  * @method InventariomesQuery groupByInventariomesRevisada() Group by the inventariomes_revisada column
+ * @method InventariomesQuery groupByInventariomesFinalalimentos() Group by the inventariomes_finalalimentos column
+ * @method InventariomesQuery groupByInventariomesFinalbebidas() Group by the inventariomes_finalbebidas column
+ * @method InventariomesQuery groupByInventariomesFaltantes() Group by the inventariomes_faltantes column
+ * @method InventariomesQuery groupByInventariomesSobrantes() Group by the inventariomes_sobrantes column
+ * @method InventariomesQuery groupByInventariomesTotal() Group by the inventariomes_total column
+ * @method InventariomesQuery groupByInventariomesTotalimportefisico() Group by the inventariomes_totalimportefisico column
  *
  * @method InventariomesQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method InventariomesQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -62,6 +74,12 @@
  * @method Inventariomes findOneByIdauditor(int $idauditor) Return the first Inventariomes filtered by the idauditor column
  * @method Inventariomes findOneByInventariomesFecha(string $inventariomes_fecha) Return the first Inventariomes filtered by the inventariomes_fecha column
  * @method Inventariomes findOneByInventariomesRevisada(boolean $inventariomes_revisada) Return the first Inventariomes filtered by the inventariomes_revisada column
+ * @method Inventariomes findOneByInventariomesFinalalimentos(string $inventariomes_finalalimentos) Return the first Inventariomes filtered by the inventariomes_finalalimentos column
+ * @method Inventariomes findOneByInventariomesFinalbebidas(string $inventariomes_finalbebidas) Return the first Inventariomes filtered by the inventariomes_finalbebidas column
+ * @method Inventariomes findOneByInventariomesFaltantes(string $inventariomes_faltantes) Return the first Inventariomes filtered by the inventariomes_faltantes column
+ * @method Inventariomes findOneByInventariomesSobrantes(string $inventariomes_sobrantes) Return the first Inventariomes filtered by the inventariomes_sobrantes column
+ * @method Inventariomes findOneByInventariomesTotal(string $inventariomes_total) Return the first Inventariomes filtered by the inventariomes_total column
+ * @method Inventariomes findOneByInventariomesTotalimportefisico(string $inventariomes_totalimportefisico) Return the first Inventariomes filtered by the inventariomes_totalimportefisico column
  *
  * @method array findByIdinventariomes(int $idinventariomes) Return Inventariomes objects filtered by the idinventariomes column
  * @method array findByIdempresa(int $idempresa) Return Inventariomes objects filtered by the idempresa column
@@ -71,6 +89,12 @@
  * @method array findByIdauditor(int $idauditor) Return Inventariomes objects filtered by the idauditor column
  * @method array findByInventariomesFecha(string $inventariomes_fecha) Return Inventariomes objects filtered by the inventariomes_fecha column
  * @method array findByInventariomesRevisada(boolean $inventariomes_revisada) Return Inventariomes objects filtered by the inventariomes_revisada column
+ * @method array findByInventariomesFinalalimentos(string $inventariomes_finalalimentos) Return Inventariomes objects filtered by the inventariomes_finalalimentos column
+ * @method array findByInventariomesFinalbebidas(string $inventariomes_finalbebidas) Return Inventariomes objects filtered by the inventariomes_finalbebidas column
+ * @method array findByInventariomesFaltantes(string $inventariomes_faltantes) Return Inventariomes objects filtered by the inventariomes_faltantes column
+ * @method array findByInventariomesSobrantes(string $inventariomes_sobrantes) Return Inventariomes objects filtered by the inventariomes_sobrantes column
+ * @method array findByInventariomesTotal(string $inventariomes_total) Return Inventariomes objects filtered by the inventariomes_total column
+ * @method array findByInventariomesTotalimportefisico(string $inventariomes_totalimportefisico) Return Inventariomes objects filtered by the inventariomes_totalimportefisico column
  *
  * @package    propel.generator.aersa.om
  */
@@ -178,7 +202,7 @@ abstract class BaseInventariomesQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idinventariomes`, `idempresa`, `idsucursal`, `idalmacen`, `idusuario`, `idauditor`, `inventariomes_fecha`, `inventariomes_revisada` FROM `inventariomes` WHERE `idinventariomes` = :p0';
+        $sql = 'SELECT `idinventariomes`, `idempresa`, `idsucursal`, `idalmacen`, `idusuario`, `idauditor`, `inventariomes_fecha`, `inventariomes_revisada`, `inventariomes_finalalimentos`, `inventariomes_finalbebidas`, `inventariomes_faltantes`, `inventariomes_sobrantes`, `inventariomes_total`, `inventariomes_totalimportefisico` FROM `inventariomes` WHERE `idinventariomes` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -597,6 +621,258 @@ abstract class BaseInventariomesQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_REVISADA, $inventariomesRevisada, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomes_finalalimentos column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesFinalalimentos(1234); // WHERE inventariomes_finalalimentos = 1234
+     * $query->filterByInventariomesFinalalimentos(array(12, 34)); // WHERE inventariomes_finalalimentos IN (12, 34)
+     * $query->filterByInventariomesFinalalimentos(array('min' => 12)); // WHERE inventariomes_finalalimentos >= 12
+     * $query->filterByInventariomesFinalalimentos(array('max' => 12)); // WHERE inventariomes_finalalimentos <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesFinalalimentos The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesFinalalimentos($inventariomesFinalalimentos = null, $comparison = null)
+    {
+        if (is_array($inventariomesFinalalimentos)) {
+            $useMinMax = false;
+            if (isset($inventariomesFinalalimentos['min'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FINALALIMENTOS, $inventariomesFinalalimentos['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesFinalalimentos['max'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FINALALIMENTOS, $inventariomesFinalalimentos['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FINALALIMENTOS, $inventariomesFinalalimentos, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomes_finalbebidas column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesFinalbebidas(1234); // WHERE inventariomes_finalbebidas = 1234
+     * $query->filterByInventariomesFinalbebidas(array(12, 34)); // WHERE inventariomes_finalbebidas IN (12, 34)
+     * $query->filterByInventariomesFinalbebidas(array('min' => 12)); // WHERE inventariomes_finalbebidas >= 12
+     * $query->filterByInventariomesFinalbebidas(array('max' => 12)); // WHERE inventariomes_finalbebidas <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesFinalbebidas The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesFinalbebidas($inventariomesFinalbebidas = null, $comparison = null)
+    {
+        if (is_array($inventariomesFinalbebidas)) {
+            $useMinMax = false;
+            if (isset($inventariomesFinalbebidas['min'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FINALBEBIDAS, $inventariomesFinalbebidas['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesFinalbebidas['max'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FINALBEBIDAS, $inventariomesFinalbebidas['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FINALBEBIDAS, $inventariomesFinalbebidas, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomes_faltantes column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesFaltantes(1234); // WHERE inventariomes_faltantes = 1234
+     * $query->filterByInventariomesFaltantes(array(12, 34)); // WHERE inventariomes_faltantes IN (12, 34)
+     * $query->filterByInventariomesFaltantes(array('min' => 12)); // WHERE inventariomes_faltantes >= 12
+     * $query->filterByInventariomesFaltantes(array('max' => 12)); // WHERE inventariomes_faltantes <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesFaltantes The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesFaltantes($inventariomesFaltantes = null, $comparison = null)
+    {
+        if (is_array($inventariomesFaltantes)) {
+            $useMinMax = false;
+            if (isset($inventariomesFaltantes['min'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FALTANTES, $inventariomesFaltantes['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesFaltantes['max'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FALTANTES, $inventariomesFaltantes['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_FALTANTES, $inventariomesFaltantes, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomes_sobrantes column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesSobrantes(1234); // WHERE inventariomes_sobrantes = 1234
+     * $query->filterByInventariomesSobrantes(array(12, 34)); // WHERE inventariomes_sobrantes IN (12, 34)
+     * $query->filterByInventariomesSobrantes(array('min' => 12)); // WHERE inventariomes_sobrantes >= 12
+     * $query->filterByInventariomesSobrantes(array('max' => 12)); // WHERE inventariomes_sobrantes <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesSobrantes The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesSobrantes($inventariomesSobrantes = null, $comparison = null)
+    {
+        if (is_array($inventariomesSobrantes)) {
+            $useMinMax = false;
+            if (isset($inventariomesSobrantes['min'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_SOBRANTES, $inventariomesSobrantes['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesSobrantes['max'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_SOBRANTES, $inventariomesSobrantes['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_SOBRANTES, $inventariomesSobrantes, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomes_total column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesTotal(1234); // WHERE inventariomes_total = 1234
+     * $query->filterByInventariomesTotal(array(12, 34)); // WHERE inventariomes_total IN (12, 34)
+     * $query->filterByInventariomesTotal(array('min' => 12)); // WHERE inventariomes_total >= 12
+     * $query->filterByInventariomesTotal(array('max' => 12)); // WHERE inventariomes_total <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesTotal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesTotal($inventariomesTotal = null, $comparison = null)
+    {
+        if (is_array($inventariomesTotal)) {
+            $useMinMax = false;
+            if (isset($inventariomesTotal['min'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_TOTAL, $inventariomesTotal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesTotal['max'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_TOTAL, $inventariomesTotal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_TOTAL, $inventariomesTotal, $comparison);
+    }
+
+    /**
+     * Filter the query on the inventariomes_totalimportefisico column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInventariomesTotalimportefisico(1234); // WHERE inventariomes_totalimportefisico = 1234
+     * $query->filterByInventariomesTotalimportefisico(array(12, 34)); // WHERE inventariomes_totalimportefisico IN (12, 34)
+     * $query->filterByInventariomesTotalimportefisico(array('min' => 12)); // WHERE inventariomes_totalimportefisico >= 12
+     * $query->filterByInventariomesTotalimportefisico(array('max' => 12)); // WHERE inventariomes_totalimportefisico <= 12
+     * </code>
+     *
+     * @param     mixed $inventariomesTotalimportefisico The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function filterByInventariomesTotalimportefisico($inventariomesTotalimportefisico = null, $comparison = null)
+    {
+        if (is_array($inventariomesTotalimportefisico)) {
+            $useMinMax = false;
+            if (isset($inventariomesTotalimportefisico['min'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO, $inventariomesTotalimportefisico['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($inventariomesTotalimportefisico['max'])) {
+                $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO, $inventariomesTotalimportefisico['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InventariomesPeer::INVENTARIOMES_TOTALIMPORTEFISICO, $inventariomesTotalimportefisico, $comparison);
     }
 
     /**

@@ -46,6 +46,12 @@ class InventariomesTableMap extends TableMap
         $this->addForeignKey('idauditor', 'Idauditor', 'INTEGER', 'usuario', 'idusuario', false, null, null);
         $this->addColumn('inventariomes_fecha', 'InventariomesFecha', 'DATE', true, null, null);
         $this->addColumn('inventariomes_revisada', 'InventariomesRevisada', 'BOOLEAN', true, 1, false);
+        $this->addColumn('inventariomes_finalalimentos', 'InventariomesFinalalimentos', 'DECIMAL', true, 16, null);
+        $this->addColumn('inventariomes_finalbebidas', 'InventariomesFinalbebidas', 'DECIMAL', true, 16, null);
+        $this->addColumn('inventariomes_faltantes', 'InventariomesFaltantes', 'DECIMAL', true, 16, null);
+        $this->addColumn('inventariomes_sobrantes', 'InventariomesSobrantes', 'DECIMAL', true, 16, null);
+        $this->addColumn('inventariomes_total', 'InventariomesTotal', 'DECIMAL', true, 16, null);
+        $this->addColumn('inventariomes_totalimportefisico', 'InventariomesTotalimportefisico', 'DECIMAL', true, 16, null);
         // validators
     } // initialize()
 
