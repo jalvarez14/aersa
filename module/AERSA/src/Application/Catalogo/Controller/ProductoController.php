@@ -7,6 +7,91 @@ use Zend\Console\Request as ConsoleRequest;
 
 class ProductoController extends AbstractActionController
 {
+    
+    public function renameproductAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($post_data['product_name'])->exists();
+            
+            //SI NO EXISTE EL PRODUCTO
+            if(!$exist){
+                
+                $categoria = \CategoriaQuery::create()->filterByCategoriaNombre($post_data["producto"]['categoria_nombre'])->findOne();
+                $subcategoria = \CategoriaQuery::create()->filterByCategoriaNombre($post_data["producto"]['categoria_nombre_sub'])->findOne();
+                $unidad = \UnidadmedidaQuery::create()->filterByUnidadmedidaNombre($post_data["producto"]['producto_unidad'])->findOne();
+                
+                $producto = new \Producto();
+                $producto->setIdempresa($session['idempresa'])
+                         ->setIdcategoria($categoria->getIdcategoria())
+                         ->setIdunidadmedida($unidad->getIdunidadmedida())
+                         ->setIdsubcategoria($subcategoria->getIdcategoria())
+                         ->setProductoBaja($post_data["producto"]['producto_baja'])
+                         ->setProductoCosto($post_data["producto"]['producto_costo'])
+                         ->setProductoIva($post_data["producto"]['producto_iva'])
+                         ->setProductoNombre($post_data['product_name'])
+                         ->setProductoPrecio($post_data["producto"]['producto_precio'])
+                         ->setProductoRendimientooriginal($post_data["producto"]['producto_rendimientooriginal'])
+                         ->setProductoTipo($post_data["producto"]['producto_tipo'])
+                         ->save();
+                
+                return $this->getResponse()->setContent(json_encode(array('response' => true)));
+                
+                
+            }else{
+                return $this->getResponse()->setContent(json_encode(array('response' => false)));
+            }
+        }
+        
+    }
+    public function validateproductAction(){
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($post_data['producto_nombre'])->exists();
+            
+            //SI NO EXISTE EL PRODUCTO
+            if(!$exist){
+                
+                $categoria = \CategoriaQuery::create()->filterByCategoriaNombre($post_data['categoria_nombre'])->findOne();
+                $subcategoria = \CategoriaQuery::create()->filterByCategoriaNombre($post_data['categoria_nombre_sub'])->findOne();
+                $unidad = \UnidadmedidaQuery::create()->filterByUnidadmedidaNombre($post_data['producto_unidad'])->findOne();
+                $producto = new \Producto();
+                $producto->setIdempresa($session['idempresa'])
+                         ->setIdcategoria($categoria->getIdcategoria())
+                         ->setIdunidadmedida($unidad->getIdunidadmedida())
+                         ->setIdsubcategoria($subcategoria->getIdcategoria())
+                         ->setProductoBaja($post_data['producto_baja'])
+                         ->setProductoCosto($post_data['producto_costo'])
+                         ->setProductoIva($post_data['producto_iva'])
+                         ->setProductoNombre($post_data['producto_nombre'])
+                         ->setProductoPrecio($post_data['producto_precio'])
+                         ->setProductoRendimientooriginal($post_data['producto_rendimientooriginal'])
+                         ->setProductoTipo($post_data['producto_tipo'])
+                         ->save();
+                
+                return $this->getResponse()->setContent(json_encode(array('response' => true)));
+                
+                
+            }else{
+                $producto = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($post_data['producto_nombre'])->findOne();
+                return $this->getResponse()->setContent(json_encode(array('response' => false, 'data' => $producto->toArray(\BasePeer::TYPE_FIELDNAME))));
+            }
+            
+           
+            
+        }
+    }
+    
     public function indexAction()
     {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES

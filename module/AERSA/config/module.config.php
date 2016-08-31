@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route' => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route' => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -353,6 +353,27 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'validateproduct' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validateproduct',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'validateproduct',
+                                            ),
+                                        ),
+                                    ),
+                                    'renameproduct' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/renameproduct',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'renameproduct',
+                                            ),
+                                        ),
+                                    ),
+               
                                     'editarcodigo' => array(
                                         'type' => 'Segment',
                                         'options' => array(
