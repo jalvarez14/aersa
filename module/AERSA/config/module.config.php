@@ -9,58 +9,58 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersa', //LOCAL
                     'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                   /*
-                    * ESCRITORIO
-                    */
+                    /*
+                     * ESCRITORIO
+                     */
                     'escritorio' => array(
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route'    => '/',
+                            'route' => '/',
                             'defaults' => array(
-                                'controller'    => 'Application\Dashboard\Controller\Index',
-                                'action'        => 'index',
+                                'controller' => 'Application\Dashboard\Controller\Index',
+                                'action' => 'index',
                             ),
                         ),
                     ),
                     'autocomplete' => array(
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route'    => '/autocomplete[/:action]',
+                            'route' => '/autocomplete[/:action]',
                             'defaults' => array(
-                                'controller'    => 'Application\Dashboard\Controller\Index',
-                                'action'        => 'index',
+                                'controller' => 'Application\Dashboard\Controller\Index',
+                                'action' => 'index',
                             ),
                         ),
                     ),
                     /*
-                    * LOGIN
-                    */
+                     * LOGIN
+                     */
                     'login' => array(
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route'    => '/login[/:action]',
+                            'route' => '/login[/:action]',
                             'defaults' => array(
-                                'controller'    => 'Application\Login\Controller\Login',
-                                'action'        => 'in',
+                                'controller' => 'Application\Login\Controller\Login',
+                                'action' => 'in',
                             ),
                         ),
                     ),
                     /*
-                    * CATALOGOS
-                    */
-                   'catalogo' => array(
+                     * CATALOGOS
+                     */
+                    'catalogo' => array(
                         'type' => 'Literal',
                         'options' => array(
                             'route' => '/catalogo',
                         ),
-                       'may_terminate' => false,
-                       'child_routes' => array(
-                           'usuario' => array(
+                        'may_terminate' => false,
+                        'child_routes' => array(
+                            'usuario' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/usuario',
@@ -69,11 +69,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Literal',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -81,9 +81,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -91,9 +91,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -101,9 +101,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'changepassword' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'changepassword' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/changepassword[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -111,9 +111,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'administrador' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'administrador' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/administrador[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -121,9 +121,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editaradministrador' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editaradministrador' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editaradministrador[/:id][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -131,9 +131,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminaradministrador' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminaradministrador' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminaradministrador[/:id][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -141,9 +141,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'changepasswordadministrador' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'changepasswordadministrador' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/changepasswordadministrador[/:id][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -151,9 +151,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'auditor' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'auditor' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/auditor/nuevo[/:suc][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -161,9 +161,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editarauditor' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editarauditor' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editarauditor[/:id][/:suc][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -171,9 +171,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'changepasswordauditor' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'changepasswordauditor' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/changepasswordauditor[/:id][/:suc][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -181,9 +181,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'checkuser' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'checkuser' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/checkuser[/:username]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Usuario',
@@ -191,10 +191,9 @@ return array(
                                             ),
                                         ),
                                     ),
-
-                               ),
+                                ),
                             ),
-                           'almacen' => array(
+                            'almacen' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/almacen',
@@ -203,11 +202,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevo[/:suc][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Almacen',
@@ -215,9 +214,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id][/:suc][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Almacen',
@@ -225,9 +224,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                               ),
+                                ),
                             ),
-                           'trabajadorespromedio' => array(
+                            'trabajadorespromedio' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/trabajador_promedio',
@@ -236,11 +235,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Literal',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Trabajadorespromedio',
@@ -248,9 +247,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Trabajadorespromedio',
@@ -258,9 +257,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Trabajadorespromedio',
@@ -268,9 +267,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                               ),
+                                ),
                             ),
-                           'proveedor' => array(
+                            'proveedor' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/proveedor',
@@ -279,11 +278,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Literal',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Proveedor',
@@ -291,9 +290,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Proveedor',
@@ -301,9 +300,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'batch' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'batch' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/batch[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Proveedor',
@@ -311,9 +310,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                               ),
+                                ),
                             ),
-                           'producto' => array(
+                            'producto' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/producto',
@@ -322,11 +321,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Literal',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -334,9 +333,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -344,9 +343,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'nuevocodigo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'nuevocodigo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevocodigo[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -354,9 +353,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editarcodigo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editarcodigo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editarcodigo[/:id][/:prod]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -364,9 +363,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminarcodigo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminarcodigo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminarcodigo[/:id][/:prod]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -374,9 +373,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'nuevasubreceta' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'nuevasubreceta' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevasubreceta[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -384,9 +383,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editarsubreceta' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editarsubreceta' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editarsubreceta[/:id][/:prod]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -394,9 +393,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminarsubreceta' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminarsubreceta' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminarsubreceta[/:id][/:prod]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -404,9 +403,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'getprod' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'getprod' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/getprod[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
@@ -414,10 +413,9 @@ return array(
                                             ),
                                         ),
                                     ),
-
-                               ),
+                                ),
                             ),
-                        'altaproductos' => array(
+                            'altaproductos' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/altaproductos',
@@ -427,7 +425,7 @@ return array(
                                     ),
                                 ),
                             ),
-                        'productosasociacion' => array(
+                            'productosasociacion' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/asociacionproductos',
@@ -437,8 +435,7 @@ return array(
                                     ),
                                 ),
                             ),
-
-                        'iva' => array(
+                            'iva' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/iva',
@@ -447,11 +444,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Literal',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Iva',
@@ -459,9 +456,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Iva',
@@ -469,9 +466,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'nuevo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Iva',
@@ -479,9 +476,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Iva',
@@ -489,10 +486,9 @@ return array(
                                             ),
                                         ),
                                     ),
-
-                               ),
+                                ),
                             ),
-                        'categoria' => array(
+                            'categoria' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/categoria',
@@ -501,11 +497,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Literal',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
@@ -513,9 +509,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'nuevasub' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'nuevasub' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevasub[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
@@ -523,9 +519,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editarsub' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editarsub' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editarsub[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
@@ -533,9 +529,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
@@ -543,9 +539,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'nuevo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
@@ -553,9 +549,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
@@ -563,9 +559,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'getsubcat' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'getsubcat' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/getsubcat[/:idcategoria]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Categoria',
@@ -573,10 +569,9 @@ return array(
                                             ),
                                         ),
                                     ),
-
-                              ),
+                                ),
                             ),
-                           'empresa' => array(
+                            'empresa' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/empresa',
@@ -585,11 +580,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Literal',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Empresa',
@@ -597,9 +592,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Empresa',
@@ -607,9 +602,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'nuevo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Empresa',
@@ -617,10 +612,9 @@ return array(
                                             ),
                                         ),
                                     ),
-
-                                   'eliminar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Empresa',
@@ -628,10 +622,9 @@ return array(
                                             ),
                                         ),
                                     ),
-
-                               ),
+                                ),
                             ),
-                           'sucursal' => array(
+                            'sucursal' => array(
                                 'type' => 'Literal',
                                 'options' => array(
                                     'route' => '/empresa/sucursal',
@@ -640,11 +633,11 @@ return array(
                                         'action' => 'index',
                                     ),
                                 ),
-                               'may_terminate' => true,
-                               'child_routes' => array(
-                                   'nuevo' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/nuevo[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Sucursal',
@@ -652,9 +645,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'editar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'editar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/editar[/:id][/:emp]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Sucursal',
@@ -662,9 +655,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'eliminar' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/eliminar[/:id]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Sucursal',
@@ -672,9 +665,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'checkuser' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'checkuser' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/checkuser[/:username]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Sucursal',
@@ -682,9 +675,9 @@ return array(
                                             ),
                                         ),
                                     ),
-                                   'getweekarray' => array(
-                                       'type' => 'Segment',
-                                       'options' => array(
+                                    'getweekarray' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
                                             'route' => '/getweekarray',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Sucursal',
@@ -692,8 +685,7 @@ return array(
                                             ),
                                         ),
                                     ),
-
-                               ),
+                                ),
                             ),
                             'tablajeria' => array(
                                 'type' => 'Segment',
@@ -756,7 +748,6 @@ return array(
                                             ),
                                         ),
                                     ),
-
                                 ),
                             ),
                         ),
@@ -841,12 +832,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Compra',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Compra',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -892,12 +883,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Consignacion',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Consignacion',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -943,12 +934,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Requisicion',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1034,12 +1025,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Devolucion',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Devolucion',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1087,12 +1078,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Ingresos',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ingresos',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1138,12 +1129,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Notacredito',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Notacredito',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1191,12 +1182,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Venta',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1303,12 +1294,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Tablajeria',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1349,7 +1340,6 @@ return array(
                                             ),
                                         ),
                                     ),
-
                                 ),
                             ),
                             'ajustesinventarios' => array(
@@ -1364,7 +1354,7 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'nuevo' => array(
-                                        'type' => 'Literal', 
+                                        'type' => 'Literal',
                                         'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
@@ -1377,12 +1367,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Proceso\Controller\Ajustesinventarios',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Ajustesinventarios',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1405,12 +1395,11 @@ return array(
                                     ),
                                 ),
                             ),
-
                         ),
                     ),
                     /*
-                    * FLUJO DE EFECTIVO
-                    */
+                     * FLUJO DE EFECTIVO
+                     */
                     'flujoefectivo' => array(
                         'type' => 'Literal',
                         'options' => array(
@@ -1535,7 +1524,6 @@ return array(
                                             ),
                                         ),
                                     ),
-
                                 ),
                             ),
                             'cuentasporpagar' => array(
@@ -1599,7 +1587,6 @@ return array(
                                             ),
                                         ),
                                     ),
-
                                 ),
                             ),
                             'cuentabancaria' => array(
@@ -1626,12 +1613,12 @@ return array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/editar[/:id]',
-                                             'defaults' => array(
-                                                 'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria',
-                                                 'action' => 'editar',
-                                                 ),
+                                            'defaults' => array(
+                                                'controller' => 'Application\Flujoefectivo\Controller\Cuentabancaria',
+                                                'action' => 'editar',
                                             ),
                                         ),
+                                    ),
                                     'eliminar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1875,23 +1862,66 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'cierresinventarios' => array(
-                                        'type' => 'Segment',
+                                        'type' => 'Literal',
                                         'options' => array(
                                             'route' => '/cierresinventarios',
                                             'defaults' => array(
-                                                'controller' => 'Application\Administracion\Controller\Reportes',
-                                                'action' => 'cierresinventarios',
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                'action' => 'index',
                                             ),
-                                            'may_terminate' => true,
-                                            'child_routes' => array(
-                                                'batch' => array(
-                                                    'type' => 'Segment',
-                                                    'options' => array(
-                                                        'route' => '/batch[/:id]',
-                                                        'defaults' => array(
-                                                            'controller' => 'Application\Administracion\Controller\Reportes',
-                                                            'action' => 'batch',
-                                                        ),
+                                        ),
+                                        'may_terminate' => true,
+                                        'child_routes' => array(
+                                            'nuevo' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '/nuevo',
+                                                    'defaults' => array(
+                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                        'action' => 'nuevo',
+                                                    ),
+                                                ),
+                                            ),
+                                            'batch' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '/batch[/:id]',
+                                                    'defaults' => array(
+                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                        'action' => 'batch',
+                                                    ),
+                                                ),
+                                            ),
+                                            'batch' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '/batch[/:id]',
+                                                    'defaults' => array(
+                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                        'action' => 'batch',
+                                                    ),
+                                                ),
+                                            ),
+                                        ),
+                                    ),
+                                    'cardex' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/cardex',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Cardex',
+                                                'action' => 'index',
+                                            ),
+                                        ),
+                                        'may_terminate' => true,
+                                        'child_routes' => array(
+                                            'almacen' => array(
+                                                'type' => 'Segment',
+                                                'options' => array(
+                                                    'route' => '/almacen',
+                                                    'defaults' => array(
+                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cardex',
+                                                        'action' => 'almacen',
                                                     ),
                                                 ),
                                             ),
@@ -1906,66 +1936,63 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route'    => 'aersa', //LOCAL
+                    //'route' => 'aersa', //LOCAL
                     'route'    => 'aersamx.com', //PRODUCCION
-
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
                     'index' => array(
-                        'type'    => 'Literal',
+                        'type' => 'Literal',
                         'options' => array(
-                            'route'    => '/',
+                            'route' => '/',
                             'defaults' => array(
                                 'controller' => 'Website\Controller\Website',
-                                'action'     => 'index',
+                                'action' => 'index',
                             ),
                         ),
                     ),
                     'nosotros' => array(
-                        'type'    => 'Literal',
+                        'type' => 'Literal',
                         'options' => array(
-                            'route'    => '/nosotros',
+                            'route' => '/nosotros',
                             'defaults' => array(
-                                'controller'    => 'Website\Controller\Website',
-                                'action'        => 'nosotros',
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'nosotros',
                             ),
                         ),
                     ),
                     'diagnostico' => array(
-                        'type'    => 'Literal',
+                        'type' => 'Literal',
                         'options' => array(
-                            'route'    => '/diagnostico',
+                            'route' => '/diagnostico',
                             'defaults' => array(
-                                'controller'    => 'Website\Controller\Website',
-                                'action'        => 'diagnostico',
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'diagnostico',
                             ),
                         ),
                     ),
                     'contacto' => array(
-                        'type'    => 'Literal',
+                        'type' => 'Literal',
                         'options' => array(
-                            'route'    => '/contacto',
+                            'route' => '/contacto',
                             'defaults' => array(
-                                'controller'    => 'Website\Controller\Website',
-                                'action'        => 'contacto',
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'contacto',
                             ),
                         ),
                     ),
                     'sendCotizacion' => array(
-                        'type'    => 'Literal',
+                        'type' => 'Literal',
                         'options' => array(
-                            'route'    => '/sendCotizacion',
+                            'route' => '/sendCotizacion',
                             'defaults' => array(
-                                'controller'    => 'Website\Controller\Website',
-                                'action'        => 'sendCotizacion',
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'sendCotizacion',
                             ),
                         ),
                     ),
                 ),
             ),
-
-
         ),
     ),
     'service_manager' => array(
@@ -1981,9 +2008,9 @@ return array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(
             array(
-                'type'     => 'gettext',
+                'type' => 'gettext',
                 'base_dir' => __DIR__ . '/../language',
-                'pattern'  => '%s.mo',
+                'pattern' => '%s.mo',
             ),
         ),
     ),
@@ -2000,39 +2027,34 @@ return array(
             /*
              * CATALOGO
              */
-
-            'Application\Catalogo\Controller\Usuario'       => 'Application\Catalogo\Controller\UsuarioController',
-            'Application\Catalogo\Controller\Proveedor'     => 'Application\Catalogo\Controller\ProveedorController',
-            'Application\Catalogo\Controller\Iva'           => 'Application\Catalogo\Controller\IvaController',
-            'Application\Catalogo\Controller\Categoria'     => 'Application\Catalogo\Controller\CategoriaController',
-            'Application\Catalogo\Controller\Empresa'       => 'Application\Catalogo\Controller\EmpresaController',
-            'Application\Catalogo\Controller\Almacen'       => 'Application\Catalogo\Controller\AlmacenController',
-            'Application\Catalogo\Controller\Sucursal'      => 'Application\Catalogo\Controller\SucursalController',
-            'Application\Catalogo\Controller\Producto'      => 'Application\Catalogo\Controller\ProductoController',
+            'Application\Catalogo\Controller\Usuario' => 'Application\Catalogo\Controller\UsuarioController',
+            'Application\Catalogo\Controller\Proveedor' => 'Application\Catalogo\Controller\ProveedorController',
+            'Application\Catalogo\Controller\Iva' => 'Application\Catalogo\Controller\IvaController',
+            'Application\Catalogo\Controller\Categoria' => 'Application\Catalogo\Controller\CategoriaController',
+            'Application\Catalogo\Controller\Empresa' => 'Application\Catalogo\Controller\EmpresaController',
+            'Application\Catalogo\Controller\Almacen' => 'Application\Catalogo\Controller\AlmacenController',
+            'Application\Catalogo\Controller\Sucursal' => 'Application\Catalogo\Controller\SucursalController',
+            'Application\Catalogo\Controller\Producto' => 'Application\Catalogo\Controller\ProductoController',
             'Application\Catalogo\Controller\Altaproductos' => 'Application\Catalogo\Controller\AltaproductosController',
             'Application\Catalogo\Controller\Productosasociacion' => 'Application\Catalogo\Controller\ProductosasociacionController',
             'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
-
-            'Application\Catalogo\Controller\Trabajadorespromedio'  => 'Application\Catalogo\Controller\Trabajadorespromediocontroller',
+            'Application\Catalogo\Controller\Trabajadorespromedio' => 'Application\Catalogo\Controller\Trabajadorespromediocontroller',
             /*
              * PROCESO
              */
-
-            'Application\Proceso\Controller\Compra'         => 'Application\Proceso\Controller\CompraController',
-            'Application\Proceso\Controller\Consignacion'   => 'Application\Proceso\Controller\ConsignacionController',
-            'Application\Proceso\Controller\Requisicion'    => 'Application\Proceso\Controller\RequisicionController',
-            'Application\Proceso\Controller\Devolucion'     => 'Application\Proceso\Controller\DevolucionController',
-            'Application\Proceso\Controller\Ingresos'       => 'Application\Proceso\Controller\IngresosController',
-            'Application\Proceso\Controller\Notacredito'    => 'Application\Proceso\Controller\NotacreditoController',
-            'Application\Proceso\Controller\Tablajeria'     => 'Application\Proceso\Controller\TablajeriaController',
-            'Application\Proceso\Controller\Venta'          => 'Application\Proceso\Controller\VentaController',
-            'Application\Proceso\Controller\Comentarios'    => 'Application\Proceso\Controller\ComentariosController',
-            'Application\Proceso\Controller\Ajustesinventarios'    => 'Application\Proceso\Controller\AjustesinventariosController',
-            
+            'Application\Proceso\Controller\Compra' => 'Application\Proceso\Controller\CompraController',
+            'Application\Proceso\Controller\Consignacion' => 'Application\Proceso\Controller\ConsignacionController',
+            'Application\Proceso\Controller\Requisicion' => 'Application\Proceso\Controller\RequisicionController',
+            'Application\Proceso\Controller\Devolucion' => 'Application\Proceso\Controller\DevolucionController',
+            'Application\Proceso\Controller\Ingresos' => 'Application\Proceso\Controller\IngresosController',
+            'Application\Proceso\Controller\Notacredito' => 'Application\Proceso\Controller\NotacreditoController',
+            'Application\Proceso\Controller\Tablajeria' => 'Application\Proceso\Controller\TablajeriaController',
+            'Application\Proceso\Controller\Venta' => 'Application\Proceso\Controller\VentaController',
+            'Application\Proceso\Controller\Comentarios' => 'Application\Proceso\Controller\ComentariosController',
+            'Application\Proceso\Controller\Ajustesinventarios' => 'Application\Proceso\Controller\AjustesinventariosController',
             /*
              * FLUJO EFECTIVO
              */
-
             'Application\Flujoefectivo\Controller\Cuentabancaria' => 'Application\Flujoefectivo\Controller\CuentabancariaController',
             'Application\Flujoefectivo\Controller\Saldoproveedores' => 'Application\Flujoefectivo\Controller\SaldoproveedoresController',
             'Application\Flujoefectivo\Controller\Cuentasporpagar' => 'Application\Flujoefectivo\Controller\CuentasporpagarController',
@@ -2042,14 +2064,13 @@ return array(
             /*
              * REPORTES
              */
-            
             'Application\Reportes\Controller\Reportes' => 'Application\Reportes\Controller\ReportesController',
             //administracion
             /*
              * ADMINISTRACION
              */
-            
-            'Application\Administracion\Controller\Reportes' => 'Application\Administracion\Controller\ReportesController',
+            'Application\Administracion\Controller\Reportes\Cierresinventarios' => 'Application\Administracion\Controller\Reportes\CierresinventariosController',
+            'Application\Administracion\Controller\Reportes\Cardex' => 'Application\Administracion\Controller\Reportes\CardexController',
             /*
              * WEBSITE
              */
@@ -2058,15 +2079,15 @@ return array(
     ),
     'view_manager' => array(
         'display_not_found_reason' => true,
-        'display_exceptions'       => true,
-        'doctype'                  => 'HTML5',
-        'not_found_template'       => 'error/404',
-        'exception_template'       => 'error/index',
+        'display_exceptions' => true,
+        'doctype' => 'HTML5',
+        'not_found_template' => 'error/404',
+        'exception_template' => 'error/index',
         'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/application/layout/layout.phtml',
+            'layout/layout' => __DIR__ . '/../view/application/layout/layout.phtml',
             'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-            'error/404'               => __DIR__ . '/../view/application/layout/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
+            'error/404' => __DIR__ . '/../view/application/layout/error/404.phtml',
+            'error/index' => __DIR__ . '/../view/error/index.phtml',
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view',

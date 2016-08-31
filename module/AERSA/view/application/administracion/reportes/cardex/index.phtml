@@ -1,0 +1,91 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">Cardex</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/administracion/reportes/cardex">Cardex</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    $form->setAttribute('action', '/administracion/reportes/cardex');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <br>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('almacen')) ?>  
+                        <?php echo $this->formSelect($form->get('almacen')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <label id="responsable" name="responsable">Responsable</label>
+                        <br>
+                        <label id="responsable_responsable" name="nombre_responsable"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('fecha')) ?>  
+                        <?php echo $this->formText($form->get('fecha')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('auditor')) ?>  
+                        <?php echo $this->formSelect($form->get('auditor')) ?> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('revisada')) ?>  
+                        <?php echo $this->formSelect($form->get('revisada')) ?> 
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+                <div class="form-actions right">
+                    <button disabled class="btn blue" id="generar" type="button">
+                        <i class="fa fa-check"></i>
+                        Generar
+                    </button>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" style="overflow: scroll; white-space: nowrap;">
+                        <table class="table" id="reporte_table">
+                            <thead>
+                            <th>Fecha</th>
+                            <th>Folio</th>
+                            <th>Proceso</th>
+                            <th>Proveedor</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Existencia</th>
+                            <th>Entrada $</th>
+                            <th>Salida $</th>
+                            <th>Saldo</th>
+                            <th>CP</th>
+                            </thead>
+                            <tbody id="tbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/application/custom/js/administracion/reportes/cardex.js" type="text/javascript"></script>
+<script>
+    var $plugin = $('#my_container').cardex();
+    $plugin.list();
+</script>
