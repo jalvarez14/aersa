@@ -10,7 +10,7 @@
         </ul>
     </div>
     <?php
-    $form->setAttribute('action', '/administracion/reportes/cierresinventarios');
+    $form->setAttribute('action', '/administracion/reportes/cierresinventarios/nuevo');
     echo $this->form()->openTag($form);
     ?>
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
@@ -19,19 +19,20 @@
                 <br>
                 <div class="row">
                     <div class="col-md-4">
-                        <?php echo $this->formLabel($form->get('almacen')) ?>  
-                        <?php echo $this->formSelect($form->get('almacen')) ?> 
+                        <?php echo $this->formLabel($form->get('idalmacen')) ?>  
+                        <?php echo $this->formSelect($form->get('idalmacen')) ?> 
                     </div>
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
+                        <?php echo $this->formHidden($form->get('inventariomes_fecha')) ?>  
                         <?php echo $this->formLabel($form->get('fecha')) ?>  
                         <?php echo $this->formText($form->get('fecha')) ?> 
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <?php echo $this->formLabel($form->get('auditor')) ?>  
-                        <?php echo $this->formSelect($form->get('auditor')) ?> 
+                        <?php echo $this->formLabel($form->get('idauditor')) ?>  
+                        <?php echo $this->formSelect($form->get('idauditor')) ?> 
                     </div>
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
@@ -42,6 +43,12 @@
                         </div>
                     </div>                        
                 </div>
+                <div id="revisada" class="row" style="display: none">
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('inventariomes_revisada')) ?>  
+                        <?php echo $this->formSelect($form->get('inventariomes_revisada')) ?> 
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <p>(*)Campos obligatorios</p>
@@ -51,30 +58,36 @@
                     <div class="col-md-12" style="overflow: scroll; white-space: nowrap;">
                         <table class="table" id="reporte_table">
                             <thead>
-                                <th>ID</th>
-                                <th>Nomb</th>
-                                <th>ExistIni</th>
-                                <th>Cmpr</th>
-                                <th>ReqIng</th>
-                                <th>OrdTabIng</th>
-                                <th>Vnt</th>
-                                <th>ReqEg</th>
-                                <th>OrdTabEg</th>
-                                <th>Dev</th>
-                                <th>StT</th>
-                                <th>Unid</th>
-                                <th>StF</th>
-                                <th>Dif</th>
-                                <th>CostProm</th>
-                                <th>DifImp</th>
+                            <th>ID</th>
+                            <th>Nomb</th>
+                            <th>ExistIni</th>
+                            <th>Cmpr</th>
+                            <th>ReqIng</th>
+                            <th>OrdTabIng</th>
+                            <th>Vnt</th>
+                            <th>ReqEg</th>
+                            <th>OrdTabEg</th>
+                            <th>Dev</th>
+                            <th>StT</th>
+                            <th>Unid</th>
+                            <th>StF</th>
+                            <th>ImpFis</th>
+                            <th>Dif</th>
+                            <th>CostProm</th>
+                            <th>DifImp</th>
+                            <th>Revisado</th>
                             </thead>
                             <tbody id="tbody">
-                                
                             </tbody>
                         </table>
                     </div>
                 </div>
-                
+                <div id="boton_g" name="boton_g" class="form-actions right" style="display: none">
+                    <button class="btn blue" id="plantilla_save" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
