@@ -11,7 +11,7 @@ class CierresinventariosForm extends Form {
         parent::__construct('cierresinventariosForm');
         
         $this->add(array(
-            'name' => 'almacen',
+            'name' => 'idalmacen',
             'type' => 'Select',
             'attributes' => array(
                 'required' => true,
@@ -21,6 +21,15 @@ class CierresinventariosForm extends Form {
                 'label' => 'Alamacen *',
                 'empty_option' => 'Seleccione un almacen',
                 'value_options' => $almacen_array,
+            ),
+        ));
+        
+        $this->add(array(
+           'name'  => 'inventariomes_fecha',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => false,
+                'value' => $fecha,
             ),
         ));
         
@@ -39,7 +48,7 @@ class CierresinventariosForm extends Form {
         ));
         
         $this->add(array(
-            'name' => 'auditor',
+            'name' => 'idauditor',
             'type' => 'Select',
             'attributes' => array(
                 'required' => true,
@@ -51,6 +60,23 @@ class CierresinventariosForm extends Form {
                 'value_options' => $auditor_array,
             ),
         ));
+        
+        $this->add(array(
+            'name' => 'inventariomes_revisada',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Revisión *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                    1 => 'Revisada',
+                    0 => 'No revisada',
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        )); 
         
     }
    
