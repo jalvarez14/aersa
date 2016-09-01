@@ -86,16 +86,80 @@
         }
         
         var calcular = function ($tr) {
+            var table=$('#reporte_table');
             var stfisico = $tr.find('input[name*=inventariomesdetalle_stockfisico]').val();
+            var stteorico = $tr.find('input[name*=inventariomesdetalle_stockteorico]').val();
             var costoPromedio=$tr.find('input[name*=inventariomesdetalle_costopromedio]').val();
-            alert(costoPromedio);
             var impFis= stfisico * costoPromedio;
-            alert($tr.find('td.inventariomesdetalle_importefisico').html());
-            $tr.find('td.inventariomesdetalle_importefisico').html(impFis+"a");
+            var difImpprev=$tr.find('input[name*=inventariomesdetalle_difimporte]').val();
+            var impFisprev=$tr.find('input[name*=inventariomesdetalle_importefisico]').val();
             
-            //$impFis = $stockFisico * $costoPromedio;
-            //$tr.find('td.requisiciondetalle_subtotal').text(accounting.formatMoney(row_subtotal));
-            //alert(cantidad);
+            $tr.find('td.inventariomesdetalle_importefisico span').html(impFis);
+            $tr.find('input[name*=inventariomesdetalle_importefisico]').val(impFis);
+            
+            var dif = stteorico - stfisico;
+            
+            $tr.find('td.inventariomesdetalle_diferencia span').html(dif);
+            $tr.find('input[name*=inventariomesdetalle_diferencia]').val(dif);
+            
+            var difImporte = dif * costoPromedio;
+            
+            $tr.find('td.inventariomesdetalle_difimporte span').html(difImporte);
+            $tr.find('input[name*=inventariomesdetalle_difimporte]').val(difImporte);
+            
+            var cat=$tr.find('input[name*=idcategoria]').val();
+            
+            if(cat==1) {
+                var falim=table.find('input[name*=inventariomes_finalalimentos]').val();
+                falim-=impFisprev;
+                falim+=impFis;
+                table.find('input[name*=inventariomes_finalalimentos]').val(falim);
+                table.find("td.inventariomes_finalalimentos span").html(falim);
+            }
+            if(cat==2) {
+                var fbeb=table.find('input[name*=inventariomes_finalbebidas]').val();
+                fbeb-=impFisprev;
+                fbeb+=impFis;
+                table.find('input[name*=inventariomes_finalbebidas]').val(fbeb);
+                table.find("td.inventariomes_finalbebidas span").html(fbeb);
+            }
+            
+            if(difImpprev<0) {
+                var faltante=table.find("td.inventariomes_faltantes span").html();
+                faltante-=difImpprev;
+                table.find("td.inventariomes_faltantes span").html(faltante);
+                table.find('input[name*=inventariomes_faltantes]').val(faltante);
+            } else {
+                var sobrante=table.find("td.inventariomes_sobrantes span").html();
+                sobrante-=difImpprev;
+                table.find("td.inventariomes_sobrantes span").html(sobrante);
+                table.find('input[name*=inventariomes_sobrantes]').val(sobrante);
+            }
+            
+            var sobrante=parseFloat(table.find("td.inventariomes_sobrantes span").html());
+            var faltante=parseFloat(table.find("td.inventariomes_faltantes span").html());
+            
+            if(difImporte<0) {
+                faltante=faltante+difImporte;
+            } else {
+                sobrante=sobrante+difImporte;
+            }
+            
+            table.find("td.inventariomes_faltantes span").html(faltante);
+            table.find('input[name*=inventariomes_faltantes]').val(faltante);
+            
+            table.find("td.inventariomes_sobrantes span").html(sobrante);
+            table.find('input[name*=inventariomes_sobrantes]').val(sobrante);
+            
+            var total = sobrante + faltante;
+            table.find("td.inventariomes_total span").html(total);
+            table.find('input[name*=inventariomes_total]').val(total);
+            
+            var impFisTotal=table.find('input[name*=inventariomes_totalimportefisico]').val();
+            impFisTotal-=impFisprev;
+            impFisTotal+=impFis;
+            table.find("td.inventariomes_totalimportefisico span").html(total);
+            table.find('input[name*=inventariomes_totalimportefisico]').val(impFisTotal);
         }
         /*
          * Public methods
