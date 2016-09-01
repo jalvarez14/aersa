@@ -57,7 +57,46 @@
             });
             return result;
         }
+        
+        var revisadaControl = function () {
+            $('select[name=inventariomes_revisada]').on('change', function () {
+                var selected = $('select[name=inventariomes_revisada] option:selected').val();
 
+                if (selected == 1) {
+                    $container.find('table input:checkbox').prop('checked', true)
+                    //$('#productos_table tbody input[type=checkbox]').prop('checked', true);
+                } else {
+                    //$container.find('table input:checkbox').prop('checked', false)
+                    $('#reporte_table tbody input[type=checkbox]').prop('checked', false);
+                }
+            });
+            $('#reporte_table tbody input[type=checkbox]').on('change', function () {
+                var all_checked = true;
+                $('#reporte_table tbody input[type=checkbox]').filter(function () {
+                    if (!$(this).prop('checked')) {
+                        all_checked = false;
+                    }
+                });
+                if (!all_checked) {
+                    $('select[name=inventariomes_revisada]').val(0);
+                } else {
+                    $('select[name=inventariomes_revisada]').val(1);
+                }
+            });
+        }
+        
+        var calcular = function ($tr) {
+            var stfisico = $tr.find('input[name*=inventariomesdetalle_stockfisico]').val();
+            var costoPromedio=$tr.find('input[name*=inventariomesdetalle_costopromedio]').val();
+            alert(costoPromedio);
+            var impFis= stfisico * costoPromedio;
+            alert($tr.find('td.inventariomesdetalle_importefisico').html());
+            $tr.find('td.inventariomesdetalle_importefisico').html(impFis+"a");
+            
+            //$impFis = $stockFisico * $costoPromedio;
+            //$tr.find('td.requisiciondetalle_subtotal').text(accounting.formatMoney(row_subtotal));
+            //alert(cantidad);
+        }
         /*
          * Public methods
          */
@@ -112,8 +151,8 @@
             });
             $('input[name=batch_inventario]').on('change', function () {
                 if ($('select[name=auditor]').val() != "" && $('select[name=almacen]').val() != "") {
-                    var auditor = $('select[name=auditor]').val();
-                    var almacen = $('select[name=almacen]').val();
+                    var auditor = $('select[name=idauditor]').val();
+                    var almacen = $('select[name=idalmacen]').val();
                     var empty = false;
                     var val = $('input[name=batch_inventario]').val();
                     if (val == "") {
@@ -154,44 +193,33 @@
                                             for (var k in data) {
                                                 table.append(data[k]);
                                             }
+                                            $container.find('#boton_g').slideDown();
+                                            $container.find('#revisada').slideDown();
+                                            revisadaControl();
+                                            $container.find('input').numeric();
+                                            $('#reporte_table tbody input[type=text]').on('change', function () {
+                                                var $tr = $(this).closest("tr");
+                                                calcular($tr);//mandar el total
+                                            });
+                                        } else {
+                                            $('#reporte_table > tbody').empty();
+                                            $container.find('#boton_g').slideUp();
+                                            $container.find('#revisada').slideUp();
                                         }
                                     }
                                 })
-
-
-//                           for (var k in workbook_array) {
-//                               console.log(workbook_array[k]);
-//                           }
-
-
-//                            if(workbook_array[first_sheet_name].length > 0){
-//                                $.ajax({
-//                                    url:'/catalogo/proveedor/batch',
-//                                    type: 'POST',
-//                                    dataType: 'json',
-//                                    data:{proveedores:workbook_array[first_sheet_name]},
-//                                    beforeSend: function (xhr) {
-//                                        $('body').addClass('loading');
-//                                    },
-//                                    success: function (data, textStatus, jqXHR) {
-//                                        $('body').removeClass('loading');
-//                                        if(data.response){
-//                                            window.location = '/catalogo/proveedor';
-//                                        }
-//                                    }
-//                                })
-//                            }
                             }
                             reader.readAsBinaryString(f);
-
                         }
-
                     }
                 } else {
                     alert("Selecciona un almacen y auditor");
                 }
 
             });
+            revisadaControl();
+            
+            
         }
 
         /*
