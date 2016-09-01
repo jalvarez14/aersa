@@ -48,9 +48,9 @@
                             ?>
                             <tr date="<?php echo $entity->getIngresoFecha('Y/m/d') ?>" id="<?php echo $entity->getIdingreso() ?>">
                                 <td><?php echo $entity->getIngresoFecha('d/m/Y') ?></td>
-                                <td><?php echo money_format('%(#10n',$entity->getingresoTotalalimento()) ?></td>
-                                <td><?php echo money_format('%(#10n',$entity->getingresoTotalbebida()) ?></td>
-                                <td><?php echo money_format('%(#10n',$entity->getingresoTotalmiscelanea()) ?></td>
+                                <td><?php echo money_format('%+#1.6n',$entity->getingresoTotalalimento()) ?></td>
+                                <td><?php echo money_format('%+#1.6n',$entity->getingresoTotalbebida()) ?></td>
+                                <td><?php echo money_format('%+#1.6n',$entity->getingresoTotalmiscelanea()) ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
                                 <td>                                    
                                     <div class="btn-group">

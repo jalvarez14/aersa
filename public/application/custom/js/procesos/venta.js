@@ -177,8 +177,8 @@
 
                                     if(count < numRequests){
                                         
-                                        var subtotal = parseFloat(ventas_array[count].subtotal);
-                                        var cantidad = parseFloat(ventas_array[count].cantidad);
+                                        var subtotal = parseFloat(parseFloat(ventas_array[count].subtotal).toFixed(6));
+                                        var cantidad = parseFloat(parseFloat(ventas_array[count].cantidad).toFixed(6));
                                         var producto = ventas_array[count].nombre;
 
                                         var precio_unitario = subtotal / cantidad;
@@ -550,7 +550,7 @@
                                                                                             }
                                                                                             $('#productos_table tbody').append($tr);
 
-                                                                                            total = total + parseFloat(subtotal);
+                                                                                            total = total + parseFloat(parseFloat(subtotal).toFixed(6));
                                                                                             $('#total').text(accounting.formatMoney(total));
                                                                                             $('input[name=venta_total]').val(total);
                                                                                             $modal.modal('hide');
@@ -995,7 +995,7 @@
                                                                                                             }
                                                                                                             $('#productos_table tbody').append($tr);
 
-                                                                                                            total = total + parseFloat(subtotal);
+                                                                                                            total = total + parseFloat(parseFloat(subtotal).toFixed(6));
                                                                                                             $('#total').text(accounting.formatMoney(total));
                                                                                                             $('input[name=venta_total]').val(total);
                                                                                                             $modal.modal('hide');
@@ -1072,7 +1072,7 @@
                                                         
                                                         $('#productos_table tbody').append($tr);
                                                         
-                                                        total = total + parseFloat(subtotal);
+                                                        total = total + parseFloat(parseFloat(subtotal).toFixed(6));
                                                         $('#total').text(accounting.formatMoney(total));
                                                         $('input[name=venta_total]').val(total);
                                                         
@@ -1236,7 +1236,7 @@
            $('#productos_table tbody .fa-list').on('click',function(){
                var idproducto = $(this).closest('tr').attr('idproducto');
                var producto = $(this).closest('tr').find('td').eq(0).text();
-               var cantidad = parseFloat($(this).closest('tr').find('td').eq(2).text());
+               var cantidad = parseFloat(parseFloat($(this).closest('tr').find('td').eq(2).text()).toFixed(6));
                $.ajax({
                     url: '/procesos/venta/getreceta',
                     type: 'POST',

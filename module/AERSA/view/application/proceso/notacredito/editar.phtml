@@ -156,7 +156,7 @@
                                     </td>
                                     
                                     <td class="costo_unitario">
-                                        <?php echo money_format('%(#10n',$detalle->getNotacreditodetalleCostounitarioneto())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getNotacreditodetalleCostounitarioneto())?>
                                     </td>
                                     
                                     <td>
@@ -166,7 +166,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdnotacreditodetalle()?>][ieps]" value="<?php echo $detalle->getNotacreditodetalleIeps()?>"> 
                                     </td>
                                     <td class="subtotal" >
-                                        <?php echo money_format('%(#10n',$detalle->getNotacreditodetalleSubtotal())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getNotacreditodetalleSubtotal())?>
                                     </td>
                                     <td>
                                         <?php if($detalle->getNotacreditodetalleRevisada()) :?>
@@ -197,25 +197,25 @@
                                     <td colspan="8"></td>
                                     <td>SUBTOTAL</td>
                                     <?php echo $this->formHidden($form->get('notacredito_subtotal')) ?> 
-                                    <td id="subtotal"><?php echo money_format('%(#10n',$entity->getNotacreditoSubtotal())?></td>
+                                    <td id="subtotal"><?php echo money_format('%+#1.6n',$entity->getNotacreditoSubtotal())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IEPS</td>
                                     <?php echo $this->formHidden($form->get('notacredito_ieps')) ?> 
-                                    <td id="ieps"><?php echo money_format('%(#10n',$entity->getNotacreditoIeps())?></td>
+                                    <td id="ieps"><?php echo money_format('%+#1.6n',$entity->getNotacreditoIeps())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IVA</td>
                                     <?php echo $this->formHidden($form->get('notacredito_iva')) ?> 
-                                    <td id="iva"><?php echo money_format('%(#10n',$entity->getNotacreditoIva())?></td>
+                                    <td id="iva"><?php echo money_format('%+#1.6n',$entity->getNotacreditoIva())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>TOTAL</td>
                                     <?php echo $this->formHidden($form->get('notacredito_total')) ?> 
-                                    <td id="total"><?php echo money_format('%(#10n',$entity->getNotacreditoTotal())?></td>
+                                    <td id="total"><?php echo money_format('%+#1.6n',$entity->getNotacreditoTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>

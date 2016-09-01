@@ -163,7 +163,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdcompradetalle()?>][precio]" value="<?php echo $detalle->getCompradetallePrecio()?>"> 
                                     </td>
                                     <td>
-                                        <?php echo money_format('%(#10n',$detalle->getCompradetalleCostounitario())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getCompradetalleCostounitario())?>
                                     </td>
                                     <td>
                                         <input type="text" name="productos[<?php echo $detalle->getIdcompradetalle()?>][descuento]" value="<?php echo $detalle->getCompradetalleDescuento()?>"> 
@@ -172,7 +172,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdcompradetalle()?>][ieps]" value="<?php echo $detalle->getCompradetalleIeps()?>"> 
                                     </td>
                                     <td class="subtotal">
-                                        <?php echo money_format('%(#10n',$detalle->getCompradetalleSubtotal())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getCompradetalleSubtotal())?>
                                     </td>
                                     <td>
                                         <?php if($detalle->getCompradetalleRevisada()) :?>
@@ -220,25 +220,25 @@
                                     <td colspan="8"></td>
                                     <td>SUBTOTAL</td>
                                     <?php echo $this->formHidden($form->get('compra_subtotal')) ?> 
-                                    <td id="subtotal"><?php echo money_format('%(#10n',$entity->getCompraSubtotal())?></td>
+                                    <td id="subtotal"><?php echo money_format('%+#1.6n',$entity->getCompraSubtotal())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IEPS</td>
                                     <?php echo $this->formHidden($form->get('compra_ieps')) ?> 
-                                    <td id="ieps"><?php echo money_format('%(#10n',$entity->getCompraIeps())?></td>
+                                    <td id="ieps"><?php echo money_format('%+#1.6n',$entity->getCompraIeps())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IVA</td>
                                     <?php echo $this->formHidden($form->get('compra_iva')) ?> 
-                                    <td id="iva"><?php echo money_format('%(#10n',$entity->getCompraIva())?></td>
+                                    <td id="iva"><?php echo money_format('%+#1.6n',$entity->getCompraIva())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>TOTAL</td>
                                     <?php echo $this->formHidden($form->get('compra_total')) ?> 
-                                    <td id="total"><?php echo money_format('%(#10n',$entity->getCompraTotal())?></td>
+                                    <td id="total"><?php echo money_format('%+#1.6n',$entity->getCompraTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>

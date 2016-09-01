@@ -141,7 +141,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][requisiciondetalle_preciounitario]" value="<?php echo $detalle->getRequisiciondetallePreciounitario()?>"> 
                                     </td>
                                     <td class="requisiciondetalle_subtotal">
-                                        <?php echo "$".money_format('%(#10n',$detalle->getRequisiciondetalleSubtotal())?>
+                                        <?php echo "$".money_format('%+#1.6n',$detalle->getRequisiciondetalleSubtotal())?>
                                     </td>
                                     <td>
                                         <?php if($detalle->getRequisiciondetalleRevisada()) :?>
@@ -166,7 +166,7 @@
                                     <td colspan="8"></td>
                                     <td>TOTAL</td>
                                     <?php echo $this->formHidden($form->get('requisicion_total')) ?> 
-                                    <td id="total"><?php echo '$'.money_format('%(#10n',$entity->getRequisicionTotal())?></td>
+                                    <td id="total"><?php echo '$'.money_format('%+#1.6n',$entity->getRequisicionTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>

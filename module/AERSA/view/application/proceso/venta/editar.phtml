@@ -102,8 +102,8 @@
                                     <td><?php echo $detalle->getProducto()->getProductoNombre()?></td>
                                     <td><?php echo $detalle->getAlmacen()->getAlmacenNombre()?></td>
                                     <td><?php echo $detalle->getVentadetalleCantidad()?></td>
-                                    <td><?php echo money_format('%(#1n',$precio_unitario)?></td>
-                                    <td><?php echo money_format('%(#1n',$detalle->getVentadetalleSubtotal())?></td>
+                                    <td><?php echo money_format('%+#1.6n',$precio_unitario)?></td>
+                                    <td><?php echo money_format('%+#1.6n',$detalle->getVentadetalleSubtotal())?></td>
                                     <td>
                                         <?php if($detalle->getVentadetalleRevisada()) :?>
                                             <input checked type="checkbox" name=productos[<?php echo $detalle->getIdventadetalle()?>][revisada]>
@@ -120,7 +120,7 @@
                                     <td colspan="3"></td>
                                     <td>TOTAL</td>
                                     <input type="hidden" name="venta_total" value="<?php echo $entity->getVentaTotal()?>">
-                                    <td style="padding-left: 8px;" colspan="3" id="total"><?php echo money_format('%(#1n',$entity->getVentaTotal())?></td>
+                                    <td style="padding-left: 8px;" colspan="3" id="total"><?php echo money_format('%+#1.6n',$entity->getVentaTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>

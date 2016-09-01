@@ -49,7 +49,7 @@
                             ?>
                             <tr date="<?php echo $entity->getVentaFechaventa('Y/m/d') ?>" id="<?php echo $entity->getIdventa() ?>">
                                 <td><?php echo $entity->getVentaFechaventa('d/m/Y') ?></td>
-                                <td><?php echo money_format('%(#10n',$entity->getVentaTotal()) ?></td>
+                                <td><?php echo money_format('%+#1.6n',$entity->getVentaTotal()) ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
                                 <td>                                    
                                     <div class="btn-group">

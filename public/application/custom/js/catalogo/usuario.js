@@ -195,6 +195,20 @@
                                 $.each(workbook_array[first_sheet_name],function(index,row){
                                     
                                     if(typeof row.Nombre != 'undefined' && typeof row.Unidad != 'undefined' && typeof row.Categoria != 'undefined' && typeof row.SubCategoria != 'undefined' && typeof row.Rendimiento != 'undefined' && typeof row.PrecioVenta != 'undefined' && typeof row.Costo != 'undefined' && typeof row.Tipo != 'undefined' && typeof row.IVA != 'undefined' && typeof row.Baja != 'undefined'){
+                                        
+                                        var iva = row.IVA.toLowerCase(); 
+                                        if(iva == "si"){
+                                            row.IVA = 1;
+                                        }else{
+                                            row.IVA = 0;
+                                        }
+                                        
+                                        var baja = row.Baja.toLowerCase(); 
+                                        if(baja == "si"){
+                                            row.Baja = 1;
+                                        }else{
+                                            row.Baja = 0;
+                                        }
                                         var tmp = {
                                             producto_nombre:row.Nombre,
                                             producto_unidad:row.Unidad,

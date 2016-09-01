@@ -97,7 +97,7 @@ class ProductoController extends AbstractActionController
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-
+        
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
         
         //SI SE TRATA DE UN ADMIN DE AERSA
@@ -120,6 +120,10 @@ class ProductoController extends AbstractActionController
     
     public function nuevoAction()
     {
+        
+
+        
+        
         $request = $this->getRequest();
         
         $categorias = array();

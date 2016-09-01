@@ -157,7 +157,7 @@
                                     </td>
                                     
                                     <td class="costo_unitario">
-                                        <?php echo money_format('%(#10n',$detalle->getDevoluciondetalleCostounitarioneto())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getDevoluciondetalleCostounitarioneto())?>
                                     </td>
                                     
                                     <td>
@@ -167,7 +167,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIddevoluciondetalle()?>][ieps]" value="<?php echo $detalle->getDevoluciondetalleIeps()?>"> 
                                     </td>
                                     <td class="subtotal">
-                                        <?php echo money_format('%(#10n',$detalle->getDevoluciondetalleSubtotal())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getDevoluciondetalleSubtotal())?>
                                     </td>
                                     <td>
                                         <?php if($detalle->getDevoluciondetalleRevisada()) :?>
@@ -198,25 +198,25 @@
                                     <td colspan="8"></td>
                                     <td>SUBTOTAL</td>
                                     <?php echo $this->formHidden($form->get('devolucion_subtotal')) ?> 
-                                    <td id="subtotal"><?php echo money_format('%(#10n',$entity->getDevolucionSubtotal())?></td>
+                                    <td id="subtotal"><?php echo money_format('%+#1.6n',$entity->getDevolucionSubtotal())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IEPS</td>
                                     <?php echo $this->formHidden($form->get('devolucion_ieps')) ?> 
-                                    <td id="ieps"><?php echo money_format('%(#10n',$entity->getDevolucionIeps())?></td>
+                                    <td id="ieps"><?php echo money_format('%+#1.6n',$entity->getDevolucionIeps())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>IVA</td>
                                     <?php echo $this->formHidden($form->get('devolucion_iva')) ?> 
-                                    <td id="iva"><?php echo money_format('%(#10n',$entity->getDevolucionIva())?></td>
+                                    <td id="iva"><?php echo money_format('%+#1.6n',$entity->getDevolucionIva())?></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"></td>
                                     <td>TOTAL</td>
                                     <?php echo $this->formHidden($form->get('devolucion_total')) ?> 
-                                    <td id="total"><?php echo money_format('%(#10n',$entity->getDevolucionTotal())?></td>
+                                    <td id="total"><?php echo money_format('%+#1.6n',$entity->getDevolucionTotal())?></td>
                                 </tr>
                             </tfoot>
                         </table>

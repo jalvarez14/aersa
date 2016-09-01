@@ -278,8 +278,8 @@ class TablajeriaController extends AbstractActionController {
             $form->get('ordentablajeria_folio')->setAttribute('class', 'form-control valid');
 
             //MONEY FORMAT
-            $form->get('ordentablajeria_preciokilo')->setValue(money_format('%(#1n',$entity->getOrdentablajeriaPreciokilo()));
-            $form->get('ordentablajeria_totalbruto')->setValue(money_format('%(#1n',$entity->getOrdentablajeriaTotalbruto()));
+            $form->get('ordentablajeria_preciokilo')->setValue(money_format('%+#1.6n',$entity->getOrdentablajeriaPreciokilo()));
+            $form->get('ordentablajeria_totalbruto')->setValue(money_format('%+#1.6n',$entity->getOrdentablajeriaTotalbruto()));
             
             //LOS DETALLES DE LA DEVOLUCION
             $detalles = \OrdentablajeriadetalleQuery::create()->filterByIdordentablajeria($entity->getIdordentablajeria())->find();

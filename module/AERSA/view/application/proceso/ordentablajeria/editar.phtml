@@ -225,10 +225,10 @@
                                         <?php echo $detalle->getOrdentablajeriadetallePesototal()?>
                                     </td>
                                     <td class="precioporcion">
-                                        <?php echo money_format('%(#1n',$detalle->getOrdentablajeriadetallePrecioporcion())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getOrdentablajeriadetallePrecioporcion())?>
                                     </td>
                                     <td class="importe">
-                                        <?php echo money_format('%(#1n',$detalle->getOrdentablajeriadetalleSubtotal())?>
+                                        <?php echo money_format('%+#1.6n',$detalle->getOrdentablajeriadetalleSubtotal())?>
                                     </td>
                                     <td>
                                         <?php if($detalle->getOrdentablajeriadetalleRevisada()) :?>

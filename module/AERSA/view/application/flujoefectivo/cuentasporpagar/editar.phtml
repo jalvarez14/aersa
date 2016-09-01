@@ -39,7 +39,7 @@
                         
                         <h3 class="page-title">Información general</h3>
                         <h5>Proveedor: <?php echo $compra->getProveedor()->getProveedorNombrecomercial()?>, Folio: <?php echo $compra->getCompraFolio()?>, Fecha: <?php echo $compra->getCompraFechacompra('d/m/Y')?></h5>
-                        <h5>Total: <?php echo money_format('%(#10n',$total) ?>, Restan: <?php echo money_format('%(#10n',$restan) ?></h5>
+                        <h5>Total: <?php echo money_format('%+#1.6n',$total) ?>, Restan: <?php echo money_format('%+#1.6n',$restan) ?></h5>
                         <div class="form-group">
                             <div class="col-md-6">
                                 <?php echo $this->formHidden($form->get('idcompra')) ?> 
@@ -50,7 +50,7 @@
                             <div class="col-md-6">
                                 <?php echo $this->formLabel($form->get('flujoefectivo_pago')) ?>  
                                 <?php echo $this->formSelect($form->get('flujoefectivo_pago')) ?> 
-                                <span id="abonoproveedor" style="display:none;color: green">Abono proveedor: <?php echo money_format('%(#10n',$abonoproveedor)?></span>
+                                <span id="abonoproveedor" style="display:none;color: green">Abono proveedor: <?php echo money_format('%+#1.6n',$abonoproveedor)?></span>
                             </div>
                             
                         </div>
@@ -165,7 +165,7 @@
                                         <td><?php echo $movimiento->getFlujoefectivoFecha('d/m/Y')?></td>
                                         <td><span class="label label-sm label-info"> <?php echo ucfirst($movimiento->getFlujoefectivoPago()) ?> </span></td>
                                         <td><?php echo $cuenta?></td>
-                                        <td> <?php echo money_format('%(#10n',$movimiento->getFlujoefectivoCantidad()) ?></td>
+                                        <td> <?php echo money_format('%+#1.6n',$movimiento->getFlujoefectivoCantidad()) ?></td>
                                         <td><?php echo $medio?></td>
                                         <td><?php echo $referencia?></td>
                                         <td><?php echo $comprobante?></td>

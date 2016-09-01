@@ -130,7 +130,7 @@ class ReportesController extends AbstractActionController {
                             if (isset($pagos[$i + 1]['idcompra'])) {
                                 if ($pagos[$i + 1]['idcompra'] == $idcompra) {
                                     $i++;
-                                    $saldo = number_format($pagos[$i]['saldo'], 5);
+                                    $saldo = number_format($pagos[$i]['saldo'], 6);
                                 } else
                                     break;
                             } else
@@ -145,24 +145,24 @@ class ReportesController extends AbstractActionController {
                                     $reporte[$categoria][$pagos[$i]['banco']] += $pendiente;
                                 else
                                     $reporte[$categoria][$pagos[$i]['banco']] = $pendiente;
-                                $saldo = number_format($saldo - $pendiente, 5);
+                                $saldo = number_format($saldo - $pendiente, 6);
                                 $pendiente = 0;
                                 $cantidadpagar = 0;
                             } else {
                                 //echo "else de pendiente $pendiente <br>";
                                 if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                     $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
-                                    $pendiente -= number_format($saldo, 5);
+                                    $pendiente -= number_format($saldo, 6);
                                 } else {
                                     $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
-                                    $pendiente -= number_format($saldo, 5);
+                                    $pendiente -= number_format($saldo, 6);
                                 }
-                                $saldo = number_format($pendiente, 5);
+                                $saldo = number_format($pendiente, 6);
                                 $saldo = $saldo * -1;
                             }
                         } else {
                             //echo "sin pendiente <br>";
-                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 6) : number_format($compradetalle->getCompradetalleSubtotal(), 6);
                             $cantidadpagar = str_replace(",", "", $cantidadpagar);
                             //echo "cantidad a pagar $cantidadpagar y saldo $saldo <br>";
                             if ($saldo >= $cantidadpagar) {
@@ -171,7 +171,7 @@ class ReportesController extends AbstractActionController {
                                     $reporte[$categoria][$pagos[$i]['banco']] += $cantidadpagar;
                                 else
                                     $reporte[$categoria][$pagos[$i]['banco']] = $cantidadpagar;
-                                $saldo = number_format($saldo - $cantidadpagar, 5);
+                                $saldo = number_format($saldo - $cantidadpagar, 6);
                                 $saldo = str_replace(",", "", $saldo);
                                 $cantidadpagar = 0;
                             } else {
@@ -179,15 +179,15 @@ class ReportesController extends AbstractActionController {
                                 if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                     //echo "envio de saldo a reporte if<br>";
                                     $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
-                                    $pendiente = number_format(($cantidadpagar - $saldo), 5);
+                                    $pendiente = number_format(($cantidadpagar - $saldo), 6);
                                 } else {
                                     //echo "envio de saldo a reporte else<br>";
                                     $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
-                                    $pendiente = number_format(($cantidadpagar - $saldo), 5);
+                                    $pendiente = number_format(($cantidadpagar - $saldo), 6);
                                 }
-                                $saldo = number_format(($saldo - $cantidadpagar), 5);
+                                $saldo = number_format(($saldo - $cantidadpagar), 6);
                                 $saldo = str_replace(",", "", $saldo);
-                                $cantidadpagar = number_format($pendiente, 5);
+                                $cantidadpagar = number_format($pendiente, 6);
                             }
                         }
                     } while ($cantidadpagar != 0 || $i < count($pagos));
@@ -253,7 +253,7 @@ class ReportesController extends AbstractActionController {
                     $valuefila['banco' . $i] = $cantidadbanco;
                 }
                 $valuefila['total'] = $totalf;
-                $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
+                $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 6) : 0;
                 $valuefila['pct'] = $porcentaje;
                 $reportec[$fila] = $valuefila;
 
@@ -277,7 +277,7 @@ class ReportesController extends AbstractActionController {
                         $valuefila['banco' . $i] = $cantidadbanco;
                     }
                     $valuefila['total'] = $totalf;
-                    $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
+                    $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 6) : 0;
                     $valuefila['pct'] = $porcentaje;
                     $reportesc[$fila] = $valuefila;
                     $fila++;
@@ -409,7 +409,7 @@ class ReportesController extends AbstractActionController {
             }
             $valuefila['total'] = $totalf;
             if ($totalf != 0)
-                $porcentaje = number_format(($totalf * 100) / $totali, 2);
+                $porcentaje = number_format(($totalf * 100) / $totali, 6);
             else
                 $porcentaje = 0;
             $valuefila['pct'] = $porcentaje;
@@ -453,7 +453,7 @@ class ReportesController extends AbstractActionController {
             $compradetalle = new \Compradetalle();
             $pendiente = 0;
             $cantidadpagar = 0;
-            $saldo = number_format($pagos[$i]['saldo'], 5);
+            $saldo = number_format($pagos[$i]['saldo'], 6);
             $saldo = str_replace(",", "", $saldo);
             foreach ($comprasdetalles as $compradetalle) {
                 do {
@@ -462,7 +462,7 @@ class ReportesController extends AbstractActionController {
                         if (isset($pagos[$i + 1]['idcompra'])) {
                             if ($pagos[$i + 1]['idcompra'] == $idcompra) {
                                 $i++;
-                                $saldo = number_format($pagos[$i]['saldo'], 5);
+                                $saldo = number_format($pagos[$i]['saldo'], 6);
                             } else
                                 break;
                         } else
@@ -477,24 +477,24 @@ class ReportesController extends AbstractActionController {
                                 $reporte[$categoria][$pagos[$i]['banco']] += $pendiente;
                             else
                                 $reporte[$categoria][$pagos[$i]['banco']] = $pendiente;
-                            $saldo = number_format($saldo - $pendiente, 5);
+                            $saldo = number_format($saldo - $pendiente, 6);
                             $pendiente = 0;
                             $cantidadpagar = 0;
                         } else {
                             //echo "else de pendiente $pendiente <br>";
                             if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                 $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
-                                $pendiente -= number_format($saldo, 5);
+                                $pendiente -= number_format($saldo, 6);
                             } else {
                                 $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
-                                $pendiente -= number_format($saldo, 5);
+                                $pendiente -= number_format($saldo, 6);
                             }
-                            $saldo = number_format($pendiente, 5);
+                            $saldo = number_format($pendiente, 6);
                             $saldo = $saldo * -1;
                         }
                     } else {
                         //echo "sin pendiente <br>";
-                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 6) : number_format($compradetalle->getCompradetalleSubtotal(), 6);
                         $cantidadpagar = str_replace(",", "", $cantidadpagar);
                         //echo "cantidad a pagar $cantidadpagar y saldo $saldo <br>";
                         if ($saldo >= $cantidadpagar) {
@@ -503,7 +503,7 @@ class ReportesController extends AbstractActionController {
                                 $reporte[$categoria][$pagos[$i]['banco']] += $cantidadpagar;
                             else
                                 $reporte[$categoria][$pagos[$i]['banco']] = $cantidadpagar;
-                            $saldo = number_format($saldo - $cantidadpagar, 5);
+                            $saldo = number_format($saldo - $cantidadpagar, 6);
                             $saldo = str_replace(",", "", $saldo);
                             $cantidadpagar = 0;
                         } else {
@@ -511,15 +511,15 @@ class ReportesController extends AbstractActionController {
                             if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
                                 //echo "envio de saldo a reporte if<br>";
                                 $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
-                                $pendiente = number_format(($cantidadpagar - $saldo), 5);
+                                $pendiente = number_format(($cantidadpagar - $saldo), 6);
                             } else {
                                 //echo "envio de saldo a reporte else<br>";
                                 $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
-                                $pendiente = number_format(($cantidadpagar - $saldo), 5);
+                                $pendiente = number_format(($cantidadpagar - $saldo), 6);
                             }
-                            $saldo = number_format(($saldo - $cantidadpagar), 5);
+                            $saldo = number_format(($saldo - $cantidadpagar), 6);
                             $saldo = str_replace(",", "", $saldo);
-                            $cantidadpagar = number_format($pendiente, 5);
+                            $cantidadpagar = number_format($pendiente, 6);
                         }
                     }
                 } while ($cantidadpagar != 0 || $i < count($pagos));
@@ -594,7 +594,7 @@ class ReportesController extends AbstractActionController {
                     $textofila.="<td></td>";
             }
             
-            $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
+            $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 6) : 0;
             $textofila.="<td>".$totalf."</td><td>$porcentaje%</td></tr>";
             $reporteg[$fila] = $textofila;
 
@@ -613,7 +613,7 @@ class ReportesController extends AbstractActionController {
                     } else
                         $textofila.="<td></td>";
                 }
-                $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 2) : 0;
+                $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 6) : 0;
                 $textofila.="<td>".$totalf."</td><td>$porcentaje%</td></tr>";
                 $reporteg[$fila] = $textofila;
             }
@@ -683,13 +683,13 @@ class ReportesController extends AbstractActionController {
             for ($i = 1; $i < 13; $i++) {
                 if (isset($pagos[$i]))
                     foreach ($pagos[$i] as $idcompra => $cantidad) {
-                        $saldo = number_format($cantidad, 5);
+                        $saldo = number_format($cantidad, 6);
                         $saldo = str_replace(",", "", $saldo);
                         $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
                         $compradetalle = new \Compradetalle();
                         foreach ($comprasdetalles as $compradetalle) {
                             $categoria = $compradetalle->getProducto()->getIdsubcategoria();
-                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 6) : number_format($compradetalle->getCompradetalleSubtotal(), 6);
                             $cantidadpagar = str_replace(",", "", $cantidadpagar);
                             if ($saldo >= $cantidadpagar) {
                                 if (isset($reporte[$categoria]['mes' . $i]))
@@ -756,7 +756,7 @@ class ReportesController extends AbstractActionController {
                         $valuefila['mes' . $i] = $cantidadmes;
                     }
                     $valuefila['total'] = $totalf;
-                    $porcentaje = number_format(($totalf * 100) / $totalg, 2);
+                    $porcentaje = number_format(($totalf * 100) / $totalg, 6);
                     $valuefila['pct'] = $porcentaje;
                     $reportesc[$fila] = $valuefila;
                     $fila++;
@@ -813,7 +813,7 @@ class ReportesController extends AbstractActionController {
                 }
                 $valuefila['total'] = $totalf;
                 if ($totalf != 0)
-                    $porcentaje = number_format(($totalf * 100) / $totali, 2);
+                    $porcentaje = number_format(($totalf * 100) / $totali, 6);
                 else
                     $porcentaje = 0;
                 $valuefila['pct'] = $porcentaje;
@@ -946,13 +946,13 @@ class ReportesController extends AbstractActionController {
         for ($i = 1; $i < 13; $i++) {
             if (isset($pagos[$i]))
                 foreach ($pagos[$i] as $idcompra => $cantidad) {
-                    $saldo = number_format($cantidad, 5);
+                    $saldo = number_format($cantidad, 6);
                     $saldo = str_replace(",", "", $saldo);
                     $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
                     $compradetalle = new \Compradetalle();
                     foreach ($comprasdetalles as $compradetalle) {
                         $categoria = $compradetalle->getProducto()->getIdsubcategoria();
-                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 5) : number_format($compradetalle->getCompradetalleSubtotal(), 5);
+                        $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 6) : number_format($compradetalle->getCompradetalleSubtotal(),6);
                         $cantidadpagar = str_replace(",", "", $cantidadpagar);
                         if ($saldo >= $cantidadpagar) {
                             if (isset($reporte[$categoria]['mes' . $i]))
@@ -1043,7 +1043,7 @@ class ReportesController extends AbstractActionController {
                     $textofila.="<td></td>";
             }
             $textofila.="<td>$totalf</td>";
-            $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totali, 2) : 0;
+            $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totali, 6) : 0;
             $textofila.="<td>$porcentaje%</td></tr>";
             $reporteg[$fila] = $textofila;
             $fila++;
@@ -1086,7 +1086,7 @@ class ReportesController extends AbstractActionController {
                     $textofila.="<td></td>";
             }
             $textofila.="<td>$totalf</td>";
-            $porcentaje = number_format(($totalf * 100) / $totalg, 2);
+            $porcentaje = number_format(($totalf * 100) / $totalg, 6);
             $textofila.="<td>$porcentaje%</td></tr>";
             $reporteg[$fila] = $textofila;
 
@@ -1106,7 +1106,7 @@ class ReportesController extends AbstractActionController {
                         $textofila.="<td></td>";
                 }
                 $textofila.="<td>$totalf</td>";
-                $porcentaje = number_format(($totalf * 100) / $totalg, 2);
+                $porcentaje = number_format(($totalf * 100) / $totalg, 6);
                 $textofila.="<td>$porcentaje%</td></tr>";
                 $reporteg[$fila] = $textofila;
             }

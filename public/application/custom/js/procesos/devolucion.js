@@ -42,7 +42,7 @@
         
         //La variable iva está definida en las vistas con un echo
         //var aux = $("#iva").text().split('%');
-        var iva = parseFloat($("#ivaValor").val());
+        var iva = parseFloat(parseFloat($("#ivaValor").val()).toFixed(6));
         var defaults = {
            
        };
@@ -55,10 +55,10 @@
         var caluclator = function($tr)
         {            
             
-            var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat($tr.find('input[name*=cantidad]').val()) : 1;
-            var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat($tr.find('input[name*=precio]').val()) : 0;
-            var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat($tr.find('input[name*=descuento]').val()) : 0;
-            var ieps = $tr.find('input[name*=ieps]').val() != "" ? parseFloat($tr.find('input[name*=ieps]').val()) : 0;
+            var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=cantidad]').val()).toFixed(6)) : 1;
+            var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=precio]').val()).toFixed(6)) : 0;
+            var descuento = $tr.find('input[name*=descuento]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=descuento]').val()).toFixed(6)) : 0;
+            var ieps = $tr.find('input[name*=ieps]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=ieps]').val()).toFixed(6)) : 0;
             
             
             
@@ -84,7 +84,7 @@
             //COMPRA SUBTOTAL
             var devolucion_subtotal = 0.00;
             $('#productos_table tbody').find('input[name*=subtotal]').filter(function(){
-                devolucion_subtotal= devolucion_subtotal + parseFloat($(this).val());
+                devolucion_subtotal= devolucion_subtotal + parseFloat(parseFloat($(this).val()).toFixed(6));
             });
             $('#productos_table tfoot').find('#subtotal').text(accounting.formatMoney(devolucion_subtotal));
             $('#productos_table tfoot').find('input[name=devolucion_subtotal]').val(devolucion_subtotal);
@@ -115,7 +115,7 @@
                 
                 if(has_iva == 'true'){
                     
-                    var subtotal = parseFloat($(this).find('input[name*=subtotal]').val());
+                    var subtotal = parseFloat(parseFloat($(this).find('input[name*=subtotal]').val()).toFixed(6));
                     var row_iva = (subtotal * iva) / 100;
                         
                     devolucion_iva = devolucion_iva + row_iva;

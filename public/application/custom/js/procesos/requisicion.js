@@ -46,8 +46,8 @@
          */
 
         var caluclator = function ($tr) {
-            var cantidad = $tr.find('input[name*=requisiciondetalle_cantidad]').val() != "" ? parseFloat($tr.find('input[name*=requisiciondetalle_cantidad]').val()) : 1;
-            var preciounitario = $tr.find('input[name*=requisiciondetalle_preciounitario]').val() != "" ? parseFloat($tr.find('input[name*=requisiciondetalle_preciounitario]').val()) : 0;
+            var cantidad = $tr.find('input[name*=requisiciondetalle_cantidad]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=requisiciondetalle_cantidad]').val()).toFixed(6)) : 1;
+            var preciounitario = $tr.find('input[name*=requisiciondetalle_preciounitario]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=requisiciondetalle_preciounitario]').val()).toFixed(6)) : 0;
 
             //ROW SUBTOTAL
             var row_subtotal = cantidad * preciounitario;
@@ -57,7 +57,7 @@
             //COMPRA SUBTOTAL
             var requisicion_subtotal = 0.00;
             $('#productos_table tbody').find('input[name*=requisiciondetalle_subtotal]').filter(function () {
-                requisicion_subtotal = requisicion_subtotal + parseFloat($(this).val());
+                requisicion_subtotal = requisicion_subtotal + parseFloat(parseFloat($(this).val()).toFixed(6));
             });
 
             //COMPRA TOTAL

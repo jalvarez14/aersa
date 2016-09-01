@@ -50,8 +50,8 @@
             
             if(typeof $tr != 'undefined'){
             
-                var cantidad = parseFloat($tr.find('input[name*=cantidad]').val());
-                var pesoporcion = parseFloat($tr.find('input[name*=pesoporcion]').val());
+                var cantidad = parseFloat(parseFloat($tr.find('input[name*=cantidad]').val()).toFixed(6));
+                var pesoporcion = parseFloat(parseFloat($tr.find('input[name*=pesoporcion]').val()).toFixed(6));
                 var pesototal =  cantidad * pesoporcion;
 
                 //ROW UPDATE
@@ -62,7 +62,7 @@
             //TOTALES
             var peso_total = 0;
             $('#productos_table tbody td.pesototal').filter(function(){
-                peso_total = peso_total + parseFloat($(this).text());
+                peso_total = peso_total + parseFloat(parseFloat($(this).text()).toFixed(6));
             });
             $('#peso_total').text(peso_total);
             
@@ -124,7 +124,7 @@
             var peso_total = 0;
             $('#productos_table tbody td.pesototal').filter(function(){
 
-                peso_total = peso_total + parseFloat($(this).text());
+                peso_total = peso_total + parseFloat(parseFloat($(this).text()).toFixed(6));
             });
             $('#peso_total').text(peso_total);
             
@@ -134,9 +134,9 @@
             });
             $('#importe_total').text(accounting.formatMoney(importe_total));
             
-            var pesobruto = ($('input[name=ordentablajeria_numeroporciones]').val() != "") ? parseFloat($('input[name=ordentablajeria_numeroporciones]').val()) : 0;
-            var inyeccion = ($('input[name=ordentablajeria_inyeccion]').val() != "") ? parseFloat($('input[name=ordentablajeria_inyeccion]').val()) : 0;
-            var pesoneto =  parseFloat($('#peso_total').text());
+            var pesobruto = ($('input[name=ordentablajeria_numeroporciones]').val() != "") ? parseFloat(parseFloat($('input[name=ordentablajeria_numeroporciones]').val()).toFixed(6)) : 0;
+            var inyeccion = ($('input[name=ordentablajeria_inyeccion]').val() != "") ? parseFloat(parseFloat($('input[name=ordentablajeria_inyeccion]').val()).toFixed(6)) : 0;
+            var pesoneto =  parseFloat(parseFloat($('#peso_total').text()).toFixed(6));
             var mermatotal = (pesobruto + inyeccion) - pesoneto;
             var porcaprovechamiento = pesoneto / (pesobruto + inyeccion);
             var peciokilo = accounting.unformat($('input[name=ordentablajeria_preciokilo]').val());
@@ -152,9 +152,9 @@
             $('#productos_table tbody tr').filter(function(){
                 
                 var $tr = $(this);
-                var cantidad = parseFloat($tr.find('input[name*=cantidad]').val());
-                var pesoporcion = parseFloat($tr.find('input[name*=pesoporcion]').val());
-                var pesototal =  parseFloat($tr.find('td.pesototal').text());
+                var cantidad = parseFloat(parseFloat($tr.find('input[name*=cantidad]').val()).toFixed(6));
+                var pesoporcion = parseFloat(parseFloat($tr.find('input[name*=pesoporcion]').val()).toFixed(6));
+                var pesototal =  parseFloat(parseFloat($tr.find('td.pesototal').text()).toFixed(6));
                 var precioporcion = pesoporcion * precioneto;
                 var importe = cantidad * precioporcion;
                 
@@ -170,7 +170,7 @@
             var peso_total = 0;
             $('#productos_table tbody td.pesototal').filter(function(){
 
-                peso_total = peso_total + parseFloat($(this).text());
+                peso_total = peso_total + parseFloat(parseFloat($(this).text()).toFixed(6));
             });
             $('#peso_total').text(peso_total);
             

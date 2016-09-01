@@ -193,7 +193,7 @@
                     },
                 });
                 var idcuentaporcobrar=$container.find('input[name=idcuentaporcobrar]').val();
-                var abono=parseFloat($(this).closest('tr').find('td').eq(1).text());
+                var abono=parseFloat(parseFloat($(this).closest('tr').find('td').eq(1).text()).toFixed(6));
                 if(abono<saldo) {
                     var tmpl = [
                     // tabindex is required for focus

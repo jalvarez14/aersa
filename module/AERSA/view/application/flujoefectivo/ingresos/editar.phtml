@@ -109,9 +109,9 @@
                             <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][subtotal]" value="<?php echo $detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleSub']?>">
                             <input type="hidden" name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][iva]" value="<?php echo $detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleIva']?>">
                             <td><?php echo $concepto->getConceptoingresoNombre()?></td>
-                            <td><?php echo money_format('%(#10n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleSub']) ?></td>
-                             <td><?php echo money_format('%(#10n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleIva']) ?></td>
-                            <td><input disabled name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][total]" type="text" class="form-control" value="<?php echo money_format('%(#1n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleTotal'])?>"></td>
+                            <td><?php echo money_format('%+#1.6n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleSub']) ?></td>
+                             <td><?php echo money_format('%+#1.6n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleIva']) ?></td>
+                            <td><input disabled name="ingresodetalle[<?php echo $rubro->getIdrubroingreso()?>][<?php echo $concepto->getIdconceptoingreso()?>][total]" type="text" class="form-control" value="<?php echo money_format('%+#1.6n',$detalles[$rubro->getIdrubroingreso()][$concepto->getIdconceptoingreso()]['IngresodetalleTotal'])?>"></td>
                             
                         </tr>
                         <?php endforeach;?>
@@ -132,7 +132,7 @@
                             <label class="control-label col-md-5">Total bebidas: </label>
                             <div class="col-md-7">
                                 <input type="hidden" name="ingreso_totalbebida" value="<?php echo $entity->getIngresoTotalbebida() ?>">
-                                <p id="total_bebidas" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalbebida()  - $flujoefectivo['bebidas']) ?><a id="bebidas" href="javascript:;"><span class="fa fa-money"></span></a></p>
+                                <p id="total_bebidas" class="form-control-static"><?php echo money_format('%+#1.6n',$entity->getIngresoTotalbebida()  - $flujoefectivo['bebidas']) ?><a id="bebidas" href="javascript:;"><span class="fa fa-money"></span></a></p>
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                             <label class="control-label col-md-5">Total alimentos: </label>
                             <div class="col-md-7">
                                 <input type="hidden" name="ingreso_totalalimento" value="<?php echo $entity->getIngresoTotalalimento() ?>">
-                                <p id="total_alimentos" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalalimento() - $flujoefectivo['alimentos'] ) ?><a id="alimentos" href="javascript:;"><span class="fa fa-money"></span></a></p>
+                                <p id="total_alimentos" class="form-control-static"><?php echo money_format('%+#1.6n',$entity->getIngresoTotalalimento() - $flujoefectivo['alimentos'] ) ?><a id="alimentos" href="javascript:;"><span class="fa fa-money"></span></a></p>
                             </div>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                             <label class="control-label col-md-5">Total miscelanea: </label>
                             <div class="col-md-7">
                                  <input type="hidden" name="ingreso_totalmiscelanea" value="<?php echo $entity->getIngresoTotalmiscelanea() ?>">
-                                 <p id="total_miscelanea" class="form-control-static"><?php echo money_format('%(#10n',$entity->getIngresoTotalmiscelanea() - $flujoefectivo['miscelanea']) ?><a id="miscelanea" href="javascript:;"><span class="fa fa-money"></span></a></p>
+                                 <p id="total_miscelanea" class="form-control-static"><?php echo money_format('%+#1.6n',$entity->getIngresoTotalmiscelanea() - $flujoefectivo['miscelanea']) ?><a id="miscelanea" href="javascript:;"><span class="fa fa-money"></span></a></p>
                             </div>
                         </div>
                     </div>

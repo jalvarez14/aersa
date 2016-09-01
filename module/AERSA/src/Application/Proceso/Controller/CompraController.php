@@ -63,7 +63,6 @@ class CompraController extends AbstractActionController {
     }
 
     public function nuevoregistroAction() {
-        
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         

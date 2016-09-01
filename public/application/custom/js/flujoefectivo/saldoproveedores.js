@@ -55,7 +55,7 @@
                 var cantidad = $('input[name=abonoproveedordetalle_cantidad]').val();
                 var a = $('select[name=idcuentabancaria] option:selected').text();
                 a = a.split("-");
-                var fondos = parseFloat(a[2]);
+                var fondos = parseFloat(parseFloat(a[2]).toFixed(6));
                 if (cantidad.length == 0)
                     cantidad = 0;
                 
@@ -154,10 +154,10 @@
             });
             
             $('.delete_modal').click(function () {
-                var saldo=parseFloat($container.find('input[name=abonoproveedor_balance]').val());
+                var saldo=parseFloat(parseFloat($container.find('input[name=abonoproveedor_balance]').val()).toFixed(6));
                 var id = $(this).closest('tr').attr('id');
                 var idproveedor=$container.find('input[name=idproveedor]').val();
-                var abono=parseFloat($(this).closest('tr').find('td').eq(2).text());
+                var abono=parseFloat(parseFloat($(this).closest('tr').find('td').eq(2).text()).toFixed(6));
                 if(abono<saldo) {
                     var tmpl = [
                     // tabindex is required for focus
