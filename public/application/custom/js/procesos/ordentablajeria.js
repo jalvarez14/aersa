@@ -137,9 +137,16 @@
             var pesobruto = ($('input[name=ordentablajeria_numeroporciones]').val() != "") ? parseFloat(parseFloat($('input[name=ordentablajeria_numeroporciones]').val()).toFixed(6)) : 0;
             var inyeccion = ($('input[name=ordentablajeria_inyeccion]').val() != "") ? parseFloat(parseFloat($('input[name=ordentablajeria_inyeccion]').val()).toFixed(6)) : 0;
             var pesoneto =  parseFloat(parseFloat($('#peso_total').text()).toFixed(6));
+            console.log(pesobruto);
+            console.log(inyeccion);
+            console.log(pesoneto);
             var mermatotal = (pesobruto + inyeccion) - pesoneto;
             var porcaprovechamiento = pesoneto / (pesobruto + inyeccion);
             var peciokilo = accounting.unformat($('input[name=ordentablajeria_preciokilo]').val());
+            
+            
+            
+            
             var precioneto = peciokilo / porcaprovechamiento;
             var porcmerma = (pesobruto + inyeccion - pesoneto) / (pesobruto + inyeccion);
             
@@ -322,7 +329,7 @@
                 
                 $('input[name=idproducto]').val(suggestion.idproducto);
                 $('input[name=producto_unidadmedida]').val(suggestion.unidad_medida);
-                $('input[name=ordentablajeria_preciokilo]').val(accounting.formatMoney(suggestion.producto_ultimocosto));
+                $('input[name=ordentablajeria_preciokilo]').val(accounting.formatMoney(suggestion.producto_costo));
                 $('input[name=ordentablajeria_pesobruto]').val('');
                 $('input[name=ordentablajeria_numeroporciones]').val('');
               
@@ -548,7 +555,7 @@
                 
                 $('input[name=idproducto]').val(suggestion.idproducto);
                 $('input[name=producto_unidadmedida]').val(suggestion.unidad_medida);
-                $('input[name=ordentablajeria_preciokilo]').val(accounting.formatMoney(suggestion.producto_ultimocosto));
+                $('input[name=ordentablajeria_preciokilo]').val(accounting.formatMoney(suggestion.producto_costo));
                 $('input[name=ordentablajeria_pesobruto]').val('');
                 $('input[name=ordentablajeria_numeroporciones]').val('');
               
@@ -723,7 +730,7 @@
             var now = $('input[name=ordentablajeria_fecha]').val();
             var now_array = now.split('/');
             var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
-            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
+            if(new Date().format('W') != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');

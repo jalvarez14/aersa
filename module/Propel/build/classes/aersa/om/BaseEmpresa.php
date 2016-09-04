@@ -61,6 +61,18 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $empresa_administracion;
 
     /**
+     * The value for the empresa_habilitarrecetas field.
+     * @var        boolean
+     */
+    protected $empresa_habilitarrecetas;
+
+    /**
+     * The value for the empresa_habilitarproductos field.
+     * @var        boolean
+     */
+    protected $empresa_habilitarproductos;
+
+    /**
      * @var        PropelObjectCollection|Abonoproveedor[] Collection to store aggregation of Abonoproveedor objects.
      */
     protected $collAbonoproveedors;
@@ -433,6 +445,28 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [empresa_habilitarrecetas] column value.
+     *
+     * @return boolean
+     */
+    public function getEmpresaHabilitarrecetas()
+    {
+
+        return $this->empresa_habilitarrecetas;
+    }
+
+    /**
+     * Get the [empresa_habilitarproductos] column value.
+     *
+     * @return boolean
+     */
+    public function getEmpresaHabilitarproductos()
+    {
+
+        return $this->empresa_habilitarproductos;
+    }
+
+    /**
      * Set the value of [idempresa] column.
      *
      * @param  int $v new value
@@ -554,6 +588,64 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     } // setEmpresaAdministracion()
 
     /**
+     * Sets the value of the [empresa_habilitarrecetas] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setEmpresaHabilitarrecetas($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->empresa_habilitarrecetas !== $v) {
+            $this->empresa_habilitarrecetas = $v;
+            $this->modifiedColumns[] = EmpresaPeer::EMPRESA_HABILITARRECETAS;
+        }
+
+
+        return $this;
+    } // setEmpresaHabilitarrecetas()
+
+    /**
+     * Sets the value of the [empresa_habilitarproductos] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setEmpresaHabilitarproductos($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->empresa_habilitarproductos !== $v) {
+            $this->empresa_habilitarproductos = $v;
+            $this->modifiedColumns[] = EmpresaPeer::EMPRESA_HABILITARPRODUCTOS;
+        }
+
+
+        return $this;
+    } // setEmpresaHabilitarproductos()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -594,6 +686,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->empresa_razonsocial = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
             $this->empresa_estatus = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
             $this->empresa_administracion = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
+            $this->empresa_habilitarrecetas = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+            $this->empresa_habilitarproductos = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -603,7 +697,7 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Empresa object", $e);
@@ -1267,6 +1361,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_ADMINISTRACION)) {
             $modifiedColumns[':p' . $index++]  = '`empresa_administracion`';
         }
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_HABILITARRECETAS)) {
+            $modifiedColumns[':p' . $index++]  = '`empresa_habilitarrecetas`';
+        }
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS)) {
+            $modifiedColumns[':p' . $index++]  = '`empresa_habilitarproductos`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `empresa` (%s) VALUES (%s)',
@@ -1292,6 +1392,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                         break;
                     case '`empresa_administracion`':
                         $stmt->bindValue($identifier, (int) $this->empresa_administracion, PDO::PARAM_INT);
+                        break;
+                    case '`empresa_habilitarrecetas`':
+                        $stmt->bindValue($identifier, (int) $this->empresa_habilitarrecetas, PDO::PARAM_INT);
+                        break;
+                    case '`empresa_habilitarproductos`':
+                        $stmt->bindValue($identifier, (int) $this->empresa_habilitarproductos, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1626,6 +1732,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 4:
                 return $this->getEmpresaAdministracion();
                 break;
+            case 5:
+                return $this->getEmpresaHabilitarrecetas();
+                break;
+            case 6:
+                return $this->getEmpresaHabilitarproductos();
+                break;
             default:
                 return null;
                 break;
@@ -1660,6 +1772,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $keys[2] => $this->getEmpresaRazonsocial(),
             $keys[3] => $this->getEmpresaEstatus(),
             $keys[4] => $this->getEmpresaAdministracion(),
+            $keys[5] => $this->getEmpresaHabilitarrecetas(),
+            $keys[6] => $this->getEmpresaHabilitarproductos(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1785,6 +1899,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 4:
                 $this->setEmpresaAdministracion($value);
                 break;
+            case 5:
+                $this->setEmpresaHabilitarrecetas($value);
+                break;
+            case 6:
+                $this->setEmpresaHabilitarproductos($value);
+                break;
         } // switch()
     }
 
@@ -1814,6 +1934,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if (array_key_exists($keys[2], $arr)) $this->setEmpresaRazonsocial($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setEmpresaEstatus($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setEmpresaAdministracion($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setEmpresaHabilitarrecetas($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setEmpresaHabilitarproductos($arr[$keys[6]]);
     }
 
     /**
@@ -1830,6 +1952,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_RAZONSOCIAL)) $criteria->add(EmpresaPeer::EMPRESA_RAZONSOCIAL, $this->empresa_razonsocial);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_ESTATUS)) $criteria->add(EmpresaPeer::EMPRESA_ESTATUS, $this->empresa_estatus);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_ADMINISTRACION)) $criteria->add(EmpresaPeer::EMPRESA_ADMINISTRACION, $this->empresa_administracion);
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_HABILITARRECETAS)) $criteria->add(EmpresaPeer::EMPRESA_HABILITARRECETAS, $this->empresa_habilitarrecetas);
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS)) $criteria->add(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS, $this->empresa_habilitarproductos);
 
         return $criteria;
     }
@@ -1897,6 +2021,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $copyObj->setEmpresaRazonsocial($this->getEmpresaRazonsocial());
         $copyObj->setEmpresaEstatus($this->getEmpresaEstatus());
         $copyObj->setEmpresaAdministracion($this->getEmpresaAdministracion());
+        $copyObj->setEmpresaHabilitarrecetas($this->getEmpresaHabilitarrecetas());
+        $copyObj->setEmpresaHabilitarproductos($this->getEmpresaHabilitarproductos());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -9010,6 +9136,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $this->empresa_razonsocial = null;
         $this->empresa_estatus = null;
         $this->empresa_administracion = null;
+        $this->empresa_habilitarrecetas = null;
+        $this->empresa_habilitarproductos = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

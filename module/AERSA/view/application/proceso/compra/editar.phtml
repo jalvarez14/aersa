@@ -121,6 +121,7 @@
                                     <span class="input-group-addon">
                                         <i class="fa fa-search"></i>
                                     </span>
+                                    <input id="unidadmedida_nombre" type="hidden">
                                     <input id="idproducto" type="hidden">
                                     <input id="producto_iva" type="hidden">
                                     <input id="producto_autocomplete" class="form-control" type="text">
@@ -136,6 +137,7 @@
                             <table class="table" id="productos_table">
                             <thead>
                                 <th>Producto</th>
+                                <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th>Precio</th>
                                 <th>C.U. Neto</th>
@@ -150,12 +152,19 @@
                                 <?php $detalle = new Compradetalle()?>
                                 <?php foreach ($compra_detalle as $detalle) :?>
                                 <tr id="<?php echo $detalle->getIdcompradetalle()?>">
+                                    <?php 
+                                       // $producto = ProductoQuery::create()->findPk($detalle->getIdproducto());
+                                       // echo '<pre>';var_dump($detalle->toArray());echo '</pre>';exit();
+                                    ?>
                                     <td>
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdcompradetalle()?>][subtotal]" value="<?php echo $detalle->getCompradetalleSubtotal()?>">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdcompradetalle()?>][costo_unitario]" value="<?php echo $detalle->getCompradetalleCostounitario()?>">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdcompradetalle()?>][producto_iva]" value="<?php echo $detalle->getProducto()->getProductoIva()?>">
                                         <input type="hidden" name="productos[<?php echo $detalle->getIdcompradetalle()?>][idproducto]" value="<?php echo $detalle->getIdproducto()?>">
-                                        <?php echo $detalle->getProducto()->getProductoNombre()?>
+                                         <?php echo $detalle->getProducto()->getProductoNombre()?>
+                                    </td>
+                                    <td>
+                                        <?php echo $detalle->getProducto()->getUnidadmedida()->getUnidadmedidaNombre()?>
                                     </td>
                                     <td>
                                         <input type="text" name="productos[<?php echo $detalle->getIdcompradetalle()?>][cantidad]" value="<?php echo $detalle->getCompradetalleCantidad()?>"> 

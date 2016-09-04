@@ -43,6 +43,8 @@ class EmpresaTableMap extends TableMap
         $this->addColumn('empresa_razonsocial', 'EmpresaRazonsocial', 'VARCHAR', true, 255, null);
         $this->addColumn('empresa_estatus', 'EmpresaEstatus', 'BOOLEAN', false, 1, true);
         $this->addColumn('empresa_administracion', 'EmpresaAdministracion', 'BOOLEAN', false, 1, null);
+        $this->addColumn('empresa_habilitarrecetas', 'EmpresaHabilitarrecetas', 'BOOLEAN', true, 1, null);
+        $this->addColumn('empresa_habilitarproductos', 'EmpresaHabilitarproductos', 'BOOLEAN', true, 1, null);
         // validators
     } // initialize()
 

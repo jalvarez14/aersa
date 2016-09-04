@@ -98,14 +98,14 @@ class ProductoController extends AbstractActionController
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         
+        
+      
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
-        
-        //SI SE TRATA DE UN ADMIN DE AERSA
-        if($session['idempresa'] == 1)
-        
+       
         $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
-        $productos = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->find();
 
+        $productos = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->find();
+        
          
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
@@ -113,6 +113,8 @@ class ProductoController extends AbstractActionController
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'productos' => $productos,
+            'empresa_habilitarrecetas' => $emp->getEmpresaHabilitarrecetas(),
+            'empresa_habilitarproductos' => $emp->getEmpresaHabilitarproductos(),
         ));
         return $view_model;
 
@@ -184,6 +186,16 @@ class ProductoController extends AbstractActionController
     
     public function editarAction() 
     {
+        
+         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        
+      
+        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
+       
+        $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
 
         $request = $this->getRequest();
 
@@ -269,6 +281,8 @@ class ProductoController extends AbstractActionController
             'recetas'   => $recetas,
             'producto'  => $entity,
             'isBebida'  => $isBebida,
+             'empresa_habilitarrecetas' => $emp->getEmpresaHabilitarrecetas(),
+            'empresa_habilitarproductos' => $emp->getEmpresaHabilitarproductos(),
         ));
         $view_model->setTemplate('/application/catalogo/producto/editar');
         return $view_model;
@@ -490,7 +504,15 @@ class ProductoController extends AbstractActionController
     
     public function editarsubrecetaAction() 
     {
-
+        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        
+      
+        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
+       
+        $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
         $request = $this->getRequest();
 
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
@@ -543,6 +565,7 @@ class ProductoController extends AbstractActionController
         } 
         else 
             return $this->redirect()->toUrl('/catalogo/producto');
+       
         
         $dataProd = \ProductoQuery::create()->filterByIdproducto($id)->findOne();
         //INTANCIAMOS NUESTRA VISTA
@@ -553,6 +576,8 @@ class ProductoController extends AbstractActionController
             'receta'    => $entity,
             'producto'  => $producto,
             'data'      => $dataProd,
+             'empresa_habilitarrecetas' => $emp->getEmpresaHabilitarrecetas(),
+            'empresa_habilitarproductos' => $emp->getEmpresaHabilitarproductos(),
         ));
         $view_model->setTemplate('/application/catalogo/producto/editarsubreceta');
         return $view_model;
@@ -563,12 +588,26 @@ class ProductoController extends AbstractActionController
         $request = $this->getRequest();
         if($request->isPost())
         {
+            
             $id = $this->params()->fromRoute('id');
             $prod = $this->params()->fromRoute('prod');
             
             $entity = \RecetaQuery::create()->findPk($id);
             $entity->delete();
             
+            //ACTUALIZAMOS EL COSTO DEL PRODUCTO PADRE
+            $producto = \ProductoQuery::create()->findPk($prod);
+        
+            $costo_producto = $producto->getProductoCosto();
+            $recetas = \RecetaQuery::create()->filterByIdproducto($prod)->find();
+            $costo = 0.00;
+            foreach ($recetas as $receta){
+                $costo+= ($costo_producto * $receta->getRecetaCantidad());
+            }
+
+            $producto->setProductoCosto($costo)->save();
+
+
             $this->flashMessenger()->addSuccessMessage('Sub receta eleminada correctamente!');
 
             return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);

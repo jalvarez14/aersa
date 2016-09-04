@@ -71,6 +71,40 @@ class EmpresaForm extends Form
             ),
         ));
         
+        $this->add(array(
+            'name' => 'empresa_habilitarproductos',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Productos *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                    1 => 'Habilitar',
+                    0 => 'No habilitar'
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
+        $this->add(array(
+            'name' => 'empresa_habilitarrecetas',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Recetas *',
+                'empty_option' => 'Sin especificar',
+                'value_options' => array(
+                    1 => 'Habilitar',
+                    0 => 'No habilitar'
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
+        
         //Los siguientes campos no son propios de la tabla empresa
         //pero son necesarios para crear una nueva empresa
         

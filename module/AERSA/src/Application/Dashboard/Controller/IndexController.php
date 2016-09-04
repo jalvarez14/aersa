@@ -45,9 +45,8 @@ class IndexController extends AbstractActionController
         $search = $this->params()->fromQuery('q');
         $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
         
-        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva'))));
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
 
-        
     }
     
     public function getproductossimplesAction(){
@@ -60,9 +59,10 @@ class IndexController extends AbstractActionController
                 ->filterByIdempresa($session['idempresa'])
                 ->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)
                 ->filterByProductoTipo("simple",  \Criteria::EQUAL)
+                ->filterByProductoBaja(0)
                 ->find();
         
-        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva'))));
+         return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
 
         
     }

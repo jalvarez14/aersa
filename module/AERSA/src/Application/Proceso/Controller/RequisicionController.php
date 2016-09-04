@@ -39,6 +39,7 @@ class RequisicionController extends AbstractActionController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
+           // echo '<pre>';var_dump($post_data);echo '</pre>';exit();
             $requisicion = new \Requisicion();
             $post_data["requisicion_fecha"] = date_create_from_format('d/m/Y', $post_data["requisicion_fecha"]);
             $post_data["idusuario"] = $idusuario;
@@ -53,29 +54,32 @@ class RequisicionController extends AbstractActionController {
             //SETEAMOS LA FECHA DE CREACION
             $requisicion->setRequisicionFechacreacion(new \DateTime())
                     ->setIdempresa($session['idempresa']);
-
+                    
             $requisicion->save();
             //REQUISICION DETALLES
             foreach ($post_data['productos'] as $producto) {
+                $tipopro = \ProductoQuery::create()->filterByIdproducto($producto['idproducto'])->findOne();
+                 
                 $requisicion_detalle = new \Requisiciondetalle();
                 foreach ($producto as $key => $value) {
                     if (\RequisiciondetallePeer::getTableMap()->hasColumn($key)) {
                         $requisicion_detalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                     }
                 }
-
+                $requisicion_detalle->setRequisiciondetallePreciounitario($tipopro->getProductoCosto());
                 if (isset($producto['requisiciondetalle_revisada'])) {
                     $requisicion_detalle->setRequisiciondetalleRevisada(1);
                 }
                 $requisicion_detalle->setIdrequisicion($requisicion->getIdrequisicion());
+                
                 $requisicion_detalle->save();
-                $tipopro = \ProductoQuery::create()->filterByIdproducto($requisicion_detalle->getIdproducto())->findOne();
+               
                 if($tipopro->getProductoTipo()!='simple') {
                     $receta = new \Receta();
                     $receta = \RecetaQuery::create()->filterByIdproducto($tipopro->getIdproducto())->find();
                     foreach ($receta as $pro) {
                         $requisiciond = new \Requisiciondetalle();
-                        $costouni= \ProductoQuery::create()->filterByIdproducto($pro->getIdproductoreceta())->findOne()->getProductoUltimocosto();
+                        $costouni= \ProductoQuery::create()->filterByIdproducto($pro->getIdproductoreceta())->findOne()->getProductoCosto();
                         $requisiciond->setIdrequisicion($requisicion->getIdrequisicion())
                                 ->setIdproducto($pro->getIdproductoreceta())
                                 ->setRequisiciondetalleCantidad($pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
@@ -102,7 +106,7 @@ class RequisicionController extends AbstractActionController {
         }
 
         $almacen_array = array();
-        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
         foreach ($almacenes as $almacen) {
             $id = $almacen->getIdalmacen();
             $almacen_array[$id] = $almacen->getAlmacenNombre();
@@ -187,7 +191,7 @@ class RequisicionController extends AbstractActionController {
                     $receta = \RecetaQuery::create()->filterByIdproducto($tipopro->getIdproducto())->find();
                     foreach ($receta as $pro) {
                         $requisiciond = new \Requisiciondetalle();
-                        $costouni= \ProductoQuery::create()->filterByIdproducto($pro->getIdproductoreceta())->findOne()->getProductoUltimocosto();
+                        $costouni= \ProductoQuery::create()->filterByIdproducto($pro->getIdproductoreceta())->findOne()->getProductoCosto();
                         $requisiciond->setIdrequisicion($entity->getIdrequisicion())
                                 ->setIdproducto($pro->getIdproductoreceta())
                                 ->setRequisiciondetalleCantidad($pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
@@ -322,7 +326,7 @@ class RequisicionController extends AbstractActionController {
         $result = []; 
         foreach ($resetas as $reseta) {
                 $producto= \ProductoQuery::create()->filterByIdproducto($reseta->getIdproductoreceta())->findOne();
-                $preciouni = $producto->getProductoUltimocosto();
+                $preciouni = $producto->getProductoCosto();
                 $result[$producto->getProductoNombre()][0]=$reseta->getRecetaCantidad();
                 $result[$producto->getProductoNombre()][1]=$preciouni;
                 

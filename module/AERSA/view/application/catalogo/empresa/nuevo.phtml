@@ -48,11 +48,16 @@
                         <?php echo $this->formSelect($form->get('empresa_estatus')) ?>
                     </div>
                 </div>
-                
-                <div class="col-md-6 ">
-                    <div class="form-group" style=" padding-top: 30px;">
-                        <?php echo $this->formLabel($form->get('empresa_administracion')) ?>  
-                        <?php echo $this->formCheckbox($form->get('empresa_administracion')) ?>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('empresa_habilitarproductos')) ?>  
+                        <?php echo $this->formSelect($form->get('empresa_habilitarproductos')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('empresa_habilitarrecetas')) ?>  
+                        <?php echo $this->formSelect($form->get('empresa_habilitarrecetas')) ?>
                     </div>
                 </div>
             </div>

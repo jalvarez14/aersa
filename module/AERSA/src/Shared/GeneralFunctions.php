@@ -28,13 +28,25 @@ class GeneralFunctions {
     public static function collectionToAutocomplete($collection, $primary_key,$value,$columns = array()){
        
         $array = array();
+         
         foreach ($collection as $entity){
             
             $id = $entity->getByName($primary_key, \BasePeer::TYPE_FIELDNAME);
             $a = array('id' => $id,'value' => $entity->getByName($value, \BasePeer::TYPE_FIELDNAME));
-            
+           
             foreach ($columns as $column){
-                $a[$column] = $entity->getByName($column, \BasePeer::TYPE_FIELDNAME);
+              
+                if(is_array($column)){     
+                    $class_name = $column[3];
+                    $column_name = $column[2];
+                    $q = new $class_name;
+                    $result_array = $q->create()->filterBy(\BasePeer::translateFieldname($column[0], $column[1], \BasePeer::TYPE_FIELDNAME, \BasePeer::TYPE_PHPNAME), $entity->getByName($column[1], \BasePeer::TYPE_FIELDNAME))->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
+                    $a[$column_name] = $result_array[$column_name];
+                }else{
+                    $a[$column] = $entity->getByName($column, \BasePeer::TYPE_FIELDNAME);
+                }
+    
+                
             }
             
             $array[] = $a;

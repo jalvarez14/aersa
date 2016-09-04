@@ -11,12 +11,16 @@
  * @method EmpresaQuery orderByEmpresaRazonsocial($order = Criteria::ASC) Order by the empresa_razonsocial column
  * @method EmpresaQuery orderByEmpresaEstatus($order = Criteria::ASC) Order by the empresa_estatus column
  * @method EmpresaQuery orderByEmpresaAdministracion($order = Criteria::ASC) Order by the empresa_administracion column
+ * @method EmpresaQuery orderByEmpresaHabilitarrecetas($order = Criteria::ASC) Order by the empresa_habilitarrecetas column
+ * @method EmpresaQuery orderByEmpresaHabilitarproductos($order = Criteria::ASC) Order by the empresa_habilitarproductos column
  *
  * @method EmpresaQuery groupByIdempresa() Group by the idempresa column
  * @method EmpresaQuery groupByEmpresaNombrecomercial() Group by the empresa_nombrecomercial column
  * @method EmpresaQuery groupByEmpresaRazonsocial() Group by the empresa_razonsocial column
  * @method EmpresaQuery groupByEmpresaEstatus() Group by the empresa_estatus column
  * @method EmpresaQuery groupByEmpresaAdministracion() Group by the empresa_administracion column
+ * @method EmpresaQuery groupByEmpresaHabilitarrecetas() Group by the empresa_habilitarrecetas column
+ * @method EmpresaQuery groupByEmpresaHabilitarproductos() Group by the empresa_habilitarproductos column
  *
  * @method EmpresaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method EmpresaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -121,12 +125,16 @@
  * @method Empresa findOneByEmpresaRazonsocial(string $empresa_razonsocial) Return the first Empresa filtered by the empresa_razonsocial column
  * @method Empresa findOneByEmpresaEstatus(boolean $empresa_estatus) Return the first Empresa filtered by the empresa_estatus column
  * @method Empresa findOneByEmpresaAdministracion(boolean $empresa_administracion) Return the first Empresa filtered by the empresa_administracion column
+ * @method Empresa findOneByEmpresaHabilitarrecetas(boolean $empresa_habilitarrecetas) Return the first Empresa filtered by the empresa_habilitarrecetas column
+ * @method Empresa findOneByEmpresaHabilitarproductos(boolean $empresa_habilitarproductos) Return the first Empresa filtered by the empresa_habilitarproductos column
  *
  * @method array findByIdempresa(int $idempresa) Return Empresa objects filtered by the idempresa column
  * @method array findByEmpresaNombrecomercial(string $empresa_nombrecomercial) Return Empresa objects filtered by the empresa_nombrecomercial column
  * @method array findByEmpresaRazonsocial(string $empresa_razonsocial) Return Empresa objects filtered by the empresa_razonsocial column
  * @method array findByEmpresaEstatus(boolean $empresa_estatus) Return Empresa objects filtered by the empresa_estatus column
  * @method array findByEmpresaAdministracion(boolean $empresa_administracion) Return Empresa objects filtered by the empresa_administracion column
+ * @method array findByEmpresaHabilitarrecetas(boolean $empresa_habilitarrecetas) Return Empresa objects filtered by the empresa_habilitarrecetas column
+ * @method array findByEmpresaHabilitarproductos(boolean $empresa_habilitarproductos) Return Empresa objects filtered by the empresa_habilitarproductos column
  *
  * @package    propel.generator.aersa.om
  */
@@ -234,7 +242,7 @@ abstract class BaseEmpresaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial`, `empresa_estatus`, `empresa_administracion` FROM `empresa` WHERE `idempresa` = :p0';
+        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial`, `empresa_estatus`, `empresa_administracion`, `empresa_habilitarrecetas`, `empresa_habilitarproductos` FROM `empresa` WHERE `idempresa` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -475,6 +483,60 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EmpresaPeer::EMPRESA_ADMINISTRACION, $empresaAdministracion, $comparison);
+    }
+
+    /**
+     * Filter the query on the empresa_habilitarrecetas column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmpresaHabilitarrecetas(true); // WHERE empresa_habilitarrecetas = true
+     * $query->filterByEmpresaHabilitarrecetas('yes'); // WHERE empresa_habilitarrecetas = true
+     * </code>
+     *
+     * @param     boolean|string $empresaHabilitarrecetas The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function filterByEmpresaHabilitarrecetas($empresaHabilitarrecetas = null, $comparison = null)
+    {
+        if (is_string($empresaHabilitarrecetas)) {
+            $empresaHabilitarrecetas = in_array(strtolower($empresaHabilitarrecetas), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(EmpresaPeer::EMPRESA_HABILITARRECETAS, $empresaHabilitarrecetas, $comparison);
+    }
+
+    /**
+     * Filter the query on the empresa_habilitarproductos column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmpresaHabilitarproductos(true); // WHERE empresa_habilitarproductos = true
+     * $query->filterByEmpresaHabilitarproductos('yes'); // WHERE empresa_habilitarproductos = true
+     * </code>
+     *
+     * @param     boolean|string $empresaHabilitarproductos The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function filterByEmpresaHabilitarproductos($empresaHabilitarproductos = null, $comparison = null)
+    {
+        if (is_string($empresaHabilitarproductos)) {
+            $empresaHabilitarproductos = in_array(strtolower($empresaHabilitarproductos), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS, $empresaHabilitarproductos, $comparison);
     }
 
     /**

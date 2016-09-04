@@ -260,6 +260,8 @@ function setEmpresaData($data,$entity = Null)
     $entity->setEmpresaRazonsocial($data['empresa_razonsocial']);
     $entity->setEmpresaEstatus($data['empresa_estatus']);
     $entity->setEmpresaAdministracion($data['empresa_administracion']);
+    $entity->setEmpresaHabilitarproductos($data['empresa_habilitarproductos']);
+    $entity->setEmpresaHabilitarrecetas($data['empresa_habilitarrecetas']);
     return($entity);
 }
 

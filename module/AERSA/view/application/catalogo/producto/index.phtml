@@ -90,7 +90,11 @@
 <script>
     
     var plugin = $('#my_container').usuario();
-    
+    var empresa_habilitarproductos = "<?php echo json_encode($empresa_habilitarproductos)?>";
+    if(empresa_habilitarproductos == "false"){
+        $('.btn.default').attr('disabled',true).attr('cursor','not-allowed');
+    }
+
     
 
 </script>

@@ -166,8 +166,6 @@ class SucursalController extends AbstractActionController
                 $entity->setSucursalEstatus(                    $post_data['sucursal_estatus']);
                 $entity->setSucursalAnioactivo(                 $post_data['sucursal_anioactivo']);
                 $entity->setSucursalMesactivo(                  $post_data['sucursal_mesactivo']);
-                $entity->setSucursalHabilitarproductos(         $post_data['sucursal_habilitarproductos']);
-                $entity->setSucursalHabilitarrecetas(           $post_data['sucursal_habilitarrecetas']);
                 
                 $entity->save();
 
@@ -285,8 +283,6 @@ function setSucursal($data, $entity = null,$idEmp)
     $entity->setSucursalEstatus($data['sucursal_estatus']);
     $entity->setSucursalAnioactivo($data['sucursal_anioactivo']);
     $entity->setSucursalMesactivo($data['sucursal_mesactivo']);
-    $entity->setSucursalHabilitarproductos($data['sucursal_habilitarproductos']);
-    $entity->setSucursalHabilitarrecetas($data['sucursal_habilitarrecetas']);
     $entity->setIdempresa($idEmp);
     
     return $entity;

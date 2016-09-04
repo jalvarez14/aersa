@@ -101,6 +101,17 @@
         });
     } 
     
+    var empresa_habilitarrecetas = "<?php echo json_encode($empresa_habilitarrecetas)?>";
+
+    if(empresa_habilitarrecetas == "false"){
+            
+            $('#subreceta_form input').attr('disabled',true);
+            $('#subreceta_form .btn').attr('disabled',true).attr('cursor','not-allowed');
+        }
+    
+    
+    
+    
 
 </script>
 

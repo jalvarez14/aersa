@@ -493,6 +493,8 @@
     <column name="empresa_razonsocial" phpName="EmpresaRazonsocial" type="VARCHAR" size="255" required="true"/>
     <column name="empresa_estatus" phpName="EmpresaEstatus" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <column name="empresa_administracion" phpName="EmpresaAdministracion" type="BOOLEAN" size="1" required="false"/>
+    <column name="empresa_habilitarrecetas" phpName="EmpresaHabilitarrecetas" type="BOOLEAN" size="1" required="true"/>
+    <column name="empresa_habilitarproductos" phpName="EmpresaHabilitarproductos" type="BOOLEAN" size="1" required="true"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -1353,8 +1355,6 @@
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="sucursal_nombre" phpName="SucursalNombre" type="VARCHAR" size="45" required="true"/>
-    <column name="sucursal_habilitarproductos" phpName="SucursalHabilitarproductos" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
-    <column name="sucursal_habilitarrecetas" phpName="SucursalHabilitarrecetas" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
     <column name="sucursal_estatus" phpName="SucursalEstatus" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
     <column name="sucursal_anioactivo" phpName="SucursalAnioactivo" type="INTEGER" required="true"/>
     <column name="sucursal_mesactivo" phpName="SucursalMesactivo" type="INTEGER" required="true"/>

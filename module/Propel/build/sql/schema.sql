@@ -604,6 +604,8 @@ CREATE TABLE `empresa`
     `empresa_razonsocial` VARCHAR(255) NOT NULL,
     `empresa_estatus` TINYINT(1) DEFAULT 1,
     `empresa_administracion` TINYINT(1),
+    `empresa_habilitarrecetas` TINYINT(1) NOT NULL,
+    `empresa_habilitarproductos` TINYINT(1) NOT NULL,
     PRIMARY KEY (`idempresa`)
 ) ENGINE=InnoDB;
 
@@ -1610,8 +1612,6 @@ CREATE TABLE `sucursal`
     `idsucursal` INTEGER NOT NULL AUTO_INCREMENT,
     `idempresa` INTEGER NOT NULL,
     `sucursal_nombre` VARCHAR(45) NOT NULL,
-    `sucursal_habilitarproductos` TINYINT(1) DEFAULT 1 NOT NULL,
-    `sucursal_habilitarrecetas` TINYINT(1) DEFAULT 1 NOT NULL,
     `sucursal_estatus` TINYINT(1) DEFAULT 1 NOT NULL,
     `sucursal_anioactivo` INTEGER NOT NULL,
     `sucursal_mesactivo` INTEGER NOT NULL,

@@ -376,6 +376,7 @@
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
                 $('#producto_add').attr('disabled', false);
                 $('input#idproducto').val(suggestion.id);
+                $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
 
             });
 
@@ -394,12 +395,13 @@
                     success: function (data) {
                         if (data.length != 0) {
                             tipopro= data['ProductoTipo'];
-                            precio=data['ProductoUltimocosto'];
+                            precio=data['ProductoCosto'];
                         }
                     },
                 });
                 tr.append('<td> '+ tipopro + '</td>');
                 tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
+                tr.append('<td> '+ $('#unidadmedida_nombre').val() + '</td>');
                 tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
                 tr.append('<td><input disabled required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="'+precio+'"></td>');
                 tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
@@ -587,6 +589,7 @@
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
                 $('#producto_add').attr('disabled', false);
                 $('input#idproducto').val(suggestion.id);
+                $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
 
             });
 
@@ -610,6 +613,7 @@
                 });
                 tr.append('<td> '+ tipopro + '</td>');
                 tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
+                tr.append('<td> '+ $('#unidadmedida_nombre').val() + '</td>');
                 tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
                 tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
                 tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
@@ -824,7 +828,7 @@
             var now = $('input[name=requisicion_fecha]').val();
             var now_array = now.split('/');
             var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
-            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
+            if(new Date().format('W') != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');

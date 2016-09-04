@@ -53,12 +53,19 @@
                         <?php echo $this->formSelect($form->get('empresa_estatus')) ?>
                     </div>
                 </div>
-                <div class="col-md-6" style=" padding-top: 30px;">
-                    <div >
-                        <?php echo $this->formLabel($form->get('empresa_administracion')) ?>  
-                        <?php echo $this->formCheckbox($form->get('empresa_administracion')) ?>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('empresa_habilitarproductos')) ?>  
+                        <?php echo $this->formSelect($form->get('empresa_habilitarproductos')) ?>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('empresa_habilitarrecetas')) ?>  
+                        <?php echo $this->formSelect($form->get('empresa_habilitarrecetas')) ?>
+                    </div>
+                </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -155,12 +162,13 @@
                     <tr>
                         <th> Nombre </th>
                         <th> Estatus </th>
-                        <th> Productos </th>
-                        <th> Recetas </th>
+                        <th> Año activo </th>
+                        <th> Semana activa </th>
                         <th> Acciones </th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $entity = new Sucursal();?>
                     <?php foreach ($sucursales as $entity) : ?>
                         <?php
 
@@ -174,33 +182,16 @@
                             $estatus = 'Inactivo';
                             $class = 'danger';
                         }
-                        if ($entity->getSucursalHabilitarproductos() == 1) 
-                        {
-                            $prod = 'Activo';
-                            $classProd = 'info';
-                        } 
-                        else 
-                        {
-                            $prod = 'Inactivo';
-                            $classProd = 'danger';
-                        }
-                        if ($entity->getSucursalHabilitarrecetas() == 1) 
-                        {
-                            $recetas = 'Activo';
-                            $classRec = 'info';
-                        } 
-                        else 
-                        {
-                            $recetas = 'Inactivo';
-                            $classRec = 'danger';
-                        }
-
+                        
+                        $week_array = \Shared\GeneralFunctions::getWeekArray($entity->getSucursalAnioactivo());
+                    
+                           
                         ?>
                         <tr id="<?php echo $entity->getIdsucursal() ?>">
                             <td><?php echo $entity->getSucursalnombre() ?></td>
                             <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
-                            <td><span class="label label-sm label-<?php echo $classProd?>"> <?php echo $prod ?></span></td>
-                            <td><span class="label label-sm label-<?php echo $classRec?>"> <?php echo $recetas ?></span></td>
+                            <td><?php echo $entity->getSucursalAnioactivo() ?></td>
+                            <td><?php echo $week_array[$entity->getSucursalMesactivo()] ?></td>
 
                             <td>
                                 

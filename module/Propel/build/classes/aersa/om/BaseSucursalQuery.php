@@ -9,8 +9,6 @@
  * @method SucursalQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
  * @method SucursalQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method SucursalQuery orderBySucursalNombre($order = Criteria::ASC) Order by the sucursal_nombre column
- * @method SucursalQuery orderBySucursalHabilitarproductos($order = Criteria::ASC) Order by the sucursal_habilitarproductos column
- * @method SucursalQuery orderBySucursalHabilitarrecetas($order = Criteria::ASC) Order by the sucursal_habilitarrecetas column
  * @method SucursalQuery orderBySucursalEstatus($order = Criteria::ASC) Order by the sucursal_estatus column
  * @method SucursalQuery orderBySucursalAnioactivo($order = Criteria::ASC) Order by the sucursal_anioactivo column
  * @method SucursalQuery orderBySucursalMesactivo($order = Criteria::ASC) Order by the sucursal_mesactivo column
@@ -18,8 +16,6 @@
  * @method SucursalQuery groupByIdsucursal() Group by the idsucursal column
  * @method SucursalQuery groupByIdempresa() Group by the idempresa column
  * @method SucursalQuery groupBySucursalNombre() Group by the sucursal_nombre column
- * @method SucursalQuery groupBySucursalHabilitarproductos() Group by the sucursal_habilitarproductos column
- * @method SucursalQuery groupBySucursalHabilitarrecetas() Group by the sucursal_habilitarrecetas column
  * @method SucursalQuery groupBySucursalEstatus() Group by the sucursal_estatus column
  * @method SucursalQuery groupBySucursalAnioactivo() Group by the sucursal_anioactivo column
  * @method SucursalQuery groupBySucursalMesactivo() Group by the sucursal_mesactivo column
@@ -109,8 +105,6 @@
  *
  * @method Sucursal findOneByIdempresa(int $idempresa) Return the first Sucursal filtered by the idempresa column
  * @method Sucursal findOneBySucursalNombre(string $sucursal_nombre) Return the first Sucursal filtered by the sucursal_nombre column
- * @method Sucursal findOneBySucursalHabilitarproductos(boolean $sucursal_habilitarproductos) Return the first Sucursal filtered by the sucursal_habilitarproductos column
- * @method Sucursal findOneBySucursalHabilitarrecetas(boolean $sucursal_habilitarrecetas) Return the first Sucursal filtered by the sucursal_habilitarrecetas column
  * @method Sucursal findOneBySucursalEstatus(boolean $sucursal_estatus) Return the first Sucursal filtered by the sucursal_estatus column
  * @method Sucursal findOneBySucursalAnioactivo(int $sucursal_anioactivo) Return the first Sucursal filtered by the sucursal_anioactivo column
  * @method Sucursal findOneBySucursalMesactivo(int $sucursal_mesactivo) Return the first Sucursal filtered by the sucursal_mesactivo column
@@ -118,8 +112,6 @@
  * @method array findByIdsucursal(int $idsucursal) Return Sucursal objects filtered by the idsucursal column
  * @method array findByIdempresa(int $idempresa) Return Sucursal objects filtered by the idempresa column
  * @method array findBySucursalNombre(string $sucursal_nombre) Return Sucursal objects filtered by the sucursal_nombre column
- * @method array findBySucursalHabilitarproductos(boolean $sucursal_habilitarproductos) Return Sucursal objects filtered by the sucursal_habilitarproductos column
- * @method array findBySucursalHabilitarrecetas(boolean $sucursal_habilitarrecetas) Return Sucursal objects filtered by the sucursal_habilitarrecetas column
  * @method array findBySucursalEstatus(boolean $sucursal_estatus) Return Sucursal objects filtered by the sucursal_estatus column
  * @method array findBySucursalAnioactivo(int $sucursal_anioactivo) Return Sucursal objects filtered by the sucursal_anioactivo column
  * @method array findBySucursalMesactivo(int $sucursal_mesactivo) Return Sucursal objects filtered by the sucursal_mesactivo column
@@ -230,7 +222,7 @@ abstract class BaseSucursalQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idsucursal`, `idempresa`, `sucursal_nombre`, `sucursal_habilitarproductos`, `sucursal_habilitarrecetas`, `sucursal_estatus`, `sucursal_anioactivo`, `sucursal_mesactivo` FROM `sucursal` WHERE `idsucursal` = :p0';
+        $sql = 'SELECT `idsucursal`, `idempresa`, `sucursal_nombre`, `sucursal_estatus`, `sucursal_anioactivo`, `sucursal_mesactivo` FROM `sucursal` WHERE `idsucursal` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -432,60 +424,6 @@ abstract class BaseSucursalQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(SucursalPeer::SUCURSAL_NOMBRE, $sucursalNombre, $comparison);
-    }
-
-    /**
-     * Filter the query on the sucursal_habilitarproductos column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterBySucursalHabilitarproductos(true); // WHERE sucursal_habilitarproductos = true
-     * $query->filterBySucursalHabilitarproductos('yes'); // WHERE sucursal_habilitarproductos = true
-     * </code>
-     *
-     * @param     boolean|string $sucursalHabilitarproductos The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return SucursalQuery The current query, for fluid interface
-     */
-    public function filterBySucursalHabilitarproductos($sucursalHabilitarproductos = null, $comparison = null)
-    {
-        if (is_string($sucursalHabilitarproductos)) {
-            $sucursalHabilitarproductos = in_array(strtolower($sucursalHabilitarproductos), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(SucursalPeer::SUCURSAL_HABILITARPRODUCTOS, $sucursalHabilitarproductos, $comparison);
-    }
-
-    /**
-     * Filter the query on the sucursal_habilitarrecetas column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterBySucursalHabilitarrecetas(true); // WHERE sucursal_habilitarrecetas = true
-     * $query->filterBySucursalHabilitarrecetas('yes'); // WHERE sucursal_habilitarrecetas = true
-     * </code>
-     *
-     * @param     boolean|string $sucursalHabilitarrecetas The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return SucursalQuery The current query, for fluid interface
-     */
-    public function filterBySucursalHabilitarrecetas($sucursalHabilitarrecetas = null, $comparison = null)
-    {
-        if (is_string($sucursalHabilitarrecetas)) {
-            $sucursalHabilitarrecetas = in_array(strtolower($sucursalHabilitarrecetas), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-        }
-
-        return $this->addUsingAlias(SucursalPeer::SUCURSAL_HABILITARRECETAS, $sucursalHabilitarrecetas, $comparison);
     }
 
     /**

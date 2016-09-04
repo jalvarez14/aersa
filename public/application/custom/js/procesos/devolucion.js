@@ -333,6 +333,7 @@
                 $('#producto_add').attr('disabled',false);
                 $('input#idproducto').val(suggestion.id);
                 $('input#producto_iva').val(suggestion.producto_iva);
+                $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
                 
             });
             
@@ -349,6 +350,7 @@
 
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
+                tr.append('<td >'+$('input#unidadmedida_nombre').val()+'</td>');
                 tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
                 tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');
@@ -509,6 +511,7 @@
                 $('#producto_add').attr('disabled',false);
                 $('input#idproducto').val(suggestion.id);
                 $('input#producto_iva').val(suggestion.producto_iva);
+                $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
                 
             });
             
@@ -527,6 +530,7 @@
                                
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
+                tr.append('<td >'+$('input#unidadmedida_nombre').val()+'</td>');
                 tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
                 tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');
@@ -635,7 +639,7 @@
             var now_array = now.split('/');
             var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
             
-            if((now.getMonth()+1) != mes || now.getFullYear() != anio){
+            if(new Date().format('W') != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');

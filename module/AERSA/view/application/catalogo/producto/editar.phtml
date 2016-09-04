@@ -117,7 +117,7 @@
         </div>
     </div>
 </div>
-<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+<div  class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
     <div class="portlet-body form">
         <div class="portlet-body form">
 
@@ -173,7 +173,7 @@
     </div>
 </div>
 <?php if($producto->getProductoTipo() == 'subreceta' || $producto->getProductoTipo() == 'plu') :?>
-    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div id="subreceta" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
                 <div class="portlet-body form">
                     <div class="form-body">
@@ -338,5 +338,19 @@
             }
         });
         
-    }); 
+        
+        var empresa_habilitarproductos = "<?php echo json_encode($empresa_habilitarproductos)?>";
+        var empresa_habilitarrecetas = "<?php echo json_encode($mpresa_habilitarrecetas)?>";
+        if(empresa_habilitarproductos == "false"){
+            
+            $('#producto_form > div:not(:last-child) input,#producto_form > div:not(:last-child) select').attr('disabled',true);
+            $('#producto_form > div.portlet:not(#subreceta) .btn').attr('disabled',true).attr('cursor','not-allowed');;
+        }
+        
+        if(empresa_habilitarrecetas == "false"){
+            
+            $('#subreceta .btn').attr('disabled',true).attr('cursor','not-allowed');;
+        }
+
+}); 
 </script>
