@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    'route' => 'admin.aersa', //LOCAL
-                    //'route' => 'admin.aersamx.com', //PRODUCCION
+                    //'route' => 'admin.aersa', //LOCAL
+                    'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -373,7 +373,6 @@ return array(
                                             ),
                                         ),
                                     ),
-               
                                     'editarcodigo' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -1951,14 +1950,66 @@ return array(
                                 ),
                             ),
                         ),
-                    )
+                    ),
+                    'auditoria' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/auditoria',
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'cierresemana' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/cierresemana',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+                                    'batch' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/batch[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                'action' => 'batch',
+                                            ),
+                                        ),
+                                    ),
+                                    'batch' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/batch[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                'action' => 'batch',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
                     //'route' => 'aersa', //LOCAL
-                    'route'    => 'aersamx.com', //PRODUCCION
+                    'route' => 'aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
