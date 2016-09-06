@@ -1882,45 +1882,12 @@ return array(
                                 'may_terminate' => true,
                                 'child_routes' => array(
                                     'cierresinventarios' => array(
-                                        'type' => 'Literal',
+                                        'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/cierresinventarios',
                                             'defaults' => array(
                                                 'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
                                                 'action' => 'index',
-                                            ),
-                                        ),
-                                        'may_terminate' => true,
-                                        'child_routes' => array(
-                                            'nuevo' => array(
-                                                'type' => 'Segment',
-                                                'options' => array(
-                                                    'route' => '/nuevo',
-                                                    'defaults' => array(
-                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
-                                                        'action' => 'nuevo',
-                                                    ),
-                                                ),
-                                            ),
-                                            'batch' => array(
-                                                'type' => 'Segment',
-                                                'options' => array(
-                                                    'route' => '/batch[/:id]',
-                                                    'defaults' => array(
-                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
-                                                        'action' => 'batch',
-                                                    ),
-                                                ),
-                                            ),
-                                            'batch' => array(
-                                                'type' => 'Segment',
-                                                'options' => array(
-                                                    'route' => '/batch[/:id]',
-                                                    'defaults' => array(
-                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
-                                                        'action' => 'batch',
-                                                    ),
-                                                ),
                                             ),
                                         ),
                                     ),
@@ -1963,7 +1930,7 @@ return array(
                                 'options' => array(
                                     'route' => '/cierresemana',
                                     'defaults' => array(
-                                        'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                        'controller' => 'Application\Auditoria\Controller\Cierresinventarios',
                                         'action' => 'index',
                                     ),
                                 ),
@@ -1974,18 +1941,28 @@ return array(
                                         'options' => array(
                                             'route' => '/nuevo',
                                             'defaults' => array(
-                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                'controller' => 'Application\Auditoria\Controller\Cierresinventarios',
                                                 'action' => 'nuevo',
                                             ),
                                         ),
                                     ),
-                                    'batch' => array(
+                                    'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/batch[/:id]',
+                                            'route' => '/editar[/:id]',
                                             'defaults' => array(
-                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
-                                                'action' => 'batch',
+                                                'controller' => 'Application\Auditoria\Controller\Cierresinventarios',
+                                                'action' => 'editar',
+                                            ),
+                                        ),
+                                    ),
+                                    'eliminar' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/eliminar[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Auditoria\Controller\Cierresinventarios',
+                                                'action' => 'eliminar',
                                             ),
                                         ),
                                     ),
@@ -1994,7 +1971,7 @@ return array(
                                         'options' => array(
                                             'route' => '/batch[/:id]',
                                             'defaults' => array(
-                                                'controller' => 'Application\Administracion\Controller\Reportes\Cierresinventarios',
+                                                'controller' => 'Application\Auditoria\Controller\Cierresinventarios',
                                                 'action' => 'batch',
                                             ),
                                         ),
@@ -2137,12 +2114,15 @@ return array(
              * REPORTES
              */
             'Application\Reportes\Controller\Reportes' => 'Application\Reportes\Controller\ReportesController',
-            //administracion
             /*
              * ADMINISTRACION
              */
             'Application\Administracion\Controller\Reportes\Cierresinventarios' => 'Application\Administracion\Controller\Reportes\CierresinventariosController',
             'Application\Administracion\Controller\Reportes\Cardex' => 'Application\Administracion\Controller\Reportes\CardexController',
+            /*
+             * AUDITORIA
+             */
+            'Application\Auditoria\Controller\Cierresinventarios' => 'Application\Auditoria\Controller\CierresinventariosController',
             /*
              * WEBSITE
              */
