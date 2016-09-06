@@ -1,0 +1,193 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">Inventario cierre de semana</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/auditoria/cierresemana">Inventario cierre de semana</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    $form->setAttribute('action', '/auditoria/cierresemana/editar/'.$inventariomes->getIdinventariomes());
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('idalmacen')) ?>  
+                        <?php echo $this->formSelect($form->get('idalmacen')) ?> 
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <?php echo $this->formHidden($form->get('inventariomes_fecha')) ?>  
+                        <?php echo $this->formLabel($form->get('fecha')) ?>  
+                        <?php echo $this->formText($form->get('fecha')) ?> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('idauditor')) ?>  
+                        <?php echo $this->formSelect($form->get('idauditor')) ?> 
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <br>
+                        <div class="btn-set pull-right">
+                            <input type="file" name="batch_inventario" style="display: none" accept=".xls,.xlsx">
+                            <a id="subir_inventario" href="#"><button class="btn default" type="button" style="margin-bottom: 15px; margin-right: 10px">Subir inventario</button></a>
+                        </div>
+                    </div>                        
+                </div>
+                <div id="revisada" class="row" >
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('inventariomes_revisada')) ?>  
+                        <?php echo $this->formSelect($form->get('inventariomes_revisada')) ?> 
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="overflow: scroll; white-space: nowrap;">
+                        <table class="table" id="reporte_table">
+                            <thead>
+                            <th>ID</th>
+                            <th>Nomb</th>
+                            <th>ExistIni</th>
+                            <th>Cmpr</th>
+                            <th>ReqIng</th>
+                            <th>OrdTabIng</th>
+                            <th>Vnt</th>
+                            <th>ReqEg</th>
+                            <th>OrdTabEg</th>
+                            <th>Dev</th>
+                            <th>StT</th>
+                            <th>Unid</th>
+                            <th>StF</th>
+                            <th>ImpFis</th>
+                            <th>Dif</th>
+                            <th>CostProm</th>
+                            <th>DifImp</th>
+                            <th>Revisado</th>
+                            </thead>
+                            <tbody id="tbody">
+                                <?php $detalle = new Inventariomesdetalle()?>
+                                <?php foreach ($inventariomesdetalle as $detalle) :?>
+                                <tr>
+                                    <!--<tr id='$idproducto' bgcolor='" . $colorbg . "'>
+                                    <td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    </tr>");-->
+                                    <td>
+                                        <input type='hidden' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][idcategoria]' value='<?php $producto=  ProductoQuery::create()->filterByIdproducto($detalle->getIdproducto())->findOne();echo CategoriaQuery::create()->filterByIdcategoria($producto->getIdcategoria())->findOne()->getCategoriaNombre();?>'/>
+                                        <input type='hidden' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][idproducto]' value='<?php echo $detalle->getIdproducto()?>' /><?php echo $detalle->getIdproducto()?>
+                                    </td>
+                                    <td>
+                                        <?php echo $producto->getProductoNombre()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_stockinicial]' value='<?php echo $detalle->getInventariomesdetalleStockinicial()?>'> <?php echo $detalle->getInventariomesdetalleStockinicial()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_ingresocompra]' value='<?php echo $detalle->getInventariomesdetalleIngresocompra()?>'><?php echo $detalle->getInventariomesdetalleIngresocompra()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_ingresorequisicion]' value='<?php echo $detalle->getInventariomesdetalleIngresorequisicion()?>'><?php echo $detalle->getInventariomesdetalleIngresocompra()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_ingresoordentablajeria]' value='<?php echo $detalle->getInventariomesdetalleIngresoordentablajeria()?>'><?php echo $detalle->getInventariomesdetalleIngresoordentablajeria()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresoventa]' value='<?php echo $detalle->getInventariomesdetalleEgresoventa()?>'><?php echo $detalle->getInventariomesdetalleEgresoventa()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresorequisicion]' value='<?php echo $detalle->getInventariomesdetalleEgresorequisicion()?>'><?php echo $detalle->getInventariomesdetalleEgresorequisicion()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresoordentablajeria]' value='<?php echo $detalle->getInventariomesdetalleEgresoordentablajeria()?>'><?php echo $detalle->getInventariomesdetalleEgresoordentablajeria()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresodevolucion]' value='<?php echo $detalle->getInventariomesdetalleEgresodevolucion()?>'><?php echo $detalle->getInventariomesdetalleEgresodevolucion()?>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_stockteorico]' value='<?php echo $detalle->getInventariomesdetalleStockteorico()?>'><?php echo $detalle->getInventariomesdetalleStockteorico()?>
+                                    </td>
+                                    <td>
+                                        <?php echo $producto->getUnidadmedida()->getUnidadmedidaNombre()?>
+                                    </td>
+                                    <td>
+                                        <input required type='text' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_stockfisico]' value='<?php echo $detalle->getInventariomesdetalleStockfisico()?>'>
+                                    </td>
+                                    <td class='inventariomesdetalle_importefisico'>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_importefisico]' value='<?php echo $detalle->getInventariomesdetalleImportefisico()?>'>
+                                        <span><?php echo $detalle->getInventariomesdetalleImportefisico()?></span>
+                                    </td>
+                                    <td class='inventariomesdetalle_diferencia'>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_diferencia]' value='<?php echo $detalle->getInventariomesdetalleDiferencia()?>'>
+                                        <span><?php echo $detalle->getInventariomesdetalleDiferencia()?></span>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_costopromedio]' value='<?php echo $detalle->getInventariomesdetalleCostopromedio()?>'><?php echo $detalle->getInventariomesdetalleCostopromedio()?>
+                                    </td>
+                                    <td class='inventariomesdetalle_difimporte'>
+                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_difimporte]' value='<?php echo $detalle->getInventariomesdetalleDifimporte()?>'>
+                                        <span><?php echo $detalle->getInventariomesdetalleDifimporte()?></span>
+                                    </td>
+                                    <td>
+                                        <input type='checkbox' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_revisada]' <?php echo (bool)($detalle->getInventariomesdetalleRevisada()) ? "checked": "";?>
+                                    </td>
+                                </tr>
+                                <?php endforeach?>
+                                <tr><td>Responsable</td><td><?php echo $encargado?></td><td></td><td><td></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final alimentos</td><td class='inventariomes_finalalimentos'><input type='hidden'  name='inventariomes_finalalimentos' value='<?php echo $inventariomes->getInventariomesFinalalimentos()?>'><span><?php echo $inventariomes->getInventariomesFinalalimentos()?></span></td></tr>
+                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final bebidas</td><td class='inventariomes_finalbebidas'><input type='hidden'  name='inventariomes_finalbebidas' value='<?php echo $inventariomes->getInventariomesFinalbebidas()?>'><span><?php echo $inventariomes->getInventariomesFinalbebidas()?></span></td></tr>
+                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Sobrante</td><td class='inventariomes_sobrantes'><input type='hidden'  name='inventariomes_sobrantes' value='<?php echo $inventariomes->getInventariomesSobrantes()?>'><span><?php echo $inventariomes->getInventariomesSobrantes()?></span></td></tr>
+                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Faltante</td><td class='inventariomes_faltantes'><input type='hidden'  name='inventariomes_faltantes' value='<?php echo $inventariomes->getInventariomesFaltantes()?>'><span><?php echo $inventariomes->getInventariomesFaltantes()?></span></td></tr>
+                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Total</td><td class='inventariomes_total'><input type='hidden'  name='inventariomes_total' value='<?php echo $inventariomes->getInventariomesTotal()?>'><span><?php echo $inventariomes->getInventariomesTotal()?></span></td></tr>
+                                <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Importe Fisico</td><td class='inventariomes_totalimportefisico'><input type='hidden'  name='inventariomes_totalimportefisico' value='<?php echo $inventariomes->getInventariomesTotalimportefisico()?>'><span><?php echo $inventariomes->getInventariomesTotalimportefisico()?></span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="boton_g" name="boton_g" class="form-actions right">
+                    <button class="btn blue" id="plantilla_save" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
+<script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="/application/custom/js/auditoria/cierresinventarios.js" type="text/javascript"></script>
+<script>
+    var $plugin = $('#my_container').cierresinventarios();
+    $plugin.edit();
+</script>
