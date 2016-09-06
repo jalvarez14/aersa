@@ -264,9 +264,14 @@ class CierresinventariosController extends AbstractActionController {
                     $stockFisico = $productosReporte[$objproducto->getIdproducto()];
 
                 $dif = $stockTeorico - $stockFisico;
-
-                $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
-                $costoPromedio = ($costoPromedio > 0) ? $costoPromedio * -1 : $costoPromedio;
+                $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
+                if($has_compras > 0){
+                    $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
+                    $costoPromedio = ($costoPromedio > 0) ? $costoPromedio * -1 : $costoPromedio; 
+                }else{
+                    $costoPromedio = $objproducto->getProductoCosto();
+                }
+               
                 $difImporte = $dif * $costoPromedio;
                 if (0 < $difImporte)
                     $sobrante+=$difImporte;
