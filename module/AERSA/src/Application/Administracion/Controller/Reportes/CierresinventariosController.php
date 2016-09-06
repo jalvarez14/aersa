@@ -7,299 +7,336 @@ use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
 class CierresinventariosController extends AbstractActionController {
-
+    
     public function indexAction() {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
-        $inventarios = \InventariomesQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
-
-        $view_model = new ViewModel();
-        $view_model->setTemplate('/application/administracion/reportes/cierresinventarios/index');
-        $view_model->setVariables(array(
-            'messages' => $this->flashMessenger(),
-            'inventarios' => $inventarios,
-        ));
-        return $view_model;
-    }
-
-    public function nuevoAction() {
-        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
-        $session = new \Shared\Session\AouthSession();
-        $session = $session->getData();
-
-        $idempresa = $session['idempresa'];
-        $idsucursal = $session['idsucursal'];
-
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL---
-        //$collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
-        //INTANCIAMOS NUESTRA VISTA        
-        $almacen_array = array();
-        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
-        foreach ($almacenes as $almacen) {
-            $id = $almacen->getIdalmacen();
-            $almacen_array[$id] = $almacen->getAlmacenNombre();
-        }
-
-        $auditor_array = array();
-        $usuarios = \UsuarioQuery::create()->filterByIdrol(4)->useUsuariosucursalQuery()->filterByIdsucursal($idsucursal)->endUse()->find();
-        $usuario = new \Usuario();
-        foreach ($usuarios as $usuario) {
-            $id = $usuario->getIdusuario();
-            $auditor_array[$id] = $usuario->getUsuarioNombre();
-        }
         $request = $this->getRequest();
         if ($request->isPost()) {
+            $iva = \TasaivaQuery::create()->filterByIdtasaiva(1)->findOne()->getTasaivaValor();
+            $iva = $iva / 100 + 1;
             $post_data = $request->getPost();
-            $idalmacen=$post_data['idalmacen'];
-            $post_data['idusuario']=$session['idusuario'];
-            $idauditor=$post_data['idauditor'];
-            $post_data['idempresa']=$idempresa;
-            $post_data['idsucursal']=$idsucursal;
-            $inventariocierremes =  new \Inventariomes();
-            foreach ($post_data as $key => $value) {
-                if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
-                    $inventariocierremes->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+            $mes = $post_data['mes'];
+            $ano = $post_data['ano'];
+            $ingresos = array();
+            if ($mes == 1 || $mes == 3 || $mes == 5 || $mes == 7 || $mes == 8 || $mes == 10 || $mes == 12)
+                $dias = 31;
+            else if ($mes == 4 || $mes == 6 || $mes == 9 || $mes == 11)
+                $dias = 30;
+            else
+                $dias = (checkdate($mes, 29, $ano)) ? 29 : 28;
+            $totali = 0;
+            $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-' . $dias . ' 23:59:59'))->filterByFlujoefectivoOrigen('ingreso')->orderByIdcompra()->find();
+            $flujoefectivo = new \Flujoefectivo();
+            $inicio = $ano . '-' . $mes . '-01 00:00:00';
+            $fin = $ano . '-' . $mes . '-' . $dias . ' 23:59:59';
+            foreach ($flujosefectivos as $flujoefectivo) {
+                $cheque = true;
+                if ($flujoefectivo->getFlujoefectivoMediodepago() == 'cheque') {
+                    $fecha = $flujoefectivo->getFlujoefectivoFechacobrocheque();
+                    if (!($inicio < $fecha) && ($fecha < $fin))
+                        $cheque = false;
+                }
+
+                if ($cheque) {
+                    if (isset($ingresos[$flujoefectivo->getIngresorubro()][$flujoefectivo->getIdcuentabancaria()])) {
+                        $ingresos[$flujoefectivo->getIngresorubro()][$flujoefectivo->getIdcuentabancaria()]+=str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                    } else {
+                        $ingresos[$flujoefectivo->getIngresorubro()][$flujoefectivo->getIdcuentabancaria()] = str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
+                    }
+                    $totali+=str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad());
                 }
             }
-            $inventariocierremes->save();
-            
-            foreach($post_data['reporte'] as $reporte) {
-                $inventariocierremes_detalle = new \Inventariomesdetalle();
-                foreach ($reporte as $key => $value) {
-                    if (\InventariomesdetallePeer::getTableMap()->hasColumn($key)) {
-                        $inventariocierremes_detalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+            $reportei = array();
+            $rubrosingresos = \RubroingresoQuery::create()->find();
+            $rubroingreso = new \Rubroingreso();
+            $rubroingresoarray = array();
+            $fila = 0;
+            $arraytotalesi = array();
+            foreach ($rubrosingresos as $rubroingreso) {
+                $valuefila = array();
+                $valuefila['nombre'] = $rubroingreso->getRubroingresoNombre();
+                $totalf = 0;
+                $objbancos = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->orderByCuentabancariaBanco()->orderByIdcuentabancaria()->find();
+                $objbanco = new \Cuentabancaria();
+                $numbanco = 1;
+                foreach ($objbancos as $objbanco) {
+                    $cantidadcuent = "";
+                    if (isset($ingresos[strtolower($rubroingreso->getRubroingresoNombre())][$objbanco->getIdcuentabancaria()])) {
+                        $cantidadcuent = $ingresos[strtolower($rubroingreso->getRubroingresoNombre())][$objbanco->getIdcuentabancaria()];
+                        $totalf+=$ingresos[strtolower($rubroingreso->getRubroingresoNombre())][$objbanco->getIdcuentabancaria()];
+                    }
+                    $valuefila['banco' . $numbanco] = $cantidadcuent;
+                    $numbanco++;
+                }
+                $valuefila['total'] = $totalf;
+                if ($totalf != 0)
+                    $porcentaje = number_format(($totalf * 100) / $totali, 2);
+                else
+                    $porcentaje = 0;
+                $valuefila['pct'] = $porcentaje;
+                $reportei[$fila] = $valuefila;
+                $fila++;
+            }
+            $totalesi = array();
+            foreach ($reportei as $reportei1) {
+                foreach ($reportei1 as $key => $value) {
+                    if (strpos($key, 'banco') !== false) {
+                        if (isset($totalesi[$key]))
+                            $totalesi[$key]+=($value != "") ? $value : 0;
+                        else
+                            $totalesi[$key] = ($value != "") ? $value : 0;
                     }
                 }
-                if (isset($reporte['inventariomesdetalle_revisada'])) {
-                    $inventariocierremes_detalle->setInventariomesdetalleRevisada(1);
-                }
-                $inventariocierremes_detalle->setIdinventariomes($inventariocierremes->getIdinventariomes());
-                $inventariocierremes_detalle->save();
             }
-            $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-            return $this->redirect()->toUrl('/administracion/reportes/cierresinventarios');
-        }
-        $ts = strtotime("now");
-        $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
-        //dia inicio de semana date('Y-m-d',$start);
-        $fecha = date('Y-m-d', strtotime('next sunday', $start));
+            $totalesi['total'] = $totali;
+            $totalesi['pct'] = "100";
 
-        $form = new \Application\Administracion\Form\Reportes\CierresinventariosForm($fecha, $almacen_array, $auditor_array);
+            $reporte = array();
+            $flujosefectivos = \FlujoefectivoQuery::create()->filterByFlujoefectivoFecha(array('min' => $ano . '-' . $mes . '-01 00:00:00', 'max' => $ano . '-' . $mes . '-' . $dias . ' 23:59:59'))->filterByFlujoefectivoOrigen('compra')->orderByIdcompra()->find();
+            $flujoefectivo = new \Flujoefectivo();
+            $pagos = array();
+
+            $inicio = $ano . '-' . $mes . '-01 00:00:00';
+            $fin = $ano . '-' . $mes . '-' . $dias . ' 23:59:59';
+            foreach ($flujosefectivos as $flujoefectivo) {
+                $cheque = true;
+                if ($flujoefectivo->getFlujoefectivoMediodepago() == 'cheque') {
+                    $fecha = $flujoefectivo->getFlujoefectivoFechacobrocheque();
+                    if (!($inicio < $fecha) && ($fecha < $fin))
+                        $cheque = false;
+                }
+                if ($cheque) {
+                    array_push($pagos, array('idcompra' => $flujoefectivo->getIdcompra(), 'banco' => $flujoefectivo->getCuentabancaria()->getCuentabancariaBanco(), 'saldo' => str_replace(",", "", $flujoefectivo->getFlujoefectivoCantidad())));
+                }
+            }
+            for ($i = 0; $i < count($pagos); $i++) {
+                $idcompra = $pagos[$i]['idcompra'];
+                $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($idcompra)->find();
+                $compradetalle = new \Compradetalle();
+                $pendiente = 0;
+                $cantidadpagar = 0;
+                $saldo = number_format($pagos[$i]['saldo'], 5);
+                $saldo = str_replace(",", "", $saldo);
+                //echo "saldo inicial $saldo <br>";
+                foreach ($comprasdetalles as $compradetalle) {
+                    do {
+                        $categoria = $compradetalle->getProducto()->getIdsubcategoria();
+                        if ($saldo < 0) {
+                            if (isset($pagos[$i + 1]['idcompra'])) {
+                                if ($pagos[$i + 1]['idcompra'] == $idcompra) {
+                                    $i++;
+                                    $saldo = number_format($pagos[$i]['saldo'], 6);
+                                } else
+                                    break;
+                            } else
+                                break;
+                            $saldo = str_replace(",", "", $saldo);
+                            //echo "aumento de saldo $saldo <br>";
+                        }
+                        if ($pendiente != 0) {
+                            if ($saldo >= $pendiente) {
+                                //echo "if de pendiente $pendiente <br>";
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']]))
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $pendiente;
+                                else
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $pendiente;
+                                $saldo = number_format($saldo - $pendiente, 6);
+                                $pendiente = 0;
+                                $cantidadpagar = 0;
+                            } else {
+                                //echo "else de pendiente $pendiente <br>";
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
+                                    $pendiente -= number_format($saldo, 6);
+                                } else {
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
+                                    $pendiente -= number_format($saldo, 6);
+                                }
+                                $saldo = number_format($pendiente, 6);
+                                $saldo = $saldo * -1;
+                            }
+                        } else {
+                            //echo "sin pendiente <br>";
+                            $cantidadpagar = ($compradetalle->getProducto()->getProductoIva()) ? number_format(($compradetalle->getCompradetalleSubtotal() * $iva), 6) : number_format($compradetalle->getCompradetalleSubtotal(), 6);
+                            $cantidadpagar = str_replace(",", "", $cantidadpagar);
+                            //echo "cantidad a pagar $cantidadpagar y saldo $saldo <br>";
+                            if ($saldo >= $cantidadpagar) {
+                                //echo "saldo mayor = $saldo <br>";
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']]))
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $cantidadpagar;
+                                else
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $cantidadpagar;
+                                $saldo = number_format($saldo - $cantidadpagar, 6);
+                                $saldo = str_replace(",", "", $saldo);
+                                $cantidadpagar = 0;
+                            } else {
+                                //echo "saldo menor = $saldo <br>";
+                                if (isset($reporte[$categoria][$pagos[$i]['banco']])) {
+                                    //echo "envio de saldo a reporte if<br>";
+                                    $reporte[$categoria][$pagos[$i]['banco']] += $saldo;
+                                    $pendiente = number_format(($cantidadpagar - $saldo), 6);
+                                } else {
+                                    //echo "envio de saldo a reporte else<br>";
+                                    $reporte[$categoria][$pagos[$i]['banco']] = $saldo;
+                                    $pendiente = number_format(($cantidadpagar - $saldo), 6);
+                                }
+                                $saldo = number_format(($saldo - $cantidadpagar), 6);
+                                $saldo = str_replace(",", "", $saldo);
+                                $cantidadpagar = number_format($pendiente, 6);
+                            }
+                        }
+                    } while ($cantidadpagar != 0 || $i < count($pagos));
+                }
+            }
+            $objbancos = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->orderByCuentabancariaBanco()->find();
+            $objbanco = new \Cuentabancaria();
+            $arraybancos = array();
+            $arraybancos2 = array();
+            $numero = 1;
+            foreach ($objbancos as $key => $objbanco) {
+                array_push($arraybancos2, $objbanco->getCuentabancariaBanco());
+            }
+
+            foreach ($arraybancos2 as $key => $value) {
+                $arraybancos['banco' . ($key + 1)] = $value;
+            }
+
+
+            for ($i = (count($arraybancos)); $i < 8; $i++) {
+                $arraybancos['banco' . ($i + 1)] = "";
+            }
+            $totales = array();
+            $totalg = 0;
+            foreach ($reporte as $banco) {
+                foreach ($banco as $key => $value) {
+                    if (isset($totales[$key]))
+                        $totales[$key]+=$value;
+                    else
+                        $totales[$key] = $value;
+                    $totalg+=$value;
+                }
+            }
+
+            $arraytotales = array();
+            for ($i = 0; $i < count($arraybancos2); $i++) {
+                $value = "";
+                if (isset($totales[$arraybancos2[$i]]))
+                    $value = $totales[$arraybancos2[$i]];
+                $arraytotales['banco' . ($i + 1)] = $value;
+            }
+            $arraytotales['total'] = $totalg;
+            $arraytotales['pct'] = "100";
+
+
+            $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+            $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+
+            $objcategorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
+            $categoria = new \Categoria();
+            $reportec = array();
+            $fila = 0;
+            foreach ($objcategorias as $categoria) {
+                $valuefila = array();
+                $valuefila['nombre'] = $categoria->getCategoriaNombre();
+                $totalf = 0;
+                for ($i = 1; $i < count($arraybancos2) + 1; $i++) {
+                    $cantidadbanco = "";
+                    if (isset($reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]])) {
+                        $cantidadbanco = $reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                        $totalf+=$reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                    }
+                    $valuefila['banco' . $i] = $cantidadbanco;
+                }
+                $valuefila['total'] = $totalf;
+                $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 6) : 0;
+                $valuefila['pct'] = $porcentaje;
+                $reportec[$fila] = $valuefila;
+
+                $fila++;
+            }
+            $objcategorias = \CategoriaQuery::create()->find();
+            $categoria = new \Categoria();
+            $reportesc = array();
+            $fila = 0;
+            foreach ($objcategorias as $categoria) {
+                if ($categoria->getIdcategoriapadre() != null) {
+                    $valuefila = array();
+                    $valuefila['nombre'] = $categoria->getCategoriaNombre();
+                    $totalf = 0;
+                    for ($i = 1; $i < count($arraybancos2) + 1; $i++) {
+                        $cantidadbanco = "";
+                        if (isset($reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]])) {
+                            $cantidadbanco = $reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                            $totalf+=$reporte[$categoria->getIdcategoria()][$arraybancos2[$i - 1]];
+                        }
+                        $valuefila['banco' . $i] = $cantidadbanco;
+                    }
+                    $valuefila['total'] = $totalf;
+                    $porcentaje = ($totalf!=0) ? number_format(($totalf * 100) / $totalg, 6) : 0;
+                    $valuefila['pct'] = $porcentaje;
+                    $reportesc[$fila] = $valuefila;
+                    $fila++;
+                }
+            }
+            $template = '/flujoefectivomensual' . count($arraybancos2) . 'B.xlsx';
+            $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+            $config = array(
+                'template' => $template,
+                'templateDir' => $templateDir
+            );
+            $a = array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal);
+            $R = new \PHPReport($config);
+            $R->load(
+                    array(
+                        array(
+                            'id' => 'compania',
+                            'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal),
+                        ),
+                        array(
+                            'id' => 'reporte',
+                            'data' => array('mes' => $mes, 'ano' => $ano),
+                        ),
+                        array(
+                            'id' => 'banco',
+                            'data' => $arraybancos,
+                        ),
+                        array(
+                            'id' => 'ingreso',
+                            'repeat' => true,
+                            'data' => $reportei,
+                        ),
+                        array(
+                            'id' => 'subt',
+                            'data' => $arraytotales,
+                        ),
+                        array(
+                            'id' => 'ingresot',
+                            'data' => $totalesi,
+                        ),
+                        array(
+                            'id' => 'subcat',
+                            'repeat' => true,
+                            'data' => $reportesc,
+                        )
+                    )
+            );
+            if (isset($post_data['generar_pdf']))
+                echo $R->render('PDF');
+            else
+                echo $R->render('excel');
+            exit;
+        }
+        //INTANCIAMOS NUESTRA VISTA
+        $form = new \Application\Administracion\Form\Reportes\CierresinventariosForm();
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/administracion/reportes/cierresinventarios/nuevo');
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
         ));
+        $view_model->setTemplate('/application/administracion/reportes/cierresinventarios/index');
         return $view_model;
     }
-
-    public function batchAction() {
-        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
-        $session = new \Shared\Session\AouthSession();
-        $session = $session->getData();
-
-
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $idempresa = $session['idempresa'];
-            $idsucursal = $session['idsucursal'];
-            $post_data = $request->getPost();
-            /* obtiene todos los datos en este formato:
-              array(5) { ["CLAVE"]=> string(1) "2" ["NOMBRE"]=> string(4) "test" ["UNIDAD"]=> string(5) "Pieza" ["CANTIDAD"]=> string(1) "1" ["TOTAL"]=> string(1) "1" }
-              array(5) { ["CLAVE"]=> string(1) "3" ["NOMBRE"]=> string(19) "Servicio de tequila" ["UNIDAD"]=> string(7) "Botella" ["CANTIDAD"]=> string(1) "5" ["TOTAL"]=> string(1) "5" }
-              array(5) { ["CLAVE"]=> string(1) "4" ["NOMBRE"]=> string(17) "Botella Don Julio" ["UNIDAD"]=> string(5) "Pieza" ["CANTIDAD"]=> string(1) "7" ["TOTAL"]=> string(1) "7" }
-              array(5) { ["CLAVE"]=> string(1) "5" ["NOMBRE"]=> string(6) "Fresca" ["UNIDAD"]=> string(5) "Pieza" ["CANTIDAD"]=> string(1) "8" ["TOTAL"]=> string(1) "8" }
-             */
-            $idalmacen = $post_data['almacen'];
-            $idusuario = $post_data['auditor'];
-            $productosReporte = array();
-            foreach ($post_data['inventario']["Sheet1"] as $producto) {
-                if (count($producto) == 5 && $producto['CLAVE'] != 'CLAVE')
-                    $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
-            }
-            $ts = strtotime("now");
-            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
-            $inicio_semana = date('Y-m-d', $start);
-            $fin_semana = date('Y-m-d', strtotime('next sunday', $start));
-
-            $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
-            $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
-
-            $inicio_semana = $inicio_semana . " 00:00:00   ";
-            $fin_semana = $fin_semana . " 23:59:59";
-
-            //inventario anterior
-            $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->exists();
-            if ($inventario_anterior)
-                $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->findOne()->getIdinventariomes();
-
-            $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
-            $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
-
-            $objrequisicionesOrigen = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
-            $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
-
-            $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
-            $objordentabDestino = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
-
-            $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
-
-            $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
-            $objproducto = new \Producto();
-
-            $reporte = array();
-            $sobrante = 0;
-            $faltante = 0;
-            $falim = 0;
-            $fbebi = 0;
-            $impFisTotal=0;
-            $bgfila = "#F2F2F2";
-            $bgfila2 = "#FFFFFF";
-            $color = true;
-            $row = 0;
-            foreach ($objproductos as $objproducto) {
-                $exisinicial = 0;
-                if ($inventario_anterior) {
-                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleDiferencia();
-                }
-                $totalProductoCompra = 0;
-                $compra = 0;
-                foreach ($objcompras as $objcompra) {
-                    $objcompradetalles = \CompradetalleQuery::create()
-                            ->filterByIdcompra($objcompra->getIdcompra())
-                            ->filterByIdalmacen($idalmacen)
-                            ->filterByIdproducto($objproducto->getIdproducto())
-                            ->find();
-                    $objcompradetalle = new \Compradetalle();
-                    foreach ($objcompradetalles as $objcompradetalle) {
-                        $compra+=$objcompradetalle->getCompradetalleCantidad();
-                        $totalProductoCompra+=$objcompradetalle->getCompradetalleSubtotal();
-                    }
-                }
-
-                $requisicionIng = 0;
-                foreach ($objrequisicionesDestino as $objrequisicion) {
-                    $objrequisiciondetalles = \RequisiciondetalleQuery::create()
-                            ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                            ->filterByIdproducto($objproducto->getIdproducto())
-                            ->find();
-                    $objrequisiciondetalle = new \Requisiciondetalle();
-                    foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
-                        $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
-                    }
-                }
-
-                $ordenTabIng = 0;
-                foreach ($objordentabDestino as $objordentab) {
-                    $objordentabdetalles = \OrdentablajeriadetalleQuery::create()
-                            ->filterByIdordentablajeria($objordentab->getIdordentablajeria())
-                            ->filterByIdproducto($objproducto->getIdproducto())
-                            ->find();
-                    $objordentabdetalle = new \Ordentablajeriadetalle();
-                    foreach ($objordentabdetalles as $objordentabdetalle) {
-                        $ordenTabIng+=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
-                    }
-                }
-
-                $venta = 0;
-                foreach ($objventas as $objventa) {
-                    $objventadetalles = \VentadetalleQuery::create()
-                            ->filterByIdventa($objventa->getIdventa())
-                            ->filterByIdalmacen($idalmacen)
-                            ->filterByIdproducto($objproducto->getIdproducto())
-                            ->find();
-                    $objventadetalle = new \Ventadetalle();
-                    foreach ($objventadetalles as $objventadetalle) {
-                        $venta+=$objventadetalle->getVentadetalleCantidad();
-                    }
-                }
-
-                $requisicionEg = 0;
-                foreach ($objrequisicionesOrigen as $objrequisicion) {
-                    $objrequisiciondetalles = \RequisiciondetalleQuery::create()
-                            ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                            ->filterByIdpadre(NULL)
-                            ->filterByIdproducto($objproducto->getIdproducto())
-                            ->find();
-                    $objrequisiciondetalle = new \Requisiciondetalle();
-                    foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
-                        $requisicionEg+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
-                    }
-                }
-
-                $ordenTabEg = 0;
-                foreach ($objordentabOrigen as $objordentab) {
-                    $objordentabdetalles = \OrdentablajeriadetalleQuery::create()
-                            ->filterByIdordentablajeria($objordentab->getIdordentablajeria())
-                            ->filterByIdproducto($objproducto->getIdproducto())
-                            ->find();
-                    $objordentabdetalle = new \Ordentablajeriadetalle();
-                    foreach ($objordentabdetalles as $objordentabdetalle) {
-                        $ordenTabEg+=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
-                    }
-                }
-
-                $devolucion = 0;
-                foreach ($objdevoluciones as $objdevolucion) {
-                    $objdevoluciondetalles = \DevoluciondetalleQuery::create()
-                            ->filterByIddevolucion($objdevolucion->getIddevolucion())
-                            ->filterByIdalmacen($idalmacen)
-                            ->filterByIdproducto($objproducto->getIdproducto())
-                            ->find();
-                    $objdevoluciondetalle = new \Devoluciondetalle();
-                    foreach ($objdevoluciondetalles as $objdevoluciondetalle) {
-                        $devolucion+=$objdevoluciondetalle->getDevoluciondetalleCantidad();
-                    }
-                }
-
-                $stockTeorico = ($compra + $requisicionIng + $ordenTabIng) - ($venta + $requisicionEg + $ordenTabEg);
-
-                $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
-                $stockFisico = 0;
-                if (isset($productosReporte[$objproducto->getIdproducto()]))
-                    $stockFisico = $productosReporte[$objproducto->getIdproducto()];
-
-                $dif = $stockTeorico - $stockFisico;
-
-                $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
-                $costoPromedio = ($costoPromedio > 0) ? $costoPromedio * -1 : $costoPromedio;
-                $difImporte = $dif * $costoPromedio;
-                if (0 < $difImporte)
-                    $sobrante+=$difImporte;
-                else
-                    $faltante+=$difImporte;
-                $colorbg = ($color) ? $bgfila : $bgfila2;
-                $color = !$color;
-                $impFis = $stockFisico * $costoPromedio;
-                $stockFisico=($stockFisico==0) ? "" : $stockFisico;
-                $cat=$objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
-                if ($cat == 1)
-                    $falim+=$impFis;
-                if ($cat == 2)
-                    $fbebi+=$impFis;
-                $impFisTotal+=$impFis;
-                $idproducto = $objproducto->getIdproducto();
-                $nomPro = $objproducto->getProductoNombre();
-                //<input type='hidden'  name='' value=''>
-                array_push($reporte, "<tr id='$idproducto' bgcolor='" . $colorbg . "'><td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td><td>$nomPro</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockinicial]' value='$exisinicial'> $exisinicial</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresocompra]' value='$compra'>$compra</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresorequisicion]' value='$requisicionIng'>$requisicionIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresoordentablajeria]' value='$ordenTabIng'>$ordenTabIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoventa]' value='$venta'>$venta</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresorequisicion]' value='$requisicionEg'>$requisicionEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoordentablajeria]' value='$ordenTabEg'>$ordenTabEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td><td>$unidad</td><td><input required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td><td class='inventariomesdetalle_importefisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_importefisico]' value='$impFis'><span>$impFis</span></td><td class='inventariomesdetalle_diferencia'><input type='hidden'  name='reporte[$row][inventariomesdetalle_diferencia]' value='$dif'> <span>$dif</span></td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_costopromedio]' value='$costoPromedio'>$costoPromedio</td><td class='inventariomesdetalle_difimporte'><input type='hidden'  name='reporte[$row][inventariomesdetalle_difimporte]' value='$difImporte'><span>$difImporte</span></td><td><input type='checkbox' name='reporte[$row][inventariomesdetalle_revisada]'></td></tr>");
-                $row++;
-            }
-            $total = $sobrante + $faltante;
-            $responsable = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
-            if ($responsable == "")
-                $responsable = "N/A";
-            array_push($reporte, "<tr><td>Responsable</td><td>$responsable</td><td></td><td><td></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final alimentos</td><td class='inventariomes_finalalimentos'><input type='hidden'  name='inventariomes_finalalimentos' value='$falim'><span>$falim</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final bebidas</td><td class='inventariomes_finalbebidas'><input type='hidden'  name='inventariomes_finalbebidas' value='$fbebi'><span>$fbebi</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Sobrante</td><td class='inventariomes_sobrantes'><input type='hidden'  name='inventariomes_sobrantes' value='$sobrante'><span>$sobrante</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Faltante</td><td class='inventariomes_faltantes'><input type='hidden'  name='inventariomes_faltantes' value='$faltante'><span>$faltante</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Total</td><td class='inventariomes_total'><input type='hidden'  name='inventariomes_total' value='$total'><span>$total</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Importe Fisico</td><td class='inventariomes_totalimportefisico'><input type='hidden'  name='inventariomes_totalimportefisico' value='$impFisTotal'><span>$impFisTotal</span></td></tr>");
-            return $this->getResponse()->setContent(json_encode($reporte));
-        }
-    }
-
 }
