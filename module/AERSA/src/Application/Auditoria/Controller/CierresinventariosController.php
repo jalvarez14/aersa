@@ -180,7 +180,7 @@ class CierresinventariosController extends AbstractActionController {
                 if ($inventario_anterior) {
                     $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                     if ($exisinicial)
-                        $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleDiferencia();
+                        $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
                 }
                 $totalProductoCompra = 0;
                 $compra = 0;
@@ -272,7 +272,7 @@ class CierresinventariosController extends AbstractActionController {
                     }
                 }
 
-                $stockTeorico = ($compra + $requisicionIng + $ordenTabIng) - ($venta + $requisicionEg + $ordenTabEg);
+                $stockTeorico = ($compra + $requisicionIng + $ordenTabIng + $exisinicial) - ($venta + $requisicionEg + $ordenTabEg);
 
                 $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                 $stockFisico = 0;

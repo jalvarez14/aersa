@@ -96,7 +96,7 @@ class ReportesController extends AbstractActionController {
             }
             if ($documento) {
                 $template = '/variacioncostos.xlsx';
-                $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
                 $inicio = $mes_inicio . "/" . $ano_inicio;
                 $fin = $mes_fin . "/" . $ano_fin;
                 $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
@@ -183,7 +183,7 @@ class ReportesController extends AbstractActionController {
             $idproductos = array();
             $post_data = $request->getPost();
             $template = '/inventarios.xlsx';
-            $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
+            $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
             $formato = $post_data['formato'];
 
             foreach ($post_data as $key => $value) {
@@ -457,7 +457,7 @@ class ReportesController extends AbstractActionController {
 
             if ($documento) {
                 $template = '/entradasporcompras.xlsx';
-                $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
                 $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
                 $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
                 $config = array(
@@ -856,7 +856,7 @@ class ReportesController extends AbstractActionController {
             exit;
             if ($documento) {
                 $template = '/variacioncostos.xlsx';
-                $templateDir = $_SERVER['DOCUMENT_ROOT'] . 'application/files/jasper/templates';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
                 $inicio = $mes_inicio . "/" . $ano_inicio;
                 $fin = $mes_fin . "/" . $ano_fin;
                 $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
