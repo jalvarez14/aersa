@@ -147,7 +147,7 @@ class CierresinventariosController extends AbstractActionController {
             $fin_semana = $fin_semana . " 23:59:59";
 
             //inventario anterior
-            $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->exists();
+            $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdalmacen($idalmacen)->exists();
             if ($inventario_anterior)
                 $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->findOne()->getIdinventariomes();
 
