@@ -48,7 +48,6 @@
         var caluclator = function ($tr) {
             var cantidad = $tr.find('input[name*=requisiciondetalle_cantidad]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=requisiciondetalle_cantidad]').val()).toFixed(6)) : 1;
             var preciounitario = $tr.find('input[name*=requisiciondetalle_preciounitario]').val() != "" ? parseFloat(parseFloat($tr.find('input[name*=requisiciondetalle_preciounitario]').val()).toFixed(6)) : 0;
-
             //ROW SUBTOTAL
             var row_subtotal = cantidad * preciounitario;
             $tr.find('input[name*=requisiciondetalle_subtotal]').val(row_subtotal);
@@ -59,7 +58,7 @@
             $('#productos_table tbody').find('input[name*=requisiciondetalle_subtotal]').filter(function () {
                 requisicion_subtotal = requisicion_subtotal + parseFloat(parseFloat($(this).val()).toFixed(6));
             });
-
+            
             //COMPRA TOTAL
             var requisicion_total = requisicion_subtotal + row_subtotal - row_subtotal;
             $('#productos_table tfoot').find('#total').text(accounting.formatMoney(requisicion_total));
@@ -402,7 +401,7 @@
                 tr.append('<td> '+ tipopro + '</td>');
                 tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
                 tr.append('<td> '+ $('#unidadmedida_nombre').val() + '</td>');
-                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
+                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
                 tr.append('<td><input disabled required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="'+precio+'"></td>');
                 tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
                 tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
@@ -614,7 +613,7 @@
                 tr.append('<td> '+ tipopro + '</td>');
                 tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
                 tr.append('<td> '+ $('#unidadmedida_nombre').val() + '</td>');
-                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="1"></td>');
+                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
                 tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
                 tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
                 tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
