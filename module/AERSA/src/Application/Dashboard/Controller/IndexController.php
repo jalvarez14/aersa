@@ -28,9 +28,17 @@ class IndexController extends AbstractActionController
         
         $search = $this->params()->fromQuery('q');
         
-        $query = \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->filterByProveedorNombrecomercial('%'.$search.'%',  \Criteria::LIKE)->find();
-        $result = \Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproveedor', 'proveedor_nombrecomercial');
-        
+        $query = \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->filterByProveedorNombrecomercial('%'.$search.'%',  \Criteria::LIKE)->_or()->filterByProveedorRazonsocial('%'.$search.'%',  \Criteria::LIKE)->find();
+        $result = array();
+        $entity = new \Proveedor();
+        foreach ($query as $entity){
+            $id = $entity->getIdproveedor();
+            $value = $entity->getProveedorNombrecomercial()." - ".$entity->getProveedorRazonsocial();
+            $tmp['id'] = $id;
+            $tmp['value'] = $value;
+            $result[] = $tmp;
+        }
+
         return $this->getResponse()->setContent(json_encode($result));
 
         
