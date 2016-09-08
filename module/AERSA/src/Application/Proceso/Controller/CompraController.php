@@ -145,7 +145,7 @@ class CompraController extends AbstractActionController {
                 $compra_detalle->save();
                 
             }
-             echo '<pre>';var_dump($post_data);echo '</pre>';exit();
+  
             //REDIRECCIONAMOS AL LISTADO
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
             return $this->redirect()->toUrl('/procesos/compra');
