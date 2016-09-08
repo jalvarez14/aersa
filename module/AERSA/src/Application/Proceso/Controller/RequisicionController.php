@@ -294,9 +294,9 @@ class RequisicionController extends AbstractActionController {
 
     public function getalmdesAction() {
         $cat = $this->params()->fromRoute('id');
-        $result = \AlmacenQuery::create()->filterByIdsucursal($cat)->find()->toArray();
+        $result = \AlmacenQuery::create()->filterByIdsucursal($cat)->filterByAlmacenEstatus(1)->find()->toArray();
         return $this->getResponse()->setContent(json_encode($result));
-    }
+    }   
     
     public function gettipoproAction() {
         $cat = $this->params()->fromRoute('id');

@@ -58,7 +58,7 @@ class RequisicionForm extends Form {
                 'class' => 'form-control'
             ),
             'options' => array(
-                'label' => 'Alamacen origen *',
+                'label' => 'Almacén origen *',
                 'value_options' => $almacen_array,
             ),
         ));
@@ -84,7 +84,7 @@ class RequisicionForm extends Form {
                 'class' => 'form-control'
             ),
             'options' => array(
-                'label' => 'Almacen destino *',
+                'label' => 'Almacén destino *',
                 'value_options' => $almacen_array,
             ),
         ));
