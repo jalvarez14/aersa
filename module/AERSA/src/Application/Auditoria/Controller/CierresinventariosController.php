@@ -99,8 +99,13 @@ class CierresinventariosController extends AbstractActionController {
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
         //dia inicio de semana date('Y-m-d',$start);
-        $fecha = date('Y-m-d', strtotime('next sunday', $start));
-
+        $semana_act= \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+        $anio_act= \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+        $time = strtotime("1 January $anio_act", time());
+        $day = date('w', $time);
+        $time += ((7*$semana_act)+1-$day)*24*3600;
+        $time += 6*24*3600;
+        $fecha= date('Y-m-d', $time);
         $form = new \Application\Auditoria\Form\CierresinventariosForm($fecha, $almacen_array, $auditor_array);
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/auditoria/cierresinventarios/nuevo');
