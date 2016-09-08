@@ -210,7 +210,7 @@
             //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE ELIMINAR CADA UNO DE LOS REGISTROS
             $container.find('#datatable tbody tr').filter(function(){
                 var date = new Date($(this).attr('date'));
-                if(getWeekNumber(new Date()) != mes || (date.getFullYear()) != anio){
+                if(date.format('W') != mes || (date.getFullYear()) != anio){
                     $(this).find('.delete_modal').unbind();
                     $(this).find('.delete_modal').css('cursor','not-allowed');
                 }
@@ -222,6 +222,42 @@
         plugin.init = function(){
             
             settings = plugin.settings = $.extend({}, defaults, options);
+            
+            
+            //COMPRAS POR CFDI
+            $('#cfdi_add').on('click',function(){
+                $('input[name=cfdi_add]').trigger('click');
+            });
+            $('input[name=cfdi_add]').on('change',function(){
+                
+                var empty = false;
+                var val = $('input[name=cfdi_add]').val();
+                if(val == ""){
+                    empty = true;
+                }
+                
+                if(!empty){
+                    var files = $('input[name=cfdi_add]').get(0).files;
+                    var i, f;
+                    for (i = 0, f = files[i]; i != files.length; ++i) {
+                        
+                        var reader = new FileReader();
+                        var name = f.name;
+                        reader.onload = function (e) {
+                            
+                             var data = e.target.result;
+                             var xml = jQuery.parseXML(data);
+                             var json = xmlToJson(xml);
+                             console.log(json);
+                             
+      
+              
+                        }
+                        reader.readAsBinaryString(f);
+                    }
+                }
+            });
+            
 
         }
         
@@ -646,9 +682,8 @@
             var now = $('input[name=compra_fechacompra]').val();
             
             var now_array = now.split('/');
-
-            var now = new Date(now_array[2]+'-'+now_array[1]+'-'+parseInt(now_array[0]));
-            if(new Date().format('W') != mes || now.getFullYear() != anio){
+            var now = new Date(now_array[2]+'/'+now_array[1]+'/'+parseInt(now_array[0]));
+            if(now.format('W') != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');

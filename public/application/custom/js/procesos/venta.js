@@ -1195,7 +1195,7 @@
             //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE ELIMINAR CADA UNO DE LOS REGISTROS
             $container.find('#datatable tbody tr').filter(function(){
                 var date = new Date($(this).attr('date'));
-                if(getWeekNumber(new Date())  != mes || (date.getFullYear()) != anio){
+                if(date.format('W') != mes || (date.getFullYear()) != anio){
                     $(this).find('.delete_modal').unbind();
                     $(this).find('.delete_modal').css('cursor','not-allowed');
                 }
@@ -1287,8 +1287,8 @@
            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
             var now = $('input[name=venta_fechaventa]').val();
             var now_array = now.split('/');
-            var now = new Date(now_array[2]+'-'+now_array[1]+'-'+now_array[0]);
-            if(new Date().format('W') != mes || now.getFullYear() != anio){
+            var now = new Date(now_array[2]+'/'+now_array[1]+'/'+now_array[0]);
+            if(now.format('W') != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');

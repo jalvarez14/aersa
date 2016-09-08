@@ -71,7 +71,7 @@ class CompraController extends AbstractActionController {
         if($request->isPost()){
             
             $post_data = $request->getPost();
-            
+           
             $post_files = $request->getFiles();
            
             $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
@@ -141,11 +141,11 @@ class CompraController extends AbstractActionController {
                 if(isset($producto['revisada'])){
                     $compra_detalle->setCompradetalleRevisada(1);
                 }
-                
+
                 $compra_detalle->save();
                 
             }
-            
+             echo '<pre>';var_dump($post_data);echo '</pre>';exit();
             //REDIRECCIONAMOS AL LISTADO
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
             return $this->redirect()->toUrl('/procesos/compra');
