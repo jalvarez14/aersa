@@ -37,6 +37,7 @@ class ProductoController extends AbstractActionController
                          ->setProductoNombre($post_data['product_name'])
                          ->setProductoPrecio($post_data["producto"]['producto_precio'])
                          ->setProductoRendimientooriginal($post_data["producto"]['producto_rendimientooriginal'])
+                        ->setProductoRendimiento($post_data['producto_rendimiento'])
                          ->setProductoTipo($post_data["producto"]['producto_tipo'])
                          ->save();
                 
@@ -76,6 +77,7 @@ class ProductoController extends AbstractActionController
                          ->setProductoNombre($post_data['producto_nombre'])
                          ->setProductoPrecio($post_data['producto_precio'])
                          ->setProductoRendimientooriginal($post_data['producto_rendimientooriginal'])
+                        ->setProductoRendimiento($post_data['producto_rendimiento'])
                          ->setProductoTipo($post_data['producto_tipo'])
                          ->save();
                 
