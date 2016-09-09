@@ -215,6 +215,7 @@
                                             categoria_nombre:row.Categoria,
                                             categoria_nombre_sub:row.SubCategoria,
                                             producto_rendimientooriginal:row.Rendimiento,
+                                            producto_rendimiento:row.Rendimiento,
                                             producto_precio:row.PrecioVenta,
                                             producto_costo:row.Costo,
                                             producto_tipo:row.Tipo,
