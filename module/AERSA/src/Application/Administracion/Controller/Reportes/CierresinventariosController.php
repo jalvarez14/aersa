@@ -15,8 +15,101 @@ class CierresinventariosController extends AbstractActionController {
         $idsucursal = $session['idsucursal'];
         $request = $this->getRequest();
         if ($request->isPost()) {
+            $post_data = $request->getPost();
+            var_dump($post_data);
+            $inicio=$post_data['fecha_inicial'];
+            $fin=$post_data['fecha_final'];
+            $inicioSpli=  explode('/', $inicio);
+            $finSpli=  explode('/', $fin);
+            $inicio=$inicioSpli[2]."-".$inicioSpli[1]."-".$inicioSpli[0];
+            $fin=$finSpli[2]."-".$finSpli[1]."-".$finSpli[0];
+            
+            //ventas netas sin iva
+            $ingresos= \IngresoQuery::create()->filterByIdsucursal($idsucursal)->filterByIngresoFecha(array('min' => $inicio.' 00:00:00', 'max' => $fin.' 23:59:59'))->find();
+            $ingreso=new \Ingreso();
+            $ventasNetasAlimentos=0;
+            $ventasNetasBebidas=0;
+            $ventasNetasConsolidado=0;
+            foreach($ingresos as $ingreso) {
+                $ingresosDetalles= \IngresodetalleQuery::create()->filterByIdingreso($ingreso->getIdingreso())->find();
+                $ingresoDetalle=new \Ingresodetalle();
+                foreach ($ingresosDetalles as $ingresoDetalle) {
+                    if($ingresoDetalle->getIdrubroingreso()==1)
+                        $ventasNetasAlimentos+=$ingresoDetalle->getIngresodetalleSub();
+                    else if($ingresoDetalle->getIdrubroingreso()==2)
+                        $ventasNetasBebidas+=$ingresoDetalle->getIngresodetalleSub();
+                }
+            }
+            $ventasNetasConsolidado=$ventasNetasAlimentos+$ventasNetasBebidas;
+            
+            //inventario incial
+            $prevSunday = date('Y-m-d',strtotime('last sunday', strtotime($inicio)));
+            
+            $inventariosMes= \InventariomesQuery::create()->filterByIdsucursal($idsucursal)->filterByInventariomesFecha($prevSunday)->find();
+            $inventarioMes= new \Inventariomes();
+            $invIniAlimentos=0;
+            $invIniBebidas=0;
+            $invIniConsolidado=0;
+            foreach ($inventariosMes as $inventarioMes) {
+                $invIniAlimentos+=$inventarioMes->getInventariomesFinalalimentos();
+                $invIniBebidas+=$inventarioMes->getInventariomesFinalbebidas();
+            }
+            $invIniConsolidado=$invIniBebidas+$invIniAlimentos;
+            
+            //compras del mes
+            $compraMesAlimentos=0;
+            $compraMesBebidas=0;
+            $compraMesConsolidado=0;
             $iva = \TasaivaQuery::create()->filterByIdtasaiva(1)->findOne()->getTasaivaValor();
             $iva = $iva / 100 + 1;
+            
+            $almacenesActi= \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->filterByAlmacenEstatus(1)->find();
+            $almacen=new \Almacen();
+            foreach ($almacenesActi as $almacen) {
+                $compras= \CompraQuery::create()->filterByIdsucursal()->filterByIdalmacen($almacen->getIdalmacen())->filterByCompraFechacompra(array('min'=> $inicio.' 00:00:00', 'max'=>$fin.' 23:59:59'))->find();
+                $compra=new \Compra();
+                foreach ($compras as $compra) {
+                    $comprasDetalle= \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
+                    $compraDetalle= new \Compradetalle();
+                    foreach ($comprasDetalle as $compraDetalle) {
+                        $cantidad=number_format(($compraDetalle->getCompradetalleSubtotal() * $iva), 6);
+                        $cantidad = str_replace(",", "", $cantidad);
+                        if($compraDetalle->getProducto()->getIdcategoria()==1)
+                            $compraMesAlimentos+=$cantidad;
+                        else if($compraDetalle->getProducto()->getIdcategoria()==2)
+                            $compraMesBebidas+=$cantidad;
+                    }
+                }
+            }
+            $compraMesConsolidado=$compraMesAlimentos+$compraMesBebidas;
+            //existencias
+            $existenciaAlimentos=$invIniAlimentos+$compraMesAlimentos;
+            $existenciaBebidas=$invIniBebidas+$compraMesBebidas;
+            $existenciaConsolidado=$invIniConsolidado+$compraMesConsolidado;
+            
+            //inventario final
+            $invFinAlimentos=0;
+            $invFinBebidas=0;
+            $invFinConsolidado=0;
+            
+            //costo bruto
+            $costoBrutoAlimentos=$existenciaAlimentos-$invFinAlimentos;
+            $costoBrutoBebidas=$existenciaBebidas-$invFinBebidas;
+            $costoBrutoConsolidado=$existenciaConsolidado-$invFinConsolidado;
+            
+            //creditos al costo
+            $creditosCostAlimentos=0;
+            $creditosCostBebidas=0;
+            $creditosCostConsolidado=0;
+            
+            //Costo neta de venta
+            $costVentAlimentos=$costoBrutoAlimentos-$creditosCostAlimentos;
+            $costVentBebidas=$costoBrutoBebidas-$creditosCostBebidas;
+            $costVentConsolidado=$costoBrutoConsolidado-$creditosCostConsolidado;
+            
+            
+            exit;
+            
             $post_data = $request->getPost();
             $mes = $post_data['mes'];
             $ano = $post_data['ano'];
