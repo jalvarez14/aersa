@@ -178,6 +178,6 @@
 <script type="text/javascript" src="/application/custom/js/procesos/ingresos.js"></script>
 <script type="text/javascript" src="/application/custom/js/procesos/comentarios.js"></script>
 <script>
-    var $form = $('#form_container').ingresos({'iva':<?php echo $iva?>});
+    var $form = $('#form_container').ingresos({'iva':<?php echo $iva?>,'idrol':<?php echo $idrol?>});
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

@@ -34,6 +34,7 @@ class ConsignacionController extends AbstractActionController {
             'collection' => $collection,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+                'idrol' => $session['idrol'],
         ));
         return $view_model;
 
@@ -169,6 +170,7 @@ class ConsignacionController extends AbstractActionController {
             'mes_activo' => $mes_activo,
             'almacenes' => json_encode($almecenes), //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
             'iva' => $iva,
+            'idrol' => $session['idrol'],
         ));
 
         return $view_model;
@@ -305,6 +307,7 @@ class ConsignacionController extends AbstractActionController {
                 'almacenes' => $almecenes,
                 'count' => $count,
                 'iva' => $iva,
+                'idrol' => $session['idrol'],
             ));
             
             return $view_model;

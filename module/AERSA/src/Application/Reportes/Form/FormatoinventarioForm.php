@@ -19,7 +19,7 @@ class FormatoinventarioForm extends Form {
             ),
             'options' => array(
                 'label' => 'Almacen *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $almacen,
             ),
         ));
@@ -33,7 +33,7 @@ class FormatoinventarioForm extends Form {
             ),
             'options' => array(
                 'label' => 'Formato *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'PDF' => 'PDF',
                     'excel' => 'Excel',
@@ -50,7 +50,7 @@ class FormatoinventarioForm extends Form {
             ),
             'options' => array(
                 'label' => 'Movimientos recientes *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'Si' => 'Si',
                     'No' => 'No',

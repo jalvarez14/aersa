@@ -133,12 +133,33 @@
                 }
             });
             
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+                $('.delete_modal').parent('li').remove();
+            }
+            
             
         }
         
         plugin.init = function(){
       
             settings = plugin.settings = $.extend({}, defaults, options);
+            
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+               $('select[name=ingreso_revisada]').attr('disabled',true);
+               $('form input[type=checkbox]').attr('disabled',true);
+               var revisada =  $('select[name=ingreso_revisada] option:selected').val();
+               if(revisada == 1){
+                   $('form input,form select,form button[type=submit]').attr('disabled',true);
+               }
+            }
         
         }
         

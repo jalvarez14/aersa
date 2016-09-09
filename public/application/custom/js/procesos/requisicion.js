@@ -306,6 +306,14 @@
                     $(this).find('.delete_modal').css('cursor','not-allowed');
                 }
             });
+            
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+                $('.delete_modal').parent('li').remove();
+            }
         }
 
         plugin.init = function () {
@@ -404,7 +412,15 @@
                 tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
                 tr.append('<td><input disabled required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="'+precio+'"></td>');
                 tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
-                tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                    tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada] disabled>  </td>');
+                }else{
+                    tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                }
+                
                 if(tipopro!='simple')
                     tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
@@ -524,6 +540,14 @@
                 });
                          
            });
+           
+           /*
+            * ACL
+            */
+          
+           if(settings.idrol == 5){
+               $('select[name=requisicion_revisada] option[value=1]').remove();
+           }
 
 
         }
@@ -616,7 +640,14 @@
                 tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
                 tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
                 tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
-                tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                    tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada] disabled>  </td>');
+                }else{
+                    tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                }
                 if(tipopro!='simple')
                     tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
@@ -833,6 +864,16 @@
                 $('.fa-trash').css('cursor','not-allowed');
                 
             }
+
+            if(settings.idrol == 5){
+               $('select[name=requisicion_revisada]').attr('disabled',true);
+               $('#productos_table input[type=checkbox]').attr('disabled',true);
+               var revisada =  $('select[name=requisicion_revisada] option:selected').val();
+  
+               if(revisada == 1){
+                   $('form input,form select,form button[type=submit]').attr('disabled',true);
+               }
+           }
 
         }
 

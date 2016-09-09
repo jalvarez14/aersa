@@ -56,7 +56,7 @@ class FlujoefectivocuentaporcobrarForm extends Form {
             ),
             'options' => array(
                 'label' => 'Medio de pago *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'cheque' => 'Cheque',
                     'efectivo' => 'Efectivo',
@@ -95,7 +95,7 @@ class FlujoefectivocuentaporcobrarForm extends Form {
             'type' => 'Select',
             'options' => array(
                 'label' => 'Cobrado *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Si',
                     0 => 'No',

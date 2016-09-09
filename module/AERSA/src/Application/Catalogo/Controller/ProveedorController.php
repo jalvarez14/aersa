@@ -7,6 +7,45 @@ use Zend\Console\Request as ConsoleRequest;
 
 class ProveedorController extends AbstractActionController
 {
+    
+    public function associatevendorAction(){
+         $request = $this->getRequest();
+          //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+            
+         if ($request->isPost()){
+             $post_data = $request->getPost();
+            
+             $cfdi = new \Proveedorescfdi();
+             $cfdi->setIdproveedor($post_data['idproveedor'])
+                  ->setProveedorescfdiNombre($post_data['emisor_nombre'])
+                  ->setIdempresa($session['idempresa'])
+                  ->save();       
+         }
+         
+         return $this->getResponse()->setContent(json_encode(array('response' => true,'proveedor' => array('id' => $cfdi->getIdproveedor(), 'value' => $cfdi->getProveedor()->getProveedorNombrecomercial(). " - ". $cfdi->getProveedor()->getProveedorRazonsocial()))));
+    }
+    
+    public function validateproveedorcfdiAction(){
+         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+         if ($request->isPost()){
+             $post_data = $request->getPost();
+             
+             $query = \ProveedorescfdiQuery::create()->filterByProveedorescfdiNombre($post_data['emisor_nombre'])->exists();
+             if(!$query){
+                 return $this->getResponse()->setContent(json_encode(array('response' => false)));
+             }
+             
+       
+         }
+    }
+    
+    
     public function indexAction()
     {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES

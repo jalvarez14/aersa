@@ -34,7 +34,7 @@ class UsuarioForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Rol *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Administrador',
                     2 => 'Auditor'
@@ -51,7 +51,7 @@ class UsuarioForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Estatus *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Activo',
                     0 => 'Inactivo'

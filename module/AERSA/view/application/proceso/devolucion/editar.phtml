@@ -262,7 +262,7 @@
 <script type="text/javascript" src="/application/custom/js/procesos/devolucion.js"></script>
 <script type="text/javascript" src="/application/custom/js/procesos/comentarios.js"></script>
 <script>
-    var $form = $('#form_container').compra();
+    var $form = $('#form_container').compra({'idrol':<?php echo $idrol?>});
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $mes_devolucion ?>,<?php echo $anio_devolucion ?>,<?php echo json_encode($almacenes)?>,<?php echo $count?>);
 </script>
 

@@ -507,9 +507,24 @@
                                                                                             $tr.append('<td>'+accounting.formatMoney(precio_unitario)+'</td>');
                                                                                             $tr.append('<td>'+accounting.formatMoney(subtotal)+'</td>');
                                                                                             if(revisado == 1){
-                                                                                                $tr.append('<td><input checked type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                                                               /*
+                                                                                                * ACL
+                                                                                                */
+                                                                                               if(settings.idrol == 5){
+                                                                                                     $tr.append('<td><inputchecked type="checkbox" name=productos['+count+'][revisada] disabled></td>');
+                                                                                               }else{
+                                                                                                    $tr.append('<td><input checked type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                                                               }
+                                                                                                
                                                                                             }else{
-                                                                                                $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                                                                /*
+                                                                                                * ACL
+                                                                                                */
+                                                                                               if(settings.idrol == 5){
+                                                                                                     $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada] disabled></td>');
+                                                                                               }else{
+                                                                                                    $tr.append('<td><input  type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                                                               }
                                                                                             }
                                                                                             if (data3.data.receta.length > 0) {
                                                                                                 $tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
@@ -952,9 +967,24 @@
                                                                                                             $tr.append('<td>' + accounting.formatMoney(precio_unitario) + '</td>');
                                                                                                             $tr.append('<td>' + accounting.formatMoney(subtotal) + '</td>');
                                                                                                             if (revisado == 1) {
-                                                                                                                $tr.append('<td><input checked type="checkbox" name=productos[' + count + '][revisada]></td>');
+                                                                                                                /*
+                                                                                                                 * ACL
+                                                                                                                 */
+                                                                                                                if (settings.idrol == 5) {
+                                                                                                                    $tr.append('<td><inputchecked type="checkbox" name=productos[' + count + '][revisada] disabled></td>');
+                                                                                                                } else {
+                                                                                                                    $tr.append('<td><input checked type="checkbox" name=productos[' + count + '][revisada]></td>');
+                                                                                                                }
+
                                                                                                             } else {
-                                                                                                                $tr.append('<td><input type="checkbox" name=productos[' + count + '][revisada]></td>');
+                                                                                                                /*
+                                                                                                                 * ACL
+                                                                                                                 */
+                                                                                                                if (settings.idrol == 5) {
+                                                                                                                    $tr.append('<td><input type="checkbox" name=productos[' + count + '][revisada] disabled></td>');
+                                                                                                                } else {
+                                                                                                                    $tr.append('<td><input  type="checkbox" name=productos[' + count + '][revisada]></td>');
+                                                                                                                }
                                                                                                             }
                                                                                                             if (data3.data.receta.length > 0) {
                                                                                                                 $tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
@@ -1025,10 +1055,25 @@
                                                         $tr.append('<td>'+cantidad+'</td>');
                                                         $tr.append('<td>'+accounting.formatMoney(precio_unitario)+'</td>');
                                                         $tr.append('<td>'+accounting.formatMoney(subtotal)+'</td>');
-                                                        if(revisado == 1){
-                                                            $tr.append('<td><input checked type="checkbox" name=productos['+count+'][revisada]></td>');
-                                                        }else{
-                                                            $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                                                        if (revisado == 1) {
+                                                            /*
+                                                             * ACL
+                                                             */
+                                                            if (settings.idrol == 5) {
+                                                                $tr.append('<td><inputchecked type="checkbox" name=productos[' + count + '][revisada] disabled></td>');
+                                                            } else {
+                                                                $tr.append('<td><input checked type="checkbox" name=productos[' + count + '][revisada]></td>');
+                                                            }
+
+                                                        } else {
+                                                            /*
+                                                             * ACL
+                                                             */
+                                                            if (settings.idrol == 5) {
+                                                                $tr.append('<td><input type="checkbox" name=productos[' + count + '][revisada] disabled></td>');
+                                                            } else {
+                                                                $tr.append('<td><input  type="checkbox" name=productos[' + count + '][revisada]></td>');
+                                                            }
                                                         }
                                                         if(data.data.receta.length > 0){
                                                             $tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
@@ -1201,12 +1246,32 @@
                 }
             });
             
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+                $('.delete_modal').parent('li').remove();
+            }
+            
             
         }
         
         plugin.init = function(){
             
             settings = plugin.settings = $.extend({}, defaults, options);
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+               $('select[name=venta_revisada]').attr('disabled',true);
+               $('form input[type=checkbox]').attr('disabled',true);
+               var revisada =  $('select[name=venta_revisada] option:selected').val();
+               if(revisada == 1){
+                   $('form input,form select,form button[type=submit]').attr('disabled',true);
+               }
+            }
 
         }
         

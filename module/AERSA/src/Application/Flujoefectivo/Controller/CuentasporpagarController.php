@@ -239,7 +239,7 @@ class CuentasporpagarController extends AbstractActionController {
                     'type' => 'Select',
                     'options' => array(
                         'label' => 'Pago *',
-                        'empty_option' => 'Sin especificar',
+                        
                         'value_options' => array(
                             'cuenta' => 'Cuenta',
                             'abono' => 'Abono',

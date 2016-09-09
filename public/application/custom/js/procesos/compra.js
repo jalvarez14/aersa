@@ -216,7 +216,13 @@
                 }
             });
             
+            /*
+             * ACL
+             */
             
+            if(settings.idrol == 5){
+                $('.delete_modal').parent('li').remove();
+            }
         }
         
         plugin.init = function(){
@@ -248,7 +254,106 @@
                              var data = e.target.result;
                              var xml = jQuery.parseXML(data);
                              var json = xmlToJson(xml);
-                             console.log(json);
+                             var emisor_nombre = json['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['nombre'];
+                             $.ajax({
+                                url: '/catalogo/proveedor/validateproveedorcfdi',
+                                type: 'POST',
+                                dataType: 'JSON',
+                                async: false,
+                                data:  {emisor_nombre:emisor_nombre},
+                                success: function (data) {
+                                    if(!data.response){
+                                        var tmpl = [
+                                            '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                                                '<div class="modal-header">',
+
+                                                    '<h4 class="modal-title">Asociar emisor - proveedor </h4>',
+                                                '</div>',
+                                                '<div class="modal-body">',
+                                                    '<div class="row">',
+                                                        '<div class="col-md-12">',
+                                                            '<div class="custom-alerts alert alert-warning fade in">',
+                                                                '<strong>Advertencia!</strong>',
+                                                                 ' El siguiente emisor NO se encuentra asociado a ningun proveedor. Para continuar es necesario que lo asocie a un proveedor existente.',
+                                                            '</div>',
+                                                        '</div>',
+                                                        '<div class="col-md-12">',
+                                                            '<div class="form-group">',
+                                                                '<label for="producto_nombre">Nombre del emisor *</label>',
+                                                                '<input required class="form-control" type="text" name="emisor_nombre" value="'+emisor_nombre+'" disabled>',
+                                                            '</div>',
+                                                        '</div>',
+                                                        '<div class="col-md-12">',
+                                                            '<div class="form-group">',
+                                                                '<label for="producto_nombre">Proveedor *</label>',
+                                                                '<div class="input-group">',
+                                                                    '<span class="input-group-addon">',
+                                                                        '<i class="fa fa-search"></i>',
+                                                                    '</span>',
+                                                                    '<input type="hidden" name="idproveedor">',
+                                                                    '<input required class="form-control" type="text" name="idproveedor_autocomplete">',
+                                                                     '<span style="color:red;display:none">Este campo es requerido</span>',
+                                                                '</div>',
+                                                            '</div>',
+                                                        '</div>',
+                                                    '</div>',
+                                                '</div>',
+                                                '<div class="modal-footer">',
+                                                    '<button id="save_product" href="#" class="btn blue">Guardar</button>',
+                                                    '<button id="cancel_product" href="#" class="btn red">Cancelar</button>',
+                                                '</div>',
+                                            '</div>',  
+                                        ].join('');
+                                        var $modal = $(tmpl);
+                                         
+                                        var data = new Bloodhound({
+                                            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                                            queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                            remote: {
+                                              url: '/autocomplete/getproveedores?q=%QUERY&cfdi=1',
+                                              wildcard: '%QUERY'
+                                            }
+                                        });
+                                        $modal.find('input[name=idproveedor_autocomplete]').typeahead(null, {
+                                            name: 'best-pictures',
+                                            display: 'value',
+                                            hint: true,
+                                            highlight: true,
+                                            source: data,
+                                            limit:5,
+                                        });
+                                        $modal.find('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+                                            $modal.find('input[name=idproveedor]').val(suggestion.id);
+                                        });
+                                        $modal.find('#cancel_product').on('click',function(){
+                                            $modal.modal('hide');
+                                        });
+                                        $modal.find('#save_product').on('click',function(){
+                                           $modal.find('input[name=idproveedor_autocomplete]').next('span').hide();
+                                            var idproveedor = $modal.find('input[name=idproveedor]').val();
+                                            if($modal.find('input[name=idproveedor_autocomplete]').val() !=""){
+                                                $.ajax({
+                                                url:'/catalogo/proveedor/associatevendor',
+                                                type:'POST',
+                                                data:{idproveedor:idproveedor,emisor_nombre:emisor_nombre},
+                                                dataType:'JSON',
+                                                success: function (data2) {
+                                                   console.log(data2);
+
+                                                }
+                                                });
+                                            }else{
+                                                console.log( $modal.find('input[name=idproveedor_autocomplete]'));
+                                                $modal.find('input[name=idproveedor_autocomplete]').next('span').show();
+                                            }
+                                            
+                                        });
+                                        $modal.modal();
+                                    }
+                                }
+                            });
+                             
+                             console.log();
                              
       
               
@@ -302,7 +407,7 @@
         }
 
         plugin.new = function(anio,mes,almacenes){
-            
+         
             var minDate = firstDayOfWeek(anio,mes);
             var maxDate = new Date(minDate);
             maxDate.setDate(minDate.getDate() + 6);
@@ -396,7 +501,15 @@
                 tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
                 tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                    tr.append('<td><input type="checkbox" name=productos['+count+'][revisada] disabled></td >');
+                }else{
+                    tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                }
+                
                 tr.append(almacenen_select);
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
@@ -455,9 +568,7 @@
            
            //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
             revisadaControl();
-           
-           
-           
+
            //VALIDAR FOLIO
            $('input[name=compra_folio]').on('blur',function(){
                 var folio = $(this).val();
@@ -466,7 +577,7 @@
                 $.ajax({
                     url: "/procesos/compra/validatefolio",
                     dataType: "json",
-                    data: {folio:folio},
+                    data: {folio:folio,idproveedor:$('input[name=idproveedor]').val()},
                     success: function (exist) {
                        
                         if(exist){
@@ -480,6 +591,15 @@
                 });
                          
            });
+           
+           
+           /*
+            * ACL
+            */
+           if(settings.idrol == 5){
+               $('select[name=compra_revisada] option[value=1]').remove();
+           }
+           
                          
         }
         
@@ -583,7 +703,14 @@
                 tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
                 tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                    tr.append('<td><input type="checkbox" name=productos['+count+'][revisada] disabled></td >');
+                }else{
+                    tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                }
                 tr.append(almacenen_select);
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
@@ -664,7 +791,7 @@
                 $.ajax({
                     url: "/procesos/compra/validatefolio",
                     dataType: "json",
-                    data: {folio:folio,edit:true,id:$('input[name=idcompra]').val()},
+                    data: {folio:folio,edit:true,id:$('input[name=idcompra]').val(),idproveedor:$('input[name=idproveedor]').val()},
                     success: function (exist) {
                         if(exist){
                             alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
@@ -697,6 +824,18 @@
                 id: id,
                 parent:'idcompra',
             });
+            
+            /*
+            * ACL
+            */
+           if(settings.idrol == 5){
+               $('select[name=compra_revisada]').attr('disabled',true);
+               $('#productos_table input[type=checkbox]').attr('disabled',true);
+               var revisada =  $('select[name=compra_revisada] option:selected').val();
+               if(revisada == 1){
+                   $('form input,form select,form button[type=submit]').attr('disabled',true);
+               }
+           }
 
         }
 

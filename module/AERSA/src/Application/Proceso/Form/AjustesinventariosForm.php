@@ -38,7 +38,7 @@ class AjustesinventariosForm extends Form {
             'name' => 'idalmacen',
             'type' => 'Select',
             'options' => array(
-                'empty_option' => 'Sin especificar',
+                
                 'label' => 'Almacen *',
                 'value_options' => $almacen_array,
             ),
@@ -119,7 +119,7 @@ class AjustesinventariosForm extends Form {
             'type' => 'Select',
             'options' => array(
                 'label' => 'Tipo *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'sobrante' => 'Sobrante',
                     'faltante' => 'Faltante',

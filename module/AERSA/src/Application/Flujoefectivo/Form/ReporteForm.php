@@ -19,7 +19,7 @@ class ReporteForm extends Form {
             ),
             'options' => array(
                 'label' => 'Año *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $ano_array,
             ),
         ));
@@ -33,7 +33,7 @@ class ReporteForm extends Form {
             ),
             'options' => array(
                 'label' => 'Mes *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     '01' => 'Enero',
                     '02' => 'Febrero',

@@ -43,7 +43,7 @@ class CuentaporpagarForm extends Form {
             'type' => 'Select',
             'options' => array(
                 'label' => 'Pago *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'cuenta' => 'Cuenta',
                     'abono' => 'Abono',
@@ -61,7 +61,7 @@ class CuentaporpagarForm extends Form {
             'name' => 'idcuentabancaria',
             'type' => 'Select',
             'options' => array(
-                'empty_option' => 'Sin especificar',
+                
                 'label' => 'Cuenta bancaria',
                 'value_options' => $idcuentabancaria,
             ),
@@ -89,7 +89,7 @@ class CuentaporpagarForm extends Form {
             'type' => 'Select',
             'options' => array(
                 'label' => 'Medio de pago',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'cheque' => 'Cheque',
                     'efectivo' => 'Efectivo',
@@ -119,7 +119,7 @@ class CuentaporpagarForm extends Form {
             'name' => 'flujoefectivo_chequecirculacion',
             'type' => 'Select',
             'options' => array(
-                'empty_option' => 'Sin especificar',
+                
                 'label' => '¿Cobrado?',
                 'value_options' => array(
                     1 => 'Si',

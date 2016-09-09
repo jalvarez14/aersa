@@ -34,7 +34,7 @@ class TrabajadorpromedioForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Mes *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Enero',
                     2 => 'Febrero',

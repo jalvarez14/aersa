@@ -34,6 +34,7 @@ class IngresosController extends AbstractActionController {
             'collection' => $collection,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
             
         return $view_model;
@@ -126,6 +127,7 @@ class IngresosController extends AbstractActionController {
             'mes_activo' => $mes_activo,
             'anio_activo' => $anio_activo,
             'iva' => $iva,
+            'idrol' => $session['idrol'],
         ));
         $view_model->setTemplate('/application/proceso/ingresos/nuevo');
         return $view_model;
@@ -285,6 +287,7 @@ class IngresosController extends AbstractActionController {
                 'concepto_ingresos' => $concepto_ingresos,
                 'detalles' => $detalles_array,
                 'iva' => $iva,
+                'idrol' => $session['idrol'],
             ));
             
             return $view_model;

@@ -280,13 +280,32 @@
                 }
             });
             
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+                $('.delete_modal').parent('li').remove();
+            }
+            
             
         }
         
         plugin.init = function(){
             
             settings = plugin.settings = $.extend({}, defaults, options);
-
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+               $('select[name=ordentablajeria_revisada]').attr('disabled',true);
+               $('#productos_table input[type=checkbox]').attr('disabled',true);
+               var revisada =  $('select[name=ordentablajeria_revisada] option:selected').val();
+               if(revisada == 1){
+                   $('form input,form select,form button[type=submit]').attr('disabled',true);
+               }
+            }
         }
         
         plugin.new = function(anio,mes,almacenes){
@@ -448,6 +467,14 @@
                 $tr.append('<td class="pesototal">1</td>');
                 $tr.append('<td class="precioporcion">'+accounting.formatMoney(1)+'</td>');
                 $tr.append('<td class="importe">'+accounting.formatMoney(1)+'</td>');
+                 /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                    $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada] disabled></td>');
+                }else{
+                    $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                }
                 $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
                 $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
@@ -674,7 +701,14 @@
                 $tr.append('<td class="pesototal">1</td>');
                 $tr.append('<td class="precioporcion">'+accounting.formatMoney(1)+'</td>');
                 $tr.append('<td class="importe">'+accounting.formatMoney(1)+'</td>');
-                $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                 /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                    $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada] disabled></td>');
+                }else{
+                    $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                }
                 $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
                 //EVENTOS DE NUESTRAS ROW

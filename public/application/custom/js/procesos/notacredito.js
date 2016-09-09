@@ -255,12 +255,33 @@
                 }
             });
             
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+                $('.delete_modal').parent('li').remove();
+            }
+            
             
         }
         
         plugin.init = function(){
             
             settings = plugin.settings = $.extend({}, defaults, options);
+            
+            /*
+             * ACL
+             */
+            
+            if(settings.idrol == 5){
+               $('select[name=notacredito_revisada]').attr('disabled',true);
+               $('form input[type=checkbox]').attr('disabled',true);
+               var revisada =  $('select[name=notacredito_revisada] option:selected').val();
+               if(revisada == 1){
+                   $('form input,form select,form button[type=submit]').attr('disabled',true);
+               }
+            }
 
         }
         
@@ -357,7 +378,15 @@
                 tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
                 tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                      tr.append('<td><input type="checkbox" name=productos['+count+'][revisada] disabled> </td>');
+                }else{
+                     tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                }
+               
                 tr.append(almacenen_select);
                 tr.append('<td class="text-center"><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
@@ -530,7 +559,14 @@
                 tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
                 tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
-                tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                 /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                      tr.append('<td><input type="checkbox" name=productos['+count+'][revisada] disabled> </td>');
+                }else{
+                     tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
+                }
                 tr.append(almacenen_select);
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 

@@ -310,6 +310,29 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'validateproveedorcfdi' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validateproveedorcfdi',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Proveedor',
+                                                'action' => 'validateproveedorcfdi',
+                                            ),
+                                        ),
+                                    ),
+                                    
+                                    'associatevendor' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/associatevendor',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Proveedor',
+                                                'action' => 'associatevendor',
+                                            ),
+                                        ),
+                                    ),
+                                
+                                    
                                 ),
                             ),
                             'producto' => array(

@@ -49,7 +49,7 @@ use Zend\Form\Form;
             'type' => 'Select',
             'options' => array(
                 'label' => 'Almacen origen *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $almacen_array,
             ),
             'attributes' => array(
@@ -63,7 +63,7 @@ use Zend\Form\Form;
             'type' => 'Select',
             'options' => array(
                 'label' => 'Almacen destino *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $almacen_array,
             ),
             'attributes' => array(
@@ -226,10 +226,11 @@ use Zend\Form\Form;
             'type' => 'Select',
             'options' => array(
                 'label' => 'Revisada ',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
+                     0 => 'No revisada',
                     1 => 'Revisada',
-                    0 => 'No revisada',
+                   
                 ),
             ),
             'attributes' => array(
@@ -256,7 +257,7 @@ use Zend\Form\Form;
             'type' => 'Select',
             'options' => array(
                 'label' => 'Es porcion ',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Si',
                     0 => 'No',

@@ -73,6 +73,6 @@
 <script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
 <script src="/application/custom/js/procesos/ajustesinventarios.js" type="text/javascript"></script>	
 <script>
-    var $plugin = $('#my_container').ajustesinventarios();
+    var $plugin = $('#my_container').ajustesinventarios({'idrol':<?php echo $idrol?>});
     $plugin.list();
 </script>

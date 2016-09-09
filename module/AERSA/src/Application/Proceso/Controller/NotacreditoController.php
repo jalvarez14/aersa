@@ -27,6 +27,7 @@ class NotacreditoController extends AbstractActionController {
             'collection' => $collection,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
         return $view_model;
     }
@@ -153,7 +154,8 @@ class NotacreditoController extends AbstractActionController {
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
             'iva' => $iva,
-            'almacenes' => json_encode($almecenes) //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
+            'almacenes' => json_encode($almecenes), //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
+            'idrol' => $session['idrol'],
         ));
 
         return $view_model;
@@ -291,6 +293,7 @@ class NotacreditoController extends AbstractActionController {
                 'mes_notacredito' => $entity->getNotacreditoFechacreacion('m'),
                 'anio_notacredito' => $entity->getNotacreditoFechacreacion('Y'),
                 'iva' => $iva,
+                'idrol' => $session['idrol'],
             ));
 
             return $view_model;

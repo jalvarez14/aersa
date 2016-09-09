@@ -80,7 +80,7 @@ class AbonoproveedordetalleForm extends Form {
             'type' => 'Select',
             'options' => array(
                 'label' => 'Tipo *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'abono' => 'Abono',
                     'egreso' => 'Egreso',
@@ -125,7 +125,7 @@ class AbonoproveedordetalleForm extends Form {
             ),
             'options' => array(
                 'label' => 'Medio de pago *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'cheque' => 'Cheque',
                     'efectivo' => 'Efectivo',
@@ -140,7 +140,7 @@ class AbonoproveedordetalleForm extends Form {
             'type' => 'Select',
             'options' => array(
                 'label' => 'Cobrado *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Si',
                     0 => 'No',

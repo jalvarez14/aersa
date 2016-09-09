@@ -75,7 +75,7 @@ use Zend\Form\Form;
             'type' => 'Select',
             'options' => array(
                 'label' => 'Almacen *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $almacen_array,
             ),
             'attributes' => array(
@@ -89,7 +89,7 @@ use Zend\Form\Form;
             'type' => 'Select',
             'options' => array(
                 'label' => 'Tipo *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     'ordecompra' => 'Orden compra',
                     'compra' => 'Compra',
@@ -106,10 +106,11 @@ use Zend\Form\Form;
             'type' => 'Select',
             'options' => array(
                 'label' => 'Revisión *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
+                     0 => 'No revisada',
                     1 => 'Revisada',
-                    0 => 'No revisada',
+                   
                 ),
             ),
             'attributes' => array(

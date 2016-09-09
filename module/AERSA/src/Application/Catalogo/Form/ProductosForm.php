@@ -35,7 +35,7 @@ class ProductosForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Categoria *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $categorias,
             ),
             'attributes' => array(
@@ -49,7 +49,7 @@ class ProductosForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Subcategoria',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $subcategorias
             ),
             'attributes' => array(

@@ -91,6 +91,6 @@
 <script src="/application/custom/js/procesos/devolucion.js" type="text/javascript"></script>	
 <script>
     
-    var plugin = $('#my_container').compra();
+    var plugin = $('#my_container').compra({'idrol':<?php echo $idrol?>});
     plugin.list(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

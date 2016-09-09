@@ -66,7 +66,7 @@ class NotacreditoForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Almacen *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $almacen_array,
             ),
             'attributes' => array(
@@ -80,10 +80,11 @@ class NotacreditoForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Revisión *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
+                     0 => 'No revisada',
                     1 => 'Revisada',
-                    0 => 'No revisada',
+                   
                 ),
             ),
             'attributes' => array(

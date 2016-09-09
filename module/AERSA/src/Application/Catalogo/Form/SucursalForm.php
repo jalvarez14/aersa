@@ -34,7 +34,7 @@ class SucursalForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Estatus *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Activo',
                     0 => 'Inactivo'
@@ -51,7 +51,7 @@ class SucursalForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Productos *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Habilitar',
                     0 => 'No habilitar'
@@ -68,7 +68,7 @@ class SucursalForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Recetas *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Habilitar',
                     0 => 'No habilitar'
@@ -85,7 +85,7 @@ class SucursalForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Semana activa *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => $array_weeks,
             ),
             'attributes' => array(
@@ -129,7 +129,7 @@ class SucursalForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Estatus *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Activo',
                     0 => 'Inactivo'
@@ -183,7 +183,7 @@ class SucursalForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Estatus *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Activo',
                     0 => 'Inactivo'

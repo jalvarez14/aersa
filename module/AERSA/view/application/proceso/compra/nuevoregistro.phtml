@@ -91,7 +91,8 @@
         <div class="portlet-body form">
             <div class="portlet-body form">
                 <div class="form-body">
-                    <h3 class="page-title">Productos</h3><br><br>
+                    <input type="file" style="display: none" name="cfdi_add" accept=".xml">
+                    <h3 class="page-title">Productos <button id="cfdi_add" class="btn grey-mint" type="button">Cargar CFDI</button></h3><br><br>
                     <div class="row">
                         <div class="form-group">
                             <div class="col-md-4 col-md-offset-6">
@@ -187,8 +188,10 @@
     </div>
 </form>
 </div>
+<script type="text/javascript" src="/application/global/plugins/xml2json.js"></script>
 <script type="text/javascript" src="/application/custom/js/procesos/compra.js"></script>
+
 <script>
-    var $form = $('#form_container').compra({'iva':<?php echo $iva?>});
+    var $form = $('#form_container').compra({'iva':<?php echo $iva?>,'idrol':<?php echo $idrol?>});
     $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $almacenes?>);
 </script>

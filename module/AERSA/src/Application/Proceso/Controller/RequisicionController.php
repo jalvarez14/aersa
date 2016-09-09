@@ -27,6 +27,7 @@ class RequisicionController extends AbstractActionController {
             'idusuario' => $idusuario,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
         return $view_model;
     }
@@ -132,6 +133,7 @@ class RequisicionController extends AbstractActionController {
             'messages' => $this->flashMessenger(),
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
         $view_model->setTemplate('/application/proceso/requisicion/nuevo');
         return $view_model;
@@ -268,6 +270,7 @@ class RequisicionController extends AbstractActionController {
                 'anio_activo' => $anio_activo,
                 'mes_activo' => $mes_activo,
                 'count' => $count,
+                'idrol' => $session['idrol'],
             ));
             
             return $view_model;

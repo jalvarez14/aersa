@@ -31,17 +31,28 @@
                             <th class="text"> Folio </th>
                             <th class="text"> Origen </th>
                             <th class="text"> Destino </th>
+                            <th> Revisada </th>
                             <th class="text"> Opciones </th>
                         </tr>
                     </thead>
                     <tbody class="text">
                         <?php $entity= new Requisicion();?>
                         <?php foreach ($collection as $entity) : ?>
+                        <?php 
+                            if($entity->getRequisicionRevisada()) {
+                                $class = 'info';
+                                $revisada = 'Revisada';
+                            } else {
+                                $class = 'danger';
+                                $revisada = 'No revisada';
+                            }
+                        ?>
                         <tr date="<?php echo $entity->getRequisicionFecha('Y/m/d') ?>"  id="<?php echo $entity->getIdrequisicion() ?>">
                                 <td><?php echo $entity->getRequisicionFecha('d/m/Y') ?></td>
                                 <td><?php echo $entity->getRequisicionFolio() ?></td>
                                 <td><?php echo $entity->getSucursalRelatedByIdsucursalorigen()->getSucursalNombre() ?></td>
                                 <td><?php echo $entity->getSucursalRelatedByIdsucursaldestino()->getSucursalNombre() ?></td>
+                                <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
@@ -85,6 +96,6 @@
 <script src="/application/custom/js/catalogo/tablajeria.js" type="text/javascript"></script>
 -->
 <script>
-    var $plugin = $('#my_container').requisicion();
+    var $plugin = $('#my_container').requisicion({'idrol':<?php echo $idrol?>});
     $plugin.list(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

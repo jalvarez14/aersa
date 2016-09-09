@@ -28,6 +28,7 @@ class TablajeriaController extends AbstractActionController {
             'collection' => $collection,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
         return $view_model;
     }
@@ -174,6 +175,7 @@ class TablajeriaController extends AbstractActionController {
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
             'almacenes' => json_encode($almecenes), //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
+            'idrol' => $session['idrol'],
  
         ));
 
@@ -304,6 +306,7 @@ class TablajeriaController extends AbstractActionController {
                 'has_plantilla' => $has_plantila,
                 'mes_ordentablajeria' => $entity->getOrdentablajeriaFecha('m'),
                 'anio_ordentablajeria' => $entity->getOrdentablajeriaFecha('Y'),
+                'idrol' => $session['idrol'],
             ));
 
             return $view_model;

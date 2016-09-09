@@ -33,7 +33,7 @@ class CategoriasForm extends Form
             'type' => 'select',
             'options' => array(
                 'label' => 'Padre *',
-                'empty_option' => 'Sin especificar',
+                
                     
                 'value_options' => $padres,
             ),

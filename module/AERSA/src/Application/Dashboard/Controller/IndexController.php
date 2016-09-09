@@ -27,17 +27,40 @@ class IndexController extends AbstractActionController
         $session = $session->getData();
         
         $search = $this->params()->fromQuery('q');
-        
+        $cfdi = $this->params()->fromQuery('cfdi') ? (int)$this->params()->fromQuery('cfdi') : 0;
+            
         $query = \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->filterByProveedorNombrecomercial('%'.$search.'%',  \Criteria::LIKE)->_or()->filterByProveedorRazonsocial('%'.$search.'%',  \Criteria::LIKE)->find();
-        $result = array();
-        $entity = new \Proveedor();
-        foreach ($query as $entity){
+        
+        if(!$cfdi){
+             
+            $result = array();
+            $entity = new \Proveedor();
+            foreach ($query as $entity){
             $id = $entity->getIdproveedor();
             $value = $entity->getProveedorNombrecomercial()." - ".$entity->getProveedorRazonsocial();
             $tmp['id'] = $id;
             $tmp['value'] = $value;
             $result[] = $tmp;
         }
+             
+        }else{
+            
+            $result = array();
+            $entity = new \Proveedor();
+            foreach ($query as $entity){
+                $id = $entity->getIdproveedor();
+                $value = $entity->getProveedorNombrecomercial()." - ".$entity->getProveedorRazonsocial();
+                if(!\ProveedorescfdiQuery::create()->filterByIdproveedor($id)->exists()){
+                    $tmp['id'] = $id;
+                    $tmp['value'] = $value;
+                    $result[] = $tmp;
+                }
+                
+            }
+        }
+                
+       
+        
 
         return $this->getResponse()->setContent(json_encode($result));
 

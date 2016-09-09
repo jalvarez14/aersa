@@ -195,6 +195,6 @@
 </div>
 <script type="text/javascript" src="/application/custom/js/procesos/requisicion.js"></script>
 <script>
-    var $form = $('#form_container').requisicion();
+    var $form = $('#form_container').requisicion({'idrol':<?php echo $idrol?>});
     $form.edit(<?php echo $anio_activo?>,<?php echo $mes_activo?>);
 </script>

@@ -28,6 +28,7 @@ class VentaController extends AbstractActionController {
             'collection' => $collection,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
         return $view_model;
     }
@@ -204,6 +205,7 @@ class VentaController extends AbstractActionController {
             'form' => $form,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
 
         return $view_model;
@@ -430,6 +432,7 @@ class VentaController extends AbstractActionController {
                 'mes_activo' => $mes_activo,
                 'mes_ordentablajeria' => $entity->getVentaFechaventa('m'),
                 'anio_ordentablajeria' => $entity->getVentaFechaventa('Y'),
+                'idrol' => $session['idrol'],
             ));
 
             return $view_model;

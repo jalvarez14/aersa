@@ -34,6 +34,7 @@ class CompraController extends AbstractActionController {
             'collection' => $collection,
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
         return $view_model;
 
@@ -46,17 +47,17 @@ class CompraController extends AbstractActionController {
         
         $folio = $this->params()->fromQuery('folio');
         $edit = (!is_null($this->params()->fromQuery('edit'))) ?$this->params()->fromQuery('edit') : false;
-
+        $idproveedor = $this->params()->fromQuery('idproveedor');
+        
         $to = new \DateTime();
         $from = date("Y-m-d", strtotime("-2 months")); $from = new \DateTime($from);
         
         if($edit){
              $id = $this->params()->fromQuery('id');
              $entity = \CompraQuery::create()->findPk($id);
-            
-             $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::LIKE)->exists();
+             $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::LIKE)->filterByIdproveedor($idproveedor)->exists();
         }else{
-            $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::EQUAL)->exists();
+            $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::EQUAL)->filterByIdproveedor($idproveedor)->exists();
         }
         
         return $this->getResponse()->setContent(json_encode($exist));
@@ -172,6 +173,7 @@ class CompraController extends AbstractActionController {
             'mes_activo' => $mes_activo,
             'almacenes' => json_encode($almecenes), //LO PASAMOS EN JSON POR QUE LO VAMOS A TRABAJR CON NUESTRO JS
             'iva' => $iva,
+            'idrol' => $session['idrol'],
         ));
 
         return $view_model;
@@ -317,6 +319,7 @@ class CompraController extends AbstractActionController {
                 'almacenes' => $almecenes,
                 'count' => $count,
                 'iva' => $iva,
+                'idrol' => $session['idrol'],
             ));
             
             return $view_model;

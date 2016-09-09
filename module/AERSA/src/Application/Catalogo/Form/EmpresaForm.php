@@ -76,7 +76,7 @@ class EmpresaForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Productos *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Habilitar',
                     0 => 'No habilitar'
@@ -93,7 +93,7 @@ class EmpresaForm extends Form
             'type' => 'Select',
             'options' => array(
                 'label' => 'Recetas *',
-                'empty_option' => 'Sin especificar',
+                
                 'value_options' => array(
                     1 => 'Habilitar',
                     0 => 'No habilitar'
