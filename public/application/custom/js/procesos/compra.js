@@ -77,19 +77,7 @@
             $tr.find('input[name*=subtotal]').val(row_subtotal);
             $tr.find('td.subtotal').text(accounting.formatMoney(row_subtotal));
             
-            //COMPRA SUBTOTAL
-            var compra_subtotal = 0.00;
-            $('#productos_table tbody').find('input[name*=subtotal]').filter(function(){
-
-                compra_subtotal= compra_subtotal + parseFloat(parseFloat(parseFloat($(this).val()).toFixed(6)));
-                
-            });
-      
-            $('#productos_table tfoot').find('#subtotal').text(accounting.formatMoney(compra_subtotal));
-            $('#productos_table tfoot').find('input[name=compra_subtotal]').val(compra_subtotal);
-            
             //COMPRA IEPS
-
             var compra_ieps = 0.00;
             $('#productos_table tbody tr').filter(function(){
                 var precio = $(this).find('input[name*=precio]').val();
@@ -108,7 +96,7 @@
             $('#productos_table tbody tr').filter(function(){
                 
                 var has_iva = $(this).find('input[name*=producto_iva]').val(); 
-                if(has_iva == "true"){
+                if(has_iva == "true" || has_iva == 1){
                     
                     var subtotal = parseFloat(parseFloat(parseFloat($(this).find('input[name*=subtotal]').val()).toFixed(6)));
                     var row_iva = (subtotal * settings.iva) / 100;
@@ -117,9 +105,21 @@
                 }
                 
             });
-
+     
             $('#productos_table tfoot').find('#iva').text(accounting.formatMoney(compra_iva));
             $('#productos_table tfoot').find('input[name=compra_iva]').val(compra_iva);
+            
+            //COMPRA SUBTOTAL
+            var compra_subtotal = 0.00;
+            $('#productos_table tbody').find('input[name*=subtotal]').filter(function(){
+
+                compra_subtotal= compra_subtotal + parseFloat(parseFloat(parseFloat($(this).val()).toFixed(6)));
+                
+            });
+            
+            $('#productos_table tfoot').find('#subtotal').text(accounting.formatMoney(compra_subtotal));
+            $('#productos_table tfoot').find('input[name=compra_subtotal]').val(compra_subtotal);
+            
             
             //COMPRA TOTAL
             var compra_total = compra_subtotal + compra_iva;
