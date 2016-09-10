@@ -172,7 +172,7 @@
                                     <td>
                                         <input type="text" name="productos[<?php echo $detalle->getIdcompradetalle()?>][precio]" value="<?php echo $detalle->getCompradetallePrecio()?>"> 
                                     </td>
-                                    <td>
+                                    <td class="costo_unitario">
                                         <?php echo money_format('%+#1.6n',$detalle->getCompradetalleCostounitario())?>
                                     </td>
                                     <td>
@@ -181,7 +181,7 @@
                                     <td>
                                         <input type="text" name="productos[<?php echo $detalle->getIdcompradetalle()?>][ieps]" value="<?php echo $detalle->getCompradetalleIeps()?>"> 
                                     </td>
-                                    <td>
+                                    <td class="subtotal">
                                         <?php echo money_format('%+#1.6n',$detalle->getCompradetalleSubtotal())?>
                                     </td>
                                     <td>

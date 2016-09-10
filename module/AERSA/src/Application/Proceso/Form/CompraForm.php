@@ -91,8 +91,9 @@ use Zend\Form\Form;
                 'label' => 'Tipo *',
                 
                 'value_options' => array(
-                    'ordecompra' => 'Orden compra',
                     'compra' => 'Compra',
+                    'ordecompra' => 'Orden compra',
+                    
                 ),
             ),
             'attributes' => array(

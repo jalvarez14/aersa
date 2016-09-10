@@ -51,7 +51,7 @@
        
         
         var caluclator = function($tr){
-           
+            
             var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat(parseFloat(parseFloat($tr.find('input[name*=cantidad]').val()).toFixed(6))) : 1;
            
             var precio = $tr.find('input[name*=precio]').val() != "" ? parseFloat(parseFloat(parseFloat($tr.find('input[name*=precio]').val()).toFixed(6))) : 0;
@@ -65,8 +65,10 @@
             $tr.find('td.costo_unitario').text(accounting.formatMoney(costo_unitario));
 
             //DESCUENTO
-            var row_desc = (costo_unitario * descuento) / 100
+            var row_desc = (costo_unitario * descuento) / 100;
+            
             costo_unitario = costo_unitario - row_desc;
+            
             $tr.find('input[name*=costo_unitario]').val(costo_unitario);
             $tr.find('td.costo_unitario').text(accounting.formatMoney(costo_unitario));
             
@@ -320,7 +322,7 @@
                                             hint: true,
                                             highlight: true,
                                             source: data,
-                                            limit:5,
+                                            limit:100,
                                         });
                                         $modal.find('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
                                             $modal.find('input[name=idproveedor]').val(suggestion.id);
@@ -441,7 +443,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit:5,
+                limit:100,
             });
             
             $('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
@@ -453,7 +455,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                  url: '/autocomplete/getproductos?q=%QUERY',
+                  url: '/autocomplete/getproductos?q=%QUERY&type=simple',
                   wildcard: '%QUERY'
                 }
             });
@@ -464,7 +466,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit:5,
+                limit:100,
             });
             
             $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
@@ -491,6 +493,9 @@
                    
                     almacenen_select.find('select').attr('disabled',true);
                 }
+                
+                var almacen_selected = $('select[name=idalmacen] option:selected').val();
+                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
 
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
@@ -640,7 +645,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit:5,
+                limit:100,
             });
             
             $('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
@@ -652,7 +657,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                  url: '/autocomplete/getproductos?q=%QUERY',
+                  url: '/autocomplete/getproductos?q=%QUERY&type=simple',
                   wildcard: '%QUERY'
                 }
             });
@@ -663,7 +668,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit:5,
+                limit:100,
             });
             
             $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
@@ -692,11 +697,13 @@
                    
                     almacenen_select.find('select').attr('disabled',true);
                 }
-
+                
+                var almacen_selected = $('select[name=idalmacen] option:selected').val();
+                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
                                
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
-               tr.append('<td>'+$('input#unidadmedida_nombre').val()+'</td>');
+                tr.append('<td>'+$('input#unidadmedida_nombre').val()+'</td>');
                 tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
                 tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');

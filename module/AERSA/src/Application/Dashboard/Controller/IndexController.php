@@ -74,7 +74,15 @@ class IndexController extends AbstractActionController
         $session = $session->getData();
 
         $search = $this->params()->fromQuery('q');
-        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+        $type = $this->params()->fromQuery('type') ? $this->params()->fromQuery('type') : false;
+       
+        if($type == 'simple'){
+            $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoTipo('simple')->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+        }else{
+            $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+        }
+        
+        
         
         return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
 
