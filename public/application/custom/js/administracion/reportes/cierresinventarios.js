@@ -91,23 +91,33 @@
                     return a;
                 }
             });
+            
+            container.find('input[name=fecha_fin]').attr('disabled',true);
 
-            container.find('input[name=fecha_fin]').datepicker({
-                format: 'dd/mm/yyyy',
-                beforeShowDay: function (date) {
-                    var a = new Array();
-                    a[0] = date.getDay() == 0;
-                    a[1] = '';
-                    a[2] = '';
-                    return a;
-                }
-            });
 
             $('input[name=fecha_inicio]').on('change', function () {
+
                 if ($(this).val() != "" && $('input[name=fecha_fin]').val() != "")
                     $('#generar_reporte').prop("type", "button");
                 else
                     $('#generar_reporte').prop("type", "submit");
+                var str = $(this).val();
+                var res = str.split("/");
+                container.find('input[name=fecha_fin]').val("");
+                $('#generar_reporte').prop("type", "submit");
+                container.find('input[name=fecha_fin]').attr('disabled',false);
+                container.find('input[name=fecha_fin]').datepicker({
+                    format: 'dd/mm/yyyy',
+                    minDate: new Date(res[2]+"/"+res[1]+"/"+res[0]),
+                    beforeShowDay: function (date) {
+                        var a = new Array();
+                        a[0] = date.getDay() == 0;
+                        a[1] = '';
+                        a[2] = '';
+                        return a;
+                    }
+                });
+                container.find('input[name=fecha_fin]').datepicker( "option", "minDate", new Date(res[2]+"/"+res[1]+"/"+res[0]) );
             });
 
             $('input[name=fecha_fin]').on('change', function () {
