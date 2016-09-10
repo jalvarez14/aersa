@@ -30,6 +30,7 @@
                     <thead>
                         <tr>
                             <th> Fecha </th>
+                            <th> Folio </th>
                             <th> Proveedor </th>
                             <th> Total </th>
                             <th> Comprobante </th>
@@ -63,6 +64,7 @@
                             ?>
                             <tr date="<?php echo $entity->getCompraFechacompra('Y/m/d') ?>" id="<?php echo $entity->getIdcompra() ?>">
                                 <td><?php echo $entity->getCompraFechacompra('d/m/Y') ?></td>
+                                <td><?php echo $entity->getCompraFolio() ?></td>
                                 <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
                                 <td><?php echo money_format('%+#1.6n',$entity->getCompraTotal()) ?></td>
                                 <td><?php echo $comprobante?></td>
