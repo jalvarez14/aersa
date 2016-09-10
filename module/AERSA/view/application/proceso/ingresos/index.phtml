@@ -30,6 +30,7 @@
                     <thead>
                         <tr>
                             <th> Fecha </th>
+                            <th> Folio </th>
                             <th> Total Alimentos </th>
                             <th> Total Bebidas </th>
                             <th> Total Miscelanea </th>
@@ -51,6 +52,7 @@
                             ?>
                             <tr date="<?php echo $entity->getIngresoFecha('Y/m/d') ?>" id="<?php echo $entity->getIdingreso() ?>">
                                 <td><?php echo $entity->getIngresoFecha('d/m/Y') ?></td>
+                                <td><?php echo $entity->getIngresoFolio() ?></td>
                                 <td><?php echo money_format('%+#1.6n',$entity->getingresoTotalalimento()) ?></td>
                                 <td><?php echo money_format('%+#1.6n',$entity->getingresoTotalbebida()) ?></td>
                                 <td><?php echo money_format('%+#1.6n',$entity->getingresoTotalmiscelanea()) ?></td>
