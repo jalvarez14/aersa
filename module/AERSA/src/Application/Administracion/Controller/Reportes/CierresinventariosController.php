@@ -237,7 +237,7 @@ class CierresinventariosController extends AbstractActionController {
                     $dias_activos++;
                 }
             }
-            $ventasPromDiar=$ventasNetasConsolidado/$dias_activos;  
+            $ventasPromDiar=($ventasNetasConsolidado!=0||$dias_activos!=0)?$ventasNetasConsolidado/$dias_activos:0;
             
             //Consumo promedio p/empleado diario
             //(sumatoria de comedor empleados/dias activos)/promedio empleados
