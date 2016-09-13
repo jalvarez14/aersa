@@ -30,6 +30,7 @@
                     <thead>
                         <tr>
                             <th> Fecha </th>
+                            <th> Folio </th>
                             <th> Proveedor </th>
                             <th> Total </th>
                             <th> Revisada </th>
@@ -56,6 +57,7 @@
                             ?>
                         <tr date="<?php echo $entity->getDevolucionFechacreacion('Y/m/d') ?>" id="<?php echo $entity->getIddevolucion() ?>">
                             <td><?php echo $entity->getDevolucionFechadevolucion('d/m/Y') ?></td>
+                            <td><?php echo $entity->getDevolucionFolio() ?></td>
                                 <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
                                 <td><?php echo money_format('%+#1.6n',$entity->getDevolucionTotal()) ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>

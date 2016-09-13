@@ -30,6 +30,7 @@
                     <thead>
                         <tr>
                             <th> Fecha </th>
+                            <th> Folio </th>
                             <th> Total </th>
                             <th> Revisada </th>
                             <th> Acciones </th>
@@ -49,6 +50,7 @@
                             ?>
                             <tr date="<?php echo $entity->getVentaFechaventa('Y/m/d') ?>" id="<?php echo $entity->getIdventa() ?>">
                                 <td><?php echo $entity->getVentaFechaventa('d/m/Y') ?></td>
+                                <td><?php echo $entity->getVentaFolio() ?></td>
                                 <td><?php echo money_format('%+#1.6n',$entity->getVentaTotal()) ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
                                 <td>                                    
