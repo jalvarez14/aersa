@@ -232,6 +232,29 @@
             settings = plugin.settings = $.extend({}, defaults, options);
             
             
+            /*
+             * El campo fecha de entrega, sólo se debe de visualizar, o bien, habilitar cuando el tipo sea: orden de compra
+             */
+            
+            var compra_tipo = $('select[name=compra_tipo] option:selected').val();
+            console.log(compra_tipo);
+            if(compra_tipo == 'ordecompra'){
+                $('input[name=compra_fechaentrega]').attr('disabled',false);
+            }else{
+                $('input[name=compra_fechaentrega]').val('');
+                $('input[name=compra_fechaentrega]').attr('disabled',true);
+            }
+            $('select[name=compra_tipo]').on('change',function(){
+                var compra_tipo = $('select[name=compra_tipo] option:selected').val();
+                if(compra_tipo == 'ordecompra'){
+                $('input[name=compra_fechaentrega]').attr('disabled',false);
+            }else{
+                 $('input[name=compra_fechaentrega]').val('');
+                $('input[name=compra_fechaentrega]').attr('disabled',true);
+            }
+            });
+            
+            
             //COMPRAS POR CFDI
             $('#cfdi_add').on('click',function(){
                 $('input[name=cfdi_add]').trigger('click');
