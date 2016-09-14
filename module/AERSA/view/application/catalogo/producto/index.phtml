@@ -28,6 +28,7 @@
                     <thead >
                         <tr>
                             <th> Nombre </th>
+                            <th> Tipo </th>
                             <th> Categoria </th>
                             <th> Subcategoria </th>
                             <th> Unidad medida </th>
@@ -46,6 +47,7 @@
                            
                             <tr id="<?php echo $entity->getIdproducto() ?>">
                                 <td><?php echo $entity->getProductoNombre() ?></td>
+                                 <td><span class="label label-sm label-success"><?php echo  $entity->getProductoTipo() ?></span></td>
                                 <td><span class="label label-sm label-success"> <?php echo $entity->getCategoriaRelatedByIdcategoria()->getCategoriaNombre() ?> </span></td>
                                 <?php if($subcategoria != NULL): ?>
                                 <td><span class="label label-sm label-success"><?php echo $subcategoria->getCategoriaNombre() ?></span></td>

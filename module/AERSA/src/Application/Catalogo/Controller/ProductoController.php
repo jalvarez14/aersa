@@ -134,14 +134,16 @@ class ProductoController extends AbstractActionController
         $subcategorias = array();
         
         $cats   = \CategoriaQuery::create()->filterByIdcategoriapadre(null)->find();
-
+        $subcategorias = \CategoriaQuery::create()->filterByIdcategoriapadre(1)->find();
+        $subcategorias = \Shared\GeneralFunctions::collectionToSelectArray($subcategorias, 'idcategoria', 'categoria_nombre');
+        
         //Crear arreglo de datos para formulario en campo categorias
         foreach ($cats as $item)
             $categorias[$item->getIdCategoria()] = $item->getCategorianombre();
         
 
-        $form = new \Application\Catalogo\Form\ProductosForm($categorias);
-        
+        $form = new \Application\Catalogo\Form\ProductosForm($categorias,$subcategorias);
+      
         if ($request->isPost()) 
         {
             $session = new \Shared\Session\AouthSession();

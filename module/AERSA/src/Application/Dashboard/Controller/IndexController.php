@@ -84,7 +84,7 @@ class IndexController extends AbstractActionController
         
         
         
-        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
 
     }
     
