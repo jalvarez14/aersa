@@ -141,7 +141,6 @@ class ProductoController extends AbstractActionController
         foreach ($cats as $item)
             $categorias[$item->getIdCategoria()] = $item->getCategorianombre();
         
-
         $form = new \Application\Catalogo\Form\ProductosForm($categorias,$subcategorias);
       
         if ($request->isPost()) 
