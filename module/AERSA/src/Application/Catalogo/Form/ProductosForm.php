@@ -197,8 +197,8 @@ class ProductosForm extends Form
             'options' => array(
                 'label' => 'Baja *',
                 'value_options' => array(
-                    1 => 'Si',
                     0 => 'No',
+                    1 => 'Si',
                 ),
             ),
             'attributes' => array(
