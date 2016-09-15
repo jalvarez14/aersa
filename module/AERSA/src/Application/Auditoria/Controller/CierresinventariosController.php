@@ -37,7 +37,7 @@ class CierresinventariosController extends AbstractActionController {
         //$collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
         //INTANCIAMOS NUESTRA VISTA        
         $almacen_array = array();
-        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
         foreach ($almacenes as $almacen) {
             $id = $almacen->getIdalmacen();
             $almacen_array[$id] = $almacen->getAlmacenNombre();
