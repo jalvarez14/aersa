@@ -4,11 +4,11 @@ namespace Application\Administracion\Form\Reportes;
 
 use Zend\Form\Form;
 
-class CierresinventariosForm extends Form {
+class EstadisticosmensualesForm extends Form {
     
     public function __construct() {
         
-        parent::__construct('cierresinventariosForm');
+        parent::__construct('estadisticosmensualesForm');
         
         $this->add(array(
             'name' => 'fecha_inicio',

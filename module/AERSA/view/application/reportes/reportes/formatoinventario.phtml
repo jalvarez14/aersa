@@ -45,7 +45,8 @@
                     </div>
                     <?php endforeach;?>
                 </div>
-                <h5 class="form-section">Productos</h5>
+                
+                <h5 class="form-section">Productos</h5> 
                 <div class="col-md-6">
                     <div class="input-group">
                         <span class="input-group-addon">
@@ -54,7 +55,12 @@
                         <input id="producto_search" class="form-control" type="text">
                     </div>
                 </div>
-                
+                <div class="cold-md-6 form-actions right">
+                    <button disabled class="btn blue" id="generar_reporte" type="submit">
+                        <i class="fa fa-check"></i>
+                        Generar
+                    </button>
+                </div>  
                 <div class="row">
                     <div class="col-md-12">
                         <table class="table" id="reporte_table">
@@ -88,12 +94,7 @@
                         <p>(*)Campos obligatorios</p>
                     </div>
                 </div>
-                <div class="form-actions right">
-                    <button disabled class="btn blue" id="generar_reporte" type="submit">
-                        <i class="fa fa-check"></i>
-                        Generar
-                    </button>
-                </div>
+                
             </div>
         </div>
     </div>

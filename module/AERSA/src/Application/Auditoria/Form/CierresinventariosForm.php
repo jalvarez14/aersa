@@ -18,8 +18,8 @@ class CierresinventariosForm extends Form {
                 'class' => 'form-control'
             ),
             'options' => array(
-                'label' => 'Alamacen *',
-                'empty_option' => 'Seleccione un almacen',
+                    'label' => 'Alamacén *',
+                'empty_option' => 'Seleccione un almacén',
                 'value_options' => $almacen_array,
             ),
         ));

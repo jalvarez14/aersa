@@ -242,12 +242,12 @@ class ReportesController extends AbstractActionController {
         }
 
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
-        $objalmacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->find();
+        $objalmacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->filterByAlmacenEstatus(1)->find();
         $almacenes = array();
         foreach ($objalmacenes as $objalmacen) {
             $almacenes[$objalmacen->getIdalmacen()] = $objalmacen->getAlmacenNombre();
         }
-        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
+        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple','subreceta'))->orderByProductoNombre('asc')->find();
         $form = new \Application\Reportes\Form\FormatoinventarioForm($almacenes);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
