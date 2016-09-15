@@ -34,8 +34,8 @@
                     <div class="row  col-md-2">
                         <select class="form-control " required name="status">
                             <option selected value> Sin especificar </option>
-                            <option value="1"> Activo </option>
-                            <option value="0"> Inactivo </option>
+                            <option value="0"> Activo </option>
+                            <option value="1"> Inactivo </option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -59,7 +59,7 @@
                         <?php $subcategoria = \CategoriaQuery::create()->findPk($entity->getIdsubcategoria()) ?>
                             
                             <?php
-                                 if ($entity->getProductobaja()) 
+                                 if (!$entity->getProductobaja()) 
                                  {
                                      $estatus = "Activo";
                                      $class ="primary";
