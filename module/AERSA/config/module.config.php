@@ -1937,6 +1937,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'estadisticosmensuales' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/estadisticosmensuales',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Estadisticosmensuales',
+                                                'action' => 'index',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
@@ -2142,6 +2152,7 @@ return array(
              */
             'Application\Administracion\Controller\Reportes\Cierresinventarios' => 'Application\Administracion\Controller\Reportes\CierresinventariosController',
             'Application\Administracion\Controller\Reportes\Cardex' => 'Application\Administracion\Controller\Reportes\CardexController',
+            'Application\Administracion\Controller\Reportes\Estadisticosmensuales' => 'Application\Administracion\Controller\Reportes\EstadisticosmensualesController',
             /*
              * AUDITORIA
              */
