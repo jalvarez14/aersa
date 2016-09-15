@@ -353,18 +353,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                 $compradetalles = \CompradetalleQuery::create()->filterByIdcompra($compraObj->getIdcompra())->find();
                 $compradetalle = new \Compradetalle();
                 foreach ($compradetalles as $compradetalle) {
-                    $idproducto = $compradetalle->getIdproducto();
+                    $idsubcat = $compradetalle->getProducto()->getIdsubcategoria();
                     if ($compradetalle->getProducto()->getIdcategoria() == 1) {
-                        if (isset($productosAlimentos0[$idproducto])) {
-                            $productosAlimentos0[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosAlimentos0[$idsubcat])) {
+                            $productosAlimentos0[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosAlimentos0[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosAlimentos0[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     } elseif ($compradetalle->getProducto()->getIdcategoria() == 2) {
-                        if (isset($productosBebidas0[$idproducto])) {
-                            $productosBebidas0[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosBebidas0[$idsubcat])) {
+                            $productosBebidas0[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosBebidas0[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosBebidas0[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     }
                 }
@@ -375,18 +375,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                     $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicionObj->getIdrequisicion())->find();
                     $requisiciondetalle = new \Requisiciondetalle();
                     foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $idproducto = $requisiciondetalle->getIdproducto();
+                        $idsubcat = $requisiciondetalle->getProducto()->getIdsubcategoria();
                         if ($requisiciondetalle->getProducto()->getIdcategoria() == 1) {
-                            if (isset($productosAlimentos0[$idproducto])) {
-                                $productosAlimentos0[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosAlimentos0[$idsubcat])) {
+                                $productosAlimentos0[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosAlimentos0[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosAlimentos0[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         } elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2) {
-                            if (isset($productosBebidas0[$idproducto])) {
-                                $productosBebidas0[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosBebidas0[$idsubcat])) {
+                                $productosBebidas0[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosBebidas0[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosBebidas0[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         }
                     }
@@ -665,18 +665,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                 $compradetalles = \CompradetalleQuery::create()->filterByIdcompra($compraObj->getIdcompra())->find();
                 $compradetalle = new \Compradetalle();
                 foreach ($compradetalles as $compradetalle) {
-                    $idproducto = $compradetalle->getIdproducto();
+                    $idsubcat = $compradetalle->getProducto()->getIdsubcategoria();
                     if ($compradetalle->getProducto()->getIdcategoria() == 1) {
-                        if (isset($productosAlimentos[$idproducto])) {
-                            $productosAlimentos[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosAlimentos[$idsubcat])) {
+                            $productosAlimentos[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosAlimentos[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosAlimentos[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     } elseif ($compradetalle->getProducto()->getIdcategoria() == 2) {
-                        if (isset($productosBebidas[$idproducto])) {
-                            $productosBebidas[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosBebidas[$idsubcat])) {
+                            $productosBebidas[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosBebidas[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosBebidas[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     }
                 }
@@ -687,18 +687,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                     $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicionObj->getIdrequisicion())->find();
                     $requisiciondetalle = new \Requisiciondetalle();
                     foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $idproducto = $requisiciondetalle->getIdproducto();
+                        $idsubcat = $requisiciondetalle->getProducto()->getIdsubcategoria();
                         if ($requisiciondetalle->getProducto()->getIdcategoria() == 1) {
-                            if (isset($productosAlimentos[$idproducto])) {
-                                $productosAlimentos[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosAlimentos[$idsubcat])) {
+                                $productosAlimentos[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosAlimentos[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosAlimentos[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         } elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2) {
-                            if (isset($productosBebidas[$idproducto])) {
-                                $productosBebidas[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosBebidas[$idsubcat])) {
+                                $productosBebidas[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosBebidas[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosBebidas[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         }
                     }
@@ -974,18 +974,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                 $compradetalles = \CompradetalleQuery::create()->filterByIdcompra($compraObj->getIdcompra())->find();
                 $compradetalle = new \Compradetalle();
                 foreach ($compradetalles as $compradetalle) {
-                    $idproducto = $compradetalle->getIdproducto();
+                    $idsubcat = $compradetalle->getProducto()->getIdsubcategoria();
                     if ($compradetalle->getProducto()->getIdcategoria() == 1) {
-                        if (isset($productosAlimentos2[$idproducto])) {
-                            $productosAlimentos2[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosAlimentos2[$idsubcat])) {
+                            $productosAlimentos2[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosAlimentos2[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosAlimentos2[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     } elseif ($compradetalle->getProducto()->getIdcategoria() == 2) {
-                        if (isset($productosBebidas2[$idproducto])) {
-                            $productosBebidas2[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosBebidas2[$idsubcat])) {
+                            $productosBebidas2[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosBebidas2[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosBebidas2[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     }
                 }
@@ -996,18 +996,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                     $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicionObj->getIdrequisicion())->find();
                     $requisiciondetalle = new \Requisiciondetalle();
                     foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $idproducto = $requisiciondetalle->getIdproducto();
+                        $idsubcat = $requisiciondetalle->getProducto()->getIdsubcategoria();
                         if ($requisiciondetalle->getProducto()->getIdcategoria() == 1) {
-                            if (isset($productosAlimentos2[$idproducto])) {
-                                $productosAlimentos2[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosAlimentos2[$idsubcat])) {
+                                $productosAlimentos2[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosAlimentos2[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosAlimentos2[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         } elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2) {
-                            if (isset($productosBebidas2[$idproducto])) {
-                                $productosBebidas2[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosBebidas2[$idsubcat])) {
+                                $productosBebidas2[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosBebidas2[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosBebidas2[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         }
                     }
@@ -1283,18 +1283,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                 $compradetalles = \CompradetalleQuery::create()->filterByIdcompra($compraObj->getIdcompra())->find();
                 $compradetalle = new \Compradetalle();
                 foreach ($compradetalles as $compradetalle) {
-                    $idproducto = $compradetalle->getIdproducto();
+                    $idsubcat = $compradetalle->getProducto()->getIdsubcategoria();
                     if ($compradetalle->getProducto()->getIdcategoria() == 1) {
-                        if (isset($productosAlimentos3[$idproducto])) {
-                            $productosAlimentos3[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosAlimentos3[$idsubcat])) {
+                            $productosAlimentos3[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosAlimentos3[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosAlimentos3[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     } elseif ($compradetalle->getProducto()->getIdcategoria() == 2) {
-                        if (isset($productosBebidas3[$idproducto])) {
-                            $productosBebidas3[$idproducto]+=$compradetalle->getCompradetalleSubtotal();
+                        if (isset($productosBebidas3[$idsubcat])) {
+                            $productosBebidas3[$idsubcat]+=$compradetalle->getCompradetalleSubtotal();
                         } else {
-                            $productosBebidas3[$idproducto] = $compradetalle->getCompradetalleSubtotal();
+                            $productosBebidas3[$idsubcat] = $compradetalle->getCompradetalleSubtotal();
                         }
                     }
                 }
@@ -1305,18 +1305,18 @@ class EstadisticosmensualesController extends AbstractActionController {
                     $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicionObj->getIdrequisicion())->find();
                     $requisiciondetalle = new \Requisiciondetalle();
                     foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $idproducto = $requisiciondetalle->getIdproducto();
+                        $idsubcat = $requisiciondetalle->getProducto()->getIdsubcategoria();
                         if ($requisiciondetalle->getProducto()->getIdcategoria() == 1) {
-                            if (isset($productosAlimentos3[$idproducto])) {
-                                $productosAlimentos3[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosAlimentos3[$idsubcat])) {
+                                $productosAlimentos3[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosAlimentos3[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosAlimentos3[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         } elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2) {
-                            if (isset($productosBebidas3[$idproducto])) {
-                                $productosBebidas3[$idproducto]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
+                            if (isset($productosBebidas3[$idsubcat])) {
+                                $productosBebidas3[$idsubcat]+=$requisiciondetalle->getRequisiciondetalleSubtotal();
                             } else {
-                                $productosBebidas3[$idproducto] = $requisiciondetalle->getRequisiciondetalleSubtotal();
+                                $productosBebidas3[$idsubcat] = $requisiciondetalle->getRequisiciondetalleSubtotal();
                             }
                         }
                     }
@@ -1363,18 +1363,18 @@ class EstadisticosmensualesController extends AbstractActionController {
         array_push($reporte, "<tr><td>Mermas</td><td>$mermaAlimentos3</td><td>$mermaAlimentos2</td><td>$mermaAlimentos</td><td>$mermaAlimentos0</td><td></td></tr>");
         array_push($reporte, "<tr><td>Bebidas</td><td>$mermaBebidas3</td><td>$mermaBebidas2</td><td>$mermaBebidas</td><td>$mermaBebidas0</td><td></td></tr>");
         array_push($reporte, "<tr><td>Alimentos</td><td></td><td></td><td></td><td></td><td></td></tr>");
-        $productos=  \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdcategoria(1)->orderByProductoNombre()->find();
-        $producto= new \Producto();
+        $subcategorias= \CategoriaQuery::create()->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
+        $subcategoria=new \Categoria();
         $total3=0;
         $total2=0;
         $total=0;
         $total0=0;
-        foreach ($productos as $producto) {
-            $semana3=(isset($productosAlimentos3[$producto->getIdproducto()]))? $productosAlimentos3[$producto->getIdproducto()]:0;
-            $semana2=(isset($productosAlimentos2[$producto->getIdproducto()]))? $productosAlimentos2[$producto->getIdproducto()]:0;
-            $semana=(isset($productosAlimentos[$producto->getIdproducto()]))? $productosAlimentos[$producto->getIdproducto()]:0;
-            $semana0=(isset($productosAlimentos0[$producto->getIdproducto()]))? $productosAlimentos0[$producto->getIdproducto()]:0;
-            $nombre=$producto->getProductoNombre();
+        foreach ($subcategorias as $subcategoria) {
+            $semana3=(isset($productosAlimentos3[$subcategoria->getIdcategoria()]))? $productosAlimentos3[$subcategoria->getIdcategoria()]:0;
+            $semana2=(isset($productosAlimentos2[$subcategoria->getIdcategoria()]))? $productosAlimentos2[$subcategoria->getIdcategoria()]:0;
+            $semana=(isset($productosAlimentos[$subcategoria->getIdcategoria()]))? $productosAlimentos[$subcategoria->getIdcategoria()]:0;
+            $semana0=(isset($productosAlimentos0[$subcategoria->getIdcategoria()]))? $productosAlimentos0[$subcategoria->getIdcategoria()]:0;
+            $nombre=$subcategoria->getCategoriaNombre();
             $total3+=$semana3;
             $total2+=$semana2;
             $total+=$semana;
@@ -1387,14 +1387,14 @@ class EstadisticosmensualesController extends AbstractActionController {
         $total2=0;
         $total=0;
         $total0=0;
-        $productos=  \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdcategoria(2)->orderByProductoNombre()->find();
-        $producto= new \Producto();
-        foreach ($productos as $producto) {
-            $semana3=(isset($productosBebidas3[$producto->getIdproducto()]))? $productosBebidas3[$producto->getIdproducto()]:0;
-            $semana2=(isset($productosBebidas2[$producto->getIdproducto()]))? $productosBebidas2[$producto->getIdproducto()]:0;
-            $semana=(isset($productosBebidas[$producto->getIdproducto()]))? $productosBebidas[$producto->getIdproducto()]:0;
-            $semana0=(isset($productosBebidas0[$producto->getIdproducto()]))? $productosBebidas0[$producto->getIdproducto()]:0;
-            $nombre=$producto->getProductoNombre();
+        $subcategorias= \CategoriaQuery::create()->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
+        $subcategoria=new \Categoria();
+        foreach ($subcategorias as $subcategoria) {
+            $semana3=(isset($productosBebidas3[$subcategoria->getIdcategoria()]))? $productosBebidas3[$subcategoria->getIdcategoria()]:0;
+            $semana2=(isset($productosBebidas2[$subcategoria->getIdcategoria()]))? $productosBebidas2[$subcategoria->getIdcategoria()]:0;
+            $semana=(isset($productosBebidas[$subcategoria->getIdcategoria()]))? $productosBebidas[$subcategoria->getIdcategoria()]:0;
+            $semana0=(isset($productosBebidas0[$subcategoria->getIdcategoria()]))? $productosBebidas0[$subcategoria->getIdcategoria()]:0;
+            $nombre=$subcategoria->getCategoriaNombre();
             $total3+=$semana3;
             $total2+=$semana2;
             $total+=$semana;
