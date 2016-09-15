@@ -8,7 +8,7 @@ $( document ).ready(function() {
     
     $("[name=idcategoria]").change(function () {
         getSubcategorias();
-        
+
     });
     
     $("[name=producto_rendimiento]").change(function () {
@@ -21,7 +21,8 @@ $( document ).ready(function() {
     
     $("[name=idunidadmedida]").change(function () {
          var idcat = $(this).val();
-        if(idcat != '5')
+          var idcategoria = $("[name=idcategoria] option:selected").val();
+        if(idcat != '5' && idcategoria != 2)
         {
             $("label[for=producto_rendimiento").hide();
             $("[name=producto_rendimiento]").removeAttr("required");
@@ -57,16 +58,28 @@ $( document ).ready(function() {
         
     });
     
+     var idcategoria = $('select[name=idcategoria] option:selected').val();
+     if(idcategoria == 2){
+        $("label[for=producto_rendimiento").show();
+        $("[name=producto_rendimiento]").attr("required",true).show(); 
+    }
+    
     $('select[name=idcategoria],select[name=producto_tipo]').on('change',function(){
         var idcategoria = $('select[name=idcategoria] option:selected').val();
         var producto_tipo = $('select[name=producto_tipo] option:selected').val(); 
-        if(idcategoria == 1 && producto_tipo == 'subreceta')
+        if((idcategoria == 1 && producto_tipo == 'subreceta') || idcategoria == 2)
         {
-            $("label[for=producto_rendimiento").show();
-            $("[name=producto_rendimiento]").attr("required",true).show();
-            $("label[for=producto_rendimientooriginal").show();
-            $("[name=producto_rendimientooriginal]").attr("required",true).show();
-            $("[name=producto_costo]").attr("readonly",true);
+            if(idcategoria == 2){
+                $("label[for=producto_rendimiento").show();
+                $("[name=producto_rendimiento]").attr("required",true).show(); 
+            }else if(idcategoria == 1){
+                $("label[for=producto_rendimiento").show();
+                $("[name=producto_rendimiento]").attr("required",true).show();
+                $("label[for=producto_rendimientooriginal").show();
+                $("[name=producto_rendimientooriginal]").attr("required",true).show();
+                $("[name=producto_costo]").attr("readonly",true);
+            }
+            
         }else{
             $("label[for=producto_rendimiento").hide();
             $("[name=producto_rendimiento]").attr("required",false).hide();
@@ -80,7 +93,7 @@ $( document ).ready(function() {
     function getSubcategorias()
     {
         var idcat = $("[name=idcategoria]").val();
-        
+
         if(idcat != '2')
         {
             $("label[for=producto_rendimiento").hide();
