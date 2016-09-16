@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Administracion\Form\Reportes;
+namespace Application\Reportes\Form;
 
 use Zend\Form\Form;
 

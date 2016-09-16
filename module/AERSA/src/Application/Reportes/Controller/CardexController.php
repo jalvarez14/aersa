@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Administracion\Controller\Reportes;
+namespace Application\Reportes\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -311,9 +311,9 @@ class CardexController extends AbstractActionController {
         //dia inicio de semana date('Y-m-d',$start);
         $fecha = date('Y-m-d', strtotime('next sunday', $start));
         
-        $form = new \Application\Administracion\Form\Reportes\CardexForm($fecha,$almacen_array,$auditor_array);
+        $form = new \Application\Reportes\Form\CardexForm($fecha,$almacen_array,$auditor_array);
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/administracion/reportes/cardex/index');
+        $view_model->setTemplate('/application/reportes/cardex/index');
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
