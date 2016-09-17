@@ -93,7 +93,7 @@ class ProveedorController extends AbstractActionController
             $post_data = $request->getPost();
           
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-            $exist = \ProveedorQuery::create()->filterByProveedorNombrecomercial($post_data['proveedor_nombrecomercial'])->exists();
+            $exist = \ProveedorQuery::create()->filterByProveedorNombrecomercial($post_data['proveedor_nombrecomercial'])->filterByIdempresa($session['idempresa'])->exists();
 
             if (!$exist) 
             {

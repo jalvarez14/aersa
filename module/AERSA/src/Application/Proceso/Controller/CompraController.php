@@ -68,7 +68,7 @@ class CompraController extends AbstractActionController {
         $session = $session->getData();
         
         $request = $this->getRequest();
-        
+
         if($request->isPost()){
             
             $post_data = $request->getPost();

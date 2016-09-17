@@ -107,8 +107,7 @@ class ProductoController extends AbstractActionController
         $emp = \EmpresaQuery::create()->findPk($session['idempresa']);
 
         $productos = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->find();
-        
-         
+
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/catalogo/producto/index');

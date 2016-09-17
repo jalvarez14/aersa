@@ -45,7 +45,6 @@ class LoginController extends AbstractActionController
                 
                 return $this->redirect()->toUrl('/login/select');
 
-
             }else{
                 return $this->redirect()->toUrl('/login');
             }
@@ -168,7 +167,7 @@ class LoginController extends AbstractActionController
             
             $empresas = array();
             $sucursales_array = array();
-            
+            $sucursales_array['admin'] ='Administración';
             $usuario_sucursal = new \Usuariosucursal();
             foreach ($usuario_sucursales as $usuario_sucursal){
                 $id = $usuario_sucursal->getIdsucursal();
@@ -177,12 +176,9 @@ class LoginController extends AbstractActionController
                 $sucursales_array[$id] = $usuario_sucursal->getSucursal()->getSucursalNombre();
                 
             }
- 
 
         }
-        
 
-        
         if($session['idrol'] == 5){ //AUDITOR EMPRESA
             $view_model->setTemplate('/application/login/select_almacenista_empresa');
             
@@ -202,8 +198,6 @@ class LoginController extends AbstractActionController
             
         }
         
-        
-
         $form = new \Application\Login\Form\SelectForm($session['idrol'],$empresas,$sucursales_array);
         
         $view_model->setVariables(array(

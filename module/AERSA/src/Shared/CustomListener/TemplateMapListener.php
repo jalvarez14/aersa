@@ -47,7 +47,7 @@ class TemplateMapListener implements ListenerAggregateInterface
        
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-        
+      
         switch ($section[0])
         {
             case 'Website':
@@ -152,8 +152,17 @@ class TemplateMapListener implements ListenerAggregateInterface
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
                     break;
+                     
+                }elseif($session['idrol'] == 4 && !is_null($session['idempresa']) && is_null($session['idsucursal'])){
                     
-                //ALMACENISTA 
+                    $template_map->merge(
+                    array(
+                        'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_2.phtml',
+                        'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                        'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                    ));
+                    break;
+                     
                 }elseif($session['idrol'] == 5 && !is_null($session['idempresa']) && !is_null($session['idsucursal'])){
                     
                     $template_map->merge(
