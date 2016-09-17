@@ -55,7 +55,15 @@
             settings = plugin.settings = $.extend({}, defaults, options);
         }
 
-        plugin.list = function () {
+        plugin.list = function (no_data) {
+            if(no_data==1) {
+                $('select[name=anio]').attr('disabled', true);
+                $('select[name=mes]').attr('disabled', true);
+                $('#generar_reporte').attr('disabled', true);
+                $('#generar_excel').attr('disabled', true);
+                $('#generar_pdf').attr('disabled', true);
+                $('#no_data').html('No existen ordenes de tablajería')
+            }
             
             $('select[name=anio]').on('change', function () {
                 if ($('select[name=anio] option:selected').val() != "" && $('select[name=mes] option:selected').val() != "")
