@@ -198,15 +198,14 @@ class ReportesController extends AbstractActionController {
                 $categoria=  \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
                 $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
                 $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
-                $fila = 0;
                 foreach ($idproductos as $idproducto) {
                     $objproducto = \ProductoQuery::create()->findPk($idproducto);
                     $nombre = $objproducto->getProductoNombre();
                     $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
-                    $productos[$fila] = array('subcat'=> $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad);
-                    $fila++;
+                    array_push($productos, array('subcat'=> $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
                 }
             }
+
             $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
             $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
 
