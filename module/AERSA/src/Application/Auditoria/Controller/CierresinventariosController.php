@@ -64,22 +64,22 @@ class CierresinventariosController extends AbstractActionController {
                     $inventariocierremes->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
             }
-            $otroinventariocierremes= \InventariomesQuery::create()
+            $otroinventariocierremes = \InventariomesQuery::create()
                     ->filterByIdalmacen($inventariocierremes->getIdalmacen())
                     ->filterByIdsucursal($inventariocierremes->getIdsucursal())
                     ->filterByInventariomesFecha($inventariocierremes->getInventariomesFecha())
                     ->exists();
-            if($otroinventariocierremes) {
-                $otroinventariocierremes= \InventariomesQuery::create()
-                    ->filterByIdalmacen($inventariocierremes->getIdalmacen())
-                    ->filterByIdsucursal($inventariocierremes->getIdsucursal())
-                    ->filterByInventariomesFecha($inventariocierremes->getInventariomesFecha())
-                    ->findOne();
+            if ($otroinventariocierremes) {
+                $otroinventariocierremes = \InventariomesQuery::create()
+                        ->filterByIdalmacen($inventariocierremes->getIdalmacen())
+                        ->filterByIdsucursal($inventariocierremes->getIdsucursal())
+                        ->filterByInventariomesFecha($inventariocierremes->getInventariomesFecha())
+                        ->findOne();
                 $otroinventariocierremes->delete();
             }
-            
+
             $inventariocierremes->save();
-            
+
             foreach ($post_data['reporte'] as $reporte) {
                 $inventariocierremes_detalle = new \Inventariomesdetalle();
                 foreach ($reporte as $key => $value) {
@@ -99,13 +99,13 @@ class CierresinventariosController extends AbstractActionController {
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
         //dia inicio de semana date('Y-m-d',$start);
-        $semana_act= \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
-        $anio_act= \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+        $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+        $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
         $time = strtotime("1 January $anio_act", time());
         $day = date('w', $time);
-        $time += ((7*$semana_act)+1-$day)*24*3600;
-        $time += 6*24*3600;
-        $fecha= date('Y-m-d', $time);
+        $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+        $time += 6 * 24 * 3600;
+        $fecha = date('Y-m-d', $time);
         $form = new \Application\Auditoria\Form\CierresinventariosForm($fecha, $almacen_array, $auditor_array);
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/auditoria/cierresinventarios/nuevo');
@@ -136,10 +136,10 @@ class CierresinventariosController extends AbstractActionController {
             $idalmacen = $post_data['almacen'];
             $idusuario = $post_data['auditor'];
             $productosReporte = array();
-            
+
             foreach ($post_data['inventario']["Sheet1"] as $producto) {
-                if(isset($producto['CLAVE']))
-                if ($producto['CLAVE'] != 'CLAVE'&&(count($producto)==6||  count($producto)==5))
+                if (isset($producto['CLAVE']))
+                    if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
                         $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
             }
             $ts = strtotime("now");
@@ -184,10 +184,12 @@ class CierresinventariosController extends AbstractActionController {
             $row = 0;
             foreach ($objproductos as $objproducto) {
                 $exisinicial = 0;
-                if ($inventario_anterior) {
-                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
-                    if ($exisinicial)
-                        $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                if ($objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaAlmacenable(1)) {
+                    if ($inventario_anterior) {
+                        $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
+                        if ($exisinicial)
+                            $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                    }
                 }
                 $totalProductoCompra = 0;
                 $compra = 0;
@@ -329,20 +331,20 @@ class CierresinventariosController extends AbstractActionController {
             return $this->getResponse()->setContent(json_encode($reporte));
         }
     }
-    
-    public function  encargadoAction() {
+
+    public function encargadoAction() {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
-            $id=$post_data['id'];
-            $nombre= \AlmacenQuery::create()->filterByIdalmacen($id)->findOne()->getAlmacenEncargado();
-            $con=true;
-            if($nombre=="")
-                $con=false;
+            $id = $post_data['id'];
+            $nombre = \AlmacenQuery::create()->filterByIdalmacen($id)->findOne()->getAlmacenEncargado();
+            $con = true;
+            if ($nombre == "")
+                $con = false;
             return $this->getResponse()->setContent(json_encode($con));
         }
     }
-    
+
     public function editarAction() {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -437,4 +439,5 @@ class CierresinventariosController extends AbstractActionController {
             return $this->redirect()->toUrl('/auditoria/cierresemana');
         }
     }
+
 }
