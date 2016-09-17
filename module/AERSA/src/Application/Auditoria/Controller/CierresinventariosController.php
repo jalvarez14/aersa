@@ -136,9 +136,11 @@ class CierresinventariosController extends AbstractActionController {
             $idalmacen = $post_data['almacen'];
             $idusuario = $post_data['auditor'];
             $productosReporte = array();
+            
             foreach ($post_data['inventario']["Sheet1"] as $producto) {
-                if (count($producto) == 5 && $producto['CLAVE'] != 'CLAVE')
-                    $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
+                if(isset($producto['CLAVE']))
+                if ($producto['CLAVE'] != 'CLAVE'&&(count($producto)==6||  count($producto)==5))
+                        $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
             }
             $ts = strtotime("now");
             $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
@@ -316,7 +318,6 @@ class CierresinventariosController extends AbstractActionController {
             }
             $total = $sobrante + $faltante;
             $responsable = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
-            
             if ($responsable == "")
                 $responsable = "N/A";
             array_push($reporte, "<tr><td>Responsable</td><td>$responsable</td><td></td><td><td></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final alimentos</td><td class='inventariomes_finalalimentos'><input type='hidden'  name='inventariomes_finalalimentos' value='$falim'><span>$falim</span></td></tr>");
@@ -328,7 +329,20 @@ class CierresinventariosController extends AbstractActionController {
             return $this->getResponse()->setContent(json_encode($reporte));
         }
     }
-
+    
+    public function  encargadoAction() {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post_data = $request->getPost();
+            $id=$post_data['id'];
+            $nombre= \AlmacenQuery::create()->filterByIdalmacen($id)->findOne()->getAlmacenEncargado();
+            $con=true;
+            if($nombre=="")
+                $con=false;
+            return $this->getResponse()->setContent(json_encode($con));
+        }
+    }
+    
     public function editarAction() {
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
