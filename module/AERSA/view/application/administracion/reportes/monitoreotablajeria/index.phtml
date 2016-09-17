@@ -1,0 +1,77 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">Monitoreo tablajería</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/administracion/reportes/monitoreotablajeria">Monitoreo tablajería</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    $form->setAttribute('action', '/administracion/reportes/monitoreotablajeria');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('mes')) ?>  
+                        <?php echo $this->formSelect($form->get('mes')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('anio')) ?>  
+                        <?php echo $this->formSelect($form->get('anio')) ?> 
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-actions">
+                <div class="left col-md-2">
+                    <button class="btn blue" id="generar_pdf" name="generar_pdf" type="submit">
+                        <i class="fa fa-file-pdf-o"></i>
+                        PDF
+                    </button>
+                </div>
+                <div class="left col-md-2">
+                    <button class="btn blue" id="generar_excel" name="generar_excel" type="submit">
+                        <i class="fa fa-file-excel-o"></i>
+                        Excel
+                    </button>
+                </div>
+                <div class="right col-md-8" align="right">
+                    <button class="btn blue" id="generar_reporte" type="submit">
+                    <i class="fa fa-check"></i>
+                        Generar
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div id="divtable" class="col-md-12">
+                    <table class="table" id="reporte_table">
+                        <thead>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="/application/custom/js/administracion/reportes/monitoreotablajeria.js" type="text/javascript"></script>	
+<script>
+    var $plugin = $('#my_container').monitoreotablajeria();
+    $plugin.list();
+</script>
