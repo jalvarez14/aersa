@@ -180,16 +180,17 @@ class ReportesController extends AbstractActionController {
             $productos = array();
             $idcategorias = array();
             $post_data = $request->getPost();
-            $template = '/entradasporcompras.xlsx';
+            $template = '/formatoinventario.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
             $formato = $post_data['formato'];
             foreach ($post_data as $key => $value) {
                 if (strpos($key, '-'))
                     array_push($idcategorias, substr($key, 9));
             }
+            
             foreach ($idcategorias as $id) {
                 $idproductos = array();
-                $productosObj= \ProductoQuery::create()->filterByIdsubcategoria($id)->orderByProductoNombre('asc')->find();
+                $productosObj= \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->orderByProductoNombre('asc')->find();
                 $productoObj=new \Producto();
                 foreach ($productosObj as $productoObj) {
                     array_push($idproductos, $productoObj->getIdproducto());
