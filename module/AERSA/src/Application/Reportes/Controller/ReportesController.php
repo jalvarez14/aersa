@@ -171,39 +171,40 @@ class ReportesController extends AbstractActionController {
     }
 
     public function formatoinventarioAction() {
-
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
         $request = $this->getRequest();
         if ($request->isPost()) {
-
             $productos = array();
-            $idproductos = array();
+            $idcategorias = array();
             $post_data = $request->getPost();
-            $template = '/inventarios.xlsx';
+            $template = '/entradasporcompras.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
             $formato = $post_data['formato'];
-
             foreach ($post_data as $key => $value) {
                 if (strpos($key, '-'))
-                    array_push($productos, substr($key, 9));
+                    array_push($idcategorias, substr($key, 9));
             }
-            //array('nombre'=>'Example product','unidad'=>kilo,'cantidad'=>4.5),
-            foreach ($post_data as $key => $value) {
-                if (strpos($key, '-'))
-                    array_push($idproductos, substr($key, 9));
-            }
-            $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
-            $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
-            $fila = 0;
-            foreach ($idproductos as $idproducto) {
-                $objproducto = \ProductoQuery::create()->findPk($idproducto);
-                $nombre = $objproducto->getProductoNombre();
-                $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
-                $productos[$fila] = array('clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad, 'cantidad' => '');
-                $fila++;
+            foreach ($idcategorias as $id) {
+                $idproductos = array();
+                $productosObj= \ProductoQuery::create()->filterByIdsubcategoria($id)->orderByProductoNombre('asc')->find();
+                $productoObj=new \Producto();
+                foreach ($productosObj as $productoObj) {
+                    array_push($idproductos, $productoObj->getIdproducto());
+                }
+                $categoria=  \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+                $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+                $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+                $fila = 0;
+                foreach ($idproductos as $idproducto) {
+                    $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                    $nombre = $objproducto->getProductoNombre();
+                    $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                    $productos[$fila] = array('subcat'=> $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad);
+                    $fila++;
+                }
             }
             $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
             $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
@@ -213,7 +214,6 @@ class ReportesController extends AbstractActionController {
                 'templateDir' => $templateDir
             );
             $R = new \PHPReport($config);
-//            $R->setConfig();
             $R->load(array(
                 array(
                     'id' => 'compania',
@@ -228,8 +228,6 @@ class ReportesController extends AbstractActionController {
                     'data' => $productos,
                     'minRows' => 2,
                     'format' => array(
-                        'price' => array('number' => array('prefix' => '$', 'decimals' => 2)),
-                        'total' => array('number' => array('prefix' => '$', 'decimals' => 2))
                     )
                 )
                     )
@@ -240,20 +238,24 @@ class ReportesController extends AbstractActionController {
                 echo $R->render('excel');
             exit();
         }
-
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
         $objalmacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->filterByAlmacenEstatus(1)->find();
         $almacenes = array();
         foreach ($objalmacenes as $objalmacen) {
             $almacenes[$objalmacen->getIdalmacen()] = $objalmacen->getAlmacenNombre();
         }
-        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->orderByProductoNombre('asc')->find();
+
+        $subcatsAlimentos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
+        $subcatsBebidas = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
+        $subcatsGastos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(3)->orderByCategoriaNombre('asc')->find();
         $form = new \Application\Reportes\Form\FormatoinventarioForm($almacenes);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
             'form' => $form,
             'categorias' => $categorias,
-            'productos' => $productos,
+            'subcatsAlimentos' => $subcatsAlimentos,
+            'subcatsBebidas' => $subcatsBebidas,
+            'subcatsGastos' => $subcatsGastos,
             'messages' => $this->flashMessenger(),
         ));
         $view_model->setTemplate('/application/reportes/reportes/formatoinventario');
@@ -910,18 +912,18 @@ class ReportesController extends AbstractActionController {
         }
 
         //INTANCIAMOS NUESTRA VISTA
-        $no_data=false;
-        $mes_min=0;
-        $anio_min=0;
-        $mes_max=0;
-        $anio_max=0;
+        $no_data = false;
+        $mes_min = 0;
+        $anio_min = 0;
+        $mes_max = 0;
+        $anio_max = 0;
         if (\FlujoefectivoQuery::create()->filterByIdsucursal($idsucursal)->orderByFlujoefectivoFecha('asc')->exists()) {
             $mes_min = \FlujoefectivoQuery::create()->filterByIdsucursal($idsucursal)->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('m');
             $anio_min = \FlujoefectivoQuery::create()->filterByIdsucursal($idsucursal)->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('Y');
             $mes_max = \FlujoefectivoQuery::create()->filterByIdsucursal($idsucursal)->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('m');
             $anio_max = \FlujoefectivoQuery::create()->filterByIdsucursal($idsucursal)->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('Y');
         } else {
-            $no_data=true;
+            $no_data = true;
         }
         if (checkdate($mes_max, 31, $anio_max)) {
             $dia_max = 31;
@@ -932,7 +934,7 @@ class ReportesController extends AbstractActionController {
         } else {
             $dia_max = 28;
         }
-        
+
         $form = new \Application\Reportes\Form\InformeacumuladosForm();
         $view_model = new ViewModel();
         $view_model->setVariables(array(

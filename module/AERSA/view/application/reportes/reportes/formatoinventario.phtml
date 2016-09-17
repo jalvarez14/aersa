@@ -46,7 +46,7 @@
                     <?php endforeach;?>
                 </div>
                 
-                <h5 class="form-section">Productos</h5> 
+                <h5 class="form-section">Subcategorias</h5> 
                 <div class="col-md-6">
                     <div class="input-group">
                         <span class="input-group-addon">
@@ -66,23 +66,46 @@
                         <table class="table" id="reporte_table">
                             <thead>
                             <th></th>
-                            <th>Producto</th>
+                            <th>Subcategorias</th>
                             </thead>
                             <tbody id="tbody">
-                                <?php $color=true;$producto = new Producto();
-                                foreach ($productos as $producto): ?>
-                                    <tr id="producto-<?php echo $producto->getIdproducto() ?>"  bgcolor="<?php echo ($color)? '#FFFFFF' : '#F2F2F2';$color=!$color;?>">
+                                <tr><td>Alimentos</td></tr>
+                                <?php $color=true;$subcat = new Categoria();
+                                foreach ($subcatsAlimentos as $subcat): ?>
+                                <tr id="categoria-<?php echo $subcat->getIdcategoria() ?>"  bgcolor="<?php echo ($color)? '#FFFFFF' : '#F2F2F2';$color=!$color;?>">
                                         <?php 
-                                        $cat=$producto->getCategoriaRelatedByIdcategoria();
-                                        if($cat->getIdcategoriapadre()!=NULL)
-                                            $cat=$cat->getCategoriaRelatedByIdcategoriapadre();
+                                        $cat=$subcat->getCategoriaRelatedByIdcategoriapadre();
                                         ?>
-                                        
                                         <td>
-                                            
-                                            <input type="checkbox" id="generado-<?php echo $producto->getIdproducto() ?>" name="generado-<?php echo $producto->getIdproducto() ?>" class="icheck generado <?php echo ucfirst($cat->getCategoriaNombre()); ?>" >
+                                            <input type="checkbox" id="generado-<?php echo $subcat->getIdcategoria() ?>" name="generado-<?php echo $subcat->getIdcategoria() ?>" class="icheck generado <?php echo ucfirst($cat->getCategoriaNombre()); ?>" >
                                         </td>
-                                        <td name="nombre_producto" id="nombre_producto"><?php echo ucfirst($producto->getProductoNombre()); ?></td>
+                                        <td name="nombre_subcategoria" id="nombre_subcategoria"><?php echo ucfirst($subcat->getCategoriaNombre()); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr><td>Bebidas</td></tr>
+                                <?php $color=true;$subcat = new Categoria();
+                                foreach ($subcatsBebidas as $subcat): ?>
+                                <tr id="categoria-<?php echo $subcat->getIdcategoria() ?>"  bgcolor="<?php echo ($color)? '#FFFFFF' : '#F2F2F2';$color=!$color;?>">
+                                        <?php 
+                                        $cat=$subcat->getCategoriaRelatedByIdcategoriapadre();
+                                        ?>
+                                        <td>
+                                            <input type="checkbox" id="generado-<?php echo $subcat->getIdcategoria() ?>" name="generado-<?php echo $subcat->getIdcategoria() ?>" class="icheck generado <?php echo ucfirst($cat->getCategoriaNombre()); ?>" >
+                                        </td>
+                                        <td name="nombre_subcategoria" id="nombre_subcategoria"><?php echo ucfirst($subcat->getCategoriaNombre()); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr><td>Gastos</td></tr>
+                                <?php $color=true;$subcat = new Categoria();
+                                foreach ($subcatsGastos as $subcat): ?>
+                                <tr id="categoria-<?php echo $subcat->getIdcategoria() ?>"  bgcolor="<?php echo ($color)? '#FFFFFF' : '#F2F2F2';$color=!$color;?>">
+                                        <?php 
+                                        $cat=$subcat->getCategoriaRelatedByIdcategoriapadre();
+                                        ?>
+                                        <td>
+                                            <input type="checkbox" id="generado-<?php echo $subcat->getIdcategoria() ?>" name="generado-<?php echo $subcat->getIdcategoria() ?>" class="icheck generado <?php echo ucfirst($cat->getCategoriaNombre()); ?>" >
+                                        </td>
+                                        <td name="nombre_subcategoria" id="nombre_subcategoria"><?php echo ucfirst($subcat->getCategoriaNombre()); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
