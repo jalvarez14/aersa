@@ -208,15 +208,43 @@
         }
 
         plugin.new = function () {
+            $('#batch_inventario').attr('disabled', true);
+            $('select[name=idalmacen]').on('change', function () {
+                var $this=$(this);
+                if($this.val()!=0) {
+                    var id=$this.val();
+                    $.ajax({
+                        async: false,
+                        type: "POST",
+                        url: "/auditoria/cierresemana/encargado",
+                        dataType: "json",
+                        data: {id: id},
+                        success: function (data) {
+                            if(data){
+                                $('#batch_inventario').attr('disabled', false);
+                            } else {
+                                alert("Almacen sin encargado");
+                                $('#batch_inventario').attr('disabled', true);
+                            }
+                        },
+                    });
+                }
+            });
+            
             $container.find('table input:text').on('blur',function(){
                 var $tr = $(this).closest('tr');
                 calcular($tr);
             });
             var inventario_array = {};
+            
+            
+            
             $('#subir_inventario').on('click', function () {
                 $('input[name=batch_inventario]').trigger('click');
             });
             $('input[name=batch_inventario]').on('change', function () {
+
+                alert($('select[name=auditor] option:selected').val());
                 if ($('select[name=auditor]').val() != "" && $('select[name=almacen]').val() != "") {
                     var auditor = $('select[name=idauditor]').val();
                     var almacen = $('select[name=idalmacen]').val();

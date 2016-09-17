@@ -2016,6 +2016,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'encargado' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/encargado[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Auditoria\Controller\Cierresinventarios',
+                                                'action' => 'encargado',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
