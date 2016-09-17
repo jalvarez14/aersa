@@ -73,7 +73,7 @@
                     $.ajax({
                         async: false,
                         type: "POST",
-                        url: "/administracion/reportes/cardex/almacen",
+                        url: "/reportes/kardex/almacen",
                         dataType: "json",
                         data: {idalmacen: idalmacen},
                         success: function (data) {
@@ -104,7 +104,7 @@
                 $.ajax({
                     async: false,
                     type: "POST",
-                    url: "/administracion/reportes/cardex",
+                    url: "/reportes/kardex",
                     dataType: "json",
                     data: {idalmacen: idalmacen},
                     success: function (data) {

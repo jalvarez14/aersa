@@ -357,7 +357,15 @@
             });
         }
         
-        plugin.informeacumulados = function (mes_min, anio_min, mes_max, anio_max,dia_max) {
+        plugin.informeacumulados = function (no_data, mes_min, anio_min, mes_max, anio_max,dia_max) {
+            if(no_data==1) {
+                $('input[name=fecha_inicial]').attr('disabled', true);
+                $('input[name=fecha_final]').attr('disabled', true);
+                $('#generar_reporte').attr('disabled', true);
+                $('#generar_excel').attr('disabled', true);
+                $('#generar_pdf').attr('disabled', true);
+                $('#no_data').html('No existen registros de flujo efectivo')
+            }
             
             var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
             var maxDate = new Date(anio_max + '/' + mes_max + '/' + dia_max);

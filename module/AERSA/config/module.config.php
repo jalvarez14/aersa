@@ -10,7 +10,7 @@ return array(
                 'type' => 'Hostname',
                 'options' => array(
                     //'route' => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -320,7 +320,6 @@ return array(
                                             ),
                                         ),
                                     ),
-                                    
                                     'associatevendor' => array(
                                         'type' => 'Segment',
                                         'options' => array(
@@ -331,8 +330,6 @@ return array(
                                             ),
                                         ),
                                     ),
-                                
-                                    
                                 ),
                             ),
                             'producto' => array(
@@ -1885,6 +1882,29 @@ return array(
                                     ),
                                 ),
                             ),
+                            'kardex' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/kardex',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Reportes\Controller\Cardex',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'almacen' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/almacen',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Reportes\Controller\Cardex',
+                                                'action' => 'almacen',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                     /*
@@ -1914,35 +1934,22 @@ return array(
                                             ),
                                         ),
                                     ),
-                                    'cardex' => array(
-                                        'type' => 'Literal',
-                                        'options' => array(
-                                            'route' => '/cardex',
-                                            'defaults' => array(
-                                                'controller' => 'Application\Administracion\Controller\Reportes\Cardex',
-                                                'action' => 'index',
-                                            ),
-                                        ),
-                                        'may_terminate' => true,
-                                        'child_routes' => array(
-                                            'almacen' => array(
-                                                'type' => 'Segment',
-                                                'options' => array(
-                                                    'route' => '/almacen',
-                                                    'defaults' => array(
-                                                        'controller' => 'Application\Administracion\Controller\Reportes\Cardex',
-                                                        'action' => 'almacen',
-                                                    ),
-                                                ),
-                                            ),
-                                        ),
-                                    ),
                                     'estadisticosmensuales' => array(
                                         'type' => 'Segment',
                                         'options' => array(
                                             'route' => '/estadisticosmensuales',
                                             'defaults' => array(
                                                 'controller' => 'Application\Administracion\Controller\Reportes\Estadisticosmensuales',
+                                                'action' => 'index',
+                                            ),
+                                        ),
+                                    ),
+                                    'monitoreotablajeria' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/monitoreotablajeria',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Monitoreotablajeria',
                                                 'action' => 'index',
                                             ),
                                         ),
@@ -2019,7 +2026,7 @@ return array(
                 'type' => 'Hostname',
                 'options' => array(
                     //'route' => 'aersa', //LOCAL
-                    'route' => 'aersamx.com', //PRODUCCION
+                'route' => 'aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
@@ -2147,12 +2154,13 @@ return array(
              * REPORTES
              */
             'Application\Reportes\Controller\Reportes' => 'Application\Reportes\Controller\ReportesController',
+            'Application\Reportes\Controller\Cardex' => 'Application\Reportes\Controller\CardexController',
             /*
              * ADMINISTRACION
              */
             'Application\Administracion\Controller\Reportes\Cierresinventarios' => 'Application\Administracion\Controller\Reportes\CierresinventariosController',
-            'Application\Administracion\Controller\Reportes\Cardex' => 'Application\Administracion\Controller\Reportes\CardexController',
             'Application\Administracion\Controller\Reportes\Estadisticosmensuales' => 'Application\Administracion\Controller\Reportes\EstadisticosmensualesController',
+            'Application\Administracion\Controller\Reportes\Monitoreotablajeria' => 'Application\Administracion\Controller\Reportes\MonitoreotablajeriaController',
             /*
              * AUDITORIA
              */
