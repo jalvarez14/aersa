@@ -10,7 +10,7 @@ return array(
                 'type' => 'Hostname',
                 'options' => array(
                     //'route' => 'admin.aersa', //LOCAL
-                'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -1954,6 +1954,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'estadisticosanuales' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/estadisticosanuales',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Administracion\Controller\Reportes\Estadisticosanuales',
+                                                'action' => 'index',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),
@@ -2036,7 +2046,7 @@ return array(
                 'type' => 'Hostname',
                 'options' => array(
                     //'route' => 'aersa', //LOCAL
-                'route' => 'aersamx.com', //PRODUCCION
+                    'route' => 'aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
@@ -2171,6 +2181,7 @@ return array(
             'Application\Administracion\Controller\Reportes\Cierresinventarios' => 'Application\Administracion\Controller\Reportes\CierresinventariosController',
             'Application\Administracion\Controller\Reportes\Estadisticosmensuales' => 'Application\Administracion\Controller\Reportes\EstadisticosmensualesController',
             'Application\Administracion\Controller\Reportes\Monitoreotablajeria' => 'Application\Administracion\Controller\Reportes\MonitoreotablajeriaController',
+            'Application\Administracion\Controller\Reportes\Estadisticosanuales' => 'Application\Administracion\Controller\Reportes\EstadisticosanualesController',
             /*
              * AUDITORIA
              */
