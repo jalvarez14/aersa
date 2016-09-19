@@ -208,7 +208,7 @@
         }
 
         plugin.new = function () {
-            $('#batch_inventario').attr('disabled', true);
+            $('#batch_inventario_b').attr('disabled', true);
             $('select[name=idalmacen]').on('change', function () {
                 var $this=$(this);
                 if($this.val()!=0) {
@@ -221,10 +221,10 @@
                         data: {id: id},
                         success: function (data) {
                             if(data){
-                                $('#batch_inventario').attr('disabled', false);
+                                $('#batch_inventario_b').attr('disabled', false);
                             } else {
+                                $('#batch_inventario_b').attr('disabled', true);
                                 alert("Almacen sin encargado");
-                                $('#batch_inventario').attr('disabled', true);
                             }
                         },
                     });
@@ -243,11 +243,10 @@
                 $('input[name=batch_inventario]').trigger('click');
             });
             $('input[name=batch_inventario]').on('change', function () {
-
-                alert($('select[name=auditor] option:selected').val());
-                if ($('select[name=auditor]').val() != "" && $('select[name=almacen]').val() != "") {
-                    var auditor = $('select[name=idauditor]').val();
-                    var almacen = $('select[name=idalmacen]').val();
+                var auditor = $('select[name=idauditor]').val();
+                var almacen = $('select[name=idalmacen]').val();
+                if (almacen!=0 && auditor!=0) {
+                    
                     var empty = false;
                     var val = $('input[name=batch_inventario]').val();
                     if (val == "") {
