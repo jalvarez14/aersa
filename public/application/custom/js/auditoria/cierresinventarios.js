@@ -208,18 +208,45 @@
         }
 
         plugin.new = function () {
+            $('#batch_inventario_b').attr('disabled', true);
+            $('select[name=idalmacen]').on('change', function () {
+                var $this=$(this);
+                if($this.val()!=0) {
+                    var id=$this.val();
+                    $.ajax({
+                        async: false,
+                        type: "POST",
+                        url: "/auditoria/cierresemana/encargado",
+                        dataType: "json",
+                        data: {id: id},
+                        success: function (data) {
+                            if(data){
+                                $('#batch_inventario_b').attr('disabled', false);
+                            } else {
+                                $('#batch_inventario_b').attr('disabled', true);
+                                alert("Almacen sin encargado");
+                            }
+                        },
+                    });
+                }
+            });
+            
             $container.find('table input:text').on('blur',function(){
                 var $tr = $(this).closest('tr');
                 calcular($tr);
             });
             var inventario_array = {};
+            
+            
+            
             $('#subir_inventario').on('click', function () {
                 $('input[name=batch_inventario]').trigger('click');
             });
             $('input[name=batch_inventario]').on('change', function () {
-                if ($('select[name=auditor]').val() != "" && $('select[name=almacen]').val() != "") {
-                    var auditor = $('select[name=idauditor]').val();
-                    var almacen = $('select[name=idalmacen]').val();
+                var auditor = $('select[name=idauditor]').val();
+                var almacen = $('select[name=idalmacen]').val();
+                if (almacen!=0 && auditor!=0) {
+                    
                     var empty = false;
                     var val = $('input[name=batch_inventario]').val();
                     if (val == "") {
