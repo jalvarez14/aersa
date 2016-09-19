@@ -13,23 +13,47 @@ class SucursalController extends AbstractActionController
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+           
 
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
+            $sucursal = \SucursalQuery::create()->findPk($post_data['idsucursal']);
+            foreach ($post_data as $key => $value) {
+                if (\SucursalPeer::getTableMap()->hasColumn($key)) {
+                    $sucursal->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                }
+            }
+            $sucursal->save();
+   
+            $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+          
+        }
         
         //SI SE TRATA DE UN ADMIN DE AERSA
         if($session['idrol'] == 1){
             $collection = \EmpresaQuery::create()->orderByIdempresa(\Criteria::DESC)->find();
+            
+            //INTANCIAMOS NUESTRA VISTA
+            $view_model = new ViewModel();
+            $view_model->setTemplate('/application/catalogo/empresa/index');
+            $view_model->setVariables(array(
+                'messages' => $this->flashMessenger(),
+                'collection' => $collection,
+            ));
+        }else{
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($session['idempresa'])->find();
+            
+            $view_model = new ViewModel();
+            $view_model->setTemplate('/application/catalogo/sucursal/index');
+            $view_model->setVariables(array(
+                'messages' => $this->flashMessenger(),
+                'sucursales' => $sucursales,
+            ));
         }
 
-
         
-        //INTANCIAMOS NUESTRA VISTA
-        $view_model = new ViewModel();
-        $view_model->setTemplate('/application/catalogo/empresa/index');
-        $view_model->setVariables(array(
-            'messages' => $this->flashMessenger(),
-            'collection' => $collection,
-        ));
         return $view_model;
 
     }

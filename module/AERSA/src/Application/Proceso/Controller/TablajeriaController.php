@@ -207,7 +207,7 @@ class TablajeriaController extends AbstractActionController {
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();
-               
+              
 
                 $post_data["ordentablajeria_fecha"] = date_create_from_format('d/m/Y', $post_data["ordentablajeria_fecha"]);
                 $post_data["ordentablajeria_preciokilo"] = preg_replace('/[^\d\.]/', '', $post_data["ordentablajeria_preciokilo"]);
@@ -224,7 +224,7 @@ class TablajeriaController extends AbstractActionController {
                 if ($post_data['ordentablajeria_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
                 }
-
+                 
                 $entity->save();
 
 

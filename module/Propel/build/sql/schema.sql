@@ -1064,6 +1064,7 @@ CREATE TABLE `ordentablajeria`
     `ordentablajeria_precioneto` DECIMAL(15,5) NOT NULL,
     `ordentablajeria_inyeccion` FLOAT,
     `ordentablajeria_merma` FLOAT NOT NULL,
+    `ordentablajeria_porcentajemerma` FLOAT NOT NULL,
     `ordentablajeria_aprovechamiento` FLOAT NOT NULL,
     `ordentablajeria_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `ordentablajeria_folio` VARCHAR(10) NOT NULL,
