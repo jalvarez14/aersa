@@ -190,7 +190,7 @@ class ReportesController extends AbstractActionController {
             
             foreach ($idcategorias as $id) {
                 $idproductos = array();
-                $productosObj= \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->orderByProductoNombre('asc')->find();
+                $productosObj= \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple','subreceta'))->orderByProductoNombre('asc')->find();
                 $productoObj=new \Producto();
                 foreach ($productosObj as $productoObj) {
                     array_push($idproductos, $productoObj->getIdproducto());
