@@ -311,7 +311,7 @@ class CierresinventariosController extends AbstractActionController {
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
                     $impFis = $stockFisico * $costoPromedio;
-                    $stockFisico = ($stockFisico == 0) ? "" : $stockFisico;
+                    //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
                         $falim+=$impFis;
