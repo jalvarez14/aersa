@@ -132,6 +132,12 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     protected $ordentablajeria_merma;
 
     /**
+     * The value for the ordentablajeria_porcentajemerma field.
+     * @var        double
+     */
+    protected $ordentablajeria_porcentajemerma;
+
+    /**
      * The value for the ordentablajeria_aprovechamiento field.
      * @var        double
      */
@@ -477,6 +483,17 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     {
 
         return $this->ordentablajeria_merma;
+    }
+
+    /**
+     * Get the [ordentablajeria_porcentajemerma] column value.
+     *
+     * @return double
+     */
+    public function getOrdentablajeriaPorcentajemerma()
+    {
+
+        return $this->ordentablajeria_porcentajemerma;
     }
 
     /**
@@ -1030,6 +1047,27 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     } // setOrdentablajeriaMerma()
 
     /**
+     * Set the value of [ordentablajeria_porcentajemerma] column.
+     *
+     * @param  double $v new value
+     * @return Ordentablajeria The current object (for fluent API support)
+     */
+    public function setOrdentablajeriaPorcentajemerma($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->ordentablajeria_porcentajemerma !== $v) {
+            $this->ordentablajeria_porcentajemerma = $v;
+            $this->modifiedColumns[] = OrdentablajeriaPeer::ORDENTABLAJERIA_PORCENTAJEMERMA;
+        }
+
+
+        return $this;
+    } // setOrdentablajeriaPorcentajemerma()
+
+    /**
      * Set the value of [ordentablajeria_aprovechamiento] column.
      *
      * @param  double $v new value
@@ -1319,15 +1357,16 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->ordentablajeria_precioneto = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
             $this->ordentablajeria_inyeccion = ($row[$startcol + 15] !== null) ? (double) $row[$startcol + 15] : null;
             $this->ordentablajeria_merma = ($row[$startcol + 16] !== null) ? (double) $row[$startcol + 16] : null;
-            $this->ordentablajeria_aprovechamiento = ($row[$startcol + 17] !== null) ? (double) $row[$startcol + 17] : null;
-            $this->ordentablajeria_revisada = ($row[$startcol + 18] !== null) ? (boolean) $row[$startcol + 18] : null;
-            $this->ordentablajeria_folio = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
-            $this->ordentablajeria_fecha = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
-            $this->ordentablajeria_fechacreacion = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
-            $this->ordentablajeria_pesoporcion = ($row[$startcol + 22] !== null) ? (double) $row[$startcol + 22] : null;
-            $this->notaauditorempresa = ($row[$startcol + 23] !== null) ? (boolean) $row[$startcol + 23] : null;
-            $this->notaalmacenistaempresa = ($row[$startcol + 24] !== null) ? (boolean) $row[$startcol + 24] : null;
-            $this->notaauditoraersa = ($row[$startcol + 25] !== null) ? (boolean) $row[$startcol + 25] : null;
+            $this->ordentablajeria_porcentajemerma = ($row[$startcol + 17] !== null) ? (double) $row[$startcol + 17] : null;
+            $this->ordentablajeria_aprovechamiento = ($row[$startcol + 18] !== null) ? (double) $row[$startcol + 18] : null;
+            $this->ordentablajeria_revisada = ($row[$startcol + 19] !== null) ? (boolean) $row[$startcol + 19] : null;
+            $this->ordentablajeria_folio = ($row[$startcol + 20] !== null) ? (string) $row[$startcol + 20] : null;
+            $this->ordentablajeria_fecha = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
+            $this->ordentablajeria_fechacreacion = ($row[$startcol + 22] !== null) ? (string) $row[$startcol + 22] : null;
+            $this->ordentablajeria_pesoporcion = ($row[$startcol + 23] !== null) ? (double) $row[$startcol + 23] : null;
+            $this->notaauditorempresa = ($row[$startcol + 24] !== null) ? (boolean) $row[$startcol + 24] : null;
+            $this->notaalmacenistaempresa = ($row[$startcol + 25] !== null) ? (boolean) $row[$startcol + 25] : null;
+            $this->notaauditoraersa = ($row[$startcol + 26] !== null) ? (boolean) $row[$startcol + 26] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1337,7 +1376,7 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 26; // 26 = OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 27; // 27 = OrdentablajeriaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Ordentablajeria object", $e);
@@ -1720,6 +1759,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA)) {
             $modifiedColumns[':p' . $index++]  = '`ordentablajeria_merma`';
         }
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_PORCENTAJEMERMA)) {
+            $modifiedColumns[':p' . $index++]  = '`ordentablajeria_porcentajemerma`';
+        }
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO)) {
             $modifiedColumns[':p' . $index++]  = '`ordentablajeria_aprovechamiento`';
         }
@@ -1808,6 +1850,9 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                         break;
                     case '`ordentablajeria_merma`':
                         $stmt->bindValue($identifier, $this->ordentablajeria_merma, PDO::PARAM_STR);
+                        break;
+                    case '`ordentablajeria_porcentajemerma`':
+                        $stmt->bindValue($identifier, $this->ordentablajeria_porcentajemerma, PDO::PARAM_STR);
                         break;
                     case '`ordentablajeria_aprovechamiento`':
                         $stmt->bindValue($identifier, $this->ordentablajeria_aprovechamiento, PDO::PARAM_STR);
@@ -2086,30 +2131,33 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                 return $this->getOrdentablajeriaMerma();
                 break;
             case 17:
-                return $this->getOrdentablajeriaAprovechamiento();
+                return $this->getOrdentablajeriaPorcentajemerma();
                 break;
             case 18:
-                return $this->getOrdentablajeriaRevisada();
+                return $this->getOrdentablajeriaAprovechamiento();
                 break;
             case 19:
-                return $this->getOrdentablajeriaFolio();
+                return $this->getOrdentablajeriaRevisada();
                 break;
             case 20:
-                return $this->getOrdentablajeriaFecha();
+                return $this->getOrdentablajeriaFolio();
                 break;
             case 21:
-                return $this->getOrdentablajeriaFechacreacion();
+                return $this->getOrdentablajeriaFecha();
                 break;
             case 22:
-                return $this->getOrdentablajeriaPesoporcion();
+                return $this->getOrdentablajeriaFechacreacion();
                 break;
             case 23:
-                return $this->getNotaauditorempresa();
+                return $this->getOrdentablajeriaPesoporcion();
                 break;
             case 24:
-                return $this->getNotaalmacenistaempresa();
+                return $this->getNotaauditorempresa();
                 break;
             case 25:
+                return $this->getNotaalmacenistaempresa();
+                break;
+            case 26:
                 return $this->getNotaauditoraersa();
                 break;
             default:
@@ -2158,15 +2206,16 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $keys[14] => $this->getOrdentablajeriaPrecioneto(),
             $keys[15] => $this->getOrdentablajeriaInyeccion(),
             $keys[16] => $this->getOrdentablajeriaMerma(),
-            $keys[17] => $this->getOrdentablajeriaAprovechamiento(),
-            $keys[18] => $this->getOrdentablajeriaRevisada(),
-            $keys[19] => $this->getOrdentablajeriaFolio(),
-            $keys[20] => $this->getOrdentablajeriaFecha(),
-            $keys[21] => $this->getOrdentablajeriaFechacreacion(),
-            $keys[22] => $this->getOrdentablajeriaPesoporcion(),
-            $keys[23] => $this->getNotaauditorempresa(),
-            $keys[24] => $this->getNotaalmacenistaempresa(),
-            $keys[25] => $this->getNotaauditoraersa(),
+            $keys[17] => $this->getOrdentablajeriaPorcentajemerma(),
+            $keys[18] => $this->getOrdentablajeriaAprovechamiento(),
+            $keys[19] => $this->getOrdentablajeriaRevisada(),
+            $keys[20] => $this->getOrdentablajeriaFolio(),
+            $keys[21] => $this->getOrdentablajeriaFecha(),
+            $keys[22] => $this->getOrdentablajeriaFechacreacion(),
+            $keys[23] => $this->getOrdentablajeriaPesoporcion(),
+            $keys[24] => $this->getNotaauditorempresa(),
+            $keys[25] => $this->getNotaalmacenistaempresa(),
+            $keys[26] => $this->getNotaauditoraersa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2287,30 +2336,33 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                 $this->setOrdentablajeriaMerma($value);
                 break;
             case 17:
-                $this->setOrdentablajeriaAprovechamiento($value);
+                $this->setOrdentablajeriaPorcentajemerma($value);
                 break;
             case 18:
-                $this->setOrdentablajeriaRevisada($value);
+                $this->setOrdentablajeriaAprovechamiento($value);
                 break;
             case 19:
-                $this->setOrdentablajeriaFolio($value);
+                $this->setOrdentablajeriaRevisada($value);
                 break;
             case 20:
-                $this->setOrdentablajeriaFecha($value);
+                $this->setOrdentablajeriaFolio($value);
                 break;
             case 21:
-                $this->setOrdentablajeriaFechacreacion($value);
+                $this->setOrdentablajeriaFecha($value);
                 break;
             case 22:
-                $this->setOrdentablajeriaPesoporcion($value);
+                $this->setOrdentablajeriaFechacreacion($value);
                 break;
             case 23:
-                $this->setNotaauditorempresa($value);
+                $this->setOrdentablajeriaPesoporcion($value);
                 break;
             case 24:
-                $this->setNotaalmacenistaempresa($value);
+                $this->setNotaauditorempresa($value);
                 break;
             case 25:
+                $this->setNotaalmacenistaempresa($value);
+                break;
+            case 26:
                 $this->setNotaauditoraersa($value);
                 break;
         } // switch()
@@ -2354,15 +2406,16 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if (array_key_exists($keys[14], $arr)) $this->setOrdentablajeriaPrecioneto($arr[$keys[14]]);
         if (array_key_exists($keys[15], $arr)) $this->setOrdentablajeriaInyeccion($arr[$keys[15]]);
         if (array_key_exists($keys[16], $arr)) $this->setOrdentablajeriaMerma($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setOrdentablajeriaAprovechamiento($arr[$keys[17]]);
-        if (array_key_exists($keys[18], $arr)) $this->setOrdentablajeriaRevisada($arr[$keys[18]]);
-        if (array_key_exists($keys[19], $arr)) $this->setOrdentablajeriaFolio($arr[$keys[19]]);
-        if (array_key_exists($keys[20], $arr)) $this->setOrdentablajeriaFecha($arr[$keys[20]]);
-        if (array_key_exists($keys[21], $arr)) $this->setOrdentablajeriaFechacreacion($arr[$keys[21]]);
-        if (array_key_exists($keys[22], $arr)) $this->setOrdentablajeriaPesoporcion($arr[$keys[22]]);
-        if (array_key_exists($keys[23], $arr)) $this->setNotaauditorempresa($arr[$keys[23]]);
-        if (array_key_exists($keys[24], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[24]]);
-        if (array_key_exists($keys[25], $arr)) $this->setNotaauditoraersa($arr[$keys[25]]);
+        if (array_key_exists($keys[17], $arr)) $this->setOrdentablajeriaPorcentajemerma($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setOrdentablajeriaAprovechamiento($arr[$keys[18]]);
+        if (array_key_exists($keys[19], $arr)) $this->setOrdentablajeriaRevisada($arr[$keys[19]]);
+        if (array_key_exists($keys[20], $arr)) $this->setOrdentablajeriaFolio($arr[$keys[20]]);
+        if (array_key_exists($keys[21], $arr)) $this->setOrdentablajeriaFecha($arr[$keys[21]]);
+        if (array_key_exists($keys[22], $arr)) $this->setOrdentablajeriaFechacreacion($arr[$keys[22]]);
+        if (array_key_exists($keys[23], $arr)) $this->setOrdentablajeriaPesoporcion($arr[$keys[23]]);
+        if (array_key_exists($keys[24], $arr)) $this->setNotaauditorempresa($arr[$keys[24]]);
+        if (array_key_exists($keys[25], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[25]]);
+        if (array_key_exists($keys[26], $arr)) $this->setNotaauditoraersa($arr[$keys[26]]);
     }
 
     /**
@@ -2391,6 +2444,7 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIONETO)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_PRECIONETO, $this->ordentablajeria_precioneto);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_INYECCION)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_INYECCION, $this->ordentablajeria_inyeccion);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA, $this->ordentablajeria_merma);
+        if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_PORCENTAJEMERMA)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_PORCENTAJEMERMA, $this->ordentablajeria_porcentajemerma);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_APROVECHAMIENTO, $this->ordentablajeria_aprovechamiento);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_REVISADA, $this->ordentablajeria_revisada);
         if ($this->isColumnModified(OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO)) $criteria->add(OrdentablajeriaPeer::ORDENTABLAJERIA_FOLIO, $this->ordentablajeria_folio);
@@ -2479,6 +2533,7 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         $copyObj->setOrdentablajeriaPrecioneto($this->getOrdentablajeriaPrecioneto());
         $copyObj->setOrdentablajeriaInyeccion($this->getOrdentablajeriaInyeccion());
         $copyObj->setOrdentablajeriaMerma($this->getOrdentablajeriaMerma());
+        $copyObj->setOrdentablajeriaPorcentajemerma($this->getOrdentablajeriaPorcentajemerma());
         $copyObj->setOrdentablajeriaAprovechamiento($this->getOrdentablajeriaAprovechamiento());
         $copyObj->setOrdentablajeriaRevisada($this->getOrdentablajeriaRevisada());
         $copyObj->setOrdentablajeriaFolio($this->getOrdentablajeriaFolio());
@@ -3463,6 +3518,7 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         $this->ordentablajeria_precioneto = null;
         $this->ordentablajeria_inyeccion = null;
         $this->ordentablajeria_merma = null;
+        $this->ordentablajeria_porcentajemerma = null;
         $this->ordentablajeria_aprovechamiento = null;
         $this->ordentablajeria_revisada = null;
         $this->ordentablajeria_folio = null;

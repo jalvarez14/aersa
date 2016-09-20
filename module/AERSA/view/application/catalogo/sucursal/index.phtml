@@ -1,0 +1,176 @@
+<?php foreach ($messages->getSuccessMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Éxito!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
+
+<h3 class="page-title">Sucursales</h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li><a>Catalogo</a><i class="fa fa-angle-right"></i></li>
+         
+         <li><a>Sucursales</a></li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+<div class="alert alert-danger alert-dismissable">
+    <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+    <strong>Error!</strong>
+    <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+
+
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <div class="btn-set pull-right">
+             
+            </div>
+            <h3 class="form-section ">Sucursales </h3>
+            <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
+                <thead >
+                    <tr>
+                        <th> Nombre </th>
+                        <th> Estatus </th>
+                        <th> Año activo </th>
+                        <th> Semana activa </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $entity = new Sucursal();?>
+                    <?php foreach ($sucursales as $entity) : ?>
+                        <?php
+
+                        if ($entity->getSucursalestatus() == 1) 
+                        {
+                            $estatus = 'Activo';
+                            $class = 'info';
+                        } 
+                        else 
+                        {
+                            $estatus = 'Inactivo';
+                            $class = 'danger';
+                        }
+                        
+                        $week_array = \Shared\GeneralFunctions::getWeekArray($entity->getSucursalAnioactivo());
+                      
+  
+                        ?>
+                        <tr id="<?php echo $entity->getIdsucursal() ?>" data-semanaactiva="<?php echo $entity->getSucursalMesactivo()?>">
+                            <td><?php echo $entity->getSucursalnombre() ?></td>
+                            <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $estatus ?> </span></td>
+                            <td><span class="current_value"><?php echo $entity->getSucursalAnioactivo() ?></span><a class="edit_anio" href="javascript:;" style="float: right"><i class="fa fa-pencil"></i></a></td>
+                            <td><span class="current_value"><?php echo $week_array[$entity->getSucursalMesactivo()] ?></span><a class="edit_semana" href="javascript:;" style="float: right"><i class="fa fa-pencil"></i></a></td>
+
+                        </tr>
+                    <?php endforeach; ?>
+                        
+                        <?php if(count($sucursales) == 0) : ?>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                                
+                        </tr>
+                        <?php endif ?>
+                        
+                </tbody>
+            </table>
+        </div>        
+    </div>
+</div>
+<script>
+
+$(document).ready(function(){
+    
+    //EDIT ANIO
+    $('a.edit_anio,a.edit_semana').on('click',function(){
+        var idsucursal =  $(this).closest('tr').attr('id');
+        var anio = $(this).closest('tr').find('td').eq(2).find('span').text();
+        var semana_activa =$(this).closest('tr').attr('data-semanaactiva');
+       
+        var current_value = $(this).closest('td').find('span').text();
+        var tmpl = [
+            '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                '<form method="post" action="/catalogo/empresa/sucursal">',
+                    '<div class="modal-header">',
+                        '<h4 class="modal-title">Editar año activo</h4>',
+                    '</div>',
+                    '<div class="modal-body">',
+                        '<div class="row">',
+
+                                '<div class="col-md-12">',
+                                    '<div class="form-group">',
+                                        '<label for="producto_nombre">Año activo *</label>',
+                                        '<input class="form-control" type="hidden" name="idsucursal" value="'+idsucursal+'">',
+                                        '<input required class="form-control" type="text" name="sucursal_anioactivo" value="'+anio+'">',
+                                    '</div>',
+                                    '<div class="form-group">',
+                                        '<label for="producto_nombre">Semana activa *</label>',
+                                        '<select class="form-control" name="sucursal_mesactivo" required></select>',
+                                    '</div>',
+                                '</div>',
+
+                        '</div>',
+                    '</div>',
+                    '<div class="modal-footer">',
+                        '<button type="submit" href="#" class="btn blue">Guardar</button>',
+                        '<a id="cancel_product" href="#" class="btn red">Cancelar</button>',
+                    '</div>',
+                '</form>',
+            '</div>',  
+        ].join('');
+        var $modal = $(tmpl);
+        $.ajax({
+            type: 'POST',
+            data:{anio:anio},
+            dataType:'JSON',
+            url:'/catalogo/empresa/sucursal/getweekarray',
+            async: false,
+            success: function (data, textStatus, jqXHR) {
+                $('select[name=sucursal_mesactivo] option').remove();
+                $.each(data,function(index){
+                    var $option = $('<option>').text(this).val(index);
+                    $modal.find('select[name=sucursal_mesactivo]').append($option);
+                });
+            }
+        });
+        $modal.find('select[name=sucursal_mesactivo] option[value="'+semana_activa+'"]').attr('selected',true);
+        $modal.find('#cancel_product').on('click',function(){$modal.modal('hide'); });
+        $modal.find('input[name=sucursal_anioactivo]').on('change',function(){
+            anio = $modal.find('input[name=sucursal_anioactivo]').val();
+            $.ajax({
+                type: 'POST',
+                data:{anio:anio},
+                dataType:'JSON',
+                url:'/catalogo/empresa/sucursal/getweekarray',
+                success: function (data, textStatus, jqXHR) {
+                    $modal.find('select[name=sucursal_mesactivo] option').remove();
+                    $.each(data,function(index){
+                        var $option = $('<option>').text(this).val(index);
+                        $modal.find('select[name=sucursal_mesactivo]').append($option);
+                    });
+                }
+            });
+        });
+        
+        
+        
+        $modal.modal();
+        
+                                         
+
+    });
+
+    
+});
+
+</script>
+
+

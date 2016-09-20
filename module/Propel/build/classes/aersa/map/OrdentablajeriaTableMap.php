@@ -55,6 +55,7 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addColumn('ordentablajeria_precioneto', 'OrdentablajeriaPrecioneto', 'DECIMAL', true, 15, null);
         $this->addColumn('ordentablajeria_inyeccion', 'OrdentablajeriaInyeccion', 'FLOAT', false, null, null);
         $this->addColumn('ordentablajeria_merma', 'OrdentablajeriaMerma', 'FLOAT', true, null, null);
+        $this->addColumn('ordentablajeria_porcentajemerma', 'OrdentablajeriaPorcentajemerma', 'FLOAT', true, null, null);
         $this->addColumn('ordentablajeria_aprovechamiento', 'OrdentablajeriaAprovechamiento', 'FLOAT', true, null, null);
         $this->addColumn('ordentablajeria_revisada', 'OrdentablajeriaRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('ordentablajeria_folio', 'OrdentablajeriaFolio', 'VARCHAR', true, 10, null);

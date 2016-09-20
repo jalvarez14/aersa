@@ -903,6 +903,7 @@
     <column name="ordentablajeria_precioneto" phpName="OrdentablajeriaPrecioneto" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="ordentablajeria_inyeccion" phpName="OrdentablajeriaInyeccion" type="FLOAT" required="false"/>
     <column name="ordentablajeria_merma" phpName="OrdentablajeriaMerma" type="FLOAT" required="true"/>
+    <column name="ordentablajeria_porcentajemerma" phpName="OrdentablajeriaPorcentajemerma" type="FLOAT" required="true"/>
     <column name="ordentablajeria_aprovechamiento" phpName="OrdentablajeriaAprovechamiento" type="FLOAT" required="true"/>
     <column name="ordentablajeria_revisada" phpName="OrdentablajeriaRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="ordentablajeria_folio" phpName="OrdentablajeriaFolio" type="VARCHAR" size="10" required="true"/>

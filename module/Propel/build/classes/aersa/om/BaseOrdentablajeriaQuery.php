@@ -23,6 +23,7 @@
  * @method OrdentablajeriaQuery orderByOrdentablajeriaPrecioneto($order = Criteria::ASC) Order by the ordentablajeria_precioneto column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaInyeccion($order = Criteria::ASC) Order by the ordentablajeria_inyeccion column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaMerma($order = Criteria::ASC) Order by the ordentablajeria_merma column
+ * @method OrdentablajeriaQuery orderByOrdentablajeriaPorcentajemerma($order = Criteria::ASC) Order by the ordentablajeria_porcentajemerma column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaAprovechamiento($order = Criteria::ASC) Order by the ordentablajeria_aprovechamiento column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaRevisada($order = Criteria::ASC) Order by the ordentablajeria_revisada column
  * @method OrdentablajeriaQuery orderByOrdentablajeriaFolio($order = Criteria::ASC) Order by the ordentablajeria_folio column
@@ -50,6 +51,7 @@
  * @method OrdentablajeriaQuery groupByOrdentablajeriaPrecioneto() Group by the ordentablajeria_precioneto column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaInyeccion() Group by the ordentablajeria_inyeccion column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaMerma() Group by the ordentablajeria_merma column
+ * @method OrdentablajeriaQuery groupByOrdentablajeriaPorcentajemerma() Group by the ordentablajeria_porcentajemerma column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaAprovechamiento() Group by the ordentablajeria_aprovechamiento column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaRevisada() Group by the ordentablajeria_revisada column
  * @method OrdentablajeriaQuery groupByOrdentablajeriaFolio() Group by the ordentablajeria_folio column
@@ -119,6 +121,7 @@
  * @method Ordentablajeria findOneByOrdentablajeriaPrecioneto(string $ordentablajeria_precioneto) Return the first Ordentablajeria filtered by the ordentablajeria_precioneto column
  * @method Ordentablajeria findOneByOrdentablajeriaInyeccion(double $ordentablajeria_inyeccion) Return the first Ordentablajeria filtered by the ordentablajeria_inyeccion column
  * @method Ordentablajeria findOneByOrdentablajeriaMerma(double $ordentablajeria_merma) Return the first Ordentablajeria filtered by the ordentablajeria_merma column
+ * @method Ordentablajeria findOneByOrdentablajeriaPorcentajemerma(double $ordentablajeria_porcentajemerma) Return the first Ordentablajeria filtered by the ordentablajeria_porcentajemerma column
  * @method Ordentablajeria findOneByOrdentablajeriaAprovechamiento(double $ordentablajeria_aprovechamiento) Return the first Ordentablajeria filtered by the ordentablajeria_aprovechamiento column
  * @method Ordentablajeria findOneByOrdentablajeriaRevisada(boolean $ordentablajeria_revisada) Return the first Ordentablajeria filtered by the ordentablajeria_revisada column
  * @method Ordentablajeria findOneByOrdentablajeriaFolio(string $ordentablajeria_folio) Return the first Ordentablajeria filtered by the ordentablajeria_folio column
@@ -146,6 +149,7 @@
  * @method array findByOrdentablajeriaPrecioneto(string $ordentablajeria_precioneto) Return Ordentablajeria objects filtered by the ordentablajeria_precioneto column
  * @method array findByOrdentablajeriaInyeccion(double $ordentablajeria_inyeccion) Return Ordentablajeria objects filtered by the ordentablajeria_inyeccion column
  * @method array findByOrdentablajeriaMerma(double $ordentablajeria_merma) Return Ordentablajeria objects filtered by the ordentablajeria_merma column
+ * @method array findByOrdentablajeriaPorcentajemerma(double $ordentablajeria_porcentajemerma) Return Ordentablajeria objects filtered by the ordentablajeria_porcentajemerma column
  * @method array findByOrdentablajeriaAprovechamiento(double $ordentablajeria_aprovechamiento) Return Ordentablajeria objects filtered by the ordentablajeria_aprovechamiento column
  * @method array findByOrdentablajeriaRevisada(boolean $ordentablajeria_revisada) Return Ordentablajeria objects filtered by the ordentablajeria_revisada column
  * @method array findByOrdentablajeriaFolio(string $ordentablajeria_folio) Return Ordentablajeria objects filtered by the ordentablajeria_folio column
@@ -262,7 +266,7 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_esporcion`, `ordentablajeria_numeroporciones`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_totalbruto`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio`, `ordentablajeria_fecha`, `ordentablajeria_fechacreacion`, `ordentablajeria_pesoporcion`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
+        $sql = 'SELECT `idordentablajeria`, `idempresa`, `idsucursal`, `idalmacenorigen`, `idalmacendestino`, `idusuario`, `idauditor`, `idproducto`, `ordentablajeria_esporcion`, `ordentablajeria_numeroporciones`, `ordentablajeria_pesobruto`, `ordentablajeria_preciokilo`, `ordentablajeria_totalbruto`, `ordentablajeria_pesoneto`, `ordentablajeria_precioneto`, `ordentablajeria_inyeccion`, `ordentablajeria_merma`, `ordentablajeria_porcentajemerma`, `ordentablajeria_aprovechamiento`, `ordentablajeria_revisada`, `ordentablajeria_folio`, `ordentablajeria_fecha`, `ordentablajeria_fechacreacion`, `ordentablajeria_pesoporcion`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa` FROM `ordentablajeria` WHERE `idordentablajeria` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1062,6 +1066,48 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_MERMA, $ordentablajeriaMerma, $comparison);
+    }
+
+    /**
+     * Filter the query on the ordentablajeria_porcentajemerma column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrdentablajeriaPorcentajemerma(1234); // WHERE ordentablajeria_porcentajemerma = 1234
+     * $query->filterByOrdentablajeriaPorcentajemerma(array(12, 34)); // WHERE ordentablajeria_porcentajemerma IN (12, 34)
+     * $query->filterByOrdentablajeriaPorcentajemerma(array('min' => 12)); // WHERE ordentablajeria_porcentajemerma >= 12
+     * $query->filterByOrdentablajeriaPorcentajemerma(array('max' => 12)); // WHERE ordentablajeria_porcentajemerma <= 12
+     * </code>
+     *
+     * @param     mixed $ordentablajeriaPorcentajemerma The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return OrdentablajeriaQuery The current query, for fluid interface
+     */
+    public function filterByOrdentablajeriaPorcentajemerma($ordentablajeriaPorcentajemerma = null, $comparison = null)
+    {
+        if (is_array($ordentablajeriaPorcentajemerma)) {
+            $useMinMax = false;
+            if (isset($ordentablajeriaPorcentajemerma['min'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PORCENTAJEMERMA, $ordentablajeriaPorcentajemerma['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($ordentablajeriaPorcentajemerma['max'])) {
+                $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PORCENTAJEMERMA, $ordentablajeriaPorcentajemerma['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrdentablajeriaPeer::ORDENTABLAJERIA_PORCENTAJEMERMA, $ordentablajeriaPorcentajemerma, $comparison);
     }
 
     /**
