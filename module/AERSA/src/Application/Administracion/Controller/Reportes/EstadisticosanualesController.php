@@ -17,8 +17,23 @@ class EstadisticosanualesController extends AbstractActionController {
         if ($request->isPost()) {
 
             $post_data = $request->getPost();
-            var_dump($post_data);exit;
             $anio = $post_data['anio'];
+            
+            
+            //mes 1
+            $ts = strtotime("now");
+            echo $ts;exit;
+            
+            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
+            var_dump($post_data);exit;
+            
+            
+            
+            
+            
+            
+            
+            
             $mes = $post_data['mes'];
             $inicio = "$anio-$mes-01 00:00:00";
             if (checkdate($mes, '31', $anio))

@@ -190,7 +190,7 @@ class ReportesController extends AbstractActionController {
             
             foreach ($idcategorias as $id) {
                 $idproductos = array();
-                $productosObj= \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->orderByProductoNombre('asc')->find();
+                $productosObj= \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple','subreceta'))->orderByProductoNombre('asc')->find();
                 $productoObj=new \Producto();
                 foreach ($productosObj as $productoObj) {
                     array_push($idproductos, $productoObj->getIdproducto());
@@ -949,6 +949,67 @@ class ReportesController extends AbstractActionController {
         ));
         $view_model->setTemplate('/application/reportes/reportes/informeacumulados');
         return $view_model;
+    }
+    
+    public function recetasAction() {
+        $view_model = new ViewModel();
+        $view_model->setTemplate('/application/reportes/recetas/index');
+        return $view_model;
+    }
+    
+    public function recetasdetalleAction() {
+        echo "A";
+        exit;
+    }
+    
+    public function recetasresumenAction() {
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        $idempresa = $session['idempresa'];
+        $idsucursal = $session['idsucursal'];
+        $reporte= array();
+        $productosObj= \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo('subreceta')->orderByProductoNombre('asc')->find();
+        $productoObj=new \Producto();
+        foreach ($productosObj as $productoObj) {
+            $recetasObj= \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
+            $recetaObj=new \Receta();
+            $idProducto=$productoObj->getIdproducto();
+            $nombreProducto=$productoObj->getProductoNombre();
+            $totalReceta=0;
+            $bgazulclaro = "#ADD8E6";
+            $bgazul = "#819FF7";
+            array_push($reporte, "<tr bgcolor='" . $bgazul . "'><td>Clave:</td><td>$idProducto</td><td>Producto:</td><td>$nombreProducto</td><td></td><td></td></tr>");
+            array_push($reporte, "<tr bgcolor='" . $bgazulclaro . "'><td>Clave</td><td>Nombre Producto</td><td>Cantidad</td><td>Unidad</td><td>Costo</td><td>Total</td></tr>");
+            $color=true;
+            foreach ($recetasObj as $recetaObj) {
+                $producto=  \ProductoQuery::create()->filterByIdproducto($recetaObj->getIdproductoreceta())->findOne();
+                $clave=$producto->getIdproducto();
+                $nombre=$producto->getProductoNombre();
+                $cantidad=$recetaObj->getRecetaCantidad();
+                $unidad=$producto->getUnidadmedida()->getUnidadmedidaNombre();
+                $costo=$producto->getProductoCosto();
+                $total=$costo*$cantidad;
+                $totalReceta+=$total;
+                $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
+                $color = !$color;
+                array_push($reporte, "<tr bgcolor='" . $bg . "'><td>$clave</td><td>$nombre</td><td>$cantidad</td><td>$unidad</td><td>$costo</td><td>$total</td></tr>");
+            }
+            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td>Total</td><td>$totalReceta</td></tr>");
+        }
+        $fecha = date('d/m/Y');
+        $empresa=  \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+        $sucursal= \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalNombre();
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'fecha' => $fecha,
+            'empresa' => $empresa,
+            'sucursal' => $sucursal,
+            'reporte' => $reporte,
+        ));
+        $view_model->setTemplate('/application/reportes/recetas/resumen');
+        return $view_model;    
+        echo "a";
+        exit;   
     }
 
 }

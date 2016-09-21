@@ -1905,6 +1905,39 @@ return array(
                                     ),
                                 ),
                             ),
+                            'recetas' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/recetas',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Reportes\Controller\Reportes',
+                                        'action' => 'recetas',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'resumen' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/resumen',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Reportes\Controller\Reportes',
+                                                'action' => 'recetasresumen',
+                                            ),
+                                        ),
+                                    ),
+                                    'detalle' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/detalle',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Reportes\Controller\Reportes',
+                                                'action' => 'recetasdetalle',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                     /*
