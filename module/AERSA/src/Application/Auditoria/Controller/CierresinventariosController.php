@@ -412,8 +412,104 @@ class CierresinventariosController extends AbstractActionController {
 
             $form = new \Application\Auditoria\Form\CierresinventariosForm($fecha, $almacen_array, $auditor_array);
             $form->setData($inventariomes->toArray(\BasePeer::TYPE_FIELDNAME));
-
-            $inventariomesdetalle = \InventariomesdetalleQuery::create()->filterByIdinventariomes($inventariomes->getIdinventariomes())->find();
+            $reporte=array();
+            $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
+            $categoriaObj = new \Categoria();
+            foreach ($categoriasObj as $categoriaObj) {
+                $nombreSubcategoria=$categoriaObj->getCategoriaNombre();
+                array_push($reporte, "<tr><td>$nombreSubcategoria</td></tr>");
+                $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
+                $objproducto = new \Producto();
+                foreach ($objproductos as $objproducto) {
+                    $exists=\InventariomesdetalleQuery::create()->filterByIdinventariomes($inventariomes->getIdinventariomes())->filterByIdproducto($objproducto->getIdproducto())->exists();
+                    if($exists) {
+                        $inventariomesdetalle = \InventariomesdetalleQuery::create()->filterByIdinventariomes($inventariomes->getIdinventariomes())->filterByIdproducto($objproducto->getIdproducto())->findOne();
+                        $id=$inventariomesdetalle->getIdinventariomesdetalle();
+                        $idproducto=$objproducto->getIdproducto();
+                        $productoNombre=$objproducto->getProductoNombre();
+                        $categoria=$objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
+                        $stockinicial=$inventariomesdetalle->getInventariomesdetalleStockinicial();
+                        $ingresocompra=$inventariomesdetalle->getInventariomesdetalleIngresocompra();
+                        $ingresorequisicion=$inventariomesdetalle->getInventariomesdetalleIngresorequisicion();
+                        $ingresoordentablajeria=$inventariomesdetalle->getInventariomesdetalleIngresoordentablajeria();
+                        $egresoventa=$inventariomesdetalle->getInventariomesdetalleEgresoventa();
+                        $egresorequisicion=$inventariomesdetalle->getInventariomesdetalleEgresorequisicion();
+                        $egresoordentablajeria=$inventariomesdetalle->getInventariomesdetalleEgresoordentablajeria();
+                        $egresodevolucion=$inventariomesdetalle->getInventariomesdetalleEgresodevolucion();
+                        $stockteorico=$inventariomesdetalle->getInventariomesdetalleStockteorico();
+                        $unidadMedida=$objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        $stockfisico=$inventariomesdetalle->getInventariomesdetalleStockfisico();
+                        $importefisico=$inventariomesdetalle->getInventariomesdetalleImportefisico();
+                        $diferencia=$inventariomesdetalle->getInventariomesdetalleDiferencia();
+                        $costopromedio=$inventariomesdetalle->getInventariomesdetalleCostopromedio();
+                        $difimporte=$inventariomesdetalle->getInventariomesdetalleDifimporte();
+                        $revisada=(bool)($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "checked": "";
+                        array_push($reporte, "<tr>
+                                    <td>
+                                        <input type='hidden' name='reporte[$id][idcategoria]' value='$categoria'/>
+                                        <input type='hidden' name='reporte[$id][idproducto]' value='$idproducto' />$idproducto
+                                    </td>
+                                    <td>
+                                        $productoNombre
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_stockinicial]' value='$stockinicial'> $stockinicial
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_ingresocompra]' value='$ingresocompra'>$ingresocompra
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_ingresorequisicion]' value='$ingresorequisicion'>$ingresorequisicion
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_ingresoordentablajeria]' value='$ingresoordentablajeria'>$ingresoordentablajeria
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_egresoventa]' value='$egresoventa'>$egresoventa
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_egresorequisicion]' value='$egresorequisicion'>$egresorequisicion
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_egresoordentablajeria]' value='$egresoordentablajeria'>$egresoordentablajeria
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_egresodevolucion]' value='$egresodevolucion'>$egresodevolucion
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_stockteorico]' value='$stockteorico'>$stockteorico
+                                    </td>
+                                    <td>
+                                        $unidadMedida
+                                    </td>
+                                    <td>
+                                        <input required type='text' name='reporte[$id][inventariomesdetalle_stockfisico]' value='$stockfisico'>
+                                    </td>
+                                    <td class='inventariomesdetalle_importefisico'>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_importefisico]' value='$importefisico'>
+                                        <span>$importefisico</span>
+                                    </td>
+                                    <td class='inventariomesdetalle_diferencia'>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_diferencia]' value='$diferencia'>
+                                        <span>$diferencia</span>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_costopromedio]' value='$costopromedio'>$costopromedio
+                                    </td>
+                                    <td class='inventariomesdetalle_difimporte'>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_difimporte]' value='$difimporte'>
+                                        <span>$difimporte</span>
+                                    </td>
+                                    <td>
+                                        <input type='checkbox' name='reporte[$id][inventariomesdetalle_revisada]' $revisada
+                                    </td>
+                                </tr>");
+                    }
+                    
+                }
+            }
+            
+            
             $encargado = $inventariomes->getAlmacen()->getAlmacenEncargado();
             if ($encargado == "")
                 $encargado = "N/A";
@@ -421,9 +517,10 @@ class CierresinventariosController extends AbstractActionController {
             $view_model->setTemplate('/application/auditoria/cierresinventarios/editar');
             $view_model->setVariables(array(
                 'form' => $form,
-                'inventariomesdetalle' => $inventariomesdetalle,
+                'reporte' => $reporte,
                 'messages' => $this->flashMessenger(),
                 'encargado' => $encargado,
+                'idempresa' => $idempresa,
                 'inventariomes' => $inventariomes,
             ));
             return $view_model;

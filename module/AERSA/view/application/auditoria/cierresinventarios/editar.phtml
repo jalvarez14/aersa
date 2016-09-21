@@ -80,87 +80,9 @@
                             </thead>
                             <tbody id="tbody">
                                 <?php $detalle = new Inventariomesdetalle()?>
-                                <?php foreach ($inventariomesdetalle as $detalle) :?>
-                                <tr>
-                                    <!--<tr id='$idproducto' bgcolor='" . $colorbg . "'>
-                                    <td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td>
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    </tr>");-->
-                                    <td>
-                                        <input type='hidden' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][idcategoria]' value='<?php $producto=  ProductoQuery::create()->filterByIdproducto($detalle->getIdproducto())->findOne();echo CategoriaQuery::create()->filterByIdcategoria($producto->getIdcategoria())->findOne()->getCategoriaNombre();?>'/>
-                                        <input type='hidden' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][idproducto]' value='<?php echo $detalle->getIdproducto()?>' /><?php echo $detalle->getIdproducto()?>
-                                    </td>
-                                    <td>
-                                        <?php echo $producto->getProductoNombre()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_stockinicial]' value='<?php echo $detalle->getInventariomesdetalleStockinicial()?>'> <?php echo $detalle->getInventariomesdetalleStockinicial()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_ingresocompra]' value='<?php echo $detalle->getInventariomesdetalleIngresocompra()?>'><?php echo $detalle->getInventariomesdetalleIngresocompra()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_ingresorequisicion]' value='<?php echo $detalle->getInventariomesdetalleIngresorequisicion()?>'><?php echo $detalle->getInventariomesdetalleIngresocompra()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_ingresoordentablajeria]' value='<?php echo $detalle->getInventariomesdetalleIngresoordentablajeria()?>'><?php echo $detalle->getInventariomesdetalleIngresoordentablajeria()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresoventa]' value='<?php echo $detalle->getInventariomesdetalleEgresoventa()?>'><?php echo $detalle->getInventariomesdetalleEgresoventa()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresorequisicion]' value='<?php echo $detalle->getInventariomesdetalleEgresorequisicion()?>'><?php echo $detalle->getInventariomesdetalleEgresorequisicion()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresoordentablajeria]' value='<?php echo $detalle->getInventariomesdetalleEgresoordentablajeria()?>'><?php echo $detalle->getInventariomesdetalleEgresoordentablajeria()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_egresodevolucion]' value='<?php echo $detalle->getInventariomesdetalleEgresodevolucion()?>'><?php echo $detalle->getInventariomesdetalleEgresodevolucion()?>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_stockteorico]' value='<?php echo $detalle->getInventariomesdetalleStockteorico()?>'><?php echo $detalle->getInventariomesdetalleStockteorico()?>
-                                    </td>
-                                    <td>
-                                        <?php echo $producto->getUnidadmedida()->getUnidadmedidaNombre()?>
-                                    </td>
-                                    <td>
-                                        <input required type='text' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_stockfisico]' value='<?php echo $detalle->getInventariomesdetalleStockfisico()?>'>
-                                    </td>
-                                    <td class='inventariomesdetalle_importefisico'>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_importefisico]' value='<?php echo $detalle->getInventariomesdetalleImportefisico()?>'>
-                                        <span><?php echo $detalle->getInventariomesdetalleImportefisico()?></span>
-                                    </td>
-                                    <td class='inventariomesdetalle_diferencia'>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_diferencia]' value='<?php echo $detalle->getInventariomesdetalleDiferencia()?>'>
-                                        <span><?php echo $detalle->getInventariomesdetalleDiferencia()?></span>
-                                    </td>
-                                    <td>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_costopromedio]' value='<?php echo $detalle->getInventariomesdetalleCostopromedio()?>'><?php echo $detalle->getInventariomesdetalleCostopromedio()?>
-                                    </td>
-                                    <td class='inventariomesdetalle_difimporte'>
-                                        <input type='hidden'  name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_difimporte]' value='<?php echo $detalle->getInventariomesdetalleDifimporte()?>'>
-                                        <span><?php echo $detalle->getInventariomesdetalleDifimporte()?></span>
-                                    </td>
-                                    <td>
-                                        <input type='checkbox' name='reporte[<?php echo $detalle->getIdinventariomesdetalle()?>][inventariomesdetalle_revisada]' <?php echo (bool)($detalle->getInventariomesdetalleRevisada()) ? "checked": "";?>
-                                    </td>
-                                </tr>
+                                <?php foreach ($reporte as $line) :?>
+                                <?php echo $line;?>
+
                                 <?php endforeach?>
                                 <tr><td>Responsable</td><td><?php echo $encargado?></td><td></td><td><td></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final alimentos</td><td class='inventariomes_finalalimentos'><input type='hidden'  name='inventariomes_finalalimentos' value='<?php echo $inventariomes->getInventariomesFinalalimentos()?>'><span><?php echo $inventariomes->getInventariomesFinalalimentos()?></span></td></tr>
                                 <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final bebidas</td><td class='inventariomes_finalbebidas'><input type='hidden'  name='inventariomes_finalbebidas' value='<?php echo $inventariomes->getInventariomesFinalbebidas()?>'><span><?php echo $inventariomes->getInventariomesFinalbebidas()?></span></td></tr>
