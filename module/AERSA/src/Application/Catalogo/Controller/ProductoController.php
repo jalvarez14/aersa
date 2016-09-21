@@ -8,6 +8,15 @@ use Zend\Console\Request as ConsoleRequest;
 class ProductoController extends AbstractActionController
 {
     
+    public $column_map = array(
+         0 => 'producto_nombre',
+         1 => 'producto_tipo',
+         2 => 'categoria_nombre',
+         3 => 'subcategoria_nombre',       
+         4 => 'producto_costo',
+
+    );
+    
     public function renameproductAction(){
         
         $session = new \Shared\Session\AouthSession();
@@ -99,6 +108,81 @@ class ProductoController extends AbstractActionController
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            $query = new \ProductoQuery();
+            
+             //JOIN
+            $query->useCategoriaRelatedByIdcategoriaQuery('a')->endUse();
+            $query->useCategoriaRelatedByIdsubcategoriaQuery('b')->endUse();
+            $query->useUnidadmedidaQuery('c')->endUse();
+            $query->withColumn('a.CategoriaNombre', 'categoria_nombre')
+                  ->withColumn('b.CategoriaNombre', 'subcategoria_nombre')
+                  ->withColumn('c.UnidadmedidaNombre', 'unidadmedida_nombre');
+            
+            //WHERE
+            $query->filterByIdempresa($session['idempresa']);
+            $records_filtered = $query->count();
+            
+            //SEARCH
+            if(!empty($post_data['search']['value'])){
+                $search_value = utf8_encode($post_data['search']['value']);
+                $c = new \Criteria();
+                
+                $c1= $c->getNewCriterion('producto.producto_nombre', '%'.$search_value.'%', \Criteria::LIKE);
+                $c2= $c->getNewCriterion('producto.producto_tipo', '%'.$search_value.'%', \Criteria::LIKE);
+                $c3= $c->getNewCriterion('categoria.categoria_nombre', '%'.$search_value.'%', \Criteria::LIKE);
+                $c4= $c->getNewCriterion('unidadmedida.unidadmedida_nombre', '%'.$search_value.'%', \Criteria::LIKE);
+          
+                $c1->addOr($c2)->addOr($c3)->addOr($c4);
+
+                $query->addAnd($c1);
+                
+                $records_filtered = $query->count();
+            }
+            
+            //LIMIT
+            $query->setOffset((int)$post_data['start']);
+            $query->setLimit((int)$post_data['length']);
+            
+            //DAMOS EL FORMATO PARA EL PLUGIN (DATATABLE)
+            $data = array();
+            
+            foreach ($query->find()->toArray(null,false,  \BasePeer::TYPE_FIELDNAME) as $value){
+                
+                $tmp['DT_RowId'] = $value['idproducto'];
+                $tmp['producto_nombre'] = $value['producto_nombre'];
+                $tmp['unidadmedida_nombre'] = '<td><span class="label label-sm label-success">'.$value['unidadmedida_nombre'].'</span></td>';
+                $tmp['producto_tipo'] =  '<td><span class="label label-sm label-success">'.$value['producto_tipo'].'</span></td>';
+                $tmp['producto_costo'] = money_format('%+#1.6n',$value['producto_costo']);
+                $tmp['categoria_nombre'] = '<td><span class="label label-sm label-success">'.$value['categoria_nombre'].'</span></td>';
+                $tmp['subcategoria_nombre'] = '<td><span class="label label-sm label-success">'.$value['subcategoria_nombre'].'</span></td>';
+                $tmp['options'] = '<td class="text-left"><div class="btn-group"><button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones <i class="fa fa-angle-down"></i></button><ul class="dropdown-menu" role="menu"><li><a href="/catalogo/producto/editar/'.$value['idproducto'].'"> <i class="fa fa-pencil"></i> Editar</a></li><li><a href="javascript:;" class="delete_modal"><i class="fa fa-trash"></i> Eliminar </a></li></ul></div></td>';
+
+                
+                $data[] = $tmp;
+ 
+            }   
+
+            //El arreglo que regresamos
+            $json_data = array(
+                "draw"            => (int)$post_data['draw'],
+                //"recordsTotal"    => 100,
+                "recordsFiltered" => $records_filtered,
+                "data"            => $data
+            );
+            
+
+            
+            return $this->getResponse()->setContent(json_encode($json_data));
+           
+            
+            
+
+        }
+            
         
         
       
