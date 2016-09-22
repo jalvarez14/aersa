@@ -9,11 +9,12 @@ class ProductoController extends AbstractActionController
 {
     
     public $column_map = array(
-         0 => 'producto_nombre',
-         1 => 'producto_tipo',
-         2 => 'categoria_nombre',
-         3 => 'subcategoria_nombre',       
-         4 => 'producto_costo',
+         0 => 'ProductoNombre',
+         1 => 'ProductoTipo',
+         2 => 'a.CategoriaNombre',
+         3 => 'b.CategoriaNombre',    
+         4 => 'c.UnidadmedidaNombre',     
+         5 => 'ProductoCosto',
 
     );
     
@@ -139,16 +140,33 @@ class ProductoController extends AbstractActionController
                 $c1->addOr($c2)->addOr($c3)->addOr($c4);
 
                 $query->addAnd($c1);
+                $query->groupByIdproducto();
                 
                 $records_filtered = $query->count();
+                
             }
             
             //LIMIT
             $query->setOffset((int)$post_data['start']);
             $query->setLimit((int)$post_data['length']);
             
+            
+            //ORDER
+            $order_column = $post_data['order'][0]['column'];
+            $order_column = $this->column_map[$order_column];
+            $dir = $post_data['order'][0]['dir'];
+            if($dir == 'desc'){
+                $query->orderBy($order_column,  \Criteria::DESC);
+            }else{
+                $query->orderBy($order_column,  \Criteria::ASC);
+            }
+
+            
+            
             //DAMOS EL FORMATO PARA EL PLUGIN (DATATABLE)
             $data = array();
+            
+           
             
             foreach ($query->find()->toArray(null,false,  \BasePeer::TYPE_FIELDNAME) as $value){
                 
@@ -168,6 +186,7 @@ class ProductoController extends AbstractActionController
 
             //El arreglo que regresamos
             $json_data = array(
+                'order' => $order_column,
                 "draw"            => (int)$post_data['draw'],
                 //"recordsTotal"    => 100,
                 "recordsFiltered" => $records_filtered,

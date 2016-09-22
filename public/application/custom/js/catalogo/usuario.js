@@ -76,23 +76,26 @@
                 success:function(data){
                    table.dataTable({
                        "language":data,
-                       "order":[],
+                       "order":[[0,'asc']],
                        "serverSide": true,
                        processing: true,
-                       iDisplayLength:25,
+                       iDisplayLength:10,
                        "ajax": {
                             "type": "POST"
                         },
                         "columns": [
-                            {"data": "producto_nombre", "name": "producto_nombre", "orderable": "true"},
-                            {"data": "producto_tipo", "name": "producto_tipo", "orderable": "true"},
-                            {"data": "categoria_nombre", "name": "categoria_nombre", "orderable": "true"},
-                            {"data": "subcategoria_nombre", "name": "subcategoria_nombre", "orderable": "true"},
-                            {"data": "unidadmedida_nombre", "name": "unidadmedida_nombre", "orderable": "true"},
-                            {"data": "producto_costo", "name": "producto_costo", "orderable": "true"},
-                            {"data": "options", "name": "options", "orderable": "false"}
+                            {"data": "producto_nombre", "name": "producto_nombre", "orderable": true},
+                            {"data": "producto_tipo", "name": "producto_tipo", "orderable": true},
+                            {"data": "categoria_nombre", "name": "categoria_nombre", "orderable": true},
+                            {"data": "subcategoria_nombre", "name": "subcategoria_nombre", "orderable": true},
+                            {"data": "unidadmedida_nombre", "name": "unidadmedida_nombre", "orderable": true},
+                            {"data": "producto_costo", "name": "producto_costo", "orderable": true},
+                            {"data": "options", "name": "options", "orderable": false}
+                        ],
+                        "columnDefs": [
+                            { "orderable": false, "targets": 0 }
                         ]
-                   });
+                   }).fnSetFilteringDelay();
                 },
             });
             
