@@ -958,8 +958,72 @@ class ReportesController extends AbstractActionController {
     }
     
     public function recetasdetalleAction() {
-        echo "A";
-        exit;
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        $idempresa = $session['idempresa'];
+        $idsucursal = $session['idsucursal'];
+        $reporte= array();
+        $productosObj= \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo('subreceta')->orderByProductoNombre('asc')->find();
+        $productoObj=new \Producto();
+        foreach ($productosObj as $productoObj) {
+            $recetasObj= \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
+            $recetaObj=new \Receta();
+            $idProducto=$productoObj->getIdproducto();
+            $nombreProducto=$productoObj->getProductoNombre();
+            $totalReceta=0;
+            $bgazulclaro = "#ADD8E6";
+            $bgazul = "#819FF7";
+            array_push($reporte, "<tr bgcolor='" . $bgazul . "'><td>Clave:</td><td>$idProducto</td><td>Producto:</td><td>$nombreProducto</td><td></td><td></td><td></td></tr>");
+            array_push($reporte, "<tr bgcolor='" . $bgazulclaro . "'><td>ProdPadre</td><td>ProdHijo</td><td>Tipo</td><td>Clave</td><td>Cantidad</td><td>Costo</td><td>Total</td></tr>");
+            $color=true;
+            foreach ($recetasObj as $recetaObj) {
+                $producto=  \ProductoQuery::create()->filterByIdproducto($recetaObj->getIdproductoreceta())->findOne();
+                $clave=$producto->getIdproducto();
+                $nombre=$producto->getProductoNombre();
+                $cantidad=$recetaObj->getRecetaCantidad();
+                $costo=$producto->getProductoCosto();
+                $tipo=$producto->getProductoTipo();
+                $total=$costo*$cantidad;
+                if($producto->getProductoTipo()=='subreceta') {
+                    $recetasDetalleObj= \RecetaQuery::create()->filterByIdproducto($producto->getIdproducto())->find();
+                    $recetaDetalleObj=new \Receta();
+                    foreach ($recetasDetalleObj as $recetaDetalleObj) {
+                        $productoDetalle=  \ProductoQuery::create()->filterByIdproducto($recetaDetalleObj->getIdproductoreceta())->findOne();
+                        $claveDetalle=$productoDetalle->getIdproducto();
+                        $nombreDetalle=$productoDetalle->getProductoNombre();
+                        $cantidadDetalle=$recetaDetalleObj->getRecetaCantidad();
+                        $unidadDetalle=$productoDetalle->getUnidadmedida()->getUnidadmedidaNombre();
+                        $costoDetalle=$productoDetalle->getProductoCosto();
+                        $totalDetalle=$costoDetalle*$cantidadDetalle;
+                        $totalReceta+=$totalDetalle;
+                        $tipoDetalle=$productoDetalle->getProductoTipo();
+                        $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
+                        $color = !$color;
+                        array_push($reporte, "<tr bgcolor='" . $bg . "'><td>$nombre</td><td>$nombreDetalle</td><td>$tipoDetalle</td><td>$claveDetalle</td><td>$cantidadDetalle</td><td>$costoDetalle</td><td>$totalDetalle</td></tr>");
+                    }
+                } else {
+                    $totalReceta+=$total;
+                    $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
+                    $color = !$color;
+                    array_push($reporte, "<tr bgcolor='" . $bg . "'><td></td><td>$nombre</td><td>$tipo</td><td>$clave</td><td>$cantidad</td><td>$costo</td><td>$total</td></tr>");
+                }
+            }
+            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td>Total</td><td>$totalReceta</td></tr>");
+        }
+        $fecha = date('d/m/Y');
+        $empresa=  \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+        $sucursal= \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalNombre();
+        $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'fecha' => $fecha,
+            'empresa' => $empresa,
+            'sucursal' => $sucursal,
+            'reporte' => $reporte,
+        ));
+        $view_model->setTemplate('/application/reportes/recetas/detalle');
+        return $view_model;    
+        echo "a";
+        exit;   
     }
     
     public function recetasresumenAction() {
