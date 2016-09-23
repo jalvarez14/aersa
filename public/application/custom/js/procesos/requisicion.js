@@ -123,6 +123,7 @@
             var sucdes = $("[name=idsucursaldestino]").val();
             $.ajax({
                 type: "GET",
+                async: false,
                 url: "/procesos/requisicion/getconcepsal/" + almorg + "/" + almdes + "/" + sucorg + "/" + sucdes,
                 dataType: "json",
                 success: function (data) {
@@ -173,7 +174,6 @@
                 url: "/procesos/requisicion/getconcepsal/" + almorg + "/" + almdes + "/" + sucorg + "/" + sucdes,
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
                     if (data.length != 0) {
                         $("[name=idconceptosalida]").html('');
                         for (var k in data) {
@@ -185,6 +185,78 @@
                     }
                 },
             });
+        }
+        
+        var inicioEdit= function (sucursal_destino,almacen_origen,almacen_destino,concepto_salida) {
+            $.ajax({
+                async: false,
+                type: "GET",
+                url: "/procesos/requisicion/getalmdes/" + sucursal_destino,
+                dataType: "json",
+                success: function (data) {
+                    if (data.length != 0)
+                    {
+                        $("[name=idalmacendestino]").html('');
+                        for (var k in data)
+                        {
+                            if ((sucursal_destino == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() == data[k]['Idalmacen']))
+                            {
+                            } else
+                                $("[name=idalmacendestino]").append('<option value="' + data[k]['Idalmacen'] + '">' + data[k]['AlmacenNombre'] + '</option>');
+                        }
+                    } else
+                    {
+                        $("[name=idalmacendestino]").html('');
+                        alert('No existen almacenes para sucursal destino');
+                    }
+                },
+            });
+            $('[name=idsucursaldestino]').val(sucursal_destino);
+            $('[name=idalmacenorigen]').val(almacen_origen);
+            var idsucdes = $("[name=idsucursaldestino]").val();
+            
+            $('[name=idalmacendestino]').val(almacen_destino);
+            var almorg = $("[name=idalmacenorigen] option:selected").text();
+            var almdes = $("[name=idalmacendestino] option:selected").text();
+            var sucorg = $("[name=idsucursalorigen]").val();
+            var sucdes = $("[name=idsucursaldestino]").val();
+            var almacen = ["Almacén general", "Cocina", "Barra", "Créditos al costo", "Bonificados", "Consignación", "Servicio"];
+            var banddes = true;
+            var bandorg = true;
+            for (var a = 0; a < almacen.length; a++) {
+                if (almacen[a] == almorg) {
+                    bandorg = false;
+                    a = almacen.length;
+                }
+            }
+            for (var a = 0; a < almacen.length; a++) {
+                if (almacen[a] == almdes) {
+                    banddes = false;
+                    a = almacen.length;
+                }
+            }
+            if (bandorg)
+                almorg = "Otro";
+            if (banddes)
+                almdes = "Otro";
+            $.ajax({
+                async: false,
+                type: "GET",
+                url: "/procesos/requisicion/getconcepsal/" + almorg + "/" + almdes + "/" + sucorg + "/" + sucdes,
+                dataType: "json",
+                success: function (data) {
+                    if (data.length != 0) {
+                        $("[name=idconceptosalida]").html('');
+                        for (var k in data) {
+                            $("[name=idconceptosalida]").append('<option value="' + data[k]['Idconceptosalida'] + '">' + data[k]['ConceptosalidaNombre'] + '</option>');
+                        }
+                    } else {
+                        $("[name=idconceptosalida]").html('');
+                        alert('No existen concepto para requisicion');
+                    }
+                },
+            });
+            $('[name=idconceptosalida]').val(concepto_salida);
         }
 
         var updateAlmacen = function (almdes, almorg) {
@@ -552,8 +624,11 @@
 
         }
 
-        plugin.edit = function(anio,mes,count){
-            getAlmacenesSucDes();
+        plugin.edit = function(sucursal_destino,almacen_origen,almacen_destino,concepto_salida,anio,mes,count){
+            
+            inicioEdit(sucursal_destino,almacen_origen,almacen_destino,concepto_salida);
+            
+            
             $('[name=idsucursaldestino]').on('change', function () {
                 getAlmacenesSucDes();
             });

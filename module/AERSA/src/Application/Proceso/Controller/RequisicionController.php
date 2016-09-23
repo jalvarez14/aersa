@@ -261,6 +261,10 @@ class RequisicionController extends AbstractActionController {
             $count = \RequisiciondetalleQuery::create()->orderByIdrequisiciondetalle(\Criteria::DESC) ->findOne();
             $count = $count->getIdrequisiciondetalle() + 1;
    
+            $sucursal_destino=$entity->getIdsucursaldestino();
+            $almacen_origen=$entity->getIdalmacenorigen();
+            $almacen_destino=$entity->getIdalmacendestino();
+            $concepto_salida=$entity->getIdconceptosalida();
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/proceso/requisicion/editar');
             $view_model->setVariables(array(
@@ -269,6 +273,10 @@ class RequisicionController extends AbstractActionController {
                 'requisiciondetalle' => $requisiciondetalle,
                 'anio_activo' => $anio_activo,
                 'mes_activo' => $mes_activo,
+                'sucursal_destino' => $sucursal_destino,
+                'almacen_origen' => $almacen_origen,
+                'almacen_destino' => $almacen_destino,
+                'concepto_salida' => $concepto_salida,
                 'count' => $count,
                 'idrol' => $session['idrol'],
             ));
@@ -359,4 +367,14 @@ class RequisicionController extends AbstractActionController {
         return $this->getResponse()->setContent(json_encode($exist));
     }
 
+    public function getproductosAction(){
+
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        $idempresa = $session['idempresa'];
+        $search = $this->params()->fromQuery('q');
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoTipo(array('simple','subreceta'))->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
+
+    }
 }
