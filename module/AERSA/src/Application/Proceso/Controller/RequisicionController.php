@@ -261,6 +261,10 @@ class RequisicionController extends AbstractActionController {
             $count = \RequisiciondetalleQuery::create()->orderByIdrequisiciondetalle(\Criteria::DESC) ->findOne();
             $count = $count->getIdrequisiciondetalle() + 1;
    
+            $sucursal_destino=$entity->getIdsucursaldestino();
+            $almacen_origen=$entity->getIdalmacenorigen();
+            $almacen_destino=$entity->getIdalmacendestino();
+            $concepto_salida=$entity->getIdconceptosalida();
             $view_model = new ViewModel();
             $view_model->setTemplate('/application/proceso/requisicion/editar');
             $view_model->setVariables(array(
@@ -269,6 +273,10 @@ class RequisicionController extends AbstractActionController {
                 'requisiciondetalle' => $requisiciondetalle,
                 'anio_activo' => $anio_activo,
                 'mes_activo' => $mes_activo,
+                'sucursal_destino' => $sucursal_destino,
+                'almacen_origen' => $almacen_origen,
+                'almacen_destino' => $almacen_destino,
+                'concepto_salida' => $concepto_salida,
                 'count' => $count,
                 'idrol' => $session['idrol'],
             ));
