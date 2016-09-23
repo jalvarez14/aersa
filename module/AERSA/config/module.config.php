@@ -1040,6 +1040,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'getproductos' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/getproductos[/:q]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Requisicion',
+                                                'action' => 'getproductos',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                             'devolucion' => array(

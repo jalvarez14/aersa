@@ -359,4 +359,14 @@ class RequisicionController extends AbstractActionController {
         return $this->getResponse()->setContent(json_encode($exist));
     }
 
+    public function getproductosAction(){
+
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        $idempresa = $session['idempresa'];
+        $search = $this->params()->fromQuery('q');
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoTipo(array('simple','subreceta'))->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
+
+    }
 }
