@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
 <?php foreach ($messages->getSuccessMessages() as $message):?>
     <div class="alert alert-success alert-dismissable">
         <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
@@ -186,23 +187,29 @@
                                 <tr>
                                     <th> Producto </th>
                                     <th> Cantidad </th>
+                                    <th> Costo </th>
                                     <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
                                         <th> Cantidad normalizada </th>
                                     <?php endif;?>
+                                    <th>Importe</th>
                                     <th> Opciones </th>
                                     
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php $entity = new Producto();?>
                                 <?php foreach ($recetas as $entity) : ?>
                                 <?php $nombreProducto = \ProductoQuery::create()->findPk($entity->getIdproductoreceta())?>
                                     <tr id="<?php echo $entity->getIdreceta() ?>">
                                         <td><?php echo $nombreProducto->getProductoNombre() ?></td>
+                                       
                                         <td><?php echo $entity->getRecetaCantidadoriginal() ?></td>
+                                         <td><?php echo money_format('%+#1.6n',$nombreProducto->getProductoCosto()) ?></td>
                                         <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
                                             <td><?php echo $entity->getRecetaCantidad() ?></td>
                                         <?php endif;?>
-                                        <td class="text-left">                                    
+                                            <td><?php echo  money_format('%+#1.6n',$nombreProducto->getProductoCosto() * $nombreProducto->getProductoRendimiento())?></td>
+                                            <td class="text-left">                                    
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones
                                                     <i class="fa fa-angle-down"></i>
@@ -351,6 +358,36 @@
             
             $('#subreceta .btn').attr('disabled',true).attr('cursor','not-allowed');;
         }
+        
+        /*
+     * VALIDACION PRODUCTOS
+     */
+
+    $('input[name=producto_nombre]').on('blur', function () {
+        var producto_nombre = $(this).val();
+        var $this = $(this);
+        var action = window.location.pathname.split("/");
+        var id = (typeof action[4] != 'undefined') ? action[4] : null;
+        action = action[3];
+        var edit = (action == 'edit') ? true : false;
+
+        $this.removeClass('valid');
+        $.ajax({
+            url: "/autocomplete/validateproduct",
+            dataType: "json",
+            type: 'POST',
+            data: {producto_nombre: producto_nombre, edit: true, id: id},
+            success: function (exist) {
+                if (exist) {
+                    alert('El producto con nombre "' + producto_nombre + '" ya se encuentra registrado');
+                    $this.val('');
+                } else {
+                    $this.addClass('valid');
+                }
+
+            },
+        });
+    });
 
 }); 
 </script>

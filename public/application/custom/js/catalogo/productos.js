@@ -131,6 +131,36 @@ $( document ).ready(function() {
         
     }
     
+    /*
+     * VALIDACION PRODUCTOS
+     */
+
+    $('input[name=producto_nombre]').on('blur', function () {
+        var producto_nombre = $(this).val();
+        var $this = $(this);
+        var action = window.location.pathname.split("/");
+        var id = (typeof action[4] != 'undefined') ? action[4] : null;
+        action = action[3];
+        var edit = (action == 'edit') ? true : false;
+
+        $this.removeClass('valid');
+        $.ajax({
+            url: "/autocomplete/validateproduct",
+            dataType: "json",
+            type: 'POST',
+            data: {producto_nombre: producto_nombre, edit: edit, id: id},
+            success: function (exist) {
+                if (exist) {
+                    alert('El producto con nombre "' + producto_nombre + '" ya se encuentra registrado');
+                    $this.val('');
+                } else {
+                    $this.addClass('valid');
+                }
+
+            },
+        });
+    });
+    
     
     
     

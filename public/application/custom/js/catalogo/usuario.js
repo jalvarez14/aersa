@@ -90,6 +90,7 @@
                             {"data": "subcategoria_nombre", "name": "subcategoria_nombre", "orderable": true},
                             {"data": "unidadmedida_nombre", "name": "unidadmedida_nombre", "orderable": true},
                             {"data": "producto_costo", "name": "producto_costo", "orderable": true},
+                            {"data": "producto_iva", "name": "producto_iva", "orderable": true},
                             {"data": "options", "name": "options", "orderable": false}
                         ],
                         "columnDefs": [

@@ -433,7 +433,7 @@
                                                                                 hint: true,
                                                                                 highlight: true,
                                                                                 source: producto_autocomplete,
-                                                                                limit: 5,
+                                                                                limit: 100,
                                                                             });
                                                                             $modal.find('input[name=producto_cantidad]').numeric();
                                                                             $modal.find('#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
@@ -893,7 +893,7 @@
                                                                                                 hint: true,
                                                                                                 highlight: true,
                                                                                                 source: producto_autocomplete,
-                                                                                                limit: 5,
+                                                                                                limit: 100,
                                                                                             });
                                                                                             $modal.find('input[name=producto_cantidad]').numeric();
                                                                                             $modal.find('#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {

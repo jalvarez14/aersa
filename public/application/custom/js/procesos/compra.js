@@ -631,6 +631,8 @@
                $('select[name=compra_revisada] option[value=1]').remove();
            }
            
+           
+           
                          
         }
         
@@ -860,6 +862,8 @@
                 id: id,
                 parent:'idcompra',
             });
+            
+
             
             /*
             * ACL

@@ -163,7 +163,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit: 5,
+                limit: 100,
             });
 
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
@@ -199,7 +199,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit: 5,
+                limit: 100,
             });
 
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
