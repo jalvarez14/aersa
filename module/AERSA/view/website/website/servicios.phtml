@@ -1,0 +1,259 @@
+<script src="website/js/servicios.js"></script>
+<script src="website/js/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<script src="website/js/responsiveMap.js"></script>
+
+
+<div class="page-header row"></div>
+<div class="row bot">
+        <img src="/website/img/banners/servicios.png" alt="" class="img-responsive img-index" />
+</div>
+
+<div class="container">
+    <div class="row top">
+        <div class="hidden-xs">
+            <div style="position: relative;">
+
+                <img class="img-responsive img-center img-100" id="imgTransportes" src="website/img/servicios/prueba.jpg"  usemap="#mapTransportes" alt="" />
+                <div id="detalleMaritimo">
+                    <div class="detalle-content">
+                        <span id="maritimoClose" class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+                <div id="detalleTerrestre">
+                    <div class="detalle-content">
+                        <span id="terrestreClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="detalleAereo">
+                    <div class="detalle-content">
+                        <span id="aereoClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <map name="mapTransportes">
+                <area  id="btnMaritimo"  shape="rect" coords="0,0,321,428"        />
+                <area  id="btnAereo"     shape="rect" coords="321,0,640,428"      />
+                <area  id="btnTerrestre" shape="rect" coords="640,0,959,428"     />
+            </map>
+        </div>
+        <div class="hidden visible-xs">
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 " id="imgMaritimoM" src="website/img/servicios/prueba-mini.jpg" usemap="#maritimoM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 " id="imgMaritimoM" src="website/img/servicios/prueba-mini.jpg" usemap="#maritimoM" alt="" />
+            <?php endif; ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleMaritimoM" class="col-xs-12 " >
+                    <span id="maritimoMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12 row">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <map name="maritimoM">
+                <area id="btnMaritimoM" alt="" title=""  shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded " 	id="imgAereoM" src="website/img/servicios/prueba-mini.jpg"  usemap="#aereoM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded " 	id="imgAereoM" src="website/img/servicios/prueba-mini.jpg"  usemap="#aereoM" alt="" />
+            <?php endif; ?>
+
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleAereoM" class="col-xs-12 " >
+                    <span id="aereoMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <map name="aereoM">
+                <area id="btnAereoM" alt="" title=""  shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded " id="imgTerrestreM" src="website/img/servicios/prueba-mini.jpg"  usemap="#terrestreM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded "  id="imgTerrestreM" src="website/img/servicios/prueba-mini.jpg"  usemap="#terrestreM" alt="" />
+            <?php endif; ?>
+
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleTerrestreM" class="col-xs-12 " >
+                    <span id="terrestreMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <map name="terrestreM">
+                <area id="btnTerrestreM" alt="" title=""  shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+        </div>
+
+    </div>
+
+    <div class="row top">
+        <div class="hidden-xs">
+            <div style="position: relative;">
+                <?php if (lan == 'es') : ?>
+                    <img class="img-responsive img-center img-100" id="imgLogistica" src="website/img/servicios/prueba.jpg" usemap="#mapLogistica" alt="" >	
+                <?php else : ?>
+                    <img class="img-responsive img-center img-100" id="imgLogistica" src="website/img/servicios/prueba.jpg" usemap="#mapLogistica" alt="" >	
+                <?php endif; ?>
+                <div id="detalleAduana">
+                    <div class="detalle-content">
+                        <span id="aduanaClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                     
+
+                </div>
+                <div id="detalleLogistica">
+                    <div class="detalle-content">
+                        <span id="logisticaClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>      
+                </div>
+                <div id="detalleSeguro">
+                    <div class="detalle-content">
+                        <span id="seguroClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <map name="mapLogistica">
+                <area id="btnAduana" 	alt="" shape="rect" coords="0,0,321,428"      />
+                <area id="btnSeguro"    alt="" shape="rect" coords="321,0,640,428"      />
+                <area id="btnLogistica"	alt="" shape="rect" coords="640,0,959,428"     />
+            </map>
+        </div>
+        <div class="hidden visible-xs">
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#aduanaM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#aduanaM" alt="" />
+            <?php endif; ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleAduanaM" class="col-xs-12 " >
+                    <span id="aduanaMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <map name="aduanaM">
+                <area  id="btnAduanaM" shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#seguroM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#seguroM" alt="" />
+            <?php endif; ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleSeguroM" class="col-xs-12 " >
+                    <span id="seguroMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <map name="seguroM">
+                <area  id="btnSeguroM" shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#logisticaM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#logisticaM" alt="" />
+            <?php endif; ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleLogisticaM" class="col-xs-12 " >
+                    <span id="logsticaMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <map name="logisticaM">
+                <area  id="btnLogisticaM" shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function (e) {
+        $('img[usemap]').rwdImageMaps();
+    });
+
+
+</script>

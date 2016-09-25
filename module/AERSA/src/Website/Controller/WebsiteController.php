@@ -114,8 +114,11 @@ class WebsiteController extends AbstractActionController
               return $this->getResponse()->setContent(json_encode('good'));
           }
       }
-
-
+    }
+    public function serviciosAction()
+    {
+        $this->layout('website/layout/layout');
+        return new Viewmodel();
     }
 
 

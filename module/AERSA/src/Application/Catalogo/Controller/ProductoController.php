@@ -15,6 +15,7 @@ class ProductoController extends AbstractActionController
          3 => 'b.CategoriaNombre',    
          4 => 'c.UnidadmedidaNombre',     
          5 => 'ProductoCosto',
+         6 => 'ProductoIva',
 
     );
     
@@ -170,6 +171,8 @@ class ProductoController extends AbstractActionController
             
             foreach ($query->find()->toArray(null,false,  \BasePeer::TYPE_FIELDNAME) as $value){
                 
+                $iva = ($value['producto_iva']) ? '<td><span class="label label-sm label-success">SI</span></td>': '<td><span class="label label-sm label-danger">NO</span></td>';
+                
                 $tmp['DT_RowId'] = $value['idproducto'];
                 $tmp['producto_nombre'] = $value['producto_nombre'];
                 $tmp['unidadmedida_nombre'] = '<td><span class="label label-sm label-success">'.$value['unidadmedida_nombre'].'</span></td>';
@@ -177,13 +180,14 @@ class ProductoController extends AbstractActionController
                 $tmp['producto_costo'] = money_format('%+#1.6n',$value['producto_costo']);
                 $tmp['categoria_nombre'] = '<td><span class="label label-sm label-success">'.$value['categoria_nombre'].'</span></td>';
                 $tmp['subcategoria_nombre'] = '<td><span class="label label-sm label-success">'.$value['subcategoria_nombre'].'</span></td>';
+                $tmp['producto_iva'] = $iva;
                 $tmp['options'] = '<td class="text-left"><div class="btn-group"><button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones <i class="fa fa-angle-down"></i></button><ul class="dropdown-menu" role="menu"><li><a href="/catalogo/producto/editar/'.$value['idproducto'].'"> <i class="fa fa-pencil"></i> Editar</a></li><li><a href="javascript:;" class="delete_modal"><i class="fa fa-trash"></i> Eliminar </a></li></ul></div></td>';
 
                 
                 $data[] = $tmp;
  
             }   
-
+      
             //El arreglo que regresamos
             $json_data = array(
                 'order' => $order_column,

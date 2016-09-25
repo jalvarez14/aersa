@@ -438,7 +438,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: '/procesos/requisicion/getproductos?q=%QUERY',
+                    url: '/autocomplete/getproductos?q=%QUERY&type=simple',
                     wildcard: '%QUERY'
                 }
             });
@@ -449,7 +449,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit: 5,
+                limit: 100,
             });
 
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
@@ -670,7 +670,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: '/procesos/requisicion/getproductos?q=%QUERY',
+                    url: '/autocomplete/getproductos?q=%QUERY&type=simple',
                     wildcard: '%QUERY'
                 }
             });
@@ -681,7 +681,7 @@
                 hint: true,
                 highlight: true,
                 source: data,
-                limit: 5,
+                limit: 100,
             });
 
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {

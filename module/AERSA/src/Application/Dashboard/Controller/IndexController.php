@@ -15,6 +15,30 @@ use Zend\Console\Request as ConsoleRequest;
 
 class IndexController extends AbstractActionController
 {
+    
+    public function validateproductAction(){
+        $request = $this->getRequest();
+        if($request->isPost()){
+            
+            $session = new \Shared\Session\AouthSession();
+            $session = $session->getData();
+            
+            $post_data = $request->getPost();
+            $edit = ($post_data['edit'] == "true") ? true : false;
+            
+            if($edit == "true"){
+             $id = $post_data['id'];
+             $entity = \ProductoQuery::create()->findPk($id);
+             $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($entity->getProductoNombre(),  \Criteria::NOT_EQUAL)->filterByProductoNombre($post_data['producto_nombre'])->exists();
+            }else{
+                $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($post_data['producto_nombre'],  \Criteria::EQUAL)->exists();
+            }
+           
+            
+            return $this->getResponse()->setContent(json_encode($exist));
+        }
+    }
+    
     public function indexAction()
     {
         $session = new \Shared\Session\AouthSession();
