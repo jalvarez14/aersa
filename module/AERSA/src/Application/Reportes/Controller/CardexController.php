@@ -20,16 +20,15 @@ class CardexController extends AbstractActionController {
             $post_data = $request->getPost();
             
             $idalmacen=$post_data['idalmacen'];
-            $ts = strtotime("now");
-            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
-            $inicio_semana=date('Y-m-d',$start);
-            $fin_semana = date('Y-m-d', strtotime('next sunday', $start));
             
-            $fin_semana_anterior=date('Y-m-d', strtotime('last sunday', $start));
+            $inicioSpli = explode('/', $post_data['inicio']);
+            $finSpli = explode('/', $post_data['fin']);
+            
+            $inicio_semana = $inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0]." 00:00:00   ";
+            $fin_semana = $finSpli[2] . "-" . $finSpli[1] . "-" . $finSpli[0]." 23:59:59";
+            
+            $fin_semana_anterior=date('Y-m-d', strtotime('last sunday', strtotime($inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0])));
             $fin_semana_anterior=$fin_semana_anterior." 23:59:59";
-            
-            $inicio_semana=$inicio_semana." 00:00:00   ";
-            $fin_semana=$fin_semana." 23:59:59";
             
             //inventario anterior
             $inventario_anterior= \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->exists();
@@ -297,21 +296,11 @@ class CardexController extends AbstractActionController {
             $almacen_array[$id] = $almacen->getAlmacenNombre();
         }
         
-        $auditor_array = array();
-        $usuarios= \UsuarioQuery::create()->filterByIdrol(4)->useUsuariosucursalQuery()->filterByIdsucursal($idsucursal)->endUse()->find();
-        $usuario = new \Usuario();
-        foreach ($usuarios as $usuario) {
-            $id = $usuario->getIdusuario();
-            $auditor_array[$id] = $usuario->getUsuarioNombre();
-        }
-        
-        
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
         //dia inicio de semana date('Y-m-d',$start);
         $fecha = date('Y-m-d', strtotime('next sunday', $start));
-        
-        $form = new \Application\Reportes\Form\CardexForm($fecha,$almacen_array,$auditor_array);
+        $form = new \Application\Reportes\Form\CardexForm($almacen_array);
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/reportes/cardex/index');
         $view_model->setVariables(array(

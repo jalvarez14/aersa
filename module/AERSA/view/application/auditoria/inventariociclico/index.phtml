@@ -1,0 +1,109 @@
+<link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
+<link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
+<div id="my_container">
+    <h3 class="page-title">⁠⁠⁠Inventario  cíclico</h3>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="/auditoria/inventariociclico">⁠⁠⁠Inventario  cíclico</a>
+            </li>
+        </ul>
+    </div>
+    <?php
+    $form->setAttribute('action', '/auditoria/inventariociclico');
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <br>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('idalmacen')) ?>  
+                        <?php echo $this->formSelect($form->get('idalmacen')) ?> 
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <?php echo $this->formHidden($form->get('inventariomes_fecha')) ?>  
+                        <?php echo $this->formLabel($form->get('fecha')) ?>  
+                        <?php echo $this->formText($form->get('fecha')) ?> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <?php echo $this->formLabel($form->get('idauditor')) ?>  
+                        <?php echo $this->formSelect($form->get('idauditor')) ?> 
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <br>
+                        <div class="btn-set pull-right">
+                            <input type="file" name="batch_inventario" style="display: none" accept=".xls,.xlsx">
+                            <a id="subir_inventario" href="#"><button name="batch_inventario_b" id="batch_inventario_b" class="btn default" type="button" style="margin-bottom: 15px; margin-right: 10px">Subir inventario</button></a>
+                        </div>
+                    </div>                        
+                </div>
+                <div id="botones" class="row" style="display: none">
+                    <div class="form-actions">
+                        <!--<form action="/reportes/recetas/detalle" method="post">-->
+                            <div class="left col-md-2">
+                                <button class="btn blue" id="generar_pdf" name="generar_pdf" type="submit">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                    PDF
+                                </button>
+                            </div>
+                            <div class="left col-md-2">
+                                <button class="btn blue" id="generar_excel" name="generar_excel" type="submit">
+                                    <i class="fa fa-file-excel-o"></i>
+                                    Excel
+                                </button>
+                            </div>
+                        <!--</form>-->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>(*)Campos obligatorios</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" style="overflow: scroll; white-space: nowrap;">
+                        <table class="table" id="reporte_table">
+                            <thead>
+                            <th>ID</th>
+                            <th>Nomb</th>
+                            <th>ExistIni</th>
+                            <th>Cmpr</th>
+                            <th>ReqIng</th>
+                            <th>OrdTabIng</th>
+                            <th>Vnt</th>
+                            <th>ReqEg</th>
+                            <th>OrdTabEg</th>
+                            <th>Dev</th>
+                            <th>StT</th>
+                            <th>Unid</th>
+                            <th>StF</th>
+                            <th>ImpFis</th>
+                            <th>Dif</th>
+                            <th>CostProm</th>
+                            <th>DifImp</th>
+                            <th>Revisado</th>
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
+<script src="/application/global/scripts/datatable.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
+<script src="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
+<script src="/application/custom/js/auditoria/inventariociclico.js" type="text/javascript"></script>
+<script>
+    var $plugin = $('#my_container').inventariociclico();
+    $plugin.new();
+</script>

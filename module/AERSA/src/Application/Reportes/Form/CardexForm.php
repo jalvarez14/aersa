@@ -6,7 +6,7 @@ use Zend\Form\Form;
 
 class CardexForm extends Form {
     
-    public function __construct($fecha,$almacen_array = array(),$auditor_array = array()) {
+    public function __construct($almacen_array = array()) {
         
         parent::__construct('cardexForm');
         
@@ -38,49 +38,31 @@ class CardexForm extends Form {
         ));
         
         $this->add(array(
-            'name' => 'fecha',
-            'type' => 'Text',
-            'attributes' => array(
-                'required' => true,
-                'class' => 'form-control',
-                'disabled' => true,
-                'value' => $fecha,
-            ),
-            'options' => array(
-                'label' => 'Fecha',
-            ),
-        ));
-        
-        $this->add(array(
-            'name' => 'auditor',
-            'type' => 'Select',
-            'attributes' => array(
-                'required' => true,
-                'class' => 'form-control'
-            ),
-            'options' => array(
-                'label' => 'Auditor *',
-                'empty_option' => 'Seleccione un auditor',
-                'value_options' => $auditor_array,
-            ),
-        ));
-        
-        $this->add(array(
-            'name' => 'revisada',
-            'type' => 'Select',
-            'options' => array(
-                'label' => 'Revisión *',
-                
-                'value_options' => array(
-                    1 => 'Revisada',
-                    0 => 'No revisada',
-                ),
-            ),
+            'name' => 'fecha_inicio',
+            'type' => 'Date',
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
             ),
-        )); 
+            'options' => array(
+                'pattern' => '\d{1,2}/\d{1,2}/\d{4}',
+                'label' => 'Fecha inicio *'
+            )
+        ));
+        
+        $this->add(array(
+            'name' => 'fecha_fin',
+            'type' => 'Date',
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+            'options' => array(
+                'pattern' => '\d{1,2}/\d{1,2}/\d{4}',
+                'label' => 'Fecha fin *'
+            )
+        ));
+        
     }
    
 }

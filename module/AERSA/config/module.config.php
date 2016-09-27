@@ -2081,6 +2081,39 @@ return array(
                                     ),
                                 ),
                             ),
+                            'inventariociclico' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/inventariociclico',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Auditoria\Controller\Inventariociclico',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'batch' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/batch[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Auditoria\Controller\Inventariociclico',
+                                                'action' => 'batch',
+                                            ),
+                                        ),
+                                    ),
+                                    'encargado' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/encargado[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Auditoria\Controller\Inventariociclico',
+                                                'action' => 'encargado',
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -2239,6 +2272,7 @@ return array(
              * AUDITORIA
              */
             'Application\Auditoria\Controller\Cierresinventarios' => 'Application\Auditoria\Controller\CierresinventariosController',
+            'Application\Auditoria\Controller\Inventariociclico' => 'Application\Auditoria\Controller\InventariociclicoController',
             /*
              * WEBSITE
              */
