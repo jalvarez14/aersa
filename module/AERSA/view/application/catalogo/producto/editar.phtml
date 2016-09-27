@@ -90,12 +90,6 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('producto_stock')) ?>  
-                        <?php echo $this->formText  ($form->get('producto_stock')) ?>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_rendimientooriginal')) ?>  
                         <?php echo $this->formText  ($form->get('producto_rendimientooriginal')) ?>
                     </div>
@@ -208,7 +202,7 @@
                                         <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
                                             <td><?php echo $entity->getRecetaCantidad() ?></td>
                                         <?php endif;?>
-                                            <td><?php echo  money_format('%+#1.6n',$nombreProducto->getProductoCosto() * $nombreProducto->getProductoRendimiento())?></td>
+                                            <td><?php echo  money_format('%+#1.6n',$nombreProducto->getProductoCosto() * $entity->getRecetaCantidad())?></td>
                                             <td class="text-left">                                    
                                             <div class="btn-group">
                                                 <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones

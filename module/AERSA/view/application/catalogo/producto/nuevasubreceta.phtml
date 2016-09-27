@@ -95,7 +95,7 @@
             
             var cantidad = $("[name=receta_cantidadoriginal]").val();
             var cantidad_normalizada = (cantidad*producto_rendimiento)/producto_rendimientooriginal;
-            $('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(2));
+            $('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(6));
         });
     } 
     

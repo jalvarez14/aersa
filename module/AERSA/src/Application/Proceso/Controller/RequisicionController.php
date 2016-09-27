@@ -38,6 +38,16 @@ class RequisicionController extends AbstractActionController {
         $idempresa = $session['idempresa'];
         $idusuario = $session['idusuario'];
         $request = $this->getRequest();
+        
+        //FOLIO DEFAULT
+        $folio_default = \FoliorequisicionQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+        if($folio_default){
+            $folio_default = \FoliorequisicionQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
+            $folio_default = $folio_default['folio'];
+        }else{
+            $folio_default = 1001;
+        }
+        
         if ($request->isPost()) {
             $post_data = $request->getPost();
            // echo '<pre>';var_dump($post_data);echo '</pre>';exit();
@@ -57,6 +67,23 @@ class RequisicionController extends AbstractActionController {
                     ->setIdempresa($session['idempresa']);
                     
             $requisicion->save();
+            
+            //REQUISICION FOLIO
+            if($folio_default == $post_data['requisicion_folio']){
+                $folio_exist = \FoliorequisicionQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+                if($folio_exist){
+                    $folio_requisicion = \FoliorequisicionQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne();
+                    $folio_requisicion->setFolio($folio_default + 1);
+                    $folio_requisicion->save();
+                }else{
+                    $folio_requisicion = new \Foliorequisicion();
+                    $folio_requisicion->setFolio($folio_default + 1);
+                    $folio_requisicion->setIdempresa($session['idempresa']);
+                    $folio_requisicion->setIdsucursal($session['idsucursal']);
+                    $folio_requisicion->save();
+                }
+            }
+            
             //REQUISICION DETALLES
             foreach ($post_data['productos'] as $producto) {
                 $tipopro = \ProductoQuery::create()->filterByIdproducto($producto['idproducto'])->findOne();
@@ -125,8 +152,8 @@ class RequisicionController extends AbstractActionController {
         $mes_activo = $sucursal->getSucursalMesactivo();
 
         //INTANCIAMOS NUESTRA VISTA
-
         $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg, $almacen_array, $sucursaldes_array, $concepto_array);
+        $form->get('requisicion_folio')->setValue($folio_default);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
             'form' => $form,

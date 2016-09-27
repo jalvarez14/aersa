@@ -58,6 +58,10 @@
  * @method EmpresaQuery rightJoinFlujoefectivo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Flujoefectivo relation
  * @method EmpresaQuery innerJoinFlujoefectivo($relationAlias = null) Adds a INNER JOIN clause to the query using the Flujoefectivo relation
  *
+ * @method EmpresaQuery leftJoinFoliorequisicion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Foliorequisicion relation
+ * @method EmpresaQuery rightJoinFoliorequisicion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Foliorequisicion relation
+ * @method EmpresaQuery innerJoinFoliorequisicion($relationAlias = null) Adds a INNER JOIN clause to the query using the Foliorequisicion relation
+ *
  * @method EmpresaQuery leftJoinIngreso($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ingreso relation
  * @method EmpresaQuery rightJoinIngreso($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ingreso relation
  * @method EmpresaQuery innerJoinIngreso($relationAlias = null) Adds a INNER JOIN clause to the query using the Ingreso relation
@@ -1129,6 +1133,80 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         return $this
             ->joinFlujoefectivo($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Flujoefectivo', 'FlujoefectivoQuery');
+    }
+
+    /**
+     * Filter the query by a related Foliorequisicion object
+     *
+     * @param   Foliorequisicion|PropelObjectCollection $foliorequisicion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByFoliorequisicion($foliorequisicion, $comparison = null)
+    {
+        if ($foliorequisicion instanceof Foliorequisicion) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $foliorequisicion->getIdempresa(), $comparison);
+        } elseif ($foliorequisicion instanceof PropelObjectCollection) {
+            return $this
+                ->useFoliorequisicionQuery()
+                ->filterByPrimaryKeys($foliorequisicion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByFoliorequisicion() only accepts arguments of type Foliorequisicion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Foliorequisicion relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinFoliorequisicion($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Foliorequisicion');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Foliorequisicion');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Foliorequisicion relation Foliorequisicion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   FoliorequisicionQuery A secondary query class using the current class as primary query
+     */
+    public function useFoliorequisicionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinFoliorequisicion($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Foliorequisicion', 'FoliorequisicionQuery');
     }
 
     /**

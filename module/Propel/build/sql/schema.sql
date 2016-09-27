@@ -673,6 +673,33 @@ CREATE TABLE `flujoefectivo`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- foliorequisicion
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `foliorequisicion`;
+
+CREATE TABLE `foliorequisicion`
+(
+    `idfoliorequisicion` INTEGER NOT NULL AUTO_INCREMENT,
+    `folio` INTEGER NOT NULL,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    PRIMARY KEY (`idfoliorequisicion`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_foliorequisicion`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_foliorequisicion`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- ingreso
 -- ---------------------------------------------------------------------
 

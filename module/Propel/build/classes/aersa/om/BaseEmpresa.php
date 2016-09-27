@@ -121,6 +121,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collFlujoefectivosPartial;
 
     /**
+     * @var        PropelObjectCollection|Foliorequisicion[] Collection to store aggregation of Foliorequisicion objects.
+     */
+    protected $collFoliorequisicions;
+    protected $collFoliorequisicionsPartial;
+
+    /**
      * @var        PropelObjectCollection|Ingreso[] Collection to store aggregation of Ingreso objects.
      */
     protected $collIngresos;
@@ -277,6 +283,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $flujoefectivosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $foliorequisicionsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -775,6 +787,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             $this->collFlujoefectivos = null;
 
+            $this->collFoliorequisicions = null;
+
             $this->collIngresos = null;
 
             $this->collInventariomess = null;
@@ -1059,6 +1073,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collFlujoefectivos !== null) {
                 foreach ($this->collFlujoefectivos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->foliorequisicionsScheduledForDeletion !== null) {
+                if (!$this->foliorequisicionsScheduledForDeletion->isEmpty()) {
+                    FoliorequisicionQuery::create()
+                        ->filterByPrimaryKeys($this->foliorequisicionsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->foliorequisicionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collFoliorequisicions !== null) {
+                foreach ($this->collFoliorequisicions as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1562,6 +1593,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collFoliorequisicions !== null) {
+                    foreach ($this->collFoliorequisicions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collIngresos !== null) {
                     foreach ($this->collIngresos as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1804,6 +1843,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collFlujoefectivos) {
                 $result['Flujoefectivos'] = $this->collFlujoefectivos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collFoliorequisicions) {
+                $result['Foliorequisicions'] = $this->collFoliorequisicions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collIngresos) {
                 $result['Ingresos'] = $this->collIngresos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2079,6 +2121,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getFoliorequisicions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addFoliorequisicion($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getIngresos() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addIngreso($relObj->copy($deepCopy));
@@ -2253,6 +2301,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
         if ('Flujoefectivo' == $relationName) {
             $this->initFlujoefectivos();
+        }
+        if ('Foliorequisicion' == $relationName) {
+            $this->initFoliorequisicions();
         }
         if ('Ingreso' == $relationName) {
             $this->initIngresos();
@@ -4774,6 +4825,256 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $query->joinWith('Usuario', $join_behavior);
 
         return $this->getFlujoefectivos($query, $con);
+    }
+
+    /**
+     * Clears out the collFoliorequisicions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addFoliorequisicions()
+     */
+    public function clearFoliorequisicions()
+    {
+        $this->collFoliorequisicions = null; // important to set this to null since that means it is uninitialized
+        $this->collFoliorequisicionsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collFoliorequisicions collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialFoliorequisicions($v = true)
+    {
+        $this->collFoliorequisicionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collFoliorequisicions collection.
+     *
+     * By default this just sets the collFoliorequisicions collection to an empty array (like clearcollFoliorequisicions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initFoliorequisicions($overrideExisting = true)
+    {
+        if (null !== $this->collFoliorequisicions && !$overrideExisting) {
+            return;
+        }
+        $this->collFoliorequisicions = new PropelObjectCollection();
+        $this->collFoliorequisicions->setModel('Foliorequisicion');
+    }
+
+    /**
+     * Gets an array of Foliorequisicion objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Foliorequisicion[] List of Foliorequisicion objects
+     * @throws PropelException
+     */
+    public function getFoliorequisicions($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collFoliorequisicionsPartial && !$this->isNew();
+        if (null === $this->collFoliorequisicions || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collFoliorequisicions) {
+                // return empty collection
+                $this->initFoliorequisicions();
+            } else {
+                $collFoliorequisicions = FoliorequisicionQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collFoliorequisicionsPartial && count($collFoliorequisicions)) {
+                      $this->initFoliorequisicions(false);
+
+                      foreach ($collFoliorequisicions as $obj) {
+                        if (false == $this->collFoliorequisicions->contains($obj)) {
+                          $this->collFoliorequisicions->append($obj);
+                        }
+                      }
+
+                      $this->collFoliorequisicionsPartial = true;
+                    }
+
+                    $collFoliorequisicions->getInternalIterator()->rewind();
+
+                    return $collFoliorequisicions;
+                }
+
+                if ($partial && $this->collFoliorequisicions) {
+                    foreach ($this->collFoliorequisicions as $obj) {
+                        if ($obj->isNew()) {
+                            $collFoliorequisicions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collFoliorequisicions = $collFoliorequisicions;
+                $this->collFoliorequisicionsPartial = false;
+            }
+        }
+
+        return $this->collFoliorequisicions;
+    }
+
+    /**
+     * Sets a collection of Foliorequisicion objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $foliorequisicions A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setFoliorequisicions(PropelCollection $foliorequisicions, PropelPDO $con = null)
+    {
+        $foliorequisicionsToDelete = $this->getFoliorequisicions(new Criteria(), $con)->diff($foliorequisicions);
+
+
+        $this->foliorequisicionsScheduledForDeletion = $foliorequisicionsToDelete;
+
+        foreach ($foliorequisicionsToDelete as $foliorequisicionRemoved) {
+            $foliorequisicionRemoved->setEmpresa(null);
+        }
+
+        $this->collFoliorequisicions = null;
+        foreach ($foliorequisicions as $foliorequisicion) {
+            $this->addFoliorequisicion($foliorequisicion);
+        }
+
+        $this->collFoliorequisicions = $foliorequisicions;
+        $this->collFoliorequisicionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Foliorequisicion objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Foliorequisicion objects.
+     * @throws PropelException
+     */
+    public function countFoliorequisicions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collFoliorequisicionsPartial && !$this->isNew();
+        if (null === $this->collFoliorequisicions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collFoliorequisicions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getFoliorequisicions());
+            }
+            $query = FoliorequisicionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collFoliorequisicions);
+    }
+
+    /**
+     * Method called to associate a Foliorequisicion object to this object
+     * through the Foliorequisicion foreign key attribute.
+     *
+     * @param    Foliorequisicion $l Foliorequisicion
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addFoliorequisicion(Foliorequisicion $l)
+    {
+        if ($this->collFoliorequisicions === null) {
+            $this->initFoliorequisicions();
+            $this->collFoliorequisicionsPartial = true;
+        }
+
+        if (!in_array($l, $this->collFoliorequisicions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddFoliorequisicion($l);
+
+            if ($this->foliorequisicionsScheduledForDeletion and $this->foliorequisicionsScheduledForDeletion->contains($l)) {
+                $this->foliorequisicionsScheduledForDeletion->remove($this->foliorequisicionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Foliorequisicion $foliorequisicion The foliorequisicion object to add.
+     */
+    protected function doAddFoliorequisicion($foliorequisicion)
+    {
+        $this->collFoliorequisicions[]= $foliorequisicion;
+        $foliorequisicion->setEmpresa($this);
+    }
+
+    /**
+     * @param	Foliorequisicion $foliorequisicion The foliorequisicion object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeFoliorequisicion($foliorequisicion)
+    {
+        if ($this->getFoliorequisicions()->contains($foliorequisicion)) {
+            $this->collFoliorequisicions->remove($this->collFoliorequisicions->search($foliorequisicion));
+            if (null === $this->foliorequisicionsScheduledForDeletion) {
+                $this->foliorequisicionsScheduledForDeletion = clone $this->collFoliorequisicions;
+                $this->foliorequisicionsScheduledForDeletion->clear();
+            }
+            $this->foliorequisicionsScheduledForDeletion[]= clone $foliorequisicion;
+            $foliorequisicion->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Foliorequisicions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Foliorequisicion[] List of Foliorequisicion objects
+     */
+    public function getFoliorequisicionsJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FoliorequisicionQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getFoliorequisicions($query, $con);
     }
 
     /**
@@ -9201,6 +9502,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collFoliorequisicions) {
+                foreach ($this->collFoliorequisicions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collIngresos) {
                 foreach ($this->collIngresos as $o) {
                     $o->clearAllReferences($deep);
@@ -9312,6 +9618,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collFlujoefectivos->clearIterator();
         }
         $this->collFlujoefectivos = null;
+        if ($this->collFoliorequisicions instanceof PropelCollection) {
+            $this->collFoliorequisicions->clearIterator();
+        }
+        $this->collFoliorequisicions = null;
         if ($this->collIngresos instanceof PropelCollection) {
             $this->collIngresos->clearIterator();
         }

@@ -406,6 +406,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
+        // Invalidate objects in FoliorequisicionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        FoliorequisicionPeer::clearInstancePool();
         // Invalidate objects in IngresoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         IngresoPeer::clearInstancePool();
@@ -826,6 +829,12 @@ abstract class BaseEmpresaPeer
 
             $criteria->add(DevolucionPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Foliorequisicion objects
+            $criteria = new Criteria(FoliorequisicionPeer::DATABASE_NAME);
+
+            $criteria->add(FoliorequisicionPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += FoliorequisicionPeer::doDelete($criteria, $con);
 
             // delete related Ingreso objects
             $criteria = new Criteria(IngresoPeer::DATABASE_NAME);
