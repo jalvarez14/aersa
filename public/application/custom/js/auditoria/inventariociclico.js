@@ -205,9 +205,8 @@
                 $('input[name=batch_inventario]').trigger('click');
             });
             $('input[name=batch_inventario]').on('change', function () {
-                var auditor = $('select[name=idauditor]').val();
                 var almacen = $('select[name=idalmacen]').val();
-                if (almacen!=0 && auditor!=0) {
+                if (almacen!=0) {
                     
                     var empty = false;
                     var val = $('input[name=batch_inventario]').val();
@@ -238,7 +237,7 @@
                                     url: '/auditoria/inventariociclico/batch',
                                     type: 'POST',
                                     dataType: 'json',
-                                    data: {inventario: workbook_array, almacen: almacen, auditor: auditor},
+                                    data: {inventario: workbook_array, almacen: almacen},
                                     beforeSend: function (xhr) {
                                         $('body').addClass('loading');
                                     },

@@ -72,7 +72,6 @@
         var controlBotonFormatoInventario = function () {
             var almacen = true;
             var formato = true;
-            var movimientos = true;
             var checkbox = false;
             var activar = true;
 
@@ -81,20 +80,12 @@
             if ($('select[name=formato]').val() == "")
                 formato = false;
 
-            if ($('select[name=movimientos_recientes]').val() != "") {
-                if ($('select[name=movimientos_recientes]').val() == "Si") {
-                    if (($('input[name=recientes_dias]').val() == ''))
-                        movimientos = false;
-                }
-            } else
-                movimientos = false;
-
             $container.find('.generado').filter(function () {
                 if ($(this).prop('checked'))
                     checkbox = true;
             });
 
-            if (almacen && formato && movimientos && checkbox)
+            if (almacen && formato && checkbox)
                 activar = false;
             $('#generar_reporte').attr('disabled', activar);
         }
@@ -202,26 +193,6 @@
         }
 
         plugin.formatoinventario = function () {
-            $('input[name=recientes_dias]').numeric();
-            $('#recientes').attr('hidden', true);
-
-            $('input[name=recientes_dias]').on('blur', function () {
-                if ($(this).val() != '') {
-                    recientes($(this).val());
-                    controlBotonFormatoInventario();
-                }
-            });
-
-            $('select[name=movimientos_recientes]').on('change', function () {
-                if ($(this).val() == "Si") {
-                    $('#recientes').attr('hidden', false);
-                    if ($('input[name=recientes_dias]').val() != '')
-                        recientes($('input[name=recientes_dias]').val());
-                } else
-                    $('#recientes').attr('hidden', true);
-
-                controlBotonFormatoInventario();
-            });
 
             $('select[name=formato]').on('change', function () {
                 controlBotonFormatoInventario();
@@ -252,10 +223,6 @@
                         $container.find('.generado').prop('checked', false);
                         $container.find('.generadoc').prop('checked', false);
                     }
-                }
-                if ($('select[name=movimientos_recientes]').val() == "Si") {
-                    if ($('input[name=recientes_dias]').val() != '')
-                        recientes($('input[name=recientes_dias]').val());
                 }
                 controlBoton();
             });

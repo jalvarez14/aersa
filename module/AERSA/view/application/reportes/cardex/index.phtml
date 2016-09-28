@@ -19,23 +19,24 @@
                 <br>
                 <div class="row">
                     <div class="col-md-6">
-                        <?php echo $this->formLabel($form->get('almacen')) ?>  
-                        <?php echo $this->formSelect($form->get('almacen')) ?> 
-                    </div>
-                    <div class="col-md-6">
-                        <label id="responsable" name="responsable">Responsable</label>
-                        <br>
-                        <label id="responsable_responsable" name="nombre_responsable"></label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
                         <?php echo $this->formLabel($form->get('fecha_inicio')) ?>  
                         <?php echo $this->formDate($form->get('fecha_inicio')) ?> 
                     </div>
                     <div class="col-md-6">
                         <?php echo $this->formLabel($form->get('fecha_fin')) ?>  
                         <?php echo $this->formDate($form->get('fecha_fin')) ?> 
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="icheck-list">
+                        <?php $almacen=new Almacen();foreach ($almacenes as $almacen):?>
+                        <div class="col-md-3">
+                            <label>
+                                <input id="<?php echo $almacen->getIdalmacen();?>" name="<?php ucfirst($almacen->getAlmacenNombre()) ?>" value="<?php echo ucfirst($almacen->getAlmacenNombre())?>" type="checkbox" class="icheck generado"> <?php echo ucfirst($almacen->getAlmacenNombre())?>
+                            </label>
+                        </div>
+                        <?php endforeach;?>
                     </div>
                 </div>
                 <br>
