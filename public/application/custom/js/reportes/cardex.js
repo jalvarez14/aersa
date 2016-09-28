@@ -69,15 +69,19 @@
         });
         
         var revisarSelect = function () {
-            var almacen = ($('select[name=almacen]').val() != "") ? true : false;
+            var checkbox = false;
+            $container.find('.generado').filter(function () {
+                if ($(this).prop('checked'))
+                    checkbox = true;
+            });
             var inicio=(container.find('input[name=fecha_inicio]').val().length!=0) ? true: false;
             var fin=(container.find('input[name=fecha_fin]').val().length!=0) ? true: false;
             var activar = true;
-            if (almacen&&inicio&&fin)
+            if (checkbox&&inicio&&fin)
                 activar = false;
             $('#generar').attr('disabled', activar);
         }
-
+        
         /*
          * Public methods
          */
@@ -130,32 +134,17 @@
                 revisarSelect();
             });
             
-            
-            $('select[name=almacen]').on('change', function () {
-                var idalmacen = $(this).val();
-                if (idalmacen != "") {
-                    $.ajax({
-                        async: false,
-                        type: "POST",
-                        url: "/reportes/kardex/almacen",
-                        dataType: "json",
-                        data: {idalmacen: idalmacen},
-                        success: function (data) {
-                            if (data.length != 0) {
-                                $('#responsable_responsable').html(data);
-                            } else {
-                                $('#responsable_responsable').html("N/A");
-                            }
-                        },
-                    });
-                } else {
-                    $('#responsable_responsable').html("");
-                }
+            $container.find('input:checkbox').on('click', function () {
                 revisarSelect();
             });
-
+            
             $('#generar').on('click', function () {
-                var idalmacen = $('select[name=almacen]').val();
+                var almacenes= new Array();
+                $container.find('.generado').filter(function () {
+                if ($(this).prop('checked'))
+                        almacenes.push($(this).attr('id'));
+                });
+                
                 var inicio=container.find('input[name=fecha_inicio]').val();
                 var fin=container.find('input[name=fecha_fin]').val();
                 var table = $('#reporte_table');
@@ -164,7 +153,7 @@
                     type: "POST",
                     url: "/reportes/kardex",
                     dataType: "json",
-                    data: {idalmacen: idalmacen,inicio:inicio,fin:fin},
+                    data: {almacenes:almacenes,inicio:inicio,fin:fin},
                     success: function (data) {
                         if (data.length != 0) {
                             $('#reporte_table > tbody').empty();

@@ -39,7 +39,6 @@ class InventariociclicoController extends AbstractActionController {
             $post_data = $request->getPost();
             $idalmacen = $post_data['idalmacen'];
             $post_data['idusuario'] = $session['idusuario'];
-            $idauditor = $post_data['idauditor'];
             $post_data['idempresa'] = $idempresa;
             $post_data['idsucursal'] = $idsucursal;
             $inventariocierremes = new \Inventariomes();
