@@ -630,14 +630,15 @@ class ProductoController extends AbstractActionController
         
         //VERIFICAMOS SI EXISTE
         $exist = \ProductoQuery::create()->filterByIdproducto($prod)->exists();
-        
+
         if ($exist) 
         {
             $producto = \ProductoQuery::create()->findPk($prod);
             
             //INTANCIAMOS NUESTRA ENTIDAD
-            $entity = \RecetaQuery::create()->filterByIdproductoreceta($id)->findOne();
-            
+            $entity = \RecetaQuery::create()->filterByIdproducto($prod)->filterByIdproductoreceta($id)->findOne();
+          
+
             
             $form = new \Application\Catalogo\Form\SubrecetaForm();
             
@@ -668,6 +669,7 @@ class ProductoController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('Sub receta modificada correctamente!');
                 return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
             }
+            
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
             
