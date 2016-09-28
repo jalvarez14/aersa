@@ -32,7 +32,7 @@ class SucursalController extends AbstractActionController
         }
         
         //SI SE TRATA DE UN ADMIN DE AERSA
-        if($session['idrol'] == 1){
+        if($session['idrol'] == 999){
             $collection = \EmpresaQuery::create()->orderByIdempresa(\Criteria::DESC)->find();
             
             //INTANCIAMOS NUESTRA VISTA
