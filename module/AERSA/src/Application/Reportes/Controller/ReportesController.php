@@ -180,6 +180,10 @@ class ReportesController extends AbstractActionController {
             $productos = array();
             $idcategorias = array();
             $post_data = $request->getPost();
+            if($post_data['movimientos_recientes']=="Si") {
+                $recintes=$this->getrecientesAction();
+            }
+                exit;
             $template = '/formatoinventario.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
             $formato = $post_data['formato'];
@@ -264,7 +268,7 @@ class ReportesController extends AbstractActionController {
 
     public function getrecientesAction() {
         $dias = $this->params()->fromQuery('dias');
-        $fecha = date('Y-m-d', strtotime('-' . $dias . ' day'));
+        $fecha = date('Y-m-d', strtotime('-28 day'));
         $hoy = date('Y-m-d');
         $fecha.=' 00:00:00';
         $hoy.=' 23:59:59';
@@ -300,7 +304,7 @@ class ReportesController extends AbstractActionController {
             }
         }
 
-        return $this->getResponse()->setContent(json_encode($idproductos));
+        return $idproductos;
     }
 
     public function entradasporcomprasAction() {

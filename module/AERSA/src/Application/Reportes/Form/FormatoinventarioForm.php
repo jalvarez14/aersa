@@ -52,8 +52,8 @@ class FormatoinventarioForm extends Form {
                 'label' => 'Movimientos recientes *',
                 
                 'value_options' => array(
-                    'Si' => 'Si',
                     'No' => 'No',
+                    'Si' => 'Si',
                 ),
             ),
         ));

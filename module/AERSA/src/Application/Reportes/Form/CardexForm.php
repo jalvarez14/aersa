@@ -6,23 +6,9 @@ use Zend\Form\Form;
 
 class CardexForm extends Form {
     
-    public function __construct($almacen_array = array()) {
+    public function __construct() {
         
         parent::__construct('cardexForm');
-        
-        $this->add(array(
-            'name' => 'almacen',
-            'type' => 'Select',
-            'attributes' => array(
-                'required' => true,
-                'class' => 'form-control'
-            ),
-            'options' => array(
-                'label' => 'Alamacen *',
-                'empty_option' => 'Seleccione un almacen',
-                'value_options' => $almacen_array,
-            ),
-        ));
         
         $this->add(array(
             'name' => 'responsable',
