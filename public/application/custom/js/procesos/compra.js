@@ -559,8 +559,9 @@
                 }
                 
                 //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
-                
+                $('#productos_table tbody').prepend(tr);
+                 tr.find('input[name*=cantidad]').focus();
+                 
                 //LIMPIAMOS EL AUTOCOMPLETE
                 $('input#producto_autocomplete').typeahead('val', ''); 
                 $('input#idproducto').val(''); 
@@ -770,8 +771,9 @@
                 revisadaControl();
                 
                 //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
-                
+                $('#productos_table tbody').prepend(tr);
+                tr.find('input[name*=cantidad]').focus();
+               
                 
                 //LIMPIAMOS EL AUTOCOMPLETE
                 $('input#producto_autocomplete').typeahead('val', ''); 
