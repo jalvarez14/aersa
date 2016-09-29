@@ -300,6 +300,7 @@ class CompraController extends AbstractActionController {
             //LOS DETALLES DE LA COMPRA
             $compra_detalle = \CompradetalleQuery::create()->filterByIdcompra($entity->getIdcompra())->orderByIdcompradetalle(\Criteria::ASC)->find();
             
+            
             //COUNT
             $count = \CompradetalleQuery::create()->orderByIdcompradetalle(\Criteria::DESC)->findOne();
             $count = $count->getIdcompradetalle() + 1;
