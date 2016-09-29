@@ -179,11 +179,13 @@ class ReportesController extends AbstractActionController {
         if ($request->isPost()) {
             $productos = array();
             $idcategorias = array();
+            $subRecintes=array();
+            $prodRecientes=array();
             $post_data = $request->getPost();
-            if($post_data['movimientos_recientes']=="Si") {
-                $recintes=$this->getrecientesAction();
+            if ($post_data['movimientos_recientes'] == "Si") {
+                $subRecintes = $this->getrecientesSubcatAction();
+                $prodRecientes = $this->getrecientesProdAction();
             }
-                exit;
             $template = '/formatoinventario.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
             $formato = $post_data['formato'];
@@ -192,23 +194,146 @@ class ReportesController extends AbstractActionController {
                     array_push($idcategorias, substr($key, 9));
             }
 
-            foreach ($idcategorias as $id) {
-                $idproductos = array();
-                $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
-                $productoObj = new \Producto();
-                foreach ($productosObj as $productoObj) {
-                    array_push($idproductos, $productoObj->getIdproducto());
-                }
-                $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
-                $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
-                $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
-                foreach ($idproductos as $idproducto) {
-                    $objproducto = \ProductoQuery::create()->findPk($idproducto);
-                    $nombre = $objproducto->getProductoNombre();
-                    $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
-                    array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+            $subcatsAlimentos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
+            $subcatsBebidas = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
+            $subcatsGastos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(3)->orderByCategoriaNombre('asc')->find();
+
+            $subcat = new \Categoria();
+            foreach ($subcatsAlimentos as $subcat) {
+                if (in_array($subcat->getIdcategoria(), $idcategorias)) {
+                    $id = $subcat->getIdcategoria();
+                    $idproductos = array();
+                    $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
+                    $productoObj = new \Producto();
+                    foreach ($productosObj as $productoObj) {
+                        array_push($idproductos, $productoObj->getIdproducto());
+                    }
+                    $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+                    $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+                    $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+                    foreach ($idproductos as $idproducto) {
+                        $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                        $nombre = $objproducto->getProductoNombre();
+                        $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+                    }
+                } elseif (in_array($subcat->getIdcategoria(), $subRecintes)) {
+                    $id = $subcat->getIdcategoria();
+                    $idproductos = array();
+                    $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
+                    $productoObj = new \Producto();
+                    foreach ($productosObj as $productoObj) {
+                        if(in_array($productoObj->getIdproducto(), $prodRecientes))
+                            array_push($idproductos, $productoObj->getIdproducto());
+                    }
+                    $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+                    $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+                    $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+                    foreach ($idproductos as $idproducto) {
+                        $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                        $nombre = $objproducto->getProductoNombre();
+                        $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+                    }
                 }
             }
+
+            foreach ($subcatsBebidas as $subcat) {
+                if (in_array($subcat->getIdcategoria(), $idcategorias)) {
+                    $id = $subcat->getIdcategoria();
+                    $idproductos = array();
+                    $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
+                    $productoObj = new \Producto();
+                    foreach ($productosObj as $productoObj) {
+                        array_push($idproductos, $productoObj->getIdproducto());
+                    }
+                    $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+                    $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+                    $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+                    foreach ($idproductos as $idproducto) {
+                        $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                        $nombre = $objproducto->getProductoNombre();
+                        $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+                    }
+                } elseif (in_array($subcat->getIdcategoria(), $subRecintes)) {
+                    $id = $subcat->getIdcategoria();
+                    $idproductos = array();
+                    $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
+                    $productoObj = new \Producto();
+                    foreach ($productosObj as $productoObj) {
+                        if(in_array($productoObj->getIdproducto(), $prodRecientes))
+                            array_push($idproductos, $productoObj->getIdproducto());
+                    }
+                    $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+                    $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+                    $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+                    foreach ($idproductos as $idproducto) {
+                        $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                        $nombre = $objproducto->getProductoNombre();
+                        $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+                    }
+                }
+            }
+
+            foreach ($subcatsGastos as $subcat) {
+                if (in_array($subcat->getIdcategoria(), $idcategorias)) {
+                    $id = $subcat->getIdcategoria();
+                    $idproductos = array();
+                    $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
+                    $productoObj = new \Producto();
+                    foreach ($productosObj as $productoObj) {
+                        array_push($idproductos, $productoObj->getIdproducto());
+                    }
+                    $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+                    $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+                    $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+                    foreach ($idproductos as $idproducto) {
+                        $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                        $nombre = $objproducto->getProductoNombre();
+                        $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+                    }
+                } elseif (in_array($subcat->getIdcategoria(), $subRecintes)) {
+                    $id = $subcat->getIdcategoria();
+                    $idproductos = array();
+                    $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
+                    $productoObj = new \Producto();
+                    foreach ($productosObj as $productoObj) {
+                        if(in_array($productoObj->getIdproducto(), $prodRecientes))
+                            array_push($idproductos, $productoObj->getIdproducto());
+                    }
+                    $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+                    $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+                    $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+                    foreach ($idproductos as $idproducto) {
+                        $objproducto = \ProductoQuery::create()->findPk($idproducto);
+                        $nombre = $objproducto->getProductoNombre();
+                        $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+                    }
+                }
+            }
+
+
+//            foreach ($idcategorias as $id) {
+//                $idproductos = array();
+//                $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($id)->filterByIdempresa($idempresa)->filterByProductoTipo(array('simple', 'subreceta'))->filterByProductoBaja(0)->orderByProductoNombre('asc')->find();
+//                $productoObj = new \Producto();
+//                foreach ($productosObj as $productoObj) {
+//                    array_push($idproductos, $productoObj->getIdproducto());
+//                }
+//                $categoria = \CategoriaQuery::create()->filterByIdcategoria($id)->findOne()->getCategoriaNombre();
+//                $almacen = \AlmacenQuery::create()->findPk($post_data['almacen'])->getAlmacenNombre();
+//                $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
+//                foreach ($idproductos as $idproducto) {
+//                    $objproducto = \ProductoQuery::create()->findPk($idproducto);
+//                    $nombre = $objproducto->getProductoNombre();
+//                    $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+//                    array_push($productos, array('subcat' => $categoria, 'clave' => $objproducto->getIdproducto(), 'nombre' => $nombre, 'unidad' => $unidad));
+//                }
+//            }
 
             $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
             $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
@@ -266,7 +391,48 @@ class ReportesController extends AbstractActionController {
         return $view_model;
     }
 
-    public function getrecientesAction() {
+    public function getrecientesSubcatAction() {
+        $dias = $this->params()->fromQuery('dias');
+        $fecha = date('Y-m-d', strtotime('-28 day'));
+        $hoy = date('Y-m-d');
+        $fecha.=' 00:00:00';
+        $hoy.=' 23:59:59';
+        $idsubcategorias = array();
+        $compras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $fecha, 'max' => $hoy))->find();
+        $compra = new \Compra();
+        foreach ($compras as $compra) {
+            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
+            $compradetalle = new \Compradetalle();
+            foreach ($comprasdetalles as $compradetalle) {
+                if (!in_array($compradetalle->getProducto()->getIdsubcategoria(), $idsubcategorias))
+                    array_push($idsubcategorias, $compradetalle->getProducto()->getIdsubcategoria());
+            }
+        }
+        $requisiciones = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $fecha, 'max' => $hoy))->find();
+        $requisicion = new \Requisicion();
+        foreach ($requisiciones as $requisicion) {
+            $requisicionesdetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
+            $requisiciondetalle = new \Requisiciondetalle();
+            foreach ($requisicionesdetalles as $requisiciondetalle) {
+                if (!in_array($requisiciondetalle->getProducto()->getIdsubcategoria(), $idsubcategorias))
+                    array_push($idsubcategorias, $requisiciondetalle->getProducto()->getIdsubcategoria());
+            }
+        }
+        $ordenestablajeria = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $fecha, 'max' => $hoy))->find();
+        $ordentablajeria = new \Ordentablajeria();
+        foreach ($ordenestablajeria as $ordentablajeria) {
+            $ordenestablajeriadetalles = \OrdentablajeriadetalleQuery::create()->filterByIdordentablajeria($ordentablajeria->getIdordentablajeria())->find();
+            $ordentablajeriadetalle = new \Ordentablajeriadetalle();
+            foreach ($ordenestablajeriadetalles as $ordentablajeriadetalle) {
+                if (!in_array($ordentablajeriadetalle->getProducto()->getIdsubcategoria(), $idsubcategorias))
+                    array_push($idsubcategorias, $ordentablajeriadetalle->getProducto()->getIdsubcategoria());
+            }
+        }
+
+        return $idsubcategorias;
+    }
+
+    public function getrecientesProdAction() {
         $dias = $this->params()->fromQuery('dias');
         $fecha = date('Y-m-d', strtotime('-28 day'));
         $hoy = date('Y-m-d');
