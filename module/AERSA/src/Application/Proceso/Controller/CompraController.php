@@ -298,7 +298,7 @@ class CompraController extends AbstractActionController {
             $form->get('compra_folio')->setAttribute('class', 'form-control valid');
             
             //LOS DETALLES DE LA COMPRA
-            $compra_detalle = \CompradetalleQuery::create()->filterByIdcompra($entity->getIdcompra())->orderByIdcompradetalle(\Criteria::DESC)->find();
+            $compra_detalle = \CompradetalleQuery::create()->filterByIdcompra($entity->getIdcompra())->orderByIdcompradetalle(\Criteria::ASC)->find();
             
             //COUNT
             $count = \CompradetalleQuery::create()->orderByIdcompradetalle(\Criteria::DESC)->findOne();
