@@ -1,5 +1,6 @@
 <?php
 namespace Application\Catalogo\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -749,6 +750,42 @@ class ProductoController extends AbstractActionController
             
         }
 
+    }
+    
+    public function  exportAction() {
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $session = new \Shared\Session\AouthSession();
+            $session = $session->getData();
+            $post_data = $request->getPost();
+            $productosObj= \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->orderByProductoNombre('asc')->find();
+            $productoObj = new \Producto();
+            $reporte=array();
+            foreach ($productosObj as $productoObj) {
+                $iva=($productoObj->getProductoIva()==1) ? 'Si' : 'No';
+                $baja=($productoObj->getProductoBaja()==1) ? 'Si' : 'No';
+                array_push($reporte, array('nombre' => $productoObj->getProductoNombre(), 'unidad' => $productoObj->getUnidadmedida()->getUnidadmedidaNombre(), 'categoria' => $productoObj->getCategoriaRelatedByIdcategoria()->getCategoriaNombre(), 'subcategoria' => $productoObj->getCategoriaRelatedByIdsubcategoria()->getCategoriaNombre(), 'rendimiento' => $productoObj->getProductoRendimiento(), 'tipo' => ucfirst($productoObj->getProductoTipo()), 'precio' => $productoObj->getProductoPrecio(),'costo'=> $productoObj->getProductoCosto(),'iva' => $iva,'baja'=>$baja));
+            }
+            $template = '/productos.xlsx';
+            $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+            $config = array(
+                'template' => $template,
+                'templateDir' => $templateDir
+            );
+            $R = new \PHPReport($config);
+            $R->load(array(
+                array(
+                    'id' => 'producto',
+                    'repeat' => true,
+                    'data' => $reporte,
+                    'minRows' => 2,
+                )
+                    )
+            );
+            $formato=(isset($post_data['generar_pdf'])) ? 'PDF': 'excel';
+            echo $R->render($formato);
+            exit;
+        }
     }
     
 }

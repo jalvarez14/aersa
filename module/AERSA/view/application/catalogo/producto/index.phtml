@@ -20,9 +20,20 @@
         <div class="portlet-body form">
             <div class="form-body">
                 <div class="btn-set pull-right">
+                    <form action="/catalogo/producto/export" method="post">
+                    <button class="btn default" id="generar_excel" name="generar_pdf" type="submit" style="margin-bottom: 15px;">
+                        <i class="fa fa-file-excel-o"></i>
+                        Exportar Excel
+                    </button>
+                    <button class="btn default" id="generar_pdf" name="generar_pdf" type="submit" style="margin-bottom: 15px;">
+                        <i class="fa fa-file-pdf-o"></i>
+                        Exportar PDF
+                    </button>
+                    
                     <a id="subir_productos" href="javascript:;"><button class="btn default" type="button" style="margin-bottom: 15px;">Subir productos</button></a>
                    <input type="file" name="batch_productos" style="display: none" accept=".xls,.xlsx">
                     <a href="/catalogo/producto/nuevo"><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo producto</button></a>
+                    </form>
                 </div>
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable_product" style="border-bottom-width: 0px;">
                     <thead >
