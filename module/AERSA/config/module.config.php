@@ -453,6 +453,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'export' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/export[/:id]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'export',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                             'altaproductos' => array(
