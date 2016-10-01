@@ -330,6 +330,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'export' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/export',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Proveedor',
+                                                'action' => 'export',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                             'producto' => array(
@@ -456,7 +466,7 @@ return array(
                                     'export' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/export[/:id]',
+                                            'route' => '/export',
                                             'defaults' => array(
                                                 'controller' => 'Application\Catalogo\Controller\Producto',
                                                 'action' => 'export',

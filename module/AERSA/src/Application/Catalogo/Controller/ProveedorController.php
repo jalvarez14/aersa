@@ -1,5 +1,6 @@
 <?php
 namespace Application\Catalogo\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -242,6 +243,42 @@ class ProveedorController extends AbstractActionController
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
             return $this->getResponse()->setContent(json_encode(array('response' => true)));
             
+        }
+    }
+    
+    public function  exportAction() {
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $session = new \Shared\Session\AouthSession();
+            $session = $session->getData();
+            $post_data = $request->getPost();
+            $proveedoresObj= \ProveedorQuery::create()->filterByIdempresa($session['idempresa'])->orderByProveedorNombrecomercial('asc')->find();
+            $proveedorObj = new \Proveedor();
+            $reporte=array();
+            foreach ($proveedoresObj as $proveedorObj) {
+                array_push($reporte, array('nombre' => $proveedorObj->getProveedorNombrecomercial(), 'razonsocial' => $proveedorObj->getProveedorRazonsocial(), 'rfc' => $proveedorObj->getProveedorRfc(), 'telefono' => $proveedorObj->getProveedorTelefono()));
+            }
+            $template = '/proveedores.xlsx';
+            $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+            $config = array(
+                'template' => $template,
+                'templateDir' => $templateDir
+            );
+            $R = new \PHPReport($config);
+            $R->load(array(
+                array(
+                    'id' => 'proveedor',
+                    'repeat' => true,
+                    'data' => $reporte,
+                    'minRows' => 2,
+                )
+                    )
+            );
+            $formato=(isset($post_data['generar_pdf'])) ? 'PDF': 'excel';
+            echo $R->render($formato);
+            exit;
+        } else { 
+            return $this->redirect()->toUrl('/catalogo/proveedor');
         }
     }
     

@@ -785,6 +785,8 @@ class ProductoController extends AbstractActionController
             $formato=(isset($post_data['generar_pdf'])) ? 'PDF': 'excel';
             echo $R->render($formato);
             exit;
+        } else { 
+            return $this->redirect()->toUrl('/catalogo/producto');
         }
     }
     
