@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route' => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route' => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -2121,8 +2121,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route' => 'aersa', //LOCAL
-                    'route' => 'aersamx.com', //PRODUCCION
+                    'route' => 'aersa', //LOCAL
+                    //'route' => 'aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(

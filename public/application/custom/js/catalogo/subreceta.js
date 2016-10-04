@@ -2,14 +2,16 @@
 $( document ).ready(function() {
     
         
-  
+    var idproducto = $('input[name=idproducto]').val();    
     var data = new Bloodhound({
+        
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: '/autocomplete/getproductos?q=%QUERY',
+          url: '/autocomplete/getproductosreceta?q=%QUERY&idproducto='+idproducto,
           wildcard: '%QUERY'
-        }
+        },
+   
     });
 
     $('input#producto_autocomplete').typeahead(null, {
