@@ -766,7 +766,7 @@ class ProductoController extends AbstractActionController
                 $baja=($productoObj->getProductoBaja()==1) ? 'Si' : 'No';
                 array_push($reporte, array('nombre' => $productoObj->getProductoNombre(), 'unidad' => $productoObj->getUnidadmedida()->getUnidadmedidaNombre(), 'categoria' => $productoObj->getCategoriaRelatedByIdcategoria()->getCategoriaNombre(), 'subcategoria' => $productoObj->getCategoriaRelatedByIdsubcategoria()->getCategoriaNombre(), 'rendimiento' => $productoObj->getProductoRendimiento(), 'tipo' => ucfirst($productoObj->getProductoTipo()), 'precio' => $productoObj->getProductoPrecio(),'costo'=> $productoObj->getProductoCosto(),'iva' => $iva,'baja'=>$baja));
             }
-            $template = '/productos.xlsx';
+            $template = '/productosexportar.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
             $config = array(
                 'template' => $template,
