@@ -183,7 +183,7 @@ class ReportesController extends AbstractActionController {
             $prodRecientes = array();
             $post_data = $request->getPost();
             if ($post_data['movimientos_recientes'] == "Si") {
-                $prodRecientes = $this->getrecientesProdAction();
+                $prodRecientes = $this->getrecientesProdAction($post_data['almacen']);
             }
             $template = '/formatoinventario.xlsx';
             $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
@@ -438,7 +438,7 @@ class ReportesController extends AbstractActionController {
         return $idsubcategorias;
     }
 
-    public function getrecientesProdAction() {
+    public function getrecientesProdAction($idAlmacen) {
         $dias = $this->params()->fromQuery('dias');
         $fecha = date('Y-m-d', strtotime('-28 day'));
         $hoy = date('Y-m-d');
@@ -448,14 +448,14 @@ class ReportesController extends AbstractActionController {
         $compras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $fecha, 'max' => $hoy))->find();
         $compra = new \Compra();
         foreach ($compras as $compra) {
-            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
+            $comprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->filterByIdalmacen($idAlmacen)->find();
             $compradetalle = new \Compradetalle();
             foreach ($comprasdetalles as $compradetalle) {
                 if (!in_array($compradetalle->getIdproducto(), $idproductos))
                     array_push($idproductos, $compradetalle->getIdproducto());
             }
         }
-        $requisiciones = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $fecha, 'max' => $hoy))->find();
+        $requisiciones = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacenorigen($idAlmacen)->find();
         $requisicion = new \Requisicion();
         foreach ($requisiciones as $requisicion) {
             $requisicionesdetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
@@ -465,7 +465,7 @@ class ReportesController extends AbstractActionController {
                     array_push($idproductos, $requisiciondetalle->getIdproducto());
             }
         }
-        $ordenestablajeria = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $fecha, 'max' => $hoy))->find();
+        $ordenestablajeria = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacenorigen($idAlmacen)->find();
         $ordentablajeria = new \Ordentablajeria();
         foreach ($ordenestablajeria as $ordentablajeria) {
             $ordenestablajeriadetalles = \OrdentablajeriadetalleQuery::create()->filterByIdordentablajeria($ordentablajeria->getIdordentablajeria())->find();

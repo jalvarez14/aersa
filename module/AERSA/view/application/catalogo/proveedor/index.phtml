@@ -20,9 +20,19 @@
         <div class="portlet-body form">
             <div class="form-body">
                 <div class="btn-set pull-right">
-                    <input type="file" name="batch_proveedores" style="display: none" accept=".xls,.xlsx">
-                    <a id="subir_proveedor" href="#"><button class="btn default" type="button" style="margin-bottom: 15px; margin-right: 10px">Subir proveedores</button></a>
-                    <a href="/catalogo/proveedor/nuevo"><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo proveedor</button></a>
+                    <form action="/catalogo/proveedor/export" method="post">
+                        <button class="btn default" id="generar_excel" name="generar_excel" type="submit" style="margin-bottom: 15px;">
+                            <i class="fa fa-file-excel-o"></i>
+                            Exportar Excel
+                        </button>
+                        <button class="btn default" id="generar_pdf" name="generar_pdf" type="submit" style="margin-bottom: 15px;">
+                            <i class="fa fa-file-pdf-o"></i>
+                            Exportar PDF
+                        </button>
+                        <input type="file" name="batch_proveedores" style="display: none" accept=".xls,.xlsx">
+                        <a id="subir_proveedor" href="#"><button class="btn default" type="button" style="margin-bottom: 15px; margin-right: 10px">Subir proveedores</button></a>
+                        <a href="/catalogo/proveedor/nuevo"><button class="btn default" type="button" style="margin-bottom: 15px;">Nuevo proveedor</button></a>
+                    </form>
                 </div>
                 <table class="table table-striped table-bordered table-hover order-column" id="datatable" style="border-bottom-width: 0px;">
                     <thead >
