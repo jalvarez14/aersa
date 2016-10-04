@@ -83,8 +83,7 @@ class CardexController extends AbstractActionController {
                         }
                     }
                     $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
-                    $costoPromedio = ($costoPromedio > 0) ? $costoPromedio * -1 : $costoPromedio;
-
+                    $costoPromedio = ($costoPromedio < 0) ? $costoPromedio * -1 : $costoPromedio;
                     $saldoIni = $costoPromedio * $exisinicial;
                     array_push($reporte, "<tr bgcolor='" . $bginfo . "'><td>Producto: $nombreProducto</td><td>Unidad: $unidad</td><td>Categoria: $categoria</td><td>Subcategoria: $subcategoria</td><td>Existenica Ini $exisinicial</td><td>Saldo Ini: $saldoIni</td><td>CP: $costoPromedio</td></tr>");
 
