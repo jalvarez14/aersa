@@ -131,7 +131,7 @@ class ProductoController extends AbstractActionController
             
             //SEARCH
             if(!empty($post_data['search']['value'])){
-                $search_value = utf8_encode($post_data['search']['value']);
+ 
                 $search_value = str_replace("Ñ", "Ã‘", $search_value);
                 $search_value = str_replace("L'", "L'", $search_value);
                 $search_value = str_replace("Ç", "Ã‡", $search_value);
