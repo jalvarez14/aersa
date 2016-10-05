@@ -132,6 +132,20 @@ class ProductoController extends AbstractActionController
             //SEARCH
             if(!empty($post_data['search']['value'])){
                 $search_value = utf8_encode($post_data['search']['value']);
+                $search_value = str_replace("Ñ", "Ã‘", $search_value);
+                $search_value = str_replace("L'", "L'", $search_value);
+                $search_value = str_replace("Ç", "Ã‡", $search_value);
+                $search_value = str_replace("À", "Ã€", $search_value);
+                $search_value = str_replace("È", "Ãˆ", $search_value);
+                $search_value = str_replace("Û", "Ã›", $search_value);
+                $search_value = str_replace("´", "Â´", $search_value);
+                $search_value = str_replace("ñ", "Ã±", $search_value);
+                $search_value = str_replace("Ú", "Ãš", $search_value);
+                $search_value = str_replace("é", "Ã©", $search_value);
+                $search_value = str_replace("Á", "Ã", $search_value);
+                $search_value = str_replace("ó", "Ã³", $search_value);
+                $search_value = str_replace("'", "'", $search_value);
+                $search_value = str_replace("ú", "Ãº", $search_value);
                 $c = new \Criteria();
                 
                 $c1= $c->getNewCriterion('producto.producto_nombre', '%'.$search_value.'%', \Criteria::LIKE);

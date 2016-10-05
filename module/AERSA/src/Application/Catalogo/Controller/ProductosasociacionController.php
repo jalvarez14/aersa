@@ -46,8 +46,8 @@ class ProductosasociacionController extends AbstractActionController
             return $this->redirect()->toUrl('/catalogo/asociacionproductos');
         }
         
-        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
-                
+        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
+        echo '<pre>';var_dump($almacenes->toArray());echo'</pre>';exit();        
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/catalogo/productosasociacion/index');

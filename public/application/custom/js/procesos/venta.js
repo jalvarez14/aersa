@@ -155,7 +155,13 @@
                             //VALIDAMOS SI EL XML TIENE DATOS 
                             if(typeof workbook_array[first_sheet_name] != 'undefined'){
                                 
-                                var cont_rows = workbook.Sheets[first_sheet_name]['!range'].e.r;
+                                if(typeof workbook.Sheets[first_sheet_name]['!range'] != 'undefined'){
+                                    var cont_rows = workbook.Sheets[first_sheet_name]['!range'].e.r;
+                                    
+                                }else{
+                                    var cont_rows = workbook_array[first_sheet_name].length;
+                                }
+
                                 var ventas_array = Array();
                                 for(var i=2;i<=cont_rows;i++){
                                     
