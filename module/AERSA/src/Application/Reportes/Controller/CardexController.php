@@ -2,6 +2,8 @@
 
 namespace Application\Reportes\Controller;
 
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
@@ -18,9 +20,21 @@ class CardexController extends AbstractActionController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
+            $archivo = false;
+            if (isset($post_data['generar_excel']) || isset($post_data['generar_pdf'])) {
+                $alm = array();
+                $post_data['inicio'] = $post_data['fecha_inicio'];
+                $post_data['fin'] = $post_data['fecha_fin'];
+                $archivo = true;
+                foreach ($post_data as $key => $value) {
+                    if (strpos($key, '-'))
+                        array_push($alm, substr($key, 4));
+                }
+                $post_data['almacenes'] = $alm;
+            }
             $reporte = array();
             foreach ($post_data['almacenes'] as $idalmacen) {
-
+                echo "entro";
                 $inicioSpli = explode('/', $post_data['inicio']);
                 $finSpli = explode('/', $post_data['fin']);
 
@@ -56,8 +70,11 @@ class CardexController extends AbstractActionController {
                 $color = true;
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
                 $objproducto = new \Producto();
-                $nombreAlmacen=  \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenNombre();
-                array_push($reporte, "<tr><td>Almacen:</td><td>$nombreAlmacen</td></tr>");
+                $nombreAlmacen = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenNombre();
+                if ($archivo)
+                    array_push($reporte, array('uno' => 'Almacen:', 'dos' => $nombreAlmacen, 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => ''));
+                else
+                    array_push($reporte, "<tr><td>Almacen:</td><td>$nombreAlmacen</td></tr>");
                 foreach ($objproductos as $objproducto) {
                     $nombreProducto = $objproducto->getProductoNombre();
                     $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
@@ -85,7 +102,10 @@ class CardexController extends AbstractActionController {
                     $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
                     $costoPromedio = ($costoPromedio < 0) ? $costoPromedio * -1 : $costoPromedio;
                     $saldoIni = $costoPromedio * $exisinicial;
-                    array_push($reporte, "<tr bgcolor='" . $bginfo . "'><td>Producto: $nombreProducto</td><td>Unidad: $unidad</td><td>Categoria: $categoria</td><td>Subcategoria: $subcategoria</td><td>Existenica Ini $exisinicial</td><td>Saldo Ini: $saldoIni</td><td>CP: $costoPromedio</td></tr>");
+                    if ($archivo)
+                        array_push($reporte, array('uno' => 'Producto:', 'dos' => $nombreProducto, 'tres' => 'Unidad:' . $unidad, 'cuatro' => 'Categoria:', 'cinco' => $categoria, 'seis' => 'Subcategoria:', 'siete' => $subcategoria, 'ocho' => 'Existenica Ini: ' . $exisinicial, 'nueve' => 'Saldo Ini: ' . $saldoIni, 'diez' => 'CP: ' . $costoPromedio, 'once' => ''));
+                    else
+                        array_push($reporte, "<tr bgcolor='" . $bginfo . "'><td>Producto: $nombreProducto</td><td>Unidad: $unidad</td><td>Categoria: $categoria</td><td>Subcategoria: $subcategoria</td><td>Existenica Ini $exisinicial</td><td>Saldo Ini: $saldoIni</td><td>CP: $costoPromedio</td></tr>");
 
                     $objcompra = new \Compra();
                     foreach ($objcompras as $objcompra) {
@@ -106,7 +126,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial+=$objcompradetalle->getCompradetalleCantidad();
                             $entradaefec = $objcompradetalle->getCompradetalleCantidad() * $costoPromedio;
                             $saldoIni+=$objcompradetalle->getCompradetalleCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
                     //array_push($reporte, "<tr bgcolor='".$colorbg."'><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
@@ -128,7 +151,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                             $entradaefec = $objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
                             $saldoIni+=$objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
 
@@ -150,7 +176,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial+=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
                             $entradaefec = $objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
                             $saldoIni+=$objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
 
@@ -167,7 +196,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial+=$objajusteinvSob->getAjusteinventarioCantidad();
                             $entradaefec = $objajusteinvSob->getAjusteinventarioCantidad() * $costoPromedio;
                             $saldoIni+=$objajusteinvSob->getAjusteinventarioCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
 
@@ -190,7 +222,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial-=$objventadetalle->getVentadetalleCantidad();
                             $salidaefec = $objventadetalle->getVentadetalleCantidad() * $costoPromedio;
                             $saldoIni-=$objventadetalle->getVentadetalleCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
 
@@ -213,7 +248,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial-=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                             $salidaefec = $objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
                             $saldoIni-=$objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
 
@@ -235,7 +273,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial-=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
                             $salidaefec = $objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
                             $saldoIni-=$objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
 
@@ -258,7 +299,10 @@ class CardexController extends AbstractActionController {
                             $exisinicial-=$objdevoluciondetalle->getDevoluciondetalleCantidad();
                             $salidaefec = $objdevoluciondetalle->getDevoluciondetalleCantidad() * $costoPromedio;
                             $saldoIni-=$objdevoluciondetalle->getDevoluciondetalleCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
 
@@ -275,16 +319,56 @@ class CardexController extends AbstractActionController {
                             $exisinicial-=$objajusteinvFal->getAjusteinventarioCantidad();
                             $salidaefec = $objajusteinvFal->getAjusteinventarioCantidad() * $costoPromedio;
                             $saldoIni+=$objajusteinvFal->getAjusteinventarioCantidad() * $costoPromedio;
-                            array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                            if ($archivo)
+                                array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
+                            else
+                                array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                         }
                     }
                 }
-
-                
             }
-            return $this->getResponse()->setContent(json_encode($reporte));
-            var_dump($reporte);
-            exit;
+            if ($archivo) {
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+                $template = '/kardex.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa),
+                        'format' => array(
+                            'date' => array('datetime' => 'd/m/Y')
+                        )
+                    ),
+                    array(
+                        'id' => 'reporte',
+                        'data' => array('fechainicio' => $post_data['inicio'], 'fechafinal' => $post_data['fin']),
+                        'format' => array(
+                            'date' => array('datetime' => 'd/m/Y')
+                        )
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $reporte,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if (isset($post_data['generar_pdf']))
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+                exit();
+            } else {
+                return $this->getResponse()->setContent(json_encode($reporte));
+                exit;
+            }
         }
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A LA EMPRESA Y SUCURSAL---
         //$collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();

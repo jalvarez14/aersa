@@ -1,16 +1,16 @@
 <link href="/application/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css" />
 <link href="/application/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css" />
 <div id="my_container">
-    <h3 class="page-title">Cardex</h3>
+    <h3 class="page-title">Kardex</h3>
     <div class="page-bar">
         <ul class="page-breadcrumb">
             <li>
-                <a href="/administracion/reportes/cardex">Cardex</a>
+                <a href="/reportes/kardex">Kardex</a>
             </li>
         </ul>
     </div>
     <?php
-    $form->setAttribute('action', '/administracion/reportes/cardex');
+    $form->setAttribute('action', '/reportes/kardex');
     echo $this->form()->openTag($form);
     ?>
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
@@ -33,7 +33,7 @@
                         <?php $almacen=new Almacen();foreach ($almacenes as $almacen):?>
                         <div class="col-md-3">
                             <label>
-                                <input id="<?php echo $almacen->getIdalmacen();?>" name="<?php ucfirst($almacen->getAlmacenNombre()) ?>" value="<?php echo ucfirst($almacen->getAlmacenNombre())?>" type="checkbox" class="icheck generado"> <?php echo ucfirst($almacen->getAlmacenNombre())?>
+                                <input id="<?php echo $almacen->getIdalmacen();?>" name="gen-<?php echo $almacen->getIdalmacen()?>" value="<?php echo ucfirst($almacen->getAlmacenNombre())?>" type="checkbox" class="icheck generado"> <?php echo ucfirst($almacen->getAlmacenNombre())?>
                             </label>
                         </div>
                         <?php endforeach;?>
@@ -46,6 +46,18 @@
                     </div>
                 </div>
                 <div class="form-actions right">
+                    <div class="left col-md-2">
+                        <button disabled class="btn blue" id="generar_pdf" name="generar_pdf" type="submit">
+                            <i class="fa fa-file-pdf-o"></i>
+                            PDF
+                        </button>
+                    </div>
+                    <div class="left col-md-2">
+                        <button disabled class="btn blue" id="generar_excel" name="generar_excel" type="submit">
+                            <i class="fa fa-file-excel-o"></i>
+                            Excel
+                        </button>
+                    </div>
                     <button disabled class="btn blue" id="generar" type="button">
                         <i class="fa fa-check"></i>
                         Generar
