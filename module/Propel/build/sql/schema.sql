@@ -1446,6 +1446,7 @@ CREATE TABLE `receta`
     `idproductoreceta` INTEGER NOT NULL,
     `receta_cantidad` FLOAT NOT NULL,
     `receta_cantidadoriginal` FLOAT,
+    `receta_unidad` enum('Botella','Pieza','Onza','Copa vino 187.5 ML','Copa vino 150 ML'),
     PRIMARY KEY (`idreceta`),
     INDEX `idproducto` (`idproducto`),
     INDEX `idproductoreceta` (`idproductoreceta`),

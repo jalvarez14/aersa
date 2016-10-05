@@ -11,12 +11,14 @@
  * @method RecetaQuery orderByIdproductoreceta($order = Criteria::ASC) Order by the idproductoreceta column
  * @method RecetaQuery orderByRecetaCantidad($order = Criteria::ASC) Order by the receta_cantidad column
  * @method RecetaQuery orderByRecetaCantidadoriginal($order = Criteria::ASC) Order by the receta_cantidadoriginal column
+ * @method RecetaQuery orderByRecetaUnidad($order = Criteria::ASC) Order by the receta_unidad column
  *
  * @method RecetaQuery groupByIdreceta() Group by the idreceta column
  * @method RecetaQuery groupByIdproducto() Group by the idproducto column
  * @method RecetaQuery groupByIdproductoreceta() Group by the idproductoreceta column
  * @method RecetaQuery groupByRecetaCantidad() Group by the receta_cantidad column
  * @method RecetaQuery groupByRecetaCantidadoriginal() Group by the receta_cantidadoriginal column
+ * @method RecetaQuery groupByRecetaUnidad() Group by the receta_unidad column
  *
  * @method RecetaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method RecetaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -37,12 +39,14 @@
  * @method Receta findOneByIdproductoreceta(int $idproductoreceta) Return the first Receta filtered by the idproductoreceta column
  * @method Receta findOneByRecetaCantidad(double $receta_cantidad) Return the first Receta filtered by the receta_cantidad column
  * @method Receta findOneByRecetaCantidadoriginal(double $receta_cantidadoriginal) Return the first Receta filtered by the receta_cantidadoriginal column
+ * @method Receta findOneByRecetaUnidad(string $receta_unidad) Return the first Receta filtered by the receta_unidad column
  *
  * @method array findByIdreceta(int $idreceta) Return Receta objects filtered by the idreceta column
  * @method array findByIdproducto(int $idproducto) Return Receta objects filtered by the idproducto column
  * @method array findByIdproductoreceta(int $idproductoreceta) Return Receta objects filtered by the idproductoreceta column
  * @method array findByRecetaCantidad(double $receta_cantidad) Return Receta objects filtered by the receta_cantidad column
  * @method array findByRecetaCantidadoriginal(double $receta_cantidadoriginal) Return Receta objects filtered by the receta_cantidadoriginal column
+ * @method array findByRecetaUnidad(string $receta_unidad) Return Receta objects filtered by the receta_unidad column
  *
  * @package    propel.generator.aersa.om
  */
@@ -150,7 +154,7 @@ abstract class BaseRecetaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idreceta`, `idproducto`, `idproductoreceta`, `receta_cantidad`, `receta_cantidadoriginal` FROM `receta` WHERE `idreceta` = :p0';
+        $sql = 'SELECT `idreceta`, `idproducto`, `idproductoreceta`, `receta_cantidad`, `receta_cantidadoriginal`, `receta_unidad` FROM `receta` WHERE `idreceta` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -451,6 +455,35 @@ abstract class BaseRecetaQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RecetaPeer::RECETA_CANTIDADORIGINAL, $recetaCantidadoriginal, $comparison);
+    }
+
+    /**
+     * Filter the query on the receta_unidad column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRecetaUnidad('fooValue');   // WHERE receta_unidad = 'fooValue'
+     * $query->filterByRecetaUnidad('%fooValue%'); // WHERE receta_unidad LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $recetaUnidad The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return RecetaQuery The current query, for fluid interface
+     */
+    public function filterByRecetaUnidad($recetaUnidad = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($recetaUnidad)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $recetaUnidad)) {
+                $recetaUnidad = str_replace('*', '%', $recetaUnidad);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(RecetaPeer::RECETA_UNIDAD, $recetaUnidad, $comparison);
     }
 
     /**

@@ -24,13 +24,13 @@ abstract class BaseRecetaPeer
     const TM_CLASS = 'RecetaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /** the column name for the idreceta field */
     const IDRECETA = 'receta.idreceta';
@@ -46,6 +46,16 @@ abstract class BaseRecetaPeer
 
     /** the column name for the receta_cantidadoriginal field */
     const RECETA_CANTIDADORIGINAL = 'receta.receta_cantidadoriginal';
+
+    /** the column name for the receta_unidad field */
+    const RECETA_UNIDAD = 'receta.receta_unidad';
+
+    /** The enumerated values for the receta_unidad field */
+    const RECETA_UNIDAD_BOTELLA = 'Botella';
+    const RECETA_UNIDAD_PIEZA = 'Pieza';
+    const RECETA_UNIDAD_ONZA = 'Onza';
+    const RECETA_UNIDAD_COPA_VINO_187_5_ML = 'Copa vino 187.5 ML';
+    const RECETA_UNIDAD_COPA_VINO_150_ML = 'Copa vino 150 ML';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -66,12 +76,12 @@ abstract class BaseRecetaPeer
      * e.g. RecetaPeer::$fieldNames[RecetaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idreceta', 'Idproducto', 'Idproductoreceta', 'RecetaCantidad', 'RecetaCantidadoriginal', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idreceta', 'idproducto', 'idproductoreceta', 'recetaCantidad', 'recetaCantidadoriginal', ),
-        BasePeer::TYPE_COLNAME => array (RecetaPeer::IDRECETA, RecetaPeer::IDPRODUCTO, RecetaPeer::IDPRODUCTORECETA, RecetaPeer::RECETA_CANTIDAD, RecetaPeer::RECETA_CANTIDADORIGINAL, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDRECETA', 'IDPRODUCTO', 'IDPRODUCTORECETA', 'RECETA_CANTIDAD', 'RECETA_CANTIDADORIGINAL', ),
-        BasePeer::TYPE_FIELDNAME => array ('idreceta', 'idproducto', 'idproductoreceta', 'receta_cantidad', 'receta_cantidadoriginal', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idreceta', 'Idproducto', 'Idproductoreceta', 'RecetaCantidad', 'RecetaCantidadoriginal', 'RecetaUnidad', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idreceta', 'idproducto', 'idproductoreceta', 'recetaCantidad', 'recetaCantidadoriginal', 'recetaUnidad', ),
+        BasePeer::TYPE_COLNAME => array (RecetaPeer::IDRECETA, RecetaPeer::IDPRODUCTO, RecetaPeer::IDPRODUCTORECETA, RecetaPeer::RECETA_CANTIDAD, RecetaPeer::RECETA_CANTIDADORIGINAL, RecetaPeer::RECETA_UNIDAD, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDRECETA', 'IDPRODUCTO', 'IDPRODUCTORECETA', 'RECETA_CANTIDAD', 'RECETA_CANTIDADORIGINAL', 'RECETA_UNIDAD', ),
+        BasePeer::TYPE_FIELDNAME => array ('idreceta', 'idproducto', 'idproductoreceta', 'receta_cantidad', 'receta_cantidadoriginal', 'receta_unidad', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -81,12 +91,23 @@ abstract class BaseRecetaPeer
      * e.g. RecetaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idreceta' => 0, 'Idproducto' => 1, 'Idproductoreceta' => 2, 'RecetaCantidad' => 3, 'RecetaCantidadoriginal' => 4, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idreceta' => 0, 'idproducto' => 1, 'idproductoreceta' => 2, 'recetaCantidad' => 3, 'recetaCantidadoriginal' => 4, ),
-        BasePeer::TYPE_COLNAME => array (RecetaPeer::IDRECETA => 0, RecetaPeer::IDPRODUCTO => 1, RecetaPeer::IDPRODUCTORECETA => 2, RecetaPeer::RECETA_CANTIDAD => 3, RecetaPeer::RECETA_CANTIDADORIGINAL => 4, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDRECETA' => 0, 'IDPRODUCTO' => 1, 'IDPRODUCTORECETA' => 2, 'RECETA_CANTIDAD' => 3, 'RECETA_CANTIDADORIGINAL' => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('idreceta' => 0, 'idproducto' => 1, 'idproductoreceta' => 2, 'receta_cantidad' => 3, 'receta_cantidadoriginal' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('Idreceta' => 0, 'Idproducto' => 1, 'Idproductoreceta' => 2, 'RecetaCantidad' => 3, 'RecetaCantidadoriginal' => 4, 'RecetaUnidad' => 5, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idreceta' => 0, 'idproducto' => 1, 'idproductoreceta' => 2, 'recetaCantidad' => 3, 'recetaCantidadoriginal' => 4, 'recetaUnidad' => 5, ),
+        BasePeer::TYPE_COLNAME => array (RecetaPeer::IDRECETA => 0, RecetaPeer::IDPRODUCTO => 1, RecetaPeer::IDPRODUCTORECETA => 2, RecetaPeer::RECETA_CANTIDAD => 3, RecetaPeer::RECETA_CANTIDADORIGINAL => 4, RecetaPeer::RECETA_UNIDAD => 5, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDRECETA' => 0, 'IDPRODUCTO' => 1, 'IDPRODUCTORECETA' => 2, 'RECETA_CANTIDAD' => 3, 'RECETA_CANTIDADORIGINAL' => 4, 'RECETA_UNIDAD' => 5, ),
+        BasePeer::TYPE_FIELDNAME => array ('idreceta' => 0, 'idproducto' => 1, 'idproductoreceta' => 2, 'receta_cantidad' => 3, 'receta_cantidadoriginal' => 4, 'receta_unidad' => 5, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
+    );
+
+    /** The enumerated values for this table */
+    protected static $enumValueSets = array(
+        RecetaPeer::RECETA_UNIDAD => array(
+            RecetaPeer::RECETA_UNIDAD_BOTELLA,
+            RecetaPeer::RECETA_UNIDAD_PIEZA,
+            RecetaPeer::RECETA_UNIDAD_ONZA,
+            RecetaPeer::RECETA_UNIDAD_COPA_VINO_187_5_ML,
+            RecetaPeer::RECETA_UNIDAD_COPA_VINO_150_ML,
+        ),
     );
 
     /**
@@ -129,6 +150,51 @@ abstract class BaseRecetaPeer
     }
 
     /**
+     * Gets the list of values for all ENUM columns
+     * @return array
+     */
+    public static function getValueSets()
+    {
+      return RecetaPeer::$enumValueSets;
+    }
+
+    /**
+     * Gets the list of values for an ENUM column
+     *
+     * @param string $colname The ENUM column name.
+     *
+     * @return array list of possible values for the column
+     */
+    public static function getValueSet($colname)
+    {
+        $valueSets = RecetaPeer::getValueSets();
+
+        if (!isset($valueSets[$colname])) {
+            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
+        }
+
+        return $valueSets[$colname];
+    }
+
+    /**
+     * Gets the SQL value for the ENUM column value
+     *
+     * @param string $colname ENUM column name.
+     * @param string $enumVal ENUM value.
+     *
+     * @return int SQL value
+     */
+    public static function getSqlValueForEnum($colname, $enumVal)
+    {
+        $values = RecetaPeer::getValueSet($colname);
+        if (!in_array($enumVal, $values)) {
+            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
+        }
+
+        return array_search($enumVal, $values);
+    }
+
+    /**
      * Convenience method which changes table.column to alias.column.
      *
      * Using this method you can maintain SQL abstraction while using column aliases.
@@ -165,12 +231,14 @@ abstract class BaseRecetaPeer
             $criteria->addSelectColumn(RecetaPeer::IDPRODUCTORECETA);
             $criteria->addSelectColumn(RecetaPeer::RECETA_CANTIDAD);
             $criteria->addSelectColumn(RecetaPeer::RECETA_CANTIDADORIGINAL);
+            $criteria->addSelectColumn(RecetaPeer::RECETA_UNIDAD);
         } else {
             $criteria->addSelectColumn($alias . '.idreceta');
             $criteria->addSelectColumn($alias . '.idproducto');
             $criteria->addSelectColumn($alias . '.idproductoreceta');
             $criteria->addSelectColumn($alias . '.receta_cantidad');
             $criteria->addSelectColumn($alias . '.receta_cantidadoriginal');
+            $criteria->addSelectColumn($alias . '.receta_unidad');
         }
     }
 

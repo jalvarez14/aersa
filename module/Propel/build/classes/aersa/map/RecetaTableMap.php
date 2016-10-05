@@ -43,6 +43,14 @@ class RecetaTableMap extends TableMap
         $this->addForeignKey('idproductoreceta', 'Idproductoreceta', 'INTEGER', 'producto', 'idproducto', true, null, null);
         $this->addColumn('receta_cantidad', 'RecetaCantidad', 'FLOAT', true, null, null);
         $this->addColumn('receta_cantidadoriginal', 'RecetaCantidadoriginal', 'FLOAT', false, null, null);
+        $this->addColumn('receta_unidad', 'RecetaUnidad', 'CHAR', false, null, null);
+        $this->getColumn('receta_unidad', false)->setValueSet(array (
+  0 => 'Botella',
+  1 => 'Pieza',
+  2 => 'Onza',
+  3 => 'Copa vino 187.5 ML',
+  4 => 'Copa vino 150 ML',
+));
         // validators
     } // initialize()
 

@@ -586,6 +586,9 @@ class ProductoController extends AbstractActionController
         
         $form = new \Application\Catalogo\Form\SubrecetaForm($productos);
         
+        $habilitar_unidad = \ProductoQuery::create()->filterByIdproducto($prod->getIdproducto())->filterByProductoTipo(array('plu','subreceta'))->filterByIdcategoria(2)->exists();
+        
+        
         
         if ($request->isPost()) 
         {
@@ -631,6 +634,7 @@ class ProductoController extends AbstractActionController
             'form'      => $form,
             'messages'  => $this->flashMessenger(),
             'producto'  => $prod,
+            'habilitar_unidad'  => $habilitar_unidad,
             
         ));
         $view_model->setTemplate('/application/catalogo/producto/nuevasubreceta');
@@ -661,6 +665,7 @@ class ProductoController extends AbstractActionController
         if ($exist) 
         {
             $producto = \ProductoQuery::create()->findPk($prod);
+            $habilitar_unidad = \ProductoQuery::create()->filterByIdproducto($producto->getIdproducto())->filterByProductoTipo(array('plu','subreceta'))->filterByIdcategoria(2)->exists();
             
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \RecetaQuery::create()->filterByIdproducto($prod)->filterByIdproductoreceta($id)->findOne();
@@ -716,6 +721,7 @@ class ProductoController extends AbstractActionController
             'data'      => $dataProd,
              'empresa_habilitarrecetas' => $emp->getEmpresaHabilitarrecetas(),
             'empresa_habilitarproductos' => $emp->getEmpresaHabilitarproductos(),
+            'habilitar_unidad'  => $habilitar_unidad,
         ));
         $view_model->setTemplate('/application/catalogo/producto/editarsubreceta');
         return $view_model;

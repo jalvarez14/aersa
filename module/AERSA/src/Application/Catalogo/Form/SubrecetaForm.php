@@ -56,10 +56,25 @@ class SubrecetaForm extends Form
             ),
         ));
         
-        
-        
-        
-        
+        $this->add(array(
+            'name' => 'receta_unidad',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Unidad *',
+                'value_options' => array(
+                    'Botella' => 'Botella',
+                    'Pieza' => 'Pieza',
+                    'Onza' => 'Onza',
+                    'Copa vino 187.5 ML' => 'Copa vino 187.5 ML',
+                    'Copa vino 150 ML' => 'Copa vino 150 ML',
+  
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));  
         
     }
 }

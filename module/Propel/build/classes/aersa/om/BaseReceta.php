@@ -60,6 +60,12 @@ abstract class BaseReceta extends BaseObject implements Persistent
     protected $receta_cantidadoriginal;
 
     /**
+     * The value for the receta_unidad field.
+     * @var        string
+     */
+    protected $receta_unidad;
+
+    /**
      * @var        Producto
      */
     protected $aProductoRelatedByIdproducto;
@@ -142,6 +148,17 @@ abstract class BaseReceta extends BaseObject implements Persistent
     {
 
         return $this->receta_cantidadoriginal;
+    }
+
+    /**
+     * Get the [receta_unidad] column value.
+     *
+     * @return string
+     */
+    public function getRecetaUnidad()
+    {
+
+        return $this->receta_unidad;
     }
 
     /**
@@ -258,6 +275,27 @@ abstract class BaseReceta extends BaseObject implements Persistent
     } // setRecetaCantidadoriginal()
 
     /**
+     * Set the value of [receta_unidad] column.
+     *
+     * @param  string $v new value
+     * @return Receta The current object (for fluent API support)
+     */
+    public function setRecetaUnidad($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->receta_unidad !== $v) {
+            $this->receta_unidad = $v;
+            $this->modifiedColumns[] = RecetaPeer::RECETA_UNIDAD;
+        }
+
+
+        return $this;
+    } // setRecetaUnidad()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -294,6 +332,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
             $this->idproductoreceta = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->receta_cantidad = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
             $this->receta_cantidadoriginal = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
+            $this->receta_unidad = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -303,7 +342,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 5; // 5 = RecetaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = RecetaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Receta object", $e);
@@ -557,6 +596,9 @@ abstract class BaseReceta extends BaseObject implements Persistent
         if ($this->isColumnModified(RecetaPeer::RECETA_CANTIDADORIGINAL)) {
             $modifiedColumns[':p' . $index++]  = '`receta_cantidadoriginal`';
         }
+        if ($this->isColumnModified(RecetaPeer::RECETA_UNIDAD)) {
+            $modifiedColumns[':p' . $index++]  = '`receta_unidad`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `receta` (%s) VALUES (%s)',
@@ -582,6 +624,9 @@ abstract class BaseReceta extends BaseObject implements Persistent
                         break;
                     case '`receta_cantidadoriginal`':
                         $stmt->bindValue($identifier, $this->receta_cantidadoriginal, PDO::PARAM_STR);
+                        break;
+                    case '`receta_unidad`':
+                        $stmt->bindValue($identifier, $this->receta_unidad, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -750,6 +795,9 @@ abstract class BaseReceta extends BaseObject implements Persistent
             case 4:
                 return $this->getRecetaCantidadoriginal();
                 break;
+            case 5:
+                return $this->getRecetaUnidad();
+                break;
             default:
                 return null;
                 break;
@@ -784,6 +832,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
             $keys[2] => $this->getIdproductoreceta(),
             $keys[3] => $this->getRecetaCantidad(),
             $keys[4] => $this->getRecetaCantidadoriginal(),
+            $keys[5] => $this->getRecetaUnidad(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -846,6 +895,9 @@ abstract class BaseReceta extends BaseObject implements Persistent
             case 4:
                 $this->setRecetaCantidadoriginal($value);
                 break;
+            case 5:
+                $this->setRecetaUnidad($value);
+                break;
         } // switch()
     }
 
@@ -875,6 +927,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
         if (array_key_exists($keys[2], $arr)) $this->setIdproductoreceta($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setRecetaCantidad($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setRecetaCantidadoriginal($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setRecetaUnidad($arr[$keys[5]]);
     }
 
     /**
@@ -891,6 +944,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
         if ($this->isColumnModified(RecetaPeer::IDPRODUCTORECETA)) $criteria->add(RecetaPeer::IDPRODUCTORECETA, $this->idproductoreceta);
         if ($this->isColumnModified(RecetaPeer::RECETA_CANTIDAD)) $criteria->add(RecetaPeer::RECETA_CANTIDAD, $this->receta_cantidad);
         if ($this->isColumnModified(RecetaPeer::RECETA_CANTIDADORIGINAL)) $criteria->add(RecetaPeer::RECETA_CANTIDADORIGINAL, $this->receta_cantidadoriginal);
+        if ($this->isColumnModified(RecetaPeer::RECETA_UNIDAD)) $criteria->add(RecetaPeer::RECETA_UNIDAD, $this->receta_unidad);
 
         return $criteria;
     }
@@ -958,6 +1012,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
         $copyObj->setIdproductoreceta($this->getIdproductoreceta());
         $copyObj->setRecetaCantidad($this->getRecetaCantidad());
         $copyObj->setRecetaCantidadoriginal($this->getRecetaCantidadoriginal());
+        $copyObj->setRecetaUnidad($this->getRecetaUnidad());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1130,6 +1185,7 @@ abstract class BaseReceta extends BaseObject implements Persistent
         $this->idproductoreceta = null;
         $this->receta_cantidad = null;
         $this->receta_cantidadoriginal = null;
+        $this->receta_unidad = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

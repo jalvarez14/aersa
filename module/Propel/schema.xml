@@ -1219,6 +1219,7 @@
     <column name="idproductoreceta" phpName="Idproductoreceta" type="INTEGER" required="true"/>
     <column name="receta_cantidad" phpName="RecetaCantidad" type="FLOAT" required="true"/>
     <column name="receta_cantidadoriginal" phpName="RecetaCantidadoriginal" type="FLOAT" required="false"/>
+    <column name="receta_unidad" phpName="RecetaUnidad" type="CHAR" sqlType="enum('Botella','Pieza','Onza','Copa vino 187.5 ML','Copa vino 150 ML')" required="false"/>
     <foreign-key foreignTable="producto" name="idproducto_receta" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idproducto" foreign="idproducto"/>
     </foreign-key>

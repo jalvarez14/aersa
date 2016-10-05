@@ -51,7 +51,7 @@ class UsuarioController extends AbstractActionController {
         {
             
             $post_data = $request->getPost();
-
+            
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $post_data['usuario_estatus'] = 3;
             $form->setData($post_data);
@@ -504,7 +504,7 @@ class UsuarioController extends AbstractActionController {
                 }
 
                 //SETEAMOS EL STATUS Y EL PASSWORD
-                $entity->setUsuarioPassword(md5($post_data['usuario_passoword']));
+                $entity->setUsuarioPassword(md5($post_data['usuario_password']));
                 $entity->save();
 
                 //Proceso para establecer la relación con la empresa
