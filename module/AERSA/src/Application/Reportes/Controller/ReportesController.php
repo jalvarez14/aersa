@@ -683,11 +683,20 @@ class ReportesController extends AbstractActionController {
         }
 
         //INTANCIAMOS NUESTRA VISTA
-        $mes_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('m');
-        $anio_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('Y');
-        $mes_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('m');
-        $anio_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('Y');
-
+        $mes_min=0;
+        $anio_min=0;
+        $mes_max=0;
+        $anio_max=0;
+        $existencia=1;
+        $exits=\FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->exists();
+        if($exits) {
+            $mes_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('m');
+            $anio_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('Y');
+            $mes_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('m');
+            $anio_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('Y');
+        } else {
+            $existencia=0;
+        }
         $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
         $proveedores = \ProveedorQuery::create()->filterByIdempresa($idempresa)->find();
         $almacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->find();
@@ -702,6 +711,7 @@ class ReportesController extends AbstractActionController {
             'anio_min' => $anio_min,
             'mes_max' => $mes_max,
             'anio_max' => $anio_max,
+            'existencia' => $existencia,
             'messages' => $this->flashMessenger(),
         ));
         $view_model->setTemplate('/application/reportes/reportes/entradasporcompras');
