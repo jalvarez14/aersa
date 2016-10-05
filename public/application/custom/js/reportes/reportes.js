@@ -236,8 +236,9 @@
             });
         }
 
-        plugin.entradasporcompras = function (mes_min, anio_min, mes_max, anio_max) {
+        plugin.entradasporcompras = function (mes_min, anio_min, mes_max, anio_max,existencia) {
             revisarCheckboxEntradasporcompra();
+            if(existencia==1) {
             var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
             var maxDate = new Date(anio_max + '/' + mes_max + '/' + '31');
 
@@ -252,7 +253,14 @@
                 endDate: maxDate,
                 format: 'dd/mm/yyyy',
             });
-
+            } else {
+                $('input[name=fecha_inicial]').attr('disabled', true);
+                $('input[name=fecha_final]').attr('disabled', true);
+                $('#generar_reporte').attr('disabled', true);
+                $('#generar_excel').attr('disabled', true);
+                $('#generar_pdf').attr('disabled', true);
+                $('#no_data').html('No existen registros de flujo efectivo')
+            }
             var productos_table = $container.find('#productos_table');
             $.ajax({
                 url: '/application/json/datatable/lang_es.json',

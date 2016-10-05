@@ -80,6 +80,8 @@
             if (checkbox&&inicio&&fin)
                 activar = false;
             $('#generar').attr('disabled', activar);
+            $('#generar_excel').attr('disabled', activar);
+            $('#generar_pdf').attr('disabled', activar);
         }
         
         /*
