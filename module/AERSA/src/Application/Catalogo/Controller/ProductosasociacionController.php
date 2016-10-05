@@ -46,8 +46,8 @@ class ProductosasociacionController extends AbstractActionController
             return $this->redirect()->toUrl('/catalogo/asociacionproductos');
         }
         
-        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
-        echo '<pre>';var_dump($almacenes->toArray());echo'</pre>';exit();        
+        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Créditos al costo',  \Criteria::NOT_EQUAL)->filterByAlmacenNombre('Consignación',  \Criteria::NOT_EQUAL)->filterByAlmacenNombre('Bonificados',  \Criteria::NOT_EQUAL)->find();
+        
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/catalogo/productosasociacion/index');
