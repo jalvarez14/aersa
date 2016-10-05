@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Auditoria\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -184,7 +185,7 @@ class CierresinventariosController extends AbstractActionController {
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
             $categoriaObj = new \Categoria();
             foreach ($categoriasObj as $categoriaObj) {
-                $nombreSubcategoria=$categoriaObj->getCategoriaNombre();
+                $nombreSubcategoria = $categoriaObj->getCategoriaNombre();
                 array_push($reporte, "<tr><td>$nombreSubcategoria</td></tr>");
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
                 $objproducto = new \Producto();
@@ -311,8 +312,8 @@ class CierresinventariosController extends AbstractActionController {
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
                     $impFis = $stockFisico * $costoPromedio;
-                    
-                    $costoPromedio= ($costoPromedio==0) ? $objproducto->getProductoCosto(): $costoPromedio;
+
+                    $costoPromedio = ($costoPromedio == 0) ? $objproducto->getProductoCosto() : $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
@@ -367,34 +368,171 @@ class CierresinventariosController extends AbstractActionController {
             $inventariomes = \InventariomesQuery::create()->findPk($id);
             if ($request->isPost()) {
                 $post_data = $request->getPost();
-                //$post_data["requisicion_fecha"] = date_create_from_format('d/m/Y', $post_data["requisicion_fecha"]);
-                foreach ($post_data as $key => $value) {
-                    if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
-                        $inventariomes->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                    }
-                }
-                if ($post_data['inventariomes_revisada']) {
-                    $inventariomes->setIdauditor($session['idusuario']);
-                }
-                $inventariomes->save();
+                if (isset($post_data['generar_pdf']) || isset($post_data['generar_excel'])) {
+                    $reporte = array();
+                    $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
+                    $subcategoriaObj = new \Categoria();
+                    foreach ($subcategoriasObj as $subcategoriaObj) {
+                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
+                        $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
+                        $objproducto = new \Producto();
+                        foreach ($productosObj as $objproducto) {
+                            $exists = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->exists();
+                            if ($exists) {
+                                $inventariomesdetalle = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->findOne();
 
-                //Requisicion DETALLES
-                $inventariomes->getInventariomesdetalles()->delete();
-                foreach ($post_data['reporte'] as $reporte) {
-                    $inventariocierremes_detalle = new \Inventariomesdetalle();
-                    foreach ($reporte as $key => $value) {
-                        if (\InventariomesdetallePeer::getTableMap()->hasColumn($key)) {
-                            $inventariocierremes_detalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                                $idproducto = $objproducto->getIdproducto();
+                                $productoNombre = $objproducto->getProductoNombre();
+                                $categoria = $objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
+                                $stockinicial = $inventariomesdetalle->getInventariomesdetalleStockinicial();
+                                $ingresocompra = $inventariomesdetalle->getInventariomesdetalleIngresocompra();
+                                $ingresorequisicion = $inventariomesdetalle->getInventariomesdetalleIngresorequisicion();
+                                $ingresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleIngresoordentablajeria();
+                                $egresoventa = $inventariomesdetalle->getInventariomesdetalleEgresoventa();
+                                $egresorequisicion = $inventariomesdetalle->getInventariomesdetalleEgresorequisicion();
+                                $egresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleEgresoordentablajeria();
+                                $egresodevolucion = $inventariomesdetalle->getInventariomesdetalleEgresodevolucion();
+                                $stockteorico = $inventariomesdetalle->getInventariomesdetalleStockteorico();
+                                $unidadMedida = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                                $stockfisico = $inventariomesdetalle->getInventariomesdetalleStockfisico();
+                                $importefisico = $inventariomesdetalle->getInventariomesdetalleImportefisico();
+                                $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
+                                $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
+                                $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
+                                $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "Si" : "No";
+                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $importefisico, 'quince' => $diferencia, 'dieciseis' => $costopromedio, 'diecisiete' => $difimporte, 'dieciocho' => $revisada));
+                            }
                         }
                     }
-                    if (isset($reporte['inventariomesdetalle_revisada'])) {
-                        $inventariocierremes_detalle->setInventariomesdetalleRevisada(1);
+                    $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
+                    $subcategoriaObj = new \Categoria();
+                    foreach ($subcategoriasObj as $subcategoriaObj) {
+                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
+                        $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
+                        $objproducto = new \Producto();
+                        foreach ($productosObj as $objproducto) {
+                            $exists = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->exists();
+                            if ($exists) {
+                                $inventariomesdetalle = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->findOne();
+                                $idproducto = $objproducto->getIdproducto();
+                                $productoNombre = $objproducto->getProductoNombre();
+                                $categoria = $objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
+                                $stockinicial = $inventariomesdetalle->getInventariomesdetalleStockinicial();
+                                $ingresocompra = $inventariomesdetalle->getInventariomesdetalleIngresocompra();
+                                $ingresorequisicion = $inventariomesdetalle->getInventariomesdetalleIngresorequisicion();
+                                $ingresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleIngresoordentablajeria();
+                                $egresoventa = $inventariomesdetalle->getInventariomesdetalleEgresoventa();
+                                $egresorequisicion = $inventariomesdetalle->getInventariomesdetalleEgresorequisicion();
+                                $egresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleEgresoordentablajeria();
+                                $egresodevolucion = $inventariomesdetalle->getInventariomesdetalleEgresodevolucion();
+                                $stockteorico = $inventariomesdetalle->getInventariomesdetalleStockteorico();
+                                $unidadMedida = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                                $stockfisico = $inventariomesdetalle->getInventariomesdetalleStockfisico();
+                                $importefisico = $inventariomesdetalle->getInventariomesdetalleImportefisico();
+                                $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
+                                $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
+                                $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
+                                $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "Si" : "No";
+                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $importefisico, 'quince' => $diferencia, 'dieciseis' => $costopromedio, 'diecisiete' => $difimporte, 'dieciocho' => $revisada));
+                            }
+                        }
                     }
-                    $inventariocierremes_detalle->setIdinventariomes($inventariomes->getIdinventariomes());
-                    $inventariocierremes_detalle->save();
+                    $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(3)->orderByCategoriaNombre('asc')->find();
+                    $subcategoriaObj = new \Categoria();
+                    foreach ($subcategoriasObj as $subcategoriaObj) {
+                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
+                        $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
+                        $objproducto = new \Producto();
+                        foreach ($productosObj as $objproducto) {
+                            $exists = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->exists();
+                            if ($exists) {
+                                $inventariomesdetalle = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->findOne();
+                                $idproducto = $objproducto->getIdproducto();
+                                $productoNombre = $objproducto->getProductoNombre();
+                                $categoria = $objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
+                                $stockinicial = $inventariomesdetalle->getInventariomesdetalleStockinicial();
+                                $ingresocompra = $inventariomesdetalle->getInventariomesdetalleIngresocompra();
+                                $ingresorequisicion = $inventariomesdetalle->getInventariomesdetalleIngresorequisicion();
+                                $ingresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleIngresoordentablajeria();
+                                $egresoventa = $inventariomesdetalle->getInventariomesdetalleEgresoventa();
+                                $egresorequisicion = $inventariomesdetalle->getInventariomesdetalleEgresorequisicion();
+                                $egresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleEgresoordentablajeria();
+                                $egresodevolucion = $inventariomesdetalle->getInventariomesdetalleEgresodevolucion();
+                                $stockteorico = $inventariomesdetalle->getInventariomesdetalleStockteorico();
+                                $unidadMedida = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                                $stockfisico = $inventariomesdetalle->getInventariomesdetalleStockfisico();
+                                $importefisico = $inventariomesdetalle->getInventariomesdetalleImportefisico();
+                                $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
+                                $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
+                                $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
+                                $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "Si" : "No";
+                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $importefisico, 'quince' => $diferencia, 'dieciseis' => $costopromedio, 'diecisiete' => $difimporte, 'dieciocho' => $revisada));
+                            }
+                        }
+                    }
+
+                    $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+                    $fecha = \InventariomesQuery::create()->filterByIdinventariomes($id)->findOne()->getInventariomesFecha();
+                    $template = '/inventariocierresemana.xlsx';
+                    $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+
+                    $config = array(
+                        'template' => $template,
+                        'templateDir' => $templateDir
+                    );
+                    $R = new \PHPReport($config);
+                    $R->load(array(
+                        array(
+                            'id' => 'compania',
+                            'data' => array('nombre' => $nombreEmpresa),
+                        ),
+                        array(
+                            'id' => 'reporte',
+                            'data' => array('fecha' => $fecha),
+                        ),
+                        array(
+                            'id' => 'col',
+                            'repeat' => true,
+                            'data' => $reporte,
+                            'minRows' => 2,
+                        )
+                            )
+                    );
+                    if (isset($post_data['generar_pdf']))
+                        echo $R->render('PDF');
+                    else
+                        echo $R->render('excel');
+                    exit();
+                } else {
+                    //$post_data["requisicion_fecha"] = date_create_from_format('d/m/Y', $post_data["requisicion_fecha"]);
+                    foreach ($post_data as $key => $value) {
+                        if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
+                            $inventariomes->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                        }
+                    }
+                    if ($post_data['inventariomes_revisada']) {
+                        $inventariomes->setIdauditor($session['idusuario']);
+                    }
+                    $inventariomes->save();
+
+                    //Requisicion DETALLES
+                    $inventariomes->getInventariomesdetalles()->delete();
+                    foreach ($post_data['reporte'] as $reporte) {
+                        $inventariocierremes_detalle = new \Inventariomesdetalle();
+                        foreach ($reporte as $key => $value) {
+                            if (\InventariomesdetallePeer::getTableMap()->hasColumn($key)) {
+                                $inventariocierremes_detalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                            }
+                        }
+                        if (isset($reporte['inventariomesdetalle_revisada'])) {
+                            $inventariocierremes_detalle->setInventariomesdetalleRevisada(1);
+                        }
+                        $inventariocierremes_detalle->setIdinventariomes($inventariomes->getIdinventariomes());
+                        $inventariocierremes_detalle->save();
+                    }
+                    $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+                    return $this->redirect()->toUrl('/auditoria/cierresemana');
                 }
-                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                return $this->redirect()->toUrl('/auditoria/cierresemana');
             }
             $fecha = $inventariomes->getInventariomesFecha();
             $almacen_array = array();
@@ -414,38 +552,38 @@ class CierresinventariosController extends AbstractActionController {
 
             $form = new \Application\Auditoria\Form\CierresinventariosForm($fecha, $almacen_array, $auditor_array);
             $form->setData($inventariomes->toArray(\BasePeer::TYPE_FIELDNAME));
-            $reporte=array();
+            $reporte = array();
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
             $categoriaObj = new \Categoria();
             foreach ($categoriasObj as $categoriaObj) {
-                $nombreSubcategoria=$categoriaObj->getCategoriaNombre();
+                $nombreSubcategoria = $categoriaObj->getCategoriaNombre();
                 array_push($reporte, "<tr><td>$nombreSubcategoria</td></tr>");
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
                 $objproducto = new \Producto();
                 foreach ($objproductos as $objproducto) {
-                    $exists=\InventariomesdetalleQuery::create()->filterByIdinventariomes($inventariomes->getIdinventariomes())->filterByIdproducto($objproducto->getIdproducto())->exists();
-                    if($exists) {
+                    $exists = \InventariomesdetalleQuery::create()->filterByIdinventariomes($inventariomes->getIdinventariomes())->filterByIdproducto($objproducto->getIdproducto())->exists();
+                    if ($exists) {
                         $inventariomesdetalle = \InventariomesdetalleQuery::create()->filterByIdinventariomes($inventariomes->getIdinventariomes())->filterByIdproducto($objproducto->getIdproducto())->findOne();
-                        $id=$inventariomesdetalle->getIdinventariomesdetalle();
-                        $idproducto=$objproducto->getIdproducto();
-                        $productoNombre=$objproducto->getProductoNombre();
-                        $categoria=$objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
-                        $stockinicial=$inventariomesdetalle->getInventariomesdetalleStockinicial();
-                        $ingresocompra=$inventariomesdetalle->getInventariomesdetalleIngresocompra();
-                        $ingresorequisicion=$inventariomesdetalle->getInventariomesdetalleIngresorequisicion();
-                        $ingresoordentablajeria=$inventariomesdetalle->getInventariomesdetalleIngresoordentablajeria();
-                        $egresoventa=$inventariomesdetalle->getInventariomesdetalleEgresoventa();
-                        $egresorequisicion=$inventariomesdetalle->getInventariomesdetalleEgresorequisicion();
-                        $egresoordentablajeria=$inventariomesdetalle->getInventariomesdetalleEgresoordentablajeria();
-                        $egresodevolucion=$inventariomesdetalle->getInventariomesdetalleEgresodevolucion();
-                        $stockteorico=$inventariomesdetalle->getInventariomesdetalleStockteorico();
-                        $unidadMedida=$objproducto->getUnidadmedida()->getUnidadmedidaNombre();
-                        $stockfisico=$inventariomesdetalle->getInventariomesdetalleStockfisico();
-                        $importefisico=$inventariomesdetalle->getInventariomesdetalleImportefisico();
-                        $diferencia=$inventariomesdetalle->getInventariomesdetalleDiferencia();
-                        $costopromedio=$inventariomesdetalle->getInventariomesdetalleCostopromedio();
-                        $difimporte=$inventariomesdetalle->getInventariomesdetalleDifimporte();
-                        $revisada=(bool)($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "checked": "";
+                        $id = $inventariomesdetalle->getIdinventariomesdetalle();
+                        $idproducto = $objproducto->getIdproducto();
+                        $productoNombre = $objproducto->getProductoNombre();
+                        $categoria = $objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
+                        $stockinicial = $inventariomesdetalle->getInventariomesdetalleStockinicial();
+                        $ingresocompra = $inventariomesdetalle->getInventariomesdetalleIngresocompra();
+                        $ingresorequisicion = $inventariomesdetalle->getInventariomesdetalleIngresorequisicion();
+                        $ingresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleIngresoordentablajeria();
+                        $egresoventa = $inventariomesdetalle->getInventariomesdetalleEgresoventa();
+                        $egresorequisicion = $inventariomesdetalle->getInventariomesdetalleEgresorequisicion();
+                        $egresoordentablajeria = $inventariomesdetalle->getInventariomesdetalleEgresoordentablajeria();
+                        $egresodevolucion = $inventariomesdetalle->getInventariomesdetalleEgresodevolucion();
+                        $stockteorico = $inventariomesdetalle->getInventariomesdetalleStockteorico();
+                        $unidadMedida = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        $stockfisico = $inventariomesdetalle->getInventariomesdetalleStockfisico();
+                        $importefisico = $inventariomesdetalle->getInventariomesdetalleImportefisico();
+                        $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
+                        $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
+                        $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
+                        $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "checked" : "";
                         array_push($reporte, "<tr>
                                     <td>
                                         <input type='hidden' name='reporte[$id][idcategoria]' value='$categoria'/>
@@ -507,11 +645,10 @@ class CierresinventariosController extends AbstractActionController {
                                     </td>
                                 </tr>");
                     }
-                    
                 }
             }
-            
-            
+
+
             $encargado = $inventariomes->getAlmacen()->getAlmacenEncargado();
             if ($encargado == "")
                 $encargado = "N/A";
