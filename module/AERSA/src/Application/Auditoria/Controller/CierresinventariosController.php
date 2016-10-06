@@ -183,8 +183,6 @@ class CierresinventariosController extends AbstractActionController {
 
             $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->find();
 
-
-
             $reporte = array();
             $sobrante = 0;
             $faltante = 0;
