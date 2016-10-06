@@ -120,7 +120,7 @@ class IndexController extends AbstractActionController
         $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->filterByIdproducto($idproducto,  \Criteria::NOT_EQUAL)->find();
 
         
-        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo','producto_rendimiento',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
 
     }
     

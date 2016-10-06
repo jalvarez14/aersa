@@ -27,6 +27,7 @@ $( document ).ready(function() {
         $('#producto_add').attr('disabled',false);
         $('input#idproducto').val(suggestion.id);
         $('input#producto_iva').val(suggestion.producto_iva);
+        $('input#productoreceta_rendimiento').val(suggestion.producto_rendimiento);
 
     });
 

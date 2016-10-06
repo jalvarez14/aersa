@@ -50,6 +50,7 @@
                              <input id="producto_rendimientooriginal" type="hidden" value="<?php echo $producto->getProductoRendimientooriginal()?>">
                             <input id="producto_rendimiento" type="hidden" value="<?php echo $producto->getProductoRendimiento()?>">
                             <input id="producto_autocomplete" class="form-control" disabled="disabled"type="text" value="<?php echo $data->getProductonombre()?>">
+                            <input id="productoreceta_rendimiento" type="hidden">
                         </div>  
                     </div>
                 </div>
@@ -103,28 +104,37 @@
     
     var producto_rendimientooriginal = $('#producto_rendimientooriginal').val();
     var producto_rendimiento = $('#producto_rendimiento').val();
-    
+    var factor=1;
+    console.log( producto_rendimiento);
+
     if(producto_rendimientooriginal != "" && producto_rendimiento != "")
     {   
-        $("[name=receta_cantidadoriginal]").on('change',function(){
+        $("[name=receta_cantidadoriginal],select[name=receta_unidad]").on('change',function(){
             
+            if(typeof  $('select[name=receta_unidad] option:selected').val() != 'undefined'){
+                 producto_rendimiento = $('#productoreceta_rendimiento').val();
+                var unidad = $('select[name=receta_unidad] option:selected').val();
+                if(unidad == "Onza"){
+                    factor = 0.029574;
+                }else if(unidad == "Copa vino 187.5 ML"){
+                     factor = 0.1875;
+                }else if(unidad == "Copa vino 150 ML"){
+                    factor =0.15;
+                }
+                else if(unidad == "Botella"){
+                    factor =1;
+                }
+                else if(unidad == "Pieza"){
+                    factor =1;
+                }
+
+            }
             
             var cantidad = $("[name=receta_cantidadoriginal]").val();
-             var cantidad_normalizada = (cantidad*producto_rendimiento)/producto_rendimientooriginal;
+            var cantidad_normalizada = (cantidad*factor)/producto_rendimiento;
             $('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(6));
         });
     } 
-    
-    var empresa_habilitarrecetas = "<?php echo json_encode($empresa_habilitarrecetas)?>";
-
-    if(empresa_habilitarrecetas == "false"){
-            
-            $('#subreceta_form input').attr('disabled',true);
-            $('#subreceta_form .btn').attr('disabled',true).attr('cursor','not-allowed');
-        }
-    
-    
-    
     
 
 </script>
