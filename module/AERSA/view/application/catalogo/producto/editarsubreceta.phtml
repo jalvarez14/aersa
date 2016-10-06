@@ -51,7 +51,7 @@
                             <input id="producto_rendimiento" type="hidden" value="<?php echo $producto->getProductoRendimiento()?>">
                             <input id="producto_autocomplete" class="form-control" disabled="disabled"type="text" value="<?php echo $data->getProductonombre()?>">
                             <?php $producto_receta = ProductoQuery::create()->filterByIdproducto($receta->getIdproductoreceta())->findOne();?>
-                            <input id="productoreceta_rendimiento" type="hidden" value="<?php $producto_receta->getProductoRendimiento()?>">
+                            <input id="productoreceta_rendimiento" type="hidden" value="<?php echo $producto_receta->getProductoRendimiento()?>">
                         </div>  
                     </div>
                 </div>
