@@ -41,7 +41,7 @@
                             <input type="file" name="batch_inventario" style="display: none" accept=".xls,.xlsx">
                             <a id="subir_inventario" href="#"><button class="btn default" type="button" style="margin-bottom: 15px; margin-right: 10px">Subir inventario</button></a>
                         </div>
-                    </div>                        
+                    </div>
                 </div>
                 <div id="revisada" class="row" >
                     <div class="col-md-4">
@@ -49,7 +49,22 @@
                         <?php echo $this->formSelect($form->get('inventariomes_revisada')) ?> 
                     </div>
                 </div>
+                
                 <br>
+                <div class="form-actions right">
+                    <div class="left col-md-2">
+                        <button class="btn blue" id="generar_pdf" name="generar_pdf" type="submit">
+                            <i class="fa fa-file-pdf-o"></i>
+                            PDF
+                        </button>
+                    </div>
+                    <div class="left col-md-2">
+                        <button class="btn blue" id="generar_excel" name="generar_excel" type="submit">
+                            <i class="fa fa-file-excel-o"></i>
+                            Excel
+                        </button>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <p>(*)Campos obligatorios</p>
