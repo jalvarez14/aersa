@@ -100,6 +100,7 @@ class CierresinventariosController extends AbstractActionController {
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
         //dia inicio de semana date('Y-m-d',$start);
+        
         $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
         $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
         $time = strtotime("1 January $anio_act", time());
@@ -143,17 +144,29 @@ class CierresinventariosController extends AbstractActionController {
                     if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
                         $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
             }
-            $ts = strtotime("now");
-            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
-            $inicio_semana = date('Y-m-d', $start);
-            $fin_semana = date('Y-m-d', strtotime('next sunday', $start));
+            
+            
+            $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+            $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+            $time = strtotime("1 January $anio_act", time());
+            $day = date('w', $time);
+            $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+            $time += 6 * 24 * 3600;
+            $fecha = date('Y-m-d', $time);
+            
+            $start=strtotime('last monday', $time);
+            $inicio_semana = date('Y-m-d', strtotime('last monday', $time));
+            
+            $fin_semana = date('Y-m-d', $time);
 
             $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
             $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
 
+            
             $inicio_semana = $inicio_semana . " 00:00:00   ";
             $fin_semana = $fin_semana . " 23:59:59";
 
+            
             //inventario anterior
             $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdalmacen($idalmacen)->exists();
             if ($inventario_anterior)
@@ -162,13 +175,13 @@ class CierresinventariosController extends AbstractActionController {
             $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
             $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
 
-            $objrequisicionesOrigen = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
-            $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
+            $objrequisicionesOrigen = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->filterByIdsucursalorigen($idsucursal)->find();
+            $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->filterByIdsucursal($idsucursal)->find();
 
-            $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
-            $objordentabDestino = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
+            $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->filterByIdsucursaldestino($idsucursal)->find();
+            $objordentabDestino = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->filterByIdsucursal($idsucursal)->find();
 
-            $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
+            $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->find();
 
 
 
@@ -504,7 +517,6 @@ class CierresinventariosController extends AbstractActionController {
                         echo $R->render('excel');
                     exit();
                 } else {
-                    //$post_data["requisicion_fecha"] = date_create_from_format('d/m/Y', $post_data["requisicion_fecha"]);
                     foreach ($post_data as $key => $value) {
                         if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
                             $inventariomes->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
