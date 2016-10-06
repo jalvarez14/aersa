@@ -72,10 +72,12 @@
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
                                             <?php } ?>
+                                            <?php if($idsucursal==$entity->getIdsucursalorigen()):?>
                                             <li>
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
+                                            <?php endif;?>
                                         </ul>
                                     </div>
                                     

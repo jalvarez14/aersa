@@ -483,6 +483,8 @@ class CierresinventariosController extends AbstractActionController {
                     }
 
                     $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+                    $nombreSucursal= \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+                    $nombreAlmacen= \AlmacenQuery::create()->findPk($inventariomes->getIdalmacen())->getAlmacenNombre();
                     $fecha = \InventariomesQuery::create()->filterByIdinventariomes($id)->findOne()->getInventariomesFecha();
                     $template = '/inventariocierresemana.xlsx';
                     $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
@@ -495,7 +497,7 @@ class CierresinventariosController extends AbstractActionController {
                     $R->load(array(
                         array(
                             'id' => 'compania',
-                            'data' => array('nombre' => $nombreEmpresa),
+                            'data' => array('nombre' => $nombreEmpresa,'sucursal' => $nombreSucursal,'almacen' =>$nombreAlmacen),
                         ),
                         array(
                             'id' => 'reporte',
