@@ -34,7 +34,6 @@ class CardexController extends AbstractActionController {
             }
             $reporte = array();
             foreach ($post_data['almacenes'] as $idalmacen) {
-                echo "entro";
                 $inicioSpli = explode('/', $post_data['inicio']);
                 $finSpli = explode('/', $post_data['fin']);
 
