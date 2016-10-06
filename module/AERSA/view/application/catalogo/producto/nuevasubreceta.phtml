@@ -113,11 +113,11 @@
                 producto_rendimiento = $('#productoreceta_rendimiento').val();
                 var unidad = $('select[name=receta_unidad] option:selected').val();
                 if(unidad == "Onza"){
-                    factor = 29.574;
+                    factor = 0.029574;
                 }else if(unidad == "Copa vino 187.5 ML"){
-                     factor = 187.5;
+                     factor = 0.1875;
                 }else if(unidad == "Copa vino 150 ML"){
-                    factor =150;
+                    factor =0.15;
                 }
                 else if(unidad == "Botella"){
                     factor =1;
@@ -127,13 +127,7 @@
                 }
             }
             var cantidad = $("[name=receta_cantidadoriginal]").val();
-            if(unidad == "Pieza" || unidad == "Botella"){
-                var cantidad_normalizada = (cantidad*factor);
-            }
-            else
-            {
-                var cantidad_normalizada = (cantidad*factor)/producto_rendimiento;
-            }
+            var cantidad_normalizada = (cantidad*factor)/producto_rendimiento;
             $('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(6));
         });
     } 
