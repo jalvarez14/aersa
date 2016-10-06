@@ -197,7 +197,7 @@
                                     <tr id="<?php echo $entity->getIdreceta() ?>">
                                         <td><?php echo $nombreProducto->getProductoNombre() ?></td>
                                        
-                                        <td><?php echo $entity->getRecetaCantidadoriginal() ?></td>
+                                        <td><?php echo $entity->getRecetaCantidad() ?></td>
                                          <td><?php echo money_format('%+#1.6n',$nombreProducto->getProductoCosto()) ?></td>
                                         <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
                                             <td><?php echo $entity->getRecetaCantidad() ?></td>

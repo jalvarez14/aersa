@@ -96,8 +96,6 @@
 
 
 
-<script type="text/javascript" src="/application/custom/js/catalogo/subreceta.js"></script>
-
 <script>     
 
     $("[name=receta_cantidad]").numeric();
@@ -110,16 +108,15 @@
     if(producto_rendimientooriginal != "" && producto_rendimiento != "")
     {   
         $("[name=receta_cantidadoriginal],select[name=receta_unidad]").on('change',function(){
-            
             if(typeof  $('select[name=receta_unidad] option:selected').val() != 'undefined'){
-                 producto_rendimiento = $('#productoreceta_rendimiento').val();
+                producto_rendimiento = $('#productoreceta_rendimiento').val();
                 var unidad = $('select[name=receta_unidad] option:selected').val();
                 if(unidad == "Onza"){
-                    factor = 0.029574;
+                    factor = 29.574;
                 }else if(unidad == "Copa vino 187.5 ML"){
-                     factor = 0.1875;
+                     factor = 187.5;
                 }else if(unidad == "Copa vino 150 ML"){
-                    factor =0.15;
+                    factor =150;
                 }
                 else if(unidad == "Botella"){
                     factor =1;
@@ -127,11 +124,15 @@
                 else if(unidad == "Pieza"){
                     factor =1;
                 }
-
             }
-            
             var cantidad = $("[name=receta_cantidadoriginal]").val();
-            var cantidad_normalizada = (cantidad*factor)/producto_rendimiento;
+            if(unidad == "Pieza" || unidad == "Botella"){
+                var cantidad_normalizada = (cantidad*factor);
+            }
+            else
+            {
+                var cantidad_normalizada = (cantidad*factor)/producto_rendimiento;
+            }
             $('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(6));
         });
     } 
