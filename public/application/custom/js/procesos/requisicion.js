@@ -27,7 +27,7 @@
      */
 
     $.requisicion = function (container, options) {
-        
+
         var plugin = this;
 
         /* 
@@ -58,7 +58,7 @@
             $('#productos_table tbody').find('input[name*=requisiciondetalle_subtotal]').filter(function () {
                 requisicion_subtotal = requisicion_subtotal + parseFloat(parseFloat($(this).val()).toFixed(6));
             });
-            
+
             //COMPRA TOTAL
             var requisicion_total = requisicion_subtotal + row_subtotal - row_subtotal;
             $('#productos_table tfoot').find('#total').text(accounting.formatMoney(requisicion_total));
@@ -186,8 +186,8 @@
                 },
             });
         }
-        
-        var inicioEdit= function (sucursal_destino,almacen_origen,almacen_destino,concepto_salida) {
+
+        var inicioEdit = function (sucursal_destino, almacen_origen, almacen_destino, concepto_salida) {
             $.ajax({
                 async: false,
                 type: "GET",
@@ -214,7 +214,7 @@
             $('[name=idsucursaldestino]').val(sucursal_destino);
             $('[name=idalmacenorigen]').val(almacen_origen);
             var idsucdes = $("[name=idsucursaldestino]").val();
-            
+
             $('[name=idalmacendestino]').val(almacen_destino);
             var almorg = $("[name=idalmacenorigen] option:selected").text();
             var almdes = $("[name=idalmacendestino] option:selected").text();
@@ -294,14 +294,14 @@
         function getWeekNumber(d) {
             // Copy date so don't modify original
             d = new Date(+d);
-            d.setHours(0,0,0);
+            d.setHours(0, 0, 0);
             // Set to nearest Thursday: current date + 4 - current day number
             // Make Sunday's day number 7
-            d.setDate(d.getDate() + 4 - (d.getDay()||7));
+            d.setDate(d.getDate() + 4 - (d.getDay() || 7));
             // Get first day of year
-            var yearStart = new Date(d.getFullYear(),0,1);
+            var yearStart = new Date(d.getFullYear(), 0, 1);
             // Calculate full weeks to nearest Thursday
-            var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+            var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
             // Return array of year and week number
             return weekNo;
         }
@@ -329,7 +329,7 @@
 
             return d;
         }
-        
+
         plugin.list = function (anio, mes) {
 
             //INICIALIZAMOS DATATABLES
@@ -371,19 +371,19 @@
             });
 
             //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE ELIMINAR CADA UNO DE LOS REGISTROS
-            $container.find('#datatable tbody tr').filter(function(){
+            $container.find('#datatable tbody tr').filter(function () {
                 var date = new Date($(this).attr('date'));
-                if(date.format('W') != mes || (date.getFullYear()) != anio){
+                if (date.format('W') != mes || (date.getFullYear()) != anio) {
                     $(this).find('.delete_modal').unbind();
-                    $(this).find('.delete_modal').css('cursor','not-allowed');
+                    $(this).find('.delete_modal').css('cursor', 'not-allowed');
                 }
             });
-            
+
             /*
              * ACL
              */
-            
-            if(settings.idrol == 5){
+
+            if (settings.idrol == 5) {
                 $('.delete_modal').parent('li').remove();
             }
         }
@@ -396,7 +396,7 @@
 
         plugin.new = function (anio, mes) {
             getAlmacenesSucDes();
-            
+
             $('[name=idsucursaldestino]').on('change', function () {
                 getAlmacenesSucDes();
             });
@@ -420,7 +420,7 @@
 
             $('[name=requisicion_folio]').attr('maxlength', '10');
 
-            var minDate = firstDayOfWeek(anio,mes);
+            var minDate = firstDayOfWeek(anio, mes);
             var maxDate = new Date(minDate);
             maxDate.setDate(minDate.getDate() + 6);
 
@@ -463,7 +463,7 @@
             $('#producto_add').on('click', function () {
 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var tr = $('<tr id="'+$('input#idproducto').val()+' ">');
+                var tr = $('<tr id="' + $('input#idproducto').val() + ' ">');
                 var tipopro;
                 var precio;
                 $.ajax({
@@ -473,30 +473,30 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.length != 0) {
-                            tipopro= data['ProductoTipo'];
-                            precio=data['ProductoCosto'];
+                            tipopro = data['ProductoTipo'];
+                            precio = data['ProductoCosto'];
                         }
                     },
                 });
-                tr.append('<td> '+ tipopro + '</td>');
+                tr.append('<td> ' + tipopro + '</td>');
                 tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
-                tr.append('<td> '+ $('#unidadmedida_nombre').val() + '</td>');
+                tr.append('<td> ' + $('#unidadmedida_nombre').val() + '</td>');
                 tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
-                tr.append('<td><input disabled required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="'+precio+'"></td>');
+                tr.append('<td><input disabled required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="' + precio + '"></td>');
                 tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
                 /*
                  * ACL
                  */
-                if(settings.idrol == 5){
+                if (settings.idrol == 5) {
                     tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada] disabled>  </td>');
-                }else{
+                } else {
                     tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
                 }
-                
-                if(tipopro!='simple')
+
+                if (tipopro != 'simple')
                     tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
                 tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
-                
+
                 //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
                 tr.find('input').numeric();
 
@@ -529,14 +529,14 @@
                         exits = 0;
                     }
                 });
-                
-                tr.find('.fa-list').click(function(){
+
+                tr.find('.fa-list').click(function () {
                     var tmpl2 = "";
                     var id = $(this).closest('tr').attr('id');
                     var can = 0;
                     var value = $(this).closest('tr').find('td').eq(1).text();
-                    var td = $(this).closest('tr').find('td.pro_cantidad').find("input:text").each(function() {
-                    can =this.value
+                    var td = $(this).closest('tr').find('td.pro_cantidad').find("input:text").each(function () {
+                        can = this.value
                     });
                     $.ajax({
                         async: false,
@@ -547,25 +547,259 @@
                             if (data.length != 0) {
                                 for (var k in data) {
                                     tmpl2 += [
-                                        '<tr> <td>' + k +'</td> <td>'+data[k][0]+' </td> <td>'+ (can * data[k][0]) + '</td> <td>'+data[k][1]+' </td> <td>'+((can * data[k][0]) * data[k][1])+' </td>' 
+                                        '<tr> <td>' + k + '</td> <td>' + data[k][0] + ' </td> <td>' + (can * data[k][0]) + '</td> <td>' + data[k][1] + ' </td> <td>' + ((can * data[k][0]) * data[k][1]) + ' </td>'
                                     ];
                                 }
-                                
+
                             }
                         },
                     });
                     var tmpl = [
-                      // tabindex is required for focus
-                      ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+                        // tabindex is required for focus
+                        ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
                         '<div class="modal-header">',
-                          '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
-                          '<h4 class="modal-title">'+value+'</h4>', 
+                        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
+                        '<h4 class="modal-title">' + value + '</h4>',
                         '</div>',
-                          '<div class="modal-body">',
+                        '<div class="modal-body">',
+                        '<table class="table" id="productos_table">',
+                        '<thead>',
+                        '<th>Producto</th>',
+                        '<th>Receta</th>',
+                        '<th>Cantidad</th>',
+                        '<th>Precio unitario</th>',
+                        '<th>Subtotal</th>',
+                        '</thead>',
+                        '<tbody id="productos_table_tbody">',
+                        tmpl2,
+                        '</tbody>',
+                        '</table>',
+                        '</div>',
+                        '<div class="modal-footer">',
+                        '<a href="#" data-dismiss="modal" class="btn btn-default">Cerrar</a>',
+                        '</div>',
+                        '</div>'
+                    ].join('');
+                    $(tmpl).modal();
+                });
+
+                //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
+                revisadaControl();
+            });
+
+            //VALIDAR FOLIO
+            $('input[name=requisicion_folio]').on('blur', function () {
+                var folio = $(this).val();
+                var $this = $(this);
+                $this.removeClass('valid');
+                $.ajax({
+                    url: "/procesos/requisicion/validatefolio",
+                    dataType: "json",
+                    data: {folio: folio},
+                    success: function (exist) {
+                        console.log(exist);
+                        if (exist) {
+                            alert('El folio "' + folio + '" ya fue utilizado en los últimos 2 meses');
+                            $this.val('');
+                        } else {
+                            $this.addClass('valid');
+                        }
+
+                    },
+                });
+
+            });
+
+            /*
+             * ACL
+             */
+
+            if (settings.idrol == 5) {
+                $('select[name=requisicion_revisada] option[value=1]').remove();
+            }
+
+
+        }
+
+        plugin.edit = function (sucursal_destino, almacen_origen, almacen_destino, concepto_salida, anio, mes, distinto_origen, count) {
+            if (distinto_origen == 1) {
+                $("[name=idsucursaldestino]").append('<option value="">' + sucursal_destino + '</option>');
+                $("[name=idalmacenorigen]").append('<option value="">' + almacen_origen + '</option>');
+                $("[name=idalmacendestino]").append('<option value="">' + almacen_destino + '</option>');
+                $("[name=idconceptosalida]").append('<option value="">' + concepto_salida + '</option>');
+                $('select[name=requisicion_revisada]').attr('disabled', true);
+                $('#productos_table input[type=checkbox]').attr('disabled', true);
+                $('form input,form select,form button[type=submit]').attr('disabled', true);
+                
+            } else {
+                inicioEdit(sucursal_destino, almacen_origen, almacen_destino, concepto_salida);
+
+                $('[name=idsucursaldestino]').on('change', function () {
+                    getAlmacenesSucDes();
+                });
+
+                $('[name=idalmacenorigen]').on('change', function () {
+                    var almorg = $("[name=idalmacenorigen]").val();
+                    var almdes = $("[name=idalmacendestino]").val();
+                    var sucorg = $("[name=idsucursalorigen]").val();
+                    var sucdes = $("[name=idsucursaldestino]").val();
+                    if (sucdes == sucorg)
+                        updateAlmacen(almdes, almorg);
+                    else
+                        getConceptos();
+
+
+                });
+
+                $('[name=idalmacendestino]').on('change', function () {
+                    getConceptos();
+                });
+
+                $('[name=requisicion_folio]').attr('maxlength', '10');
+
+                var minDate = firstDayOfWeek(anio, mes);
+                var maxDate = new Date(minDate);
+                maxDate.setDate(minDate.getDate() + 6);
+
+                container.find('input[name=requisicion_fecha]').datepicker({
+                    startDate: minDate,
+                    endDate: maxDate,
+                    format: 'dd/mm/yyyy',
+                });
+
+                container.find('input[name=requisicion_fecha]').datepicker({
+                    format: 'dd/mm/yyyy',
+                });
+
+                var data = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/procesos/requisicion/getproductos?q=%QUERY',
+                        wildcard: '%QUERY'
+                    }
+                });
+
+                $('input#producto_autocomplete').typeahead(null, {
+                    name: 'best-pictures',
+                    display: 'value',
+                    hint: true,
+                    highlight: true,
+                    source: data,
+                    limit: 100,
+                });
+
+                $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
+                    $('#producto_add').attr('disabled', false);
+                    $('input#idproducto').val(suggestion.id);
+                    $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
+
+                });
+
+                var count = count;
+                $('#producto_add').on('click', function () {
+
+                    //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
+                    var tr = $('<tr id="' + $('input#idproducto').val() + ' ">');
+                    var tipopro;
+                    $.ajax({
+                        async: false,
+                        type: "GET",
+                        url: "/procesos/requisicion/gettipopro/" + $('input#idproducto').val(),
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.length != 0) {
+                                tipopro = data['ProductoTipo'];
+
+                            }
+                        },
+                    });
+                    tr.append('<td> ' + tipopro + '</td>');
+                    tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
+                    tr.append('<td> ' + $('#unidadmedida_nombre').val() + '</td>');
+                    tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
+                    tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
+                    tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
+                    /*
+                     * ACL
+                     */
+                    if (settings.idrol == 5) {
+                        tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada] disabled>  </td>');
+                    } else {
+                        tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
+                    }
+                    if (tipopro != 'simple')
+                        tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
+                    tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+
+                    //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
+                    tr.find('input').numeric();
+
+                    //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL
+                    tr.find('input').on('blur', function () {
+                        var $tr = $(this).closest(tr);
+                        caluclator($tr);//mandar el total
+                    });
+                    var revisada = $('select[name=requisicion_revisada] option:selected').val();
+                    if (revisada == 1) {
+                        tr.find('input[type=checkbox]').prop('checked', true);
+                    }
+
+                    //INSERTAMOS EN LA TABLA
+                    $('#productos_table tbody').append(tr);
+
+                    //LIMPIAMOS EL AUTOCOMPLETE
+                    $('input#producto_autocomplete').typeahead('val', '');
+                    $('input#idproducto').val('');
+                    $('input#producto_iva').val('');
+                    $('#producto_add').attr('disabled', true);
+                    $('#requisicion_save').attr('disabled', false);
+                    count++;
+                    tr.find('.fa-trash').on('click', function () {
+                        var tr = $(this).closest('tr');
+                        tr.remove();
+                        if ($('#productos_table tbody tr').length == 0)
+                        {
+                            $('#requisicion_save').attr('disabled', true);
+                            exits = 0;
+                        }
+                    });
+
+                    tr.find('.fa-list').click(function () {
+                        var tmpl2 = "";
+                        var id = $(this).closest('tr').attr('id');
+                        var can = 0;
+                        var value = $(this).closest('tr').find('td').eq(0).text();
+                        var td = $(this).closest('tr').find('td.pro_cantidad').find("input:text").each(function () {
+                            can = this.value
+                        });
+                        $.ajax({
+                            async: false,
+                            type: "GET",
+                            url: "/procesos/requisicion/getres/" + id,
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.length != 0) {
+                                    for (var k in data) {
+                                        tmpl2 += [
+                                            '<tr> <td>' + k + '</td> <td> ' + (can * data[k][0]) + '</td> <td>' + data[k][1] + ' </td> <td>' + ((can * data[k][0]) * data[k][1]) + ' </td>'
+                                        ];
+                                    }
+
+                                }
+                            },
+                        });
+                        var tmpl = [
+                            // tabindex is required for focus
+                            ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+                            '<div class="modal-header">',
+                            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
+                            '<h4 class="modal-title">' + value + '</h4>',
+                            '</div>',
+                            '<div class="modal-body">',
                             '<table class="table" id="productos_table">',
                             '<thead>',
                             '<th>Producto</th>',
-                            '<th>Receta</th>',
                             '<th>Cantidad</th>',
                             '<th>Precio unitario</th>',
                             '<th>Subtotal</th>',
@@ -573,291 +807,59 @@
                             '<tbody id="productos_table_tbody">',
                             tmpl2,
                             '</tbody>',
-                            
-                        '</table>',
-                            
-                            
-                          '</div>',
-                          '<div class="modal-footer">',
+                            '</table>',
+                            '</div>',
+                            '<div class="modal-footer">',
                             '<a href="#" data-dismiss="modal" class="btn btn-default">Cerrar</a>',
-                          '</div>',
-                      '</div>'
-                    ].join('');
-                    $(tmpl).modal();
-                  });
+                            '</div>',
+                            '</div>'
+                        ].join('');
+                        $(tmpl).modal();
+                    });
 
-                //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
-                revisadaControl();
-            });
-
-            //VALIDAR FOLIO
-           $('input[name=requisicion_folio]').on('blur',function(){
-                var folio = $(this).val();
-                var $this = $(this);
-                $this.removeClass('valid');
-                $.ajax({
-                    url: "/procesos/requisicion/validatefolio",
-                    dataType: "json",
-                    data: {folio:folio},
-                    success: function (exist) {
-                        console.log(exist);
-                        if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $this.val('');
-                        }else{
-                            $this.addClass('valid');
-                        }
-                        
-                    },
+                    //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
+                    revisadaControl();
                 });
-                         
-           });
-           
-           /*
-            * ACL
-            */
-          
-           if(settings.idrol == 5){
-               $('select[name=requisicion_revisada] option[value=1]').remove();
-           }
 
+                $('select[name=requisicion_revisada]').on('change', function () {
+                    var selected = $('select[name=requisicion_revisada] option:selected').val();
 
-        }
-
-        plugin.edit = function(sucursal_destino,almacen_origen,almacen_destino,concepto_salida,anio,mes,count){
-            
-            inicioEdit(sucursal_destino,almacen_origen,almacen_destino,concepto_salida);
-            
-            
-            $('[name=idsucursaldestino]').on('change', function () {
-                getAlmacenesSucDes();
-            });
-
-            $('[name=idalmacenorigen]').on('change', function () {
-                var almorg = $("[name=idalmacenorigen]").val();
-                var almdes = $("[name=idalmacendestino]").val();
-                var sucorg = $("[name=idsucursalorigen]").val();
-                var sucdes = $("[name=idsucursaldestino]").val();
-                if (sucdes == sucorg)
-                    updateAlmacen(almdes, almorg);
-                else
-                    getConceptos();
-
-
-            });
-
-            $('[name=idalmacendestino]').on('change', function () {
-                getConceptos();
-            });
-
-            $('[name=requisicion_folio]').attr('maxlength', '10');
-
-            var minDate = firstDayOfWeek(anio,mes);
-            var maxDate = new Date(minDate);
-            maxDate.setDate(minDate.getDate() + 6);
-
-            container.find('input[name=requisicion_fecha]').datepicker({
-                startDate: minDate,
-                endDate: maxDate,
-                format: 'dd/mm/yyyy',
-            });
-
-            container.find('input[name=requisicion_fecha]').datepicker({
-                format: 'dd/mm/yyyy',
-            });
-
-            var data = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                remote: {
-                    url: '/procesos/requisicion/getproductos?q=%QUERY',
-                    wildcard: '%QUERY'
-                }
-            });
-
-            $('input#producto_autocomplete').typeahead(null, {
-                name: 'best-pictures',
-                display: 'value',
-                hint: true,
-                highlight: true,
-                source: data,
-                limit: 100,
-            });
-
-            $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
-                $('#producto_add').attr('disabled', false);
-                $('input#idproducto').val(suggestion.id);
-                $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
-
-            });
-
-            var count = count;
-            $('#producto_add').on('click', function () {
-
-                //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var tr = $('<tr id="'+$('input#idproducto').val()+' ">');
-                var tipopro;
-                $.ajax({
-                    async: false,
-                    type: "GET",
-                    url: "/procesos/requisicion/gettipopro/" + $('input#idproducto').val(),
-                    dataType: "json",
-                    success: function (data) {
-                        if (data.length != 0) {
-                            tipopro= data['ProductoTipo'];
-                                
-                        }
-                    },
+                    if (selected == 1) {
+                        $container.find('table input:checkbox').prop('checked', true)
+                        //$('#productos_table tbody input[type=checkbox]').prop('checked', true);
+                    } else {
+                        //$container.find('table input:checkbox').prop('checked', false)
+                        $('#productos_table tbody input[type=checkbox]').prop('checked', false);
+                    }
                 });
-                tr.append('<td> '+ tipopro + '</td>');
-                tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
-                tr.append('<td> '+ $('#unidadmedida_nombre').val() + '</td>');
-                tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
-                tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
-                tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
-                /*
-                 * ACL
-                 */
-                if(settings.idrol == 5){
-                    tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada] disabled>  </td>');
-                }else{
-                    tr.append('<td><input type="checkbox" name=productos[' + count + '][requisiciondetalle_revisada]>  </td>');
-                }
-                if(tipopro!='simple')
-                    tr.append('<td><a href="javascript:;"><i class="fa fa-list"></i></a></td>');
-                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
-                
-                //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
-                tr.find('input').numeric();
 
-                //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL
-                tr.find('input').on('blur', function () {
-                    var $tr = $(this).closest(tr);
-                    caluclator($tr);//mandar el total
+                $container.find('table input:text').on('blur', function () {
+                    var $tr = $(this).closest('tr');
+                    caluclator($tr);
                 });
-                var revisada = $('select[name=requisicion_revisada] option:selected').val();
-                if (revisada == 1) {
-                    tr.find('input[type=checkbox]').prop('checked', true);
-                }
 
-                //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
+                $container.find('table input:checkbox').on('click', function () {
+                    revisadaControl();
+                });
 
-                //LIMPIAMOS EL AUTOCOMPLETE
-                $('input#producto_autocomplete').typeahead('val', '');
-                $('input#idproducto').val('');
-                $('input#producto_iva').val('');
-                $('#producto_add').attr('disabled', true);
-                $('#requisicion_save').attr('disabled', false);
-                count++;
-                tr.find('.fa-trash').on('click', function () {
+                $('.fa-trash').on('click', function () {
                     var tr = $(this).closest('tr');
                     tr.remove();
+                    caluclator(tr);
                     if ($('#productos_table tbody tr').length == 0)
                     {
                         $('#requisicion_save').attr('disabled', true);
                         exits = 0;
                     }
                 });
-                
-                tr.find('.fa-list').click(function(){
-                    var tmpl2 = "";
-                    var id = $(this).closest('tr').attr('id');
-                    var can = 0;
-                    var value = $(this).closest('tr').find('td').eq(0).text();
-                    var td = $(this).closest('tr').find('td.pro_cantidad').find("input:text").each(function() {
-                    can =this.value
-                    });
-                    $.ajax({
-                        async: false,
-                        type: "GET",
-                        url: "/procesos/requisicion/getres/" + id,
-                        dataType: "json",
-                        success: function (data) {
-                            if (data.length != 0) {
-                                for (var k in data) {
-                                    tmpl2 += [
-                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k][0]) + '</td> <td>'+data[k][1]+' </td> <td>'+((can * data[k][0]) * data[k][1])+' </td>' 
-                                    ];
-                                }
-                                
-                            }
-                        },
-                    });
-                    var tmpl = [
-                      // tabindex is required for focus
-                      ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
-                        '<div class="modal-header">',
-                          '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
-                          '<h4 class="modal-title">'+value+'</h4>', 
-                        '</div>',
-                          '<div class="modal-body">',
-                            '<table class="table" id="productos_table">',
-                            '<thead>',
-                            '<th>Producto</th>',
-                            '<th>Cantidad</th>',
-                            '<th>Precio unitario</th>',
-                            '<th>Subtotal</th>',
-                            '</thead>',
-                            '<tbody id="productos_table_tbody">',
-                            tmpl2,
-                            '</tbody>',
-                            
-                        '</table>',
-                            
-                            
-                          '</div>',
-                          '<div class="modal-footer">',
-                            '<a href="#" data-dismiss="modal" class="btn btn-default">Cerrar</a>',
-                          '</div>',
-                      '</div>'
-                    ].join('');
-                    $(tmpl).modal();
-                  });
 
-                //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
-                revisadaControl();
-            });
-            
-            $('select[name=requisicion_revisada]').on('change', function () { 
-                var selected = $('select[name=requisicion_revisada] option:selected').val();
-
-                if (selected == 1) {
-                    $container.find('table input:checkbox').prop('checked', true)
-                    //$('#productos_table tbody input[type=checkbox]').prop('checked', true);
-                } else {
-                    //$container.find('table input:checkbox').prop('checked', false)
-                    $('#productos_table tbody input[type=checkbox]').prop('checked', false);
-                }
-            });
-
-            $container.find('table input:text').on('blur',function(){
-                var $tr = $(this).closest('tr');
-                caluclator($tr);
-            });
-            
-            $container.find('table input:checkbox').on('click',function(){
-                revisadaControl();
-            });
-                
-            $('.fa-trash').on('click',function(){
-                var tr = $(this).closest('tr');
-                tr.remove();
-                caluclator(tr);
-                if ($('#productos_table tbody tr').length == 0)
-                    {
-                        $('#requisicion_save').attr('disabled', true);
-                        exits = 0;
-                    }
-             });
-             
-            $('.fa-list').click(function(){
+                $('.fa-list').click(function () {
                     var tmpl2 = "";
                     var id = $(this).closest('tr').attr('idpro');
                     var can = 0;
                     var value = $(this).closest('tr').find('td').eq(0).text();
-                    var td = $(this).closest('tr').find('td.pro_cantidad').find("input:text").each(function() {
-                    can =this.value
+                    var td = $(this).closest('tr').find('td.pro_cantidad').find("input:text").each(function () {
+                        can = this.value
                     });
                     $.ajax({
                         async: false,
@@ -868,88 +870,85 @@
                             if (data.length != 0) {
                                 for (var k in data) {
                                     tmpl2 += [
-                                        '<tr> <td>' + k +'</td> <td> '+ (can * data[k][0]) + '</td> <td>'+data[k][1]+' </td> <td>'+((can * data[k][0]) * data[k][1])+' </td>' 
+                                        '<tr> <td>' + k + '</td> <td> ' + (can * data[k][0]) + '</td> <td>' + data[k][1] + ' </td> <td>' + ((can * data[k][0]) * data[k][1]) + ' </td>'
                                     ];
                                 }
-                                
+
                             }
                         },
                     });
                     var tmpl = [
-                      // tabindex is required for focus
-                      ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
+                        // tabindex is required for focus
+                        ' <div class="modal fade draggable-modal" id="draggable" tabindex="-1" role="basic" aria-hidden="true">',
                         '<div class="modal-header">',
-                          '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
-                          '<h4 class="modal-title">'+value+'</h4>', 
+                        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>',
+                        '<h4 class="modal-title">' + value + '</h4>',
                         '</div>',
-                          '<div class="modal-body">',
-                            '<table class="table" id="productos_table">',
-                            '<thead>',
-                            '<th>Producto</th>',
-                            '<th>Cantidad</th>',
-                            '<th>Precio unitario</th>',
-                            '<th>Subtotal</th>',
-                            '</thead>',
-                            '<tbody id="productos_table_tbody">',
-                            tmpl2,
-                            '</tbody>',
-                            
+                        '<div class="modal-body">',
+                        '<table class="table" id="productos_table">',
+                        '<thead>',
+                        '<th>Producto</th>',
+                        '<th>Cantidad</th>',
+                        '<th>Precio unitario</th>',
+                        '<th>Subtotal</th>',
+                        '</thead>',
+                        '<tbody id="productos_table_tbody">',
+                        tmpl2,
+                        '</tbody>',
                         '</table>',
-                            
-                            
-                          '</div>',
-                          '<div class="modal-footer">',
-                            '<a href="#" data-dismiss="modal" class="btn btn-default">Cerrar</a>',
-                          '</div>',
-                      '</div>'
+                        '</div>',
+                        '<div class="modal-footer">',
+                        '<a href="#" data-dismiss="modal" class="btn btn-default">Cerrar</a>',
+                        '</div>',
+                        '</div>'
                     ].join('');
                     $(tmpl).modal();
-                  });
-             
-            //VALIDAR FOLIO
-           $('input[name=requisicion_folio]').on('blur',function(){
-                var folio = $(this).val();
-                var $this = $(this);
-                $this.removeClass('valid');
-                $.ajax({
-                    url: "/procesos/requisicion/validatefolio",
-                    dataType: "json",
-                    data: {folio:folio,edit:true,id:$('input[name=idrequisicion]').val()},
-                    success: function (exist) {
-                        console.log(exist);
-                        if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $this.val('');
-                        }else{
-                            $this.addClass('valid');
-                        }
-                        
-                    },
                 });
-                         
-           });
-           
-            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
-            var now = $('input[name=requisicion_fecha]').val();
-            var now_array = now.split('/');
-            var now = new Date(now_array[2]+'/'+now_array[1]+'/'+now_array[0]);
-            if(now.format('W') != mes || now.getFullYear() != anio){
-                $container.find('input,select,button').attr('disabled',true);
-                $('.fa-trash').unbind();
-                $('.fa-trash').css('cursor','not-allowed');
-                
+
+                //VALIDAR FOLIO
+                $('input[name=requisicion_folio]').on('blur', function () {
+                    var folio = $(this).val();
+                    var $this = $(this);
+                    $this.removeClass('valid');
+                    $.ajax({
+                        url: "/procesos/requisicion/validatefolio",
+                        dataType: "json",
+                        data: {folio: folio, edit: true, id: $('input[name=idrequisicion]').val()},
+                        success: function (exist) {
+                            console.log(exist);
+                            if (exist) {
+                                alert('El folio "' + folio + '" ya fue utilizado en los últimos 2 meses');
+                                $this.val('');
+                            } else {
+                                $this.addClass('valid');
+                            }
+
+                        },
+                    });
+
+                });
+
+                //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE MODIFICAR
+                var now = $('input[name=requisicion_fecha]').val();
+                var now_array = now.split('/');
+                var now = new Date(now_array[2] + '/' + now_array[1] + '/' + now_array[0]);
+                if (now.format('W') != mes || now.getFullYear() != anio) {
+                    $container.find('input,select,button').attr('disabled', true);
+                    $('.fa-trash').unbind();
+                    $('.fa-trash').css('cursor', 'not-allowed');
+
+                }
+
+                if (settings.idrol == 5) {
+                    $('select[name=requisicion_revisada]').attr('disabled', true);
+                    $('#productos_table input[type=checkbox]').attr('disabled', true);
+                    var revisada = $('select[name=requisicion_revisada] option:selected').val();
+
+                    if (revisada == 1) {
+                        $('form input,form select,form button[type=submit]').attr('disabled', true);
+                    }
+                }
             }
-
-            if(settings.idrol == 5){
-               $('select[name=requisicion_revisada]').attr('disabled',true);
-               $('#productos_table input[type=checkbox]').attr('disabled',true);
-               var revisada =  $('select[name=requisicion_revisada] option:selected').val();
-  
-               if(revisada == 1){
-                   $('form input,form select,form button[type=submit]').attr('disabled',true);
-               }
-           }
-
         }
 
         /*
@@ -960,6 +959,6 @@
 
     }
 
-    
+
 
 })(jQuery);
