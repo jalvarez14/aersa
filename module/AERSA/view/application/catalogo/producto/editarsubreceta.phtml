@@ -107,7 +107,7 @@
     console.log( producto_rendimiento);
 
     if(producto_rendimientooriginal != "" && producto_rendimiento != "")
-    {   
+    {
         $("[name=receta_cantidadoriginal],select[name=receta_unidad]").on('change',function(){
             if(typeof  $('select[name=receta_unidad] option:selected').val() != 'undefined'){
                 producto_rendimiento = $('#productoreceta_rendimiento').val();
@@ -119,24 +119,24 @@
                 }else if(unidad == "Copa vino 150 ML"){
                     factor =150;
                 }
-                else if(unidad == "Botella"){
-                    factor =1;
+                var cantidad = $("[name=receta_cantidadoriginal]").val();
+                if(unidad == "Pieza" || unidad == "Botella"){
+                    var cantidad_normalizada = (cantidad*factor);
+                 }
+                 else
+                {
+                    var cantidad_normalizada = (cantidad*factor)/producto_rendimiento;
                 }
-                else if(unidad == "Pieza"){
-                    factor =1;
-                }
-            }
-            var cantidad = $("[name=receta_cantidadoriginal]").val();
-            if(unidad == "Pieza" || unidad == "Botella"){
-                var cantidad_normalizada = (cantidad*factor);
+                                                                          
             }
             else
             {
-                var cantidad_normalizada = (cantidad*factor)/producto_rendimiento;
+                var cantidad = $("[name=receta_cantidadoriginal]").val();
+                var cantidad_normalizada = (cantidad*producto_rendimiento)/producto_rendimientooriginal;
             }
             $('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(6));
         });
-    } 
+    }
     
 
 </script>
