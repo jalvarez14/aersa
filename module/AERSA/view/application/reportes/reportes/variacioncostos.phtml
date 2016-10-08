@@ -16,6 +16,7 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
+                <label id="no_data"></label>
                 <h5>Mes y año inicial</h5>
                 <div class="row">
                     <div class="col-md-6">
@@ -123,5 +124,5 @@
 <script src="/application/custom/js/reportes/reportes.js" type="text/javascript"></script>	
 <script>
     var $plugin = $('#my_container').reportes();
-    $plugin.variacioncostos();
+    $plugin.variacioncostos(<?php echo $no_data?>);
 </script>

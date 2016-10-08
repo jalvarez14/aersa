@@ -1,6 +1,6 @@
 <?php
-
 namespace Application\Administracion\Controller\Reportes;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -213,35 +213,77 @@ class MonitoreotablajeriaController extends AbstractActionController {
             if ($mes == 12)
                 $mes1 = "Diciembre";
 
-            $reporte2 = array();
+
             $nombreEmpresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
             $nombreSucursal = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalNombre();
-            array_push($reporte2, "<tr><td>$nombreEmpresa ($nombreSucursal)</td></tr>");
-            array_push($reporte2, "<tr><td>Monitoreo de tablajería</td></tr>");
-            array_push($reporte2, "<tr><td>Producto</td><td>$mes1</td><td>$mes2</td><td>$mes3</td></tr>");
-            $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->orderByProductoNombre('asc')->find();
-            $productoObj = new \Producto();
-            foreach ($productosObj as $productoObj) {
-                $nombreProducto = $productoObj->getProductoNombre();
-                $id = $productoObj->getIdproducto();
-                $mes1 = $reporte[1][$id];
-                $mes2 = $reporte[2][$id];
-                $mes3 = $reporte[3][$id];
-                array_push($reporte2, "<tr><td>$nombreProducto</td><td>$mes1</td><td>$mes2</td><td>$mes3</td></tr>");
+            $reporte2 = array();
+            
+            if (isset($post_data['generar_excel']) || isset($post_data['generar_pdf'])) {
+                array_push($reporte2, array('uno'=>'Producto','dos'=>$mes1,'tres'=>$mes2,'cuatro'=>$mes3));
+                $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->orderByProductoNombre('asc')->find();
+                $productoObj = new \Producto();
+                foreach ($productosObj as $productoObj) {
+                    $nombreProducto = $productoObj->getProductoNombre();
+                    $id = $productoObj->getIdproducto();
+                    $mes1 = $reporte[1][$id];
+                    $mes2 = $reporte[2][$id];
+                    $mes3 = $reporte[3][$id];
+                    array_push($reporte2, array('uno'=>$nombreProducto,'dos'=>$mes1,'tres'=>$mes2,'cuatro'=>$mes3));
+                }
+                
+                $template = '/monitoreotablajeria.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal),
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $reporte2,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if (isset($post_data['generar_pdf']))
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+            } else {
+                array_push($reporte2, "<tr><td>$nombreEmpresa ($nombreSucursal)</td></tr>");
+                array_push($reporte2, "<tr><td>Monitoreo de tablajería</td></tr>");
+                array_push($reporte2, "<tr><td>Producto</td><td>$mes1</td><td>$mes2</td><td>$mes3</td></tr>");
+                $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->orderByProductoNombre('asc')->find();
+                $productoObj = new \Producto();
+                foreach ($productosObj as $productoObj) {
+                    $nombreProducto = $productoObj->getProductoNombre();
+                    $id = $productoObj->getIdproducto();
+                    $mes1 = $reporte[1][$id];
+                    $mes2 = $reporte[2][$id];
+                    $mes3 = $reporte[3][$id];
+                    array_push($reporte2, "<tr><td>$nombreProducto</td><td>$mes1</td><td>$mes2</td><td>$mes3</td></tr>");
+                }
+                return $this->getResponse()->setContent(json_encode($reporte2));
             }
-            return $this->getResponse()->setContent(json_encode($reporte2));
             exit;
         }
 
         //INTANCIAMOS NUESTRA VISTA
-        $min=0;
-        $max=0;
-        $no_data=false;
+        $min = 0;
+        $max = 0;
+        $no_data = false;
         if (\OrdentablajeriaQuery::create()->filterByIdsucursal($idsucursal)->orderByOrdentablajeriaFecha('asc')->exists()) {
             $min = \OrdentablajeriaQuery::create()->filterByIdsucursal($idsucursal)->orderByOrdentablajeriaFecha('asc')->findOne()->getOrdentablajeriaFecha('Y');
             $max = \OrdentablajeriaQuery::create()->filterByIdsucursal($idsucursal)->orderByOrdentablajeriaFecha('desc')->findOne()->getOrdentablajeriaFecha('Y');
         } else {
-            $no_data=true;
+            $no_data = true;
         }
         $ano_array = array();
         for ($i = $min; $i <= $max; $i++) {

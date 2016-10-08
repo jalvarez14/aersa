@@ -134,7 +134,7 @@ class ReportesController extends AbstractActionController {
                         )
                 );
                 if (isset($post_data['generar_pdf']))
-                    echo $R->render();
+                    echo $R->render('PDF');
                 else
                     echo $R->render('excel');
                 exit();
@@ -150,11 +150,17 @@ class ReportesController extends AbstractActionController {
         }
 
         //INTANCIAMOS NUESTRA VISTA
-        $min = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->findOne()->getCuentaporcobrarFecha('Y');
-        $max = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('desc')->findOne()->getCuentaporcobrarFecha('Y');
         $ano_array = array();
-        for ($i = $min; $i <= $max; $i++) {
-            $ano_array[$i] = $i;
+        $no_data=false;
+        $exists=\CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->exists();
+        if($exists) {
+            $min = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->findOne()->getCuentaporcobrarFecha('Y');
+            $max = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('desc')->findOne()->getCuentaporcobrarFecha('Y');
+            for ($i = $min; $i <= $max; $i++) {
+                $ano_array[$i] = $i;
+            }
+        } else {
+            $no_data=true;
         }
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
         $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
@@ -165,6 +171,7 @@ class ReportesController extends AbstractActionController {
             'categorias' => $categorias,
             'productos' => $productos,
             'messages' => $this->flashMessenger(),
+            'no_data' => $no_data,
         ));
         $view_model->setTemplate('/application/reportes/reportes/variacioncostos');
         return $view_model;
@@ -667,7 +674,7 @@ class ReportesController extends AbstractActionController {
                         )
                 );
                 if (isset($post_data['generar_pdf']))
-                    echo $R->render();
+                    echo $R->render('PDF');
                 else
                     echo $R->render('excel');
                 exit();
@@ -1082,7 +1089,7 @@ class ReportesController extends AbstractActionController {
                         )
                 );
                 if (isset($post_data['generar_pdf']))
-                    echo $R->render();
+                        echo $R->render('PDF');
                 else
                     echo $R->render('excel');
                 exit();
