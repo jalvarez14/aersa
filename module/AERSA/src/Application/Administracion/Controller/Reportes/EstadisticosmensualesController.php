@@ -1,6 +1,6 @@
 <?php
-
 namespace Application\Administracion\Controller\Reportes;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -17,8 +17,8 @@ class EstadisticosmensualesController extends AbstractActionController {
         if ($request->isPost()) {
             $post_data = $request->getPost();
             //var_dump($post_data);
-            $inicio = $post_data['fecha_inicial'];
-            $fin = $post_data['fecha_final'];
+            $inicio = (isset($post_data['fecha_inicial'])) ? $post_data['fecha_inicial'] : $post_data['fecha_inicio'];
+            $fin = (isset($post_data['fecha_final'])) ? $post_data['fecha_final'] : $post_data['fecha_fin'];
             $inicioSpli = explode('/', $inicio);
             $finSpli = explode('/', $fin);
             $inicio = $inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0];
@@ -1329,40 +1329,80 @@ class EstadisticosmensualesController extends AbstractActionController {
 /********************************************************************************************************************************/
         $reporte=array();
         $nombreEmpresa=  \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
-        array_push($reporte, "<tr><td>$nombreEmpresa</td></tr>");
-        array_push($reporte, "<tr><td>Análisis comparativo estadístico</td></tr>");
-        array_push($reporte, "<tr><td>$inicio - $fin</td></tr>");
-        array_push($reporte, "<tr><td>Concepto</td><td>$inicio3 - $fin3</td><td>$inicio2 - $fin2</td><td>$inicio - $fin</td><td>$inicio0 - $fin0</td><td>%</td></tr>");
-        array_push($reporte, "<tr><td>Ingresos sin IVA</td><td>".$ventasNetasAlimentos3+$ventasNetasBebidas3."</td><td> ".$ventasNetasAlimentos2+$ventasNetasBebidas2."</td><td>".$ventasNetasAlimentos+$ventasNetasBebidas."</td><td>".$ventasNetasAlimentos0+$ventasNetasBebidas0."</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Costo de venta</td><td>".$costVentAlimentos3+$costVentBebidas3."</td><td>".$costVentAlimentos2+$costVentBebidas2."</td><td>".$costVentAlimentos+$costVentBebidas."</td><td>".$costVentAlimentos0+$costVentBebidas0."</td><td></td></tr>");    
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel'])) {
+            array_push($reporte, array('uno'=>'Concepto','dos'=>$inicio3.' - '.$fin3,'tres'=>$inicio2.' - '.$fin2,'cuatro'=>$inicio.' - '.$fin,'cinco'=>$inicio0.' - '.$fin0,'seis'=>'%'));
+            array_push($reporte, array('uno'=>'Ingresos sin IVA','dos'=>($ventasNetasAlimentos3+$ventasNetasBebidas3),'tres'=>($ventasNetasAlimentos2+$ventasNetasBebidas2),'cuatro'=>($ventasNetasAlimentos+$ventasNetasBebidas),'cinco'=>($ventasNetasAlimentos0+$ventasNetasBebidas0),'seis'=>''));
+            array_push($reporte, array('uno'=>'Costo de venta','dos'=>($costVentAlimentos3+$costVentBebidas3),'tres'=>($costVentAlimentos2+$costVentBebidas2),'cuatro'=>($costVentAlimentos+$costVentBebidas),'cinco'=>($costVentAlimentos0+$costVentBebidas0),'seis'=>''));
+        } else {
+            array_push($reporte, "<tr><td>$nombreEmpresa</td></tr>");
+            array_push($reporte, "<tr><td>Análisis comparativo estadístico</td></tr>");
+            array_push($reporte, "<tr><td>$inicio - $fin</td></tr>");
+            array_push($reporte, "<tr><td>Concepto</td><td>$inicio3 - $fin3</td><td>$inicio2 - $fin2</td><td>$inicio - $fin</td><td>$inicio0 - $fin0</td><td>%</td></tr>");
+            array_push($reporte, "<tr><td>Ingresos sin IVA</td><td>".$ventasNetasAlimentos3+$ventasNetasBebidas3."</td><td> ".$ventasNetasAlimentos2+$ventasNetasBebidas2."</td><td>".$ventasNetasAlimentos+$ventasNetasBebidas."</td><td>".$ventasNetasAlimentos0+$ventasNetasBebidas0."</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Costo de venta</td><td>".$costVentAlimentos3+$costVentBebidas3."</td><td>".$costVentAlimentos2+$costVentBebidas2."</td><td>".$costVentAlimentos+$costVentBebidas."</td><td>".$costVentAlimentos0+$costVentBebidas0."</td><td></td></tr>");    
+        }
         $porc3=(($costVentAlimentos3+$costVentBebidas3)!=0 || ($ventasNetasAlimentos3+$ventasNetasBebidas3)!=0) ? ($costVentAlimentos3+$costVentBebidas3)/($ventasNetasAlimentos3+$ventasNetasBebidas3) : 0;
         $porc2=(($costVentAlimentos2+$costVentBebidas2)!=0 || ($ventasNetasAlimentos2+$ventasNetasBebidas2)!=0) ? ($costVentAlimentos2+$costVentBebidas2)/($ventasNetasAlimentos3+$ventasNetasBebidas2) : 0;
         $porc=(($costVentAlimentos+$costVentBebidas)!=0 || ($ventasNetasAlimentos+$ventasNetasBebidas)!=0) ? ($costVentAlimentos+$costVentBebidas)/($ventasNetasAlimentos3+$ventasNetasBebidas) : 0;
         $porc0=(($costVentAlimentos0+$costVentBebidas0)!=0 || ($ventasNetasAlimentos0+$ventasNetasBebidas0)!=0) ? ($costVentAlimentos0+$costVentBebidas0)/($ventasNetasAlimentos3+$ventasNetasBebidas0) : 0;
-        array_push($reporte, "<tr><td>% Costo de venta</td><td>$porc3</td><td>$porc2</td><td>$porc</td><td>$porc0</td><td></td></tr>");    
-        array_push($reporte, "<tr><td>Ventas por rubro</td><td></td><td></td><td></td><td></td><td></td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel'])) {
+            array_push($reporte, array('uno'=>'% Costo de venta','dos'=>$porc3,'tres'=>$porc2,'cuatro'=>$porc,'cinco'=>$porc0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Ventas por rubro','dos'=>'','tres'=>'','cuatro'=>'','cinco'=>'','seis'=>''));
+        } else {
+            array_push($reporte, "<tr><td>% Costo de venta</td><td>$porc3</td><td>$porc2</td><td>$porc</td><td>$porc0</td><td></td></tr>");    
+            array_push($reporte, "<tr><td>Ventas por rubro</td><td></td><td></td><td></td><td></td><td></td></tr>");
+        }
         $porc=($ventasRubroAlimentos!=0 || ($ventasNetasAlimentos+$ventasNetasBebidas)!=0)? ($ventasRubroAlimentos/($ventasNetasAlimentos+$ventasNetasBebidas)):0;
-        array_push($reporte, "<tr><td>Alimentos</td><td>$ventasRubroAlimentos3</td><td>$ventasRubroAlimentos2</td><td>$ventasRubroAlimentos</td><td>$ventasRubroAlimentos0</td><td>$porc %</td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel'])) 
+            array_push($reporte, array('uno'=>'Alimentos','dos'=>$ventasRubroAlimentos3,'tres'=>$ventasRubroAlimentos2,'cuatro'=>$ventasRubroAlimentos,'cinco'=>$ventasRubroAlimentos0,'seis'=>$porc.' %'));
+        else
+            array_push($reporte, "<tr><td>Alimentos</td><td>$ventasRubroAlimentos3</td><td>$ventasRubroAlimentos2</td><td>$ventasRubroAlimentos</td><td>$ventasRubroAlimentos0</td><td>$porc %</td></tr>");
         $porc=($ventasRubroAlimentos!=0||($ventasNetasAlimentos+$ventasNetasBebidas)!=0)?($ventasRubroAlimentos/($ventasNetasAlimentos+$ventasNetasBebidas)):0;
-        array_push($reporte, "<tr><td>Bebidas</td><td>$ventasRubroBebidas3</td><td>$ventasRubroBebidas2</td><td>$ventasRubroBebidas</td><td>$ventasRubroBebidas0</td><td>$porc %</td></tr>");
-        array_push($reporte, "<tr><td>Compras del mes</td><td></td><td></td><td></td><td></td><td></td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel'])) {
+            array_push($reporte, array('uno'=>'Bebidas','dos'=>$ventasRubroBebidas3,'tres'=>$ventasRubroBebidas2,'cuatro'=>$ventasRubroBebidas,'cinco'=>$ventasRubroBebidas0,'seis'=>$porc.' %'));
+            array_push($reporte, array('uno'=>'Compras del mes','dos'=>'','tres'=>'','cuatro'=>'','cinco'=>'','seis'=>''));
+        } else {
+            array_push($reporte, "<tr><td>Bebidas</td><td>$ventasRubroBebidas3</td><td>$ventasRubroBebidas2</td><td>$ventasRubroBebidas</td><td>$ventasRubroBebidas0</td><td>$porc %</td></tr>");
+            array_push($reporte, "<tr><td>Compras del mes</td><td></td><td></td><td></td><td></td><td></td></tr>");    
+        }
         $porc=($compraMesAlimentos!=0||($ventasNetasAlimentos+$ventasNetasBebidas)!=0)?($compraMesAlimentos/($ventasNetasAlimentos+$ventasNetasBebidas)):0;
-        array_push($reporte, "<tr><td>Alimentos</td><td>$compraMesAlimentos3</td><td>$compraMesAlimentos2</td><td>$compraMesAlimentos</td><td>$compraMesAlimentos0</td><td>$porc %</td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel']))
+            array_push($reporte, array('uno'=>'Alimentos','dos'=>$compraMesAlimentos3,'tres'=>$compraMesAlimentos2,'cuatro'=>$compraMesAlimentos,'cinco'=>$compraMesAlimentos0,'seis'=>$porc.' %'));
+        else 
+            array_push($reporte, "<tr><td>Alimentos</td><td>$compraMesAlimentos3</td><td>$compraMesAlimentos2</td><td>$compraMesAlimentos</td><td>$compraMesAlimentos0</td><td>$porc %</td></tr>");
         $porc=($compraMesBebidas!=0||($ventasNetasAlimentos+$ventasNetasBebidas)!=0)? ($compraMesBebidas/($ventasNetasAlimentos+$ventasNetasBebidas)):0;
-        array_push($reporte, "<tr><td>Bebidas</td><td>$compraMesBebidas3</td><td>$compraMesBebidas2</td><td>$compraMesBebidas</td><td>$compraMesBebidas0</td><td>$porc %</td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel']))
+            array_push($reporte, array('uno'=>'Bebidas','dos'=>$compraMesBebidas3,'tres'=>$compraMesBebidas2,'cuatro'=>$compraMesBebidas,'cinco'=>$compraMesBebidas0,'seis'=>$porc.' %'));
+        else
+            array_push($reporte, "<tr><td>Bebidas</td><td>$compraMesBebidas3</td><td>$compraMesBebidas2</td><td>$compraMesBebidas</td><td>$compraMesBebidas0</td><td>$porc %</td></tr>");
         $porc=($compraMesBebidas+$compraMesAlimentos!=0||($ventasNetasAlimentos+$ventasNetasBebidas)!=0)?($compraMesBebidas+$compraMesAlimentos/($ventasNetasAlimentos+$ventasNetasBebidas)):0;
-        array_push($reporte, "<tr><td>Total</td><td>".$compraMesBebidas3+$compraMesAlimentos3."</td><td>".$compraMesBebidas2+$compraMesAlimentos2."</td><td>".$compraMesBebidas+$compraMesAlimentos."</td><td>".$compraMesBebidas0+$compraMesAlimentos0."</td><td>"." %</td></tr>");
-        array_push($reporte, "<tr><td>Venta promedio diaria</td><td>$ventasPromDiar3</td><td>$ventasPromDiar2</td><td>$ventasPromDiar</td><td>$ventasPromDiar0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Comsumo promedioP/empleado díario</td><td>$consumoPromEmpl3</td><td>$consumoPromEmpl2</td><td>$consumoPromEmpl</td><td>$consumoPromEmpl0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Cortesias</td><td></td><td></td><td></td><td></td><td></td></tr>");
-        array_push($reporte, "<tr><td>Alimentos</td><td>$cortesiasAlimentos3</td><td>$cortesiasAlimentos2</td><td>$cortesiasAlimentos</td><td>$cortesiasAlimentos0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Bebidas</td><td>$cortesiasBebidas3</td><td>$cortesiasBebidas2</td><td>$cortesiasBebidas</td><td>$cortesiasBebidas0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Consumo ejecutivo</td><td></td><td></td><td></td><td></td><td></td></tr>");
-        array_push($reporte, "<tr><td>Alimentos</td><td>$consumoEjecAlimentos3</td><td>$consumoEjecAlimentos2</td><td>$consumoEjecAlimentos</td><td>$consumoEjecAlimentos0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Bebidas</td><td>$consumoEjecBebidas3</td><td>$consumoEjecBebidas2</td><td>$consumoEjecBebidas</td><td>$consumoEjecBebidas0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Mermas</td><td>$mermaAlimentos3</td><td>$mermaAlimentos2</td><td>$mermaAlimentos</td><td>$mermaAlimentos0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Bebidas</td><td>$mermaBebidas3</td><td>$mermaBebidas2</td><td>$mermaBebidas</td><td>$mermaBebidas0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Alimentos</td><td></td><td></td><td></td><td></td><td></td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel'])) {
+            array_push($reporte, array('uno'=>'Total','dos'=>($compraMesBebidas3+$compraMesAlimentos3),'tres'=>($compraMesBebidas2+$compraMesAlimentos2),'cuatro'=>($compraMesBebidas+$compraMesAlimentos),'cinco'=>($compraMesBebidas0+$compraMesAlimentos0),'seis'=>''));
+            array_push($reporte, array('uno'=>'Venta promedio diaria','dos'=>$ventasPromDiar3,'tres'=>$ventasPromDiar2,'cuatro'=>$ventasPromDiar,'cinco'=>$ventasPromDiar0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Comsumo promedioP/empleado díario','dos'=>$consumoPromEmpl3,'tres'=>$consumoPromEmpl2,'cuatro'=>$consumoPromEmpl,'cinco'=>$consumoPromEmpl0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Cortesias','dos'=>'','tres'=>'','cuatro'=>'','cinco'=>'','seis'=>''));
+            array_push($reporte, array('uno'=>'Alimentos','dos'=>$cortesiasAlimentos3,'tres'=>$cortesiasAlimentos2,'cuatro'=>$cortesiasAlimentos,'cinco'=>$cortesiasAlimentos0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Bebidas','dos'=>$cortesiasBebidas3,'tres'=>$cortesiasBebidas2,'cuatro'=>$cortesiasBebidas,'cinco'=>$cortesiasBebidas0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Consumo ejecutivo','dos'=>'','tres'=>'','cuatro'=>'','cinco'=>'','seis'=>''));
+            array_push($reporte, array('uno'=>'Alimentos','dos'=>$consumoEjecAlimentos3,'tres'=>$consumoEjecAlimentos2,'cuatro'=>$consumoEjecAlimentos,'cinco'=>$consumoEjecAlimentos0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Bebidas','dos'=>$consumoEjecBebidas3,'tres'=>$consumoEjecBebidas2,'cuatro'=>$consumoEjecBebidas,'cinco'=>$consumoEjecBebidas0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Mermas','dos'=>$mermaAlimentos3,'tres'=>$mermaAlimentos2,'cuatro'=>$mermaAlimentos,'cinco'=>$mermaAlimentos0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Bebidas','dos'=>$mermaBebidas3,'tres'=>$mermaBebidas2,'cuatro'=>$mermaBebidas,'cinco'=>$mermaBebidas0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Alimentos','dos'=>'','tres'=>'','cuatro'=>'','cinco'=>'','seis'=>''));
+        }else {
+            array_push($reporte, "<tr><td>Total</td><td>".$compraMesBebidas3+$compraMesAlimentos3."</td><td>".$compraMesBebidas2+$compraMesAlimentos2."</td><td>".$compraMesBebidas+$compraMesAlimentos."</td><td>".$compraMesBebidas0+$compraMesAlimentos0."</td><td>"." </td></tr>");
+            array_push($reporte, "<tr><td>Venta promedio diaria</td><td>$ventasPromDiar3</td><td>$ventasPromDiar2</td><td>$ventasPromDiar</td><td>$ventasPromDiar0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Comsumo promedioP/empleado díario</td><td>$consumoPromEmpl3</td><td>$consumoPromEmpl2</td><td>$consumoPromEmpl</td><td>$consumoPromEmpl0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Cortesias</td><td></td><td></td><td></td><td></td><td></td></tr>");
+            array_push($reporte, "<tr><td>Alimentos</td><td>$cortesiasAlimentos3</td><td>$cortesiasAlimentos2</td><td>$cortesiasAlimentos</td><td>$cortesiasAlimentos0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Bebidas</td><td>$cortesiasBebidas3</td><td>$cortesiasBebidas2</td><td>$cortesiasBebidas</td><td>$cortesiasBebidas0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Consumo ejecutivo</td><td></td><td></td><td></td><td></td><td></td></tr>");
+            array_push($reporte, "<tr><td>Alimentos</td><td>$consumoEjecAlimentos3</td><td>$consumoEjecAlimentos2</td><td>$consumoEjecAlimentos</td><td>$consumoEjecAlimentos0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Bebidas</td><td>$consumoEjecBebidas3</td><td>$consumoEjecBebidas2</td><td>$consumoEjecBebidas</td><td>$consumoEjecBebidas0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Mermas</td><td>$mermaAlimentos3</td><td>$mermaAlimentos2</td><td>$mermaAlimentos</td><td>$mermaAlimentos0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Bebidas</td><td>$mermaBebidas3</td><td>$mermaBebidas2</td><td>$mermaBebidas</td><td>$mermaBebidas0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Alimentos</td><td></td><td></td><td></td><td></td><td></td></tr>");
+        }
         $subcategorias= \CategoriaQuery::create()->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
         $subcategoria=new \Categoria();
         $total3=0;
@@ -1379,10 +1419,18 @@ class EstadisticosmensualesController extends AbstractActionController {
             $total2+=$semana2;
             $total+=$semana;
             $total0+=$semana0;
-            array_push($reporte, "<tr><td>$nombre</td><td>$semana3</td><td>$semana2</td><td>$semana</td><td>$semana0</td><td></td></tr>");
+            if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel']))
+                array_push($reporte, array('uno'=>$nombre,'dos'=>$semana3,'tres'=>$semana2,'cuatro'=>$semana,'cinco'=>$semana0,'seis'=>''));
+            else
+                array_push($reporte, "<tr><td>$nombre</td><td>$semana3</td><td>$semana2</td><td>$semana</td><td>$semana0</td><td></td></tr>");
         }
-        array_push($reporte, "<tr><td>Total</td><td>$total3</td><td>$total2</td><td>$total</td><td>$total0</td><td></td></tr>");
-        array_push($reporte, "<tr><td>Bebidas</td><td></td><td></td><td></td><td></td><td></td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel'])) {
+            array_push($reporte, array('uno'=>'Total','dos'=>$total3,'tres'=>$total2,'cuatro'=>$total,'cinco'=>$total0,'seis'=>''));
+            array_push($reporte, array('uno'=>'Bebidas','dos'=>'','tres'=>'','cuatro'=>'','cinco'=>'','seis'=>''));
+        } else {
+            array_push($reporte, "<tr><td>Total</td><td>$total3</td><td>$total2</td><td>$total</td><td>$total0</td><td></td></tr>");
+            array_push($reporte, "<tr><td>Bebidas</td><td></td><td></td><td></td><td></td><td></td></tr>");
+        }
         $total3=0;
         $total2=0;
         $total=0;
@@ -1399,307 +1447,45 @@ class EstadisticosmensualesController extends AbstractActionController {
             $total2+=$semana2;
             $total+=$semana;
             $total0+=$semana0;
-            array_push($reporte, "<tr><td>$nombre</td><td>$semana3</td><td>$semana2</td><td>$semana</td><td>$semana0</td><td></td></tr>");
+            if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel']))
+                array_push($reporte, array('uno'=>$nombre,'dos'=>$semana3,'tres'=>$semana2,'cuatro'=>$semana,'cinco'=>$semana0,'seis'=>''));
+            else
+                array_push($reporte, "<tr><td>$nombre</td><td>$semana3</td><td>$semana2</td><td>$semana</td><td>$semana0</td><td></td></tr>");
         }
-        array_push($reporte, "<tr><td>Total</td><td>$total3</td><td>$total2</td><td>$total</td><td>$total0</td><td></td></tr>");
-        return $this->getResponse()->setContent(json_encode($reporte));
-        exit;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//inventario incial
-            $prevSunday = date('Y-m-d', strtotime('last sunday', strtotime($inicio)));
-
-            $inventariosMes = \InventariomesQuery::create()->filterByIdsucursal($idsucursal)->filterByInventariomesFecha($prevSunday)->find();
-            $inventarioMes = new \Inventariomes();
-            $invIniAlimentos = 0;
-            $invIniBebidas = 0;
-            $invIniConsolidado = 0;
-            foreach ($inventariosMes as $inventarioMes) {
-                $invIniAlimentos+=$inventarioMes->getInventariomesFinalalimentos();
-                $invIniBebidas+=$inventarioMes->getInventariomesFinalbebidas();
-            }
-            $invIniConsolidado = $invIniBebidas + $invIniAlimentos;
-
-            //compras del mes
-            $compraMesAlimentos = 0;
-            $compraMesBebidas = 0;
-            $compraMesConsolidado = 0;
-            $iva = \TasaivaQuery::create()->filterByIdtasaiva(1)->findOne()->getTasaivaValor();
-            $iva = $iva / 100 + 1;
-
-            $almacenesActi = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->filterByAlmacenEstatus(1)->find();
-            $almacen = new \Almacen();
-            foreach ($almacenesActi as $almacen) {
-                $compras = \CompraQuery::create()->filterByIdsucursal()->filterByIdalmacen($almacen->getIdalmacen())->filterByCompraFechacompra(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
-                $compra = new \Compra();
-                foreach ($compras as $compra) {
-                    $comprasDetalle = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
-                    $compraDetalle = new \Compradetalle();
-                    foreach ($comprasDetalle as $compraDetalle) {
-                        $cantidad = number_format(($compraDetalle->getCompradetalleSubtotal() * $iva), 6);
-                        $cantidad = str_replace(",", "", $cantidad);
-                        if ($compraDetalle->getProducto()->getIdcategoria() == 1)
-                            $compraMesAlimentos+=$cantidad;
-                        elseif ($compraDetalle->getProducto()->getIdcategoria() == 2)
-                            $compraMesBebidas+=$cantidad;
-                    }
-                }
-            }
-            $compraMesConsolidado = $compraMesAlimentos + $compraMesBebidas;
-            //existencias
-            $existenciaAlimentos = $invIniAlimentos + $compraMesAlimentos;
-            $existenciaBebidas = $invIniBebidas + $compraMesBebidas;
-            $existenciaConsolidado = $invIniConsolidado + $compraMesConsolidado;
-
-            //inventario final
-            $invFinAlimentos = 0;
-            $invFinBebidas = 0;
-            $invFinConsolidado = 0;
-            $inventariosFinMes = \InventariomesQuery::create()->filterByIdsucursal($idsucursal)->filterByInventariomesFecha($fin)->find();
-            $inventarioFinMes = new \Inventariomes();
-            foreach ($inventariosFinMes as $inventarioFinMes) {
-                $invFinAlimentos+=$inventarioFinMes->getInventariomesFinalalimentos();
-                $invFinBebidas+=$inventarioFinMes->getInventariomesFinalbebidas();
-            }
-            $invFinConsolidado = $invFinAlimentos + $invFinBebidas;
-
-            //costo bruto
-            $costoBrutoAlimentos = $existenciaAlimentos - $invFinAlimentos;
-            $costoBrutoBebidas = $existenciaBebidas - $invFinBebidas;
-            $costoBrutoConsolidado = $existenciaConsolidado - $invFinConsolidado;
-
-            //creditos al costo
-            $creditosCostAlimentos = 0;
-            $creditosCostBebidas = 0;
-            $creditosCostConsolidado = 0;
-
-            $cortesiasAlimentos = 0;
-            $cortesiasBebidas = 0;
-            $conceptos = \ConceptosalidaQuery::create()->filterByConceptosalidaNombre('Cortesia')->find();
-            $concepto = new \Conceptosalida();
-            foreach ($conceptos as $concepto) {
-                $requisiciones = \RequisicionQuery::create()->filterByIdsucursalorigen($idsucursal)->filterByIdconceptosalida($concepto->getIdconceptosalida())->filterByRequisicionFecha(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
-                $requisicion = new \Requisicion();
-                foreach ($requisiciones as $requisicion) {
-                    $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
-                    $requisiciondetalle = new \Requisiciondetalle();
-                    foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $cantidad = $requisiciondetalle->getRequisiciondetalleSubtotal();
-                        if ($requisiciondetalle->getProducto()->getIdcategoria() == 1)
-                            $cortesiasAlimentos+=$cantidad;
-                        elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2)
-                            $cortesiasBebidas+=$cantidad;
-                    }
-                }
-            }
-
-            $consumoEmplAlimentos = 0;
-            $consumoEmplBebidas = 0;
-            $conceptos = \ConceptosalidaQuery::create()->filterByConceptosalidaNombre('Consumos de empleados')->find();
-            $concepto = new \Conceptosalida();
-            foreach ($conceptos as $concepto) {
-                $requisiciones = \RequisicionQuery::create()->filterByIdsucursalorigen($idsucursal)->filterByIdconceptosalida($concepto->getIdconceptosalida())->filterByRequisicionFecha(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
-                $requisicion = new \Requisicion();
-                foreach ($requisiciones as $requisicion) {
-                    $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
-                    $requisiciondetalle = new \Requisiciondetalle();
-                    foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $cantidad = $requisiciondetalle->getRequisiciondetalleSubtotal();
-                        if ($requisiciondetalle->getProducto()->getIdcategoria() == 1)
-                            $consumoEmplAlimentos+=$cantidad;
-                        elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2)
-                            $consumoEmplBebidas+=$cantidad;
-                    }
-                }
-            }
-
-            $consumoEjecAlimentos = 0;
-            $consumoEjecBebidas = 0;
-            $conceptos = \ConceptosalidaQuery::create()->filterByConceptosalidaNombre('Consumos de ejecutivos')->find();
-            $concepto = new \Conceptosalida();
-            foreach ($conceptos as $concepto) {
-                $requisiciones = \RequisicionQuery::create()->filterByIdsucursalorigen($idsucursal)->filterByIdconceptosalida($concepto->getIdconceptosalida())->filterByRequisicionFecha(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
-                $requisicion = new \Requisicion();
-                foreach ($requisiciones as $requisicion) {
-                    $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
-                    $requisiciondetalle = new \Requisiciondetalle();
-                    foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $cantidad = $requisiciondetalle->getRequisiciondetalleSubtotal();
-                        if ($requisiciondetalle->getProducto()->getIdcategoria() == 1)
-                            $consumoEjecAlimentos+=$cantidad;
-                        elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2)
-                            $consumoEjecBebidas+=$cantidad;
-                    }
-                }
-            }
-
-            $transpasoSerAlimentos = 0;
-            $transpasoSerBebidas = 0;
-            $conceptos = \ConceptosalidaQuery::create()->filterByConceptosalidaNombre('Traspaso a servicio')->find();
-            $concepto = new \Conceptosalida();
-            foreach ($conceptos as $concepto) {
-                $requisiciones = \RequisicionQuery::create()->filterByIdsucursalorigen($idsucursal)->filterByIdconceptosalida($concepto->getIdconceptosalida())->filterByRequisicionFecha(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
-                $requisicion = new \Requisicion();
-                foreach ($requisiciones as $requisicion) {
-                    $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
-                    $requisiciondetalle = new \Requisiciondetalle();
-                    foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $cantidad = $requisiciondetalle->getRequisiciondetalleSubtotal();
-                        if ($requisiciondetalle->getProducto()->getIdcategoria() == 1)
-                            $transpasoSerAlimentos+=$cantidad;
-                        elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2)
-                            $transpasoSerBebidas+=$cantidad;
-                    }
-                }
-            }
-
-            $mermaAlimentos = 0;
-            $mermaBebidas = 0;
-            $conceptos = \ConceptosalidaQuery::create()->filterByConceptosalidaNombre('Mermas')->find();
-            $concepto = new \Conceptosalida();
-            foreach ($conceptos as $concepto) {
-                $requisiciones = \RequisicionQuery::create()->filterByIdsucursalorigen($idsucursal)->filterByIdconceptosalida($concepto->getIdconceptosalida())->filterByRequisicionFecha(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
-                $requisicion = new \Requisicion();
-                foreach ($requisiciones as $requisicion) {
-                    $requisiciondetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
-                    $requisiciondetalle = new \Requisiciondetalle();
-                    foreach ($requisiciondetalles as $requisiciondetalle) {
-                        $cantidad = $requisiciondetalle->getRequisiciondetalleSubtotal();
-                        if ($requisiciondetalle->getProducto()->getIdcategoria() == 1)
-                            $mermaAlimentos+=$cantidad;
-                        elseif ($requisiciondetalle->getProducto()->getIdcategoria() == 2)
-                            $mermaBebidas+=$cantidad;
-                    }
-                }
-            }
-
-            $creditosCostAlimentos = $consumoEmplAlimentos + $consumoEjecAlimentos + $cortesiasAlimentos + $transpasoSerAlimentos + $mermaAlimentos;
-            $creditosCostBebidas = $consumoEmplBebidas + $consumoEjecBebidas + $cortesiasBebidas + $transpasoSerBebidas + $mermaBebidas;
-            $creditosCostConsolidado = $creditosCostAlimentos + $creditosCostBebidas;
-
-            //Costo neto de venta
-            $costVentAlimentos = $costoBrutoAlimentos - $creditosCostAlimentos;
-            $costVentBebidas = $costoBrutoBebidas - $creditosCostBebidas;
-            $costVentConsolidado = $costoBrutoConsolidado - $creditosCostConsolidado;
-
-            //venta promedio diaria sin iva
-            //dias activos
-            $ingresos = \IngresoQuery::create()
-                    ->filterByIngresoFecha(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))
-                    ->filterByIdsucursal($idsucursal)
-                    ->orderByIngresoFecha("asc")
-                    ->find();
-            $dato = null;
-            $dias_activos = 0;
-            $ingreso = new \Ingreso();
-            foreach ($ingresos as $ingreso) {
-                if ($dato == null)
-                    $dato = $ingreso->getIngresoFecha('d/m/Y');
-                if ($dato != $ingreso->getIngresoFecha('d/m/Y')) {
-                    $dato = $ingreso->getIngresoFecha('d/m/Y');
-                    $dias_activos++;
-                }
-            }
-            $ventasPromDiar = ($ventasNetasConsolidado != 0 || $dias_activos != 0) ? $ventasNetasConsolidado / $dias_activos : 0;
-
-            //Consumo promedio p/empleado diario
-            //(sumatoria de comedor empleados/dias activos)/promedio empleados
-            $inicio = $inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0];
-            $fin = $finSpli[2] . "-" . $finSpli[1] . "-" . $finSpli[0];
-            $trabajadorespromedio = 0;
-            if ($inicioSpli[2] != $finSpli[2]) {
-                for ($anio = $inicioSpli[2]; $anio <= $finSpli[2]; $anio++) {
-                    $objtrabajadorespromedios = \TrabajadorespromedioQuery::create()->filterByIdsucursal($idsucursal)->filterByIdempresa($idempresa)->filterByTrabajadorespromedioAnio($anio)->find();
-                    $objtrabajadorespromedio = new \Trabajadorespromedio();
-                    foreach ($objtrabajadorespromedios as $objtrabajadorespromedio) {
-                        $trabajadorespromedio+=$objtrabajadorespromedio->getTrabajadorespromedioCantidad();
-                    }
-                }
-            } else {
-                for ($mes = $inicioSpli[1]; $mes <= $finSpli[1]; $mes++) {
-                    $obj = \TrabajadorespromedioQuery::create()->filterByIdsucursal($idsucursal)->filterByIdempresa($idempresa)->filterByTrabajadorespromedioAnio($inicioSpli[2])->filterByTrabajadorespromedioMes($mes)->findOne();
-                    if ($obj != null) {
-                        $trabajadorespromedio+=$obj->getTrabajadorespromedioCantidad();
-                    }
-                }
-            }
-
-            $consumoPromEmpl = ($trabajadorespromedio != 0) ? (($consumoEmplAlimentos + $consumoEmplBebidas) / $dias_activos) / $trabajadorespromedio : 0;
-
-
-            //porcentajes
-            $porcComprasMesAlimentos = ($compraMesAlimentos != 0 || $ventasNetasAlimentos != 0) ? $compraMesAlimentos / $ventasNetasAlimentos : 0;
-            $porcComprasMesBebidas = ($compraMesBebidas != 0 || $ventasNetasBebidas != 0) ? $compraMesBebidas / $ventasNetasBebidas : 0;
-            $porcComprasMesConsolidado = ($compraMesConsolidado != 0 || $ventasNetasConsolidado != 0) ? $compraMesConsolidado / $ventasNetasConsolidado : 0;
-
-            $porcCostoBrutoAlimentos = ($costoBrutoAlimentos != 0 || $ventasNetasAlimentos != 0) ? $costoBrutoAlimentos / $ventasNetasAlimentos : 0;
-            $porcCostoBrutoBebidas = ($costoBrutoBebidas != 0 || $ventasNetasBebidas != 0) ? $costoBrutoBebidas / $ventasNetasBebidas : 0;
-            $porcCostoBrutoConsolidado = ($costoBrutoConsolidado != 0 || $ventasNetasConsolidado != 0) ? $costoBrutoConsolidado / $ventasNetasConsolidado : 0;
-
-            $porcCostoNetoVentaAlimentos = ($costVentAlimentos != 0 || $ventasNetasAlimentos != 0) ? $costVentAlimentos / $ventasNetasAlimentos : 0;
-            $porcCostoNetoVentaBebidas = ($costVentBebidas != 0 || $ventasNetasBebidas != 0) ? $costVentBebidas / $ventasNetasBebidas : 0;
-            $porcCostoNetoVentaConsolidado = ($costVentConsolidado != 0 || $ventasNetasConsolidado != 0) ? $costVentConsolidado / $ventasNetasConsolidado : 0;
-
-            $porcComedorEmplAlimentos = ($consumoEmplAlimentos != 0 || $ventasNetasAlimentos != 0) ? $consumoEmplAlimentos / $ventasNetasAlimentos : 0;
-            $porcComedorEmplBebidas = ($consumoEmplBebidas != 0 || $ventasNetasBebidas != 0) ? $consumoEmplBebidas / $ventasNetasBebidas : 0;
-
-            $porcConsumoEjecAlimentos = ($consumoEjecAlimentos != 0 || $ventasNetasAlimentos != 0) ? $consumoEjecAlimentos / $ventasNetasAlimentos : 0;
-            $porcConsumoEjecBebidas = ($consumoEjecBebidas != 0 || $ventasNetasBebidas != 0) ? $consumoEjecBebidas / $ventasNetasBebidas : 0;
-
-            $porcCortesiasAlimentos = ($cortesiasAlimentos != 0 || $ventasNetasAlimentos != 0) ? $cortesiasAlimentos / $ventasNetasAlimentos : 0;
-            $porcCortesiasBebidas = ($cortesiasBebidas != 0 || $ventasNetasBebidas != 0) ? $cortesiasBebidas / $ventasNetasBebidas : 0;
-
-            $porcTranspAlimentos = ($transpasoSerAlimentos != 0 || $ventasNetasAlimentos != 0) ? $transpasoSerAlimentos / $ventasNetasAlimentos : 0;
-            $porcTranspBebidas = ($transpasoSerBebidas != 0 || $ventasNetasBebidas != 0) ? $transpasoSerBebidas / $ventasNetasBebidas : 0;
-
-            $porcMermasAlimentos = ($mermaAlimentos != 0 || $ventasNetasAlimentos != 0) ? $mermaAlimentos / $ventasNetasAlimentos : 0;
-            $porcMermasBebidas = ($mermaBebidas != 0 || $ventasNetasBebidas != 0) ? $mermaBebidas / $ventasNetasBebidas : 0;
-
-            //reporte
-            $nombreEmpresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
-            $reporte = array();
-
-            array_push($reporte, "<tr><td>$nombreEmpresa</td></tr>");
-            array_push($reporte, "<tr><td>Cierre inventario mes</td></tr>");
-            array_push($reporte, "<tr><td>$inicio - $fin</td></tr>");
-            array_push($reporte, "<tr><td>Concepto</td><td>Alimento</td><td>%</td><td>Bebidas</td><td></td><td>Consolidado</td><td>%</td></tr>");
-            array_push($reporte, "<tr><td>Ventas netas sin IVA</td><td>$ventasNetasAlimentos</td><td></td><td>$ventasNetasBebidas</td><td></td><td>$ventasNetasConsolidado</td><td></td></tr>");
-            array_push($reporte, "<tr><td>Inventario inicial</td><td>$invIniAlimentos</td><td></td><td>$invIniBebidas</td><td></td><td>$invIniConsolidado</td><td></td></tr>");
-            array_push($reporte, "<tr><td>Compras del mes</td><td>$compraMesAlimentos</td><td>$porcComprasMesAlimentos %</td><td>$compraMesBebidas</td><td>$porcComprasMesBebidas %</td><td>$compraMesConsolidado</td><td>$porcComprasMesConsolidado %</td></tr>");
-            array_push($reporte, "<tr><td>Existencia</td><td>$existenciaAlimentos</td><td></td><td>$existenciaBebidas</td><td></td><td>$existenciaConsolidado</td><td></td></tr>");
-            array_push($reporte, "<tr><td>Inventario Final</td><td>$invFinAlimentos</td><td></td><td>$invFinBebidas</td><td></td><td>$invFinConsolidado</td><td></td></tr>");
-            array_push($reporte, "<tr><td>Costo bruto</td><td>$costoBrutoAlimentos</td><td>$porcCostoBrutoAlimentos %</td><td>$costoBrutoBebidas</td><td>$porcCostoBrutoBebidas %</td><td>$costoBrutoConsolidado</td><td>$porcCostoBrutoConsolidado %</td></tr>");
-            array_push($reporte, "<tr><td>Creditos al costo</td><td>$creditosCostAlimentos</td><td></td><td>$creditosCostBebidas</td><td></td><td>$creditosCostConsolidado</td><td></td></tr>");
-            array_push($reporte, "<tr><td>Costo neto venta</td><td>$costVentAlimentos</td><td>$porcCostoNetoVentaAlimentos %</td><td>$costVentBebidas</td><td>$porcCostoNetoVentaBebidas %</td><td>$costVentConsolidado</td><td>$porcCostoNetoVentaConsolidado %</td></tr>");
-            array_push($reporte, "<tr><td>Venta promedio diaria sin IVA</td><td></td><td></td><td>$ventasPromDiar</td><td></td><td>$dias_activos dias activo</td><td></td></tr>");
-            array_push($reporte, "<tr><td>Consumo promedio P/Empleado diario</td><td></td><td></td><td>$consumoPromEmpl</td><td></td><td></td><td></td></tr>");
-            array_push($reporte, "<tr><td>Comedor empleado</td><td>$consumoEmplAlimentos</td><td>$porcConsumoEjecAlimentos %</td><td>$consumoEmplBebidas</td><td>$porcConsumoEjecBebidas %</td><td></td><td></td></tr>");
-            array_push($reporte, "<tr><td>Consumo ejecutivo</td><td>$consumoEjecAlimentos</td><td>$porcConsumoEjecAlimentos %</td><td>$consumoEjecBebidas</td><td>$porcConsumoEjecBebidas %</td><td></td><td></td></tr>");
-            array_push($reporte, "<tr><td>Cortesias</td><td>$cortesiasAlimentos</td><td>$porcCortesiasAlimentos %</td><td>$cortesiasBebidas</td><td>$porcCortesiasBebidas %</td><td></td><td></td></tr>");
-            array_push($reporte, "<tr><td>Transpaso a servicio</td><td>$transpasoSerAlimentos</td><td>$porcTranspAlimentos %</td><td>$transpasoSerBebidas</td><td>$porcTranspBebidas %</td><td></td><td></td></tr>");
-            array_push($reporte, "<tr><td>Mermas</td><td>$mermaAlimentos</td><td>$porcMermasAlimentos %</td><td>$mermaBebidas</td><td>$porcMermasBebidas %</td><td></td><td></td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel']))
+            array_push($reporte, array('uno'=>'Total','dos'=>$total3,'tres'=>$total2,'cuatro'=>$total,'cinco'=>$total0,'seis'=>''));
+        else
+            array_push($reporte, "<tr><td>Total</td><td>$total3</td><td>$total2</td><td>$total</td><td>$total0</td><td></td></tr>");
+        if(isset($post_data['generar_pdf'])||isset($post_data['generar_excel'])) {
+            $template = '/estadisticomensual.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal),
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $reporte,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if (isset($post_data['generar_pdf']))
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+        }else {
             return $this->getResponse()->setContent(json_encode($reporte));
-            exit;
+        }
+        exit;
         }
 
         //INTANCIAMOS NUESTRA VISTA
