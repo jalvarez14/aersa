@@ -701,7 +701,7 @@ class ProductoController extends AbstractActionController
                 $this->flashMessenger()->addSuccessMessage('Sub receta modificada correctamente!');
                 return $this->redirect()->toUrl('/catalogo/producto/editar/'.$prod);
             }
-            
+ 
             //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
             $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
             
