@@ -153,43 +153,48 @@
             $('#generar_pdf').attr('disabled', activar);
         }
 
-        plugin.variacioncostos = function () {
-            $container.find('input:checkbox').on('click', function () {
-                var $this = $(this);
-                var id = $this.attr('id');
-                if (id != "todos") {
-                    if ($this.val() != "on") {
-                        $container.find('.' + $this.val()).filter(function () {
-                            if ($this.prop('checked'))
-                                $(this).prop('checked', true);
-                            else
-                                $(this).prop('checked', false);
-                        });
-                    }
-                    revisarCheckbox();
-                } else {
-                    if ($this.prop('checked')) {
-                        $container.find('.generado').prop('checked', true);
-                        $container.find('.generadoc').prop('checked', true);
+        plugin.variacioncostos = function (no_data) {
+            if (no_data == 1) {
+                $('form input,form select,form button[type=submit]').attr('disabled', true);
+                $('#no_data').html('No existen registros para reporte')
+            } else {
+                $container.find('input:checkbox').on('click', function () {
+                    var $this = $(this);
+                    var id = $this.attr('id');
+                    if (id != "todos") {
+                        if ($this.val() != "on") {
+                            $container.find('.' + $this.val()).filter(function () {
+                                if ($this.prop('checked'))
+                                    $(this).prop('checked', true);
+                                else
+                                    $(this).prop('checked', false);
+                            });
+                        }
+                        revisarCheckbox();
                     } else {
-                        $container.find('.generado').prop('checked', false);
-                        $container.find('.generadoc').prop('checked', false);
+                        if ($this.prop('checked')) {
+                            $container.find('.generado').prop('checked', true);
+                            $container.find('.generadoc').prop('checked', true);
+                        } else {
+                            $container.find('.generado').prop('checked', false);
+                            $container.find('.generadoc').prop('checked', false);
+                        }
                     }
-                }
-                controlBoton();
-            });
-
-            $('#producto_search').on('keyup', function () {
-                var busqueda = $(this).val();
-                $container.find('#reporte_table tbody tr').filter(function () {
-                    var palabra = $(this).find('td').eq(1).text();
-                    $(this).attr("hidden", !palabra.includes(busqueda));
+                    controlBoton();
                 });
-            });
 
-            $container.find('select').on('change', function () {
-                controlBoton();
-            });
+                $('#producto_search').on('keyup', function () {
+                    var busqueda = $(this).val();
+                    $container.find('#reporte_table tbody tr').filter(function () {
+                        var palabra = $(this).find('td').eq(1).text();
+                        $(this).attr("hidden", !palabra.includes(busqueda));
+                    });
+                });
+
+                $container.find('select').on('change', function () {
+                    controlBoton();
+                });
+            }
         }
 
         plugin.formatoinventario = function () {
@@ -236,23 +241,23 @@
             });
         }
 
-        plugin.entradasporcompras = function (mes_min, anio_min, mes_max, anio_max,existencia) {
+        plugin.entradasporcompras = function (mes_min, anio_min, mes_max, anio_max, existencia) {
             revisarCheckboxEntradasporcompra();
-            if(existencia==1) {
-            var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
-            var maxDate = new Date(anio_max + '/' + mes_max + '/' + '31');
+            if (existencia == 1) {
+                var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
+                var maxDate = new Date(anio_max + '/' + mes_max + '/' + '31');
 
-            container.find('input[name=fecha_inicial]').datepicker({
-                startDate: minDate,
-                endDate: maxDate,
-                format: 'dd/mm/yyyy',
-            });
+                container.find('input[name=fecha_inicial]').datepicker({
+                    startDate: minDate,
+                    endDate: maxDate,
+                    format: 'dd/mm/yyyy',
+                });
 
-            container.find('input[name=fecha_final]').datepicker({
-                startDate: minDate,
-                endDate: maxDate,
-                format: 'dd/mm/yyyy',
-            });
+                container.find('input[name=fecha_final]').datepicker({
+                    startDate: minDate,
+                    endDate: maxDate,
+                    format: 'dd/mm/yyyy',
+                });
             } else {
                 $('input[name=fecha_inicial]').attr('disabled', true);
                 $('input[name=fecha_final]').attr('disabled', true);
@@ -331,9 +336,9 @@
                 revisarCheckboxEntradasporcompra();
             });
         }
-        
-        plugin.informeacumulados = function (no_data, mes_min, anio_min, mes_max, anio_max,dia_max) {
-            if(no_data==1) {
+
+        plugin.informeacumulados = function (no_data, mes_min, anio_min, mes_max, anio_max, dia_max) {
+            if (no_data == 1) {
                 $('input[name=fecha_inicial]').attr('disabled', true);
                 $('input[name=fecha_final]').attr('disabled', true);
                 $('#generar_reporte').attr('disabled', true);
@@ -341,7 +346,7 @@
                 $('#generar_pdf').attr('disabled', true);
                 $('#no_data').html('No existen registros de flujo efectivo')
             }
-            
+
             var minDate = new Date(anio_min + '/' + mes_min + '/' + '01');
             var maxDate = new Date(anio_max + '/' + mes_max + '/' + dia_max);
 
@@ -357,39 +362,39 @@
                 format: 'dd/mm/yyyy',
             });
             $('input[name=fecha_inicial]').on('blur', function () {
-                if($(this).val()!=""&&$('input[name=fecha_final]').val()!="")
+                if ($(this).val() != "" && $('input[name=fecha_final]').val() != "")
                     $('#generar_reporte').prop("type", "button");
                 else
                     $('#generar_reporte').prop("type", "submit");
             });
-            
+
             $('input[name=fecha_final]').on('blur', function () {
-                if($(this).val()!=""&&$('input[name=fecha_inicial]').val()!="")
+                if ($(this).val() != "" && $('input[name=fecha_inicial]').val() != "")
                     $("#generar_reporte").prop("type", "button");
                 else
                     $('#generar_reporte').prop("type", "submit");
             });
-            
+
             $("#generar_reporte").on('click', function () {
-                if($(this).attr('type')=="button") {
-                    var inicio= $('input[name=fecha_inicial]').val();
-                    var fin=$('input[name=fecha_final]').val();
+                if ($(this).attr('type') == "button") {
+                    var inicio = $('input[name=fecha_inicial]').val();
+                    var fin = $('input[name=fecha_final]').val();
                     var table = $('#reporte_table');
                     $.ajax({
-                    async: false,
-                    type: "POST",
-                    url: "/reportes/informeacumulados",
-                    dataType: "json",
-                    data: {fecha_inicial: inicio, fecha_final: fin},
-                    success: function (data) {
-                        if (data.length != 0) {
-                            $('#reporte_table > tbody').empty();
-                            for (var k in data) {
-                                table.append(data[k]);
-                            } 
-                        }
-                    },
-                });
+                        async: false,
+                        type: "POST",
+                        url: "/reportes/informeacumulados",
+                        dataType: "json",
+                        data: {fecha_inicial: inicio, fecha_final: fin},
+                        success: function (data) {
+                            if (data.length != 0) {
+                                $('#reporte_table > tbody').empty();
+                                for (var k in data) {
+                                    table.append(data[k]);
+                                }
+                            }
+                        },
+                    });
                 }
             });
         }

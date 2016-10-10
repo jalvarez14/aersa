@@ -50,8 +50,8 @@
                         <tr date="<?php echo $entity->getRequisicionFecha('Y/m/d') ?>"  id="<?php echo $entity->getIdrequisicion() ?>">
                                 <td><?php echo $entity->getRequisicionFecha('d/m/Y') ?></td>
                                 <td><?php echo $entity->getRequisicionFolio() ?></td>
-                                <td><?php echo $entity->getSucursalRelatedByIdsucursalorigen()->getSucursalNombre() ?></td>
-                                <td><?php echo $entity->getSucursalRelatedByIdsucursaldestino()->getSucursalNombre() ?></td>
+                                <td><?php echo $entity->getSucursalRelatedByIdsucursalorigen()->getSucursalNombre()." - ".$entity->getAlmacenRelatedByIdalmacenorigen()->getAlmacenNombre() ?></td>
+                                <td><?php echo $entity->getSucursalRelatedByIdsucursaldestino()->getSucursalNombre()." - ".$entity->getAlmacenRelatedByIdalmacendestino()->getAlmacenNombre() ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
                                 <td>
                                     <div class="btn-group">
