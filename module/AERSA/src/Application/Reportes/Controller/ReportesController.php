@@ -152,10 +152,10 @@ class ReportesController extends AbstractActionController {
         //INTANCIAMOS NUESTRA VISTA
         $ano_array = array();
         $no_data=0;
-        $exists=\CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->exists();
+        $exists=\CompraQuery::create()->orderByCompraFechacompra('asc')->exists();
         if($exists) {
-            $min = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->findOne()->getCuentaporcobrarFecha('Y');
-            $max = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('desc')->findOne()->getCuentaporcobrarFecha('Y');
+            $min = \CompraQuery::create()->orderByCompraFechacompra('asc')->findOne()->getCompraFechacompra('Y');
+            $max = \CompraQuery::create()->orderByCompraFechacompra('desc')->findOne()->getCompraFechacompra('Y');
             for ($i = $min; $i <= $max; $i++) {
                 $ano_array[$i] = $i;
             }
@@ -696,6 +696,7 @@ class ReportesController extends AbstractActionController {
         $anio_max=0;
         $existencia=1;
         $exits=\FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->exists();
+        var_dump(\FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->toArray());
         if($exits) {
             $mes_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('m');
             $anio_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('Y');
