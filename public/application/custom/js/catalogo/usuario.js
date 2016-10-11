@@ -195,6 +195,11 @@
                                     
                                     if(typeof row.Nombre != 'undefined' && typeof row.Unidad != 'undefined' && typeof row.Categoria != 'undefined' && typeof row.SubCategoria != 'undefined' && typeof row.Rendimiento != 'undefined' && typeof row.PrecioVenta != 'undefined' && typeof row.Costo != 'undefined' && typeof row.Tipo != 'undefined' && typeof row.IVA != 'undefined' && typeof row.Baja != 'undefined'){
                                         
+                                        var tipo = row.Tipo.toLowerCase();
+                                            if(tipo == "plu"){
+                                            row.Rendimiento = 1;
+                                        }
+                                       
                                         var iva = row.IVA.toLowerCase(); 
                                         if(iva == "si"){
                                             row.IVA = 1;
