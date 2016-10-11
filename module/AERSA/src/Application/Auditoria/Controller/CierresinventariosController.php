@@ -237,6 +237,7 @@ class CierresinventariosController extends AbstractActionController {
                                         $arrayReporte[$idpr][$pos] = $cant;
                                     }
                                 }
+                                $exisinicial=0;
                             }
                         }
                     }
