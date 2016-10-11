@@ -207,6 +207,37 @@ class CierresinventariosController extends AbstractActionController {
                             $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                             if ($exisinicial)
                                 $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                            if ($objproducto->getProductoTipo() == 'subreceta') {
+                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+                                $recetaObj = new \Receta();
+                                foreach ($recetasObj as $recetaObj) {
+                                    $idpr = $recetaObj->getIdproductoreceta();
+                                    $pos = 'inventariomesdetalle_stockinicial';
+                                    $cant = $recetaObj->getRecetaCantidad();
+                                    if (isset($arrayReporte[$idpr][$pos])) {
+                                        $arrayReporte[$idpr][$pos] = $arrayReporte[$idpr][$pos] + $cant;
+                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] = +$cant;
+                                        $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
+                                        $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
+                                        $dif = $stockTeorico - $stockFisico;
+                                        $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
+                                        $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
+                                        $difImporte = $dif * $costoPromedio;
+                                        if (0 < $arrayReporte[$idpr]['inventariomesdetalle_difimporte'])
+                                            $sobrante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+                                        else
+                                            $faltante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+
+                                        $arrayReporte[$idpr]['inventariomesdetalle_difimporte'] = $difImporte;
+                                        if (0 < $difImporte)
+                                            $sobrante+=$difImporte;
+                                        else
+                                            $faltante+=$difImporte;
+                                    } else {
+                                        $arrayReporte[$idpr][$pos] = $cant;
+                                    }
+                                }
+                            }
                         }
                     }
                     if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
@@ -358,38 +389,6 @@ class CierresinventariosController extends AbstractActionController {
                         $arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'] = $costoPromedio;
                         $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'] = $difImporte;
                         $row++;
-                    } elseif ($objproducto->getProductoTipo() == 'subreceta') {
-                        if ($exisinicial != 0) {
-                            $recetasObj = \RecetaQuery::create()->filterByIdproducto($idproducto)->find();
-                            $recetaObj = new \Receta();
-                            foreach ($recetasObj as $recetaObj) {
-                                $idpr = $recetaObj->getIdproductoreceta();
-                                $pos = 'inventariomesdetalle_stockinicial';
-                                $cant = $recetaObj->getRecetaCantidad();
-                                if (isset($arrayReporte[$idpr][$pos])) {
-                                    $arrayReporte[$idpr][$pos] = $arrayReporte[$idpr][$pos] + $cant;
-                                    $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] = +$cant;
-                                    $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
-                                    $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
-                                    $dif = $stockTeorico - $stockFisico;
-                                    $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
-                                    $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
-                                    $difImporte = $dif * $costoPromedio;
-                                    if (0 < $arrayReporte[$idpr]['inventariomesdetalle_difimporte'])
-                                        $sobrante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
-                                    else
-                                        $faltante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
-
-                                    $arrayReporte[$idpr]['inventariomesdetalle_difimporte'] = $difImporte;
-                                    if (0 < $difImporte)
-                                        $sobrante+=$difImporte;
-                                    else
-                                        $faltante+=$difImporte;
-                                } else {
-                                    $arrayReporte[$idpr][$pos] = $cant;
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -402,25 +401,25 @@ class CierresinventariosController extends AbstractActionController {
                 $objproducto = new \Producto();
                 foreach ($objproductos as $objproducto) {
                     $idproducto = $objproducto->getIdproducto();
-                    $colorbg=$arrayReporte[$idproducto]['colorbg'];
-                    $cat=$arrayReporte[$idproducto]['idcategoria'];
-                    $row=$arrayReporte[$idproducto]['row'];
-                    $nomPro=$arrayReporte[$idproducto]['nomPro'];
-                    $exisinicial=$arrayReporte[$idproducto]['inventariomesdetalle_stockinicial'];
-                    $compra=$arrayReporte[$idproducto]['inventariomesdetalle_ingresocompra'];
-                    $requisicionIng=$arrayReporte[$idproducto]['inventariomesdetalle_ingresorequisicion'];
-                    $ordenTabIng=$arrayReporte[$idproducto]['inventariomesdetalle_ingresoordentablajeria'];
-                    $venta=$arrayReporte[$idproducto]['inventariomesdetalle_egresoventa'];
-                    $requisicionEg=$arrayReporte[$idproducto]['inventariomesdetalle_egresorequisicion'];
-                    $ordenTabEg=$arrayReporte[$idproducto]['inventariomesdetalle_egresoordentablajeria'];
-                    $devolucion=$arrayReporte[$idproducto]['inventariomesdetalle_egresodevolucion'];
-                    $stockTeorico=$arrayReporte[$idproducto]['inventariomesdetalle_stockteorico'];
-                    $unidad=$arrayReporte[$idproducto]['unidad'];
-                    $stockFisico=$arrayReporte[$idproducto]['inventariomesdetalle_stockfisico'];
-                    $impFis=$arrayReporte[$idproducto]['inventariomesdetalle_importefisico'];
-                    $dif=$arrayReporte[$idproducto]['inventariomesdetalle_diferencia'];
-                    $costoPromedio=$arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'];
-                    $difImporte=$arrayReporte[$idproducto]['inventariomesdetalle_difimporte'];
+                    $colorbg = $arrayReporte[$idproducto]['colorbg'];
+                    $cat = $arrayReporte[$idproducto]['idcategoria'];
+                    $row = $arrayReporte[$idproducto]['row'];
+                    $nomPro = $arrayReporte[$idproducto]['nomPro'];
+                    $exisinicial = $arrayReporte[$idproducto]['inventariomesdetalle_stockinicial'];
+                    $compra = $arrayReporte[$idproducto]['inventariomesdetalle_ingresocompra'];
+                    $requisicionIng = $arrayReporte[$idproducto]['inventariomesdetalle_ingresorequisicion'];
+                    $ordenTabIng = $arrayReporte[$idproducto]['inventariomesdetalle_ingresoordentablajeria'];
+                    $venta = $arrayReporte[$idproducto]['inventariomesdetalle_egresoventa'];
+                    $requisicionEg = $arrayReporte[$idproducto]['inventariomesdetalle_egresorequisicion'];
+                    $ordenTabEg = $arrayReporte[$idproducto]['inventariomesdetalle_egresoordentablajeria'];
+                    $devolucion = $arrayReporte[$idproducto]['inventariomesdetalle_egresodevolucion'];
+                    $stockTeorico = $arrayReporte[$idproducto]['inventariomesdetalle_stockteorico'];
+                    $unidad = $arrayReporte[$idproducto]['unidad'];
+                    $stockFisico = $arrayReporte[$idproducto]['inventariomesdetalle_stockfisico'];
+                    $impFis = $arrayReporte[$idproducto]['inventariomesdetalle_importefisico'];
+                    $dif = $arrayReporte[$idproducto]['inventariomesdetalle_diferencia'];
+                    $costoPromedio = $arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'];
+                    $difImporte = $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'];
                     array_push($reporte, "<tr id='$idproducto' bgcolor='" . $colorbg . "'><td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td><td>$nomPro</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockinicial]' value='$exisinicial'> $exisinicial</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresocompra]' value='$compra'>$compra</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresorequisicion]' value='$requisicionIng'>$requisicionIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresoordentablajeria]' value='$ordenTabIng'>$ordenTabIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoventa]' value='$venta'>$venta</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresorequisicion]' value='$requisicionEg'>$requisicionEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoordentablajeria]' value='$ordenTabEg'>$ordenTabEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td><td>$unidad</td><td><input required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td><td class='inventariomesdetalle_importefisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_importefisico]' value='$impFis'><span>$impFis</span></td><td class='inventariomesdetalle_diferencia'><input type='hidden'  name='reporte[$row][inventariomesdetalle_diferencia]' value='$dif'> <span>$dif</span></td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_costopromedio]' value='$costoPromedio'>$costoPromedio</td><td class='inventariomesdetalle_difimporte'><input type='hidden'  name='reporte[$row][inventariomesdetalle_difimporte]' value='$difImporte'><span>$difImporte</span></td><td><input type='checkbox' name='reporte[$row][inventariomesdetalle_revisada]'></td></tr>");
                 }
             }
