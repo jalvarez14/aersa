@@ -234,7 +234,7 @@ class CierresinventariosController extends AbstractActionController {
                                         else
                                             $faltante+=$difImporte;
                                     } else {
-                                        $arrayReporte[$idpr][$pos] = $cant;
+                                        $arrayReporte[$idpr][$pos] = ($cant*$exisinicial);
                                     }
                                 }
                                 $exisinicial=0;
