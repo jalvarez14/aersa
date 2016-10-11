@@ -215,8 +215,8 @@ class CierresinventariosController extends AbstractActionController {
                                     $pos = 'inventariomesdetalle_stockinicial';
                                     $cant = $recetaObj->getRecetaCantidad();
                                     if (isset($arrayReporte[$idpr][$pos])) {
-                                        $arrayReporte[$idpr][$pos] = $arrayReporte[$idpr][$pos] + $cant;
-                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] = +$cant;
+                                        $arrayReporte[$idpr][$pos] = $arrayReporte[$idpr][$pos] + ($cant*$exisinicial);
+                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant*$exisinicial);
                                         $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
                                         $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                         $dif = $stockTeorico - $stockFisico;
@@ -339,8 +339,9 @@ class CierresinventariosController extends AbstractActionController {
                     $stockFisico = 0;
                     if (isset($productosReporte[$objproducto->getIdproducto()]))
                         $stockFisico = $productosReporte[$objproducto->getIdproducto()];
-
-                    $dif = $stockTeorico - $stockFisico;
+                    
+                    
+                    $dif = ($inventario_anterior) ? $stockTeorico - $stockFisico : $stockFisico;
 
                     $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
                     if ($has_compras > 0) {
@@ -396,7 +397,7 @@ class CierresinventariosController extends AbstractActionController {
             foreach ($categoriasObj as $categoriaObj) {
                 $nombreSubcategoria = $categoriaObj->getCategoriaNombre();
                 array_push($reporte, "<tr><td>$nombreSubcategoria</td></tr>");
-                $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->filterByProductoTipo(array('simple'))->orderByProductoNombre('asc')->find();
+                $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->filterByProductoTipo(array('simple','subreceta'))->orderByProductoNombre('asc')->find();
                 $objproducto = new \Producto();
                 foreach ($objproductos as $objproducto) {
                     $idproducto = $objproducto->getIdproducto();

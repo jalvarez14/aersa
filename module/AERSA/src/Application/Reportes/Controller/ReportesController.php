@@ -696,7 +696,6 @@ class ReportesController extends AbstractActionController {
         $anio_max=0;
         $existencia=1;
         $exits=\FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->exists();
-        var_dump(\FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->toArray());
         if($exits) {
             $mes_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('m');
             $anio_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('Y');
