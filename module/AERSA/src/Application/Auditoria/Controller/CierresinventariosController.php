@@ -368,7 +368,6 @@ class CierresinventariosController extends AbstractActionController {
                     $impFisTotal+=$impFis;
                     $idproducto = $objproducto->getIdproducto();
                     $nomPro = $objproducto->getProductoNombre();
-                    if ($objproducto->getProductoTipo() == 'simple') {
                         $arrayReporte[$idproducto]['colorbg'] = $colorbg;
                         $arrayReporte[$idproducto]['idcategoria'] = $colorbg;
                         $arrayReporte[$idproducto]['row'] = $row;
@@ -390,7 +389,6 @@ class CierresinventariosController extends AbstractActionController {
                         $arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'] = $costoPromedio;
                         $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'] = $difImporte;
                         $row++;
-                    }
                 }
             }
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
