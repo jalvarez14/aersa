@@ -151,7 +151,7 @@ class ReportesController extends AbstractActionController {
 
         //INTANCIAMOS NUESTRA VISTA
         $ano_array = array();
-        $no_data=false;
+        $no_data=0;
         $exists=\CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->exists();
         if($exists) {
             $min = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->findOne()->getCuentaporcobrarFecha('Y');
@@ -160,7 +160,7 @@ class ReportesController extends AbstractActionController {
                 $ano_array[$i] = $i;
             }
         } else {
-            $no_data=true;
+            $no_data=1;
         }
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
         $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
@@ -462,7 +462,7 @@ class ReportesController extends AbstractActionController {
                     array_push($idproductos, $compradetalle->getIdproducto());
             }
         }
-        $requisiciones = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacenorigen($idAlmacen)->find();
+        $requisiciones = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacenorigen($idAlmacen)->_or()->filterByIdalmacendestino($idAlmacen)->find();
         $requisicion = new \Requisicion();
         foreach ($requisiciones as $requisicion) {
             $requisicionesdetalles = \RequisiciondetalleQuery::create()->filterByIdrequisicion($requisicion->getIdrequisicion())->find();
@@ -472,7 +472,7 @@ class ReportesController extends AbstractActionController {
                     array_push($idproductos, $requisiciondetalle->getIdproducto());
             }
         }
-        $ordenestablajeria = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacenorigen($idAlmacen)->find();
+        $ordenestablajeria = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacenorigen($idAlmacen)->_or()->filterByIdalmacendestino($idAlmacen)->find();
         $ordentablajeria = new \Ordentablajeria();
         foreach ($ordenestablajeria as $ordentablajeria) {
             $ordenestablajeriadetalles = \OrdentablajeriadetalleQuery::create()->filterByIdordentablajeria($ordentablajeria->getIdordentablajeria())->find();

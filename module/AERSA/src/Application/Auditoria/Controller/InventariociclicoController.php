@@ -37,47 +37,7 @@ class InventariociclicoController extends AbstractActionController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
-            $idalmacen = $post_data['idalmacen'];
-            $post_data['idusuario'] = $session['idusuario'];
-            $post_data['idempresa'] = $idempresa;
-            $post_data['idsucursal'] = $idsucursal;
-            $inventariocierremes = new \Inventariomes();
-            foreach ($post_data as $key => $value) {
-                if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
-                    $inventariocierremes->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                }
-            }
-            $otroinventariocierremes = \InventariomesQuery::create()
-                    ->filterByIdalmacen($inventariocierremes->getIdalmacen())
-                    ->filterByIdsucursal($inventariocierremes->getIdsucursal())
-                    ->filterByInventariomesFecha($inventariocierremes->getInventariomesFecha())
-                    ->exists();
-            if ($otroinventariocierremes) {
-                $otroinventariocierremes = \InventariomesQuery::create()
-                        ->filterByIdalmacen($inventariocierremes->getIdalmacen())
-                        ->filterByIdsucursal($inventariocierremes->getIdsucursal())
-                        ->filterByInventariomesFecha($inventariocierremes->getInventariomesFecha())
-                        ->findOne();
-                $otroinventariocierremes->delete();
-            }
-
-            $inventariocierremes->save();
-
-            foreach ($post_data['reporte'] as $reporte) {
-                $inventariocierremes_detalle = new \Inventariomesdetalle();
-                foreach ($reporte as $key => $value) {
-                    if (\InventariomesdetallePeer::getTableMap()->hasColumn($key)) {
-                        $inventariocierremes_detalle->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                    }
-                }
-                if (isset($reporte['inventariomesdetalle_revisada'])) {
-                    $inventariocierremes_detalle->setInventariomesdetalleRevisada(1);
-                }
-                $inventariocierremes_detalle->setIdinventariomes($inventariocierremes->getIdinventariomes());
-                $inventariocierremes_detalle->save();
-            }
-            $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-            return $this->redirect()->toUrl('/auditoria/cierresemana');
+            var_dump($post_data);exit;
         }
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
