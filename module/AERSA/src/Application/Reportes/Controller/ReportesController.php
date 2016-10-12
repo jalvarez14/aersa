@@ -1163,7 +1163,7 @@ class ReportesController extends AbstractActionController {
             $archivo = true;
         }
         $reporte = array();
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo('subreceta')->orderByProductoNombre('asc')->find();
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta','plu'))->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
@@ -1287,7 +1287,7 @@ class ReportesController extends AbstractActionController {
             $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";
             $archivo = true;
         }
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo('subreceta')->orderByProductoNombre('asc')->find();
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta','plu'))->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
