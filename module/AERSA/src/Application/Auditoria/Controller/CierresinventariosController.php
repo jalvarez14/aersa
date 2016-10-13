@@ -470,6 +470,7 @@ class CierresinventariosController extends AbstractActionController {
                     $reporte = array();
                     $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
                     $subcategoriaObj = new \Categoria();
+                    array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'StT', 'doce' => 'Unid', 'trece' => 'StF', 'catorce' => 'ImpFis', 'quince' => 'Dif', 'dieciseis' => 'CostProm', 'diecisiete' => 'DifImp', 'dieciocho' => 'Revisado'));
                     foreach ($subcategoriasObj as $subcategoriaObj) {
                         array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
                         $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
