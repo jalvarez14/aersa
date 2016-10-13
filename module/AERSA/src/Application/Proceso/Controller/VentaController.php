@@ -19,7 +19,7 @@ class VentaController extends AbstractActionController {
         $anio_activo = $sucursal->getSucursalAnioactivo();
         $mes_activo = $sucursal->getSucursalMesactivo();
 
-        $collection = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdventa(\Criteria::DESC)->find();
+        $collection = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByVentaFechaventa(\Criteria::DESC)->find();
 
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/venta/index');

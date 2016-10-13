@@ -25,7 +25,7 @@ class ConsignacionController extends AbstractActionController {
         $anio_activo = $sucursal->getSucursalAnioactivo();
         $mes_activo = $sucursal->getSucursalMesactivo();
         
-        $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraTipo('consignacion')->orderByCompraFechacreacion(\Criteria::DESC)->find();
+        $collection = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraTipo('consignacion')->orderByCompraFechacompra(\Criteria::DESC)->find();
       
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/consignacion/index');

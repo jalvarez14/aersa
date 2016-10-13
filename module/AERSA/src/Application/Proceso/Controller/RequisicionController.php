@@ -18,7 +18,7 @@ class RequisicionController extends AbstractActionController {
         $mes_activo = $sucursal->getSucursalMesactivo();
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
-        $collection = \RequisicionQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursalorigen($idsucursal)->_or()->filterByIdsucursaldestino($idsucursal)->find();
+        $collection = \RequisicionQuery::create()->orderByRequisicionFecha(\Criteria::DESC)->filterByIdempresa($idempresa)->filterByIdsucursalorigen($idsucursal)->_or()->filterByIdsucursaldestino($idsucursal)->find();
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/requisicion/index');

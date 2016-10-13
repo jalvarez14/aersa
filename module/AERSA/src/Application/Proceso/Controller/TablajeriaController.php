@@ -19,7 +19,7 @@ class TablajeriaController extends AbstractActionController {
          $anio_activo = $sucursal->getSucursalAnioactivo();
          $mes_activo = $sucursal->getSucursalMesactivo();
 
-        $collection = \OrdentablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdordentablajeria(\Criteria::DESC)->find();
+        $collection = \OrdentablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByOrdentablajeriaFecha(\Criteria::DESC)->find();
 
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/ordentablajeria/index');

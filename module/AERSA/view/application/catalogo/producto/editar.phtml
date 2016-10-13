@@ -181,6 +181,7 @@
                                 <tr>
                                     <th> Producto </th>
                                     <th> Cantidad </th>
+                                    <th> Unidad medida </th>
                                     <th> Costo </th>
                                     <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
                                         <th> Cantidad normalizada </th>
@@ -191,17 +192,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $entity = new Producto();?>
+                                <?php $entity = new Receta();?>
                                 <?php foreach ($recetas as $entity) : ?>
+            
                                 <?php $nombreProducto = \ProductoQuery::create()->findPk($entity->getIdproductoreceta())?>
+                               
                                     <tr id="<?php echo $entity->getIdreceta() ?>">
                                         <td><?php echo $nombreProducto->getProductoNombre() ?></td>
                                        
                                         <td><?php echo $entity->getRecetaCantidad() ?></td>
+                                         <td><span class="label label-sm label-success"><?php echo $entity->getProductoRelatedByIdproductoreceta()->getUnidadmedida()->getUnidadmedidaNombre()?></span></td>
                                          <td><?php echo money_format('%+#1.6n',$nombreProducto->getProductoCosto()) ?></td>
                                         <?php if($producto->getProductoTipo() == 'subreceta' && $producto->getIdcategoria() == 1) :?>
                                             <td><?php echo $entity->getRecetaCantidad() ?></td>
                                         <?php endif;?>
+                                           
                                             <td><?php echo  money_format('%+#1.6n',$nombreProducto->getProductoCosto() * $entity->getRecetaCantidad())?></td>
                                             <td class="text-left">                                    
                                             <div class="btn-group">

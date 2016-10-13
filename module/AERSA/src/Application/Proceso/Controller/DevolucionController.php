@@ -18,7 +18,7 @@ class DevolucionController extends AbstractActionController {
         $anio_activo = $sucursal->getSucursalAnioactivo();
         $mes_activo = $sucursal->getSucursalMesactivo();
 
-        $collection = \DevolucionQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIddevolucion(\Criteria::DESC)->find();
+        $collection = \DevolucionQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByDevolucionFechadevolucion(\Criteria::DESC)->find();
 
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/devolucion/index');

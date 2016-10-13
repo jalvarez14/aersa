@@ -3,6 +3,7 @@ $( document ).ready(function() {
     
         
     var idproducto = $('input[name=idproducto]').val();    
+ 
     var data = new Bloodhound({
         
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -13,7 +14,7 @@ $( document ).ready(function() {
         },
    
     });
-
+          
     $('input#producto_autocomplete').typeahead(null, {
         name: 'best-pictures',
         display: 'value',

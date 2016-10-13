@@ -18,7 +18,7 @@ class NotacreditoController extends AbstractActionController {
         $anio_activo = $sucursal->getSucursalAnioactivo();
         $mes_activo = $sucursal->getSucursalMesactivo();
 
-        $collection = \NotacreditoQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdnotacredito(\Criteria::DESC)->find();
+        $collection = \NotacreditoQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByNotacreditoFechanotacredito(\Criteria::DESC)->find();
 
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/notacredito/index');
