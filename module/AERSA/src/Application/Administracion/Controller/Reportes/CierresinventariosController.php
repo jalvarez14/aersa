@@ -319,7 +319,7 @@ class CierresinventariosController extends AbstractActionController {
                 $template = '/cierremes.xlsx';
                 $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
                 $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
-                var_dump($reporte);exit;
+                //var_dump($reporte);exit;
                 $config = array(
                     'template' => $template,
                     'templateDir' => $templateDir
