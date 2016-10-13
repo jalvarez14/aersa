@@ -94,6 +94,51 @@
         }
 
         plugin.list = function () {
+            
+            var data = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '/reportes/kardex/b?q=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('input#producto_autocomplete').typeahead(null, {
+                name: 'best-pictures',
+                display: 'value',
+                hint: true,
+                highlight: true,
+                source: data,
+                limit: 100,
+            });
+
+            $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
+                $('#producto_add').attr('disabled', false);
+                $('input#idproducto').val(suggestion.id);
+
+            });
+            
+            var count = 0;
+            $('#producto_add').on('click', function () {
+                //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
+                var tr = $('<tr id="' + $('input#idproducto').val() + '" class="producto" >');
+                tr.append('<td><input type="hidden"  name=productos[' + count + '] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
+                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                //INSERTAMOS EN LA TABLA
+                $('#productos_table tbody').append(tr);
+
+                //LIMPIAMOS EL AUTOCOMPLETE
+                $('input#producto_autocomplete').typeahead('val', '');
+                $('input#idproducto').val('');
+                $('#producto_add').attr('disabled', true);
+                count++;
+                tr.find('.fa-trash').on('click', function () {
+                    var tr = $(this).closest('tr');
+                    tr.remove();
+                });
+            });
+            
             $.datepicker.setDefaults($.datepicker.regional['es']);
             container.find('input[name=fecha_inicio]').keydown(false);
             container.find('input[name=fecha_fin]').keydown(false);
@@ -142,6 +187,10 @@
             
             $('#generar').on('click', function () {
                 var almacenes= new Array();
+                var productos = new Array();
+                $('.producto').each(function () {
+                    productos.push(this.id);
+                });
                 $container.find('.generado').filter(function () {
                 if ($(this).prop('checked'))
                         almacenes.push($(this).attr('id'));
@@ -155,7 +204,7 @@
                     type: "POST",
                     url: "/reportes/kardex",
                     dataType: "json",
-                    data: {almacenes:almacenes,inicio:inicio,fin:fin},
+                    data: {almacenes:almacenes,inicio:inicio,fin:fin,productos:productos},
                     success: function (data) {
                         if (data.length != 0) {
                             $('#reporte_table > tbody').empty();
