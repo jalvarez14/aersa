@@ -152,10 +152,10 @@ class ReportesController extends AbstractActionController {
         //INTANCIAMOS NUESTRA VISTA
         $ano_array = array();
         $no_data=0;
-        $exists=\CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->exists();
+        $exists=\CompraQuery::create()->orderByCompraFechacompra('asc')->exists();
         if($exists) {
-            $min = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('asc')->findOne()->getCuentaporcobrarFecha('Y');
-            $max = \CuentaporcobrarQuery::create()->orderByCuentaporcobrarFecha('desc')->findOne()->getCuentaporcobrarFecha('Y');
+            $min = \CompraQuery::create()->orderByCompraFechacompra('asc')->findOne()->getCompraFechacompra('Y');
+            $max = \CompraQuery::create()->orderByCompraFechacompra('desc')->findOne()->getCompraFechacompra('Y');
             for ($i = $min; $i <= $max; $i++) {
                 $ano_array[$i] = $i;
             }
@@ -1163,7 +1163,7 @@ class ReportesController extends AbstractActionController {
             $archivo = true;
         }
         $reporte = array();
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo('subreceta')->orderByProductoNombre('asc')->find();
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta','plu'))->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
@@ -1287,7 +1287,7 @@ class ReportesController extends AbstractActionController {
             $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";
             $archivo = true;
         }
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo('subreceta')->orderByProductoNombre('asc')->find();
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta','plu'))->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
