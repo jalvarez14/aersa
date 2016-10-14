@@ -1,7 +1,6 @@
 <?php
 
 namespace Application\Auditoria\Controller;
-
 include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -357,9 +356,12 @@ class CierresinventariosController extends AbstractActionController {
                         $faltante+=$difImporte;
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
-                    $impFis = $stockFisico * $costoPromedio;
-
+                    
+                    $idproducto = $objproducto->getIdproducto();
+                    
                     $costoPromedio = ($costoPromedio == 0) ? $objproducto->getProductoCosto() : $costoPromedio;
+                    
+                    $impFis = $stockFisico * $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
@@ -424,8 +426,6 @@ class CierresinventariosController extends AbstractActionController {
                 }
             }
             //colocar otro for de subcategoria y dentro otro de producto para ordenar
-
-
             $total = $sobrante + $faltante;
             $responsable = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
             if ($responsable == "")

@@ -1,13 +1,12 @@
 <?php
-
 namespace Application\Auditoria\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
 class InventariociclicoController extends AbstractActionController {
-
 
     public function indexAction() {
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
@@ -37,7 +36,44 @@ class InventariociclicoController extends AbstractActionController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post_data = $request->getPost();
-            var_dump($post_data);exit;
+            $reporte = array();
+            array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'StT', 'doce' => 'Unid', 'trece' => 'StF', 'catorce' => 'ImpFis', 'quince' => 'Dif', 'dieciseis' => 'CostProm', 'diecisiete' => 'DifImp'));
+            foreach ($post_data['reporte'] as $key => $value) {
+                if(isset($value['categoria'])) {
+                    array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $value['categoria'], 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
+                } else {
+                    array_push($reporte, array('uno' => $value['idproducto'], 'dos' => $value['inventariomesdetalle_nombre'], 'tres' => $value['inventariomesdetalle_stockinicial'], 'cuatro' => $value['inventariomesdetalle_ingresocompra'], 'cinco' => $value['inventariomesdetalle_ingresorequisicion'], 'seis' => $value['inventariomesdetalle_ingresoordentablajeria'], 'siete' => $value['inventariomesdetalle_egresoventa'], 'ocho' => $value['inventariomesdetalle_egresorequisicion'], 'nueve' => $value['inventariomesdetalle_egresoordentablajeria'], 'diez' => $value['inventariomesdetalle_egresodevolucion'], 'once' => $value['inventariomesdetalle_stockteorico'], 'doce' => $value['inventariomesdetalle_unidad'], 'trece' => $value['inventariomesdetalle_stockfisico'], 'catorce' => $value['inventariomesdetalle_importefisico'], 'quince' => $value['inventariomesdetalle_diferencia'], 'dieciseis' => $value['inventariomesdetalle_costopromedio'], 'diecisiete' => $value['inventariomesdetalle_difimporte']));
+                }
+            }
+            $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
+            $nombreSucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
+            $nombreAlmacen = \AlmacenQuery::create()->findPk($post_data['idalmacen'])->getAlmacenNombre();
+            $template = '/inventariociclico.xlsx';
+            $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+
+            $config = array(
+                'template' => $template,
+                'templateDir' => $templateDir
+            );
+            $R = new \PHPReport($config);
+            $R->load(array(
+                array(
+                    'id' => 'compania',
+                    'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal, 'almacen' => $nombreAlmacen),
+                ),
+                array(
+                    'id' => 'col',
+                    'repeat' => true,
+                    'data' => $reporte,
+                    'minRows' => 2,
+                )
+                    )
+            );
+            if (isset($post_data['generar_pdf']))
+                echo $R->render('PDF');
+            else
+                echo $R->render('excel');
+            exit();
         }
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
@@ -85,16 +121,28 @@ class InventariociclicoController extends AbstractActionController {
                     if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
                         $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
             }
-            $ts = strtotime("now");
-            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
-            $inicio_semana = date('Y-m-d', $start);
-            $fin_semana = date('Y-m-d', strtotime('next sunday', $start));
+
+
+            $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+            $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+            $time = strtotime("1 January $anio_act", time());
+            $day = date('w', $time);
+            $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+            $time += 6 * 24 * 3600;
+            $fecha = date('Y-m-d', $time);
+
+            $start = strtotime('last monday', $time);
+            $inicio_semana = date('Y-m-d', strtotime('last monday', $time));
+
+            $fin_semana = date('Y-m-d', $time);
 
             $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
             $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
 
+
             $inicio_semana = $inicio_semana . " 00:00:00   ";
             $fin_semana = $fin_semana . " 23:59:59";
+
 
             //inventario anterior
             $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdalmacen($idalmacen)->exists();
@@ -104,17 +152,16 @@ class InventariociclicoController extends AbstractActionController {
             $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
             $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
 
-            $objrequisicionesOrigen = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
-            $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
+            $objrequisicionesOrigen = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->filterByIdsucursalorigen($idsucursal)->find();
+            $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->filterByIdsucursal($idsucursal)->find();
 
-            $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
-            $objordentabDestino = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
+            $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->filterByIdsucursaldestino($idsucursal)->find();
+            $objordentabDestino = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->filterByIdsucursal($idsucursal)->find();
 
-            $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
-
-
+            $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->find();
 
             $reporte = array();
+            $arrayReporte = array();
             $sobrante = 0;
             $faltante = 0;
             $falim = 0;
@@ -127,8 +174,7 @@ class InventariociclicoController extends AbstractActionController {
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
             $categoriaObj = new \Categoria();
             foreach ($categoriasObj as $categoriaObj) {
-                $nombreSubcategoria=$categoriaObj->getCategoriaNombre();
-                array_push($reporte, "<tr><td>$nombreSubcategoria</td></tr>");
+                $row++;
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
                 $objproducto = new \Producto();
                 foreach ($objproductos as $objproducto) {
@@ -138,8 +184,42 @@ class InventariociclicoController extends AbstractActionController {
                             $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                             if ($exisinicial)
                                 $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                            if ($objproducto->getProductoTipo() == 'subreceta') {
+                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+                                $recetaObj = new \Receta();
+                                foreach ($recetasObj as $recetaObj) {
+                                    $idpr = $recetaObj->getIdproductoreceta();
+                                    $pos = 'inventariomesdetalle_stockinicial';
+                                    $cant = $recetaObj->getRecetaCantidad();
+                                    if (isset($arrayReporte[$idpr][$pos])) {
+                                        $arrayReporte[$idpr][$pos] = $arrayReporte[$idpr][$pos] + ($cant * $exisinicial);
+                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $exisinicial);
+                                        $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
+                                        $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
+                                        $dif = $stockTeorico - $stockFisico;
+                                        $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
+                                        $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
+                                        $difImporte = $dif * $costoPromedio;
+                                        if (0 < $arrayReporte[$idpr]['inventariomesdetalle_difimporte'])
+                                            $sobrante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+                                        else
+                                            $faltante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+
+                                        $arrayReporte[$idpr]['inventariomesdetalle_difimporte'] = $difImporte;
+                                        if (0 < $difImporte)
+                                            $sobrante+=$difImporte;
+                                        else
+                                            $faltante+=$difImporte;
+                                    } else {
+                                        $arrayReporte[$idpr][$pos] = ($cant * $exisinicial);
+                                    }
+                                }
+                                $exisinicial = 0;
+                            }
                         }
                     }
+                    if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
+                        $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
                     $totalProductoCompra = 0;
                     $compra = 0;
                     foreach ($objcompras as $objcompra) {
@@ -237,7 +317,8 @@ class InventariociclicoController extends AbstractActionController {
                     if (isset($productosReporte[$objproducto->getIdproducto()]))
                         $stockFisico = $productosReporte[$objproducto->getIdproducto()];
 
-                    $dif = $stockTeorico - $stockFisico;
+
+                    $dif = ($inventario_anterior) ? $stockTeorico - $stockFisico : $stockFisico;
 
                     $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
                     if ($has_compras > 0) {
@@ -253,9 +334,12 @@ class InventariociclicoController extends AbstractActionController {
                         $faltante+=$difImporte;
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
+
+                    $idproducto = $objproducto->getIdproducto();
+
+                    $costoPromedio = ($costoPromedio == 0) ? $objproducto->getProductoCosto() : $costoPromedio;
+
                     $impFis = $stockFisico * $costoPromedio;
-                    
-                    $costoPromedio= ($costoPromedio==0) ? $objproducto->getProductoCosto(): $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
@@ -265,11 +349,64 @@ class InventariociclicoController extends AbstractActionController {
                     $impFisTotal+=$impFis;
                     $idproducto = $objproducto->getIdproducto();
                     $nomPro = $objproducto->getProductoNombre();
-                    //<input type='hidden'  name='' value=''>
-                    array_push($reporte, "<tr id='$idproducto' bgcolor='" . $colorbg . "'><td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td><td>$nomPro</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockinicial]' value='$exisinicial'> $exisinicial</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresocompra]' value='$compra'>$compra</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresorequisicion]' value='$requisicionIng'>$requisicionIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresoordentablajeria]' value='$ordenTabIng'>$ordenTabIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoventa]' value='$venta'>$venta</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresorequisicion]' value='$requisicionEg'>$requisicionEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoordentablajeria]' value='$ordenTabEg'>$ordenTabEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td><td>$unidad</td><td><input required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td><td class='inventariomesdetalle_importefisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_importefisico]' value='$impFis'><span>$impFis</span></td><td class='inventariomesdetalle_diferencia'><input type='hidden'  name='reporte[$row][inventariomesdetalle_diferencia]' value='$dif'> <span>$dif</span></td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_costopromedio]' value='$costoPromedio'>$costoPromedio</td><td class='inventariomesdetalle_difimporte'><input type='hidden'  name='reporte[$row][inventariomesdetalle_difimporte]' value='$difImporte'><span>$difImporte</span></td><td><input type='checkbox' name='reporte[$row][inventariomesdetalle_revisada]'></td></tr>");
+                    $arrayReporte[$idproducto]['colorbg'] = $colorbg;
+                    $arrayReporte[$idproducto]['idcategoria'] = $colorbg;
+                    $arrayReporte[$idproducto]['row'] = $row;
+                    $arrayReporte[$idproducto]['cat'] = $cat;
+                    $arrayReporte[$idproducto]['nomPro'] = $nomPro;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_stockinicial'] = $exisinicial;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_ingresocompra'] = $compra;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_ingresorequisicion'] = $requisicionIng;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_ingresoordentablajeria'] = $ordenTabIng;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_egresoventa'] = $venta;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_egresorequisicion'] = $requisicionEg;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_egresoordentablajeria'] = $ordenTabEg;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_egresodevolucion'] = $devolucion;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_stockteorico'] = $stockTeorico;
+                    $arrayReporte[$idproducto]['unidad'] = $unidad;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_stockfisico'] = $stockFisico;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_importefisico'] = $impFis;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_diferencia'] = $dif;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'] = $costoPromedio;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'] = $difImporte;
                     $row++;
                 }
             }
+            $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
+            $categoriaObj = new \Categoria();
+            $row=0;
+            foreach ($categoriasObj as $categoriaObj) {
+                $nombreSubcategoria = $categoriaObj->getCategoriaNombre();
+                if($row!=0)
+                    $row++;
+                array_push($reporte, "<tr><td><input type='hidden' name='reporte[$row][categoria]' value='$nombreSubcategoria' />$nombreSubcategoria</td></tr>");
+                $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->filterByProductoTipo(array('simple', 'subreceta'))->orderByProductoNombre('asc')->find();
+                $objproducto = new \Producto();
+                foreach ($objproductos as $objproducto) {
+                    $idproducto = $objproducto->getIdproducto();
+                    $colorbg = $arrayReporte[$idproducto]['colorbg'];
+                    $cat = $arrayReporte[$idproducto]['idcategoria'];
+                    $row = $arrayReporte[$idproducto]['row'];
+                    $nomPro = $arrayReporte[$idproducto]['nomPro'];
+                    $exisinicial = $arrayReporte[$idproducto]['inventariomesdetalle_stockinicial'];
+                    $compra = $arrayReporte[$idproducto]['inventariomesdetalle_ingresocompra'];
+                    $requisicionIng = $arrayReporte[$idproducto]['inventariomesdetalle_ingresorequisicion'];
+                    $ordenTabIng = $arrayReporte[$idproducto]['inventariomesdetalle_ingresoordentablajeria'];
+                    $venta = $arrayReporte[$idproducto]['inventariomesdetalle_egresoventa'];
+                    $requisicionEg = $arrayReporte[$idproducto]['inventariomesdetalle_egresorequisicion'];
+                    $ordenTabEg = $arrayReporte[$idproducto]['inventariomesdetalle_egresoordentablajeria'];
+                    $devolucion = $arrayReporte[$idproducto]['inventariomesdetalle_egresodevolucion'];
+                    $stockTeorico = $arrayReporte[$idproducto]['inventariomesdetalle_stockteorico'];
+                    $unidad = $arrayReporte[$idproducto]['unidad'];
+                    $stockFisico = $arrayReporte[$idproducto]['inventariomesdetalle_stockfisico'];
+                    $impFis = $arrayReporte[$idproducto]['inventariomesdetalle_importefisico'];
+                    $dif = $arrayReporte[$idproducto]['inventariomesdetalle_diferencia'];
+                    $costoPromedio = $arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'];
+                    $difImporte = $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'];
+                    array_push($reporte, "<tr id='$idproducto' bgcolor='" . $colorbg . "'><td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_nombre]' value='$nomPro'>$nomPro</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockinicial]' value='$exisinicial'> $exisinicial</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresocompra]' value='$compra'>$compra</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresorequisicion]' value='$requisicionIng'>$requisicionIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresoordentablajeria]' value='$ordenTabIng'>$ordenTabIng</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoventa]' value='$venta'>$venta</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresorequisicion]' value='$requisicionEg'>$requisicionEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoordentablajeria]' value='$ordenTabEg'>$ordenTabEg</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_unidad]' value='$unidad'>$unidad</td><td><input required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td><td class='inventariomesdetalle_importefisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_importefisico]' value='$impFis'><span>$impFis</span></td><td class='inventariomesdetalle_diferencia'><input type='hidden'  name='reporte[$row][inventariomesdetalle_diferencia]' value='$dif'><span>$dif</span></td><td><input type='hidden'  name='reporte[$row][inventariomesdetalle_costopromedio]' value='$costoPromedio'>$costoPromedio</td><td class='inventariomesdetalle_difimporte'><input type='hidden'  name='reporte[$row][inventariomesdetalle_difimporte]' value='$difImporte'><span>$difImporte</span></td><td><input type='checkbox' name='reporte[$row][inventariomesdetalle_revisada]'></td></tr>");
+                }
+            }
+            //colocar otro for de subcategoria y dentro otro de producto para ordenar
             $total = $sobrante + $faltante;
             $responsable = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
             if ($responsable == "")
@@ -296,5 +433,5 @@ class InventariociclicoController extends AbstractActionController {
             return $this->getResponse()->setContent(json_encode($con));
         }
     }
-    
+
 }
