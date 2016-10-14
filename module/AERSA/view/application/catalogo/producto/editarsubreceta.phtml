@@ -61,7 +61,8 @@
                         <?php echo $this->formText($form->get('receta_cantidadoriginal')) ?>
                     </div>
                 </div>
-                <?php if(($producto->getProductoTipo() == 'subreceta' || $producto->getProductoTipo() == 'plu')  && $producto->getIdcategoria() == 1) :?>
+                <?php if(($producto->getProductoTipo() == 'subreceta' || $producto->getProductoTipo() == 'plu')  && ($producto->getIdcategoria() == 1 || $producto->getIdcategoria() == 3)) :?>
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <?php echo $this->formLabel($form->get('receta_cantidad')) ?>  
