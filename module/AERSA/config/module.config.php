@@ -1933,6 +1933,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'b' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/b[/:q]',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Reportes\Controller\Cardex',
+                                                'action' => 'b',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                             'recetas' => array(
@@ -2141,8 +2151,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    'route' => 'aersa', //LOCAL
-                    //'route' => 'aersamx.com', //PRODUCCION
+                    //'route' => 'aersa', //LOCAL
+                    'route' => 'aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(

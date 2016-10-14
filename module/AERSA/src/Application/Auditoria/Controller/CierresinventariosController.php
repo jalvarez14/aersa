@@ -1,7 +1,6 @@
 <?php
 
 namespace Application\Auditoria\Controller;
-
 include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -357,9 +356,12 @@ class CierresinventariosController extends AbstractActionController {
                         $faltante+=$difImporte;
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
-                    $impFis = $stockFisico * $costoPromedio;
-
+                    
+                    $idproducto = $objproducto->getIdproducto();
+                    
                     $costoPromedio = ($costoPromedio == 0) ? $objproducto->getProductoCosto() : $costoPromedio;
+                    
+                    $impFis = $stockFisico * $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
@@ -424,8 +426,6 @@ class CierresinventariosController extends AbstractActionController {
                 }
             }
             //colocar otro for de subcategoria y dentro otro de producto para ordenar
-
-
             $total = $sobrante + $faltante;
             $responsable = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
             if ($responsable == "")
@@ -470,6 +470,7 @@ class CierresinventariosController extends AbstractActionController {
                     $reporte = array();
                     $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
                     $subcategoriaObj = new \Categoria();
+                    array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'StT', 'doce' => 'Unid', 'trece' => 'StF', 'catorce' => 'ImpFis', 'quince' => 'Dif', 'dieciseis' => 'CostProm', 'diecisiete' => 'DifImp', 'dieciocho' => 'Revisado'));
                     foreach ($subcategoriasObj as $subcategoriaObj) {
                         array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
                         $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
