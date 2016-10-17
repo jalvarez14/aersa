@@ -1034,8 +1034,7 @@ class ReportesController extends AbstractActionController {
                 }
                 array_push($reporte, array('uno'  => 'Total', 'dos' => $ventas_bebidas, 'tres' => $porcentaje_ventas_bebidas));
                 array_push($reporte, array('uno'  => '', 'dos' => '', 'tres' => ''));
-                //pendiente
-                $template = '/variacioncostos.xlsx';
+                $template = '/informeacumulado.xlsx';
                 $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
                 $inicio = $post_data['fecha_inicial'];
                 $fin = $post_data['fecha_final'];
@@ -1052,8 +1051,8 @@ class ReportesController extends AbstractActionController {
                         'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal),
                     ),
                     array(
-                        'id' => 'fecha',
-                        'data' => array('inicial' => $inicio, 'final' => $fin),
+                        'id' => 'reporte',
+                        'data' => array('fecha' => $inicio.' - '.$fin),
                         'format' => array(
                             'date' => array('datetime' => 'd/m/Y')
                         )
