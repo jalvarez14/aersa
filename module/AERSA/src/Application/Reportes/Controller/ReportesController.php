@@ -151,16 +151,16 @@ class ReportesController extends AbstractActionController {
 
         //INTANCIAMOS NUESTRA VISTA
         $ano_array = array();
-        $no_data=0;
-        $exists=\CompraQuery::create()->orderByCompraFechacompra('asc')->exists();
-        if($exists) {
+        $no_data = 0;
+        $exists = \CompraQuery::create()->orderByCompraFechacompra('asc')->exists();
+        if ($exists) {
             $min = \CompraQuery::create()->orderByCompraFechacompra('asc')->findOne()->getCompraFechacompra('Y');
             $max = \CompraQuery::create()->orderByCompraFechacompra('desc')->findOne()->getCompraFechacompra('Y');
             for ($i = $min; $i <= $max; $i++) {
                 $ano_array[$i] = $i;
             }
         } else {
-            $no_data=1;
+            $no_data = 1;
         }
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
         $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
@@ -690,19 +690,19 @@ class ReportesController extends AbstractActionController {
         }
 
         //INTANCIAMOS NUESTRA VISTA
-        $mes_min=0;
-        $anio_min=0;
-        $mes_max=0;
-        $anio_max=0;
-        $existencia=1;
-        $exits=\FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->exists();
-        if($exits) {
+        $mes_min = 0;
+        $anio_min = 0;
+        $mes_max = 0;
+        $anio_max = 0;
+        $existencia = 1;
+        $exits = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->exists();
+        if ($exits) {
             $mes_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('m');
             $anio_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('Y');
             $mes_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('m');
             $anio_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('Y');
         } else {
-            $existencia=0;
+            $existencia = 0;
         }
         $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
         $proveedores = \ProveedorQuery::create()->filterByIdempresa($idempresa)->find();
@@ -993,67 +993,51 @@ class ReportesController extends AbstractActionController {
 
             $porcentaje_bruto_alimentos = ($ventas_alimentos != 0) ? ($total_alimentos * 100) / $ventas_alimentos : 0;
             $porcentaje_bruto_bebidas = ($ventas_bebidas) ? ($total_bebidas * 100) / $ventas_bebidas : 0;
-            $bgazul = "#819FF7";
-            $bgazulclaro = "#ADD8E6";
-            $bgfila = "#F2F2F2";
-            $bgfila2 = "#FFFFFF";
-            $bgrojo = "#EA6363";
-            $bgverde = "#93F995";
-            $reporte = array();
-            $reporte[0] = "<tr bgcolor='" . $bgrojo . "'><td>Ventas totales</td><td>$ventas_totales</td><td></td></tr>";
-            $reporte[1] = "<tr bgcolor='" . $bgazul . "'><td>Ventas por rubro</td><td></td><td></td></tr>";
-            $reporte[3] = "<tr bgcolor='" . $bgfila . "'><td>Alimentos</td><td>$ventas_alimentos</td><td>$porcentaje_ventas_alimentos</td></tr>";
-            $reporte[4] = "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$ventas_bebidas</td><td>$porcentaje_ventas_bebidas</td></tr>";
-            $reporte[5] = "<tr bgcolor='" . $bgazul . "'><td>Porcentaje bruto</td><td></td><td></td></tr>";
-            $reporte[6] = "<tr bgcolor='" . $bgfila . "'><td>Alimentos</td><td></td><td>$porcentaje_bruto_alimentos</td></tr>";
-            $reporte[7] = "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td></td><td>$porcentaje_bruto_bebidas</td></tr>";
-            $reporte[8] = "<tr bgcolor='" . $bgazul . "'><td>Compras del mes</td><td></td><td></td></tr>";
-            $reporte[9] = "<tr bgcolor='" . $bgfila . "'><td>Alimentos</td><td>$compras_alimentos</td><td>$porcentaje_alimentos_compras</td></tr>";
-            $reporte[10] = "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$compras_bebidas</td><td>$porcentaje_bebidas_compras</td></tr>";
-            $reporte[11] = "<tr  bgcolor='" . $bgrojo . "'><td>Total</td><td>$compras_totales</td><td>$porcentaje_total_compras</td></tr>";
-            $reporte[12] = "<tr bgcolor='" . $bgverde . "'><td>Venta promedio diaria</td><td>$venta_promedio</td><td>$dias_activos días</td></tr>";
-            $reporte[13] = "<tr bgcolor='" . $bgazul . "'><td>Consumo promedio p/empleado diario</td><td></td><td></td></tr>";
-            $reporte[14] = "<tr bgcolor='" . $bgazulclaro . "'><td>Cortesia</td><td></td><td></td></tr>";
-            $reporte[15] = "<tr bgcolor='" . $bgfila . "'><td>Alimento</td><td>$cortesia_alimentos</td><td></td></tr>";
-            $reporte[16] = "<tr  bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$cortesia_bebidas</td><td></td></tr>";
-            $reporte[17] = "<tr bgcolor='" . $bgazulclaro . "'><td>Consumo ejecutivo</td><td></td><td></td></tr>";
-            $reporte[18] = "<tr bgcolor='" . $bgfila . "'><td>Alimento</td><td>$ejecutivos_alimentos</td><td></td></tr>";
-            $reporte[19] = "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$ejecutivos_bebidas</td><td></td></tr>";
-            $reporte[20] = "<tr bgcolor='" . $bgazulclaro . "'><td>Mermas</td><td></td><td></td></tr>";
-            $reporte[21] = "<tr bgcolor='" . $bgfila . "'><td>Alimento</td><td>$mermas_alimentos</td><td></td></tr>";
-            $reporte[22] = "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$mermas_bebidas</td><td></td></tr>";
-            $reporte[23] = "<tr bgcolor='" . $bgazul . "'><td>Alimentos</td><td></td><td></td></tr>";
-            $i = 24;
-            $color = true;
-            foreach ($array_alimentos as $key => $value) {
-                $bgcolor = ($color) ? $bgfila : $bgfila2;
-                $color = !$color;
-                $porcentaje = ($value * 100) / $total_alimentos;
-                $reporte[$i] = "<tr bgcolor='" . $bgcolor . "'><td>$key</td><td>$value</td><td>$porcentaje</td></tr>";
-                $i++;
-            }
-            $reporte[$i] = "<tr bgcolor='" . $bgrojo . "'><td>Total</td><td>$ventas_alimentos</td><td>$porcentaje_ventas_alimentos</td></tr>";
-            $i++;
-            $reporte[$i] = "<tr bgcolor='" . $bgazul . "'><td>Bebidas</td><td></td><td></td></tr>";
-            $i++;
-            $color = true;
-            foreach ($array_bebidas as $key => $value) {
-                $bgcolor = ($color) ? $bgfila : $bgfila2;
-                $color = !$color;
-                $porcentaje = ($value * 100) / $total_bebidas;
-                $reporte[$i] = "<tr bgcolor='" . $bgcolor . "'><td>$key</td><td>$value</td><td>$porcentaje</td></tr>";
-                $i++;
-            }
-            $reporte[$i] = "<tr bgcolor='" . $bgrojo . "'><td>Total</td><td>$ventas_bebidas</td><td>$porcentaje_ventas_bebidas</td></tr>";
-            $i++;
 
-            return $this->getResponse()->setContent(json_encode($reporte));
-            exit;
-            if ($documento) {
-                $template = '/variacioncostos.xlsx';
+            $reporte = array();
+
+            if (isset($post_data['generar_pdf']) || isset($post_data['generar_excel'])) {
+                array_push($reporte, array('uno'  => 'Concepto', 'dos' => 'Total', 'tres' => 'Porcentaje'));
+                array_push($reporte, array('uno'  => 'Ventas totales', 'dos' => $ventas_totales, 'tres' => ''));
+                
+                array_push($reporte, array('uno'  => 'Ventas por rubro', 'dos' => '', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Alimentos', 'dos' => $ventas_alimentos, 'tres' => $porcentaje_ventas_alimentos));
+                array_push($reporte, array('uno'  => 'Bebidas', 'dos' => $ventas_bebidas, 'tres' => $porcentaje_ventas_bebidas));
+                array_push($reporte, array('uno'  => 'Porcentaje bruto', 'dos' => '', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Alimentos', 'dos' => '', 'tres' => $porcentaje_bruto_alimentos));
+                array_push($reporte, array('uno'  => 'Bebidas', 'dos' => '', 'tres' => $porcentaje_bruto_bebidas));
+                array_push($reporte, array('uno'  => 'Compras del mes', 'dos' => '', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Alimentos', 'dos' => $compras_alimentos, 'tres' => $porcentaje_alimentos_compras));
+                array_push($reporte, array('uno'  => 'Bebidas', 'dos' => $compras_bebidas, 'tres' => $porcentaje_bebidas_compras));
+                array_push($reporte, array('uno'  => 'Total', 'dos' => $compras_totales, 'tres' => $porcentaje_total_compras));
+                array_push($reporte, array('uno'  => 'Venta promedio diaria', 'dos' => $venta_promedio, 'tres' => $dias_activos.' días'));
+                array_push($reporte, array('uno'  => 'Consumo promedio p/empleado diario', 'dos' => '', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Cortesia', 'dos' => '', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Alimento', 'dos' => $cortesia_alimentos, 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Bebidas', 'dos' => $cortesia_bebidas, 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Consumo ejecutivo', 'dos' => '', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Alimento', 'dos' => $ejecutivos_alimentos, 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Bebidas', 'dos' => '$ejecutivos_bebidas', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Mermas', 'dos' => '', 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Alimento', 'dos' => $mermas_alimentos, 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Bebidas', 'dos' => $mermas_bebidas, 'tres' => ''));
+                array_push($reporte, array('uno'  => 'Alimentos', 'dos' => '', 'tres' => ''));
+                foreach ($array_alimentos as $key => $value) {
+                    $porcentaje = ($value * 100) / $total_alimentos;
+                    array_push($reporte, array('uno'  => $key, 'dos' => $value, 'tres' => $porcentaje));
+                }
+                array_push($reporte, array('uno'  => 'Total', 'dos' => $ventas_alimentos, 'tres' => $porcentaje_ventas_alimentos));
+                array_push($reporte, array('uno'  => 'Bebidas', 'dos' => '', 'tres' => ''));
+                foreach ($array_bebidas as $key => $value) {
+                    $porcentaje = ($value * 100) / $total_bebidas;
+                    array_push($reporte, array('uno'  => $key, 'dos' => $value, 'tres' => $porcentaje));
+                }
+                array_push($reporte, array('uno'  => 'Total', 'dos' => $ventas_bebidas, 'tres' => $porcentaje_ventas_bebidas));
+                array_push($reporte, array('uno'  => '', 'dos' => '', 'tres' => ''));
+                $template = '/informeacumulado.xlsx';
                 $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
-                $inicio = $mes_inicio . "/" . $ano_inicio;
-                $fin = $mes_fin . "/" . $ano_fin;
+                $inicio = $post_data['fecha_inicial'];
+                $fin = $post_data['fecha_final'];
                 $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
                 $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
                 $config = array(
@@ -1065,47 +1049,80 @@ class ReportesController extends AbstractActionController {
                     array(
                         'id' => 'compania',
                         'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $sucursal),
+                    ),
+                    array(
+                        'id' => 'reporte',
+                        'data' => array('fecha' => $inicio.' - '.$fin),
                         'format' => array(
                             'date' => array('datetime' => 'd/m/Y')
                         )
                     ),
                     array(
-                        'id' => 'fecha',
-                        'data' => array('inicial' => $inicio, 'final' => $fin),
-                        'format' => array(
-                            'date' => array('datetime' => 'd/m/Y')
-                        )
-                    ),
-                    array(
-                        'id' => 'prod',
+                        'id' => 'col',
                         'repeat' => true,
                         'data' => $reporte,
                         'minRows' => 2,
-                        'format' => array(
-                            'price' => array('number' => array('prefix' => '$', 'decimals' => 2)),
-                            'total' => array('number' => array('prefix' => '$', 'decimals' => 2))
-                        )
                     )
                         )
                 );
                 if (isset($post_data['generar_pdf']))
-                        echo $R->render('PDF');
+                    echo $R->render('PDF');
                 else
                     echo $R->render('excel');
-                exit();
             } else {
-                $view_model = new ViewModel();
-                $view_model->setVariables(array(
-                    'reporte' => $reporte,
-                    'messages' => $this->flashMessenger(),
-                ));
-                $view_model->setTemplate('/application/reportes/reportes/variacioncostosreporte');
-                return $view_model;
+                $bgazul = "#819FF7";
+                $bgazulclaro = "#ADD8E6";
+                $bgfila = "#F2F2F2";
+                $bgfila2 = "#FFFFFF";
+                $bgrojo = "#EA6363";
+                $bgverde = "#93F995";
+                array_push($reporte , "<tr bgcolor='" . $bgrojo . "'><td>Ventas totales</td><td>$ventas_totales</td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazul . "'><td>Ventas por rubro</td><td></td><td></td></tr>");
+                array_push($reporte ,"<tr bgcolor='" . $bgfila . "'><td>Alimentos</td><td>$ventas_alimentos</td><td>$porcentaje_ventas_alimentos</td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$ventas_bebidas</td><td>$porcentaje_ventas_bebidas</td></tr>");
+                array_push($reporte ,"<tr bgcolor='" . $bgazul . "'><td>Porcentaje bruto</td><td></td><td></td></tr>");
+                array_push($reporte ,"<tr bgcolor='" . $bgfila . "'><td>Alimentos</td><td></td><td>$porcentaje_bruto_alimentos</td></tr>");
+                array_push($reporte ,"<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td></td><td>$porcentaje_bruto_bebidas</td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazul . "'><td>Compras del mes</td><td></td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila . "'><td>Alimentos</td><td>$compras_alimentos</td><td>$porcentaje_alimentos_compras</td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$compras_bebidas</td><td>$porcentaje_bebidas_compras</td></tr>");
+                array_push($reporte , "<tr  bgcolor='" . $bgrojo . "'><td>Total</td><td>$compras_totales</td><td>$porcentaje_total_compras</td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgverde . "'><td>Venta promedio diaria</td><td>$venta_promedio</td><td>$dias_activos días</td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazul . "'><td>Consumo promedio p/empleado diario</td><td></td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazulclaro . "'><td>Cortesia</td><td></td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila . "'><td>Alimento</td><td>$cortesia_alimentos</td><td></td></tr>");
+                array_push($reporte , "<tr  bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$cortesia_bebidas</td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazulclaro . "'><td>Consumo ejecutivo</td><td></td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila . "'><td>Alimento</td><td>$ejecutivos_alimentos</td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$ejecutivos_bebidas</td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazulclaro . "'><td>Mermas</td><td></td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila . "'><td>Alimento</td><td>$mermas_alimentos</td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgfila2 . "'><td>Bebidas</td><td>$mermas_bebidas</td><td></td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazul . "'><td>Alimentos</td><td></td><td></td></tr>");
+                $color = true;
+                foreach ($array_alimentos as $key => $value) {
+                    $bgcolor = ($color) ? $bgfila : $bgfila2;
+                    $color = !$color;
+                    $porcentaje = ($value * 100) / $total_alimentos;
+                    array_push($reporte , "<tr bgcolor='" . $bgcolor . "'><td>$key</td><td>$value</td><td>$porcentaje</td></tr>");
+                }
+                array_push($reporte , "<tr bgcolor='" . $bgrojo . "'><td>Total</td><td>$ventas_alimentos</td><td>$porcentaje_ventas_alimentos</td></tr>");
+                array_push($reporte , "<tr bgcolor='" . $bgazul . "'><td>Bebidas</td><td></td><td></td></tr>");
+                $color = true;
+                foreach ($array_bebidas as $key => $value) {
+                    $bgcolor = ($color) ? $bgfila : $bgfila2;
+                    $color = !$color;
+                    $porcentaje = ($value * 100) / $total_bebidas;
+                    array_push($reporte , "<tr bgcolor='" . $bgcolor . "'><td>$key</td><td>$value</td><td>$porcentaje</td></tr>");
+                }
+                array_push($reporte ,"<tr bgcolor='" . $bgrojo . "'><td>Total</td><td>$ventas_bebidas</td><td>$porcentaje_ventas_bebidas</td></tr>");
+                return $this->getResponse()->setContent(json_encode($reporte));
             }
+            exit;
         }
 
         //INTANCIAMOS NUESTRA VISTA
-        $no_data = false;
+        $no_data = 0;
         $mes_min = 0;
         $anio_min = 0;
         $mes_max = 0;
@@ -1163,7 +1180,7 @@ class ReportesController extends AbstractActionController {
             $archivo = true;
         }
         $reporte = array();
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta','plu'))->orderByProductoNombre('asc')->find();
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta', 'plu'))->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
@@ -1287,7 +1304,7 @@ class ReportesController extends AbstractActionController {
             $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";
             $archivo = true;
         }
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta','plu'))->orderByProductoNombre('asc')->find();
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta', 'plu'))->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
