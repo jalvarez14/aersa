@@ -62,6 +62,51 @@ class ProductoController extends AbstractActionController
         }
         
     }
+    
+    public function associateproductcfdiAction(){
+        $request = $this->getRequest();
+          //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+            
+         if ($request->isPost()){
+             $post_data = $request->getPost();
+            
+             $cfdi = new \Productocfdi();
+             $cfdi->setIdproducto($post_data['idproducto'])
+                  ->setProductocfdiNombre($post_data['concepto_nombre'])
+                  ->setIdempresa($session['idempresa'])
+                  ->save();     
+             
+             $producto = \ProductoQuery::create()->joinUnidadmedida()->withColumn('unidadmedida_nombre')->filterByIdproducto($cfdi->getIdproducto())->findOne();
+             
+             
+             return $this->getResponse()->setContent(json_encode(array('response' => true,'producto'=> $producto->toArray(\BasePeer::TYPE_FIELDNAME))));
+         }
+         
+         
+    }
+    
+    public function validateproductcfdiAction(){
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        if($request->isPost()){
+             $post_data = $request->getPost();
+             
+             $query = \ProductocfdiQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductocfdiNombre($post_data['descripcion'])->exists();
+             if(!$query){
+                 return $this->getResponse()->setContent(json_encode(array('response' => false)));
+             }else{
+                 $cfdi = \ProductocfdiQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductocfdiNombre($post_data['descripcion'])->findOne();
+                 $producto = \ProductoQuery::create()->joinUnidadmedida()->withColumn('unidadmedida_nombre')->filterByIdproducto($cfdi->getIdproducto())->findOne();
+                 return $this->getResponse()->setContent(json_encode(array('response' => true,'producto'=> $producto->toArray(\BasePeer::TYPE_FIELDNAME))));
+             }
+        }
+    }
+    
+    
     public function validateproductAction(){
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();

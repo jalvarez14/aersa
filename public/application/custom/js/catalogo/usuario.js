@@ -232,8 +232,6 @@
                                 var numRequests = productos_array.length;
                                 var count = 0;
                                 var total = 0;
-                                    
-
                                     function nextAjax(){
          
                                         if(count < numRequests){
