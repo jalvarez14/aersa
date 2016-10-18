@@ -264,7 +264,7 @@
                 $('#generar_reporte').attr('disabled', true);
                 $('#generar_excel').attr('disabled', true);
                 $('#generar_pdf').attr('disabled', true);
-                $('#no_data').html('No existen registros de flujo efectivo')
+                $('#no_data').html('No existen registros de compras')
             }
             var productos_table = $container.find('#productos_table');
             $.ajax({

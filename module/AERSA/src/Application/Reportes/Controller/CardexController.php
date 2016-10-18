@@ -85,8 +85,6 @@ class CardexController extends AbstractActionController {
                     }
                     
                     if ($pedido) {
-
-
                         $nombreProducto = $objproducto->getProductoNombre();
                         $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                         $categoria = $objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
