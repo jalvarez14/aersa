@@ -212,7 +212,6 @@ class CierresinventariosController extends AbstractActionController {
                                 foreach ($recetasObj as $recetaObj) {
                                     $idpr = $recetaObj->getIdproductoreceta();
                                     if($idpr==24022)
-                                        echo "si <br>";
                                     $pos = 'inventariomesdetalle_stockinicial';
                                     $cant = $recetaObj->getRecetaCantidad();
                                     if (isset($arrayReporte[$idpr][$pos])) {
@@ -431,7 +430,6 @@ class CierresinventariosController extends AbstractActionController {
             //colocar otro for de subcategoria y dentro otro de producto para ordenar
             $total = $sobrante + $faltante;
             $responsable = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
-            exit;
             if ($responsable == "")
                 $responsable = "N/A";
             array_push($reporte, "<tr><td>Responsable</td><td>$responsable</td><td></td><td><td></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final alimentos</td><td class='inventariomes_finalalimentos'><input type='hidden'  name='inventariomes_finalalimentos' value='$falim'><span>$falim</span></td></tr>");
