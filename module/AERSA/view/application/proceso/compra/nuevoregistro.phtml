@@ -193,6 +193,6 @@
 <script type="text/javascript" src="/application/custom/js/procesos/compra.js"></script>
 
 <script>
-    var $form = $('#form_container').compra({'iva':<?php echo $iva?>,'idrol':<?php echo $idrol?>});
+    var $form = $('#form_container').compra({'iva':<?php echo $iva?>,'idrol':<?php echo $idrol?>,almacenes:<?php echo $almacenes?>});
     $form.new(<?php echo $anio_activo?>,<?php echo $mes_activo?>,<?php echo $almacenes?>);
 </script>

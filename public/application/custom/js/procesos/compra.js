@@ -49,7 +49,83 @@
         * Private methods
         */
        
-        
+        var addCompraDetail = function(key,producto,cfdi){
+                console.log(producto);
+                console.log(cfdi);
+                
+                var iva = parseFloat(cfdi.iva);
+                if(iva>0){
+                    iva = 'true';
+                }else{
+                    iva = 'false';
+                }
+                
+                //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
+                var almacenen_select = $('<td><select class="form-control" name=productos['+key+'][almacen]></td>');
+                $.each(settings.almacenes,function(index){
+                    var option = $('<option value="'+index+'">'+this+'</option>');
+                    almacenen_select.find('select').append(option);
+                });
+                
+                var almacen_selected = $('select[name=idalmacen] option:selected').val();
+                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
+                
+                var tr = $('<tr>');
+                tr.append('<td><input type="hidden"  name="productos['+key+'][producto_iva]" value="'+iva+'"><input name=productos['+key+'][subtotal] type=hidden value="'+cfdi.importe+'"><input name=productos['+key+'][costo_unitario] type=hidden value="'+cfdi.valorUnitario+'"><input type="hidden"  name=productos['+key+'][idproducto] value="'+producto.idproducto+'">'+producto.producto_nombre+'</td>');
+                tr.append('<td>'+producto.unidadmedida_nombre+'</td>');
+                tr.append('<td><input type="text" name=productos['+key+'][cantidad] value="1"></td>');
+                tr.append('<td><input type="text" name=productos['+key+'][precio] value="'+cfdi.valorUnitario+'"></td>');
+                tr.append('<td class="costo_unitario">'+accounting.formatMoney(cfdi.valorUnitario)+'</td>');
+                tr.append('<td><input type="text" name=productos['+key+'][descuento] value="0"></td>');
+                tr.append('<td><input type="text" name=productos['+key+'][ieps] value="0"></td>');
+                tr.append('<td class="subtotal">'+accounting.formatMoney(cfdi.importe)+'</td>');
+
+                /*
+                 * ACL
+                 */
+                if(settings.idrol == 5){
+                    tr.append('<td><input type="checkbox" name=productos['+key+'][revisada] disabled></td >');
+                }else{
+                    tr.append('<td><input type="checkbox" name=productos['+key+'][revisada]></td>');
+                }
+                
+                tr.append(almacenen_select);
+                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                
+                //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
+                tr.find('input').numeric();
+                
+                //ADJUNTAMOS EL EVENTO CALCULATOR PARA CALCULAR SUBTOTAL,TOTAL,IEPS, ETC
+                tr.find('input').on('blur',function(){
+                    var $tr = $(this).closest(tr);
+                    caluclator($tr);
+                });
+                
+                var revisada = $('select[name=compra_revisada] option:selected').val();
+                if(revisada==1){
+                    tr.find('input[type=checkbox]').prop('checked',true);
+                }
+                
+                //INSERTAMOS EN LA TABLA
+                $('#productos_table tbody').append(tr);
+                 tr.find('input[name*=cantidad]').focus();
+                 
+                //LIMPIAMOS EL AUTOCOMPLETE
+                $('input#producto_autocomplete').typeahead('val', ''); 
+                $('input#idproducto').val(''); 
+                $('input#producto_iva').val('');
+                $('#producto_add').attr('disabled',true);
+
+                $('.fa-trash').on('click',function(){
+                  var tr = $(this).closest('tr');
+                  tr.remove();
+                });   
+
+                //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
+                revisadaControl();
+                caluclator(tr);
+            }
+            
         var caluclator = function($tr){
             
             var cantidad = $tr.find('input[name*=cantidad]').val() != "" ? parseFloat(parseFloat(parseFloat($tr.find('input[name*=cantidad]').val()).toFixed(6))) : 1;
@@ -165,7 +241,23 @@
             });
 
         }
-       
+        var ObjectLength = function( object ) {
+            var length = 0;
+            for( var key in object ) {
+                if( object.hasOwnProperty(key) ) {
+                    ++length;
+                }
+            }
+            return length;
+        };
+        
+        function encode_utf8(s) {
+            return unescape(encodeURIComponent(s));
+          }
+
+          function decode_utf8(s) {
+            return decodeURIComponent(escape(s));
+          }
        /*
         * Public methods
         */
@@ -237,7 +329,7 @@
              */
             
             var compra_tipo = $('select[name=compra_tipo] option:selected').val();
-            console.log(compra_tipo);
+      
             if(compra_tipo == 'ordecompra'){
                 $('input[name=compra_fechaentrega]').attr('disabled',false);
             }else{
@@ -280,7 +372,139 @@
                              var xml = jQuery.parseXML(data);
                              var json = xmlToJson(xml);
                              var emisor_nombre = json['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['nombre'];
-                             $.ajax({
+                             var numRequests =  ObjectLength(json['cfdi:Comprobante']['cfdi:Conceptos']);
+                             var count = 0;
+                             var total = 0;
+                             var productos_array = Array();
+                             $.each(json['cfdi:Comprobante']['cfdi:Conceptos'],function(index,row){
+                                var row = row['@attributes'];
+                                
+                                var tmp = {
+                                    cantidad:row.cantidad,
+                                    descripcion:row.descripcion,
+                                    importe:row.importe,
+                                    unidad:row.unidad,
+                                    valorUnitario:row.valorUnitario,
+      
+                                }
+                                productos_array.push(tmp);
+                             });
+                             var countImpuestos = 0;
+                             $.each(json['cfdi:Comprobante']['cfdi:Impuestos']['cfdi:Traslados'],function(index,row){
+                                var row = row['@attributes'];
+                                productos_array[countImpuestos].iva = row.importe;
+                                countImpuestos++;
+                             });
+                             function nextAjax(){
+                                   if(count < numRequests){
+                                        $.ajax({
+                                            url: '/catalogo/producto/validateproductcfdi',
+                                            type: 'POST',
+                                            dataType: 'JSON',
+                                            async: false,
+                                            data:  productos_array[count],
+                                            success: function (data) {
+                                                if(!data.response){
+                                                    var tmpl = [
+                                                        '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                                                            '<div class="modal-header">',
+
+                                                                '<h4 class="modal-title">Asociar concepto - producto </h4>',
+                                                            '</div>',
+                                                            '<div class="modal-body">',
+                                                                '<div class="row">',
+                                                                    '<div class="col-md-12">',
+                                                                        '<div class="custom-alerts alert alert-warning fade in">',
+                                                                            '<strong>Advertencia!</strong>',
+                                                                             ' El siguiente concepto NO se encuentra asociado a ningun producto. Para continuar es necesario que lo asocie a un producto existente.',
+                                                                        '</div>',
+                                                                    '</div>',
+                                                                    '<div class="col-md-12">',
+                                                                        '<div class="form-group">',
+                                                                            '<label for="producto_nombre">Descripción del concepto *</label>',
+                                                                            '<input required class="form-control" type="text" name="concepto_descripcion" value="'+decode_utf8(productos_array[count]['descripcion'])+'" disabled>',
+                                                                        '</div>',
+                                                                    '</div>',
+                                                                    '<div class="col-md-12">',
+                                                                        '<div class="form-group">',
+                                                                            '<label for="producto_nombre">Proveedor *</label>',
+                                                                            '<div class="input-group">',
+                                                                                '<span class="input-group-addon">',
+                                                                                    '<i class="fa fa-search"></i>',
+                                                                                '</span>',
+                                                                                '<input type="hidden" name="idproducto">',
+                                                                                '<input required class="form-control" type="text" name="producto_autocomplete">',
+                                                                                 '<span style="color:red;display:none">Este campo es requerido</span>',
+                                                                            '</div>',
+                                                                        '</div>',
+                                                                    '</div>',
+                                                                '</div>',
+                                                            '</div>',
+                                                            '<div class="modal-footer">',
+                                                                '<button id="save_product" href="#" class="btn blue">Guardar</button>',
+                                                                '<button id="cancel_product" href="#" class="btn red">Cancelar</button>',
+                                                            '</div>',
+                                                        '</div>',  
+                                                    ].join('');
+                                                    var $modal = $(tmpl);
+                                                    $modal.modal();
+                                                    
+                                                    var data = new Bloodhound({
+                                                        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                                                        queryTokenizer: Bloodhound.tokenizers.whitespace,
+                                                        remote: {
+                                                          url: '/autocomplete/getproductos?q=%QUERY&type=simple',
+                                                          wildcard: '%QUERY'
+                                                        }
+                                                    });
+                                                    
+                                                    $modal.find('input[name=producto_autocomplete]').typeahead(null, {
+                                                        name: 'best-pictures',
+                                                        display: 'value',
+                                                        hint: true,
+                                                        highlight: true,
+                                                        source: data,
+                                                        limit:100,
+                                                    });
+
+                                                    $modal.find('input[name=producto_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+                                                         $modal.find('input[name=idproducto]').val(suggestion.id);
+                                                    });
+                                                    $modal.find('#cancel_product').on('click',function(){
+                                                        count++;
+                                                        $modal.modal('hide');
+                                                        nextAjax();
+                                                    });
+                                                    $modal.find('#save_product').on('click',function(){
+                     
+                                                        var idproducto = $modal.find('input[name=idproducto]').val();
+                                                        var concepto_nombre = productos_array[count]['descripcion'];
+                                                        $.ajax({
+                                                            url:'/catalogo/producto/associateproductcfdi',
+                                                            type:'POST',
+                                                            data:{idproducto:idproducto,concepto_nombre:concepto_nombre},
+                                                            dataType:'JSON',
+                                                            success: function (data2) {
+                                                               if(data2.response){
+                                                                   addCompraDetail(count,data2.producto,productos_array[count]);
+                                                                   count++;
+                                                                   $modal.modal('hide');
+                                                                   nextAjax();
+                                                               }
+                                                            }
+                                                        });
+                                                    });
+                                                }else{
+                                                    addCompraDetail(count,data.producto,productos_array[count]);
+                                                    count++;
+                                                    
+                                                    nextAjax();
+                                                }
+                                            }
+                                        });
+                                   }
+                             }
+                            $.ajax({
                                 url: '/catalogo/proveedor/validateproveedorcfdi',
                                 type: 'POST',
                                 dataType: 'JSON',
@@ -348,37 +572,40 @@
                                             limit:100,
                                         });
                                         $modal.find('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+                           
                                             $modal.find('input[name=idproveedor]').val(suggestion.id);
                                         });
                                         $modal.find('#cancel_product').on('click',function(){
                                             $modal.modal('hide');
                                         });
                                         $modal.find('#save_product').on('click',function(){
-                                           $modal.find('input[name=idproveedor_autocomplete]').next('span').hide();
+                 
                                             var idproveedor = $modal.find('input[name=idproveedor]').val();
                                             if($modal.find('input[name=idproveedor_autocomplete]').val() !=""){
                                                 $.ajax({
-                                                url:'/catalogo/proveedor/associatevendor',
-                                                type:'POST',
-                                                data:{idproveedor:idproveedor,emisor_nombre:emisor_nombre},
-                                                dataType:'JSON',
-                                                success: function (data2) {
-                                                   console.log(data2);
-
-                                                }
+                                                    url:'/catalogo/proveedor/associatevendor',
+                                                    type:'POST',
+                                                    data:{idproveedor:idproveedor,emisor_nombre:emisor_nombre},
+                                                    dataType:'JSON',
+                                                    success: function (data2) {
+                                                        $('input[name=idproveedor_autocomplete]').typeahead('val',data2.proveedor.value);
+                                                        $('input[name=idproveedor]').val(data2.proveedor.id);
+                                                        $modal.modal('hide');
+                                                        nextAjax();
+                                                    }
                                                 });
-                                            }else{
-                                                console.log( $modal.find('input[name=idproveedor_autocomplete]'));
-                                                $modal.find('input[name=idproveedor_autocomplete]').next('span').show();
                                             }
-                                            
                                         });
                                         $modal.modal();
+                                    }else{
+                                        $('input[name=idproveedor_autocomplete]').typeahead('val',data.proveedor.value);
+                                        $('input[name=idproveedor]').val(data.proveedor.id);
+                                        nextAjax();
                                     }
                                 }
                             });
                              
-                             console.log();
+                           
                              
       
               
@@ -502,6 +729,9 @@
             });
             
             var count = 0;
+            
+            
+            
             $('#producto_add').on('click',function(){  
                 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
@@ -578,7 +808,7 @@
               
             //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 
             revisadaControl();
-              
+            caluclator(tr); 
             
             
             });
@@ -751,7 +981,7 @@
                     tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
                 }
                 tr.append(almacenen_select);
-                tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
+                tr.append('<td style="border-bottom:solid 1px #E7ECF1;"><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                 
                 //AQUI HACEMOS HACEMOS NUMERICOS TODOS NUESTRO CAMPOS INPUTS
                 tr.find('input').numeric();
@@ -788,7 +1018,7 @@
                 tr.remove();
                 caluclator(tr); 
              });         
-              
+              caluclator(tr);
             
             
             });

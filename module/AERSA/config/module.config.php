@@ -393,6 +393,27 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'validateproductcfdi' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/validateproductcfdi',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'validateproductcfdi',
+                                            ),
+                                        ),
+                                    ),
+                                    
+                                    'associateproductcfdi' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/associateproductcfdi',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Producto',
+                                                'action' => 'associateproductcfdi',
+                                            ),
+                                        ),
+                                    ),
                                     'renameproduct' => array(
                                         'type' => 'Segment',
                                         'options' => array(

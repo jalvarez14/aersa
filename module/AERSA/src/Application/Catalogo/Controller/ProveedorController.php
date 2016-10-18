@@ -37,9 +37,12 @@ class ProveedorController extends AbstractActionController
          if ($request->isPost()){
              $post_data = $request->getPost();
              
-             $query = \ProveedorescfdiQuery::create()->filterByProveedorescfdiNombre($post_data['emisor_nombre'])->exists();
+             $query = \ProveedorescfdiQuery::create()->filterByIdempresa($session['idempresa'])->filterByProveedorescfdiNombre($post_data['emisor_nombre'])->exists();
              if(!$query){
                  return $this->getResponse()->setContent(json_encode(array('response' => false)));
+             }else{
+                  $cfdi = \ProveedorescfdiQuery::create()->filterByIdempresa($session['idempresa'])->filterByProveedorescfdiNombre($post_data['emisor_nombre'])->findOne();
+                  return $this->getResponse()->setContent(json_encode(array('response' => true,'proveedor' => array('id' => $cfdi->getIdproveedor(), 'value' => $cfdi->getProveedor()->getProveedorNombrecomercial(). " - ". $cfdi->getProveedor()->getProveedorRazonsocial()))));
              }
              
        
