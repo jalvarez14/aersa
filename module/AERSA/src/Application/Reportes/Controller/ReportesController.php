@@ -695,12 +695,12 @@ class ReportesController extends AbstractActionController {
         $mes_max = 0;
         $anio_max = 0;
         $existencia = 1;
-        $exits = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->exists();
+        $exits = \CompraQuery::create()->orderByCompraFechacompra('asc')->filterByIdsucursal($idsucursal)->exists();
         if ($exits) {
-            $mes_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('m');
-            $anio_min = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('asc')->findOne()->getFlujoefectivoFecha('Y');
-            $mes_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('m');
-            $anio_max = \FlujoefectivoQuery::create()->filterByFlujoefectivoOrigen('compra')->orderByFlujoefectivoFecha('desc')->findOne()->getFlujoefectivoFecha('Y');
+            $mes_min = \CompraQuery::create()->orderByCompraFechacompra('asc')->filterByIdsucursal($idsucursal)->findOne()->getCompraFechacompra('m');
+            $anio_min = \CompraQuery::create()->orderByCompraFechacompra('asc')->filterByIdsucursal($idsucursal)->findOne()->getCompraFechacompra('Y');
+            $mes_max = \CompraQuery::create()->orderByCompraFechacompra('desc')->filterByIdsucursal($idsucursal)->findOne()->getCompraFechacompra('m');
+            $anio_max = \CompraQuery::create()->orderByCompraFechacompra('desc')->filterByIdsucursal($idsucursal)->findOne()->getCompraFechacompra('Y');
         } else {
             $existencia = 0;
         }
