@@ -211,7 +211,6 @@ class CierresinventariosController extends AbstractActionController {
                                 $recetaObj = new \Receta();
                                 foreach ($recetasObj as $recetaObj) {
                                     $idpr = $recetaObj->getIdproductoreceta();
-                                    if($idpr==24022)
                                     $pos = 'inventariomesdetalle_stockinicial';
                                     $cant = $recetaObj->getRecetaCantidad();
                                     if (isset($arrayReporte[$idpr][$pos])) {

@@ -33,7 +33,7 @@ class CardexController extends AbstractActionController {
                 $post_data['almacenes'] = $alm;
             }
             $reporte = array();
-                    
+            $reporteHead = array();
             foreach ($post_data['almacenes'] as $idalmacen) {
                 $inicioSpli = explode('/', $post_data['inicio']);
                 $finSpli = explode('/', $post_data['fin']);
@@ -47,22 +47,34 @@ class CardexController extends AbstractActionController {
                 //inventario anterior
                 $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->exists();
                 if ($inventario_anterior)
-                    $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->findOne()->getIdinventariomes();
+                    $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->findOne()->getIdinventariomes();
 
                 $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
+                $sqlcompras = "⁠⁠⁠select count(idcompra) from compra where idcompra in (SELECT idcompra FROM `compradetalle` WHERE idproducto=24022 and idalmacen=$idalmacen) and '$inicio_semana'<=compra_fechacompra and compra_fechacompra>= '$fin_semana' and idsucursal=$idsucursal;";
+
                 $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
+                $sqlventas = "⁠⁠⁠select count(idventa) from venta where idventa in (SELECT idventa FROM `ventadetalle` WHERE idproducto=24022 and idalmacen=$idalmacen) and '$inicio_semana'<=venta_fechaventa and venta_fechaventa>= '$fin_semana' and idsucursal=$idsucursal;";
 
                 $objrequisicionesOrigen = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
+                $sqlrequisiciones = "⁠⁠⁠select count(idrequisicion) from requisicion where idrequisicion in (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=24022) and idalmacenorigen=$idalmacen and '$inicio_semana'<=requisicion_fecha and requisicion_fecha>= '$fin_semana'  and idsucursalorigen=$idsucursal;";
+
                 $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->find();
+                $sqlordentab = "";
 
                 $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
+                $sqlrequisicionesDestino = "";
+
                 $objordentabDestino = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->find();
+                $sqlordentabDestino = "";
 
                 $objajusteinvSobs = \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByAjusteinventarioTipo("sobrante")->find();
+                $sqlajusteinvSobs = "";
+
                 $objajusteinvFals = \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByAjusteinventarioTipo("faltante")->find();
+                $sqlajusteinvFals = "";
 
                 $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
-
+                $sqldevoluciones = "";
 
                 $bginfo = "#ADD8E6";
                 $bgfila = "#F2F2F2";
@@ -70,31 +82,28 @@ class CardexController extends AbstractActionController {
                 $color = true;
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
                 $objproducto = new \Producto();
-                $nombreAlmacen = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenNombre();
-                if ($archivo)
-                    array_push($reporte, array('uno' => 'Almacen:', 'dos' => $nombreAlmacen, 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => ''));
-                else
-                    array_push($reporte, "<tr><td>Almacen:</td><td>$nombreAlmacen</td></tr>");
+                
                 foreach ($objproductos as $objproducto) {
-                    $pedido=true;
-                    if(isset($post_data['productos'])) {
-                        if (in_array($objproducto->getIdproducto(), $post_data['productos']))
-                            $pedido=true;
+                    $pedido = true;
+                    if (isset($post_data['productos'])) {
+                        if (in_array($objproducto->getIdproducto(), $post_data['productos'])) 
+                            $pedido = true;
                         else
-                            $pedido=false;
+                            $pedido = false;
                     }
-                    
+
                     if ($pedido) {
+                        $reporteProcesos = array();
                         $nombreProducto = $objproducto->getProductoNombre();
                         $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                         $categoria = $objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
                         $subcategoria = $objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaNombre();
                         $exisinicial = 0;
-                        
+
                         if ($inventario_anterior) {
                             $exisinicial2 = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
-                            if($exisinicial2)
-                            $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                            if ($exisinicial2)
+                                $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
                         }
                         $compra = 0;
                         $totalProductoCompra = 0;
@@ -113,12 +122,42 @@ class CardexController extends AbstractActionController {
                         }
                         $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
                         $costoPromedio = ($costoPromedio < 0) ? $costoPromedio * -1 : $costoPromedio;
+                        $rowhead=0;
+                        if ($objproducto->getProductoTipo() == 'subreceta' && $exisinicial != 0) {
+                            $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+                            $recetaObj = new \Receta();
+                            foreach ($recetasObj as $recetaObj) {
+                                if (isset($post_data['productos'])) {
+                                    if (in_array($recetaObj->getIdproductoreceta(), $post_data['productos'])) {
+                                        if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
+                                            $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
+                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
+                                        } else {
+                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
+                                        }
+                                    }
+                                } else {
+                                    if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
+                                        $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
+                                        $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
+                                    } else {
+                                        $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
+                                    }
+                                }
+                            }
+                            $exisinicial = 0;
+                        }
                         $saldoIni = $costoPromedio * $exisinicial;
-                        if ($archivo)
-                            array_push($reporte, array('uno' => 'Producto:', 'dos' => $nombreProducto, 'tres' => 'Unidad:' . $unidad, 'cuatro' => 'Categoria:', 'cinco' => $categoria, 'seis' => 'Subcategoria:', 'siete' => $subcategoria, 'ocho' => 'Existenica Ini: ' . $exisinicial, 'nueve' => 'Saldo Ini: ' . $saldoIni, 'diez' => 'CP: ' . $costoPromedio, 'once' => ''));
-                        else
-                            array_push($reporte, "<tr bgcolor='" . $bginfo . "'><td>Producto: $nombreProducto</td><td>Unidad: $unidad</td><td>Categoria: $categoria</td><td>Subcategoria: $subcategoria</td><td>Existenica Ini $exisinicial</td><td>Saldo Ini: $saldoIni</td><td>CP: $costoPromedio</td></tr>");
-
+                        
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['producto'] = $nombreProducto;
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['unidad'] = $unidad;
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['categoria'] = $categoria;
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['subcategoria'] = $subcategoria;
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['existenciaIni'] = $exisinicial;
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['saldoIni'] = $saldoIni;
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['cp'] = $costoPromedio;
+                        $reporteHead[$idalmacen][$objproducto->getIdproducto()]['saldoIni'] = $saldoIni;
+                        $row = 0;
                         $objcompra = new \Compra();
                         foreach ($objcompras as $objcompra) {
                             $objcompradetalles = \CompradetalleQuery::create()
@@ -138,13 +177,21 @@ class CardexController extends AbstractActionController {
                                 $exisinicial+=$objcompradetalle->getCompradetalleCantidad();
                                 $entradaefec = $objcompradetalle->getCompradetalleCantidad() * $costoPromedio;
                                 $saldoIni+=$objcompradetalle->getCompradetalleCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = $entrada;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
-                        //array_push($reporte, "<tr bgcolor='".$colorbg."'><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
+
                         $objrequisicion = new \Requisicion();
                         foreach ($objrequisicionesDestino as $objrequisicion) {
                             $objrequisiciondetalles = \RequisiciondetalleQuery::create()
@@ -163,10 +210,18 @@ class CardexController extends AbstractActionController {
                                 $exisinicial+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                                 $entradaefec = $objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
                                 $saldoIni+=$objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = $entrada;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
 
@@ -188,10 +243,18 @@ class CardexController extends AbstractActionController {
                                 $exisinicial+=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
                                 $entradaefec = $objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
                                 $saldoIni+=$objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = $entrada;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
 
@@ -208,10 +271,18 @@ class CardexController extends AbstractActionController {
                                 $exisinicial+=$objajusteinvSob->getAjusteinventarioCantidad();
                                 $entradaefec = $objajusteinvSob->getAjusteinventarioCantidad() * $costoPromedio;
                                 $saldoIni+=$objajusteinvSob->getAjusteinventarioCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => '', 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => '', 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td></td><td>$exisinicial</td><td>$entradaefec</td><td></td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = $entrada;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
 
@@ -234,10 +305,18 @@ class CardexController extends AbstractActionController {
                                 $exisinicial-=$objventadetalle->getVentadetalleCantidad();
                                 $salidaefec = $objventadetalle->getVentadetalleCantidad() * $costoPromedio;
                                 $saldoIni-=$objventadetalle->getVentadetalleCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = $salida;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
 
@@ -260,10 +339,18 @@ class CardexController extends AbstractActionController {
                                 $exisinicial-=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                                 $salidaefec = $objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
                                 $saldoIni-=$objrequisiciondetalle->getRequisiciondetalleCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = $salida;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
 
@@ -285,10 +372,18 @@ class CardexController extends AbstractActionController {
                                 $exisinicial-=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
                                 $salidaefec = $objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
                                 $saldoIni-=$objordentabdetalle->getOrdentablajeriadetalleCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = $salida;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
 
@@ -311,10 +406,18 @@ class CardexController extends AbstractActionController {
                                 $exisinicial-=$objdevoluciondetalle->getDevoluciondetalleCantidad();
                                 $salidaefec = $objdevoluciondetalle->getDevoluciondetalleCantidad() * $costoPromedio;
                                 $saldoIni-=$objdevoluciondetalle->getDevoluciondetalleCantidad() * $costoPromedio;
-                                if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
-                                else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = $salida;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
                             }
                         }
 
@@ -331,10 +434,70 @@ class CardexController extends AbstractActionController {
                                 $exisinicial-=$objajusteinvFal->getAjusteinventarioCantidad();
                                 $salidaefec = $objajusteinvFal->getAjusteinventarioCantidad() * $costoPromedio;
                                 $saldoIni+=$objajusteinvFal->getAjusteinventarioCantidad() * $costoPromedio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['fecha'] = $fecha;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['folio'] = $folio;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['proceso'] = $proceso;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['prove'] = $prove;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entrada'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salida'] = $salida;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['exisinicial'] = $exisinicial;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
+                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                $row++;
+                            }
+                        }
+                    }
+                }
+            }
+            foreach ($post_data['almacenes'] as $idalmacen) {
+                $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
+                $objproducto = new \Producto();
+                $nombreAlmacen = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenNombre();
+                if ($archivo)
+                    array_push($reporte, array('uno' => 'Almacen:', 'dos' => $nombreAlmacen, 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => ''));
+                else
+                    array_push($reporte, "<tr><td>Almacen:</td><td>$nombreAlmacen</td></tr>");
+                foreach ($objproductos as $objproducto) {
+                    $pedido = true;
+                    if (isset($post_data['productos'])) {
+                        if (in_array($objproducto->getIdproducto(), $post_data['productos']))
+                            $pedido = true;
+                        else
+                            $pedido = false;
+                    }
+
+                    if ($pedido) {
+                        $nombreProducto = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['producto'];
+                        $unidad = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['unidad'];
+                        $categoria = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['categoria'];
+                        $subcategoria = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['subcategoria'];
+                        $exisinicial = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['existenciaIni'];
+                        $saldoIni = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['saldoIni'];
+                        $costoPromedio = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['cp'];
+                        $saldoIni = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['saldoIni'];
+                        if ($archivo)
+                            array_push($reporte, array('uno' => 'Producto:', 'dos' => $nombreProducto, 'tres' => 'Unidad:' . $unidad, 'cuatro' => 'Categoria:', 'cinco' => $categoria, 'seis' => 'Subcategoria:', 'siete' => $subcategoria, 'ocho' => 'Existencia Ini: ' . $exisinicial, 'nueve' => 'Saldo Ini: ' . $saldoIni, 'diez' => 'CP: ' . $costoPromedio, 'once' => ''));
+                        else
+                            array_push($reporte, "<tr bgcolor='" . $bginfo . "'><td>Producto: $nombreProducto</td><td>Unidad: $unidad</td><td>Categoria: $categoria</td><td>Subcategoria: $subcategoria</td><td>Existenica Ini $exisinicial</td><td>Saldo Ini: $saldoIni</td><td>CP: $costoPromedio</td></tr>");
+                        if (isset($reporteProce[$idalmacen][$objproducto->getIdproducto()])) {
+                            foreach ($reporteProce[$idalmacen][$objproducto->getIdproducto()] as $reporte2) {
+                                $fecha = $reporte2['fecha'];
+                                $folio = $reporte2['folio'];
+                                $proceso = $reporte2['proceso'];
+                                $prove = $reporte2['prove'];
+                                $entrada = $reporte2['entrada'];
+                                $salida = $reporte2['salida'];
+                                $exisinicial = $reporte2['exisinicial'];
+                                $entradaefec = $reporte2['entradaefec'];
+                                $salidaefec = $reporte2['salidaefec'];
+                                $saldoIni = $reporte2['saldoIni'];
+                                $costoPromedio = $reporte2['costoPromedio'];
                                 if ($archivo)
-                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => '', 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => '', 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
+                                    array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
                                 else
-                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td></td><td>$salida</td><td>$exisinicial</td><td></td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                    array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td>$salida</td><td>$exisinicial</td><td>$entradaefec</td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
                             }
                         }
                     }
