@@ -520,7 +520,7 @@ class ReportesController extends AbstractActionController {
             $fila = 0;
             if (!$documento) {
                 $reporte = array("<div align='center'><h3>" . ucfirst($empresa) . "</h3></div>");
-                $reporte[1] = "<div align='center'><h3>RELACIÓN DE ENTRADAS POR COMPRA DEL " . $post_data["fecha_final"] . " AL " . $post_data["fecha_inicial"] . "</h3></div>";
+                $reporte[1] = "<div align='center'><h3>RELACIÓN DE ENTRADAS POR COMPRA DEL " . $post_data["fecha_inicial"] . " AL " . $post_data["fecha_final"] . "</h3></div>";
                 $fila = 2;
             }
             $color = true;
@@ -704,9 +704,9 @@ class ReportesController extends AbstractActionController {
         } else {
             $existencia = 0;
         }
-        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
+        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo('simple')->find();
         $proveedores = \ProveedorQuery::create()->filterByIdempresa($idempresa)->find();
-        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->find();
+        $almacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->filterByAlmacenEstatus(1)->find();
         $form = new \Application\Reportes\Form\EntradasporcomprasForm();
         $view_model = new ViewModel();
         $view_model->setVariables(array(
