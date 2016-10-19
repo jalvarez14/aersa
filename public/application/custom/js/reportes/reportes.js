@@ -272,6 +272,7 @@
                 dataType: 'json',
                 success: function (data) {
                     productos_table.dataTable({
+                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
                         "language": data,
                         "order": [],
                     });
@@ -284,6 +285,7 @@
                 dataType: 'json',
                 success: function (data) {
                     proveedores_table.dataTable({
+                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
                         "language": data,
                         "order": [],
                     });
@@ -296,6 +298,7 @@
                 dataType: 'json',
                 success: function (data) {
                     almacenes_table.dataTable({
+                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
                         "language": data,
                         "order": [],
                     });

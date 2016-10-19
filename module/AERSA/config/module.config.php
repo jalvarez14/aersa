@@ -193,6 +193,26 @@ return array(
                                     ),
                                 ),
                             ),
+                            'asociacionemisores' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/asociacionemisores[/:action]',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Asociacionemisores',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                            ),
+                            'asociacionconceptos' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/asociacionconceptos[/:action]',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Asociacionconceptos',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                            ),
                             'almacen' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -2285,6 +2305,8 @@ return array(
             'Application\Catalogo\Controller\Productosasociacion' => 'Application\Catalogo\Controller\ProductosasociacionController',
             'Application\Catalogo\Controller\Plantillatablajeria' => 'Application\Catalogo\Controller\PlantillatablajeriaController',
             'Application\Catalogo\Controller\Trabajadorespromedio' => 'Application\Catalogo\Controller\Trabajadorespromediocontroller',
+            'Application\Catalogo\Controller\Asociacionemisores' => 'Application\Catalogo\Controller\AsociacionemisoresController',
+            'Application\Catalogo\Controller\Asociacionconceptos' => 'Application\Catalogo\Controller\AsociacionconceptosController',
             /*
              * PROCESO
              */
