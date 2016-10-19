@@ -66,7 +66,7 @@ class CierresinventariosController extends AbstractActionController {
             $almacenesActi = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->filterByAlmacenEstatus(1)->find();
             $almacen = new \Almacen();
             foreach ($almacenesActi as $almacen) {
-                $compras = \CompraQuery::create()->filterByIdsucursal()->filterByIdalmacen($almacen->getIdalmacen())->filterByCompraFechacompra(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
+                $compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->filterByIdalmacen($almacen->getIdalmacen())->filterByCompraFechacompra(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
                 $compra = new \Compra();
                 foreach ($compras as $compra) {
                     $comprasDetalle = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
