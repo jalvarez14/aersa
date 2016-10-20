@@ -641,7 +641,7 @@ class ReportesController extends AbstractActionController {
             $fila++;
 
             if ($documento) {
-                $template = '/entradasporcompras.xlsx';
+                $template = '/entradascompras.xlsx';
                 $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
                 $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
                 $sucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
@@ -666,7 +666,7 @@ class ReportesController extends AbstractActionController {
                         )
                     ),
                     array(
-                        'id' => 'reporte',
+                        'id' => 'prod',
                         'repeat' => true,
                         'data' => $reporte,
                         'minRows' => 2,
