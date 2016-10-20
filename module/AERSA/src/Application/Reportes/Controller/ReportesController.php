@@ -666,7 +666,7 @@ class ReportesController extends AbstractActionController {
                         )
                     ),
                     array(
-                        'id' => 'prod',
+                        'id' => 'reporte',
                         'repeat' => true,
                         'data' => $reporte,
                         'minRows' => 2,
