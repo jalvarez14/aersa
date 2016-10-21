@@ -145,10 +145,10 @@ class InventariociclicoController extends AbstractActionController {
 
 
             //inventario anterior
+
             $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdalmacen($idalmacen)->exists();
             if ($inventario_anterior)
-                $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->findOne()->getIdinventariomes();
-
+                $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdalmacen($idalmacen)->findOne()->getIdinventariomes();
             $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
             $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
 
@@ -174,7 +174,6 @@ class InventariociclicoController extends AbstractActionController {
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
             $categoriaObj = new \Categoria();
             foreach ($categoriasObj as $categoriaObj) {
-                $row++;
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
                 $objproducto = new \Producto();
                 foreach ($objproductos as $objproducto) {
@@ -191,12 +190,12 @@ class InventariociclicoController extends AbstractActionController {
                                     $idpr = $recetaObj->getIdproductoreceta();
                                     $pos = 'inventariomesdetalle_stockinicial';
                                     $cant = $recetaObj->getRecetaCantidad();
-                                    if (isset($arrayReporte[$idpr][$pos])) {
+                                    if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                         $arrayReporte[$idpr][$pos] = $arrayReporte[$idpr][$pos] + ($cant * $exisinicial);
                                         $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $exisinicial);
                                         $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
                                         $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
-                                        $dif = $stockTeorico - $stockFisico;
+                                        $dif = $stockFisico - $stockTeorico;
                                         $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
                                         $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
                                         $difImporte = $dif * $costoPromedio;
@@ -315,15 +314,46 @@ class InventariociclicoController extends AbstractActionController {
                     $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                     $stockFisico = 0;
                     if (isset($productosReporte[$objproducto->getIdproducto()]))
-                        $stockFisico = $productosReporte[$objproducto->getIdproducto()];
+                        $stockFisico = (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'])) ? $arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'] + $productosReporte[$objproducto->getIdproducto()]: $productosReporte[$objproducto->getIdproducto()];
 
+                    if ($stockFisico != 0 && $objproducto->getProductoTipo() == 'subreceta') {
+                        $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+                        $recetaObj = new \Receta();
+                        foreach ($recetasObj as $recetaObj) {
+                            $idpr = $recetaObj->getIdproductoreceta();
+                            $pos = 'inventariomesdetalle_stockfisico';
+                            $cant = $recetaObj->getRecetaCantidad();
+                            if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
+                                $arrayReporte[$idpr][$pos] = $arrayReporte[$idpr][$pos] + ($cant * $stockFisico);
+                                $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
+                                $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
+                                $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
+                                $dif = $stockFisico - $stockTeorico;
+                                $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
+                                $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
+                                $difImporte = $dif * $costoPromedio;
+                                if (0 < $arrayReporte[$idpr]['inventariomesdetalle_difimporte'])
+                                    $sobrante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+                                else
+                                    $faltante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
 
-                    $dif = ($inventario_anterior) ? $stockTeorico - $stockFisico : $stockFisico;
+                                $arrayReporte[$idpr]['inventariomesdetalle_difimporte'] = $difImporte;
+                                if (0 < $difImporte)
+                                    $sobrante+=$difImporte;
+                                else
+                                    $faltante+=$difImporte;
+                            } else {
+                                $arrayReporte[$idpr][$pos] = ($cant * $exisinicial);
+                            }
+                        }
+                        $stockFisico = 0;
+                    }
+                    $dif = ($inventario_anterior) ? $stockFisico - $stockTeorico : $stockFisico;
 
                     $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
                     if ($has_compras > 0) {
                         $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
-                        $costoPromedio = ($costoPromedio > 0) ? $costoPromedio * -1 : $costoPromedio;
+                        $costoPromedio = abs($costoPromedio);
                     } else {
                         $costoPromedio = $objproducto->getProductoCosto();
                     }
