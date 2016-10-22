@@ -920,6 +920,15 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    'agregarproveedor' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/agregarproveedor',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Compra',
+                                                'action' => 'agregarproveedor',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevoregistro' => array(
                                         'type' => 'Literal', 'options' => array(
                                             'route' => '/nuevoregistro',

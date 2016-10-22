@@ -15,7 +15,19 @@ use Zend\Console\Request as ConsoleRequest;
 
 class CompraController extends AbstractActionController {
     
-    public function indexAction() {
+    public function agregarproveedorAction(){
+         $request = $this->getRequest();
+         if($request->isPost()){
+             $post_data = $request->getPost();
+             $compra = \CompraQuery::create()->findPk($post_data['idcompra']);
+             $compra->setIdproveedor($post_data['idproveedor'])->save();
+             //REDIRECCIONAMOS AL LISTADO
+             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+             return $this->redirect()->toUrl('/procesos/compra');
+         }
+    }
+
+        public function indexAction() {
         
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -55,7 +67,7 @@ class CompraController extends AbstractActionController {
         if($edit){
              $id = $this->params()->fromQuery('id');
              $entity = \CompraQuery::create()->findPk($id);
-             $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::LIKE)->filterByIdproveedor($idproveedor)->exists();
+             $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::LIKE)->filterByIdproveedor($idproveedor)->exists();
         }else{
             $exist = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($folio,  \Criteria::EQUAL)->filterByIdproveedor($idproveedor)->exists();
         }
@@ -97,7 +109,29 @@ class CompraController extends AbstractActionController {
                 $entity->setIdauditor($session['idusuario']);
             }
            
-            $entity->save();
+            //ANTES DE GUARDAR VERIFICAMOS QUE NO EXISTA UNA COMPRA CON EL MISMO FOLIO
+            $to = new \DateTime();
+            $from = date("Y-m-d", strtotime("-2 months")); $from = new \DateTime($from);
+            $folio_exists = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::LIKE)->filterByIdproveedor($entity->getIdproveedor())->exists();
+            if(!$folio_exists){
+                $entity->save();
+            }else{
+                //COMPRA EXISTENTE
+                $compra_existente = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::LIKE)->filterByIdproveedor($entity->getIdproveedor())->findOne();
+                $compra_existente->delete();
+                $entity->save();
+                $this->flashMessenger()->addWarningMessage('Ocurrio un error de conexion durante el proceso de guardar, validar la compra registrada!');
+            }
+            
+            //DESPUES DE GUARDAR TAMBIEN VALIDAMOS QUE NO SE HAYAN CREADO 2 COMPRAS Y SI ES ASI ELIMINAMOS LA DE MENOR TOTAL
+            $compra_existente = $compra_existente = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::LIKE)->filterByIdproveedor($entity->getIdproveedor())->count();
+            if($compra_existente>1){
+                $compra_existente = $compra_existente = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from,'to' => $to))->filterByCompraTipo('consignacion',  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(),  \Criteria::LIKE)->filterByIdproveedor($entity->getIdproveedor())->orderByCompraTotal(\Criteria::DESC)->findOne();
+                $compra_existente->delete();
+                $this->flashMessenger()->addWarningMessage('Ocurrio un error de conexion durante el proceso de guardar, validar la compra registrada!');
+
+                
+            }
             
             //EL COMPROBANTE
             if(!empty($post_files['compra_factura']['name'])){

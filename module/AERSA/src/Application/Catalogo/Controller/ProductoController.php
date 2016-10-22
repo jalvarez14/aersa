@@ -653,6 +653,14 @@ class ProductoController extends AbstractActionController
             
             $entity->save();
             
+            if($entity->getIdproducto() == 0){
+                $id = $this->params()->fromRoute('id');
+                $entity->setIdproducto($id)->save();
+                $entity->save();
+                $this->flashMessenger()->addWarningMessage('Ocurrio un error de conexion durante el proceso de guardar, validar la receta registrada!');
+                
+            }
+            
             //Actualizamos el costo del producto padre
             $producto_padre = \ProductoQuery::create()->findPk($entity->getIdproducto());
             if ($producto_padre->getProductoTipo('subreceta') && $producto_padre->getIdcategoria() == 1) {

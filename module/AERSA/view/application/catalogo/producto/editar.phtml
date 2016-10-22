@@ -6,6 +6,13 @@
         <?php echo $message?>
     </div>
 <?php endforeach;?>
+<?php foreach ($messages->getWarningMessages() as $message):?>
+    <div class="alert alert-success alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Precaución!</strong>
+        <?php echo $message?>
+    </div>
+<?php endforeach;?>
 <?php $product = new Producto()?>
 <h3 class="page-title"><?php echo $producto->getProductonombre() ?></h3>
 <div class="page-bar">
@@ -167,6 +174,7 @@
         </div>
     </div>
 </div>
+
 <?php if($producto->getProductoTipo() == 'subreceta' || $producto->getProductoTipo() == 'plu') :?>
     <div id="subreceta" class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">

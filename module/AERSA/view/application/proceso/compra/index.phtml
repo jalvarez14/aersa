@@ -20,6 +20,13 @@
             <?php echo $message?>
         </div>
     <?php endforeach;?>
+    <?php foreach ($messages->getWarningMessages() as $message):?>
+        <div class="alert alert-success alert-dismissable">
+            <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+            <strong>Precaución!</strong>
+            <?php echo $message?>
+        </div>
+    <?php endforeach;?>
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
@@ -84,6 +91,10 @@
                                             <li>
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;" class="proveedor_modal">
+                                                <i class="fa fa-plus"></i> Agregar proveedor </a>
                                             </li>
                                         </ul>
                                     </div>

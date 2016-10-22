@@ -60,12 +60,12 @@ class IndexController extends AbstractActionController
             $result = array();
             $entity = new \Proveedor();
             foreach ($query as $entity){
-            $id = $entity->getIdproveedor();
-            $value = $entity->getProveedorNombrecomercial()." - ".$entity->getProveedorRazonsocial();
-            $tmp['id'] = $id;
-            $tmp['value'] = $value;
-            $result[] = $tmp;
-        }
+                $id = $entity->getIdproveedor();
+                $value = $entity->getProveedorNombrecomercial()." - ".$entity->getProveedorRazonsocial();
+                $tmp['id'] = $id;
+                $tmp['value'] = $value;
+                $result[] = $tmp;
+            }
              
         }else{
             

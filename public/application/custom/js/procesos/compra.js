@@ -50,9 +50,7 @@
         */
        
         var addCompraDetail = function(key,producto,cfdi){
-                console.log(producto);
-                console.log(cfdi);
-                
+ 
                 var iva = parseFloat(cfdi.iva);
                 if(iva>0){
                     iva = 'true';
@@ -320,6 +318,78 @@
         }
         
         plugin.init = function(){
+            
+            
+            /*
+             * Agregar proveedor
+             */
+            
+            $container.find('.proveedor_modal').on('click',function(){
+                var idcompra = $(this).closest('tr').attr('id');
+                var tmpl = [
+                    '<div class="modal fade bs-modal-lg in" aria-hidden="true" role="dialog" tabindex="-1" style="display: block;">',
+                        '<div class="modal-header">',
+
+                            '<h4 class="modal-title">Agregar proveedor </h4>',
+                        '</div>',
+                        '<form method="POST" action="/procesos/compra/agregarproveedor">',
+                            '<div class="modal-body">',
+                                '<div class="row">',
+                                    '<div class="col-md-12">',
+                                        '<div class="form-group">',
+                                            '<label for="producto_nombre">Proveedor *</label>',
+                                            '<div class="input-group">',
+                                                '<span class="input-group-addon">',
+                                                    '<i class="fa fa-search"></i>',
+                                                '</span>',
+                                                '<input type="hidden" name="idcompra" value="'+idcompra+'">',
+                                                '<input type="hidden" name="idproveedor">',
+                                                '<input required class="form-control" type="text" name="idproveedor_autocomplete">',
+                                                 '<span style="color:red;display:none">Este campo es requerido</span>',
+                                            '</div>',
+                                        '</div>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
+                            '<div class="modal-footer">',
+                             '<a href="#" data-dismiss="modal" class="btn btn-default">Cancelar</a>',
+                                '<button type="submit" id="save_product" href="#" class="btn blue">Guardar</button>',
+                               
+                            '</div>',
+                        '</form>',
+                    '</div>',  
+                ].join('');
+                var $modal = $(tmpl);
+               
+               var data = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                      url: '/autocomplete/getproveedores?q=%QUERY',
+                      wildcard: '%QUERY'
+                    }
+                });
+                $modal.find('input[name=idproveedor_autocomplete]').typeahead(null, {
+                    name: 'best-pictures',
+                    display: 'value',
+                    hint: true,
+                    highlight: true,
+                    source: data,
+                    limit:100,
+                });
+                $modal.find('input[name=idproveedor_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+
+                    $modal.find('input[name=idproveedor]').val(suggestion.id);
+                });
+                $modal.find('#cancel_product').on('click',function(){
+                    $modal.modal('hide');
+                });
+
+                $modal.modal();
+            });
+            
+            
+            
             
             settings = plugin.settings = $.extend({}, defaults, options);
             
@@ -729,9 +799,7 @@
             });
             
             var count = 0;
-            
-            
-            
+
             $('#producto_add').on('click',function(){  
                 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
@@ -861,6 +929,29 @@
            if(settings.idrol == 5){
                $('select[name=compra_revisada] option[value=1]').remove();
            }
+           
+           $('button[type=submit]').on('click',function(e){
+                e.preventDefault();
+                var folio = $('input[name=compra_folio]').val();
+                $('input[name=compra_folio]').removeClass('valid');
+                $.ajax({
+                    url: "/procesos/compra/validatefolio",
+                    dataType: "json",
+                    data: {folio:folio,idproveedor:$('input[name=idproveedor]').val()},
+                    success: function (exist) {
+                       
+                        if(exist){
+                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                            $('input[name=compra_folio]').val('');
+                        }else{
+                            $('input[name=compra_folio]').addClass('valid');
+                            $container.find('form').submit();
+                        }
+                        
+                    },
+                });
+               
+           });
            
            
            
