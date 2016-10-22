@@ -107,7 +107,7 @@
             $tr.find('td.inventariomesdetalle_importefisico span').html(impFis);
             $tr.find('input[name*=inventariomesdetalle_importefisico]').val(impFis);
             
-            var dif = stteorico - totalFisico;
+            var dif =  totalFisico - stteorico;
             
             $tr.find('td.inventariomesdetalle_diferencia span').html(dif);
             $tr.find('input[name*=inventariomesdetalle_diferencia]').val(dif);
