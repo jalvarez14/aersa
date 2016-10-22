@@ -269,7 +269,38 @@ class CierresinventariosController extends AbstractActionController {
                                 ->find();
                         $objrequisiciondetalle = new \Requisiciondetalle();
                         foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
-                            $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            if ($objproducto->getProductoTipo() == 'subreceta') {
+                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+                                $recetaObj = new \Receta();
+                                foreach ($recetasObj as $recetaObj) {
+                                    $idpr = $recetaObj->getIdproductoreceta();
+                                    $pos = 'inventariomesdetalle_stockfisico';
+                                    $stockFisico=$requisicionEg;
+                                    $cant = $recetaObj->getRecetaCantidad();
+                                    if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
+                                        $arrayReporte[$idpr][$pos] = ($cant * $stockFisico);
+                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] =$arrayReporte[$idpr]['inventariomesdetalle_stockinicial']+ ($cant * $stockFisico);
+                                        $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
+                                        $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
+                                        $dif = $stockFisico - $stockTeorico;
+                                        $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
+                                        $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
+                                        $difImporte = $dif * $costoPromedio;
+                                        if (0 < $arrayReporte[$idpr]['inventariomesdetalle_difimporte'])
+                                            $sobrante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+                                        else
+                                            $faltante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+
+                                        $arrayReporte[$idpr]['inventariomesdetalle_difimporte'] = $difImporte;
+                                        if (0 < $difImporte)
+                                            $sobrante+=$difImporte;
+                                        else
+                                            $faltante+=$difImporte;
+                                    } else {
+                                        $arrayReporte[$idpr][$pos] = ($cant * $stockFisico);
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -307,7 +338,41 @@ class CierresinventariosController extends AbstractActionController {
                                 ->find();
                         $objrequisiciondetalle = new \Requisiciondetalle();
                         foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
-                            $requisicionEg+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            $cantidadR=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            if ($objproducto->getProductoTipo() == 'subreceta') {
+                                $cantidadR=0;
+                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+                                $recetaObj = new \Receta();
+                                foreach ($recetasObj as $recetaObj) {
+                                    $stockFisico=$requisicionIng;
+                                    $idpr = $recetaObj->getIdproductoreceta();
+                                    $pos = 'inventariomesdetalle_stockfisico';
+                                    $cant = $recetaObj->getRecetaCantidad();
+                                    if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
+                                        $arrayReporte[$idpr][$pos] = ($cant * $stockFisico);
+                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] =$arrayReporte[$idproducto]['inventariomesdetalle_stockinicial']+($cant * $stockFisico);
+                                        $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
+                                        $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
+                                        $dif = $stockFisico - $stockTeorico;
+                                        $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
+                                        $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
+                                        $difImporte = $dif * $costoPromedio;
+                                        if (0 < $arrayReporte[$idpr]['inventariomesdetalle_difimporte'])
+                                            $sobrante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+                                        else
+                                            $faltante-=$arrayReporte[$idpr]['inventariomesdetalle_difimporte'];
+
+                                        $arrayReporte[$idpr]['inventariomesdetalle_difimporte'] = $difImporte;
+                                        if (0 < $difImporte)
+                                            $sobrante+=$difImporte;
+                                        else
+                                            $faltante+=$difImporte;
+                                    } else {
+                                        $arrayReporte[$idpr][$pos] = ($cant * $stockFisico);
+                                    }
+                                }
+                            }
+                            $requisicionEg+=$cantidadR;
                         }
                     }
 
