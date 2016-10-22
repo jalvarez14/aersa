@@ -131,7 +131,6 @@ $num_pod=0;
                     }
                 }
             }
-exit;
             foreach ($post_data['almacenes'] as $idalmacen) {
 
 
