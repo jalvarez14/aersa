@@ -87,17 +87,23 @@
         
         var calcular = function ($tr) {
             var table=$('#reporte_table');
-            var stfisico = $tr.find('input[name*=inventariomesdetalle_stockfisico]').val();
+            var explo=parseFloat($tr.find('input[name*=inventariomesdetalle_explosion]').val());
+            var stfisico = parseFloat($tr.find('input[name*=inventariomesdetalle_stockfisico]').val());
             var stteorico = $tr.find('input[name*=inventariomesdetalle_stockteorico]').val();
+            var totalFisico= (stfisico) + (explo);
             var costoPromedio=$tr.find('input[name*=inventariomesdetalle_costopromedio]').val();
-            var impFis= stfisico * costoPromedio;
+            var impFis= totalFisico * costoPromedio;
             var difImpprev=$tr.find('input[name*=inventariomesdetalle_difimporte]').val();
             var impFisprev=$tr.find('input[name*=inventariomesdetalle_importefisico]').val();
+            
+            alert(totalFisico);
+            $tr.find('td.inventariomesdetalle_totalfisico span').html(totalFisico);
+            $tr.find('input[name*=inventariomesdetalle_totalfisico]').val(totalFisico);
             
             $tr.find('td.inventariomesdetalle_importefisico span').html(impFis);
             $tr.find('input[name*=inventariomesdetalle_importefisico]').val(impFis);
             
-            var dif = stteorico - stfisico;
+            var dif = stteorico - totalFisico;
             
             $tr.find('td.inventariomesdetalle_diferencia span').html(dif);
             $tr.find('input[name*=inventariomesdetalle_diferencia]').val(dif);
