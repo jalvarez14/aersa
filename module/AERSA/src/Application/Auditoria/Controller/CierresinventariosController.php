@@ -85,7 +85,6 @@ class CierresinventariosController extends AbstractActionController {
             }
 
             $inventariocierremes->save();
-
             foreach ($post_data['reporte'] as $reporte) {
                 $inventariocierremes_detalle = new \Inventariomesdetalle();
                 foreach ($reporte as $key => $value) {
@@ -209,7 +208,7 @@ class CierresinventariosController extends AbstractActionController {
                         if ($inventario_anterior) {
                             $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                             if ($exisinicial)
-                                $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                                $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleTotalfisico();
 //                            if ($objproducto->getProductoTipo() == 'subreceta') {
 //                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
 //                                $recetaObj = new \Receta();
@@ -546,16 +545,15 @@ array_push
                     $reporte = array();
                     $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
                     $subcategoriaObj = new \Categoria();
-                    array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'StT', 'doce' => 'Unid', 'trece' => 'StF', 'catorce' => 'ImpFis', 'quince' => 'Dif', 'dieciseis' => 'CostProm', 'diecisiete' => 'DifImp', 'dieciocho' => 'Revisado'));
+                    array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'StT', 'doce' => 'Unid', 'trece' => 'StF', 'catorce' => 'Explo', 'quince' => 'FisTot', 'dieciseis' => 'ImpFis', 'quicisiete' => 'Dif', 'dieciocho' => 'CostProm', 'diecinueve' => 'DifImp', 'veinte' => 'Revisado'));
                     foreach ($subcategoriasObj as $subcategoriaObj) {
-                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
+                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => ''));
                         $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
                         $objproducto = new \Producto();
                         foreach ($productosObj as $objproducto) {
                             $exists = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->exists();
                             if ($exists) {
                                 $inventariomesdetalle = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id)->filterByIdproducto($objproducto->getIdproducto())->findOne();
-
                                 $idproducto = $objproducto->getIdproducto();
                                 $productoNombre = $objproducto->getProductoNombre();
                                 $categoria = $objproducto->getCategoriaRelatedByIdcategoria()->getCategoriaNombre();
@@ -570,19 +568,21 @@ array_push
                                 $stockteorico = $inventariomesdetalle->getInventariomesdetalleStockteorico();
                                 $unidadMedida = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                                 $stockfisico = $inventariomesdetalle->getInventariomesdetalleStockfisico();
+                                $explosion = $inventariomesdetalle->getInventariomesdetalleExplosion();
+                                $totalFisico = $inventariomesdetalle->getInventariomesdetalleTotalfisico();
                                 $importefisico = $inventariomesdetalle->getInventariomesdetalleImportefisico();
                                 $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
                                 $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
                                 $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
                                 $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "Si" : "No";
-                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $importefisico, 'quince' => $diferencia, 'dieciseis' => $costopromedio, 'diecisiete' => $difimporte, 'dieciocho' => $revisada));
+                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $explosion, 'quince' => $totalFisico, 'dieciseis' => $importefisico, 'diecisiete' => $diferencia, 'dieciocho' => $costopromedio, 'diecinueve' => $difimporte, 'veinte' => $revisada));
                             }
                         }
                     }
                     $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
                     $subcategoriaObj = new \Categoria();
                     foreach ($subcategoriasObj as $subcategoriaObj) {
-                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
+                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => ''));
                         $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
                         $objproducto = new \Producto();
                         foreach ($productosObj as $objproducto) {
@@ -603,19 +603,21 @@ array_push
                                 $stockteorico = $inventariomesdetalle->getInventariomesdetalleStockteorico();
                                 $unidadMedida = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                                 $stockfisico = $inventariomesdetalle->getInventariomesdetalleStockfisico();
+                                $explosion = $inventariomesdetalle->getInventariomesdetalleExplosion();
+                                $totalFisico = $inventariomesdetalle->getInventariomesdetalleTotalfisico();
                                 $importefisico = $inventariomesdetalle->getInventariomesdetalleImportefisico();
                                 $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
                                 $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
                                 $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
                                 $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "Si" : "No";
-                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $importefisico, 'quince' => $diferencia, 'dieciseis' => $costopromedio, 'diecisiete' => $difimporte, 'dieciocho' => $revisada));
+                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $explosion, 'quince' => $totalFisico, 'dieciseis' => $importefisico, 'diecisiete' => $diferencia, 'dieciocho' => $costopromedio, 'diecinueve' => $difimporte, 'veinte' => $revisada));
                             }
                         }
                     }
                     $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(3)->orderByCategoriaNombre('asc')->find();
                     $subcategoriaObj = new \Categoria();
                     foreach ($subcategoriasObj as $subcategoriaObj) {
-                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => ''));
+                        array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => ''));
                         $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
                         $objproducto = new \Producto();
                         foreach ($productosObj as $objproducto) {
@@ -636,12 +638,14 @@ array_push
                                 $stockteorico = $inventariomesdetalle->getInventariomesdetalleStockteorico();
                                 $unidadMedida = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                                 $stockfisico = $inventariomesdetalle->getInventariomesdetalleStockfisico();
+                                $explosion = $inventariomesdetalle->getInventariomesdetalleExplosion();
+                                $totalFisico = $inventariomesdetalle->getInventariomesdetalleTotalfisico();
                                 $importefisico = $inventariomesdetalle->getInventariomesdetalleImportefisico();
                                 $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
                                 $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
                                 $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
                                 $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "Si" : "No";
-                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $importefisico, 'quince' => $diferencia, 'dieciseis' => $costopromedio, 'diecisiete' => $difimporte, 'dieciocho' => $revisada));
+                                array_push($reporte, array('uno' => $idproducto, 'dos' => $productoNombre, 'tres' => $stockinicial, 'cuatro' => $ingresocompra, 'cinco' => $ingresorequisicion, 'seis' => $ingresoordentablajeria, 'siete' => $egresoventa, 'ocho' => $egresorequisicion, 'nueve' => $egresoordentablajeria, 'diez' => $egresodevolucion, 'once' => $stockteorico, 'doce' => $unidadMedida, 'trece' => $stockfisico, 'catorce' => $explosion, 'quince' => $totalFisico, 'dieciseis' => $importefisico, 'diecisiete' => $diferencia, 'dieciocho' => $costopromedio, 'diecinueve' => $difimporte, 'veinte' => $revisada));
                             }
                         }
                     }
@@ -650,7 +654,7 @@ array_push
                     $nombreSucursal = \SucursalQuery::create()->findPk($idsucursal)->getSucursalNombre();
                     $nombreAlmacen = \AlmacenQuery::create()->findPk($inventariomes->getIdalmacen())->getAlmacenNombre();
                     $fecha = \InventariomesQuery::create()->filterByIdinventariomes($id)->findOne()->getInventariomesFecha();
-                    $template = '/inventariocierresemana.xlsx';
+                    $template = '/cierresemana.xlsx';
                     $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
 
                     $config = array(
@@ -759,6 +763,8 @@ array_push
                         $diferencia = $inventariomesdetalle->getInventariomesdetalleDiferencia();
                         $costopromedio = $inventariomesdetalle->getInventariomesdetalleCostopromedio();
                         $difimporte = $inventariomesdetalle->getInventariomesdetalleDifimporte();
+                        $explosion = $inventariomesdetalle->getInventariomesdetalleExplosion();
+                        $totalFisico = $inventariomesdetalle->getInventariomesdetalleTotalfisico();
                         $revisada = (bool) ($inventariomesdetalle->getInventariomesdetalleRevisada()) ? "checked" : "";
                         array_push($reporte, "<tr>
                                     <td>
@@ -800,6 +806,13 @@ array_push
                                     </td>
                                     <td>
                                         <input required type='text' name='reporte[$id][inventariomesdetalle_stockfisico]' value='$stockfisico'>
+                                    </td>
+                                    <td>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_explosion]' value='$explosion'>$explosion
+                                    </td>
+                                    <td class='inventariomesdetalle_totalfisico'>
+                                        <input type='hidden'  name='reporte[$id][inventariomesdetalle_totalfisico]' value='$totalFisico'>
+                                        <span>$totalFisico</span>
                                     </td>
                                     <td class='inventariomesdetalle_importefisico'>
                                         <input type='hidden'  name='reporte[$id][inventariomesdetalle_importefisico]' value='$importefisico'>
