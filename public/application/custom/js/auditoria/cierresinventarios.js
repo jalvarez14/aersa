@@ -90,8 +90,10 @@
             var explo=parseFloat($tr.find('input[name*=inventariomesdetalle_explosion]').val());
             if($.isNumeric($tr.find('input[name*=inventariomesdetalle_stockfisico]').val()))
                 var stfisico = parseFloat($tr.find('input[name*=inventariomesdetalle_stockfisico]').val());
-            else
+            else {
+                $tr.find('input[name*=inventariomesdetalle_stockfisico]').val(0)
                 var stfisico = 0;
+            }
             var stteorico = $tr.find('input[name*=inventariomesdetalle_stockteorico]').val();
             var totalFisico= (stfisico) + (explo);
             var costoPromedio=$tr.find('input[name*=inventariomesdetalle_costopromedio]').val();
