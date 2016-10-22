@@ -186,7 +186,7 @@ class CardexController extends AbstractActionController {
                             if ($inventario_anterior) {
                                 $exisinicial2 = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                                 if ($exisinicial2)
-                                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleTotalfisico();
                             }
                             $compra = 0;
                             $totalProductoCompra = 0;
@@ -206,30 +206,30 @@ class CardexController extends AbstractActionController {
                             $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
                             $costoPromedio = ($costoPromedio < 0) ? $costoPromedio * -1 : $costoPromedio;
                             $rowhead = 0;
-                            if ($objproducto->getProductoTipo() == 'subreceta' && $exisinicial != 0) {
-                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
-                                $recetaObj = new \Receta();
-                                foreach ($recetasObj as $recetaObj) {
-                                    if (isset($post_data['productos'])) {
-                                        if (in_array($recetaObj->getIdproductoreceta(), $post_data['productos'])) {
-                                            if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
-                                                $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
-                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                            } else {
-                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                            }
-                                        }
-                                    } else {
-                                        if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
-                                            $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
-                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                        } else {
-                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                        }
-                                    }
-                                }
-                                $exisinicial = 0;
-                            }
+//                            if ($objproducto->getProductoTipo() == 'subreceta' && $exisinicial != 0) {
+//                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+//                                $recetaObj = new \Receta();
+//                                foreach ($recetasObj as $recetaObj) {
+//                                    if (isset($post_data['productos'])) {
+//                                        if (in_array($recetaObj->getIdproductoreceta(), $post_data['productos'])) {
+//                                            if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
+//                                                $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
+//                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                            } else {
+//                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                            }
+//                                        }
+//                                    } else {
+//                                        if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
+//                                            $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
+//                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                        } else {
+//                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                        }
+//                                    }
+//                                }
+//                                $exisinicial = 0;
+//                            }
                             $saldoIni = $costoPromedio * $exisinicial;
 
                             $reporteHead[$idalmacen][$objproducto->getIdproducto()]['producto'] = $nombreProducto;
@@ -279,6 +279,7 @@ class CardexController extends AbstractActionController {
                             foreach ($objrequisicionesDestino as $objrequisicion) {
                                 $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                         ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                        ->filterByIdpadre(NULL)
                                         ->filterByIdproducto($objproducto->getIdproducto())
                                         ->find();
                                 $objrequisiciondetalle = new \Requisiciondetalle();
@@ -407,7 +408,7 @@ class CardexController extends AbstractActionController {
                             foreach ($objrequisicionesOrigen as $objrequisicion) {
                                 $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                         ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                        ->filterByIdpadre(NULL)
+                                        ->filterByIdpadre(NULL,  \Criteria::NOT_EQUAL)
                                         ->filterByIdproducto($objproducto->getIdproducto())
                                         ->find();
                                 $objrequisiciondetalle = new \Requisiciondetalle();
