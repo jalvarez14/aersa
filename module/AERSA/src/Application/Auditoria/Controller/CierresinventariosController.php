@@ -383,7 +383,7 @@ class CierresinventariosController extends AbstractActionController {
                     $idproducto = $objproducto->getIdproducto();
                     $explosion=(isset($arrayReporte[$idproducto]['inventariomesdetalle_explosion'])) ? $arrayReporte[$idproducto]['inventariomesdetalle_explosion']  : 0;
                     $totalFisico=$explosion+$stockFisico;
-                    $dif = ($inventario_anterior) ? $totalFisico - $stockTeorico : $totalFisico;
+                    $dif =$totalFisico - $stockTeorico;
 
                     $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
                     if ($has_compras > 0) {
