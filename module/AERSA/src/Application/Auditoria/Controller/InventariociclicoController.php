@@ -249,13 +249,13 @@ class InventariociclicoController extends AbstractActionController {
                                 $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
                                 $recetaObj = new \Receta();
                                 foreach ($recetasObj as $recetaObj) {
-                                    $stockFisico=$requisicionIng;
                                     $idpr = $recetaObj->getIdproductoreceta();
                                     $pos = 'inventariomesdetalle_stockfisico';
+                                    $stockFisico=$requisicionEg;
                                     $cant = $recetaObj->getRecetaCantidad();
                                     if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                         $arrayReporte[$idpr][$pos] = ($cant * $stockFisico);
-                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] =$arrayReporte[$idproducto]['inventariomesdetalle_stockinicial']+($cant * $stockFisico);
+                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] =$arrayReporte[$idpr]['inventariomesdetalle_stockinicial']+ ($cant * $stockFisico);
                                         $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
                                         $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                         $dif = $stockFisico - $stockTeorico;
@@ -314,18 +314,19 @@ class InventariociclicoController extends AbstractActionController {
                                 ->find();
                         $objrequisiciondetalle = new \Requisiciondetalle();
                         foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
-                            $requisicionEg+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            $cantidadR=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                             if ($objproducto->getProductoTipo() == 'subreceta') {
+                                $cantidadR=0;
                                 $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
                                 $recetaObj = new \Receta();
                                 foreach ($recetasObj as $recetaObj) {
+                                    $stockFisico=$requisicionIng;
                                     $idpr = $recetaObj->getIdproductoreceta();
                                     $pos = 'inventariomesdetalle_stockfisico';
-                                    $stockFisico=$requisicionEg;
                                     $cant = $recetaObj->getRecetaCantidad();
                                     if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                         $arrayReporte[$idpr][$pos] = ($cant * $stockFisico);
-                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] =$arrayReporte[$idpr]['inventariomesdetalle_stockinicial']+ ($cant * $stockFisico);
+                                        $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] =$arrayReporte[$idproducto]['inventariomesdetalle_stockinicial']+($cant * $stockFisico);
                                         $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
                                         $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                         $dif = $stockFisico - $stockTeorico;
@@ -347,6 +348,7 @@ class InventariociclicoController extends AbstractActionController {
                                     }
                                 }
                             }
+                            $requisicionEg+=$cantidadR;
                         }
                     }
 

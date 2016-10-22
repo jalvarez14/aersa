@@ -88,7 +88,10 @@
         var calcular = function ($tr) {
             var table=$('#reporte_table');
             var explo=parseFloat($tr.find('input[name*=inventariomesdetalle_explosion]').val());
-            var stfisico = parseFloat($tr.find('input[name*=inventariomesdetalle_stockfisico]').val());
+            if($.isNumeric($tr.find('input[name*=inventariomesdetalle_stockfisico]').val()))
+                var stfisico = parseFloat($tr.find('input[name*=inventariomesdetalle_stockfisico]').val());
+            else
+                var stfisico = 0;
             var stteorico = $tr.find('input[name*=inventariomesdetalle_stockteorico]').val();
             var totalFisico= (stfisico) + (explo);
             var costoPromedio=$tr.find('input[name*=inventariomesdetalle_costopromedio]').val();
@@ -96,7 +99,6 @@
             var difImpprev=$tr.find('input[name*=inventariomesdetalle_difimporte]').val();
             var impFisprev=$tr.find('input[name*=inventariomesdetalle_importefisico]').val();
             
-            alert(totalFisico);
             $tr.find('td.inventariomesdetalle_totalfisico span').html(totalFisico);
             $tr.find('input[name*=inventariomesdetalle_totalfisico]').val(totalFisico);
             
@@ -214,6 +216,7 @@
         }
 
         plugin.new = function () {
+            
             $('#batch_inventario_b').attr('disabled', true);
             $('select[name=idalmacen]').on('change', function () {
                 var $this=$(this);
