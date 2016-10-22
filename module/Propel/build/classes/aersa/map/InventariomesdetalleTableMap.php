@@ -43,7 +43,9 @@ class InventariomesdetalleTableMap extends TableMap
         $this->addColumn('idproducto', 'Idproducto', 'INTEGER', true, null, null);
         $this->addColumn('inventariomesdetalle_stockinicial', 'InventariomesdetalleStockinicial', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_stockteorico', 'InventariomesdetalleStockteorico', 'FLOAT', true, null, null);
+        $this->addColumn('inventariomesdetalle_explosion', 'InventariomesdetalleExplosion', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_stockfisico', 'InventariomesdetalleStockfisico', 'FLOAT', true, null, null);
+        $this->addColumn('inventariomesdetalle_totalfisico', 'InventariomesdetalleTotalfisico', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_diferencia', 'InventariomesdetalleDiferencia', 'FLOAT', false, null, null);
         $this->addColumn('inventariomesdetalle_revisada', 'InventariomesdetalleRevisada', 'BOOLEAN', true, 1, false);
         $this->addColumn('inventariomesdetalle_ingresocompra', 'InventariomesdetalleIngresocompra', 'FLOAT', true, null, null);

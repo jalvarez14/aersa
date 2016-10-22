@@ -745,7 +745,9 @@
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="inventariomesdetalle_stockinicial" phpName="InventariomesdetalleStockinicial" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_stockteorico" phpName="InventariomesdetalleStockteorico" type="FLOAT" required="true"/>
+    <column name="inventariomesdetalle_explosion" phpName="InventariomesdetalleExplosion" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_stockfisico" phpName="InventariomesdetalleStockfisico" type="FLOAT" required="true"/>
+    <column name="inventariomesdetalle_totalfisico" phpName="InventariomesdetalleTotalfisico" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_diferencia" phpName="InventariomesdetalleDiferencia" type="FLOAT" required="false"/>
     <column name="inventariomesdetalle_revisada" phpName="InventariomesdetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="inventariomesdetalle_ingresocompra" phpName="InventariomesdetalleIngresocompra" type="FLOAT" required="true"/>

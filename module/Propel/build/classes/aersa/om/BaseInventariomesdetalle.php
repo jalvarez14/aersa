@@ -60,10 +60,22 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
     protected $inventariomesdetalle_stockteorico;
 
     /**
+     * The value for the inventariomesdetalle_explosion field.
+     * @var        double
+     */
+    protected $inventariomesdetalle_explosion;
+
+    /**
      * The value for the inventariomesdetalle_stockfisico field.
      * @var        double
      */
     protected $inventariomesdetalle_stockfisico;
+
+    /**
+     * The value for the inventariomesdetalle_totalfisico field.
+     * @var        double
+     */
+    protected $inventariomesdetalle_totalfisico;
 
     /**
      * The value for the inventariomesdetalle_diferencia field.
@@ -252,6 +264,17 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [inventariomesdetalle_explosion] column value.
+     *
+     * @return double
+     */
+    public function getInventariomesdetalleExplosion()
+    {
+
+        return $this->inventariomesdetalle_explosion;
+    }
+
+    /**
      * Get the [inventariomesdetalle_stockfisico] column value.
      *
      * @return double
@@ -260,6 +283,17 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
     {
 
         return $this->inventariomesdetalle_stockfisico;
+    }
+
+    /**
+     * Get the [inventariomesdetalle_totalfisico] column value.
+     *
+     * @return double
+     */
+    public function getInventariomesdetalleTotalfisico()
+    {
+
+        return $this->inventariomesdetalle_totalfisico;
     }
 
     /**
@@ -504,6 +538,27 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
     } // setInventariomesdetalleStockteorico()
 
     /**
+     * Set the value of [inventariomesdetalle_explosion] column.
+     *
+     * @param  double $v new value
+     * @return Inventariomesdetalle The current object (for fluent API support)
+     */
+    public function setInventariomesdetalleExplosion($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->inventariomesdetalle_explosion !== $v) {
+            $this->inventariomesdetalle_explosion = $v;
+            $this->modifiedColumns[] = InventariomesdetallePeer::INVENTARIOMESDETALLE_EXPLOSION;
+        }
+
+
+        return $this;
+    } // setInventariomesdetalleExplosion()
+
+    /**
      * Set the value of [inventariomesdetalle_stockfisico] column.
      *
      * @param  double $v new value
@@ -523,6 +578,27 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
 
         return $this;
     } // setInventariomesdetalleStockfisico()
+
+    /**
+     * Set the value of [inventariomesdetalle_totalfisico] column.
+     *
+     * @param  double $v new value
+     * @return Inventariomesdetalle The current object (for fluent API support)
+     */
+    public function setInventariomesdetalleTotalfisico($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->inventariomesdetalle_totalfisico !== $v) {
+            $this->inventariomesdetalle_totalfisico = $v;
+            $this->modifiedColumns[] = InventariomesdetallePeer::INVENTARIOMESDETALLE_TOTALFISICO;
+        }
+
+
+        return $this;
+    } // setInventariomesdetalleTotalfisico()
 
     /**
      * Set the value of [inventariomesdetalle_diferencia] column.
@@ -825,19 +901,21 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             $this->idproducto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->inventariomesdetalle_stockinicial = ($row[$startcol + 3] !== null) ? (double) $row[$startcol + 3] : null;
             $this->inventariomesdetalle_stockteorico = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
-            $this->inventariomesdetalle_stockfisico = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
-            $this->inventariomesdetalle_diferencia = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
-            $this->inventariomesdetalle_revisada = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
-            $this->inventariomesdetalle_ingresocompra = ($row[$startcol + 8] !== null) ? (double) $row[$startcol + 8] : null;
-            $this->inventariomesdetalle_ingresorequisicion = ($row[$startcol + 9] !== null) ? (double) $row[$startcol + 9] : null;
-            $this->inventariomesdetalle_egresorequisicion = ($row[$startcol + 10] !== null) ? (double) $row[$startcol + 10] : null;
-            $this->inventariomesdetalle_egresoventa = ($row[$startcol + 11] !== null) ? (double) $row[$startcol + 11] : null;
-            $this->inventariomesdetalle_ingresoordentablajeria = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
-            $this->inventariomesdetalle_egresoordentablajeria = ($row[$startcol + 13] !== null) ? (double) $row[$startcol + 13] : null;
-            $this->inventariomesdetalle_egresodevolucion = ($row[$startcol + 14] !== null) ? (double) $row[$startcol + 14] : null;
-            $this->inventariomesdetalle_costopromedio = ($row[$startcol + 15] !== null) ? (string) $row[$startcol + 15] : null;
-            $this->inventariomesdetalle_difimporte = ($row[$startcol + 16] !== null) ? (string) $row[$startcol + 16] : null;
-            $this->inventariomesdetalle_importefisico = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+            $this->inventariomesdetalle_explosion = ($row[$startcol + 5] !== null) ? (double) $row[$startcol + 5] : null;
+            $this->inventariomesdetalle_stockfisico = ($row[$startcol + 6] !== null) ? (double) $row[$startcol + 6] : null;
+            $this->inventariomesdetalle_totalfisico = ($row[$startcol + 7] !== null) ? (double) $row[$startcol + 7] : null;
+            $this->inventariomesdetalle_diferencia = ($row[$startcol + 8] !== null) ? (double) $row[$startcol + 8] : null;
+            $this->inventariomesdetalle_revisada = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
+            $this->inventariomesdetalle_ingresocompra = ($row[$startcol + 10] !== null) ? (double) $row[$startcol + 10] : null;
+            $this->inventariomesdetalle_ingresorequisicion = ($row[$startcol + 11] !== null) ? (double) $row[$startcol + 11] : null;
+            $this->inventariomesdetalle_egresorequisicion = ($row[$startcol + 12] !== null) ? (double) $row[$startcol + 12] : null;
+            $this->inventariomesdetalle_egresoventa = ($row[$startcol + 13] !== null) ? (double) $row[$startcol + 13] : null;
+            $this->inventariomesdetalle_ingresoordentablajeria = ($row[$startcol + 14] !== null) ? (double) $row[$startcol + 14] : null;
+            $this->inventariomesdetalle_egresoordentablajeria = ($row[$startcol + 15] !== null) ? (double) $row[$startcol + 15] : null;
+            $this->inventariomesdetalle_egresodevolucion = ($row[$startcol + 16] !== null) ? (double) $row[$startcol + 16] : null;
+            $this->inventariomesdetalle_costopromedio = ($row[$startcol + 17] !== null) ? (string) $row[$startcol + 17] : null;
+            $this->inventariomesdetalle_difimporte = ($row[$startcol + 18] !== null) ? (string) $row[$startcol + 18] : null;
+            $this->inventariomesdetalle_importefisico = ($row[$startcol + 19] !== null) ? (string) $row[$startcol + 19] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -847,7 +925,7 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 18; // 18 = InventariomesdetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 20; // 20 = InventariomesdetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Inventariomesdetalle object", $e);
@@ -1109,8 +1187,14 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKTEORICO)) {
             $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_stockteorico`';
         }
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_EXPLOSION)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_explosion`';
+        }
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKFISICO)) {
             $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_stockfisico`';
+        }
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_TOTALFISICO)) {
+            $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_totalfisico`';
         }
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFERENCIA)) {
             $modifiedColumns[':p' . $index++]  = '`inventariomesdetalle_diferencia`';
@@ -1174,8 +1258,14 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
                     case '`inventariomesdetalle_stockteorico`':
                         $stmt->bindValue($identifier, $this->inventariomesdetalle_stockteorico, PDO::PARAM_STR);
                         break;
+                    case '`inventariomesdetalle_explosion`':
+                        $stmt->bindValue($identifier, $this->inventariomesdetalle_explosion, PDO::PARAM_STR);
+                        break;
                     case '`inventariomesdetalle_stockfisico`':
                         $stmt->bindValue($identifier, $this->inventariomesdetalle_stockfisico, PDO::PARAM_STR);
+                        break;
+                    case '`inventariomesdetalle_totalfisico`':
+                        $stmt->bindValue($identifier, $this->inventariomesdetalle_totalfisico, PDO::PARAM_STR);
                         break;
                     case '`inventariomesdetalle_diferencia`':
                         $stmt->bindValue($identifier, $this->inventariomesdetalle_diferencia, PDO::PARAM_STR);
@@ -1383,42 +1473,48 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
                 return $this->getInventariomesdetalleStockteorico();
                 break;
             case 5:
-                return $this->getInventariomesdetalleStockfisico();
+                return $this->getInventariomesdetalleExplosion();
                 break;
             case 6:
-                return $this->getInventariomesdetalleDiferencia();
+                return $this->getInventariomesdetalleStockfisico();
                 break;
             case 7:
-                return $this->getInventariomesdetalleRevisada();
+                return $this->getInventariomesdetalleTotalfisico();
                 break;
             case 8:
-                return $this->getInventariomesdetalleIngresocompra();
+                return $this->getInventariomesdetalleDiferencia();
                 break;
             case 9:
-                return $this->getInventariomesdetalleIngresorequisicion();
+                return $this->getInventariomesdetalleRevisada();
                 break;
             case 10:
-                return $this->getInventariomesdetalleEgresorequisicion();
+                return $this->getInventariomesdetalleIngresocompra();
                 break;
             case 11:
-                return $this->getInventariomesdetalleEgresoventa();
+                return $this->getInventariomesdetalleIngresorequisicion();
                 break;
             case 12:
-                return $this->getInventariomesdetalleIngresoordentablajeria();
+                return $this->getInventariomesdetalleEgresorequisicion();
                 break;
             case 13:
-                return $this->getInventariomesdetalleEgresoordentablajeria();
+                return $this->getInventariomesdetalleEgresoventa();
                 break;
             case 14:
-                return $this->getInventariomesdetalleEgresodevolucion();
+                return $this->getInventariomesdetalleIngresoordentablajeria();
                 break;
             case 15:
-                return $this->getInventariomesdetalleCostopromedio();
+                return $this->getInventariomesdetalleEgresoordentablajeria();
                 break;
             case 16:
-                return $this->getInventariomesdetalleDifimporte();
+                return $this->getInventariomesdetalleEgresodevolucion();
                 break;
             case 17:
+                return $this->getInventariomesdetalleCostopromedio();
+                break;
+            case 18:
+                return $this->getInventariomesdetalleDifimporte();
+                break;
+            case 19:
                 return $this->getInventariomesdetalleImportefisico();
                 break;
             default:
@@ -1455,19 +1551,21 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
             $keys[2] => $this->getIdproducto(),
             $keys[3] => $this->getInventariomesdetalleStockinicial(),
             $keys[4] => $this->getInventariomesdetalleStockteorico(),
-            $keys[5] => $this->getInventariomesdetalleStockfisico(),
-            $keys[6] => $this->getInventariomesdetalleDiferencia(),
-            $keys[7] => $this->getInventariomesdetalleRevisada(),
-            $keys[8] => $this->getInventariomesdetalleIngresocompra(),
-            $keys[9] => $this->getInventariomesdetalleIngresorequisicion(),
-            $keys[10] => $this->getInventariomesdetalleEgresorequisicion(),
-            $keys[11] => $this->getInventariomesdetalleEgresoventa(),
-            $keys[12] => $this->getInventariomesdetalleIngresoordentablajeria(),
-            $keys[13] => $this->getInventariomesdetalleEgresoordentablajeria(),
-            $keys[14] => $this->getInventariomesdetalleEgresodevolucion(),
-            $keys[15] => $this->getInventariomesdetalleCostopromedio(),
-            $keys[16] => $this->getInventariomesdetalleDifimporte(),
-            $keys[17] => $this->getInventariomesdetalleImportefisico(),
+            $keys[5] => $this->getInventariomesdetalleExplosion(),
+            $keys[6] => $this->getInventariomesdetalleStockfisico(),
+            $keys[7] => $this->getInventariomesdetalleTotalfisico(),
+            $keys[8] => $this->getInventariomesdetalleDiferencia(),
+            $keys[9] => $this->getInventariomesdetalleRevisada(),
+            $keys[10] => $this->getInventariomesdetalleIngresocompra(),
+            $keys[11] => $this->getInventariomesdetalleIngresorequisicion(),
+            $keys[12] => $this->getInventariomesdetalleEgresorequisicion(),
+            $keys[13] => $this->getInventariomesdetalleEgresoventa(),
+            $keys[14] => $this->getInventariomesdetalleIngresoordentablajeria(),
+            $keys[15] => $this->getInventariomesdetalleEgresoordentablajeria(),
+            $keys[16] => $this->getInventariomesdetalleEgresodevolucion(),
+            $keys[17] => $this->getInventariomesdetalleCostopromedio(),
+            $keys[18] => $this->getInventariomesdetalleDifimporte(),
+            $keys[19] => $this->getInventariomesdetalleImportefisico(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1531,42 +1629,48 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
                 $this->setInventariomesdetalleStockteorico($value);
                 break;
             case 5:
-                $this->setInventariomesdetalleStockfisico($value);
+                $this->setInventariomesdetalleExplosion($value);
                 break;
             case 6:
-                $this->setInventariomesdetalleDiferencia($value);
+                $this->setInventariomesdetalleStockfisico($value);
                 break;
             case 7:
-                $this->setInventariomesdetalleRevisada($value);
+                $this->setInventariomesdetalleTotalfisico($value);
                 break;
             case 8:
-                $this->setInventariomesdetalleIngresocompra($value);
+                $this->setInventariomesdetalleDiferencia($value);
                 break;
             case 9:
-                $this->setInventariomesdetalleIngresorequisicion($value);
+                $this->setInventariomesdetalleRevisada($value);
                 break;
             case 10:
-                $this->setInventariomesdetalleEgresorequisicion($value);
+                $this->setInventariomesdetalleIngresocompra($value);
                 break;
             case 11:
-                $this->setInventariomesdetalleEgresoventa($value);
+                $this->setInventariomesdetalleIngresorequisicion($value);
                 break;
             case 12:
-                $this->setInventariomesdetalleIngresoordentablajeria($value);
+                $this->setInventariomesdetalleEgresorequisicion($value);
                 break;
             case 13:
-                $this->setInventariomesdetalleEgresoordentablajeria($value);
+                $this->setInventariomesdetalleEgresoventa($value);
                 break;
             case 14:
-                $this->setInventariomesdetalleEgresodevolucion($value);
+                $this->setInventariomesdetalleIngresoordentablajeria($value);
                 break;
             case 15:
-                $this->setInventariomesdetalleCostopromedio($value);
+                $this->setInventariomesdetalleEgresoordentablajeria($value);
                 break;
             case 16:
-                $this->setInventariomesdetalleDifimporte($value);
+                $this->setInventariomesdetalleEgresodevolucion($value);
                 break;
             case 17:
+                $this->setInventariomesdetalleCostopromedio($value);
+                break;
+            case 18:
+                $this->setInventariomesdetalleDifimporte($value);
+                break;
+            case 19:
                 $this->setInventariomesdetalleImportefisico($value);
                 break;
         } // switch()
@@ -1598,19 +1702,21 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[2], $arr)) $this->setIdproducto($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setInventariomesdetalleStockinicial($arr[$keys[3]]);
         if (array_key_exists($keys[4], $arr)) $this->setInventariomesdetalleStockteorico($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setInventariomesdetalleStockfisico($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setInventariomesdetalleDiferencia($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setInventariomesdetalleRevisada($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setInventariomesdetalleIngresocompra($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setInventariomesdetalleIngresorequisicion($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setInventariomesdetalleEgresorequisicion($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setInventariomesdetalleEgresoventa($arr[$keys[11]]);
-        if (array_key_exists($keys[12], $arr)) $this->setInventariomesdetalleIngresoordentablajeria($arr[$keys[12]]);
-        if (array_key_exists($keys[13], $arr)) $this->setInventariomesdetalleEgresoordentablajeria($arr[$keys[13]]);
-        if (array_key_exists($keys[14], $arr)) $this->setInventariomesdetalleEgresodevolucion($arr[$keys[14]]);
-        if (array_key_exists($keys[15], $arr)) $this->setInventariomesdetalleCostopromedio($arr[$keys[15]]);
-        if (array_key_exists($keys[16], $arr)) $this->setInventariomesdetalleDifimporte($arr[$keys[16]]);
-        if (array_key_exists($keys[17], $arr)) $this->setInventariomesdetalleImportefisico($arr[$keys[17]]);
+        if (array_key_exists($keys[5], $arr)) $this->setInventariomesdetalleExplosion($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setInventariomesdetalleStockfisico($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setInventariomesdetalleTotalfisico($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setInventariomesdetalleDiferencia($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setInventariomesdetalleRevisada($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setInventariomesdetalleIngresocompra($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setInventariomesdetalleIngresorequisicion($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setInventariomesdetalleEgresorequisicion($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setInventariomesdetalleEgresoventa($arr[$keys[13]]);
+        if (array_key_exists($keys[14], $arr)) $this->setInventariomesdetalleIngresoordentablajeria($arr[$keys[14]]);
+        if (array_key_exists($keys[15], $arr)) $this->setInventariomesdetalleEgresoordentablajeria($arr[$keys[15]]);
+        if (array_key_exists($keys[16], $arr)) $this->setInventariomesdetalleEgresodevolucion($arr[$keys[16]]);
+        if (array_key_exists($keys[17], $arr)) $this->setInventariomesdetalleCostopromedio($arr[$keys[17]]);
+        if (array_key_exists($keys[18], $arr)) $this->setInventariomesdetalleDifimporte($arr[$keys[18]]);
+        if (array_key_exists($keys[19], $arr)) $this->setInventariomesdetalleImportefisico($arr[$keys[19]]);
     }
 
     /**
@@ -1627,7 +1733,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(InventariomesdetallePeer::IDPRODUCTO)) $criteria->add(InventariomesdetallePeer::IDPRODUCTO, $this->idproducto);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKINICIAL)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKINICIAL, $this->inventariomesdetalle_stockinicial);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKTEORICO)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKTEORICO, $this->inventariomesdetalle_stockteorico);
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_EXPLOSION)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_EXPLOSION, $this->inventariomesdetalle_explosion);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKFISICO)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_STOCKFISICO, $this->inventariomesdetalle_stockfisico);
+        if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_TOTALFISICO)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_TOTALFISICO, $this->inventariomesdetalle_totalfisico);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFERENCIA)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_DIFERENCIA, $this->inventariomesdetalle_diferencia);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_REVISADA)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_REVISADA, $this->inventariomesdetalle_revisada);
         if ($this->isColumnModified(InventariomesdetallePeer::INVENTARIOMESDETALLE_INGRESOCOMPRA)) $criteria->add(InventariomesdetallePeer::INVENTARIOMESDETALLE_INGRESOCOMPRA, $this->inventariomesdetalle_ingresocompra);
@@ -1707,7 +1815,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         $copyObj->setIdproducto($this->getIdproducto());
         $copyObj->setInventariomesdetalleStockinicial($this->getInventariomesdetalleStockinicial());
         $copyObj->setInventariomesdetalleStockteorico($this->getInventariomesdetalleStockteorico());
+        $copyObj->setInventariomesdetalleExplosion($this->getInventariomesdetalleExplosion());
         $copyObj->setInventariomesdetalleStockfisico($this->getInventariomesdetalleStockfisico());
+        $copyObj->setInventariomesdetalleTotalfisico($this->getInventariomesdetalleTotalfisico());
         $copyObj->setInventariomesdetalleDiferencia($this->getInventariomesdetalleDiferencia());
         $copyObj->setInventariomesdetalleRevisada($this->getInventariomesdetalleRevisada());
         $copyObj->setInventariomesdetalleIngresocompra($this->getInventariomesdetalleIngresocompra());
@@ -2112,7 +2222,9 @@ abstract class BaseInventariomesdetalle extends BaseObject implements Persistent
         $this->idproducto = null;
         $this->inventariomesdetalle_stockinicial = null;
         $this->inventariomesdetalle_stockteorico = null;
+        $this->inventariomesdetalle_explosion = null;
         $this->inventariomesdetalle_stockfisico = null;
+        $this->inventariomesdetalle_totalfisico = null;
         $this->inventariomesdetalle_diferencia = null;
         $this->inventariomesdetalle_revisada = null;
         $this->inventariomesdetalle_ingresocompra = null;
