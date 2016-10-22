@@ -265,6 +265,7 @@ class CierresinventariosController extends AbstractActionController {
                     foreach ($objrequisicionesDestino as $objrequisicion) {
                         $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                 ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                ->filterByIdpadre(NULL)
                                 ->filterByIdproducto($objproducto->getIdproducto())
                                 ->find();
                         $objrequisiciondetalle = new \Requisiciondetalle();
@@ -302,7 +303,7 @@ class CierresinventariosController extends AbstractActionController {
                     foreach ($objrequisicionesOrigen as $objrequisicion) {
                         $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                 ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                ->filterByIdpadre(NULL)
+                                ->filterByIdpadre(NULL,  \Criteria::NOT_EQUAL)
                                 ->filterByIdproducto($objproducto->getIdproducto())
                                 ->find();
                         $objrequisiciondetalle = new \Requisiciondetalle();
