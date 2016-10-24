@@ -186,6 +186,7 @@ class CierresinventariosController extends AbstractActionController {
 
             $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->find();
 
+            
             $reporte = array();
             $arrayReporte = array();
             $sobrante = 0;
@@ -335,9 +336,28 @@ class CierresinventariosController extends AbstractActionController {
                             $devolucion+=$objdevoluciondetalle->getDevoluciondetalleCantidad();
                         }
                     }
-
+                    
+                    $ajusteSob=0;
+                    $ajusteSobObjs= \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->filterByIdproducto($objproducto->getIdproducto())->filterByAjusteinventarioTipo('sobrante')->find();
+                    $ajusteSobObj=new \Ajusteinventario();
+                    
+                    foreach ($ajusteSobObjs as $ajusteSobObj) {
+                        $ajusteSob+=$ajusteSobObj->getAjusteinventarioCantidad();
+                    }
+                    
+                    $ajusteFal=0;
+                    $ajusteFalObjs= \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->filterByIdproducto($objproducto->getIdproducto())->filterByAjusteinventarioTipo('faltante')->find();
+                    $ajusteFalObj=new \Ajusteinventario();
+                    
+                    foreach ($ajusteFalObjs as $ajusteFalObj) {
+                        $ajusteFal+=$ajusteFalObj->getAjusteinventarioCantidad();
+                    }
+                    
+                    $ajuste=$ajusteSob - $ajusteFal;
+                    
                     $stockTeorico = ($compra + $requisicionIng + $ordenTabIng + $exisinicial) - ($venta + $requisicionEg + $ordenTabEg);
-
+                    $stockTeorico+=$ajuste;
+                    
                     $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                     $stockFisico = 0;
                     if (isset($productosReporte[$objproducto->getIdproducto()]))
@@ -439,6 +459,7 @@ class CierresinventariosController extends AbstractActionController {
                     $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'] = $difImporte;
                     $arrayReporte[$idproducto]['inventariomesdetalle_explosion'] = $explosion;
                     $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'] = $totalFisico;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_reajuste'] = $ajuste;
                     $row++;
                 }
             }
@@ -474,6 +495,7 @@ class CierresinventariosController extends AbstractActionController {
                     $difImporte = $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'];
                     $explosion = $arrayReporte[$idproducto]['inventariomesdetalle_explosion'];
                     $totalFisico=$arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'];
+                    $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
 array_push
 ($reporte, 
 "<tr id='$idproducto' bgcolor='" . $colorbg . "'>"
