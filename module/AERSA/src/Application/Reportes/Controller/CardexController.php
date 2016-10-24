@@ -39,17 +39,18 @@ class CardexController extends AbstractActionController {
             $inicioSpli = explode('/', $post_data['inicio']);
             $finSpli = explode('/', $post_data['fin']);
 
-            $inicio_semana = $inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0] . " 00:00:00   ";
+            $inicio_semana = $inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0] . " 00:00:00";
             $fin_semana = $finSpli[2] . "-" . $finSpli[1] . "-" . $finSpli[0] . " 23:59:59";
 
             $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', strtotime($inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0])));
             $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
-
+$num_pod=0;
             foreach ($post_data['almacenes'] as $idalmacen) {
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
                 $objproducto = new \Producto();
 
                 foreach ($objproductos as $objproducto) {
+                    
                     $pedido = true;
                     $idproducto = $objproducto->getIdproducto();
                     if (isset($post_data['productos'])) {
@@ -60,65 +61,67 @@ class CardexController extends AbstractActionController {
                     }
                     if ($pedido) {
                         $conn = \Propel::getConnection();
-                        $sqlcompras = "SELECT count(idcompra) FROM compra WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=24022 AND idalmacen=$idalmacen) AND '$inicio_semana' <= compra_fechacompra AND compra_fechacompra>= '$fin_semana' AND idsucursal=$idsucursal;";
+                        $sqlcompras = "SELECT count(idcompra) FROM compra WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idproducto AND idalmacen=$idalmacen) AND '$inicio_semana' <= compra_fechacompra AND compra_fechacompra <= '$fin_semana' AND idsucursal=$idsucursal;";
                         $st = $conn->prepare($sqlcompras);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idcompra)'] != 0)
                             array_push($productosArray, $idproducto);
                         if(!in_array($idproducto, $productosArray)) {
-                        $sqlventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=24022 AND idalmacen=$idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa >= '$fin_semana' AND idsucursal=$idsucursal;";
+                        $sqlventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=24022 AND idalmacen=$idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana' AND idsucursal=$idsucursal;";
                         $st = $conn->prepare($sqlventas);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idventa)'] != 0)
                             array_push($productosArray, $idproducto);
-                        } elseif(!in_array($idproducto, $productosArray)) {
-                        $sqlrequisicionesOrigen = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha >= '$fin_semana'  AND idsucursalorigen=$idsucursal;";
+                        }                         if(!in_array($idproducto, $productosArray)) {
+                        $sqlrequisicionesOrigen = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'  AND idsucursalorigen=$idsucursal;";
                         $st = $conn->prepare($sqlrequisicionesOrigen);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+
                         if ($results[0]['count(idrequisicion)'] != 0)
                             array_push($productosArray, $idproducto);
-                        } elseif(!in_array($idproducto, $productosArray)) {
+                        } 
+                        if(!in_array($idproducto, $productosArray)) {
                         
-                        $sqlrequisicionesDestino = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha >= '$fin_semana'  AND idsucursaldestino=$idsucursal;";
+                        $sqlrequisicionesDestino = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'  AND idsucursaldestino=$idsucursal;";
                         $st = $conn->prepare($sqlrequisicionesDestino);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idrequisicion)'] != 0 && !in_array($idproducto, $productosArray))
                             array_push($productosArray, $idproducto);
-                        } elseif(!in_array($idproducto, $productosArray)) {
+                        }                         if(!in_array($idproducto, $productosArray)) {
                         
-                        $sqlordentabOrigen = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha>= '$fin_semana' AND idsucursal=$idsucursal;";
+                        $sqlordentabOrigen = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana' AND idsucursal=$idsucursal;";
                         $st = $conn->prepare($sqlordentabOrigen);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idordentablajeria)'] != 0)
                             array_push($productosArray, $idproducto);
-                        } elseif(!in_array($idproducto, $productosArray)) {
-                        $sqlordentabDestino = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha>= '$fin_semana' AND idsucursal=$idsucursal;";
+                        }                         if(!in_array($idproducto, $productosArray)) {
+                        $sqlordentabDestino = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana' AND idsucursal=$idsucursal;";
                         $st = $conn->prepare($sqlordentabDestino);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idordentablajeria)'] != 0)
                             array_push($productosArray, $idproducto);
-                        } elseif(!in_array($idproducto, $productosArray)) {
-                        $sqlajusteinvSobs = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha >= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='sobrante';";
+                        }                         if(!in_array($idproducto, $productosArray)) {
+                        $sqlajusteinvSobs = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha <= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='sobrante';";
                         $st = $conn->prepare($sqlajusteinvSobs);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idajusteinventario)'] != 0)
                             array_push($productosArray, $idproducto);
-                        } elseif(!in_array($idproducto, $productosArray)) {
-                        $sqlajusteinvFals = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha >= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='faltante';";
+                        }                         if(!in_array($idproducto, $productosArray)) {
+                        $sqlajusteinvFals = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha <= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='faltante';";
                         $st = $conn->prepare($sqlajusteinvFals);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idajusteinventario)'] != 0)
                             array_push($productosArray, $idproducto);
-                        } elseif(!in_array($idproducto, $productosArray)) {
-                        $sqldevoluciones = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idproducto AND idalmacen=$idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion >= '$fin_semana' AND idsucursal=$idsucursal;";
+                        }                         if(!in_array($idproducto, $productosArray)) {
+                        $sqldevoluciones = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idproducto AND idalmacen=$idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion <= '$fin_semana' AND idsucursal=$idsucursal;";
                         $st = $conn->prepare($sqldevoluciones);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
@@ -128,7 +131,6 @@ class CardexController extends AbstractActionController {
                     }
                 }
             }
-
             foreach ($post_data['almacenes'] as $idalmacen) {
 
 
@@ -186,7 +188,7 @@ class CardexController extends AbstractActionController {
                             if ($inventario_anterior) {
                                 $exisinicial2 = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                                 if ($exisinicial2)
-                                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleStockfisico();
+                                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleTotalfisico();
                             }
                             $compra = 0;
                             $totalProductoCompra = 0;
@@ -206,30 +208,30 @@ class CardexController extends AbstractActionController {
                             $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
                             $costoPromedio = ($costoPromedio < 0) ? $costoPromedio * -1 : $costoPromedio;
                             $rowhead = 0;
-                            if ($objproducto->getProductoTipo() == 'subreceta' && $exisinicial != 0) {
-                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
-                                $recetaObj = new \Receta();
-                                foreach ($recetasObj as $recetaObj) {
-                                    if (isset($post_data['productos'])) {
-                                        if (in_array($recetaObj->getIdproductoreceta(), $post_data['productos'])) {
-                                            if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
-                                                $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
-                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                            } else {
-                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                            }
-                                        }
-                                    } else {
-                                        if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
-                                            $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
-                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                        } else {
-                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
-                                        }
-                                    }
-                                }
-                                $exisinicial = 0;
-                            }
+//                            if ($objproducto->getProductoTipo() == 'subreceta' && $exisinicial != 0) {
+//                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
+//                                $recetaObj = new \Receta();
+//                                foreach ($recetasObj as $recetaObj) {
+//                                    if (isset($post_data['productos'])) {
+//                                        if (in_array($recetaObj->getIdproductoreceta(), $post_data['productos'])) {
+//                                            if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
+//                                                $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
+//                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                            } else {
+//                                                $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                            }
+//                                        }
+//                                    } else {
+//                                        if (isset($reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'])) {
+//                                            $recini = $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'];
+//                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = $recini + ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                        } else {
+//                                            $reporteHead[$idalmacen][$recetaObj->getIdproductoreceta()]['existenciaIni'] = ($recetaObj->getRecetaCantidad() * $exisinicial);
+//                                        }
+//                                    }
+//                                }
+//                                $exisinicial = 0;
+//                            }
                             $saldoIni = $costoPromedio * $exisinicial;
 
                             $reporteHead[$idalmacen][$objproducto->getIdproducto()]['producto'] = $nombreProducto;
@@ -279,6 +281,7 @@ class CardexController extends AbstractActionController {
                             foreach ($objrequisicionesDestino as $objrequisicion) {
                                 $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                         ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                        ->filterByIdpadre(NULL)
                                         ->filterByIdproducto($objproducto->getIdproducto())
                                         ->find();
                                 $objrequisiciondetalle = new \Requisiciondetalle();
@@ -407,7 +410,7 @@ class CardexController extends AbstractActionController {
                             foreach ($objrequisicionesOrigen as $objrequisicion) {
                                 $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                         ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                        ->filterByIdpadre(NULL)
+                                        ->filterByIdpadre(NULL,  \Criteria::NOT_EQUAL)
                                         ->filterByIdproducto($objproducto->getIdproducto())
                                         ->find();
                                 $objrequisiciondetalle = new \Requisiciondetalle();
