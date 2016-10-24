@@ -312,8 +312,27 @@ class InventariociclicoController extends AbstractActionController {
                         }
                     }
 
+                    $ajusteSob=0;
+                    $ajusteSobObjs= \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->filterByIdproducto($objproducto->getIdproducto())->filterByAjusteinventarioTipo('sobrante')->find();
+                    $ajusteSobObj=new \Ajusteinventario();
+                    
+                    foreach ($ajusteSobObjs as $ajusteSobObj) {
+                        $ajusteSob+=$ajusteSobObj->getAjusteinventarioCantidad();
+                    }
+                    
+                    $ajusteFal=0;
+                    $ajusteFalObjs= \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->filterByIdproducto($objproducto->getIdproducto())->filterByAjusteinventarioTipo('faltante')->find();
+                    $ajusteFalObj=new \Ajusteinventario();
+                    
+                    foreach ($ajusteFalObjs as $ajusteFalObj) {
+                        $ajusteFal+=$ajusteFalObj->getAjusteinventarioCantidad();
+                    }
+                    
+                    $ajuste=$ajusteSob - $ajusteFal;
+                    
                     $stockTeorico = ($compra + $requisicionIng + $ordenTabIng + $exisinicial) - ($venta + $requisicionEg + $ordenTabEg);
-
+                    $stockTeorico+=$ajuste;
+                    
                     $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
                     $stockFisico = 0;
                     if (isset($productosReporte[$objproducto->getIdproducto()]))
@@ -415,6 +434,7 @@ class InventariociclicoController extends AbstractActionController {
                     $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'] = $difImporte;
                     $arrayReporte[$idproducto]['inventariomesdetalle_explosion'] = $explosion;
                     $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'] = $totalFisico;
+                    $arrayReporte[$idproducto]['inventariomesdetalle_reajuste'] = $ajuste;
                     $row++;
                 }
             }
@@ -452,6 +472,7 @@ class InventariociclicoController extends AbstractActionController {
                     $costoPromedio = $arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'];
                     $costoPromedio = abs($costoPromedio);
                     $difImporte = $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'];
+                    $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
                     array_push($reporte, 
 "<tr id='$idproducto' bgcolor='" . $colorbg . "'>"
 . "<td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td>"
@@ -464,6 +485,7 @@ class InventariociclicoController extends AbstractActionController {
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresorequisicion]' value='$requisicionEg'>$requisicionEg</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresoordentablajeria]' value='$ordenTabEg'>$ordenTabEg</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td>"
+. "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_reajuste]' value='$ajuste'>$ajuste</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_unidad]' value='$unidad'>$unidad</td>"
 . "<td><input required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td>"
