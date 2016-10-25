@@ -290,7 +290,7 @@ class VentaController extends AbstractActionController {
             
             //VALIDAMOS SI EXISTE EL PRODUCTO
             $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->exists();
-             echo '<pre>';var_dump($exist);echo'</pre>';exit();
+          
             //SI EXISTE
             if($exist){
                 $producto = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->findOne();
