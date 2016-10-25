@@ -307,7 +307,7 @@ class VentaController extends AbstractActionController {
                     echo '<pre>';var_dump($productosucursalalmacen->toArray());echo'</pre>';
                     
                     $almacen = $productosucursalalmacen->getAlmacen();
-                    echo '<pre>';var_dump($almacen->toArray());echo'</pre>';
+                    
                     $tmp['idproducto'] = $producto->getIdproducto();
                     $tmp['producto'] = $producto->getProductoNombre();
                     $tmp['idalmacen'] = $almacen->getIdalmacen();
