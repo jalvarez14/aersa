@@ -891,6 +891,7 @@ CREATE TABLE `inventariomesdetalle`
     `inventariomesdetalle_ingresorequisicion` FLOAT NOT NULL,
     `inventariomesdetalle_egresorequisicion` FLOAT NOT NULL,
     `inventariomesdetalle_egresoventa` FLOAT NOT NULL,
+    `inventariomesdetalle_reajuste` FLOAT NOT NULL,
     `inventariomesdetalle_ingresoordentablajeria` FLOAT NOT NULL,
     `inventariomesdetalle_egresoordentablajeria` FLOAT NOT NULL,
     `inventariomesdetalle_egresodevolucion` FLOAT NOT NULL,
@@ -1630,6 +1631,35 @@ CREATE TABLE `rubroingreso`
     `rubroingreso_nombre` VARCHAR(255) NOT NULL,
     `rubroingreso_descripcion` TEXT,
     PRIMARY KEY (`idrubroingreso`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- semanarevisada
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `semanarevisada`;
+
+CREATE TABLE `semanarevisada`
+(
+    `idsemanarevisada` INTEGER NOT NULL,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    `semanarevisada_anio` INTEGER NOT NULL,
+    `semanarevisada_semana` INTEGER NOT NULL,
+    `semanarevisada_estatus` TINYINT(1) NOT NULL,
+    PRIMARY KEY (`idsemanarevisada`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_semanarevisada`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusucursal_semanarevisada`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------

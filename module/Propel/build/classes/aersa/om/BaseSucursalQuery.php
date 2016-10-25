@@ -92,6 +92,10 @@
  * @method SucursalQuery rightJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
  * @method SucursalQuery innerJoinRequisicionRelatedByIdsucursalorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdsucursalorigen relation
  *
+ * @method SucursalQuery leftJoinSemanarevisada($relationAlias = null) Adds a LEFT JOIN clause to the query using the Semanarevisada relation
+ * @method SucursalQuery rightJoinSemanarevisada($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Semanarevisada relation
+ * @method SucursalQuery innerJoinSemanarevisada($relationAlias = null) Adds a INNER JOIN clause to the query using the Semanarevisada relation
+ *
  * @method SucursalQuery leftJoinTrabajadorespromedio($relationAlias = null) Adds a LEFT JOIN clause to the query using the Trabajadorespromedio relation
  * @method SucursalQuery rightJoinTrabajadorespromedio($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Trabajadorespromedio relation
  * @method SucursalQuery innerJoinTrabajadorespromedio($relationAlias = null) Adds a INNER JOIN clause to the query using the Trabajadorespromedio relation
@@ -1799,6 +1803,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinRequisicionRelatedByIdsucursalorigen($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'RequisicionRelatedByIdsucursalorigen', 'RequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Semanarevisada object
+     *
+     * @param   Semanarevisada|PropelObjectCollection $semanarevisada  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySemanarevisada($semanarevisada, $comparison = null)
+    {
+        if ($semanarevisada instanceof Semanarevisada) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $semanarevisada->getIdsucursal(), $comparison);
+        } elseif ($semanarevisada instanceof PropelObjectCollection) {
+            return $this
+                ->useSemanarevisadaQuery()
+                ->filterByPrimaryKeys($semanarevisada->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterBySemanarevisada() only accepts arguments of type Semanarevisada or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Semanarevisada relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinSemanarevisada($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Semanarevisada');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Semanarevisada');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Semanarevisada relation Semanarevisada object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SemanarevisadaQuery A secondary query class using the current class as primary query
+     */
+    public function useSemanarevisadaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSemanarevisada($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Semanarevisada', 'SemanarevisadaQuery');
     }
 
     /**

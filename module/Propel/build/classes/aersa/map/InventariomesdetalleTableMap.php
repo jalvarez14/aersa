@@ -52,6 +52,7 @@ class InventariomesdetalleTableMap extends TableMap
         $this->addColumn('inventariomesdetalle_ingresorequisicion', 'InventariomesdetalleIngresorequisicion', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_egresorequisicion', 'InventariomesdetalleEgresorequisicion', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_egresoventa', 'InventariomesdetalleEgresoventa', 'FLOAT', true, null, null);
+        $this->addColumn('inventariomesdetalle_reajuste', 'InventariomesdetalleReajuste', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_ingresoordentablajeria', 'InventariomesdetalleIngresoordentablajeria', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_egresoordentablajeria', 'InventariomesdetalleEgresoordentablajeria', 'FLOAT', true, null, null);
         $this->addColumn('inventariomesdetalle_egresodevolucion', 'InventariomesdetalleEgresodevolucion', 'FLOAT', true, null, null);

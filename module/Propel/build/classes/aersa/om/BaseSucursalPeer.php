@@ -425,6 +425,9 @@ abstract class BaseSucursalPeer
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
+        // Invalidate objects in SemanarevisadaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        SemanarevisadaPeer::clearInstancePool();
         // Invalidate objects in TrabajadorespromedioPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         TrabajadorespromedioPeer::clearInstancePool();
@@ -1095,6 +1098,12 @@ abstract class BaseSucursalPeer
 
             $criteria->add(RequisicionPeer::IDSUCURSALORIGEN, $obj->getIdsucursal());
             $affectedRows += RequisicionPeer::doDelete($criteria, $con);
+
+            // delete related Semanarevisada objects
+            $criteria = new Criteria(SemanarevisadaPeer::DATABASE_NAME);
+
+            $criteria->add(SemanarevisadaPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += SemanarevisadaPeer::doDelete($criteria, $con);
 
             // delete related Trabajadorespromedio objects
             $criteria = new Criteria(TrabajadorespromedioPeer::DATABASE_NAME);

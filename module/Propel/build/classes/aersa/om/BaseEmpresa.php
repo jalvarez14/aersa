@@ -193,6 +193,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $collRequisicionsPartial;
 
     /**
+     * @var        PropelObjectCollection|Semanarevisada[] Collection to store aggregation of Semanarevisada objects.
+     */
+    protected $collSemanarevisadas;
+    protected $collSemanarevisadasPartial;
+
+    /**
      * @var        PropelObjectCollection|Sucursal[] Collection to store aggregation of Sucursal objects.
      */
     protected $collSucursals;
@@ -355,6 +361,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $requisicionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $semanarevisadasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -810,6 +822,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collProveedorescfdis = null;
 
             $this->collRequisicions = null;
+
+            $this->collSemanarevisadas = null;
 
             $this->collSucursals = null;
 
@@ -1283,6 +1297,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->semanarevisadasScheduledForDeletion !== null) {
+                if (!$this->semanarevisadasScheduledForDeletion->isEmpty()) {
+                    SemanarevisadaQuery::create()
+                        ->filterByPrimaryKeys($this->semanarevisadasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->semanarevisadasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collSemanarevisadas !== null) {
+                foreach ($this->collSemanarevisadas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->sucursalsScheduledForDeletion !== null) {
                 if (!$this->sucursalsScheduledForDeletion->isEmpty()) {
                     SucursalQuery::create()
@@ -1689,6 +1720,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collSemanarevisadas !== null) {
+                    foreach ($this->collSemanarevisadas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collSucursals !== null) {
                     foreach ($this->collSucursals as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1879,6 +1918,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collRequisicions) {
                 $result['Requisicions'] = $this->collRequisicions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collSemanarevisadas) {
+                $result['Semanarevisadas'] = $this->collSemanarevisadas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collSucursals) {
                 $result['Sucursals'] = $this->collSucursals->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2193,6 +2235,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getSemanarevisadas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addSemanarevisada($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getSucursals() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addSucursal($relObj->copy($deepCopy));
@@ -2337,6 +2385,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
         if ('Requisicion' == $relationName) {
             $this->initRequisicions();
+        }
+        if ('Semanarevisada' == $relationName) {
+            $this->initSemanarevisadas();
         }
         if ('Sucursal' == $relationName) {
             $this->initSucursals();
@@ -8403,6 +8454,256 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collSemanarevisadas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addSemanarevisadas()
+     */
+    public function clearSemanarevisadas()
+    {
+        $this->collSemanarevisadas = null; // important to set this to null since that means it is uninitialized
+        $this->collSemanarevisadasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collSemanarevisadas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialSemanarevisadas($v = true)
+    {
+        $this->collSemanarevisadasPartial = $v;
+    }
+
+    /**
+     * Initializes the collSemanarevisadas collection.
+     *
+     * By default this just sets the collSemanarevisadas collection to an empty array (like clearcollSemanarevisadas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initSemanarevisadas($overrideExisting = true)
+    {
+        if (null !== $this->collSemanarevisadas && !$overrideExisting) {
+            return;
+        }
+        $this->collSemanarevisadas = new PropelObjectCollection();
+        $this->collSemanarevisadas->setModel('Semanarevisada');
+    }
+
+    /**
+     * Gets an array of Semanarevisada objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Semanarevisada[] List of Semanarevisada objects
+     * @throws PropelException
+     */
+    public function getSemanarevisadas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collSemanarevisadasPartial && !$this->isNew();
+        if (null === $this->collSemanarevisadas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collSemanarevisadas) {
+                // return empty collection
+                $this->initSemanarevisadas();
+            } else {
+                $collSemanarevisadas = SemanarevisadaQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collSemanarevisadasPartial && count($collSemanarevisadas)) {
+                      $this->initSemanarevisadas(false);
+
+                      foreach ($collSemanarevisadas as $obj) {
+                        if (false == $this->collSemanarevisadas->contains($obj)) {
+                          $this->collSemanarevisadas->append($obj);
+                        }
+                      }
+
+                      $this->collSemanarevisadasPartial = true;
+                    }
+
+                    $collSemanarevisadas->getInternalIterator()->rewind();
+
+                    return $collSemanarevisadas;
+                }
+
+                if ($partial && $this->collSemanarevisadas) {
+                    foreach ($this->collSemanarevisadas as $obj) {
+                        if ($obj->isNew()) {
+                            $collSemanarevisadas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collSemanarevisadas = $collSemanarevisadas;
+                $this->collSemanarevisadasPartial = false;
+            }
+        }
+
+        return $this->collSemanarevisadas;
+    }
+
+    /**
+     * Sets a collection of Semanarevisada objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $semanarevisadas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setSemanarevisadas(PropelCollection $semanarevisadas, PropelPDO $con = null)
+    {
+        $semanarevisadasToDelete = $this->getSemanarevisadas(new Criteria(), $con)->diff($semanarevisadas);
+
+
+        $this->semanarevisadasScheduledForDeletion = $semanarevisadasToDelete;
+
+        foreach ($semanarevisadasToDelete as $semanarevisadaRemoved) {
+            $semanarevisadaRemoved->setEmpresa(null);
+        }
+
+        $this->collSemanarevisadas = null;
+        foreach ($semanarevisadas as $semanarevisada) {
+            $this->addSemanarevisada($semanarevisada);
+        }
+
+        $this->collSemanarevisadas = $semanarevisadas;
+        $this->collSemanarevisadasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Semanarevisada objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Semanarevisada objects.
+     * @throws PropelException
+     */
+    public function countSemanarevisadas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collSemanarevisadasPartial && !$this->isNew();
+        if (null === $this->collSemanarevisadas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collSemanarevisadas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getSemanarevisadas());
+            }
+            $query = SemanarevisadaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collSemanarevisadas);
+    }
+
+    /**
+     * Method called to associate a Semanarevisada object to this object
+     * through the Semanarevisada foreign key attribute.
+     *
+     * @param    Semanarevisada $l Semanarevisada
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addSemanarevisada(Semanarevisada $l)
+    {
+        if ($this->collSemanarevisadas === null) {
+            $this->initSemanarevisadas();
+            $this->collSemanarevisadasPartial = true;
+        }
+
+        if (!in_array($l, $this->collSemanarevisadas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddSemanarevisada($l);
+
+            if ($this->semanarevisadasScheduledForDeletion and $this->semanarevisadasScheduledForDeletion->contains($l)) {
+                $this->semanarevisadasScheduledForDeletion->remove($this->semanarevisadasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Semanarevisada $semanarevisada The semanarevisada object to add.
+     */
+    protected function doAddSemanarevisada($semanarevisada)
+    {
+        $this->collSemanarevisadas[]= $semanarevisada;
+        $semanarevisada->setEmpresa($this);
+    }
+
+    /**
+     * @param	Semanarevisada $semanarevisada The semanarevisada object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeSemanarevisada($semanarevisada)
+    {
+        if ($this->getSemanarevisadas()->contains($semanarevisada)) {
+            $this->collSemanarevisadas->remove($this->collSemanarevisadas->search($semanarevisada));
+            if (null === $this->semanarevisadasScheduledForDeletion) {
+                $this->semanarevisadasScheduledForDeletion = clone $this->collSemanarevisadas;
+                $this->semanarevisadasScheduledForDeletion->clear();
+            }
+            $this->semanarevisadasScheduledForDeletion[]= clone $semanarevisada;
+            $semanarevisada->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Semanarevisadas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Semanarevisada[] List of Semanarevisada objects
+     */
+    public function getSemanarevisadasJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = SemanarevisadaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getSemanarevisadas($query, $con);
+    }
+
+    /**
      * Clears out the collSucursals collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -9562,6 +9863,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collSemanarevisadas) {
+                foreach ($this->collSemanarevisadas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collSucursals) {
                 foreach ($this->collSucursals as $o) {
                     $o->clearAllReferences($deep);
@@ -9666,6 +9972,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collRequisicions->clearIterator();
         }
         $this->collRequisicions = null;
+        if ($this->collSemanarevisadas instanceof PropelCollection) {
+            $this->collSemanarevisadas->clearIterator();
+        }
+        $this->collSemanarevisadas = null;
         if ($this->collSucursals instanceof PropelCollection) {
             $this->collSucursals->clearIterator();
         }
