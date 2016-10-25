@@ -295,7 +295,7 @@ class VentaController extends AbstractActionController {
             //SI EXISTE
             if($exist){
                 $producto = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->findOne();
-               echo '<pre>';var_dump($producto);echo'</pre>';
+               
 
 
                 $type = $producto->getProductoTipo();
@@ -304,8 +304,10 @@ class VentaController extends AbstractActionController {
                     
                     //OBTENEMOS EL ALMACEN DONDE SE DEBE DE REGISTRAR
                     $productosucursalalmacen = \ProductosucursalalmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByIdproducto($producto->getIdproducto())->findOne();
-                    $almacen = $productosucursalalmacen->getAlmacen();
+                    echo '<pre>';var_dump($productosucursalalmacen->toArray());echo'</pre>';
                     
+                    $almacen = $productosucursalalmacen->getAlmacen();
+                    echo '<pre>';var_dump($almacen->toArray());echo'</pre>';
                     $tmp['idproducto'] = $producto->getIdproducto();
                     $tmp['producto'] = $producto->getProductoNombre();
                     $tmp['idalmacen'] = $almacen->getIdalmacen();
