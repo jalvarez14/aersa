@@ -13,6 +13,7 @@ class ProductosasociacionController extends AbstractActionController
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
+        
 
         $productos = \ProductoQuery::create()
                 ->filterByProductoTipo('plu',  \Criteria::EQUAL)
@@ -23,24 +24,25 @@ class ProductosasociacionController extends AbstractActionController
         if($request->isPost())
         {
             $post_data = $request->getPost();
+      
+
             $status = $post_data['status'];
+           
+            $prod = \ProductosucursalalmacenQuery::create()->filterByIdproducto($post_data['id'])->filterByIdsucursal($session['idsucursal'])->find()->delete();
             
+
             foreach ($post_data['id'] as $checked)
             {   
-                
-                $prod = \ProductosucursalalmacenQuery::create()->filterByIdproducto($checked)->findOne();
-                if($prod == null)
-                {
+
                     $prod = new \Productosucursalalmacen();
                     $prod->setIdproducto($checked);
                     $prod->setIdalmacen($status);
                     $prod->setIdempresa($session['idempresa']);
                     $prod->setIdsucursal($session['idsucursal']);
-                }
-                else
-                    $prod->setIdalmacen($status);
-                    
-                $prod->save();
+                   
+
+                    $prod->save();
+                  
             }
             $this->flashMessenger()->addSuccessMessage('Productos guardados satisfactoriamente!');
             return $this->redirect()->toUrl('/catalogo/asociacionproductos');
@@ -55,6 +57,7 @@ class ProductosasociacionController extends AbstractActionController
             'messages' => $this->flashMessenger(),
             'productos' => $productos,
             'almacenes' => $almacenes,
+            'session' => $session,
         ));
         return $view_model;
 

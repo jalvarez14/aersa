@@ -67,7 +67,7 @@
                             
                             <?php
                                  $almacen = \ProductosucursalalmacenQuery::create()
-                                         ->filterByIdproducto($entity->getIdproducto())
+                                         ->filterByIdproducto($entity->getIdproducto())->filterByIdsucursal($session['idsucursal'])
                                          ->findone();
                                  if($almacen != null)
                                  {
