@@ -234,9 +234,7 @@ class VentaController extends AbstractActionController {
     
     public function validateproductexistAction(){
         
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+        
 
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
@@ -295,6 +293,8 @@ class VentaController extends AbstractActionController {
             //SI EXISTE
             if($exist){
                 $producto = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->findOne();
+                echo '<pre>';var_dump($producto->toArray());echo'</pre>';exit();
+
                 $type = $producto->getProductoTipo();
                 //SI EL PRODUCTO ES PLU
                 if($type == 'plu'){
