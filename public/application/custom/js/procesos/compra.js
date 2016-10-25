@@ -1177,6 +1177,8 @@
             var now = new Date(now_array[2]+'/'+now_array[1]+'/'+parseInt(now_array[0]));
             if(now.format('W') != mes || now.getFullYear() != anio){
                 $container.find('input,select,button').attr('disabled',true);
+                $('#generar_pdf').attr('disabled',false);
+                $('#generar_excel').attr('disabled',false);
                 $('.fa-trash').unbind();
                 $('.fa-trash').css('cursor','not-allowed');
                 
@@ -1202,6 +1204,8 @@
                if(revisada == 1){
                    $('form input,form select,form button[type=submit]').attr('disabled',true);
                }
+               $('#generar_pdf').attr('disabled',false);
+               $('#generar_excel').attr('disabled',false);
            }
 
         }
