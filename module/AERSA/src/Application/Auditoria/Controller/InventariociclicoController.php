@@ -398,7 +398,7 @@ class InventariociclicoController extends AbstractActionController {
 
                     $costoPromedio = ($costoPromedio == 0) ? $objproducto->getProductoCosto() : $costoPromedio;
 
-                    $impFis = $stockFisico * $costoPromedio;
+                    $impFis = $totalFisico * $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
                             
                     
