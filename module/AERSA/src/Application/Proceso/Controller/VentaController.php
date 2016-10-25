@@ -234,6 +234,10 @@ class VentaController extends AbstractActionController {
     
     public function validateproductexistAction(){
         
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         

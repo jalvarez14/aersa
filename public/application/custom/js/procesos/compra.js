@@ -930,26 +930,30 @@
                $('select[name=compra_revisada] option[value=1]').remove();
            }
            
-           $('button[type=submit]').on('click',function(e){
-                e.preventDefault();
+           $('a.submit').on('click',function(e){
+               
                 var folio = $('input[name=compra_folio]').val();
-                $('input[name=compra_folio]').removeClass('valid');
-                $.ajax({
-                    url: "/procesos/compra/validatefolio",
-                    dataType: "json",
-                    data: {folio:folio,idproveedor:$('input[name=idproveedor]').val()},
-                    success: function (exist) {
-                       
-                        if(exist){
-                            alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
-                            $('input[name=compra_folio]').val('');
-                        }else{
-                            $('input[name=compra_folio]').addClass('valid');
-                            $container.find('form').submit();
-                        }
-                        
-                    },
-                });
+                 if(folio !== ""){ 
+                    $('input[name=compra_folio]').removeClass('valid');
+                    $.ajax({
+                        url: "/procesos/compra/validatefolio",
+                        dataType: "json",
+                        data: {folio:folio,idproveedor:$('input[name=idproveedor]').val()},
+                        success: function (exist) {
+
+                            if(exist){
+                                alert('El folio "'+folio+'" ya fue utilizado en los últimos 2 meses');
+                                $('input[name=compra_folio]').val('');
+                            }else{
+                                $('input[name=compra_folio]').addClass('valid');
+                                $container.find('button[type=submit]').trigger('click');
+                            }
+
+                        },
+                    });
+                }else{
+                    $container.find('button[type=submit]').trigger('click');
+                }
                
            });
            

@@ -69,11 +69,17 @@
                             } else {
                                 $comprobante = 'N/D';
                             }
+                            $proveedor_nombre = 'N/D';
+                            $asigmar_proveedor_flag = true;
+                            if($entity->getIdproveedor() != 0){
+                                $asigmar_proveedor_flag = false;
+                                $proveedor_nombre = $entity->getProveedor()->getProveedorNombrecomercial();
+                            } 
                             ?>
                             <tr date="<?php echo $entity->getCompraFechacompra('Y/m/d') ?>" id="<?php echo $entity->getIdcompra() ?>">
                                 <td><?php echo $entity->getCompraFechacompra('d/m/Y') ?></td>
                                 <td><?php echo $entity->getCompraFolio()?></td>
-                                <td><?php echo $entity->getProveedor()->getProveedorNombrecomercial() ?></td>
+                                <td><?php echo $proveedor_nombre ?></td>
                                 <td><span class="label label-sm label-<?php echo $class_compra?>"> <?php echo $compra ?> </span></td>
                                 <td><?php echo money_format('%+#1.6n',$entity->getCompraTotal()) ?></td>
                                 <td><?php echo $comprobante?></td>
@@ -92,10 +98,12 @@
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
+                                            <?php if($asigmar_proveedor_flag) :?>
                                             <li>
                                                 <a href="javascript:;" class="proveedor_modal">
                                                 <i class="fa fa-plus"></i> Agregar proveedor </a>
                                             </li>
+                                            <?php endif;?>
                                         </ul>
                                     </div>
                                 </td>

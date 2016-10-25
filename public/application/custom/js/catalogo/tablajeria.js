@@ -84,7 +84,8 @@
                 display: 'value',
                 hint: true,
                 highlight: true,
-                source: bestPictures
+                source: bestPictures,
+                limit:100,
             });
 
             $('input[name=idproducto_autocomplete]').bind('typeahead:select', function (ev, suggestion) {
@@ -98,7 +99,8 @@
                 display: 'value',
                 hint: true,
                 highlight: true,
-                source: data
+                source: data,
+                limit:100,
             });
 
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
@@ -157,7 +159,8 @@
                 display: 'value',
                 hint: true,
                 highlight: true,
-                source: bestPictures
+                source: bestPictures,
+                limit:100,
             });
 
             $('input[name=idproducto_autocomplete]').bind('typeahead:select', function (ev, suggestion) {
@@ -171,7 +174,8 @@
                 display: 'value',
                 hint: true,
                 highlight: true,
-                source: data
+                source: data,
+                limit:100,
             });
 
             $('input#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
