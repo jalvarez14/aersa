@@ -181,7 +181,7 @@
                                 
                                 function nextAjax(){
 
-                                    if(count < numRequests){
+                                    if(count <= numRequests){
                                         
                                         var subtotal = parseFloat(parseFloat(ventas_array[count].subtotal).toFixed(6));
                                         var cantidad = parseFloat(parseFloat(ventas_array[count].cantidad).toFixed(6));
