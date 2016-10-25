@@ -287,18 +287,16 @@ class VentaController extends AbstractActionController {
             $producto_cantidad = $post_data['producto_cantidad'];
             $producto_subtotal = $post_data['producto_subtotal'];
             $producto_preciounitario = $producto_subtotal / $producto_cantidad;
-            echo '<pre>';var_dump($producto_nombe);echo'</pre>';
-            echo '<pre>';var_dump($producto_cantidad);echo'</pre>';
-            echo '<pre>';var_dump($producto_subtotal);echo'</pre>';
-            echo '<pre>';var_dump($producto_preciounitario);echo'</pre>';
+            
 
             //VALIDAMOS SI EXISTE EL PRODUCTO
             $exist = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->exists();
-          
+            
             //SI EXISTE
             if($exist){
                 $producto = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->findOne();
-               
+               echo '<pre>';var_dump($producto);echo'</pre>';
+
 
                 $type = $producto->getProductoTipo();
                 //SI EL PRODUCTO ES PLU
