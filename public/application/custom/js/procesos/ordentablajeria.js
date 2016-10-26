@@ -137,9 +137,7 @@
             var pesobruto = ($('input[name=ordentablajeria_numeroporciones]').val() != "") ? parseFloat(parseFloat($('input[name=ordentablajeria_numeroporciones]').val()).toFixed(6)) : 0;
             var inyeccion = ($('input[name=ordentablajeria_inyeccion]').val() != "") ? parseFloat(parseFloat($('input[name=ordentablajeria_inyeccion]').val()).toFixed(6)) : 0;
             var pesoneto =  parseFloat(parseFloat($('#peso_total').text()).toFixed(6));
-            console.log(pesobruto);
-            console.log(inyeccion);
-            console.log(pesoneto);
+
             var mermatotal = (pesobruto + inyeccion) - pesoneto;
             var porcaprovechamiento = pesoneto / (pesobruto + inyeccion);
             var peciokilo = accounting.unformat($('input[name=ordentablajeria_preciokilo]').val());

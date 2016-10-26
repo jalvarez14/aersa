@@ -39,7 +39,7 @@ class TablajeriaController extends AbstractActionController {
         $session = $session->getData();
 
         $search = $this->params()->fromQuery('q');
-        $query = \ProductoQuery::create()->filterByIdunidadmedida(array(3,5))->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0)->find();
+        $query = \ProductoQuery::create()->filterByIdunidadmedida(array(3,5))->filterByProductoTipo('simple')->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0)->find();
         
         
         $array = array();

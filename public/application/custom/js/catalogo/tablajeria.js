@@ -65,7 +65,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: '/autocomplete/getproductos?q=%QUERY',
+                    url: '/autocomplete/getproductos?q=%QUERY&type=simple',
                     wildcard: '%QUERY'
                 }
             });
@@ -74,7 +74,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                    url: '/autocomplete/getproductos?q=%QUERY',
+                    url: '/autocomplete/getproductos?q=%QUERY&type=simple',
                     wildcard: '%QUERY'
                 }
             });
