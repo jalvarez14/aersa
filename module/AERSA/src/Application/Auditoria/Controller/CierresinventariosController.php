@@ -375,10 +375,11 @@ class CierresinventariosController extends AbstractActionController {
                                 $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
                                 $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
                                 $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
-                                $dif = $stockFisico - $stockTeorico;
                                 $explosion=$arrayReporte[$idpr][$exp] + ($cant * $stockFisico);
                                 $arrayReporte[$idpr][$exp] = $explosion;
                                 $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico']=$explosion+$stockFisico;
+                                $totalFisico=$arrayReporte[$idpr]['inventariomesdetalle_totalfisico'];
+                                $dif =$totalFisico - abs($stockTeorico);
                                 $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
                                 $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
                                 $difImporte = $dif * $costoPromedio;
@@ -411,11 +412,8 @@ class CierresinventariosController extends AbstractActionController {
                     } else {
                         $costoPromedio = $objproducto->getProductoCosto();
                     }
-                    $difImporte = $dif * $costoPromedio;
-                    if (0 < $difImporte)
-                        $sobrante+=$difImporte;
-                    else
-                        $faltante+=$difImporte;
+                    
+                    
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
 
@@ -425,10 +423,11 @@ class CierresinventariosController extends AbstractActionController {
 
                     $impFis = $totalFisico * $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
-                            
-                    
-                    
-                    
+                    $difImporte = $dif * $costoPromedio;
+                    if (0 < $difImporte)
+                        $sobrante+=$difImporte;
+                    else
+                        $faltante+=$difImporte;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
                         $falim+=$impFis;
