@@ -941,7 +941,7 @@ return array(
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:type]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Proceso\Controller\Compra',
                                                 'action' => 'editar',
