@@ -216,7 +216,7 @@ class NotacreditoController extends AbstractActionController {
                     $type = $type[1];
 
                     $target_path = "/application/files/devoluciones/";
-                    $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
+                    $target_path = $target_path . 'devolucion_' . $entity->getIdnotacredito() . '.' . $type;
 
                     if (move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
                         $entity->setNotacreditoFactura($target_path);
