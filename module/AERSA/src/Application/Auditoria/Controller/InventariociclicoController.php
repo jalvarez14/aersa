@@ -162,6 +162,7 @@ class InventariociclicoController extends AbstractActionController {
 
             $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->find();
 
+            
             $reporte = array();
             $arrayReporte = array();
             $sobrante = 0;
@@ -311,7 +312,7 @@ class InventariociclicoController extends AbstractActionController {
                             $devolucion+=$objdevoluciondetalle->getDevoluciondetalleCantidad();
                         }
                     }
-
+                    
                     $ajusteSob=0;
                     $ajusteSobObjs= \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->filterByIdproducto($objproducto->getIdproducto())->filterByAjusteinventarioTipo('sobrante')->find();
                     $ajusteSobObj=new \Ajusteinventario();
@@ -352,10 +353,10 @@ class InventariociclicoController extends AbstractActionController {
                                 $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                 $explosion=$arrayReporte[$idpr][$exp] + ($cant * $stockFisico);
                                 $arrayReporte[$idpr][$exp] = $explosion;
-                                $arrayReporte[$idpr]['inventariomesdetalle_totalfisico']=$explosion+$stockFisico;
+                                $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico']=$explosion+$stockFisico;
                                 $totalFisico=$arrayReporte[$idpr]['inventariomesdetalle_totalfisico'];
                                 $dif =$totalFisico - abs($stockTeorico);
-                                $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif
+                                $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
                                 $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
                                 $difImporte = $dif * $costoPromedio;
                                 if (0 < $arrayReporte[$idpr]['inventariomesdetalle_difimporte'])
@@ -387,11 +388,8 @@ class InventariociclicoController extends AbstractActionController {
                     } else {
                         $costoPromedio = $objproducto->getProductoCosto();
                     }
-                    $difImporte = $dif * $costoPromedio;
-                    if (0 < $difImporte)
-                        $sobrante+=$difImporte;
-                    else
-                        $faltante+=$difImporte;
+                    
+                    
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
 
@@ -401,10 +399,11 @@ class InventariociclicoController extends AbstractActionController {
 
                     $impFis = $totalFisico * $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
-                            
-                    
-                    
-                    
+                    $difImporte = $dif * $costoPromedio;
+                    if (0 < $difImporte)
+                        $sobrante+=$difImporte;
+                    else
+                        $faltante+=$difImporte;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
                         $falim+=$impFis;

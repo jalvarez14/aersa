@@ -412,11 +412,8 @@ class CierresinventariosController extends AbstractActionController {
                     } else {
                         $costoPromedio = $objproducto->getProductoCosto();
                     }
-                    $difImporte = $dif * $costoPromedio;
-                    if (0 < $difImporte)
-                        $sobrante+=$difImporte;
-                    else
-                        $faltante+=$difImporte;
+                    
+                    
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
 
@@ -426,10 +423,11 @@ class CierresinventariosController extends AbstractActionController {
 
                     $impFis = $totalFisico * $costoPromedio;
                     //$stockFisico = ($stockFisico == 0) ? "0" : $stockFisico;
-                            
-                    
-                    
-                    
+                    $difImporte = $dif * $costoPromedio;
+                    if (0 < $difImporte)
+                        $sobrante+=$difImporte;
+                    else
+                        $faltante+=$difImporte;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
                     if ($cat == 1)
                         $falim+=$impFis;
