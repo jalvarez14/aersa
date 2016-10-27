@@ -85,6 +85,7 @@ class AjustesinventariosController extends AbstractActionController {
             $ajusteinventario = \AjusteinventarioQuery::create()->findPk($id);
             if ($request->isPost()) {
                 $post_data = $request->getPost();
+                $post_data["ajusteinventario_fecha"] = date_create_from_format('d/m/Y', $post_data["ajusteinventario_fecha"]);
                 foreach ($post_data as $key => $value) {
                     if (\AjusteinventarioPeer::getTableMap()->hasColumn($key))
                         $ajusteinventario->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
