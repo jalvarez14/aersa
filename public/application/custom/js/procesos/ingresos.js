@@ -281,8 +281,8 @@
              $container.find('input[name*=total]').on('blur',function(){
                  
                  var total = $(this).val();
-                 var iva = (total * settings.iva) / 100
-                 var subtotal = total - iva;
+                 var subtotal = subtotal= total/(1+ (settings.iva/100));
+                 var iva = total- subtotal;
                  
                  var $tr = $(this).closest('tr');
                

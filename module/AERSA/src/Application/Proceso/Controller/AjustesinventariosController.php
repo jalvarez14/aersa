@@ -25,6 +25,7 @@ class AjustesinventariosController extends AbstractActionController {
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
+            'idrol' => $session['idrol'],
         ));
         return $view_model;
     }
@@ -68,6 +69,7 @@ class AjustesinventariosController extends AbstractActionController {
             'messages' => $this->flashMessenger(),
             'anio_activo' => $anio_activo,
             'mes_activo' => $mes_activo,
+            'idrol' => $session['idrol'],
         ));
         $view_model->setTemplate('/application/proceso/ajusteinventario/nuevo');
         return $view_model;
@@ -115,6 +117,7 @@ class AjustesinventariosController extends AbstractActionController {
                 'anio_activo' => $anio_activo,
                 'mes_activo' => $mes_activo,
                 'producto_nombre' => $producto_nombre,
+                'idrol' => $session['idrol'],
             ));
             return $view_model;
         } else {
