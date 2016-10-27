@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Proceso\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -169,7 +170,7 @@ class NotacreditoController extends AbstractActionController {
 
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
-
+        $type = $this->params()->fromRoute('type');
         //VERIFICAMOS SI EXISTE
         $exist = \NotacreditoQuery::create()->filterByIdnotacredito($id)->exists();
 
@@ -181,10 +182,70 @@ class NotacreditoController extends AbstractActionController {
 
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \NotacreditoQuery::create()->findPk($id);
+            if ($type != NULL) {
+                $fecha=$entity->getNotacreditoFechacreacion('d/m/Y');
+                $folio=$entity->getNotacreditoFolio();
+                $alm=$entity->getAlmacen()->getAlmacenNombre();
+                $creado=$entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();
+                $proveedor=$entity->getProveedor()->getProveedorNombrecomercial();
+                $factura=($entity->getNotacreditoFactura()!=NULL) ? "Si" : "No";
+                $rev=($entity->getNotacreditoRevisada()==1) ? "Si" : "No";
+                $auditor=($entity->getIdauditor()!=NULL) ? $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre(): "";
+                $nota=array('fecha'=>$fecha,'folio'=>$folio,'alm'=>$alm,'creado'=>$creado,'proveedor'=>$proveedor,'factura'=>$factura,'rev'=>$rev,'auditor'=>$auditor);
+                $col = array();
+                $notadetallesobj = \NotacreditodetalleQuery::create()->filterByIdnotacredito($id)->find();
+                $notadetalleobj = new \Notacreditodetalle();
+                array_push($col, array('uno' => 'Producto', 'dos' => 'Unidad', 'tres' => 'Cantidad', 'cuatro' => 'Precio','cinco' => 'C.U. Neto', 'seis' => 'Desc. (%)', 'siete' => 'IEPS (%)','ocho'=>'Subtotal','nueve'=>'Revisada','diez'=>'Almacen'));
+                foreach ($notadetallesobj as $notadetalleobj) {
+                    $prod=$notadetalleobj->getProducto()->getProductoNombre();
+                    $unidad=$notadetalleobj->getProducto()->getUnidadmedida()->getUnidadmedidaNombre();
+                    $cant=$notadetalleobj->getNotacreditodetalleCantidad();
+                    $prec=$notadetalleobj->getNotacreditodetalleCostounitario();
+                    $cuneto=$notadetalleobj->getNotacreditodetalleCostounitarioneto();
+                    $desc=$notadetalleobj->getNotacreditodetalleDescuento();
+                    $ieps=$notadetalleobj->getNotacreditodetalleIeps();
+                    $subt=$notadetalleobj->getNotacreditodetalleSubtotal();
+                    $rev=($notadetalleobj->getNotacreditodetalleRevisada()==1) ? "Si" : "No";
+                    $alm=$notadetalleobj->getAlmacen()->getAlmacenNombre();
+                    array_push($col, array('uno' => $prod, 'dos' => $unidad, 'tres' => $cant, 'cuatro' => $prec,'cinco' => $cuneto, 'seis' => $desc, 'siete' => $ieps,'ocho'=>$subt,'nueve'=>$rev,'diez'=>$alm));
+                }
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($session['idempresa'])->getEmpresaNombrecomercial();
+                $nombreSucursal = \SucursalQuery::create()->findPk($session['idsucursal'])->getSucursalNombre();
 
+                $template = '/notacredito.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal),
+                    ),
+                    array(
+                        'id' => 'nota',
+                        'data' => $nota,
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $col,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if ($type == 'pdf')
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+                exit();
+            }
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) {
-
+                
                 $post_data = $request->getPost();
                 $post_files = $request->getFiles();
 

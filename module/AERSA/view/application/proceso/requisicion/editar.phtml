@@ -185,10 +185,20 @@
                 </div>
             </div>
             <div class="form-actions right">
-                <button class="btn blue" id="requisicion_save" type="submit">
-                    <i class="fa fa-check"></i>
-                    Guardar
-                </button>
+                <div class="left col-md-2">
+                    <div class="left col-md-2">
+                        <a href="<?php echo $form->get('idrequisicion')->getValue() ?>/pdf" class="btn blue" role="button"><i class="fa fa-file-pdf-o"></i>PDF</a>
+                    </div>
+                    </div>
+                    <div class="left col-md-2">
+                        <div class="left col-md-2">
+                            <a href="<?php echo $form->get('idrequisicion')->getValue() ?>/excel" class="btn blue" role="button"><i class="fa fa-file-excel-o"></i>Excel</a>
+                        </div>
+                    </div>
+                    <button class="btn blue" id="requisicion_save" type="submit">
+                        <i class="fa fa-check"></i>
+                        Guardar
+                    </button>
             </div>
         </div>
     </div>
