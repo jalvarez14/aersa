@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Proceso\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -175,7 +176,7 @@ class RequisicionController extends AbstractActionController {
         $request = $this->getRequest();
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
-
+        $type = $this->params()->fromRoute('type');
         //VERIFICAMOS SI EXISTE
         $exist = \RequisicionQuery::create()->filterByIdrequisicion($id)->exists();
 
@@ -187,6 +188,67 @@ class RequisicionController extends AbstractActionController {
             $mes_activo = $sucursal->getSucursalMesactivo();
             $entity = \RequisicionQuery::create()->findPk($id);
             //SI NOS ENVIAN UNA PETICION POST
+            if ($type != NULL) {
+                $fecha = $entity->getRequisicionFecha('d/m/Y');
+                $sucorg = $entity->getSucursalRelatedByIdsucursalorigen()->getSucursalNombre();
+                $sucdes = $entity->getSucursalRelatedByIdsucursaldestino()->getSucursalNombre();
+                $consal = $entity->getConceptosalida()->getConceptosalidaNombre();
+                $creado = $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();
+                $folio = $entity->getRequisicionFolio();
+                $almorg = $entity->getAlmacenRelatedByIdalmacenorigen()->getAlmacenNombre();
+                $almdes = $entity->getAlmacenRelatedByIdalmacendestino()->getAlmacenNombre();
+                $revision = ($entity->getRequisicionRevisada() == 1) ? "Si" : "No";
+                $auditor = ($entity->getIdauditor() != NULL) ? $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre() : "";
+                $total = $entity->getRequisicionTotal();
+                $requisicion = array('fecha' => $fecha, 'sucorg' => $sucorg, 'sucdes' => $sucdes, 'consal' => $consal, 'creado' => $creado, 'folio' => $folio, 'almorg' => $almorg, 'almdes' => $almdes, 'revision' => $revision, 'auditor' => $auditor, 'total' => $total);
+                $col = array();
+                $requisicionesdetallesobj = \RequisiciondetalleQuery::create()->filterByIdrequisicion($id)->find();
+                $requisiciondetalleobj = new \Requisiciondetalle();
+                array_push($col, array('uno' => 'Tipo', 'dos' => 'Producto', 'tres' => 'Unidad', 'cuatro' => 'Cantidad', 'cinco' => 'Precio unitario', 'seis' => 'Subtotal', 'siete' => 'Revisada'));
+                foreach ($requisicionesdetallesobj as $requisiciondetalleobj) {
+                    $tipo = $requisiciondetalleobj->getProducto()->getProductoTipo();
+                    $prod = $requisiciondetalleobj->getProducto()->getProductoNombre();
+                    $unidad = $requisiciondetalleobj->getProducto()->getUnidadmedida()->getUnidadmedidaNombre();
+                    $cantidad = $requisiciondetalleobj->getRequisiciondetalleCantidad();
+                    $preciou = $requisiciondetalleobj->getRequisiciondetallePreciounitario();
+                    $subtotal = $requisiciondetalleobj->getRequisiciondetalleSubtotal();
+                    $rev = ($requisiciondetalleobj->getRequisiciondetalleRevisada() == 1) ? "Si" : "No";
+                    array_push($col, array('uno' => $tipo, 'dos' => $prod, 'tres' => $unidad, 'cuatro' => $cantidad, 'cinco' => $preciou, 'seis' => $subtotal, 'siete' => $rev));
+                }
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($session['idempresa'])->getEmpresaNombrecomercial();
+                $nombreSucursal = \SucursalQuery::create()->findPk($session['idsucursal'])->getSucursalNombre();
+
+                $template = '/requisiciones.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal),
+                    ),
+                    array(
+                        'id' => 'requisicion',
+                        'data' => $requisicion,
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $col,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if ($type == 'pdf')
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+                exit();
+            }
             if ($request->isPost()) {
                 $post_data = $request->getPost();
                 $post_data["requisicion_fecha"] = date_create_from_format('d/m/Y', $post_data["requisicion_fecha"]);
@@ -296,7 +358,7 @@ class RequisicionController extends AbstractActionController {
                 $almacen_origen = $entity->getIdalmacenorigen();
                 $almacen_destino = $entity->getIdalmacendestino();
                 $concepto_salida = $entity->getIdconceptosalida();
-                $distinto_origen=0;
+                $distinto_origen = 0;
                 $view_model = new ViewModel();
                 $view_model->setTemplate('/application/proceso/requisicion/editar');
                 $view_model->setVariables(array(
@@ -321,7 +383,7 @@ class RequisicionController extends AbstractActionController {
                 $almacen_origen = $entity->getAlmacenRelatedByIdalmacenorigen()->getAlmacenNombre();
                 $almacen_destino = $entity->getAlmacenRelatedByIdalmacendestino()->getAlmacenNombre();
                 $concepto_salida = $entity->getConceptosalida()->getConceptosalidaNombre();
-                
+
                 $almacen_array = array();
                 $sucursaldes_array = array();
                 $concepto_array = array();
@@ -348,7 +410,7 @@ class RequisicionController extends AbstractActionController {
                 $almacen_origen = $entity->getAlmacenRelatedByIdalmacenorigen()->getAlmacenNombre();
                 $almacen_destino = $entity->getAlmacenRelatedByIdalmacendestino()->getAlmacenNombre();
                 $concepto_salida = $entity->getConceptosalida()->getConceptosalidaNombre();
-                $distinto_origen=1;
+                $distinto_origen = 1;
                 $view_model = new ViewModel();
                 $view_model->setTemplate('/application/proceso/requisicion/editar');
                 $view_model->setVariables(array(

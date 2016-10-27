@@ -1043,7 +1043,7 @@ return array(
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:type]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Proceso\Controller\Requisicion',
                                                 'action' => 'editar',
@@ -1248,7 +1248,7 @@ return array(
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:type]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Proceso\Controller\Notacredito',
                                                 'action' => 'editar',
