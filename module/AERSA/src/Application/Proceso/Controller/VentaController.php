@@ -57,8 +57,9 @@ class VentaController extends AbstractActionController {
             
             $almacen = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
             $almacen_array = \Shared\GeneralFunctions::collectionToSelectArray($almacen, 'idalmacen', 'almacen_nombre');
+            $habilitar_unidad = \ProductoQuery::create()->filterByIdproducto($entity->getIdproducto())->filterByProductoTipo(array('plu','subreceta'))->filterByIdcategoria(2)->exists();
             
-            return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $entity_array, 'almacenes' => $almacen_array)));
+            return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $entity_array, 'almacenes' => $almacen_array,'habilitar_unidad' => $habilitar_unidad)));
         }
         
     }
@@ -286,7 +287,11 @@ class VentaController extends AbstractActionController {
             $producto_nombe = $post_data['producto_nombre'];
             $producto_cantidad = $post_data['producto_cantidad'];
             $producto_subtotal = $post_data['producto_subtotal'];
-            $producto_preciounitario = $producto_subtotal / $producto_cantidad;
+            $producto_preciounitario = 0;
+            if($producto_cantidad != 0){
+                $producto_preciounitario = $producto_subtotal / $producto_cantidad;
+            }
+            
             
 
             //VALIDAMOS SI EXISTE EL PRODUCTO

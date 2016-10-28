@@ -288,15 +288,15 @@
                                                                             '<div class="form-group">',
                                                                                 '<label for="producto_baja">Baja *</label>',
                                                                                 '<select required class="form-control" name="producto_baja">',
-                                                                                    '<option value="1">Si</option>',
                                                                                     '<option value="0">No</option>',
+                                                                                    '<option value="1">Si</option>',
                                                                                 '</select>',
                                                                             '</div>',
                                                                         '</div>',
                                                                         '<div class="col-md-6" id="rendimiento_container" style="display:none">',
                                                                             '<div class="form-group">',
-                                                                                '<label for="producto_rendimiento">Rendimiento *</label>',
-                                                                                '<input class="form-control" type="text">',
+                                                                                '<label for="producto_rendimiento">Rendimiento normalizado *</label>',
+                                                                                '<input name="producto_rendimiento" class="form-control" type="text">',
                                                                             '</div>',
                                                                         '</div>',
                                                                     '</div>',
@@ -332,10 +332,10 @@
                                                                 
                                                                 if(idcat == 2){
                                                                     $modal.find('#rendimiento_container').show();
-                                                                    $modal.find('#input[name=producto_rendimiento]').prop('required',true);
+                                                                    $modal.find('input[name=producto_rendimiento]').prop('required',true);
                                                                 }else{
                                                                     $modal.find('#rendimiento_container').hide();
-                                                                    $modal.find('#input[name=producto_rendimiento]').prop('required',false);
+                                                                    $modal.find('input[name=producto_rendimiento]').prop('required',false);
                                                                 }
                                                             }
 
@@ -385,29 +385,37 @@
                                                                                     '<div class="col-md-6">',
                                                                                         '<h4>Subreceta</h4>',
                                                                                     '</div>',
-                                                                                    '<div class="col-md-3 col-md-offset-5">',
+                                                                                '</div>',
+                                                                                '<div class="row" id="subreceta_inputs">',
+                                                                                    '<div class="col-md-6">',
                                                                                         '<label for="producto_rendimiento">Producto *</label>',
                                                                                         '<div class="input-group">',
                                                                                             '<span class="input-group-addon">',
                                                                                                 '<i class="fa fa-search"></i>',
                                                                                             '</span>',   
                                                                                             '<input id="idproducto" type="hidden">',
+                                                                                            '<input id="productoreceta_rendimiento" type="hidden">',   
                                                                                             '<input id="producto_autocomplete" class="form-control" type="text">',
                                                                                         '</div>',
                                                                                     '</div>',
-                                                                                    '<div class="col-md-2">',
+                                                                                    '<div class="col-md-6">',
                                                                                         '<div class="form-group">',
                                                                                              '<label for="producto_rendimiento">Cantidad *</label>',
-                                                                                             '<input disabled name="producto_cantidad" type="text" class="form-control">',
+                                                                                             '<input disabled name="receta_cantidadoriginal" type="text" class="form-control">',
                                                                                         '</div>',
                                                                                     '</div>',
-                                                                                    '<div class="col-md-1">',
-                                                                                       '<a id="producto_add" class="btn blue" href="javascript:;" style="top: 24px;">Agregar</a>',
+                                                                                 '</div>',
+                                                                                 '<div class="row">',
+                                                                                    '<div class="col-md-4 col-md-offset-8">',
+                                                                                          '<a id="producto_add" class="btn blue" href="javascript:;" style="float: right">Agregar</a>',
                                                                                     '</div>',
+                                                                                '</div>',
+                                                                                '<div class="row">',
                                                                                     '<div class="col-md-12">',
                                                                                         '<table class="table table-striped table-hover order-column" id="datatable" style="border-bottom-width: 0px;">',
                                                                                             '<thead>',
                                                                                                 '<th> Producto </th>',
+                                                                                      
                                                                                                 '<th> Cantidad </th>',
                                                                                                 '<th> Opciones </th>',
                                                                                             '</thead>',
@@ -415,11 +423,64 @@
                                                                                             '</tbody>',
                                                                                         '</table>',
                                                                                     '</div>',
-                                                                                '<div>',
-                                                                                
-                                                                                
+                                                                                '</div>',
+                                                                               
                                                                             ].join('');
                                                                             $modal.find('.modal-body').append(tmpl);
+                                                                            if(data2.habilitar_unidad){
+                                                                      
+                                                                                tmpl2 = [
+                                                                                    '<div class="col-md-6">',
+                                                                                        '<div class="form-group">',
+                                                                                             '<label for="receta_unidad">Unidad *</label>',
+                                                                                             '<select name="receta_unidad" required="required" class="form-control">',
+                                                                                                '<option value="Botella">Botella</option>',
+                                                                                                '<option value="Pieza">Pieza</option>',
+                                                                                                '<option value="Onza">Onza</option>',
+                                                                                                '<option value="Copa vino 187.5 ML">Copa vino 187.5 ML</option>',
+                                                                                                '<option value="Copa vino 150 ML">Copa vino 150 ML</option>',
+                                                                                            '</select>',
+                                                                                        '</div>',
+                                                                                    '</div>',
+                                                                                    '<div class="col-md-6">',
+                                                                                        '<div class="form-group">',
+                                                                                             '<label for="receta_cantidad">Cantidad normalizada *</label>',
+                                                                                             '<input name="receta_cantidad" readonly="readonly" class="form-control" value="" type="text">',
+                                                                                        '</div>',
+                                                                                    '</div>'
+                                                                                ].join(''); 
+                                                                                $modal.find('.modal-body #subreceta_inputs').append(tmpl2);
+                                                                                
+                                                                                var producto_rendimiento = data2.data.producto_rendimiento;
+                                                                                var factor = 1;
+                                                                                
+                                                                                $modal.find("[name=receta_cantidadoriginal],select[name=receta_unidad]").on('change', function () {
+
+                                                                                        producto_rendimiento = $modal.find('#productoreceta_rendimiento').val();
+                                                                                        var unidad = $modal.find('select[name=receta_unidad] option:selected').val();
+                                                                                        if (unidad == "Onza") {
+                                                                                            factor = 29.574;
+                                                                                        } else if (unidad == "Copa vino 187.5 ML") {
+                                                                                            factor = 187.5;
+                                                                                        } else if (unidad == "Copa vino 150 ML") {
+                                                                                            factor = 150;
+                                                                                        }
+                                                                                        var cantidad = $modal.find("[name=receta_cantidadoriginal]").val();
+                                                                                        if (unidad == "Pieza" || unidad == "Botella") {
+                                                                                            var cantidad_normalizada = (cantidad * factor);
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            var cantidad_normalizada = (cantidad * factor) / producto_rendimiento;
+                                                                                        }
+
+                                                                                    
+                                                                                    $modal.find('[name=receta_cantidad]').val(cantidad_normalizada.toFixed(6));
+                                                                                });
+
+                                                                            }
+                                                                            
+
                                                                             $.each(data2.almacenes,function(index){
                                                                                 var option = $('<option value="'+index+'">'+this+'</option>');
                                                                                 $modal.find('select[name=idalmacen]').append(option);
@@ -429,7 +490,8 @@
                                                                                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                                                                                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                                                                                 remote: {
-                                                                                    url: '/autocomplete/getproductos?q=%QUERY',
+                                                                                    url: '/autocomplete/getproductosreceta?q=%QUERY&idproducto='+data2.data.idproducto,
+                                                                                    
                                                                                     wildcard: '%QUERY'
                                                                                 }
                                                                             });
@@ -444,8 +506,9 @@
                                                                             $modal.find('input[name=producto_cantidad]').numeric();
                                                                             $modal.find('#producto_autocomplete').bind('typeahead:select', function (ev, suggestion) {
                                                                                 $modal.find('#producto_add').attr('disabled', false);
-                                                                                $modal.find('input[name=producto_cantidad]').attr('disabled', false);
+                                                                                $modal.find('input[name=receta_cantidadoriginal]').attr('disabled', false);
                                                                                 $modal.find('input#idproducto').val(suggestion.id);
+                                                                                $modal.find('input#productoreceta_rendimiento').val(suggestion.producto_rendimiento);
                                                                             });
                                                                             var count2 = 0;
                                                                             $modal.find('#producto_add').on('click',function(){
@@ -465,8 +528,8 @@
                                                                                 if(!empty){
                                                                                 
                                                                                     var $tr = $('<tr>');
-                                                                                    $tr.append('<td><input type="hidden" name=subreceta['+count2+'][cantidad] value="'+$modal.find('input[name=producto_cantidad]').val()+'"><input type="hidden" name=subreceta['+count2+'][idproducto] value="'+$modal.find('#idproducto').val()+'">'+$modal.find('#producto_autocomplete').val()+'</td>');
-                                                                                    $tr.append('<td>'+$modal.find('input[name=producto_cantidad]').val()+'</td>');
+                                                                                    $tr.append('<td><input type="hidden" name=subreceta['+count2+'][cantidad] value="'+$modal.find('input[name=receta_cantidadoriginal]').val()+'"><input type="hidden" name=subreceta['+count2+'][idproducto] value="'+$modal.find('#idproducto').val()+'">'+$modal.find('#producto_autocomplete').val()+'</td>');
+                                                                                    $tr.append('<td>'+$modal.find('input[name=receta_cantidadoriginal]').val()+'</td>');
                                                                                     $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                                                                                     
                                                                                     $tr.find('i.fa-trash').on('click',function(){
