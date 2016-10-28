@@ -1,13 +1,6 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
-
 namespace Application\Proceso\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -184,7 +177,7 @@ class ConsignacionController extends AbstractActionController {
 
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
-       
+        $type = $this->params()->fromRoute('type');  
         //VERIFICAMOS SI EXISTE
         $exist = \CompraQuery::create()->filterByIdcompra($id)->exists();
         
@@ -199,6 +192,83 @@ class ConsignacionController extends AbstractActionController {
             $entity = \CompraQuery::create()->findPk($id);
             
             //SI NOS ENVIAN UNA PETICION POST
+            if ($type != NULL) {
+                $fecha = $entity->getCompraFechacompra('d/m/Y');
+                $proveedor = $entity->getProveedor()->getProveedorNombrecomercial();
+                $fechaentrega = $entity->getCompraFechaentrega();
+                $almacen = $entity->getAlmacen()->getAlmacenNombre();
+                $creado = $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();
+                $tipo = $entity->getCompraTipo();
+                $folio = $entity->getCompraFolio();
+                $factura = ($entity->getCompraFactura() != NULL) ? "Si" : "No";
+                $revision = ($entity->getCompraRevisada() == 1) ? "Si" : "No";
+                $auditor = ($entity->getIdauditor()!=NULL) ? $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre() : "";
+                $compra = array('fecha' => $fecha, 'proveedor' => $proveedor, 'fechaentrega' => $fechaentrega, 'almacen' => $almacen, 'creado' => $creado, 'tipo' => $tipo, 'folio' => $folio, 'factura' => $factura, 'revision' => $revision, 'auditor' => $auditor);
+                
+                $col = array();
+                $comprasdetallesobj=  \CompradetalleQuery::create()->filterByIdcompra($id)->find();
+                $compradetalleobj=  new \Compradetalle();
+                array_push($col, array('uno'=>'Producto','dos'=>'Unidad','tres'=>'Cantidad','cuatro'=>'Precio','cinco'=>'C.U.Neto','seis'=>'Des. %','siete'=>'IEPS %','ocho'=>'Subtotal','nueve'=>'Revisada','diez'=>'Almacen'));
+                foreach ($comprasdetallesobj as $compradetalleobj) {
+                    $prod=$compradetalleobj->getProducto()->getProductoNombre();
+                    $unid=$compradetalleobj->getProducto()->getUnidadmedida()->getUnidadmedidaNombre();
+                    $cant=$compradetalleobj->getCompradetalleCantidad();
+                    $prec=$compradetalleobj->getCompradetallePrecio();
+                    $cuneto=$compradetalleobj->getCompradetalleCostounitarioneto();
+                    $desc=$compradetalleobj->getCompradetalleDescuento();
+                    $ieps=$compradetalleobj->getCompradetalleIeps();
+                    $subtotal=$compradetalleobj->getCompradetalleSubtotal();
+                    $rev=($compradetalleobj->getCompradetalleRevisada()==1) ? "Si": "No";
+                    $alm=$compradetalleobj->getAlmacen()->getAlmacenNombre();
+                    array_push($col, array('uno'=>$prod,'dos'=>$unid,'tres'=>$cant,'cuatro'=>$prec,'cinco'=>$cuneto,'seis'=>$desc,'siete'=>$ieps,'ocho'=>$subtotal,'nueve'=>$rev,'diez'=>$alm));
+                }
+                $subtotal_c=$entity->getCompraSubtotal();
+                $ieps_c=$entity->getCompraIeps();
+                $iva_c=$entity->getCompraIva();
+                $total_c=$entity->getCompraTotal();
+                $costo=array('sub'=>$subtotal_c,'ieps'=>$ieps_c,'iva'=>$iva_c,'total'=>$total_c);
+                
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($session['idempresa'])->getEmpresaNombrecomercial();
+                $nombreSucursal = \SucursalQuery::create()->findPk($session['idsucursal'])->getSucursalNombre();
+                    
+                $template = '/consignacion.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal),
+                    ),
+                    array(
+                        'id' => 'compra',
+                        'data' => $compra,
+                    ),
+                    array(
+                        'id' => 'costo',
+                        'repeat' => true,
+                        'data' => $costo,
+                    )
+                    ,
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $col,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if ($type=='pdf')
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+                exit();
+            }
+            
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();
