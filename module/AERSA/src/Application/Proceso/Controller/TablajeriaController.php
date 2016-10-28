@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Proceso\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -190,7 +191,7 @@ class TablajeriaController extends AbstractActionController {
 
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
-
+        $type = $this->params()->fromRoute('type');
         //VERIFICAMOS SI EXISTE
         $exist = \OrdentablajeriaQuery::create()->filterByIdordentablajeria($id)->exists();
 
@@ -204,6 +205,82 @@ class TablajeriaController extends AbstractActionController {
             $entity = \OrdentablajeriaQuery::create()->findPk($id);
 
             //SI NOS ENVIAN UNA PETICION POST
+            if ($type != NULL) {
+                $fecha = $entity->getOrdentablajeriaFecha('d/m/Y');
+                $folio= $entity->getOrdentablajeriaFolio();
+                $producto= $entity->getProducto()->getProductoNombre();
+                $pesobruto=$entity->getOrdentablajeriaPesobruto()."  ".$entity->getOrdentablajeriaNumeroporciones();
+                $preciokilo=$entity->getOrdentablajeriaPreciokilo();
+                $totalbruto=$entity->getOrdentablajeriaTotalbruto();
+                $inye=$entity->getOrdentablajeriaInyeccion();
+                $almorg=$entity->getAlmacenRelatedByIdalmacenorigen()->getAlmacenNombre();
+                $almdes=$entity->getAlmacenRelatedByIdalmacendestino()->getAlmacenNombre();
+                $creado=$entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();
+                $auditor=($entity->getIdauditor()!=NULL) ? $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre() : "";
+                $orden=array('fecha'=>$fecha,'folio'=>$folio,'producto'=>$producto,'pesobruto'=>$pesobruto,'precio'=>$preciokilo,'totalbruto'=>$totalbruto,'almorg'=>$almorg,'inyeccion'=>$inye,'almdes'=>$almdes,'creado'=>$creado,'auditor'=>$auditor,'total'=>$totalbruto);
+                
+                $pesoneto=$entity->getOrdentablajeriaPesoneto();
+                $precioneto=$entity->getOrdentablajeriaPrecioneto();
+                $mermatotal=$entity->getOrdentablajeriaMerma();
+                $porcmerma=$entity->getOrdentablajeriaPorcentajemerma();
+                $porcapro=$entity->getOrdentablajeriaAprovechamiento();
+                $rev=($entity->getOrdentablajeriaRevisada()==1) ? "Si":"No";
+                
+                $tablajeado=array('pesoneto'=>$pesoneto,'precioneto'=>$precioneto,'mermatot'=>$mermatotal,'pormerma'=>$porcmerma,'porcapr'=>$porcapro,'revisada'=>$rev);
+                
+                $col = array();
+                $ordentablajeriasobj = \OrdentablajeriadetalleQuery::create()->filterByIdordentablajeria($id)->find();
+                $ordentablajeriaobj = new \Ordentablajeriadetalle();
+                array_push($col, array('uno' => 'Producto','dos' => 'Cantidad', 'tres' => 'Unidad medida','cuatro' => 'Peso porción (Kilos)', 'cinco' =>'Peso total', 'seis' => 'Precio porción', 'siete' => 'Importe','ocho' => 'Revisada'));
+                foreach ($ordentablajeriasobj as $ordentablajeriaobj) {
+                    $prod=$ordentablajeriaobj->getProducto()->getProductoNombre();
+                    $cantidad=$ordentablajeriaobj->getOrdentablajeriadetalleCantidad();
+                    $unidad=$ordentablajeriaobj->getProducto()->getUnidadmedida()->getUnidadmedidaNombre();
+                    $pesopor=$ordentablajeriaobj->getOrdentablajeriadetallePesoporcion();
+                    $pesotot=$ordentablajeriaobj->getOrdentablajeriadetallePesototal();
+                    $precioporc=$ordentablajeriaobj->getOrdentablajeriadetallePrecioporcion();
+                    $import=$ordentablajeriaobj->getOrdentablajeriadetalleSubtotal();
+                    $rev = ($ordentablajeriaobj->getOrdentablajeriadetalleRevisada() == 1) ? "Si" : "No";
+                    array_push($col, array('uno' => $prod,'dos' => $cantidad, 'tres' => $unidad,'cuatro' => $pesopor, 'cinco' =>$pesotot, 'seis' => $precioporc, 'siete' => $import,'ocho' => $rev));
+                }
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($session['idempresa'])->getEmpresaNombrecomercial();
+                $nombreSucursal = \SucursalQuery::create()->findPk($session['idsucursal'])->getSucursalNombre();
+
+                $template = '/ordentablajeria.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal),
+                    ),
+                    array(
+                        'id' => 'ordentab',
+                        'data' => $orden,
+                    ),
+                    array(
+                        'id' => 'tablajeado',
+                        'data' => $tablajeado,
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $col,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if ($type == 'pdf')
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+                exit();
+            }
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();

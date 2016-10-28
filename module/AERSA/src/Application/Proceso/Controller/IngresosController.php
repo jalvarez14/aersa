@@ -1,13 +1,6 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
-
 namespace Application\Proceso\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -182,7 +175,7 @@ class IngresosController extends AbstractActionController {
         
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
-        
+        $type = $this->params()->fromRoute('type');
         //VERIFICAMOS SI EXISTE
         $exist = \IngresoQuery::create()->filterByIdingreso($id)->exists();
         
@@ -195,6 +188,95 @@ class IngresosController extends AbstractActionController {
             
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \IngresoQuery::create()->findPk($id);
+            if ($type != NULL) {
+                
+                $fecha = $entity->getIngresoFecha('d/m/Y');
+                $folio= $entity->getIngresoFolio();
+                $rev=($entity->getIngresoRevisada()==1)? "Si" : "No";
+                $creado=$entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();
+                $auditor=($entity->getIdauditor()!=NULL) ? $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre() : "";
+                
+                $ingreso=array('fecha'=>$fecha,'folio'=>$folio,'rev'=>$rev,'creado'=>$creado,'auditor'=>$auditor);
+                
+                $col = array();
+                $ingresodetallesobj = \IngresodetalleQuery::create()->filterByIdingreso($id)->filterByIdrubroingreso(1)->orderByIdconceptoingreso('asc')->find();
+                $ingresodetalleobj = new \Ingresodetalle();
+                array_push($col, array('uno' => 'Conceptos','dos' => 'Subtotal', 'tres' => 'IVA','cuatro' => 'Total', 'cinco' =>'Revisada'));
+                array_push($col, array('uno' => 'Alimentos','dos' => '', 'tres' => '','cuatro' => '', 'cinco' =>''));
+                foreach ($ingresodetallesobj as $ingresodetalleobj) {
+                    $concepto=$ingresodetalleobj->getConceptoingreso()->getConceptoingresoNombre();
+                    $subtotal=$ingresodetalleobj->getIngresodetalleSub();
+                    $iva=$ingresodetalleobj->getIngresodetalleIva();
+                    $total=$ingresodetalleobj->getIngresodetalleTotal();
+                    $rev = ($ingresodetalleobj->getIngresodetalleRevisada() == 1) ? "Si" : "No";
+                    array_push($col, array('uno' => $concepto,'dos' => $subtotal, 'tres' => $iva,'cuatro' => $total, 'cinco' =>$rev));
+                }
+                
+                $ingresodetallesobj = \IngresodetalleQuery::create()->filterByIdingreso($id)->filterByIdrubroingreso(2)->orderByIdconceptoingreso('asc')->find();
+                $ingresodetalleobj = new \Ingresodetalle();
+                array_push($col, array('uno' => 'Bebidas','dos' => '', 'tres' => '','cuatro' => '', 'cinco' =>''));
+                foreach ($ingresodetallesobj as $ingresodetalleobj) {
+                    $concepto=$ingresodetalleobj->getConceptoingreso()->getConceptoingresoNombre();
+                    $subtotal=$ingresodetalleobj->getIngresodetalleSub();
+                    $iva=$ingresodetalleobj->getIngresodetalleIva();
+                    $total=$ingresodetalleobj->getIngresodetalleTotal();
+                    $rev = ($ingresodetalleobj->getIngresodetalleRevisada() == 1) ? "Si" : "No";
+                    array_push($col, array('uno' => $concepto,'dos' => $subtotal, 'tres' => $iva,'cuatro' => $total, 'cinco' =>$rev));
+                }
+                
+                $ingresodetallesobj = \IngresodetalleQuery::create()->filterByIdingreso($id)->filterByIdrubroingreso(3)->orderByIdconceptoingreso('asc')->find();
+                $ingresodetalleobj = new \Ingresodetalle();
+                array_push($col, array('uno' => 'Miscelanea','dos' => '', 'tres' => '','cuatro' => '', 'cinco' =>''));
+                foreach ($ingresodetallesobj as $ingresodetalleobj) {
+                    $concepto=$ingresodetalleobj->getConceptoingreso()->getConceptoingresoNombre();
+                    $subtotal=$ingresodetalleobj->getIngresodetalleSub();
+                    $iva=$ingresodetalleobj->getIngresodetalleIva();
+                    $total=$ingresodetalleobj->getIngresodetalleTotal();
+                    $rev = ($ingresodetalleobj->getIngresodetalleRevisada() == 1) ? "Si" : "No";
+                    array_push($col, array('uno' => $concepto,'dos' => $subtotal, 'tres' => $iva,'cuatro' => $total, 'cinco' =>$rev));
+                }
+                
+                $total_alm=$entity->getIngresoTotalalimento();
+                $total_beb=$entity->getIngresoTotalbebida();
+                $total_mis=$entity->getIngresoTotalmiscelanea();
+                array_push($col, array('uno' => 'Total alimento','dos' => $total_alm, 'tres' => '','cuatro' => '', 'cinco' =>''));
+                array_push($col, array('uno' => 'Total bebidas','dos' => $total_beb, 'tres' => '','cuatro' => '', 'cinco' =>''));
+                array_push($col, array('uno' => 'Total miscelanea','dos' => $total_mis, 'tres' => '','cuatro' => '', 'cinco' =>''));
+                
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($session['idempresa'])->getEmpresaNombrecomercial();
+                $nombreSucursal = \SucursalQuery::create()->findPk($session['idsucursal'])->getSucursalNombre();
+
+                $template = '/ingresos.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal),
+                    ),
+                    array(
+                        'id' => 'ing',
+                        'data' => $ingreso,
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $col,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if ($type == 'pdf')
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+                exit();
+            }
             
              if ($request->isPost()){
                  

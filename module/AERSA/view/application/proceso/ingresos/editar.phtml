@@ -150,6 +150,14 @@
                 </div>
             </div>
             <div class="form-actions right">
+                    <div class="left col-md-2">
+                        <a href="<?php echo $form->get('idingreso')->getValue() ?>/pdf" class="btn blue" role="button"><i class="fa fa-file-pdf-o"></i>PDF</a>
+                    </div>
+                    <div class="left col-md-2">
+                        <div class="left col-md-2">
+                            <a href="<?php echo $form->get('idingreso')->getValue() ?>/excel" class="btn blue" role="button"><i class="fa fa-file-excel-o"></i>Excel</a>
+                        </div>
+                    </div>
                     <button class="btn blue" type="submit">
                         <i class="fa fa-check"></i>
                         Guardar

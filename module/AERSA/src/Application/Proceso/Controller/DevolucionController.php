@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\Proceso\Controller;
+include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -168,7 +169,7 @@ class DevolucionController extends AbstractActionController {
 
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
-
+        $type = $this->params()->fromRoute('type');
         //VERIFICAMOS SI EXISTE
         $exist = \DevolucionQuery::create()->filterByIddevolucion($id)->exists();
 
@@ -182,6 +183,81 @@ class DevolucionController extends AbstractActionController {
             $entity = \DevolucionQuery::create()->findPk($id);
 
             //SI NOS ENVIAN UNA PETICION POST
+            if ($type != NULL) {
+                
+                $fecha = $entity->getDevolucionFechadevolucion('d/m/Y');
+                $provee=$entity->getProveedor()->getProveedorNombrecomercial();
+                $folio= $entity->getDevolucionFolio();
+                $factura=($entity->getDevolucionFactura()!=NULL) ? "Si" : "No";
+                $alm=$entity->getAlmacen()->getAlmacenNombre();
+                $rev=($entity->getDevolucionRevisada()==1)? "Si" : "No";
+                $creado=$entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();
+                $auditor=($entity->getIdauditor()!=NULL) ? $entity->getUsuarioRelatedByIdauditor()->getUsuarioNombre() : "";
+                
+                $dev=array('fecha'=>$fecha,'proveedor'=>$provee,'folio'=>$folio,'factura'=>$factura,'alm'=>$alm,'rev'=>$rev,'creado'=>$creado,'auditor'=>$auditor,'total'=>$totalbruto);
+                
+                $subtotal=$entity->getDevolucionSubtotal();
+                $iepse=$entity->getDevolucionIeps();
+                $iva=$entity->getDevolucionIva();
+                $total=$entity->getDevolucionTotal();
+                
+                $totalArray=array('sub'=>$subtotal,'ieps'=>$iepse,'iva'=>$iva,'total'=>$total);
+                $col = array();
+                $devdetallesobj = \DevoluciondetalleQuery::create()->filterByIddevolucion($id)->find();
+                $devdetalleobj = new \Devoluciondetalle();
+                array_push($col, array('uno' => 'Producto','dos' => 'Unidad', 'tres' => 'Cantidad','cuatro' => 'Precio', 'cinco' =>'C.U. Neto','seis' => 'Desc. (%)', 'siete' => 'IEPS (%)','ocho' => 'Subtotal','nueve' => 'Revisada','diez' => 'Almacen'));
+                
+                foreach ($devdetallesobj as $devdetalleobj) {
+                    $prod=$devdetalleobj->getProducto()->getProductoNombre();
+                    $unidad=$devdetalleobj->getProducto()->getUnidadmedida()->getUnidadmedidaNombre();
+                    $cantidad=$devdetalleobj->getDevoluciondetalleCantidad();
+                    $precio=$devdetalleobj->getDevoluciondetalleCostounitario();
+                    $cuneto=$devdetalleobj->getDevoluciondetalleCostounitarioneto();
+                    $desc=$devdetalleobj->getDevoluciondetalleDescuento();
+                    $ieps=$devdetalleobj->getDevoluciondetalleIeps();
+                    $subtot=$devdetalleobj->getDevoluciondetalleSubtotal();
+                    $rev = ($devdetalleobj->getDevoluciondetalleRevisada() == 1) ? "Si" : "No";
+                    $almd=$devdetalleobj->getAlmacen()->getAlmacenNombre();
+                    array_push($col, array('uno' => $prod,'dos' => $unidad, 'tres' => $cantidad,'cuatro' => $precio, 'cinco' =>$cuneto, 'seis' => $desc, 'siete' => $ieps,'ocho' => $subtot,'nueve' => $rev,'diez' => $almd));
+                }
+                $nombreEmpresa = \EmpresaQuery::create()->findPk($session['idempresa'])->getEmpresaNombrecomercial();
+                $nombreSucursal = \SucursalQuery::create()->findPk($session['idsucursal'])->getSucursalNombre();
+
+                $template = '/devolucion.xlsx';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                
+                $config = array(
+                    'template' => $template,
+                    'templateDir' => $templateDir
+                );
+                $R = new \PHPReport($config);
+                $R->load(array(
+                    array(
+                        'id' => 'compania',
+                        'data' => array('nombre' => $nombreEmpresa, 'sucursal' => $nombreSucursal),
+                    ),
+                    array(
+                        'id' => 'dev',
+                        'data' => $dev,
+                    ),
+                    array(
+                        'id' => 'total',
+                        'data' => $totalArray,
+                    ),
+                    array(
+                        'id' => 'col',
+                        'repeat' => true,
+                        'data' => $col,
+                        'minRows' => 2,
+                    )
+                        )
+                );
+                if ($type == 'pdf')
+                    echo $R->render('PDF');
+                else
+                    echo $R->render('excel');
+                exit();
+            }
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();

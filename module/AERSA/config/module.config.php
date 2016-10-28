@@ -992,7 +992,7 @@ return array(
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:type]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Proceso\Controller\Consignacion',
                                                 'action' => 'editar',
@@ -1144,7 +1144,7 @@ return array(
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:type]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Proceso\Controller\Devolucion',
                                                 'action' => 'editar',
@@ -1197,7 +1197,7 @@ return array(
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:type]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Proceso\Controller\Ingresos',
                                                 'action' => 'editar',
@@ -1413,7 +1413,7 @@ return array(
                                     'editar' => array(
                                         'type' => 'Segment',
                                         'options' => array(
-                                            'route' => '/editar[/:id]',
+                                            'route' => '/editar[/:id][/:type]',
                                             'defaults' => array(
                                                 'controller' => 'Application\Proceso\Controller\Tablajeria',
                                                 'action' => 'editar',

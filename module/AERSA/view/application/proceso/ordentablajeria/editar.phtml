@@ -243,7 +243,6 @@
                         </tbody>
                         <tfoot>
                             <tr>
-         
                                 <td colspan="4">Total</td>
                                 <td style="padding-left: 8px;" colspan="2" id="peso_total">0</td>
                                 <td colspan="4" style="padding-left: 8px;" id="importe_total">$0.00</td>
@@ -255,6 +254,14 @@
                 
             </div>
             <div class="form-actions right">
+                <div class="left col-md-2">
+                    <a href="<?php echo $form->get('idordentablajeria')->getValue() ?>/pdf" class="btn blue" role="button"><i class="fa fa-file-pdf-o"></i>PDF</a>
+                </div>
+                <div class="left col-md-2">
+                    <div class="left col-md-2">
+                        <a href="<?php echo $form->get('idordentablajeria')->getValue() ?>/excel" class="btn blue" role="button"><i class="fa fa-file-excel-o"></i>Excel</a>
+                    </div>
+                </div>
                 <button class="btn blue" id="btnSubmit" type="submit">
                     <i class="fa fa-check"></i>
                     Guardar
