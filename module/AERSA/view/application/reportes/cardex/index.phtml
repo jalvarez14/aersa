@@ -34,7 +34,7 @@
                         <?php $almacen=new Almacen();foreach ($almacenes as $almacen):?>
                         <div class="col-md-3">
                             <label>
-                                <input id="<?php echo $almacen->getIdalmacen();?>" name="gen-<?php echo $almacen->getIdalmacen()?>" value="<?php echo ucfirst($almacen->getAlmacenNombre())?>" type="checkbox" class="icheck generado"> <?php echo ucfirst($almacen->getAlmacenNombre())?>
+                                <input id="<?php echo $almacen->getIdalmacen();?>" name="gen" value="<?php echo ucfirst($almacen->getAlmacenNombre())?>" type="radio" class="icheck generado"> <?php echo ucfirst($almacen->getAlmacenNombre())?>
                             </label>
                         </div>
                         <?php endforeach;?>
