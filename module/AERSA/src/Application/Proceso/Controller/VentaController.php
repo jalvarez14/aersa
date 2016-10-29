@@ -96,7 +96,9 @@ class VentaController extends AbstractActionController {
                     $receta = new \Receta();
                     $receta->setIdproducto($post_data['idproducto'])
                            ->setIdproductoreceta($detalle['idproducto'])
-                           ->setRecetaCantidad($detalle['cantidad'])
+                           ->setRecetaCantidad($detalle['receta_cantidad'])
+                           ->setRecetaCantidadoriginal($detalle['receta_cantidadoriginal'])
+                           ->setRecetaUnidad($detalle['receta_unidad'])
                            ->save();
                 }
                 

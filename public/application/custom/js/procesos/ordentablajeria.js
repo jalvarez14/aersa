@@ -501,8 +501,7 @@
             });
             
             revisadaControl();
-            
-            
+
             //VALIDAR FOLIO
            $('input[name=ordentablajeria_folio]').on('blur',function(){
                 var folio = $(this).val();
@@ -524,6 +523,30 @@
                     },
                 });
                          
+           });
+           
+           
+           $('a.submit').on('click',function(e){
+                
+                var inyeccion = ($('input[name=ordentablajeria_inyeccion]').val() != "") ? parseFloat($('input[name=ordentablajeria_inyeccion]').val()) :0;
+                inyeccion = parseFloat(inyeccion);
+                var pesobruto = parseFloat($('input[name=ordentablajeria_numeroporciones]').val());
+                pesobruto = parseFloat(pesobruto);
+                pesobruto = pesobruto + inyeccion;
+                pesobruto = parseFloat(parseFloat(pesobruto).toFixed(6));
+                var pesoneto = parseFloat(parseFloat($('input[name=ordentablajeria_pesoneto]').val()).toFixed(6));
+                
+                console.log(pesobruto);
+                console.log(pesoneto);
+                console.log(Math.abs(pesobruto - pesoneto));
+                console.log(Math.abs(pesobruto*.02));
+                if(parseFloat(parseFloat(Math.abs((pesobruto - pesoneto))).toFixed(6)) <= Math.abs(pesobruto*.02)){
+                    //$container.find('button[type=submit]').trigger('click');
+                }else{
+                    alert("Diferencia mayor al 2% entre el Peso bruto y la diferencia de kilos");
+                }
+                
+               
            });
     
         }

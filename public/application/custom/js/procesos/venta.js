@@ -213,6 +213,8 @@
                                                                         '<div class="col-md-6">',
                                                                             '<div class="form-group">',
                                                                                 '<label for="producto_nombre">Nombre del producto *</label>',
+                                                                                '<input name="producto_rendimiento" required type="hidden" value="1">>',
+                                                                                '<input name="producto_rendimientooriginal" required type="hidden" value="1">',
                                                                                 '<input required class="form-control" type="text" name="producto_nombre" value="'+data.data.producto+'" readonly>',
                                                                             '</div>',
                                                                         '</div>',
@@ -296,7 +298,7 @@
                                                                         '<div class="col-md-6" id="rendimiento_container" style="display:none">',
                                                                             '<div class="form-group">',
                                                                                 '<label for="producto_rendimiento">Rendimiento normalizado *</label>',
-                                                                                '<input name="producto_rendimiento" class="form-control" type="text">',
+                                                                                
                                                                             '</div>',
                                                                         '</div>',
                                                                     '</div>',
@@ -526,9 +528,16 @@
                                                                                 
                                                                               
                                                                                 if(!empty){
-                                                                                
+                                                                                    
+                                                                                    var receta_cantidad =  $modal.find('input[name=receta_cantidad]').val();
+                                                                                    
+                                                                                    if(data2.data.idcategoria != 2){
+                                                                                        var receta_cantidadoriginal = $modal.find('input[name=receta_cantidadoriginal]').val();
+                                                                                        receta_cantidad = receta_cantidadoriginal;
+                                                                                    }
+                                                                                    
                                                                                     var $tr = $('<tr>');
-                                                                                    $tr.append('<td><input type="hidden" name=subreceta['+count2+'][cantidad] value="'+$modal.find('input[name=receta_cantidadoriginal]').val()+'"><input type="hidden" name=subreceta['+count2+'][idproducto] value="'+$modal.find('#idproducto').val()+'">'+$modal.find('#producto_autocomplete').val()+'</td>');
+                                                                                    $tr.append('<td><input type="hidden" name=subreceta['+count2+'][receta_unidad] value="'+$modal.find('select[name=receta_unidad] option:selected').val()+'"><input type="hidden" name=subreceta['+count2+'][receta_cantidad] value="'+receta_cantidad+'"><input type="hidden" name=subreceta['+count2+'][receta_cantidadoriginal] value="'+$modal.find('input[name=receta_cantidadoriginal]').val()+'"><input type="hidden" name=subreceta['+count2+'][idproducto] value="'+$modal.find('#idproducto').val()+'">'+$modal.find('#producto_autocomplete').val()+'</td>');
                                                                                     $tr.append('<td>'+$modal.find('input[name=receta_cantidadoriginal]').val()+'</td>');
                                                                                     $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                                                                                     

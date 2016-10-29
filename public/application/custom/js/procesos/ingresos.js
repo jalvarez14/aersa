@@ -296,24 +296,39 @@
                  
                  //ALIMENTOS
                  var total_alimentos = 0.00;
-                 $container.find('table#alimentos input[name*=total]:visible').filter(function(){
-                     total_alimentos =  total_alimentos + parseFloat(parseFloat($(this).val()).toFixed(6));
+                 $container.find('table#alimentos input[name*=total]:visible').filter(function(index){
+                     if(index == 0){
+                        total_alimentos =  total_alimentos + parseFloat(parseFloat($(this).val()).toFixed(6));
+                     }else{
+                         total_alimentos =  total_alimentos - parseFloat(parseFloat($(this).val()).toFixed(6));
+                     }
+                     
                  });
                  $container.find('input[name=ingreso_totalalimento]').val(total_alimentos);
                  $container.find('p#total_alimentos').text(accounting.formatMoney(total_alimentos));
                  
                  //BEBIDAS
                  var total_bebidas = 0.00;
-                 $container.find('table#bebidas input[name*=total]:visible').filter(function(){
-                     total_bebidas =  total_bebidas + parseFloat(parseFloat($(this).val()).toFixed(6));
+                 $container.find('table#bebidas input[name*=total]:visible').filter(function(index){
+                    
+                     if(index == 0){
+                        total_bebidas =  total_bebidas + parseFloat(parseFloat($(this).val()).toFixed(6));
+                     }else{
+                         total_bebidas =  total_bebidas - parseFloat(parseFloat($(this).val()).toFixed(6));
+                     }
                  });
                  $container.find('input[name=ingreso_totalbebida]').val(total_bebidas);
                  $container.find('p#total_bebidas').text(accounting.formatMoney(total_bebidas));
                  
                  //MISCELANIA
                  var total_miscelanea = 0.00;
-                 $container.find('table#miscelanea input[name*=total]:visible').filter(function(){
+                 $container.find('table#miscelanea input[name*=total]:visible').filter(function(index){
                      total_miscelanea =  total_miscelanea + parseFloat(parseFloat($(this).val()).toFixed(6));
+                     if(index == 0){
+                        total_miscelanea =  total_miscelanea + parseFloat(parseFloat($(this).val()).toFixed(6));
+                     }else{
+                         total_miscelanea =  total_miscelanea - parseFloat(parseFloat($(this).val()).toFixed(6));
+                     }
                  });
                  $container.find('input[name=ingreso_totalmiscelanea]').val(total_miscelanea);
                  $container.find('p#total_miscelanea').text(accounting.formatMoney(total_miscelanea));
