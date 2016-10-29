@@ -482,6 +482,17 @@ class ReportesController extends AbstractActionController {
                     array_push($idproductos, $ordentablajeriadetalle->getIdproducto());
             }
         }
+        
+        $invsmes= \InventariomesQuery::create()->filterByInventariomesFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacen($idAlmacen)->find();
+        $invmes = new \Inventariomes();
+        foreach ($invsmes as $invmes) {
+            $invmesdetalles = \InventariomesdetalleQuery::create()->filterByIdinventariomes($invmes->getIdinventariomes())->find();
+            $invmesdetalle = new \Inventariomesdetalle();
+            foreach ($invmesdetalles as $invmesdetalle) {
+                if (!in_array($invmesdetalle->getIdproducto(), $idproductos))
+                    array_push($idproductos, $invmesdetalle->getIdproducto());
+            }
+        }
 
         return $idproductos;
     }
