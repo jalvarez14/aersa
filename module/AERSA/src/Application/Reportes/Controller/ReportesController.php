@@ -489,8 +489,12 @@ class ReportesController extends AbstractActionController {
             $invmesdetalles = \InventariomesdetalleQuery::create()->filterByIdinventariomes($invmes->getIdinventariomes())->find();
             $invmesdetalle = new \Inventariomesdetalle();
             foreach ($invmesdetalles as $invmesdetalle) {
-                if (!in_array($invmesdetalle->getIdproducto(), $idproductos))
-                    array_push($idproductos, $invmesdetalle->getIdproducto());
+                if($invmesdetalle->getInventariomesdetalleTotalfisico() > 0){
+                     if (!in_array($invmesdetalle->getIdproducto(), $idproductos)){
+                        array_push($idproductos, $invmesdetalle->getIdproducto());
+                     }
+                }
+               
             }
         }
 
