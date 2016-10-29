@@ -323,7 +323,7 @@
                  //MISCELANIA
                  var total_miscelanea = 0.00;
                  $container.find('table#miscelanea input[name*=total]:visible').filter(function(index){
-                     total_miscelanea =  total_miscelanea + parseFloat(parseFloat($(this).val()).toFixed(6));
+                     //total_miscelanea =  total_miscelanea + parseFloat(parseFloat($(this).val()).toFixed(6));
                      if(index == 0){
                         total_miscelanea =  total_miscelanea + parseFloat(parseFloat($(this).val()).toFixed(6));
                      }else{
