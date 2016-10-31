@@ -541,7 +541,7 @@
                 console.log(Math.abs(pesobruto - pesoneto));
                 console.log(Math.abs(pesobruto*.02));
                 if(parseFloat(parseFloat(Math.abs((pesobruto - pesoneto))).toFixed(6)) <= Math.abs(pesobruto*.02)){
-                    //$container.find('button[type=submit]').trigger('click');
+                    $container.find('button[type=submit]').trigger('click');
                 }else{
                     alert("Diferencia mayor al 2% entre el Peso bruto y la diferencia de kilos");
                 }
