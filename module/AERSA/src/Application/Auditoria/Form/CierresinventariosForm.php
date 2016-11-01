@@ -6,7 +6,7 @@ use Zend\Form\Form;
 
 class CierresinventariosForm extends Form {
     
-    public function __construct($fecha,$almacen_array = array(),$auditor_array = array()) {
+    public function __construct($almacen_array = array(),$auditor_array = array()) {
         
         parent::__construct('cierresinventariosForm');
         
@@ -25,26 +25,16 @@ class CierresinventariosForm extends Form {
         ));
         
         $this->add(array(
-           'name'  => 'inventariomes_fecha',
-            'type' => 'Hidden',
-            'attributes' => array(
-                'required' => false,
-                'value' => $fecha,
-            ),
-        ));
-        
-        $this->add(array(
-            'name' => 'fecha',
-            'type' => 'Text',
+            'name' => 'inventariomes_fecha',
+            'type' => 'Date',
             'attributes' => array(
                 'required' => true,
                 'class' => 'form-control',
-                'disabled' => true,
-                'value' => $fecha,
             ),
             'options' => array(
-                'label' => 'Fecha',
-            ),
+                'pattern' => '\d{1,2}/\d{1,2}/\d{4}',
+                'label' => 'Fecha *'
+            )
         ));
         
         $this->add(array(
