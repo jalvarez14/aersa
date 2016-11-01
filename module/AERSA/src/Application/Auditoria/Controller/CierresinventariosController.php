@@ -64,12 +64,14 @@ class CierresinventariosController extends AbstractActionController {
             $idauditor = $post_data['idauditor'];
             $post_data['idempresa'] = $idempresa;
             $post_data['idsucursal'] = $idsucursal;
+            $post_data["inventariomes_fecha"] = date_create_from_format('d/m/Y', $post_data["inventariomes_fecha"]);
             $inventariocierremes = new \Inventariomes();
             foreach ($post_data as $key => $value) {
                 if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
                     $inventariocierremes->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                 }
             }
+            
             $otroinventariocierremes = \InventariomesQuery::create()
                     ->filterByIdalmacen($inventariocierremes->getIdalmacen())
                     ->filterByIdsucursal($inventariocierremes->getIdsucursal())
@@ -83,7 +85,7 @@ class CierresinventariosController extends AbstractActionController {
                         ->findOne();
                 $otroinventariocierremes->delete();
             }
-
+            
             $inventariocierremes->save();
             foreach ($post_data['reporte'] as $reporte) {
                 $inventariocierremes_detalle = new \Inventariomesdetalle();
@@ -112,12 +114,25 @@ class CierresinventariosController extends AbstractActionController {
         $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
         $time += 6 * 24 * 3600;
         $fecha = date('Y-m-d', $time);
-        $form = new \Application\Auditoria\Form\CierresinventariosForm($fecha, $almacen_array, $auditor_array);
+        
+        $ts = strtotime("now");
+        $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
+        //dia inicio de semana date('Y-m-d',$start);
+        $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+        $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+        $time = strtotime("1 January $anio_act", time());
+        $day = date('w', $time);
+        $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+        $time += 6 * 24 * 3600;
+        $fecha = date('Y-m-d', $time);
+        
+        $form = new \Application\Auditoria\Form\CierresinventariosForm($almacen_array, $auditor_array);
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/auditoria/cierresinventarios/nuevo');
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
+            'fecha'=>$fecha,
         ));
         return $view_model;
     }
@@ -546,7 +561,12 @@ array_push
             $con = true;
             if ($nombre == "")
                 $con = false;
-            return $this->getResponse()->setContent(json_encode($con));
+            $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($id)->exists();
+            $fecha=null;
+            if ($inventario_anterior)
+                $fecha = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('desc')->findOne()->getInventariomesFecha('Y-m-d');
+            $resp=array('con' => $con,'fecha'=>$fecha);
+            return $this->getResponse()->setContent(json_encode($resp));
         }
     }
 

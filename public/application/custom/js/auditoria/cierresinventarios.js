@@ -46,6 +46,28 @@
         /*
          * Private methods
          */
+        
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '<Ant',
+            nextText: 'Sig>',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+        $(function () {
+            $("#fecha").datepicker();
+        });
 
         function to_json(workbook) {
             var result = {};
@@ -217,7 +239,22 @@
             });
         }
 
-        plugin.new = function () {
+        plugin.new = function (str) {
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            container.find('input[name=inventariomes_fecha]').attr('disabled', true);
+            container.find('input[name=inventariomes_fecha]').keydown(false);
+            var res = str.split("-");
+            container.find('input[name=inventariomes_fecha]').datepicker({
+                format: 'dd/mm/yyyy',
+                maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
+                beforeShowDay: function (date) {
+                    var a = new Array();
+                    a[0] = date.getDay() == 0;
+                    a[1] = '';
+                    a[2] = '';
+                    return a;
+                }
+            });
             
             $('#batch_inventario_b').attr('disabled', true);
             $('select[name=idalmacen]').on('change', function () {
@@ -231,11 +268,20 @@
                         dataType: "json",
                         data: {id: id},
                         success: function (data) {
-                            if(data){
+                            if(data['con']){
                                 $('#batch_inventario_b').attr('disabled', false);
                             } else {
                                 $('#batch_inventario_b').attr('disabled', true);
                                 alert("Almacen sin encargado");
+                            }
+                            if(data['fecha']!=null) {
+                                var res = data['fecha'].split("-");
+                                container.find('input[name=inventariomes_fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
+                                container.find('input[name=inventariomes_fecha]').attr('disabled', false);
+                            } else {
+                                container.find('input[name=inventariomes_fecha]').attr('disabled', true);
+                                $('#batch_inventario_b').attr('disabled', true);
+                                container.find('input[name=inventariomes_fecha]').val('');
                             }
                         },
                     });
