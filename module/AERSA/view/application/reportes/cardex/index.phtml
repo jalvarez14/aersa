@@ -16,18 +16,6 @@
     <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
         <div class="portlet-body form">
             <div class="form-body">
-                <br>
-                <div class="row">
-                    <div class="col-md-6">
-                        <?php echo $this->formLabel($form->get('fecha_inicio')) ?>  
-                        <?php echo $this->formDate($form->get('fecha_inicio')) ?> 
-                    </div>
-                    <div class="col-md-6">
-                        <?php echo $this->formLabel($form->get('fecha_fin')) ?>  
-                        <?php echo $this->formDate($form->get('fecha_fin')) ?> 
-                    </div>
-                </div>
-                <br>
                 <h3 class="form-section">Almacenes *</h3><br>
                 <div class="row">
                     <div class="icheck-list">
@@ -38,6 +26,18 @@
                             </label>
                         </div>
                         <?php endforeach;?>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <h3 class="form-section"></h3><br>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('fecha_inicio')) ?>  
+                        <?php echo $this->formDate($form->get('fecha_inicio')) ?> 
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('fecha_fin')) ?>  
+                        <?php echo $this->formDate($form->get('fecha_fin')) ?> 
                     </div>
                 </div>
                 <h3 class="form-section">Productos</h3><br>
@@ -129,5 +129,5 @@
 <script type="text/javascript" src="/application/custom/js/reportes/cardex.js"></script>
 <script>
     var $plugin = $('#my_container').cardex();
-    $plugin.list();
+    $plugin.list(<?php echo "'$fecha'";?>);
 </script>

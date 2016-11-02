@@ -67,23 +67,49 @@
         $(function () {
             $("#fecha").datepicker();
         });
-        
+
         var revisarSelect = function () {
             var checkbox = false;
             $container.find('.generado').filter(function () {
                 if ($(this).prop('checked'))
                     checkbox = true;
             });
-            var inicio=(container.find('input[name=fecha_inicio]').val().length!=0) ? true: false;
-            var fin=(container.find('input[name=fecha_fin]').val().length!=0) ? true: false;
+            var inicio = (container.find('input[name=fecha_inicio]').val().length != 0) ? true : false;
+            var fin = (container.find('input[name=fecha_fin]').val().length != 0) ? true : false;
             var activar = true;
-            if (checkbox&&inicio&&fin)
+            if (checkbox && inicio && fin)
                 activar = false;
             $('#generar').attr('disabled', activar);
             $('#generar_excel').attr('disabled', activar);
             $('#generar_pdf').attr('disabled', activar);
         }
-        
+
+        var fechaInicio = function () {
+            var checkbox = null;
+            $container.find('.generado').filter(function () {
+                if ($(this).prop('checked'))
+                    checkbox = $(this).attr('id');
+            });
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/reportes/kardex/almacen",
+                dataType: "json",
+                data: {idalmacen: checkbox},
+                success: function (data) {
+                    if (data != null) {
+                        var res = data.split("-");
+                        container.find('input[name=fecha_inicio]').datepicker("option", "minDate", new Date(res[0] + "/" + res[1] + "/" + res[2]));
+                        container.find('input[name=fecha_inicio]').attr('disabled', false);
+                    } else {
+                        container.find('input[name=fecha_inicio]').attr('disabled', true);
+                        container.find('input[name=fecha_fin]').attr('disabled', true);
+                        container.find('input[name=fecha_fin]').val('');
+                        container.find('input[name=fecha_inicio]').val('');
+                    }
+                },
+            });
+        }
         /*
          * Public methods
          */
@@ -93,8 +119,8 @@
             settings = plugin.settings = $.extend({}, defaults, options);
         }
 
-        plugin.list = function () {
-            
+        plugin.list = function (maxdate) {
+
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -103,7 +129,7 @@
                     wildcard: '%QUERY'
                 }
             });
-
+            
             $('input#producto_autocomplete').typeahead(null, {
                 name: 'best-pictures',
                 display: 'value',
@@ -118,7 +144,7 @@
                 $('input#idproducto').val(suggestion.id);
 
             });
-            
+
             var count = 0;
             $('#producto_add').on('click', function () {
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
@@ -138,12 +164,13 @@
                     tr.remove();
                 });
             });
-            
+            var res = maxdate.split("-");
             $.datepicker.setDefaults($.datepicker.regional['es']);
             container.find('input[name=fecha_inicio]').keydown(false);
             container.find('input[name=fecha_fin]').keydown(false);
             container.find('input[name=fecha_inicio]').datepicker({
                 format: 'dd/mm/yyyy',
+                maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
                 beforeShowDay: function (date) {
                     var a = new Array();
                     a[0] = date.getDay() == 1;
@@ -152,8 +179,8 @@
                     return a;
                 }
             });
-            
-            container.find('input[name=fecha_fin]').attr('disabled',true);
+
+            container.find('input[name=fecha_fin]').attr('disabled', true);
 
 
             $('input[name=fecha_inicio]').on('change', function () {
@@ -161,10 +188,10 @@
                 var res = str.split("/");
                 container.find('input[name=fecha_fin]').val("");
                 $('#generar_reporte').prop("type", "submit");
-                container.find('input[name=fecha_fin]').attr('disabled',false);
+                container.find('input[name=fecha_fin]').attr('disabled', false);
                 container.find('input[name=fecha_fin]').datepicker({
                     format: 'dd/mm/yyyy',
-                    minDate: new Date(res[2]+"/"+res[1]+"/"+res[0]),
+                    minDate: new Date(res[2] + "/" + res[1] + "/" + res[0]),
                     beforeShowDay: function (date) {
                         var a = new Array();
                         a[0] = date.getDay() == 0;
@@ -173,38 +200,39 @@
                         return a;
                     }
                 });
-                container.find('input[name=fecha_fin]').datepicker( "option", "minDate", new Date(res[2]+"/"+res[1]+"/"+res[0]) );
+                container.find('input[name=fecha_fin]').datepicker("option", "minDate", new Date(res[2] + "/" + res[1] + "/" + res[0]));
                 revisarSelect();
             });
 
             $('input[name=fecha_fin]').on('change', function () {
                 revisarSelect();
             });
-            
-            $container.find('input:checkbox').on('click', function () {
+
+            $container.find('input:radio').on('click', function () {
                 revisarSelect();
+                fechaInicio();
             });
-            
+
             $('#generar').on('click', function () {
-                var almacenes= new Array();
+                var almacenes = new Array();
                 var productos = new Array();
                 $('.producto').each(function () {
                     productos.push(this.id);
                 });
                 $container.find('.generado').filter(function () {
-                if ($(this).prop('checked'))
+                    if ($(this).prop('checked'))
                         almacenes.push($(this).attr('id'));
                 });
-                
-                var inicio=container.find('input[name=fecha_inicio]').val();
-                var fin=container.find('input[name=fecha_fin]').val();
+
+                var inicio = container.find('input[name=fecha_inicio]').val();
+                var fin = container.find('input[name=fecha_fin]').val();
                 var table = $('#reporte_table');
                 $.ajax({
                     async: false,
                     type: "POST",
                     url: "/reportes/kardex",
                     dataType: "json",
-                    data: {almacenes:almacenes,inicio:inicio,fin:fin,productos:productos},
+                    data: {almacenes: almacenes, inicio: inicio, fin: fin, productos: productos},
                     success: function (data) {
                         if (data.length != 0) {
                             $('#reporte_table > tbody').empty();
