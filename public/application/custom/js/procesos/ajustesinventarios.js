@@ -142,11 +142,41 @@
             var maxDate = new Date(minDate);
             maxDate.setDate(minDate.getDate() + 6);
 
-            container.find('input[name=ajusteinventario_fecha]').datepicker({
-                startDate: minDate,
-                endDate: maxDate,
-                format: 'dd/mm/yyyy',
-            });
+           
+            if(settings.idrol != 5){
+                $.ajax({
+                    url:'/autocomplete/getultimasemanarevisada',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                       if(data.response){
+                            settings.semanarevisada = data.semanarevisada;
+                            var minDate = firstDayOfWeek(data.semanarevisada.semanarevisada_anio,(data.semanarevisada.semanarevisada_semana + 1));
+                            var min_semana_activa = firstDayOfWeek(anio,mes);
+                            var maxDate = new Date(min_semana_activa);
+                            maxDate.setDate(min_semana_activa.getDate() + 6);
+                            container.find('input[name=ajusteinventario_fecha]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                           
+                       }else{
+                            container.find('input[name=ajusteinventario_fecha]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                       }
+                    },
+                });
+            }else{
+                container.find('input[name=ajusteinventario_fecha]').datepicker({
+                    startDate:minDate,
+                    endDate:maxDate,
+                    format: 'dd/mm/yyyy',
+                });
+            }
             
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -178,11 +208,40 @@
             var maxDate = new Date(minDate);
             maxDate.setDate(minDate.getDate() + 6);
 
-            container.find('input[name=ajusteinventario_fecha]').datepicker({
-                startDate: minDate,
-                endDate: maxDate,
-                format: 'dd/mm/yyyy',
-            });
+            if(settings.idrol != 5){
+                $.ajax({
+                    url:'/autocomplete/getultimasemanarevisada',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                       if(data.response){
+                            settings.semanarevisada = data.semanarevisada;
+                            var minDate = firstDayOfWeek(data.semanarevisada.semanarevisada_anio,(data.semanarevisada.semanarevisada_semana + 1));
+                            var min_semana_activa = firstDayOfWeek(anio,mes);
+                            var maxDate = new Date(min_semana_activa);
+                            maxDate.setDate(min_semana_activa.getDate() + 6);
+                            container.find('input[name=ajusteinventario_fecha]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                           
+                       }else{
+                            container.find('input[name=ajusteinventario_fecha]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                       }
+                    },
+                });
+            }else{
+                container.find('input[name=ajusteinventario_fecha]').datepicker({
+                    startDate:minDate,
+                    endDate:maxDate,
+                    format: 'dd/mm/yyyy',
+                });
+            }
             
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),

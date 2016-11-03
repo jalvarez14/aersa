@@ -59,7 +59,17 @@ return array(
                             'route' => '/catalogo',
                         ),
                         'may_terminate' => false,
-                        'child_routes' => array(
+                        'child_routes' => array(  
+                            'semanasrevisadas' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/semanasrevisadas[/:action][/:id]',
+                                    'defaults' => array(
+                                        'controller' => 'Application\Catalogo\Controller\Semanasrevisadas',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                            ),
                             'usuario' => array(
                                 'type' => 'Literal',
                                 'options' => array(
@@ -2316,6 +2326,7 @@ return array(
             'Application\Catalogo\Controller\Trabajadorespromedio' => 'Application\Catalogo\Controller\Trabajadorespromediocontroller',
             'Application\Catalogo\Controller\Asociacionemisores' => 'Application\Catalogo\Controller\AsociacionemisoresController',
             'Application\Catalogo\Controller\Asociacionconceptos' => 'Application\Catalogo\Controller\AsociacionconceptosController',
+            'Application\Catalogo\Controller\Semanasrevisadas' => 'Application\Catalogo\Controller\SemanasrevisadasController',
             /*
              * PROCESO
              */

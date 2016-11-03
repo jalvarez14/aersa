@@ -583,6 +583,10 @@ abstract class BaseSemanarevisada extends BaseObject implements Persistent
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[] = SemanarevisadaPeer::IDSEMANAREVISADA;
+        if (null !== $this->idsemanarevisada) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . SemanarevisadaPeer::IDSEMANAREVISADA . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(SemanarevisadaPeer::IDSEMANAREVISADA)) {
@@ -639,6 +643,13 @@ abstract class BaseSemanarevisada extends BaseObject implements Persistent
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
         }
+
+        try {
+            $pk = $con->lastInsertId();
+        } catch (Exception $e) {
+            throw new PropelException('Unable to get autoincrement id.', $e);
+        }
+        $this->setIdsemanarevisada($pk);
 
         $this->setNew(false);
     }

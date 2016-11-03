@@ -1641,7 +1641,7 @@ DROP TABLE IF EXISTS `semanarevisada`;
 
 CREATE TABLE `semanarevisada`
 (
-    `idsemanarevisada` INTEGER NOT NULL,
+    `idsemanarevisada` INTEGER NOT NULL AUTO_INCREMENT,
     `idempresa` INTEGER NOT NULL,
     `idsucursal` INTEGER NOT NULL,
     `semanarevisada_anio` INTEGER NOT NULL,

@@ -1378,7 +1378,7 @@
     </vendor>
   </table>
   <table name="semanarevisada" phpName="Semanarevisada" idMethod="native">
-    <column name="idsemanarevisada" phpName="Idsemanarevisada" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="idsemanarevisada" phpName="Idsemanarevisada" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="semanarevisada_anio" phpName="SemanarevisadaAnio" type="INTEGER" required="true"/>

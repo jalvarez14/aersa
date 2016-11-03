@@ -297,12 +297,41 @@
             var maxDate = new Date(minDate);
             maxDate.setDate(minDate.getDate() + 6);
             
-            container.find('input[name=devolucion_fechacreacion]').datepicker({
-                startDate:minDate,
-                endDate:maxDate,
-                format: 'dd/mm/yyyy',
-            });
-            
+           
+             if(settings.idrol != 5){
+                $.ajax({
+                    url:'/autocomplete/getultimasemanarevisada',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                       if(data.response){
+                            settings.semanarevisada = data.semanarevisada;
+                            var minDate = firstDayOfWeek(data.semanarevisada.semanarevisada_anio,(data.semanarevisada.semanarevisada_semana + 1));
+                            var min_semana_activa = firstDayOfWeek(anio,mes);
+                            var maxDate = new Date(min_semana_activa);
+                            maxDate.setDate(min_semana_activa.getDate() + 6);
+                            container.find('input[name=devolucion_fechacreacion]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                           
+                       }else{
+                            container.find('input[name=devolucion_fechacreacion]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                       }
+                    },
+                });
+            }else{
+                container.find('input[name=devolucion_fechacreacion]').datepicker({
+                    startDate:minDate,
+                    endDate:maxDate,
+                    format: 'dd/mm/yyyy',
+                });
+            }
             container.find('input[name=devolucion_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
@@ -485,11 +514,40 @@
             var maxDate = new Date(minDate);
             maxDate.setDate(minDate.getDate() + 6);
             
-            container.find('input[name=devolucion_fechacreacion]').datepicker({
-                startDate:minDate,
-                endDate:maxDate,
-                format: 'dd/mm/yyyy',
-            });
+             if(settings.idrol != 5){
+                $.ajax({
+                    url:'/autocomplete/getultimasemanarevisada',
+                    dataType: 'json',
+                    async: false,
+                    success: function (data) {
+                       if(data.response){
+                            settings.semanarevisada = data.semanarevisada;
+                            var minDate = firstDayOfWeek(data.semanarevisada.semanarevisada_anio,(data.semanarevisada.semanarevisada_semana + 1));
+                            var min_semana_activa = firstDayOfWeek(anio,mes);
+                            var maxDate = new Date(min_semana_activa);
+                            maxDate.setDate(min_semana_activa.getDate() + 6);
+                            container.find('input[name=devolucion_fechacreacion]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                           
+                       }else{
+                            container.find('input[name=devolucion_fechacreacion]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                       }
+                    },
+                });
+            }else{
+                container.find('input[name=devolucion_fechacreacion]').datepicker({
+                    startDate:minDate,
+                    endDate:maxDate,
+                    format: 'dd/mm/yyyy',
+                });
+            }
             
             container.find('input[name=devolucion_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
@@ -675,11 +733,27 @@
             var now_array = now.split('/');
             var now = new Date(now_array[2]+'/'+now_array[1]+'/'+now_array[0]);
             
-            if(now.format('W') != mes || now.getFullYear() != anio){
-                $container.find('input,select,button').attr('disabled',true);
-                $('.fa-trash').unbind();
-                $('.fa-trash').css('cursor','not-allowed');
+            if(settings.idrol != 5){
+                var minDate = firstDayOfWeek(settings.semanarevisada.semanarevisada_anio,(settings.semanarevisada.semanarevisada_semana + 1));
+                var min_semana_activa = firstDayOfWeek(anio,mes);
+                var maxDate = new Date(min_semana_activa);
+                maxDate.setDate(min_semana_activa.getDate() + 6);
+                if(now < minDate || now > maxDate){
+                    $container.find('input,select,button').attr('disabled',true);
+                    $('#generar_pdf').attr('disabled',false);
+                    $('#generar_excel').attr('disabled',false);
+                    $('.fa-trash').unbind();
+                    $('.fa-trash').css('cursor','not-allowed');
+                }
                 
+            }else{
+                if(now.format('W') != mes || now.getFullYear() != anio){
+                    $container.find('input,select,button').attr('disabled',true);
+                    $('#generar_pdf').attr('disabled',false);
+                    $('#generar_excel').attr('disabled',false);
+                    $('.fa-trash').unbind();
+                    $('.fa-trash').css('cursor','not-allowed');
+                }
             }
             
             $("#productos_table tbody tr").each(function()

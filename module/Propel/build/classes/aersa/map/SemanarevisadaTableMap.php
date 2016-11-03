@@ -36,7 +36,7 @@ class SemanarevisadaTableMap extends TableMap
         $this->setPhpName('Semanarevisada');
         $this->setClassname('Semanarevisada');
         $this->setPackage('aersa');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idsemanarevisada', 'Idsemanarevisada', 'INTEGER', true, null, null);
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);

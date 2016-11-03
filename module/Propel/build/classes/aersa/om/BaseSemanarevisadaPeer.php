@@ -1162,6 +1162,10 @@ abstract class BaseSemanarevisadaPeer
             $criteria = $values->buildCriteria(); // build Criteria from Semanarevisada object
         }
 
+        if ($criteria->containsKey(SemanarevisadaPeer::IDSEMANAREVISADA) && $criteria->keyContainsValue(SemanarevisadaPeer::IDSEMANAREVISADA) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.SemanarevisadaPeer::IDSEMANAREVISADA.')');
+        }
+
 
         // Set the correct dbName
         $criteria->setDbName(SemanarevisadaPeer::DATABASE_NAME);

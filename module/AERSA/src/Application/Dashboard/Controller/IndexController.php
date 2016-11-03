@@ -16,6 +16,46 @@ use Zend\Console\Request as ConsoleRequest;
 class IndexController extends AbstractActionController
 {
     
+    public function getalmacenesbyinventarioAction(){
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            $date = date_create_from_format('d/m/Y H:i', $post_data['date']." 00:00");
+            
+            $result_array = array();
+            $almacenes_array = \AlmacenQuery::create()->select(array('Idalmacen'))->filterByIdsucursal($session['idsucursal'])->find()->toArray();
+            foreach ($almacenes_array as $almacen){
+                $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
+                if(!$exist){
+                    $almacen_nombre = \AlmacenQuery::create()->findPk($almacen);
+                    $almacen_nombre = $almacen_nombre->getAlmacenNombre();
+                    $result_array[$almacen] = $almacen_nombre;
+                }
+            }
+            return $this->getResponse()->setContent(json_encode($result_array));
+        }
+       
+    }
+    
+    public function getultimasemanarevisadaAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $exist = \SemanarevisadaQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+        if($exist){
+            $semana_revisada = \SemanarevisadaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdsemanarevisada(\Criteria::DESC)->findOne();
+            return $this->getResponse()->setContent(json_encode(array('response' => true, 'semanarevisada' => $semana_revisada->toArray(\BasePeer::TYPE_FIELDNAME))));      
+        }else{
+            return $this->getResponse()->setContent(json_encode(array('response' => false)));
+        }
+    }
+        
+
     public function validateproductAction(){
         $request = $this->getRequest();
         if($request->isPost()){

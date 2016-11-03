@@ -423,17 +423,58 @@
             var minDate = firstDayOfWeek(anio, mes);
             var maxDate = new Date(minDate);
             maxDate.setDate(minDate.getDate() + 6);
-
-            container.find('input[name=requisicion_fecha]').datepicker({
-                startDate: minDate,
-                endDate: maxDate,
-                format: 'dd/mm/yyyy',
-            });
-
-            container.find('input[name=requisicion_fecha]').datepicker({
-                format: 'dd/mm/yyyy',
-            });
-
+            
+            
+            if(settings.idrol != 5){
+                $.ajax({
+                    url:'/autocomplete/getultimasemanarevisada',
+                    dataType: 'json',
+                    success: function (data) {
+                       if(data.response){
+                            var minDate = firstDayOfWeek(data.semanarevisada.semanarevisada_anio,(data.semanarevisada.semanarevisada_semana + 1));
+                            var min_semana_activa = firstDayOfWeek(anio,mes);
+                            var maxDate = new Date(min_semana_activa);
+                            maxDate.setDate(min_semana_activa.getDate() + 6);
+                            container.find('input[name=requisicion_fecha]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                           
+                       }else{
+                            container.find('input[name=requisicion_fecha]').datepicker({
+                                startDate:minDate,
+                                endDate:maxDate,
+                                format: 'dd/mm/yyyy',
+                            });
+                       }
+                    },
+                });
+            }else{
+                container.find('input[name=requisicion_fecha]').datepicker({
+                    startDate:minDate,
+                    endDate:maxDate,
+                    format: 'dd/mm/yyyy',
+                });
+            }
+            $('input[name=requisicion_fecha]').on('changeDate', function(e) {
+                var date = $('input[name=requisicion_fecha]').val();
+                $.ajax({
+                    url:'/autocomplete/getalmacenesbyinventario',
+                    type: 'POST',
+                    dataType: 'json',
+                    data:{date:date},
+                    success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacendestino] option').remove();
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+                            $container.find('select[name=idalmacendestino]').append(option);
+                        });
+                    }
+                });
+            }); 
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -661,16 +702,60 @@
                 var maxDate = new Date(minDate);
                 maxDate.setDate(minDate.getDate() + 6);
 
-                container.find('input[name=requisicion_fecha]').datepicker({
-                    startDate: minDate,
-                    endDate: maxDate,
-                    format: 'dd/mm/yyyy',
-                });
+                if(settings.idrol != 5){
+                        $.ajax({
+                            url:'/autocomplete/getultimasemanarevisada',
+                            dataType: 'json',
+                            async: false,
+                            success: function (data) {
+                               if(data.response){
+                                    settings.semanarevisada = data.semanarevisada;
+                                    var minDate = firstDayOfWeek(data.semanarevisada.semanarevisada_anio,(data.semanarevisada.semanarevisada_semana + 1));
+                                    var min_semana_activa = firstDayOfWeek(anio,mes);
+                                    var maxDate = new Date(min_semana_activa);
+                                    maxDate.setDate(min_semana_activa.getDate() + 6);
+                                    container.find('input[name=requisicion_fecha]').datepicker({
+                                        startDate:minDate,
+                                        endDate:maxDate,
+                                        format: 'dd/mm/yyyy',
+                                    });
 
-                container.find('input[name=requisicion_fecha]').datepicker({
-                    format: 'dd/mm/yyyy',
-                });
-
+                               }else{
+                                    container.find('input[name=requisicion_fecha]').datepicker({
+                                        startDate:minDate,
+                                        endDate:maxDate,
+                                        format: 'dd/mm/yyyy',
+                                    });
+                               }
+                            },
+                        });
+                    }else{
+                        container.find('input[name=requisicion_fecha]').datepicker({
+                            startDate:minDate,
+                            endDate:maxDate,
+                            format: 'dd/mm/yyyy',
+                        });
+                    }
+                $('input[name=requisicion_fecha]').on('changeDate', function (e) {
+                    var date = $('input[name=requisicion_fecha]').val();
+                    $.ajax({
+                        url: '/autocomplete/getalmacenesbyinventario',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {date: date},
+                        success: function (data, textStatus, jqXHR) {
+                            $container.find('select[name=idalmacendestino] option').remove();
+                            $.each(data, function (index, value) {
+                                var option = $('<option>');
+                                option.text(value);
+                                option.attr('value', index);
+                                $container.find('select[name=idalmacendestino]').append(option);
+                            });
+                        }
+                    });
+                });  
+                   
+                   
                 var data = new Bloodhound({
                     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -932,11 +1017,28 @@
                 var now = $('input[name=requisicion_fecha]').val();
                 var now_array = now.split('/');
                 var now = new Date(now_array[2] + '/' + now_array[1] + '/' + now_array[0]);
-                if (now.format('W') != mes || now.getFullYear() != anio) {
-                    $container.find('input,select,button').attr('disabled', true);
-                    $('.fa-trash').unbind();
-                    $('.fa-trash').css('cursor', 'not-allowed');
+                 
+                 if (settings.idrol != 5) {
+                    var minDate = firstDayOfWeek(settings.semanarevisada.semanarevisada_anio, (settings.semanarevisada.semanarevisada_semana + 1));
+                    var min_semana_activa = firstDayOfWeek(anio, mes);
+                    var maxDate = new Date(min_semana_activa);
+                    maxDate.setDate(min_semana_activa.getDate() + 6);
+                    if (now < minDate || now > maxDate) {
+                        $container.find('input,select,button').attr('disabled', true);
+                        $('#generar_pdf').attr('disabled', false);
+                        $('#generar_excel').attr('disabled', false);
+                        $('.fa-trash').unbind();
+                        $('.fa-trash').css('cursor', 'not-allowed');
+                    }
 
+                } else {
+                    if (now.format('W') != mes || now.getFullYear() != anio) {
+                        $container.find('input,select,button').attr('disabled', true);
+                        $('#generar_pdf').attr('disabled', false);
+                        $('#generar_excel').attr('disabled', false);
+                        $('.fa-trash').unbind();
+                        $('.fa-trash').css('cursor', 'not-allowed');
+                    }
                 }
 
                 if (settings.idrol == 5) {

@@ -1,12 +1,14 @@
-<h3 class="page-title"><?php echo "Hola"//$form->get('usuario_nombre')->getValue()?></h3>
+<div id="my_container">
+<h3 class="page-title">Semanas revisada</h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
-            <a href="/catalogo/usuario">Usuarios</a>
+            <a href="/catalogo/semanasrevisadas/">Semanas revisada</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <span><?php //echo $form->get('usuario_nombre')->getValue()?></span>
+            <a href="/catalogo/semanasrevisadas/nuevo">Nuevo</a>
+           
         </li>
     </ul>
 </div>
@@ -19,18 +21,23 @@
     </div>
 <?php endforeach;?>
 <?php
-    $form->setAttribute('action', '/catalogo/iva/nuevo');
+    $form->setAttribute('action', "/catalogo/semanasrevisadas/nuevo/".$idsucursal);
     echo $this->form()->openTag($form);
 ?>
 <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
     <div class="portlet-body form">
         <div class="form-body">
-            <h3 class="form-section">Información general</h3>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <?php echo $this->formLabel($form->get('tasaiva_valor')) ?>  
-                        <?php echo $this->formText($form->get('tasaiva_valor')) ?>
+                        <?php echo $this->formLabel($form->get('semanarevisada_anio')) ?>  
+                        <?php echo $this->formText($form->get('semanarevisada_anio')) ?>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('semanarevisada_semana')) ?>  
+                        <?php echo $this->formSelect($form->get('semanarevisada_semana')) ?>
                     </div>
                 </div>
             </div>
@@ -49,7 +56,9 @@
     </div>
 </div>
 <?php  echo $this->form()->closeTag(); ?>
-
-
-<script src="/application/custom/js/validaciones.js"></script>
-
+</div>
+<script src="/application/custom/js/catalogo/semanarevisada.js" type="text/javascript"></script>
+<script>
+    var myplugin = $('#my_container').semanarevisada();
+    myplugin.new();
+</script>

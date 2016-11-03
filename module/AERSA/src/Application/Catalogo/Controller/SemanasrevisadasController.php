@@ -6,31 +6,50 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
-class IvaController extends AbstractActionController
+class SemanasrevisadasController extends AbstractActionController
 {
-    public function indexAction()
+    
+    public function verAction()
     {
-        return $this->redirect()->toUrl('/catalogo/iva/editar/1');
-        
+
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-
-        //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
         
-        //SI SE TRATA DE UN ADMIN DE AERSA
-        if($session['idrol'] == 1){
-            $collection = \TasaivaQuery::create()->orderByTasaivaValor()->find();
-        }
-
-
+        $idsucursal = $this->params()->fromRoute('id');
+        $sucursal = \SucursalQuery::create()->findPk($idsucursal);
+        $collection = \SemanarevisadaQuery::create()->filterByIdsucursal($idsucursal)->find();
+        
         
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
-        $view_model->setTemplate('/application/catalogo/iva/index');
+        $view_model->setTemplate('/application/catalogo/semanarevisada/ver');
         $view_model->setVariables(array(
             'messages' => $this->flashMessenger(),
             'collection' => $collection,
+            'sucursal' => $sucursal,
+        ));
+        return $view_model;
+
+    }
+    
+    public function indexAction()
+    {
+
+        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        $idsucursal = $this->params()->fromRoute('id');
+      
+        $collection = \SucursalQuery::create()->filterByIdempresa($session['idempresa'])->find();
+        
+        //INTANCIAMOS NUESTRA VISTA
+        $view_model = new ViewModel();
+        $view_model->setTemplate('/application/catalogo/semanarevisada/index');
+        $view_model->setVariables(array(
+            'messages' => $this->flashMessenger(),
+            'collection' => $collection,
+
         ));
         return $view_model;
 
@@ -38,50 +57,85 @@ class IvaController extends AbstractActionController
     
     public function nuevoAction()
     {
+        
+        //CARGAMOS LA SESSION PARA HACER VALIDACIONES
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $idsucursal = $this->params()->fromRoute('id');
+         
         $request = $this->getRequest();
-        
-        //INTANCIAMOS NUESTRO FORMULARIO
-        $form = new \Application\Catalogo\Form\IvaForm();
-        
+
         if($request->isPost())
         {
+           
             
             $post_data = $request->getPost();
             
-            //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-            
-            $collection = \TasaivaQuery::create()->find();
-            
-            if(count($collection)<2)
-            {
-                //CREAMOS NUESTRA ENTIDAD VACIA
-                $entity = new \TasaIva();
-                
-                //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                foreach ($post_data as $key => $value){
-                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
-                }
-                
-                $entity->save();
+            //CREAMOS NUESTRA ENTIDAD VACIA
+            $entity = new \Semanarevisada();
 
-                $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
-                
-                return $this->redirect()->toUrl('/catalogo/iva');
-           }
-           else
-           {
-                $this->flashMessenger()->addErrorMessage('No se pueden agregar mas de dos registros');
-           }
+            //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
+            foreach ($post_data as $key => $value){
+                $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+            }
+            
+            $entity->setIdsucursal($idsucursal);
+            $entity->setIdempresa($session['idempresa']);
+            $entity->setSemanarevisadaEstatus(1);
+           
+            $entity->save();
+
+            $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
+
+            return $this->redirect()->toUrl('/catalogo/semanasrevisadas/ver/'.$idsucursal);
+           
 
         }
-
+        
+        $form = new \Application\Catalogo\Form\SemanasrevisadasForm();
+        
+        $count = \SemanarevisadaQuery::create()->filterByIdsucursal($idsucursal)->count();
+       
+        if($count > 0){
+             //OBTENEMOS EL ULTIMO REGISTRO
+             $ultima_semana = \SemanarevisadaQuery::create()->filterByIdsucursal($idsucursal)->orderByIdsemanarevisada(\Criteria::DESC)->findOne();
+             //OBTENEMOS EL NUMERO DE SEMANAS DEL AÑO DEL ULTIMO REGISTRO
+             $week_array = \Shared\GeneralFunctions::getWeekArray($ultima_semana->getSemanarevisadaAnio());
+            
+             if(isset($week_array[$ultima_semana->getSemanarevisadaSemana() +1])){
+                $form->get('semanarevisada_anio')->setValue($ultima_semana->getSemanarevisadaAnio());
+                $form->get('semanarevisada_anio')->setAttribute('readonly', true);
+                // $form->get('semanarevisada_semana')->setValueOptions($week_array);
+                $key = $ultima_semana->getSemanarevisadaSemana() +1;
+                $value = $week_array[$ultima_semana->getSemanarevisadaSemana() +1];
+                $form->get('semanarevisada_semana')->setValueOptions(array($key=> $value));
+                $form->get('semanarevisada_semana')->setValue($ultima_semana->getSemanarevisadaSemana() +1);
+               
+             }else{
+                 $anio = $ultima_semana->getSemanarevisadaAnio() + 1;
+                 $week_array = \Shared\GeneralFunctions::getWeekArray($anio);
+                 $form->get('semanarevisada_anio')->setValue($anio);
+                 $form->get('semanarevisada_anio')->setAttribute('readonly', true);
+                 // $form->get('semanarevisada_semana')->setValueOptions($week_array);
+                 $key = 1;
+                 $value = $week_array[1];
+                 $form->get('semanarevisada_semana')->setValueOptions(array($key=> $value));
+                 $form->get('semanarevisada_semana')->setValue($ultima_semana->getSemanarevisadaSemana() +1);
+                 
+             }
+            
+        }
+        
+        
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
         $view_model->setVariables(array(
             'form' => $form,
             'messages' => $this->flashMessenger(),
+            'idsucursal' => $idsucursal,
         ));
-        $view_model->setTemplate('/application/catalogo/iva/nuevo');
+        $view_model->setTemplate('/application/catalogo/semanarevisada/nuevo');
         return $view_model;
     }
     
@@ -163,18 +217,19 @@ class IvaController extends AbstractActionController
     {
         
         $request = $this->getRequest();
-        echo "string";
+       
         if($request->isPost())
         {
-            echo "string";
+           
             $id = $this->params()->fromRoute('id');
             
-            $entity = \TasaivaQuery::create()->findPk($id);
+            $entity = \SemanarevisadaQuery::create()->findPk($id);
+            
             $entity->delete();
             
-            $this->flashMessenger()->addSuccessMessage('Tasa de IVA eliminada satisfactoriamente!');
+            $this->flashMessenger()->addSuccessMessage('Registro eliminado satisfactoriamente!');
 
-            return $this->redirect()->toUrl('/catalogo/iva');
+            return $this->redirect()->toUrl('/catalogo/semanasrevisadas/ver/'.$entity->getIdsucursal());
             
         }
         
