@@ -346,7 +346,7 @@
                     format: 'dd/mm/yyyy',
                 });
             }
-             $('input[name=ordentablajeria_fecha]').on('changeDate', function(e) {
+            $('input[name=ordentablajeria_fecha]').on('changeDate', function(e) {
                 var date = $('input[name=ordentablajeria_fecha]').val();
                 $.ajax({
                     url:'/autocomplete/getalmacenesbyinventario',
@@ -354,11 +354,13 @@
                     dataType: 'json',
                     data:{date:date},
                     success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacenorigen] option').remove();
                         $container.find('select[name=idalmacendestino] option').remove();
                         $.each(data,function(index,value){
                             var option = $('<option>');
                             option.text(value);
                             option.attr('value',index);
+                            $container.find('select[name=idalmacenorigen]').append(option);
                             $container.find('select[name=idalmacendestino]').append(option);
                         });
                     }
@@ -663,11 +665,13 @@
                     dataType: 'json',
                     data:{date:date},
                     success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacenorigen] option').remove();
                         $container.find('select[name=idalmacendestino] option').remove();
                         $.each(data,function(index,value){
                             var option = $('<option>');
                             option.text(value);
                             option.attr('value',index);
+                            $container.find('select[name=idalmacenorigen]').append(option);
                             $container.find('select[name=idalmacendestino]').append(option);
                         });
                     }
