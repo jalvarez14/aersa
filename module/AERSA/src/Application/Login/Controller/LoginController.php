@@ -178,13 +178,16 @@ class LoginController extends AbstractActionController
                 $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
             }
             
-            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->filterBySucursalEstatus(1)->find();
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->find();
             
             $sucursal = new \Sucursal();
             $sucursales_array['admin'] ='Administración';
             foreach ($sucursales as $sucursal){
                 $id = $sucursal->getIdsucursal();
-                $sucursales_array[$id] = $sucursal->getSucursalNombre();
+                if($sucursal->getSucursalEstatus() == 1){
+                    $sucursales_array[$id] = $sucursal->getSucursalNombre();
+                }
+                
             }
             
         }
@@ -192,7 +195,7 @@ class LoginController extends AbstractActionController
         if($session['idrol'] == 4){ //AUDITOR EMPRESA
             $view_model->setTemplate('/application/login/select_auditor_empresa');
             
-            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->useSucursalQuery()->filterBySucursalEstatus(1)->endUse()->find();
+            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->find();
             
             $empresas = array();
             $sucursales_array = array();
@@ -202,7 +205,10 @@ class LoginController extends AbstractActionController
                 $id = $usuario_sucursal->getIdsucursal();
                 $idempresa = $usuario_sucursal->getSucursal()->getEmpresa()->getIdempresa();
                 $empresas[$idempresa] = $usuario_sucursal->getSucursal()->getEmpresa()->getEmpresaNombrecomercial();
-                $sucursales_array[$id] = $usuario_sucursal->getSucursal()->getSucursalNombre();
+                if($usuario_sucursal->getSucursal()->getSucursalEstatus() == 1){
+                    $sucursales_array[$id] = $usuario_sucursal->getSucursal()->getSucursalNombre();
+                }
+                
                 
             }
 
@@ -211,7 +217,7 @@ class LoginController extends AbstractActionController
         if($session['idrol'] == 5){ //AUDITOR EMPRESA
             $view_model->setTemplate('/application/login/select_almacenista_empresa');
             
-            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->useSucursalQuery()->filterBySucursalEstatus(1)->endUse()->find();
+            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->find();
             
             $empresas = array();
             $sucursales_array = array();
@@ -221,7 +227,10 @@ class LoginController extends AbstractActionController
                 $id = $usuario_sucursal->getIdsucursal();
                 $idempresa = $usuario_sucursal->getSucursal()->getEmpresa()->getIdempresa();
                 $empresas[$idempresa] = $usuario_sucursal->getSucursal()->getEmpresa()->getEmpresaNombrecomercial();
-                $sucursales_array[$id] = $usuario_sucursal->getSucursal()->getSucursalNombre();
+                if($usuario_sucursal->getSucursal()->getSucursalEstatus() == 1){
+                    $sucursales_array[$id] = $usuario_sucursal->getSucursal()->getSucursalNombre();
+                }
+                
                 
             }
             
