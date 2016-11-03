@@ -471,12 +471,13 @@
                             var option = $('<option>');
                             option.text(value);
                             option.attr('value',index);
-                            $container.find('select[name=idalmacenorigen]').append(option);
-                            $container.find('select[name=idalmacendestino]').append(option);
+                   
+                            $('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);
                         });
                     }
                 });
             }); 
+            return;
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -752,8 +753,7 @@
                             var option = $('<option>');
                             option.text(value);
                             option.attr('value',index);
-                            $container.find('select[name=idalmacenorigen]').append(option);
-                            $container.find('select[name=idalmacendestino]').append(option);
+                            $('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);
                         });
                     }
                 });
