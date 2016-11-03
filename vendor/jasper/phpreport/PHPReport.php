@@ -1041,8 +1041,10 @@ class PHPReport {
  * converts pixels to excel units
  * @param float $p
  * @return float 
- */
+
 function pixel2unit($p)
 {
 	return ($p-5)/7;
 }
+ *  
+ */
