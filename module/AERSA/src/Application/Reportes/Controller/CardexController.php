@@ -21,6 +21,7 @@ class CardexController extends AbstractActionController {
         if ($request->isPost()) {
             $post_data = $request->getPost();
             $archivo = false;
+            
             if (isset($post_data['generar_excel']) || isset($post_data['generar_pdf'])) {
                 $alm = array();
                 $post_data['inicio'] = $post_data['fecha_inicio'];
@@ -30,9 +31,7 @@ class CardexController extends AbstractActionController {
                     if (strpos($key, '-'))
                         array_push($alm, substr($key, 4));
                 }
-                $post_data['almacenes'] = $alm;
             }
-
             $productosArray = array();
             $reporte = array();
             $reporteHead = array();
@@ -44,13 +43,13 @@ class CardexController extends AbstractActionController {
 
             $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', strtotime($inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0])));
             $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
-$num_pod=0;
+            $num_pod = 0;
             foreach ($post_data['almacenes'] as $idalmacen) {
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
                 $objproducto = new \Producto();
 
                 foreach ($objproductos as $objproducto) {
-                    
+
                     $pedido = true;
                     $idproducto = $objproducto->getIdproducto();
                     if (isset($post_data['productos'])) {
@@ -67,66 +66,66 @@ $num_pod=0;
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         if ($results[0]['count(idcompra)'] != 0)
                             array_push($productosArray, $idproducto);
-                        if(!in_array($idproducto, $productosArray)) {
-                        $sqlventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=24022 AND idalmacen=$idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana' AND idsucursal=$idsucursal;";
-                        $st = $conn->prepare($sqlventas);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        if ($results[0]['count(idventa)'] != 0)
-                            array_push($productosArray, $idproducto);
-                        }                         if(!in_array($idproducto, $productosArray)) {
-                        $sqlrequisicionesOrigen = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'  AND idsucursalorigen=$idsucursal;";
-                        $st = $conn->prepare($sqlrequisicionesOrigen);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                        if (!in_array($idproducto, $productosArray)) {
+                            $sqlventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=24022 AND idalmacen=$idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana' AND idsucursal=$idsucursal;";
+                            $st = $conn->prepare($sqlventas);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            if ($results[0]['count(idventa)'] != 0)
+                                array_push($productosArray, $idproducto);
+                        } if (!in_array($idproducto, $productosArray)) {
+                            $sqlrequisicionesOrigen = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'  AND idsucursalorigen=$idsucursal;";
+                            $st = $conn->prepare($sqlrequisicionesOrigen);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
 
-                        if ($results[0]['count(idrequisicion)'] != 0)
-                            array_push($productosArray, $idproducto);
-                        } 
-                        if(!in_array($idproducto, $productosArray)) {
-                        
-                        $sqlrequisicionesDestino = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'  AND idsucursaldestino=$idsucursal;";
-                        $st = $conn->prepare($sqlrequisicionesDestino);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        if ($results[0]['count(idrequisicion)'] != 0 && !in_array($idproducto, $productosArray))
-                            array_push($productosArray, $idproducto);
-                        }                         if(!in_array($idproducto, $productosArray)) {
-                        
-                        $sqlordentabOrigen = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana' AND idsucursal=$idsucursal;";
-                        $st = $conn->prepare($sqlordentabOrigen);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        if ($results[0]['count(idordentablajeria)'] != 0)
-                            array_push($productosArray, $idproducto);
-                        }                         if(!in_array($idproducto, $productosArray)) {
-                        $sqlordentabDestino = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana' AND idsucursal=$idsucursal;";
-                        $st = $conn->prepare($sqlordentabDestino);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        if ($results[0]['count(idordentablajeria)'] != 0)
-                            array_push($productosArray, $idproducto);
-                        }                         if(!in_array($idproducto, $productosArray)) {
-                        $sqlajusteinvSobs = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha <= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='sobrante';";
-                        $st = $conn->prepare($sqlajusteinvSobs);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        if ($results[0]['count(idajusteinventario)'] != 0)
-                            array_push($productosArray, $idproducto);
-                        }                         if(!in_array($idproducto, $productosArray)) {
-                        $sqlajusteinvFals = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha <= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='faltante';";
-                        $st = $conn->prepare($sqlajusteinvFals);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        if ($results[0]['count(idajusteinventario)'] != 0)
-                            array_push($productosArray, $idproducto);
-                        }                         if(!in_array($idproducto, $productosArray)) {
-                        $sqldevoluciones = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idproducto AND idalmacen=$idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion <= '$fin_semana' AND idsucursal=$idsucursal;";
-                        $st = $conn->prepare($sqldevoluciones);
-                        $st->execute();
-                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        if ($results[0]['count(iddevolucion)'] != 0)
-                            array_push($productosArray, $idproducto);
+                            if ($results[0]['count(idrequisicion)'] != 0)
+                                array_push($productosArray, $idproducto);
+                        }
+                        if (!in_array($idproducto, $productosArray)) {
+
+                            $sqlrequisicionesDestino = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'  AND idsucursaldestino=$idsucursal;";
+                            $st = $conn->prepare($sqlrequisicionesDestino);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            if ($results[0]['count(idrequisicion)'] != 0 && !in_array($idproducto, $productosArray))
+                                array_push($productosArray, $idproducto);
+                        } if (!in_array($idproducto, $productosArray)) {
+
+                            $sqlordentabOrigen = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacenorigen=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana' AND idsucursal=$idsucursal;";
+                            $st = $conn->prepare($sqlordentabOrigen);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            if ($results[0]['count(idordentablajeria)'] != 0)
+                                array_push($productosArray, $idproducto);
+                        } if (!in_array($idproducto, $productosArray)) {
+                            $sqlordentabDestino = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idproducto) AND idalmacendestino=$idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana' AND idsucursal=$idsucursal;";
+                            $st = $conn->prepare($sqlordentabDestino);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            if ($results[0]['count(idordentablajeria)'] != 0)
+                                array_push($productosArray, $idproducto);
+                        } if (!in_array($idproducto, $productosArray)) {
+                            $sqlajusteinvSobs = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha <= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='sobrante';";
+                            $st = $conn->prepare($sqlajusteinvSobs);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            if ($results[0]['count(idajusteinventario)'] != 0)
+                                array_push($productosArray, $idproducto);
+                        } if (!in_array($idproducto, $productosArray)) {
+                            $sqlajusteinvFals = "SELECT count(idajusteinventario) FROM ajusteinventario WHERE idproducto=$idproducto AND idalmacen=$idalmacen AND '$inicio_semana' <= ajusteinventario_fecha AND ajusteinventario_fecha <= '$fin_semana' AND idsucursal=$idsucursal AND ajusteinventario_tipo='faltante';";
+                            $st = $conn->prepare($sqlajusteinvFals);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            if ($results[0]['count(idajusteinventario)'] != 0)
+                                array_push($productosArray, $idproducto);
+                        } if (!in_array($idproducto, $productosArray)) {
+                            $sqldevoluciones = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idproducto AND idalmacen=$idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion <= '$fin_semana' AND idsucursal=$idsucursal;";
+                            $st = $conn->prepare($sqldevoluciones);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            if ($results[0]['count(iddevolucion)'] != 0)
+                                array_push($productosArray, $idproducto);
                         }
                     }
                 }
@@ -410,7 +409,7 @@ $num_pod=0;
                             foreach ($objrequisicionesOrigen as $objrequisicion) {
                                 $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                         ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                        ->filterByIdpadre(NULL,  \Criteria::NOT_EQUAL)
+                                        ->filterByIdpadre(NULL, \Criteria::NOT_EQUAL)
                                         ->filterByIdproducto($objproducto->getIdproducto())
                                         ->find();
                                 $objrequisiciondetalle = new \Requisiciondetalle();
@@ -538,10 +537,12 @@ $num_pod=0;
                     }
                 }
             }
-            foreach ($post_data['almacenes'] as $idalmacen) {
+
+            $idalmacen=$post_data['almacenes'];
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
                 $objproducto = new \Producto();
                 $nombreAlmacen = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenNombre();
+                
                 if ($archivo)
                     array_push($reporte, array('uno' => 'Almacen:', 'dos' => $nombreAlmacen, 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => ''));
                 else
@@ -591,12 +592,10 @@ $num_pod=0;
                         }
                     }
                 }
-            }
             if ($archivo) {
                 $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
                 $template = '/kardex.xlsx';
                 $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
-
                 $config = array(
                     'template' => $template,
                     'templateDir' => $templateDir
@@ -639,7 +638,7 @@ $num_pod=0;
         //$collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
         //INTANCIAMOS NUESTRA VISTA        
         $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
-        
+
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
         //dia inicio de semana date('Y-m-d',$start);
@@ -650,7 +649,7 @@ $num_pod=0;
         $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
         $time += 6 * 24 * 3600;
         $fecha = date('Y-m-d', $time);
-        
+
         $form = new \Application\Reportes\Form\CardexForm();
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/reportes/cardex/index');
@@ -676,13 +675,27 @@ $num_pod=0;
 //        }
         $request = $this->getRequest();
         if ($request->isPost()) {
-        $post_data = $request->getPost();
-        $id = $post_data['idalmacen'];
-        $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($id)->exists();
-        $fecha=null;
-        if ($inventario_anterior)
-            $fecha = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('desc')->findOne()->getInventariomesFecha('Y-m-d');
-        return $this->getResponse()->setContent(json_encode($fecha));
+            $post_data = $request->getPost();
+            $id = $post_data['idalmacen'];
+            $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($id)->exists();
+            $fecha = array();
+            $cont=0;
+            if ($inventario_anterior) {
+                $fechas = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('asc')->find();
+                $fechasobj= new \Inventariomes();
+                foreach($fechas as $fechasobj) {
+                    $cont++;
+                    if($cont<11){ 
+                        $date = $fechasobj->getInventariomesFecha('d-m-Y');
+                        $date = strtotime($date);
+                        $date = strtotime("+1 day", $date);
+                        $date=date('j-n-Y', $date);
+                        array_push($fecha, $date);
+                    }
+                }
+            }
+                
+            return $this->getResponse()->setContent(json_encode($fecha));
         }
     }
 

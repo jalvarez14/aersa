@@ -447,7 +447,7 @@ class ReportesController extends AbstractActionController {
 
     public function getrecientesProdAction($idAlmacen) {
         $dias = $this->params()->fromQuery('dias');
-        $fecha = date('Y-m-d', strtotime('-28 day'));
+        $fecha = date('Y-m-d', strtotime('-35 day'));
         $hoy = date('Y-m-d');
         $fecha.=' 00:00:00';
         $hoy.=' 23:59:59';
@@ -1221,7 +1221,7 @@ class ReportesController extends AbstractActionController {
                 $costo = $producto->getProductoCosto();
                 $tipo = $producto->getProductoTipo();
                 $total = $costo * $cantidad;
-                if ($producto->getProductoTipo() == 'subreceta') {
+                if ($producto->getProductoTipo() == 'subreceta' || $producto->getProductoTipo() == 'plu') {
                     $recetasDetalleObj = \RecetaQuery::create()->filterByIdproducto($producto->getIdproducto())->find();
                     $recetaDetalleObj = new \Receta();
                     foreach ($recetasDetalleObj as $recetaDetalleObj) {
