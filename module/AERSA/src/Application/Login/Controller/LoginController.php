@@ -28,12 +28,29 @@ class LoginController extends AbstractActionController
             $post_data = $request->getPost();
             
             //VALIDAMOS SI LOS DATOS DE ACCESO SON CORRECTOS Y SI SE ENCUENTRA ACTIVO
-            $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->exists();
+            $exist = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->exists();
+           
             
             if($exist){
                 
+                
                 $usuario = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->findOne();
+                if($usuario->getIdrol() >= 3){
+                    $empresa = \UsuarioempresaQuery::create()->filterByIdusuario($usuario->getIdusuario())->findOne();
+                    if($empresa->getEmpresa()->getEmpresaEstatus() == 0){
+                        $this->flashMessenger()->addErrorMessage('Empresa inactiva, favor de comunicarse con el equipo de AERSA');
+                        //INTANCIAMOS NUESTRA VISTA
+
+                        $view_model = new ViewModel();
+                        $view_model->setVariables(array(
+                            'messages' => $this->flashMessenger(),
+                        ));
+                        return $view_model;
+                    }
+                    
+                }
               
+                
                 //CREAMOS NUESTRA PRESESSION
                 $session = new \Shared\Session\AouthSession();
                 $session->Create(array(
@@ -46,13 +63,24 @@ class LoginController extends AbstractActionController
                 return $this->redirect()->toUrl('/login/select');
 
             }else{
-                return $this->redirect()->toUrl('/login');
+               
+                $this->flashMessenger()->addErrorMessage('Usuario y/o contraseña incorrecta!');
+                //INTANCIAMOS NUESTRA VISTA
+              
+                $view_model = new ViewModel();
+                $view_model->setVariables(array(
+                    'messages' => $this->flashMessenger(),
+                ));
+                return $view_model;
             }
  
         }
 
         //INTANCIAMOS NUESTRA VISTA
         $view_model = new ViewModel();
+        $view_model->setVariables(array(
+            'messages' => $this->flashMessenger(),
+        ));
         return $view_model;
 
     }
@@ -149,7 +177,7 @@ class LoginController extends AbstractActionController
                 $empresas[$id] = $usuario_empresa->getEmpresa()->getEmpresaNombrecomercial();
             }
             
-            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->find();
+            $sucursales = \SucursalQuery::create()->filterByIdempresa($empresa->getIdempresa())->filterBySucursalEstatus(1)->find();
             
             $sucursal = new \Sucursal();
             $sucursales_array['admin'] ='Administración';
@@ -163,7 +191,7 @@ class LoginController extends AbstractActionController
         if($session['idrol'] == 4){ //AUDITOR EMPRESA
             $view_model->setTemplate('/application/login/select_auditor_empresa');
             
-            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->find();
+            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->useSucursalQuery()->filterBySucursalEstatus(1)->endUse()->find();
             
             $empresas = array();
             $sucursales_array = array();
@@ -182,7 +210,7 @@ class LoginController extends AbstractActionController
         if($session['idrol'] == 5){ //AUDITOR EMPRESA
             $view_model->setTemplate('/application/login/select_almacenista_empresa');
             
-            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->find();
+            $usuario_sucursales = \UsuariosucursalQuery::create()->filterByIdusuario($session['idusuario'])->useSucursalQuery()->filterBySucursalEstatus(1)->endUse()->find();
             
             $empresas = array();
             $sucursales_array = array();
