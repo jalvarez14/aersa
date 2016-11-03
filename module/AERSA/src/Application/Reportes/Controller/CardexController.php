@@ -639,11 +639,18 @@ $num_pod=0;
         //$collection = \CuentabancariaQuery::create()->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
         //INTANCIAMOS NUESTRA VISTA        
         $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
-
+        
         $ts = strtotime("now");
         $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
         //dia inicio de semana date('Y-m-d',$start);
-        $fecha = date('Y-m-d', strtotime('next sunday', $start));
+        $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+        $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+        $time = strtotime("1 January $anio_act", time());
+        $day = date('w', $time);
+        $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+        $time += 6 * 24 * 3600;
+        $fecha = date('Y-m-d', $time);
+        
         $form = new \Application\Reportes\Form\CardexForm();
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/reportes/cardex/index');
@@ -651,20 +658,31 @@ $num_pod=0;
             'form' => $form,
             'messages' => $this->flashMessenger(),
             'almacenes' => $almacenes,
+            'fecha' => $fecha,
         ));
         return $view_model;
     }
 
     public function almacenAction() {
+//        $request = $this->getRequest();
+//        if ($request->isPost()) {
+//            $post_data = $request->getPost();
+//            $idalmacen = $post_data['idalmacen'];
+//            if (\AlmacenQuery::create()->filterByIdalmacen($idalmacen)->exists())
+//                $nombre = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
+//            else
+//                $nombre = "";
+//            return $this->getResponse()->setContent(json_encode($nombre));
+//        }
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $post_data = $request->getPost();
-            $idalmacen = $post_data['idalmacen'];
-            if (\AlmacenQuery::create()->filterByIdalmacen($idalmacen)->exists())
-                $nombre = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
-            else
-                $nombre = "";
-            return $this->getResponse()->setContent(json_encode($nombre));
+        $post_data = $request->getPost();
+        $id = $post_data['idalmacen'];
+        $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($id)->exists();
+        $fecha=null;
+        if ($inventario_anterior)
+            $fecha = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('desc')->findOne()->getInventariomesFecha('Y-m-d');
+        return $this->getResponse()->setContent(json_encode($fecha));
         }
     }
 
