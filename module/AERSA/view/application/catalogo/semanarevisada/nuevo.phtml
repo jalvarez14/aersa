@@ -1,0 +1,55 @@
+<h3 class="page-title"><?php echo "Hola"//$form->get('usuario_nombre')->getValue()?></h3>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="/catalogo/usuario">Usuarios</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span><?php //echo $form->get('usuario_nombre')->getValue()?></span>
+        </li>
+    </ul>
+</div>
+<?php foreach ($messages->getErrorMessages() as $message):?>
+    <div class="alert alert-danger alert-dismissable">
+        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
+        <strong>Error!</strong>
+        <?php echo $message?>
+        
+    </div>
+<?php endforeach;?>
+<?php
+    $form->setAttribute('action', '/catalogo/iva/nuevo');
+    echo $this->form()->openTag($form);
+?>
+<div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+    <div class="portlet-body form">
+        <div class="form-body">
+            <h3 class="form-section">Información general</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('tasaiva_valor')) ?>  
+                        <?php echo $this->formText($form->get('tasaiva_valor')) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>(*)Campos obligatorios</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions right">
+            <button class="btn blue" type="submit">
+                <i class="fa fa-check"></i>
+                Guardar
+            </button>
+        </div>
+    </div>
+</div>
+<?php  echo $this->form()->closeTag(); ?>
+
+
+<script src="/application/custom/js/validaciones.js"></script>
+

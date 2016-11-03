@@ -528,6 +528,14 @@
            
            $('a.submit').on('click',function(e){
                 
+                var ordentablajeria_merma = $('input[name=ordentablajeria_merma]').val();
+                if(ordentablajeria_merma < 0){
+                    alert("La merma no puede ser negativa. Favor de verificar.");
+                }else{
+                    $container.find('button[type=submit]').trigger('click');
+                }
+                
+                /*
                 var inyeccion = ($('input[name=ordentablajeria_inyeccion]').val() != "") ? parseFloat($('input[name=ordentablajeria_inyeccion]').val()) :0;
                 inyeccion = parseFloat(inyeccion);
                 var pesobruto = parseFloat($('input[name=ordentablajeria_numeroporciones]').val());
@@ -535,9 +543,7 @@
                 pesobruto = pesobruto + inyeccion;
                 pesobruto = parseFloat(parseFloat(pesobruto).toFixed(6));
                 var pesoneto = parseFloat(parseFloat($('input[name=ordentablajeria_pesoneto]').val()).toFixed(6));
-                
-                console.log(pesobruto);
-                console.log(pesoneto);
+
                 console.log(Math.abs(pesobruto - pesoneto));
                 console.log(Math.abs(pesobruto*.02));
                 if(parseFloat(parseFloat(Math.abs((pesobruto - pesoneto))).toFixed(6)) <= Math.abs(pesobruto*.02)){
@@ -545,7 +551,7 @@
                 }else{
                     alert("Diferencia mayor al 2% entre el Peso bruto y la diferencia de kilos");
                 }
-                
+                */
                
            });
     
