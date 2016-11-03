@@ -64,6 +64,7 @@
             yearSuffix: ''
         };
         $.datepicker.setDefaults($.datepicker.regional['es']);
+
         $(function () {
             $("#fecha").datepicker();
         });
@@ -97,9 +98,9 @@
                 dataType: "json",
                 data: {idalmacen: checkbox},
                 success: function (data) {
-                    if (data != null) {
-                        var res = data.split("-");
-                        container.find('input[name=fecha_inicio]').datepicker("option", "minDate", new Date(res[0] + "/" + res[1] + "/" + res[2]));
+                    if (data.length!=0) {
+                        availableDates=data;
+                        container.find('input[name=fecha_inicio]').datepicker("option", "beforeShowDay", available);
                         container.find('input[name=fecha_inicio]').attr('disabled', false);
                     } else {
                         container.find('input[name=fecha_inicio]').attr('disabled', true);
@@ -109,6 +110,18 @@
                     }
                 },
             });
+        }
+
+        var availableDates = [];
+
+        function available(date) {
+
+            dmy = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+            if ($.inArray(dmy, availableDates) != -1) {
+                return [true, "", "Available"];
+            } else {
+                return [false, "", "unAvailable"];
+            }
         }
         /*
          * Public methods
@@ -129,7 +142,7 @@
                     wildcard: '%QUERY'
                 }
             });
-            
+
             $('input#producto_autocomplete').typeahead(null, {
                 name: 'best-pictures',
                 display: 'value',
@@ -168,19 +181,26 @@
             $.datepicker.setDefaults($.datepicker.regional['es']);
             container.find('input[name=fecha_inicio]').keydown(false);
             container.find('input[name=fecha_fin]').keydown(false);
+//            container.find('input[name=fecha_inicio]').datepicker({
+//                format: 'dd/mm/yyyy',
+//                beforeShowDay: function (date) {
+//                    var a = new Array();
+//                    a[0] = date.getDay() == 1;
+//                    a[1] = '';
+//                    a[2] = '';
+//                    return a;
+//                }
+//            });
+
+
+
             container.find('input[name=fecha_inicio]').datepicker({
                 format: 'dd/mm/yyyy',
-                maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
-                beforeShowDay: function (date) {
-                    var a = new Array();
-                    a[0] = date.getDay() == 1;
-                    a[1] = '';
-                    a[2] = '';
-                    return a;
-                }
+//                beforeShowDay: available
             });
 
             container.find('input[name=fecha_fin]').attr('disabled', true);
+            container.find('input[name=fecha_inicio]').attr('disabled', true);
 
 
             $('input[name=fecha_inicio]').on('change', function () {
@@ -211,6 +231,7 @@
             $container.find('input:radio').on('click', function () {
                 revisarSelect();
                 fechaInicio();
+                $('input[name=almacenes]').val($(this).attr('id'));
             });
 
             $('#generar').on('click', function () {
