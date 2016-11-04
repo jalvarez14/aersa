@@ -1,7 +1,6 @@
 <?php
 
 namespace Application\Reportes\Controller;
-
 include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -27,10 +26,10 @@ class CardexController extends AbstractActionController {
                 $post_data['inicio'] = $post_data['fecha_inicio'];
                 $post_data['fin'] = $post_data['fecha_fin'];
                 $archivo = true;
-                foreach ($post_data as $key => $value) {
-                    if (strpos($key, '-'))
-                        array_push($alm, substr($key, 4));
-                }
+//                foreach ($post_data as $key => $value) {
+//                    if (strpos($key, '-'))
+//                        array_push($alm, substr($key, 4));
+//                }
             }
             $productosArray = array();
             $reporte = array();
@@ -44,7 +43,7 @@ class CardexController extends AbstractActionController {
             $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', strtotime($inicioSpli[2] . "-" . $inicioSpli[1] . "-" . $inicioSpli[0])));
             $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
             $num_pod = 0;
-            foreach ($post_data['almacenes'] as $idalmacen) {
+            $idalmacen=$post_data['almacenes'];
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
                 $objproducto = new \Producto();
 
@@ -129,8 +128,7 @@ class CardexController extends AbstractActionController {
                         }
                     }
                 }
-            }
-            foreach ($post_data['almacenes'] as $idalmacen) {
+             $idalmacen=$post_data['almacenes'];
 
 
 
@@ -536,7 +534,6 @@ class CardexController extends AbstractActionController {
                         }
                     }
                 }
-            }
 
             $idalmacen=$post_data['almacenes'];
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
@@ -555,7 +552,6 @@ class CardexController extends AbstractActionController {
                         else
                             $pedido = false;
                     }
-
                     if ($pedido) {
                         if (isset($reporteHead[$idalmacen][$objproducto->getIdproducto()]['producto'])) {
                             $nombreProducto = $reporteHead[$idalmacen][$objproducto->getIdproducto()]['producto'];
@@ -595,7 +591,7 @@ class CardexController extends AbstractActionController {
             if ($archivo) {
                 $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
                 $template = '/kardex.xlsx';
-                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
+                $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates/';
                 $config = array(
                     'template' => $template,
                     'templateDir' => $templateDir
