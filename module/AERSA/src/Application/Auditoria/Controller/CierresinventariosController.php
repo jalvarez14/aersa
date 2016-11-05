@@ -389,7 +389,7 @@ class CierresinventariosController extends AbstractActionController {
                             if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                 $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
                                 $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
-                                $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
+                                //$stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                 $explosion=$arrayReporte[$idpr][$exp] + ($cant * $stockFisico);
                                 $arrayReporte[$idpr][$exp] = $explosion;
                                 $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico']=$explosion+$stockFisico;
