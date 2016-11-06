@@ -347,7 +347,7 @@
                                             $container.find('#boton_g').slideDown();
                                             $container.find('#revisada').slideDown();
                                             revisadaControl();
-                                            $container.find('input').numeric();
+                                            $container.find('.numero').numeric();
                                             $('#reporte_table tbody input[type=text]').on('change', function () {
                                                 var $tr = $(this).closest("tr");
                                                 calcular($tr);//mandar el total

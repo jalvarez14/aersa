@@ -525,7 +525,7 @@ array_push
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_reajuste]' value='$ajuste'>$ajuste</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td>"
-. "<td>$unidad</td><td><input required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td>"
+. "<td>$unidad</td><td><input class='numero' required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_explosion]' value='$explosion'>$explosion</td>"
 . "<td class='inventariomesdetalle_totalfisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_totalfisico]' value='$totalFisico'><span>$totalFisico</span></td>"
 . "<td class='inventariomesdetalle_importefisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_importefisico]' value='$impFis'><span>$impFis</span></td>"
