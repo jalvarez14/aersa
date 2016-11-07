@@ -105,7 +105,7 @@ class RequisicionController extends AbstractActionController {
 
                 $requisicion_detalle->save();
 
-                if ($tipopro->getProductoTipo() != 'simple') {
+                if ($tipopro->getProductoTipo() != 'simple' && ($requisicion->getIdsucursalorigen() !=  $requisicion->getIdsucursaldestino())) {
                     $receta = new \Receta();
                     $receta = \RecetaQuery::create()->filterByIdproducto($tipopro->getIdproducto())->find();
                     foreach ($receta as $pro) {
@@ -279,7 +279,7 @@ class RequisicionController extends AbstractActionController {
                     $requisicion_detalle->setIdrequisicion($entity->getIdrequisicion());
                     $requisicion_detalle->save();
                     $tipopro = \ProductoQuery::create()->filterByIdproducto($requisicion_detalle->getIdproducto())->findOne();
-                    if ($tipopro->getProductoTipo() != 'simple') {
+                    if ($tipopro->getProductoTipo() != 'simple' && ($requisicion->getIdsucursalorigen()!=$requisicion->getIdsucursaldestino())) {
                         $receta = new \Receta();
                         $receta = \RecetaQuery::create()->filterByIdproducto($tipopro->getIdproducto())->find();
                         foreach ($receta as $pro) {

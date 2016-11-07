@@ -235,14 +235,14 @@
             });
 
             $('#generar').on('click', function () {
-                var almacenes = new Array();
+                var almacenes=null;
                 var productos = new Array();
                 $('.producto').each(function () {
                     productos.push(this.id);
                 });
                 $container.find('.generado').filter(function () {
                     if ($(this).prop('checked'))
-                        almacenes.push($(this).attr('id'));
+                        almacenes=$(this).attr('id');
                 });
 
                 var inicio = container.find('input[name=fecha_inicio]').val();

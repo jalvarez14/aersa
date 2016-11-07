@@ -389,9 +389,9 @@ class CierresinventariosController extends AbstractActionController {
                             if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                 $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
                                 $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
-                                $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                 $explosion=$arrayReporte[$idpr][$exp] + ($cant * $stockFisico);
                                 $arrayReporte[$idpr][$exp] = $explosion;
+                                $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                 $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico']=$explosion+$stockFisico;
                                 $totalFisico=$arrayReporte[$idpr]['inventariomesdetalle_totalfisico'];
                                 $dif =$totalFisico - abs($stockTeorico);
@@ -525,7 +525,7 @@ array_push
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_reajuste]' value='$ajuste'>$ajuste</td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td>"
-. "<td>$unidad</td><td><input required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td>"
+. "<td>$unidad</td><td><input class='numero' required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_explosion]' value='$explosion'>$explosion</td>"
 . "<td class='inventariomesdetalle_totalfisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_totalfisico]' value='$totalFisico'><span>$totalFisico</span></td>"
 . "<td class='inventariomesdetalle_importefisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_importefisico]' value='$impFis'><span>$impFis</span></td>"
@@ -763,6 +763,27 @@ array_push
                 }
             }
             $fecha = $inventariomes->getInventariomesFecha();
+            
+            $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+        $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+        $time = strtotime("1 January $anio_act", time());
+        $day = date('w', $time);
+        $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+        $time += 6 * 24 * 3600;
+            
+            $fecha = date('Y-m-d', $time);
+        
+            $ts = strtotime("now");
+            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
+            //dia inicio de semana date('Y-m-d',$start);
+            $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+            $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+            $time = strtotime("1 January $anio_act", time());
+            $day = date('w', $time);
+            $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+            $time += 6 * 24 * 3600;
+            $fecha = date('Y-m-d', $time);
+            
             $almacen_array = array();
             $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
             foreach ($almacenes as $almacen) {
@@ -778,7 +799,7 @@ array_push
                 $auditor_array[$id] = $usuario->getUsuarioNombre();
             }
 
-            $form = new \Application\Auditoria\Form\CierresinventariosForm($fecha, $almacen_array, $auditor_array);
+            $form = new \Application\Auditoria\Form\CierresinventariosForm($almacen_array, $auditor_array);
             $form->setData($inventariomes->toArray(\BasePeer::TYPE_FIELDNAME));
             $reporte = array();
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
@@ -902,6 +923,7 @@ array_push
                 'encargado' => $encargado,
                 'idempresa' => $idempresa,
                 'inventariomes' => $inventariomes,
+                'fecha'=>$fecha,
             ));
             return $view_model;
         } else {

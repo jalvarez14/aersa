@@ -279,9 +279,9 @@
                                 container.find('input[name=inventariomes_fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
                                 container.find('input[name=inventariomes_fecha]').attr('disabled', false);
                             } else {
-                                container.find('input[name=inventariomes_fecha]').attr('disabled', true);
-                                $('#batch_inventario_b').attr('disabled', true);
-                                container.find('input[name=inventariomes_fecha]').val('');
+                                var res = str.split("-");
+                                container.find('input[name=inventariomes_fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
+                                container.find('input[name=inventariomes_fecha]').attr('disabled', false);
                             }
                         },
                     });
@@ -347,7 +347,7 @@
                                             $container.find('#boton_g').slideDown();
                                             $container.find('#revisada').slideDown();
                                             revisadaControl();
-                                            $container.find('input').numeric();
+                                            $container.find('.numero').numeric();
                                             $('#reporte_table tbody input[type=text]').on('change', function () {
                                                 var $tr = $(this).closest("tr");
                                                 calcular($tr);//mandar el total
@@ -373,15 +373,70 @@
             
         }
         
-        plugin.edit = function () {
+        plugin.edit = function (str) {
+            
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            container.find('input[name=inventariomes_fecha]').attr('disabled', true);
+            container.find('select[name=idalmacen]').attr('disabled', true);
+            container.find('select[name=idauditor]').attr('disabled', true);
+            container.find('select[name=inventariomes_revisada]').attr('disabled', true);
+            container.find('input[name=inventariomes_fecha]').keydown(false);
+            var res = str.split("-");
+//            container.find('input[name=inventariomes_fecha]').datepicker({
+//                format: 'dd/mm/yyyy',
+//                //maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
+//                beforeShowDay: function (date) {
+//                    var a = new Array();
+//                    a[0] = date.getDay() == 0;
+//                    a[1] = '';
+//                    a[2] = '';
+//                    return a;
+//                }
+//            });
+            
             $container.find('table input:text').on('blur',function(){
                 var $tr = $(this).closest('tr');
                 calcular($tr);
             });
+            
+            $('select[name=idalmacen]').on('change', function () {
+                var $this=$(this);
+                if($this.val()!=0) {
+                    var id=$this.val();
+                    $.ajax({
+                        async: false,
+                        type: "POST",
+                        url: "/auditoria/cierresemana/encargado",
+                        dataType: "json",
+                        data: {id: id},
+                        success: function (data) {
+                            if(data['con']){
+                                $('#batch_inventario_b').attr('disabled', false);
+                            } else {
+                                $('#batch_inventario_b').attr('disabled', true);
+                                alert("Almacen sin encargado");
+                            }
+                            if(data['fecha']!=null) {
+                                var res = data['fecha'].split("-");
+                                container.find('input[name=inventariomes_fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
+                                container.find('input[name=inventariomes_fecha]').attr('disabled', false);
+                                container.find('input[name=inventariomes_fecha]').val(str);
+                            } else {
+                                container.find('input[name=inventariomes_fecha]').attr('disabled', true);
+                                $('#batch_inventario_b').attr('disabled', true);
+                                container.find('input[name=inventariomes_fecha]').val('');
+                            }
+                        },
+                    });
+                }
+            });
+            
             var inventario_array = {};
+            
             $('#subir_inventario').on('click', function () {
                 $('input[name=batch_inventario]').trigger('click');
             });
+            
             $('input[name=batch_inventario]').on('change', function () {
                 if ($('select[name=auditor]').val() != "" && $('select[name=almacen]').val() != "") {
                     var auditor = $('select[name=idauditor]').val();
