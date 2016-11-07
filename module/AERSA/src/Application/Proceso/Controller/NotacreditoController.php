@@ -272,12 +272,12 @@ class NotacreditoController extends AbstractActionController {
                 //EL COMPROBANTE
                 if (!empty($post_files['notacredito_factura']['name'])) {
 
-                    $type = $post_files['notacredito_factura']['type'];
-                    $type = explode('/', $type);
-                    $type = $type[1];
+                    $file_type = $post_files['notacredito_factura']['type'];
+                    $file_type = explode('/', $file_type);
+                    $file_type = $file_type[1];
 
                     $target_path = "/application/files/devoluciones/";
-                    $target_path = $target_path . 'devolucion_' . $entity->getIdnotacredito() . '.' . $type;
+                    $target_path = $target_path . 'devolucion_' . $entity->getIdnotacredito() . '.' . $file_type;
 
                     if (move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
                         $entity->setNotacreditoFactura($target_path);

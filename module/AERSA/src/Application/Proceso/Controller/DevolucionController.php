@@ -286,12 +286,12 @@ class DevolucionController extends AbstractActionController {
                 //EL COMPROBANTE
                 if (!empty($post_files['devolucion_factura']['name'])) {
 
-                    $type = $post_files['devolucion_factura']['type'];
-                    $type = explode('/', $type);
-                    $type = $type[1];
+                    $file_type = $post_files['devolucion_factura']['type'];
+                    $file_type = explode('/', $file_type);
+                    $file_type = $file_type[1];
 
                     $target_path = "/application/files/devoluciones/";
-                    $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $type;
+                    $target_path = $target_path . 'devolucion_' . $entity->getIddevolucion() . '.' . $file_type;
                     
                    
                     if (move_uploaded_file($_FILES['devolucion_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {

@@ -212,7 +212,7 @@ class CompraController extends AbstractActionController {
         //CACHAMOS EL ID QUE RECIBIMOS POR LA RUTA
         $id = $this->params()->fromRoute('id');
         $type = $this->params()->fromRoute('type');
-
+        
         //VERIFICAMOS SI EXISTE
         $exist = \CompraQuery::create()->filterByIdcompra($id)->exists();
 
@@ -327,12 +327,12 @@ class CompraController extends AbstractActionController {
                 //EL COMPROBANTE
                 if (!empty($post_files['compra_factura']['name'])) {
 
-                    $type = $post_files['compra_factura']['type'];
-                    $type = explode('/', $type);
-                    $type = $type[1];
+                    $file_type = $post_files['compra_factura']['type'];
+                    $file_type = explode('/', $file_type);
+                    $file_type = $file_type[1];
 
                     $target_path = "/application/files/compras/";
-                    $target_path = $target_path . 'compra_' . $entity->getIdcompra() . '.' . $type;
+                    $target_path = $target_path . 'compra_' . $entity->getIdcompra() . '.' . $file_type;
 
                     if (move_uploaded_file($_FILES['compra_factura']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . $target_path)) {
                         $entity->setCompraFactura($target_path);
