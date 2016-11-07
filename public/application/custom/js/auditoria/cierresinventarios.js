@@ -279,9 +279,9 @@
                                 container.find('input[name=inventariomes_fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
                                 container.find('input[name=inventariomes_fecha]').attr('disabled', false);
                             } else {
-                                container.find('input[name=inventariomes_fecha]').attr('disabled', true);
-                                $('#batch_inventario_b').attr('disabled', true);
-                                container.find('input[name=inventariomes_fecha]').val('');
+                                var res = str.split("-");
+                                container.find('input[name=inventariomes_fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
+                                container.find('input[name=inventariomes_fecha]').attr('disabled', false);
                             }
                         },
                     });
@@ -377,19 +377,22 @@
             
             $.datepicker.setDefaults($.datepicker.regional['es']);
             container.find('input[name=inventariomes_fecha]').attr('disabled', true);
+            container.find('select[name=idalmacen]').attr('disabled', true);
+            container.find('select[name=idauditor]').attr('disabled', true);
+            container.find('select[name=inventariomes_revisada]').attr('disabled', true);
             container.find('input[name=inventariomes_fecha]').keydown(false);
             var res = str.split("-");
-            container.find('input[name=inventariomes_fecha]').datepicker({
-                format: 'dd/mm/yyyy',
-                maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
-                beforeShowDay: function (date) {
-                    var a = new Array();
-                    a[0] = date.getDay() == 0;
-                    a[1] = '';
-                    a[2] = '';
-                    return a;
-                }
-            });
+//            container.find('input[name=inventariomes_fecha]').datepicker({
+//                format: 'dd/mm/yyyy',
+//                //maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
+//                beforeShowDay: function (date) {
+//                    var a = new Array();
+//                    a[0] = date.getDay() == 0;
+//                    a[1] = '';
+//                    a[2] = '';
+//                    return a;
+//                }
+//            });
             
             $container.find('table input:text').on('blur',function(){
                 var $tr = $(this).closest('tr');
