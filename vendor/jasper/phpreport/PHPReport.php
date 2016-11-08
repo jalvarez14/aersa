@@ -25,7 +25,6 @@
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
  * @version 1.1, 2013-01-06
  */
-
 require __DIR__ . '/vendor/autoload.php';
 
 class PHPReport {

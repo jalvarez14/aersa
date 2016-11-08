@@ -1,6 +1,6 @@
 <?php
 namespace Application\Catalogo\Controller;
-include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
+
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;

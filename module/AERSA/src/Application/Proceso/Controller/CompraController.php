@@ -1,6 +1,6 @@
 <?php
 namespace Application\Proceso\Controller;
-include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
+
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -215,7 +215,7 @@ class CompraController extends AbstractActionController {
         
         //VERIFICAMOS SI EXISTE
         $exist = \CompraQuery::create()->filterByIdcompra($id)->exists();
-
+        
         if ($exist) {
 
             // OBTENEMOS EL MES Y EL ANIO ACTIVO DE LA SUCURSAL
@@ -225,6 +225,7 @@ class CompraController extends AbstractActionController {
 
             //INTANCIAMOS NUESTRA ENTIDAD
             $entity = \CompraQuery::create()->findPk($id);
+          
             if ($type != NULL) {
                 $fecha = $entity->getCompraFechacompra('d/m/Y');
                 $proveedor = $entity->getProveedor()->getProveedorNombrecomercial();
@@ -301,11 +302,12 @@ class CompraController extends AbstractActionController {
                     echo $R->render('excel');
                 exit();
             }
-
+            
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();
+               
                 $post_files = $request->getFiles();
 
                 $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
@@ -323,10 +325,10 @@ class CompraController extends AbstractActionController {
                 }
 
                 $entity->save();
-
+                   
                 //EL COMPROBANTE
                 if (!empty($post_files['compra_factura']['name'])) {
-
+                
                     $file_type = $post_files['compra_factura']['type'];
                     $file_type = explode('/', $file_type);
                     $file_type = $file_type[1];
@@ -339,12 +341,12 @@ class CompraController extends AbstractActionController {
                         $entity->save();
                     }
                 }
-
+               
                 //COMPRA DETALLES
                 $entity->getCompradetalles()->delete();
-
+                
                 foreach ($post_data['productos'] as $producto) {
-
+                   
                     $compra_detalle = new \Compradetalle();
                     $compra_detalle->setIdcompra($entity->getIdcompra())
                             ->setCompradetalleRevisada(0)
@@ -356,20 +358,24 @@ class CompraController extends AbstractActionController {
                             ->setCompradetalleDescuento($producto['descuento'])
                             ->setCompradetalleIeps($producto['ieps'])
                             ->setCompradetalleSubtotal($producto['subtotal']);
-
+                    
                     if ($entity->getCompraTipo() == 'compra') {
                         $compra_detalle->setIdalmacen($producto['almacen']);
                         if (isset($producto['revisada'])) {
+                             
                             $product = \ProductoQuery::create()->findPk($producto['idproducto']);
                             $product->setProductoCosto($producto['costo_unitario'])->save();
+                                    
+                              
                             \Application\Catalogo\Controller\ProductoController::updateSubreceta($product->getIdproducto());
+                             
                         }
                     }
-
+                    
                     if (isset($producto['revisada'])) {
                         $compra_detalle->setCompradetalleRevisada(1);
                     }
-
+                   
                     $compra_detalle->save();
                 }
 

@@ -1,6 +1,6 @@
 <?php
 namespace Application\Catalogo\Controller;
-include getcwd() . '/vendor/jasper/phpreport/PHPReport.php';
+
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -633,8 +633,6 @@ class ProductoController extends AbstractActionController
         
         $habilitar_unidad = \ProductoQuery::create()->filterByIdproducto($prod->getIdproducto())->filterByProductoTipo(array('plu','subreceta'))->filterByIdcategoria(2)->exists();
         
-        
-        
         if ($request->isPost()) 
         {
             $post_data = $request->getPost();
@@ -822,6 +820,7 @@ class ProductoController extends AbstractActionController
     
     //RECIBE EL IDPRODUCTO DE EL PRODUCTO TIPO SIMPLE Y ACTUALIZA EL COSTO DEL PRODUCTO TIPO SUBRECETA
     public static function updateSubreceta($idproducto){
+      
         $recetas = \RecetaQuery::create()->filterByIdproductoreceta($idproducto)->find();
         $receta = new \Receta();
         foreach ($recetas as $receta){
