@@ -767,7 +767,26 @@
                     format: 'dd/mm/yyyy',
                 });
             }
+            $('input[name=compra_fechacompra]').on('changeDate', function(e) {
+                var date = $('input[name=compra_fechacompra]').val();
+                $.ajax({
+                    url:'/autocomplete/getalmacenesbyinventario',
+                    type: 'POST',
+                    dataType: 'json',
+                    data:{date:date},
+                    success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacen] option').remove();
        
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+                   
+                            $('select[name=idalmacen]').append(option);
+                        });
+                    }
+                });
+            }); 
             
             
             container.find('input[name=compra_fechaentrega]').datepicker({
@@ -829,11 +848,12 @@
             $('#producto_add').on('click',function(){  
                 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var almacenen_select = $('<td><select class="form-control" name=productos['+count+'][almacen]></td>');
-                $.each(almacenes,function(index){
-                    var option = $('<option value="'+index+'">'+this+'</option>');
-                    almacenen_select.find('select').append(option);
-                });
+
+                var almacenen_select = $('<td>');
+                almacenen_select.append($('select[name=idalmacen]').clone());
+                var almacen_selected = $('select[name=idalmacen] option:selected').val();
+                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
+                almacenen_select.find('select').attr('name',"productos["+count+"][almacen]");
                 
                 var tipo = $('select[name=compra_tipo] option:selected').val();
                 
@@ -841,10 +861,7 @@
                    
                     almacenen_select.find('select').attr('disabled',true);
                 }
-                
-                var almacen_selected = $('select[name=idalmacen] option:selected').val();
-                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
-                
+
                 var producto_costo = (typeof $('input#producto_costo').val() != 'undefined') ? $('input#producto_costo').val() : 0;
                 
                 var tr = $('<tr>');
@@ -1034,7 +1051,26 @@
                     format: 'dd/mm/yyyy',
                 });
             }
-            
+            $('input[name=compra_fechacompra]').on('changeDate', function(e) {
+                var date = $('input[name=compra_fechacompra]').val();
+                $.ajax({
+                    url:'/autocomplete/getalmacenesbyinventario',
+                    type: 'POST',
+                    dataType: 'json',
+                    data:{date:date},
+                    success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacen] option').remove();
+       
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+                   
+                            $('select[name=idalmacen]').append(option);
+                        });
+                    }
+                });
+            }); 
             container.find('input[name=compra_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
@@ -1095,22 +1131,19 @@
             $('#producto_add').on('click',function(){  
                 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var almacenen_select = $('<td><select class="form-control" name=productos['+count+'][almacen]></td>');
-                $.each(almacenes,function(index){
-                    var option = $('<option value="'+index+'">'+this+'</option>');
-                    almacenen_select.find('select').append(option);
-                });
-                
+                var almacenen_select = $('<td>');
+                almacenen_select.append($('select[name=idalmacen]').clone());
+                var almacen_selected = $('select[name=idalmacen] option:selected').val();
+                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
+                almacenen_select.find('select').attr('name',"productos["+count+"][almacen]");
+           
                 var tipo = $('select[name=compra_tipo] option:selected').val();
                 
                 if(tipo == 'ordecompra'){
                    
                     almacenen_select.find('select').attr('disabled',true);
                 }
-                
-                var almacen_selected = $('select[name=idalmacen] option:selected').val();
-                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
-                
+
                 var producto_costo = (typeof $('input#producto_costo').val() != 'undefined') ? $('input#producto_costo').val() : 0;
                  
                 var tr = $('<tr>');

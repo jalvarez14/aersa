@@ -285,7 +285,9 @@ class VentaController extends AbstractActionController {
         $request = $this->getRequest();
         if($request->isPost()){
             $post_data = $request->getPost();
-           
+            $date = date_create_from_format('d/m/Y H:i', $post_data['venta_fecha']." 00:00");
+            
+            
             $producto_nombe = $post_data['producto_nombre'];
             $producto_cantidad = $post_data['producto_cantidad'];
             $producto_subtotal = $post_data['producto_subtotal'];
@@ -303,16 +305,17 @@ class VentaController extends AbstractActionController {
             if($exist){
                 $producto = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre($producto_nombe)->findOne();
                
-
-
+                $productosucursalalmacen = \ProductosucursalalmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByIdproducto($producto->getIdproducto())->findOne();
+                $inventario_exist = \InventariomesQuery::create()->filterByIdalmacen($productosucursalalmacen->getIdalmacen())->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
+                if($inventario_exist){
+                    return $this->getResponse()->setContent(json_encode(array('response' => false, 'create' => false, 'rename' => false, 'msg' => "No es posible afectar un almacén que cuenta con inventario de cierre de semana”")));
+                }
+                
+                
                 $type = $producto->getProductoTipo();
                 //SI EL PRODUCTO ES PLU
                 if($type == 'plu'){
-                    
-                    //OBTENEMOS EL ALMACEN DONDE SE DEBE DE REGISTRAR
-                    $productosucursalalmacen = \ProductosucursalalmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByIdproducto($producto->getIdproducto())->findOne();
-                    
-                    
+
                     $almacen = $productosucursalalmacen->getAlmacen();
                     
                     $tmp['idproducto'] = $producto->getIdproducto();

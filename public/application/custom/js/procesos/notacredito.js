@@ -340,7 +340,26 @@
                     format: 'dd/mm/yyyy',
                 });
             }
-            
+            $('input[name=notacredito_fechacreacion]').on('changeDate', function(e) {
+                var date = $('input[name=notacredito_fechacreacion]').val();
+                $.ajax({
+                    url:'/autocomplete/getalmacenesbyinventario',
+                    type: 'POST',
+                    dataType: 'json',
+                    data:{date:date},
+                    success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacen] option').remove();
+       
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+                   
+                            $('select[name=idalmacen]').append(option);
+                        });
+                    }
+                });
+            }); 
             
             
             
@@ -402,11 +421,11 @@
             $('#producto_add').on('click',function(){  
                 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var almacenen_select = $('<td><select class="form-control" name=productos['+count+'][almacen]></td>');
-                $.each(almacenes,function(index){
-                    var option = $('<option value="'+index+'">'+this+'</option>');
-                    almacenen_select.find('select').append(option);
-                });
+                var almacenen_select = $('<td>');
+                almacenen_select.append($('select[name=idalmacen]').clone());
+                var almacen_selected = $('select[name=idalmacen] option:selected').val();
+                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
+                almacenen_select.find('select').attr('name',"productos["+count+"][almacen]");
                 
 
 
@@ -563,6 +582,27 @@
                 });
             }
             
+            $('input[name=notacredito_fechacreacion]').on('changeDate', function(e) {
+                var date = $('input[name=notacredito_fechacreacion]').val();
+                $.ajax({
+                    url:'/autocomplete/getalmacenesbyinventario',
+                    type: 'POST',
+                    dataType: 'json',
+                    data:{date:date},
+                    success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacen] option').remove();
+       
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+                   
+                            $('select[name=idalmacen]').append(option);
+                        });
+                    }
+                });
+            }); 
+            
             container.find('input[name=notacredito_fechaentrega]').datepicker({
                 format: 'dd/mm/yyyy',
             });
@@ -622,11 +662,11 @@
             $('#producto_add').on('click',function(){  
                 
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
-                var almacenen_select = $('<td><select class="form-control" name=productos['+count+'][almacen]></td>');
-                $.each(almacenes,function(index){
-                    var option = $('<option value="'+index+'">'+this+'</option>');
-                    almacenen_select.find('select').append(option);
-                });
+                var almacenen_select = $('<td>');
+                almacenen_select.append($('select[name=idalmacen]').clone());
+                var almacen_selected = $('select[name=idalmacen] option:selected').val();
+                almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
+                almacenen_select.find('select').attr('name',"productos["+count+"][almacen]");
                 
                                
                 var tr = $('<tr>');

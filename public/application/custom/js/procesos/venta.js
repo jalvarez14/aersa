@@ -134,6 +134,11 @@
                     format: 'dd/mm/yyyy',
                 });
             }
+            
+            $('input[name=venta_fechaventa]').on('changeDate', function(e) {
+                
+                $('#upload_file').attr('disabled',false);
+            });
             $('#upload_file').on('click',function(){
                 
                 $('#upload_container input').removeClass('invalid');
@@ -191,7 +196,7 @@
                                 }
 
                                 var ventas_array = Array();
-                                for(var i=2;i<=cont_rows;i++){
+                                for(var i=2;i<=cont_rows+1;i++){
                                     
                                     if(typeof workbook.Sheets[first_sheet_name][col_nombre+i].v != 'undefined'){
                                         var tmp = {
@@ -223,6 +228,7 @@
                                             type: 'POST',
                                             dataType: 'JSON',
                                             data: {
+                                                venta_fecha: $('input[name=venta_fechaventa]').val(),
                                                 producto_nombre:   ventas_array[count].nombre,
                                                 producto_cantidad: ventas_array[count].cantidad,
                                                 producto_subtotal: ventas_array[count].subtotal,
@@ -1229,6 +1235,9 @@
                                                         
                                                         nextAjax();
                                                     }
+                                                }else{
+                                                    alert(data.msg);
+                                                    $('button[type=submit]').attr('disabled',true);
                                                 }
                                                 
                                             }

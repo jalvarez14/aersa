@@ -178,6 +178,27 @@
                 });
             }
             
+            $('input[name=ajusteinventario_fecha]').on('changeDate', function(e) {
+                var date = $('input[name=ajusteinventario_fecha]').val();
+                $.ajax({
+                    url:'/autocomplete/getalmacenesbyinventario',
+                    type: 'POST',
+                    dataType: 'json',
+                    data:{date:date},
+                    success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacen] option').remove();
+       
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+                   
+                            $('select[name=idalmacen]').append(option);
+                        });
+                    }
+                });
+            }); 
+            
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -242,6 +263,27 @@
                     format: 'dd/mm/yyyy',
                 });
             }
+            
+             $('input[name=ajusteinventario_fecha]').on('changeDate', function(e) {
+                var date = $('input[name=ajusteinventario_fecha]').val();
+                $.ajax({
+                    url:'/autocomplete/getalmacenesbyinventario',
+                    type: 'POST',
+                    dataType: 'json',
+                    data:{date:date},
+                    success: function (data, textStatus, jqXHR) {
+                        $container.find('select[name=idalmacen] option').remove();
+       
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+                   
+                            $('select[name=idalmacen]').append(option);
+                        });
+                    }
+                });
+            }); 
             
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),

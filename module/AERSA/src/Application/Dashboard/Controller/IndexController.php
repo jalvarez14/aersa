@@ -27,7 +27,7 @@ class IndexController extends AbstractActionController
             $date = date_create_from_format('d/m/Y H:i', $post_data['date']." 00:00");
             
             $result_array = array();
-            $almacenes_array = \AlmacenQuery::create()->select(array('Idalmacen'))->filterByIdsucursal($session['idsucursal'])->find()->toArray();
+            $almacenes_array = \AlmacenQuery::create()->filterByAlmacenEstatus(1)->select(array('Idalmacen'))->filterByIdsucursal($session['idsucursal'])->find()->toArray();
             foreach ($almacenes_array as $almacen){
                 $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
                 if(!$exist){
