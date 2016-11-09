@@ -770,7 +770,7 @@
             $('input[name=compra_fechacompra]').on('changeDate', function(e) {
                 var date = $('input[name=compra_fechacompra]').val();
                 $.ajax({
-                    url:'/autocomplete/getalmacenesbyinventario',
+                    url:'/procesos/compra/getalmacenesbyinventario',
                     type: 'POST',
                     dataType: 'json',
                     data:{date:date},

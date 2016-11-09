@@ -349,7 +349,7 @@
             $('input[name=ordentablajeria_fecha]').on('changeDate', function(e) {
                 var date = $('input[name=ordentablajeria_fecha]').val();
                 $.ajax({
-                    url:'/autocomplete/getalmacenesbyinventario',
+                    url:'/procesos/tablajeria/getalmacenesbyinventario',
                     type: 'POST',
                     dataType: 'json',
                     data:{date:date},
@@ -659,7 +659,7 @@
             $('input[name=ordentablajeria_fecha]').on('changeDate', function(e) {
                 var date = $('input[name=ordentablajeria_fecha]').val();
                 $.ajax({
-                    url:'/autocomplete/getalmacenesbyinventario',
+                    url:'/procesos/tablajeria/getalmacenesbyinventario',
                     type: 'POST',
                     dataType: 'json',
                     data:{date:date},

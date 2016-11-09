@@ -343,7 +343,7 @@
             $('input[name=notacredito_fechacreacion]').on('changeDate', function(e) {
                 var date = $('input[name=notacredito_fechacreacion]').val();
                 $.ajax({
-                    url:'/autocomplete/getalmacenesbyinventario',
+                    url:'/procesos/credito/getalmacenesbyinventario',
                     type: 'POST',
                     dataType: 'json',
                     data:{date:date},
@@ -585,7 +585,7 @@
             $('input[name=notacredito_fechacreacion]').on('changeDate', function(e) {
                 var date = $('input[name=notacredito_fechacreacion]').val();
                 $.ajax({
-                    url:'/autocomplete/getalmacenesbyinventario',
+                    url:'/procesos/credito/getalmacenesbyinventario',
                     type: 'POST',
                     dataType: 'json',
                     data:{date:date},

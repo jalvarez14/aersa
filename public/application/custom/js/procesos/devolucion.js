@@ -339,7 +339,7 @@
             $('input[name=devolucion_fechacreacion]').on('changeDate', function(e) {
                 var date = $('input[name=devolucion_fechacreacion]').val();
                 $.ajax({
-                    url:'/autocomplete/getalmacenesbyinventario',
+                    url:'/procesos/devolucion/getalmacenesbyinventario',
                     type: 'POST',
                     dataType: 'json',
                     data:{date:date},
@@ -575,7 +575,7 @@
             $('input[name=devolucion_fechacreacion]').on('changeDate', function(e) {
                 var date = $('input[name=devolucion_fechacreacion]').val();
                 $.ajax({
-                    url:'/autocomplete/getalmacenesbyinventario',
+                    url:'/procesos/devolucion/getalmacenesbyinventario',
                     type: 'POST',
                     dataType: 'json',
                     data:{date:date},

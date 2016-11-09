@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route' => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route' => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -809,6 +809,7 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    
                                     'nuevo' => array(
                                         'type' => 'Literal',
                                         'options' => array(
@@ -930,6 +931,15 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    'getalmacenesbyinventario' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/getalmacenesbyinventario',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Compra',
+                                                'action' => 'getalmacenesbyinventario',
+                                            ),
+                                        ),
+                                    ),
                                     'agregarproveedor' => array(
                                         'type' => 'Literal', 'options' => array(
                                             'route' => '/agregarproveedor',
@@ -990,6 +1000,15 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    'getalmacenesbyinventario' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/getalmacenesbyinventario',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Consignacion',
+                                                'action' => 'getalmacenesbyinventario',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevoregistro' => array(
                                         'type' => 'Literal', 'options' => array(
                                             'route' => '/nuevoregistro',
@@ -1142,6 +1161,15 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    'getalmacenesbyinventario' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/getalmacenesbyinventario',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Devolucion',
+                                                'action' => 'getalmacenesbyinventario',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevoregistro' => array(
                                         'type' => 'Literal', 'options' => array(
                                             'route' => '/nuevoregistro',
@@ -1246,6 +1274,15 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    'getalmacenesbyinventario' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/getalmacenesbyinventario',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Notacredito',
+                                                'action' => 'getalmacenesbyinventario',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevoregistro' => array(
                                         'type' => 'Literal', 'options' => array(
                                             'route' => '/nuevoregistro',
@@ -1411,6 +1448,15 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    'getalmacenesbyinventario' => array(
+                                        'type' => 'Literal', 'options' => array(
+                                            'route' => '/getalmacenesbyinventario',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Tablajeria',
+                                                'action' => 'getalmacenesbyinventario',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevoregistro' => array(
                                         'type' => 'Literal', 'options' => array(
                                             'route' => '/nuevo',
@@ -2211,8 +2257,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route' => 'aersa', //LOCAL
-                    'route' => 'aersamx.com', //PRODUCCION
+                    'route' => 'aersa', //LOCAL
+                    //'route' => 'aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(

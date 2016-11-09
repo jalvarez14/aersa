@@ -7,7 +7,32 @@ use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
 class CompraController extends AbstractActionController {
-
+    
+    public function getalmacenesbyinventarioAction(){
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            $date = date_create_from_format('d/m/Y H:i', $post_data['date']." 00:00");
+            
+            $result_array = array();
+            $almacenes_array = \AlmacenQuery::create()->filterByAlmacenNombre('Créditos al costo',  \Criteria::NOT_EQUAL)->filterByAlmacenEstatus(1)->select(array('Idalmacen'))->filterByIdsucursal($session['idsucursal'])->find()->toArray();
+            foreach ($almacenes_array as $almacen){
+                $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
+                if(!$exist){
+                    $almacen_nombre = \AlmacenQuery::create()->findPk($almacen);
+                    $almacen_nombre = $almacen_nombre->getAlmacenNombre();
+                    $result_array[$almacen] = $almacen_nombre;
+                }
+            }
+            return $this->getResponse()->setContent(json_encode($result_array));
+        }
+       
+    }
+    
     public function agregarproveedorAction() {
         $request = $this->getRequest();
         if ($request->isPost()) {
