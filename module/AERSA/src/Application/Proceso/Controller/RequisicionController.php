@@ -452,8 +452,19 @@ class RequisicionController extends AbstractActionController {
 
     public function getalmdesAction() {
         $cat = $this->params()->fromRoute('id');
-        $result = \AlmacenQuery::create()->filterByIdsucursal($cat)->filterByAlmacenEstatus(1)->find()->toArray();
-        return $this->getResponse()->setContent(json_encode($result));
+        $date = $this->params()->fromQuery('date');
+        $date = date_create_from_format('d/m/Y H:i', $date." 00:00");
+        $almacenes_array = \AlmacenQuery::create()->select(array('Idalmacen'))->filterByIdsucursal($cat)->filterByAlmacenEstatus(1)->find()->toArray();
+        $result_array = array();
+        foreach ($almacenes_array as $almacen){
+            $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
+            if(!$exist){
+                $almacen_nombre = \AlmacenQuery::create()->findPk($almacen);
+                $almacen_nombre = $almacen_nombre->getAlmacenNombre();
+                $result_array[$almacen] = $almacen_nombre;
+            }
+        }
+        return $this->getResponse()->setContent(json_encode($result_array));
     }
 
     public function gettipoproAction() {

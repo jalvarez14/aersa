@@ -94,25 +94,28 @@
 
         var getAlmacenesSucDes = function () {
             var idsucdes = $("[name=idsucursaldestino]").val();
+            var date = $("[name=requisicion_fecha]").val();
             $.ajax({
                 async: false,
                 type: "GET",
                 url: "/procesos/requisicion/getalmdes/" + idsucdes,
                 dataType: "json",
+                data:{date:date},
                 success: function (data) {
+                    
                     if (data.length != 0)
                     {
-                        $("[name=idalmacendestino]").html('');
-                        for (var k in data)
-                        {
-                            if ((idsucdes == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() == data[k]['Idalmacen']))
-                            {
-                            } else
-                                $("[name=idalmacendestino]").append('<option value="' + data[k]['Idalmacen'] + '">' + data[k]['AlmacenNombre'] + '</option>');
-                        }
+                        $container.find('select[name=idalmacendestino] option').remove();
+                        $.each(data,function(index,value){
+                            var option = $('<option>');
+                            option.text(value);
+                            option.attr('value',index);
+
+                            $('select[name=idalmacendestino]').append(option);
+                        });
                     } else
                     {
-                        $("[name=idalmacendestino]").html('');
+                        $container.find('select[name=idalmacendestino] option').remove();
                         alert('No existen almacenes para sucursal destino');
                     }
                 },
