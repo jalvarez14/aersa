@@ -202,10 +202,18 @@
                         $("[name=idalmacendestino]").html('');
                         for (var k in data)
                         {
+                            $container.find('select[name=idalmacendestino] option').remove();
+                            $.each(data,function(index,value){
+                                var option = $('<option>');
+                                option.text(value);
+                                option.attr('value',index);
+
+                                $('select[name=idalmacendestino]').append(option);
+                            });
                             if ((sucursal_destino == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() == data[k]['Idalmacen']))
                             {
                             } else
-                                $("[name=idalmacendestino]").append('<option value="' + data[k]['Idalmacen'] + '">' + data[k]['AlmacenNombre'] + '</option>');
+                                $("[name=idalmacendestino]").append('<option value="' + k + '">' + data[k] + '</option>');
                         }
                     } else
                     {
