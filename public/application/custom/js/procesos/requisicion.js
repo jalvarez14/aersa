@@ -207,13 +207,14 @@
                                 var option = $('<option>');
                                 option.text(value);
                                 option.attr('value',index);
-
+                                if ((value == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() == data[k]))
+                                {
+                                } else{
+                                    $("[name=idalmacendestino]").append('<option value="' + k + '">' + data[k]+ '</option>');
+                                }
                                 $('select[name=idalmacendestino]').append(option);
                             });
-                            if ((sucursal_destino == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() == data[k]['Idalmacen']))
-                            {
-                            } else
-                                $("[name=idalmacendestino]").append('<option value="' + k + '">' + data[k] + '</option>');
+                            
                         }
                     } else
                     {
