@@ -407,7 +407,7 @@
         }
 
         plugin.new = function (anio, mes) {
-            getAlmacenesSucDes();
+            //getAlmacenesSucDes();
 
             $('[name=idsucursaldestino]').on('change', function () {
                 getAlmacenesSucDes();

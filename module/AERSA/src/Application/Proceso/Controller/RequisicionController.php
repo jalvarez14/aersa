@@ -149,7 +149,9 @@ class RequisicionController extends AbstractActionController {
             }
             $count ++;
         }
+        
 
+        
         $concepto_array = array();
         $conceptos = \ConceptosalidaQuery::create()->find();
         foreach ($conceptos as $concepto) {

@@ -7,6 +7,7 @@ use Zend\Form\Form;
 class RequisicionForm extends Form {
     
     public function __construct($sucursalorg,$almacen_array = array(),$almacen_array2 = array(),$sucursaldes_array = array(), $concepto_array = array()) {
+        
         parent::__construct('requisicionForm');
         
         $this->add(array(
