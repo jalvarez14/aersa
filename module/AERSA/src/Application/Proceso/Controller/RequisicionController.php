@@ -137,10 +137,17 @@ class RequisicionController extends AbstractActionController {
         }
 
         $almacen_array = array();
+        $almacen_array2 = array();
         $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
+        $count = 0;
         foreach ($almacenes as $almacen) {
+            
             $id = $almacen->getIdalmacen();
             $almacen_array[$id] = $almacen->getAlmacenNombre();
+            if($count>0){
+                $almacen_array2[$id] = $almacen->getAlmacenNombre();
+            }
+            $count ++;
         }
 
         $concepto_array = array();
@@ -155,7 +162,7 @@ class RequisicionController extends AbstractActionController {
         $mes_activo = $sucursal->getSucursalMesactivo();
 
         //INTANCIAMOS NUESTRA VISTA
-        $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg, $almacen_array, $sucursaldes_array, $concepto_array);
+        $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg, $almacen_array, $almacen_array2,$sucursaldes_array, $concepto_array);
         $form->get('requisicion_folio')->setValue($folio_default);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
