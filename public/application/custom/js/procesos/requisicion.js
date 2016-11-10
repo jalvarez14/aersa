@@ -282,8 +282,8 @@
                     if (data.length != 0) {
                         $("[name=idalmacendestino]").html('');
                         for (var k in data) {
-                            if (((idsucdes == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() != data[k]['Idalmacen'])))
-                                $("[name=idalmacendestino]").append('<option value="' + data[k]['Idalmacen'] + '">' + data[k]['AlmacenNombre'] + '</option>');
+                            if (((idsucdes == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() != k)))
+                                $("[name=idalmacendestino]").append('<option value="' + k + '">' + data[k] + '</option>');
                         }
                         if (almdes != almorg) {
                             $("[name=idalmacendestino]").val(almdes);
