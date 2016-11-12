@@ -143,7 +143,7 @@ class CompraController extends AbstractActionController {
             }
 
             //DESPUES DE GUARDAR TAMBIEN VALIDAMOS QUE NO SE HAYAN CREADO 2 COMPRAS Y SI ES ASI ELIMINAMOS LA DE MENOR TOTAL
-            $compra_existente = $compra_existente = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from, 'to' => $to))->filterByCompraTipo('consignacion', \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(), \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(), \Criteria::LIKE)->filterByIdproveedor($entity->getIdproveedor())->count();
+            $compra_existente = $compra_existente = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from, 'to' => $to))->filterByCompraTipo('consignacion', \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(), \Criteria::LIKE)->filterByIdproveedor($entity->getIdproveedor())->count();
             if ($compra_existente > 1) {
                 $compra_existente = $compra_existente = \CompraQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByCompraFechacompra(array('min' => $from, 'to' => $to))->filterByCompraTipo('consignacion', \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(), \Criteria::NOT_EQUAL)->filterByCompraFolio($entity->getCompraFolio(), \Criteria::LIKE)->filterByIdproveedor($entity->getIdproveedor())->orderByCompraTotal(\Criteria::DESC)->findOne();
                 $compra_existente->delete();
