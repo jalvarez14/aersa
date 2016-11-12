@@ -202,8 +202,35 @@ class CardexController extends AbstractActionController {
                                     $totalProductoCompra+=$objcompradetalle->getCompradetalleSubtotal();
                                 }
                             }
-                            $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
-                            $costoPromedio = ($costoPromedio < 0) ? $costoPromedio * -1 : $costoPromedio;
+                            
+                            $objreq= new \Requisicion();
+                            $objrequisiciones= $objrequisicionesDestino;
+                            foreach ($objrequisiciones as $objreq) {
+                                $objreqdets = \RequisiciondetalleQuery::create()
+                                        ->filterByIdrequisicion($objreq->getIdrequisicion())
+                                        ->filterByIdproducto($objproducto->getIdproducto())
+                                        ->find();
+                                $objreqdet = new \Requisiciondetalle();
+                                foreach ($objreqdets as $objreqdet) {
+                                    $compra+=$objreqdet->getRequisiciondetalleCantidad();
+                                    $totalProductoCompra+=$objreqdet->getRequisiciondetalleSubtotal();
+                                }
+                            }
+                            
+                            $objrequisiciones= $objrequisicionesOrigen;
+                            foreach ($objrequisiciones as $objreq) {
+                                $objreqdets = \RequisiciondetalleQuery::create()
+                                        ->filterByIdrequisicion($objreq->getIdrequisicion())
+                                        ->filterByIdproducto($objproducto->getIdproducto())
+                                        ->find();
+                                $objreqdet = new \Requisiciondetalle();
+                                foreach ($objreqdets as $objreqdet) {
+                                    $compra+=$objreqdet->getRequisiciondetalleCantidad();
+                                    $totalProductoCompra+=$objreqdet->getRequisiciondetalleSubtotal();
+                                }
+                            }
+                            
+                            $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? abs($totalProductoCompra / $compra) : $objproducto->getProductoCosto();
                             $rowhead = 0;
 //                            if ($objproducto->getProductoTipo() == 'subreceta' && $exisinicial != 0) {
 //                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
