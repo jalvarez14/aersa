@@ -521,6 +521,22 @@
         
         plugin.edit = function(anio,mes,almacenes,count,compra_tipo){
             
+            //VALIDA SI TODAVIA SE PUEDE EDITAR SEGUN EL INVENTARIOS MES
+            var date = $('input[name=compra_fechacompra]').val();
+            var idalmacen = $('select[name=idalmacen] option:selected').val();
+            $.ajax({
+                url:'/autocomplete/validateprocessbyinventariomes',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data:{date:date,almacen:{0:idalmacen}},
+                success: function (data, textStatus, jqXHR) {
+                    if(!data){
+                        $container.find('input,select,button').attr('disabled',true);
+                    }
+                }
+            });
+            
             //SI ES ORDEN DE COMPRA DESHABILITAMOS LOS SELECT DE ALMACEN
             if(compra_tipo == 'ordecompra'){
                 $container.find('select[name=idalmacen]').attr('disabled',true);

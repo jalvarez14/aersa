@@ -606,6 +606,23 @@
         
         plugin.edit = function(anio,mes,count){
             
+            //VALIDA SI TODAVIA SE PUEDE EDITAR SEGUN EL INVENTARIOS MES
+            var date = $('input[name=ordentablajeria_fecha]').val();
+            var idalmaceno = $('select[name=idalmacenorigen] option:selected').val();
+            var idalmacend = $('select[name=idsucursaldestino] option:selected').val();
+            $.ajax({
+                url:'/autocomplete/validateprocessbyinventariomes',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data:{date:date,almacen:{0:idalmaceno,1:idalmacend}},
+                success: function (data, textStatus, jqXHR) {
+                    if(!data){
+                        $container.find('input,select,button').attr('disabled',true);
+                    }
+                }
+            });
+            
             calculator();
             tablajeando();
             

@@ -526,7 +526,22 @@
         }
         
         plugin.edit = function(anio,mes,mes_notacredito,anio_notacredito,almacenes,count){
-
+            
+            //VALIDA SI TODAVIA SE PUEDE EDITAR SEGUN EL INVENTARIOS MES
+            var date = $('input[name=notacredito_fechacreacion]').val();
+            var idalmacen = $('select[name=idalmacen] option:selected').val();
+            $.ajax({
+                url:'/autocomplete/validateprocessbyinventariomes',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data:{date:date,almacen:{0:idalmacen}},
+                success: function (data, textStatus, jqXHR) {
+                    if(!data){
+                        $container.find('input,select,button').attr('disabled',true);
+                    }
+                }
+            });
 
             var minDate = firstDayOfWeek(anio,mes);
             var maxDate = new Date(minDate);

@@ -16,6 +16,27 @@ use Zend\Console\Request as ConsoleRequest;
 class IndexController extends AbstractActionController
 {
     
+    public function validateprocessbyinventariomesAction(){
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            $date = date_create_from_format('d/m/Y H:i', $post_data['date']." 00:00");
+            $result = true;
+            foreach ($post_data['almacen'] as $almacen){
+                $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
+                if($exist){
+                    $result = false;
+                }
+            }
+            
+            return $this->getResponse()->setContent(json_encode($result));
+        }
+    }
+    
     public function getalmacenesbyinventarioAction(){
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();

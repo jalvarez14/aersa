@@ -678,6 +678,25 @@
         }
 
         plugin.edit = function (sucursal_destino, almacen_origen, almacen_destino, concepto_salida, anio, mes, distinto_origen, count) {
+            
+            
+            //VALIDA SI TODAVIA SE PUEDE EDITAR SEGUN EL INVENTARIOS MES
+            var date = $('input[name=requisicion_fecha]').val();
+            var idalmaceno = $('select[name=idalmacenorigen] option:selected').val();
+            var idalmacend = $('select[name=idsucursaldestino] option:selected').val();
+            $.ajax({
+                url:'/autocomplete/validateprocessbyinventariomes',
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                data:{date:date,almacen:{0:idalmaceno,1:idalmacend}},
+                success: function (data, textStatus, jqXHR) {
+                    if(!data){
+                        $container.find('input,select,button').attr('disabled',true);
+                    }
+                }
+            });
+            
             if (distinto_origen == 1) {
                 $("[name=idsucursaldestino]").append('<option value="">' + sucursal_destino + '</option>');
                 $("[name=idalmacenorigen]").append('<option value="">' + almacen_origen + '</option>');
