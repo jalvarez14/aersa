@@ -255,7 +255,6 @@
                     return a;
                 }
             });
-            
             $('#batch_inventario_b').attr('disabled', true);
             $('select[name=idalmacen]').on('change', function () {
                 var $this=$(this);
@@ -287,15 +286,11 @@
                     });
                 }
             });
-            
             $container.find('table input:text').on('blur',function(){
                 var $tr = $(this).closest('tr');
                 calcular($tr);
             });
             var inventario_array = {};
-            
-            
-            
             $('#subir_inventario').on('click', function () {
                 $('input[name=batch_inventario]').trigger('click');
             });
@@ -369,12 +364,9 @@
 
             });
             revisadaControl();
-            
-            
         }
         
         plugin.edit = function (str) {
-            
             $.datepicker.setDefaults($.datepicker.regional['es']);
             container.find('input[name=inventariomes_fecha]').attr('disabled', true);
             container.find('select[name=idalmacen]').attr('disabled', true);
@@ -502,16 +494,12 @@
 
             });
             revisadaControl();
-            
-            
         }
 
         /*
          * Plugin initializing
          */
-
         plugin.init();
-
     }
 })(jQuery);
 
