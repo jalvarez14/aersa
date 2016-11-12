@@ -179,6 +179,8 @@ class CierresinventariosController extends AbstractActionController {
 
             $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
             $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
+            
+            
 
 
             $inicio_semana = $inicio_semana . " 00:00:00   ";
@@ -186,10 +188,9 @@ class CierresinventariosController extends AbstractActionController {
 
 
             //inventario anterior
-
-            $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdalmacen($idalmacen)->exists();
+            $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->exists();
             if ($inventario_anterior)
-                $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdalmacen($idalmacen)->findOne()->getIdinventariomes();
+                $id_inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->findOne()->getIdinventariomes();
             $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
             $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
 
