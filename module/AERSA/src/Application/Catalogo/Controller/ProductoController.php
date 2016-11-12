@@ -7,8 +7,8 @@ use Zend\View\Model\ViewModel;
 use Zend\Console\Request as ConsoleRequest;
 
 class ProductoController extends AbstractActionController
-{
-    
+ {
+
     public $column_map = array(
          0 => 'ProductoNombre',
          1 => 'ProductoTipo',
@@ -159,7 +159,7 @@ class ProductoController extends AbstractActionController
         $request = $this->getRequest();
         if($request->isPost()){
             $post_data = $request->getPost();
-            
+           
             $query = new \ProductoQuery();
             
              //JOIN
@@ -177,6 +177,7 @@ class ProductoController extends AbstractActionController
             //SEARCH
             if(!empty($post_data['search']['value'])){
                 $search_value = $post_data['search']['value'];
+                
                 $search_value = str_replace("Ñ", "Ã‘", $search_value);
                 $search_value = str_replace("L'", "L'", $search_value);
                 $search_value = str_replace("Ç", "Ã‡", $search_value);
@@ -204,13 +205,13 @@ class ProductoController extends AbstractActionController
                     $search_value = str_replace("Í", "Ã", $search_value);
                 }
                 $c = new \Criteria();
-                
+               
                 $c1= $c->getNewCriterion('producto.producto_nombre', '%'.$search_value.'%', \Criteria::LIKE);
-                $c2= $c->getNewCriterion('producto.producto_tipo', '%'.$search_value.'%', \Criteria::LIKE);
-                $c3= $c->getNewCriterion('categoria.categoria_nombre', '%'.$search_value.'%', \Criteria::LIKE);
-                $c4= $c->getNewCriterion('unidadmedida.unidadmedida_nombre', '%'.$search_value.'%', \Criteria::LIKE);
+               // $c2= $c->getNewCriterion('producto.producto_tipo', '%'.$search_value.'%', \Criteria::LIKE);
+                //$c3= $c->getNewCriterion('categoria.categoria_nombre', '%'.$search_value.'%', \Criteria::LIKE);
+                //$c4= $c->getNewCriterion('unidadmedida.unidadmedida_nombre', '%'.$search_value.'%', \Criteria::LIKE);
           
-                $c1->addOr($c2)->addOr($c3)->addOr($c4);
+                //$c1->addOr($c2)->addOr($c3)->addOr($c4);
 
                 $query->addAnd($c1);
                 $query->groupByIdproducto();
