@@ -168,8 +168,11 @@
             //COMPRA IVA
             var compra_iva = 0.00;
             $('#productos_table tbody tr').filter(function(){
-                
-                var has_iva = $(this).find('input[name*=producto_iva]').val(); 
+                                                  
+                var has_iva = $(this).find('input[name*=producto_iva]').val();
+                                                  console.log($(this));
+                 console.log(has_iva);
+                                                  console.log(typeof has_iva);
                 if(has_iva == "true" || has_iva == 1){
                     
                     var subtotal = parseFloat(parseFloat(parseFloat($(this).find('input[name*=subtotal]').val()).toFixed(6)));
@@ -915,6 +918,7 @@
               $('.fa-trash').on('click',function(){
                 var tr = $(this).closest('tr');
                 tr.remove();
+                caluclator(tr);
               });   
               
             //De igual manera, si la entidad se pone como revisada, todos los items se ponen como revisados. 

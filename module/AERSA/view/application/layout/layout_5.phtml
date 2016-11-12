@@ -636,11 +636,24 @@ License: You must have a valid license purchased only from themeforest(the above
                                         <span class="title">Formato de inventario</span>
                                     </a>
                                 </li>
-                                <li class="nav-item  ">
-                                    <a href="/reportes/recetas" class="nav-link ">
-                                        <span class="title">Recetas técnicas</span>
-                                    </a>
-                                </li>
+                                <?php 
+                                    $empresa = EmpresaQuery::create()->findPk($session['idempresa']);   
+                                ?>
+                                <?php if($session['idrol'] == 5):?>
+                                    <?php if($empresa->getEmpresaHabilitarrecetas()):?>
+                                        <li class="nav-item  ">
+                                            <a href="/reportes/recetas" class="nav-link ">
+                                                <span class="title">Recetas técnicas</span>
+                                            </a>
+                                        </li>
+                                    <?php endif;?>
+                                <?php else:?>
+                                        <li class="nav-item  ">
+                                            <a href="/reportes/recetas" class="nav-link ">
+                                                <span class="title">Recetas técnicas</span>
+                                            </a>
+                                        </li>
+                                <?php endif;?>
                                 <li class="nav-item  ">
                                     <a href="/reportes/variacioncostos" class="nav-link ">
                                         <span class="title">Variación de los costos</span>

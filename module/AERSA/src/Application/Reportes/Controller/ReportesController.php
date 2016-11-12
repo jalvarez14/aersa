@@ -1177,6 +1177,18 @@ class ReportesController extends AbstractActionController {
     }
 
     public function recetasAction() {
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        $empresa = EmpresaQuery::create()->findPk($session['idempresa']);  
+        
+        if($session['idrol'] == 5){
+            if(!$empresa->getEmpresaHabilitarrecetas()){
+                return $this->redirect()->toUrl("/");
+            }
+        }
+        
+        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/reportes/recetas/index');
         return $view_model;
