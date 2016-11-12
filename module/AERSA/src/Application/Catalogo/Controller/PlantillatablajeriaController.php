@@ -96,13 +96,13 @@ class PlantillatablajeriaController extends AbstractActionController {
             if ($request->isPost()) {
                 
                 $post_data = $request->getPost();
-                
                 if (isset($post_data['plantillatablajeria_detalle'])) {
                     foreach ($post_data as $key => $value) {
-                        if (\CompraPeer::getTableMap()->hasColumn($key)) {
+                        if (\PlantillatablajeriadetallePeer::getTableMap()->hasColumn($key)) {
                             $plantillatablajeria->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
                         }
                     }
+                    $plantillatablajeria->setPlantillatablajeriaDescripcion($post_data['plantillatablajeria_descripcion']);
                     $plantillatablajeria->save();
                     $plantillatablajeria->getPlantillatablajeriadetalles()->delete();
                     foreach ($post_data['plantillatablajeria_detalle'] as $producto) {
