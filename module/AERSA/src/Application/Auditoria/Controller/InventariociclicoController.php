@@ -39,12 +39,13 @@ class InventariociclicoController extends AbstractActionController {
         if ($request->isPost()) {
             $post_data = $request->getPost();
             $reporte = array();
-            array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'Ajst', 'doce' => 'StT', 'trece' => 'Unid', 'catorce' => 'StF', 'quince' => 'Explo', 'dieciseis' => 'FisTot', 'diecisiete' => 'ImpFis', 'quiciocho' => 'Dif', 'diecinueve' => 'CostProm', 'veinte' => 'DifImp'));
+            array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'Ajst', 'doce' => 'StT', 'trece' => 'Unid', 'catorce' => 'StF', 'quince' => 'Explo', 'dieciseis' => 'FisTot', 'diecisiete' => 'ImpFis', 'quiciocho' => 'Dif', 'diecinueve' => 'CostProm', 'veinte' => 'DifImp','veintiuno' => 'SubCat'));
             foreach ($post_data['reporte'] as $key => $value) {
                 if (isset($value['categoria'])) {
-                    array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $value['categoria'], 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => ''));
+                    array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $value['categoria'], 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => '','veintiuno' => ''));
                 } else {
-                    array_push($reporte, array('uno' => $value['idproducto'], 'dos' => $value['inventariomesdetalle_nombre'], 'tres' => $value['inventariomesdetalle_stockinicial'], 'cuatro' => $value['inventariomesdetalle_ingresocompra'], 'cinco' => $value['inventariomesdetalle_ingresorequisicion'], 'seis' => $value['inventariomesdetalle_ingresoordentablajeria'], 'siete' => $value['inventariomesdetalle_egresoventa'], 'ocho' => $value['inventariomesdetalle_egresorequisicion'], 'nueve' => $value['inventariomesdetalle_egresoordentablajeria'], 'diez' => $value['inventariomesdetalle_egresodevolucion'], 'once' => $value['inventariomesdetalle_reajuste'], 'doce' => $value['inventariomesdetalle_stockteorico'], 'trece' => $value['inventariomesdetalle_unidad'], 'catorce' => $value['inventariomesdetalle_stockfisico'], 'quince' => $value['inventariomesdetalle_importefisico'], 'dieciseis' => $value['inventariomesdetalle_diferencia'], 'diecisiete' => $value['inventariomesdetalle_costopromedio'], 'dieciocho' => $value['inventariomesdetalle_difimporte'], 'diecinueve' => $value['inventariomesdetalle_difimporte'], 'veinte' => $value['inventariomesdetalle_difimporte']));
+                    $subcat= \ProductoQuery::create()->filterByIdproducto($value['idproducto'])->findOne()->getCategoriaRelatedByIdsubcategoria()->getCategoriaNombre();
+                    array_push($reporte, array('uno' => $value['idproducto'], 'dos' => $value['inventariomesdetalle_nombre'], 'tres' => $value['inventariomesdetalle_stockinicial'], 'cuatro' => $value['inventariomesdetalle_ingresocompra'], 'cinco' => $value['inventariomesdetalle_ingresorequisicion'], 'seis' => $value['inventariomesdetalle_ingresoordentablajeria'], 'siete' => $value['inventariomesdetalle_egresoventa'], 'ocho' => $value['inventariomesdetalle_egresorequisicion'], 'nueve' => $value['inventariomesdetalle_egresoordentablajeria'], 'diez' => $value['inventariomesdetalle_egresodevolucion'], 'once' => $value['inventariomesdetalle_reajuste'], 'doce' => $value['inventariomesdetalle_stockteorico'], 'trece' => $value['inventariomesdetalle_unidad'], 'catorce' => $value['inventariomesdetalle_stockfisico'], 'quince' => $value['inventariomesdetalle_importefisico'], 'dieciseis' => $value['inventariomesdetalle_diferencia'], 'diecisiete' => $value['inventariomesdetalle_costopromedio'], 'dieciocho' => $value['inventariomesdetalle_difimporte'], 'diecinueve' => $value['inventariomesdetalle_difimporte'], 'veinte' => $value['inventariomesdetalle_difimporte'],'veintiuno' => $subcat));
                 }
             }
             $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
@@ -405,6 +406,7 @@ class InventariociclicoController extends AbstractActionController {
                     else
                         $faltante+=$difImporte;
                     $cat = $objproducto->getCategoriaRelatedByIdcategoria()->getIdcategoria();
+                    $subcat=$objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaNombre();
                     if ($cat == 1)
                         $falim+=$impFis;
                     if ($cat == 2)
@@ -435,6 +437,7 @@ class InventariociclicoController extends AbstractActionController {
                     $arrayReporte[$idproducto]['inventariomesdetalle_explosion'] = $explosion;
                     $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'] = $totalFisico;
                     $arrayReporte[$idproducto]['inventariomesdetalle_reajuste'] = $ajuste;
+                    $arrayReporte[$idproducto]['subcategoria'] =$subcat;
                     $row++;
                 }
             }
@@ -473,6 +476,7 @@ class InventariociclicoController extends AbstractActionController {
                     $costoPromedio = abs($costoPromedio);
                     $difImporte = $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'];
                     $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
+                    $subcat=$arrayReporte[$idproducto]['subcategoria'];
                     array_push($reporte, 
 "<tr id='$idproducto' bgcolor='" . $colorbg . "'>"
 . "<td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td>"
@@ -495,6 +499,7 @@ class InventariociclicoController extends AbstractActionController {
 . "<td class='inventariomesdetalle_diferencia'><input type='hidden'  name='reporte[$row][inventariomesdetalle_diferencia]' value='$dif'><span>$dif</span></td>"
 . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_costopromedio]' value='$costoPromedio'>$costoPromedio</td>"
 . "<td class='inventariomesdetalle_difimporte'><input type='hidden'  name='reporte[$row][inventariomesdetalle_difimporte]' value='$difImporte'><span>$difImporte</span></td>"
+. "<td>$subcat</td>"
 . "</tr>");
                 }
             }
@@ -503,12 +508,12 @@ class InventariociclicoController extends AbstractActionController {
             $responsable = \AlmacenQuery::create()->filterByIdalmacen($idalmacen)->findOne()->getAlmacenEncargado();
             if ($responsable == "")
                 $responsable = "N/A";
-            array_push($reporte, "<tr><td>Responsable</td><td>$responsable</td><td></td><td><td></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final alimentos</td><td class='inventariomes_finalalimentos'><input type='hidden'  name='inventariomes_finalalimentos' value='$falim'><span>$falim</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final bebidas</td><td class='inventariomes_finalbebidas'><input type='hidden'  name='inventariomes_finalbebidas' value='$fbebi'><span>$fbebi</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Sobrante</td><td class='inventariomes_sobrantes'><input type='hidden'  name='inventariomes_sobrantes' value='$sobrante'><span>$sobrante</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Faltante</td><td class='inventariomes_faltantes'><input type='hidden'  name='inventariomes_faltantes' value='$faltante'><span>$faltante</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Total</td><td class='inventariomes_total'><input type='hidden'  name='inventariomes_total' value='$total'><span>$total</span></td></tr>");
-            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Importe Fisico</td><td class='inventariomes_totalimportefisico'><input type='hidden'  name='inventariomes_totalimportefisico' value='$impFisTotal'><span>$impFisTotal</span></td></tr>");
+            array_push($reporte, "<tr><td>Responsable</td><td>$responsable</td><td></td><td></td><td><td></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final alimentos</td><td class='inventariomes_finalalimentos'><input type='hidden'  name='inventariomes_finalalimentos' value='$falim'><span>$falim</span></td></tr>");
+            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Final bebidas</td><td class='inventariomes_finalbebidas'><input type='hidden'  name='inventariomes_finalbebidas' value='$fbebi'><span>$fbebi</span></td></tr>");
+            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Sobrante</td><td class='inventariomes_sobrantes'><input type='hidden'  name='inventariomes_sobrantes' value='$sobrante'><span>$sobrante</span></td></tr>");
+            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Faltante</td><td class='inventariomes_faltantes'><input type='hidden'  name='inventariomes_faltantes' value='$faltante'><span>$faltante</span></td></tr>");
+            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Total</td><td class='inventariomes_total'><input type='hidden'  name='inventariomes_total' value='$total'><span>$total</span></td></tr>");
+            array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Importe Fisico</td><td class='inventariomes_totalimportefisico'><input type='hidden'  name='inventariomes_totalimportefisico' value='$impFisTotal'><span>$impFisTotal</span></td></tr>");
             return $this->getResponse()->setContent(json_encode($reporte));
         }
     }
