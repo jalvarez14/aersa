@@ -1180,7 +1180,8 @@ class ReportesController extends AbstractActionController {
         
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-        $empresa = EmpresaQuery::create()->findPk($session['idempresa']);  
+        
+        $empresa = \EmpresaQuery::create()->findPk($session['idempresa']);  
         
         if($session['idrol'] == 5){
             if(!$empresa->getEmpresaHabilitarrecetas()){
