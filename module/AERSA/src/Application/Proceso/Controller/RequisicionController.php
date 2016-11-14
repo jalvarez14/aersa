@@ -323,10 +323,17 @@ class RequisicionController extends AbstractActionController {
                 }
 
                 $almacen_array = array();
-                $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->find();
+                $almacen_array2 = array();
+                $almacenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->find();
+                $count = 0;
                 foreach ($almacenes as $almacen) {
+
                     $id = $almacen->getIdalmacen();
                     $almacen_array[$id] = $almacen->getAlmacenNombre();
+                    if($count>0){
+                        $almacen_array2[$id] = $almacen->getAlmacenNombre();
+                    }
+                    $count ++;
                 }
 
                 $concepto_array = array();
@@ -344,7 +351,7 @@ class RequisicionController extends AbstractActionController {
                 $id = $this->params()->fromRoute('id');
 
                 //INTANCIAMOS NUESTRO FORMULARIO
-                $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg, $almacen_array, $sucursaldes_array, $concepto_array);
+                $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg, $almacen_array, $almacen_array2,$sucursaldes_array, $concepto_array);
 
                 //LE PONEMOS LOS DATOS A NUESTRO FORMULARIO
                 $form->setData($entity->toArray(\BasePeer::TYPE_FIELDNAME));
