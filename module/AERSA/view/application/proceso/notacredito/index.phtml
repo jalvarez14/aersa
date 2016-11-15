@@ -72,10 +72,13 @@
                                                 <a href="/procesos/credito/editar/<?php echo $entity->getIdnotacredito()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
+                                            <?php if(\Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete($entity->getNotacreditoRevisada(),$entity->getNotacreditoFechanotacredito(), array($entity->getIdalmacen()))):?>
                                             <li>
                                                 <a href="javascript:;" class="delete_credito">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
+                                            <?php endif;?>
+            
                                         </ul>
                                     </div>
                                 </td>

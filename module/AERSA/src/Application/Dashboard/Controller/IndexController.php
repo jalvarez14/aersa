@@ -16,6 +16,65 @@ use Zend\Console\Request as ConsoleRequest;
 class IndexController extends AbstractActionController
 {
     
+    public static function validateprocessbyinventariomesfordelete($status,$date,$almacenes=array()){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+       
+        $result = true;
+       
+        if($session['idrol'] == 5 || $status){
+            return false;
+        }else{
+           
+            $semanarevisada_exist = \SemanarevisadaQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+            if($semanarevisada_exist){
+                
+                $date = new \DateTime($date);
+                
+                $semana_revisada = \SemanarevisadaQuery::create()->filterByIdsucursal($session['idsucursal'])->orderByIdsemanarevisada(\Criteria::DESC)->findOne();
+                $from = new \DateTime();
+                $from = $from->setISODate($semana_revisada->getSemanarevisadaAnio(), $semana_revisada->getSemanarevisadaSemana(), 8);
+                $from = $from->setTime(0, 0);
+                
+                $sucursal = \SucursalQuery::create()->findPk($session['idsucursal']);
+                $to = new \DateTime();
+                $to = $to->setISODate($sucursal->getSucursalAnioactivo(),$sucursal->getSucursalMesactivo(), 7);
+                $to = $to->setTime(23, 59);
+
+            }else{
+                if($date>=$from && $date<=$to){
+                    foreach ($almacenes as $almacen) {
+                        $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date, \Criteria::GREATER_EQUAL)->exists();
+                        if ($exist) {
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    }
+                }else{
+                    return false;
+                }
+            }
+            
+        }
+        
+        
+        
+        
+        
+        foreach ($almacenes as $almacen){
+            $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
+            if($exist){
+                $result = false;
+                
+            }
+        }
+            
+        return $result;
+        
+    }
+    
     public function validateprocessbyinventariomesAction(){
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();

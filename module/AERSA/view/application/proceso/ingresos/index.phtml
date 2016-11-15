@@ -67,10 +67,12 @@
                                                 <a href="/procesos/ingresos/editar/<?php echo $entity->getIdingreso()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
+                                            <?php if(\Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete($entity->getIngresoRevisada(),$entity->getIngresoFecha(), array())):?>
                                             <li>
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
+                                            <?php endif;?>
                                         </ul>
                                     </div>
                                 </td>

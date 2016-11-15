@@ -51,10 +51,12 @@
                                             <a href="/procesos/ajustesinventarios/editar/<?php echo $entity->getIdajusteinventario()?>">
                                             <i class="fa fa-pencil"></i> Editar </a>
                                         </li>
+                                        <?php if(\Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete(false,$entity->getAjusteinventarioFecha(), array($entity->getIdalmacen()))):?>
                                         <li>
                                             <a href="javascript:;" class="delete_modal">
-                                            <i class="fa fa-trash"></i> Eliminar </a>
+                                                <i class="fa fa-trash"></i> Eliminar </a>
                                         </li>
+                                        <?php endif;?>
                                     </ul>
                                 </div>
                             </td>

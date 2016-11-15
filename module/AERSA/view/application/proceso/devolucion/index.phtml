@@ -39,7 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        <?php $entity = new Devolucion();?>
                         <?php foreach ($collection as $entity) : ?>
                             <?php
                             if($entity->getDevolucionRevisada()) {
@@ -72,10 +72,12 @@
                                                 <a href="/procesos/devolucion/editar/<?php echo $entity->getIddevolucion()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
+                                            <?php if(\Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete($entity->getDevolucionRevisada(),$entity->getDevolucionFechadevolucion(), array($entity->getIdalmacen()))):?>
                                             <li>
-                                                <a href="javascript:;" class="delete_devolucion">
+                                                <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
+                                            <?php endif;?>
                                         </ul>
                                     </div>
                                 </td>

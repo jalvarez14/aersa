@@ -72,7 +72,7 @@
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
                                             <?php } ?>
-                                            <?php if($idsucursal==$entity->getIdsucursalorigen()):?>
+                                            <?php if($idsucursal==$entity->getIdsucursalorigen() && \Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete($entity->getRequisicionRevisada(),$entity->getRequisicionFecha(), array($entity->getIdalmacenorigen(),$entity->getIdalmacendestino()))):?>
                                             <li>
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>

@@ -63,10 +63,12 @@
                                                 <a href="/procesos/venta/editar/<?php echo $entity->getIdventa()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
-                                            <li>
-                                                <a href="javascript:;" class="delete_modal">
-                                                    <i class="fa fa-trash"></i> Eliminar </a>
-                                            </li>
+                                            <?php if (\Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete($entity->getVentaRevisada(), $entity->getVentaFechaventa(), array())): ?>
+                                                <li>
+                                                    <a href="javascript:;" class="delete_modal">
+                                                        <i class="fa fa-trash"></i> Eliminar </a>
+                                                </li>
+                                            <?php endif; ?>
                                         </ul>
                                     </div>
                                 </td>
