@@ -41,8 +41,7 @@ class IndexController extends AbstractActionController
                 $to = new \DateTime();
                 $to = $to->setISODate($sucursal->getSucursalAnioactivo(),$sucursal->getSucursalMesactivo(), 7);
                 $to = $to->setTime(23, 59);
-
-            }else{
+                
                 if($date>=$from && $date<=$to){
                     foreach ($almacenes as $almacen) {
                         $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date, \Criteria::GREATER_EQUAL)->exists();
@@ -55,13 +54,12 @@ class IndexController extends AbstractActionController
                 }else{
                     return false;
                 }
+
+            }else{
+                return false;
             }
             
         }
-        
-        
-        
-        
         
         foreach ($almacenes as $almacen){
             $exist = \InventariomesQuery::create()->filterByIdalmacen($almacen)->filterByInventariomesFecha($date,  \Criteria::GREATER_EQUAL)->exists();
