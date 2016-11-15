@@ -197,7 +197,7 @@
 
                                 var ventas_array = Array();
                                 for(var i=2;i<=cont_rows+1;i++){
-                                    
+                                   
                                     if(typeof workbook.Sheets[first_sheet_name][col_nombre+i].v != 'undefined'){
                                         var tmp = {
                                             nombre:workbook.Sheets[first_sheet_name][col_nombre+i].v,

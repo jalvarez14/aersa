@@ -252,23 +252,7 @@
               ].join('');
               $(tmpl).modal();
             });
-            
-            //VALIDAMOS MES Y ANIO EN CURSO PARA VER SI SE PUEDE ELIMINAR CADA UNO DE LOS REGISTROS
-            $container.find('#datatable tbody tr').filter(function(){
-                var date = new Date($(this).attr('date'));
-                if(date.format('W') != mes || (date.getFullYear()) != anio){
-                    $(this).find('.delete_modal').unbind();
-                    $(this).find('.delete_modal').css('cursor','not-allowed');
-                }
-            });
-            
-            /*
-             * ACL
-             */
-            
-            if(settings.idrol == 5){
-                $('.delete_modal').parent('li').remove();
-            }
+
             
             
         }
