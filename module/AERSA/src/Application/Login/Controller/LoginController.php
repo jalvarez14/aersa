@@ -36,8 +36,8 @@ class LoginController extends AbstractActionController
                 
                 $usuario = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->findOne();
                 if($usuario->getIdrol() >= 3){
-                    $sucursal = \UsuariosucursalQuery::create()->filterByIdusuario($usuario->getIdusuario())->findOne();
-                    $empresa = \EmpresaQuery::create()->filterByIdempresa($sucursal->getSucursal()->getIdempresa())->findOne();
+                    $sucursal = \UsuarioempresaQuery::create()->filterByIdusuario($usuario->getIdusuario())->findOne();
+                    $empresa = \EmpresaQuery::create()->filterByIdempresa($sucursal->getIdempresa())->findOne();
                     if($empresa->getEmpresaEstatus() == 0){
                         $this->flashMessenger()->addErrorMessage('Empresa inactiva, favor de comunicarse con el equipo de AERSA');
                         //INTANCIAMOS NUESTRA VISTA
