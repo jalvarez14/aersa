@@ -35,7 +35,7 @@ class LoginController extends AbstractActionController
                 
                 
                 $usuario = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->findOne();
-                if($usuario->getIdrol() >= 3){
+                if($usuario->getIdrol() >= 4){
                     $sucursal = \UsuarioempresaQuery::create()->filterByIdusuario($usuario->getIdusuario())->findOne();
                     $empresa = \EmpresaQuery::create()->filterByIdempresa($sucursal->getIdempresa())->findOne();
                     if($empresa->getEmpresaEstatus() == 0){
