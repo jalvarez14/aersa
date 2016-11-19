@@ -806,6 +806,7 @@
                     //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
                     var tr = $('<tr id="' + $('input#idproducto').val() + ' ">');
                     var tipopro;
+                    var precio;
                     $.ajax({
                         async: false,
                         type: "GET",
@@ -814,7 +815,7 @@
                         success: function (data) {
                             if (data.length != 0) {
                                 tipopro = data['ProductoTipo'];
-
+                                precio = data['ProductoCosto'];
                             }
                         },
                     });
@@ -822,7 +823,7 @@
                     tr.append('<td><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
                     tr.append('<td> ' + $('#unidadmedida_nombre').val() + '</td>');
                     tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
-                    tr.append('<td><input required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="0"></td>');
+                    tr.append('<td><input disabled required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="' + precio + '"></td>');
                     tr.append('<td class="requisiciondetalle_subtotal">' + accounting.formatMoney(0) + '</td>');
                     /*
                      * ACL

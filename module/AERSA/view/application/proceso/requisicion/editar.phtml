@@ -143,7 +143,7 @@
                                         <input type="text" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][requisiciondetalle_cantidad]" value="<?php echo $detalle->getRequisiciondetalleCantidad()?>"> 
                                     </td>
                                     <td>
-                                        <input type="text" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][requisiciondetalle_preciounitario]" value="<?php echo $detalle->getRequisiciondetallePreciounitario()?>"> 
+                                        <input disabled type="text" name="productos[<?php echo $detalle->getIdrequisiciondetalle()?>][requisiciondetalle_preciounitario]" value="<?php echo $detalle->getRequisiciondetallePreciounitario()?>"> 
                                     </td>
                                     <td class="requisiciondetalle_subtotal">
                                         <?php echo money_format('%+#1.6n',$detalle->getRequisiciondetalleSubtotal())?>
