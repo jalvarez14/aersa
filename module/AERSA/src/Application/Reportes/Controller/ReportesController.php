@@ -609,9 +609,9 @@ class ReportesController extends AbstractActionController {
                                     if ($info) {
                                         $nombreAlmacen = \AlmacenQuery::create()->findPk($idalmacen)->getAlmacenNombre();
                                         if ($documento)
-                                            $reporte[$fila] = array('clave' => '', 'nombre' => $nombreAlmacen, 'unidad' => $objcompra->getCompraFechacompra('Y/m/d'), 'cantidad' => $objcompra->getIdcompra(), 'cu' => '', 'sub' => '');
+                                            $reporte[$fila] = array('clave' => '', 'nombre' => $nombreAlmacen, 'unidad' => $objcompra->getCompraFechacompra('Y/m/d'), 'cantidad' => $objcompra->getCompraFolio(), 'cu' => '', 'sub' => '');
                                         else
-                                            $reporte[$fila] = "<tr bgcolor='" . $bginfo . "'><td> " . $nombreAlmacen . " </td><td> " . $objcompra->getCompraFechacompra('Y/m/d') . " </td><td> " . $objcompra->getIdcompra() . " </td></tr>";
+                                            $reporte[$fila] = "<tr bgcolor='" . $bginfo . "'><td> " . $nombreAlmacen . " </td><td> " . $objcompra->getCompraFechacompra('Y/m/d') . " </td><td> " . $objcompra->getCompraFolio() . " </td></tr>";
                                         $info = false;
                                         $fila++;
                                     }
