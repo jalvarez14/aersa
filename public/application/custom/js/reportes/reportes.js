@@ -266,28 +266,76 @@
                 $('#generar_pdf').attr('disabled', true);
                 $('#no_data').html('No existen registros de compras')
             }
-            var productos_table = $container.find('#productos_table');
+
             $.ajax({
                 url: '/application/json/datatable/lang_es.json',
                 dataType: 'json',
                 success: function (data) {
-                    productos_table.dataTable({
+                    var table = $container.find('#proveedores_table').dataTable({
                         "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
                         "language": data,
                         "order": [],
                     });
-                },
-            });
-
-            var proveedores_table = $container.find('#proveedores_table');
-            $.ajax({
-                url: '/application/json/datatable/lang_es.json',
-                dataType: 'json',
-                success: function (data) {
-                    proveedores_table.dataTable({
+                    
+                    var table2 = $container.find('#productos_table').dataTable({
                         "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
                         "language": data,
                         "order": [],
+                    });
+                    
+                    var table3 = $container.find('#almacenes_table').dataTable({
+                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
+                        "language": data,
+                        "order": [],
+                    });
+                    
+                    
+                    $('form#entradasporcomprasForm').on('submit',function(e){
+
+        
+                        $(table.fnGetNodes()).each(function(){
+                            var checkbox = $(this).find('input');
+                            if(checkbox.is(":checked")){
+                                $('form#entradasporcomprasForm').append(
+                                    $('<input>')
+                                       .attr('type', 'hidden')
+                                       .attr('name', checkbox.attr('name'))
+                                       .attr('checked',true)
+
+                                 );
+                            }
+
+                        });
+                        
+                        $(table2.fnGetNodes()).each(function(){
+                            var checkbox = $(this).find('input');
+                            if(checkbox.is(":checked")){
+                                $('form#entradasporcomprasForm').append(
+                                    $('<input>')
+                                       .attr('type', 'hidden')
+                                       .attr('name', checkbox.attr('name'))
+                                       .attr('checked',true)
+
+                                 );
+                            }
+
+                        });
+                        
+                        $(table3.fnGetNodes()).each(function(){
+                            var checkbox = $(this).find('input');
+                            if(checkbox.is(":checked")){
+                                $('form#entradasporcomprasForm').append(
+                                    $('<input>')
+                                       .attr('type', 'hidden')
+                                       .attr('name', checkbox.attr('name'))
+                                       .attr('checked',true)
+
+                                 );
+                            }
+
+                        });
+                     
+ 
                     });
                 },
             });

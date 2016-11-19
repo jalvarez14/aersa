@@ -512,6 +512,7 @@ class ReportesController extends AbstractActionController {
             $almacenes = array();
             $proveedores = array();
             $post_data = $request->getPost();
+           
             $fecha_inicial = date_create_from_format('d/m/Y', $post_data["fecha_inicial"]);
             $fecha_final = date_create_from_format('d/m/Y', $post_data["fecha_final"]);
             date_time_set($fecha_inicial, 0, 0, 0);

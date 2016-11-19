@@ -210,6 +210,19 @@ class IndexController extends AbstractActionController
         
     }
     
+    public function getproductosfornotadecreditoAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $search = $this->params()->fromQuery('q');
+
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoTipo('plu', \Criteria::NOT_EQUAL)->filterByProductoNombre('%'.utf8_encode($search).'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+
+        
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
+    }
+    
     public function getproductosAction(){
 
         $session = new \Shared\Session\AouthSession();
