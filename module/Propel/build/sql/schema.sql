@@ -1400,6 +1400,7 @@ CREATE TABLE `proveedor`
     `proveedor_ciudad` VARCHAR(45),
     `proveedor_estado` VARCHAR(45),
     `proveedor_codigopostal` VARCHAR(45),
+    `proveedor_estatus` TINYINT DEFAULT 1 NOT NULL,
     PRIMARY KEY (`idproveedor`),
     INDEX `idempresa` (`idempresa`),
     CONSTRAINT `idempresa_proveedor`

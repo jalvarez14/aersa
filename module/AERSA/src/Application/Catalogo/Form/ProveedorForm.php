@@ -154,6 +154,23 @@ class ProveedorForm extends Form
                 'class' => 'form-control',
             ),
         ));
+         
+         $this->add(array(
+            'name' => 'proveedor_estatus',
+            'type' => 'Select',
+            'options' => array(
+                'label' => 'Estatus *',
+                
+                'value_options' => array(
+                    1 => 'Activo',
+                    0 => 'Inactivo'
+                ),
+            ),
+            'attributes' => array(
+                'required' => true,
+                'class' => 'form-control',
+            ),
+        ));
         
         
 

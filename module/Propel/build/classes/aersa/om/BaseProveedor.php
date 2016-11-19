@@ -108,6 +108,13 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     protected $proveedor_codigopostal;
 
     /**
+     * The value for the proveedor_estatus field.
+     * Note: this column has a database default value of: 1
+     * @var        int
+     */
+    protected $proveedor_estatus;
+
+    /**
      * @var        Empresa
      */
     protected $aEmpresa;
@@ -203,6 +210,27 @@ abstract class BaseProveedor extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $proveedorescfdisScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->proveedor_estatus = 1;
+    }
+
+    /**
+     * Initializes internal state of BaseProveedor object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idproveedor] column value.
@@ -345,6 +373,17 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     {
 
         return $this->proveedor_codigopostal;
+    }
+
+    /**
+     * Get the [proveedor_estatus] column value.
+     *
+     * @return int
+     */
+    public function getProveedorEstatus()
+    {
+
+        return $this->proveedor_estatus;
     }
 
     /**
@@ -625,6 +664,27 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     } // setProveedorCodigopostal()
 
     /**
+     * Set the value of [proveedor_estatus] column.
+     *
+     * @param  int $v new value
+     * @return Proveedor The current object (for fluent API support)
+     */
+    public function setProveedorEstatus($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->proveedor_estatus !== $v) {
+            $this->proveedor_estatus = $v;
+            $this->modifiedColumns[] = ProveedorPeer::PROVEEDOR_ESTATUS;
+        }
+
+
+        return $this;
+    } // setProveedorEstatus()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -634,6 +694,10 @@ abstract class BaseProveedor extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->proveedor_estatus !== 1) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -669,6 +733,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             $this->proveedor_ciudad = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->proveedor_estado = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->proveedor_codigopostal = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+            $this->proveedor_estatus = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -678,7 +743,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 13; // 13 = ProveedorPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = ProveedorPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Proveedor object", $e);
@@ -1060,6 +1125,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL)) {
             $modifiedColumns[':p' . $index++]  = '`proveedor_codigopostal`';
         }
+        if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_ESTATUS)) {
+            $modifiedColumns[':p' . $index++]  = '`proveedor_estatus`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `proveedor` (%s) VALUES (%s)',
@@ -1109,6 +1177,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
                         break;
                     case '`proveedor_codigopostal`':
                         $stmt->bindValue($identifier, $this->proveedor_codigopostal, PDO::PARAM_STR);
+                        break;
+                    case '`proveedor_estatus`':
+                        $stmt->bindValue($identifier, $this->proveedor_estatus, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1343,6 +1414,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             case 12:
                 return $this->getProveedorCodigopostal();
                 break;
+            case 13:
+                return $this->getProveedorEstatus();
+                break;
             default:
                 return null;
                 break;
@@ -1385,6 +1459,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             $keys[10] => $this->getProveedorCiudad(),
             $keys[11] => $this->getProveedorEstado(),
             $keys[12] => $this->getProveedorCodigopostal(),
+            $keys[13] => $this->getProveedorEstatus(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1486,6 +1561,9 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             case 12:
                 $this->setProveedorCodigopostal($value);
                 break;
+            case 13:
+                $this->setProveedorEstatus($value);
+                break;
         } // switch()
     }
 
@@ -1523,6 +1601,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if (array_key_exists($keys[10], $arr)) $this->setProveedorCiudad($arr[$keys[10]]);
         if (array_key_exists($keys[11], $arr)) $this->setProveedorEstado($arr[$keys[11]]);
         if (array_key_exists($keys[12], $arr)) $this->setProveedorCodigopostal($arr[$keys[12]]);
+        if (array_key_exists($keys[13], $arr)) $this->setProveedorEstatus($arr[$keys[13]]);
     }
 
     /**
@@ -1547,6 +1626,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_CIUDAD)) $criteria->add(ProveedorPeer::PROVEEDOR_CIUDAD, $this->proveedor_ciudad);
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_ESTADO)) $criteria->add(ProveedorPeer::PROVEEDOR_ESTADO, $this->proveedor_estado);
         if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL)) $criteria->add(ProveedorPeer::PROVEEDOR_CODIGOPOSTAL, $this->proveedor_codigopostal);
+        if ($this->isColumnModified(ProveedorPeer::PROVEEDOR_ESTATUS)) $criteria->add(ProveedorPeer::PROVEEDOR_ESTATUS, $this->proveedor_estatus);
 
         return $criteria;
     }
@@ -1622,6 +1702,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         $copyObj->setProveedorCiudad($this->getProveedorCiudad());
         $copyObj->setProveedorEstado($this->getProveedorEstado());
         $copyObj->setProveedorCodigopostal($this->getProveedorCodigopostal());
+        $copyObj->setProveedorEstatus($this->getProveedorEstatus());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -3792,10 +3873,12 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         $this->proveedor_ciudad = null;
         $this->proveedor_estado = null;
         $this->proveedor_codigopostal = null;
+        $this->proveedor_estatus = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

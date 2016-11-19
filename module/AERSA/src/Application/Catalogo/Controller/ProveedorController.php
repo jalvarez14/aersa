@@ -55,7 +55,7 @@ class ProveedorController extends AbstractActionController
         //CARGAMOS LA SESSION PARA HACER VALIDACIONES
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
-
+        
         //OBTENEMOS LA COLECCION DE REGISTROS DE ACUERDO A SU ROL
         
         //SI SE TRATA DE UN ADMIN DE AERSA
@@ -95,9 +95,9 @@ class ProveedorController extends AbstractActionController
         if ($request->isPost()) 
         {
             $post_data = $request->getPost();
-          
+           
             //VALIDAMOS QUE EL USUARIO NO EXISTA EN LA BASE DE DATOS
-            $exist = \ProveedorQuery::create()->filterByProveedorNombrecomercial($post_data['proveedor_nombrecomercial'])->filterByIdempresa($session['idempresa'])->exists();
+            $exist = \ProveedorQuery::create()->filterByProveedorNombrecomercial($post_data['proveedor_nombrecomercial'])->_or()->filterByProveedorRfc($post_data['proveedor_RFC'])->filterByIdempresa($session['idempresa'])->exists();
 
             if (!$exist) 
             {
@@ -136,8 +136,19 @@ class ProveedorController extends AbstractActionController
             } 
             else 
             {
-                $this->flashMessenger()->addErrorMessage('Este nombre de proveedor ya está duplicado');
-                return $this->redirect()->toUrl('/catalogo/proveedor/nuevo');
+                $form->setData($post_data);
+               
+                $this->flashMessenger()->addErrorMessage('Este nombre de proveedor y/o RFC ya se encuentra registrado');
+                //INTANCIAMOS NUESTRA VISTA
+                $view_model = new ViewModel();
+                $view_model->setVariables(array(
+                    'form'      => $form,
+                    'messages'  => $this->flashMessenger(),
+                    'empresa'   => $emp,
+                    'session'   => $session,
+                ));
+                $view_model->setTemplate('/application/catalogo/proveedor/nuevo');
+                return $view_model;
             }
              
             

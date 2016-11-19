@@ -1185,6 +1185,7 @@
     <column name="proveedor_ciudad" phpName="ProveedorCiudad" type="VARCHAR" size="45" required="false"/>
     <column name="proveedor_estado" phpName="ProveedorEstado" type="VARCHAR" size="45" required="false"/>
     <column name="proveedor_codigopostal" phpName="ProveedorCodigopostal" type="VARCHAR" size="45" required="false"/>
+    <column name="proveedor_estatus" phpName="ProveedorEstatus" type="TINYINT" required="true" defaultValue="1"/>
     <foreign-key foreignTable="empresa" name="idempresa_proveedor" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idempresa" foreign="idempresa"/>
     </foreign-key>
