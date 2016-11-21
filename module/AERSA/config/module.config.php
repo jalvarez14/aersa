@@ -2257,8 +2257,8 @@ return array(
             'website' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    'route' => 'aersa', //LOCAL
-                    //'route' => 'aersamx.com', //PRODUCCION
+                    //'route' => 'aersa', //LOCAL
+                    'route' => 'aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(

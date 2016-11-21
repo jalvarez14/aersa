@@ -12,14 +12,14 @@ use Zend\Code\Reflection\ClassReflection;
 use Shared\Session\AouthSession;
 use Shared\Session\ClientSession;
 
-class AuthListener implements ListenerAggregateInterface {
+class NotificationListener implements ListenerAggregateInterface {
     
     protected $listeners = array();
     
     /*
      * Enlace con el listener de la aplicacion con la accion principal de onDispatch y maxima prioridad 1000
      */
-    public function attach(EventManagerInterface $events, $priority = 900){
+    public function attach(EventManagerInterface $events, $priority = 950){
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), $priority);
     }
     
@@ -45,38 +45,17 @@ class AuthListener implements ListenerAggregateInterface {
     public function onDispatch (MvcEvent $e)
     {
        
-        $matches = $e->getRouteMatch();     
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
         
-        //Sesion para admin   
-        $AouthSession  = new AouthSession();
-
-        $controller = $matches->getParam('controller');
-        
-        $module = explode('\\', $controller); $module = $module[0];
-        
-        if($module == 'Website'){
-            return;
+        //SI TIENE SESION ACTIVA
+        if(!is_null($session['idusuario'])){
+    
+            
         }
         
-        $action = $matches->getParam('action');
+        
 
-        define("redirect", $matches->getMatchedRouteName());
-        
-        /* Rutas excluidas de verificación */
-        $excludeControllers = array(
-            'Login\Controller\Login',
-        );
-        
-        /* Verificamos si es una ruta excluida ó si hay una sesión activa */
-        if (in_array($controller, $excludeControllers, true) || $AouthSession->isActive()) {
-            return;
-        } else {
-
-            $matches->setParam('controller', 'Application\Login\Controller\Login');
-            $matches->setParam('action', 'in');
-        }
-        
-        return;
     }
 
 }

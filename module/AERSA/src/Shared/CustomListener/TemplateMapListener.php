@@ -34,13 +34,15 @@ class TemplateMapListener implements ListenerAggregateInterface
         
         $controller_params = $e->getRouteMatch()->getParams();
         
+
         $controller_of_route = $controller_params['controller'];
-        
+      
         $section = new classReflection($controller_of_route.'Controller');
-        
+       
         $section = $section ->getFileName();   
       
         $section = explode('/src/',  $section);
+        
         $section = explode("/",$section[1]);
         
         $template_map=$e->getApplication()->getServiceManager()->get('viewtemplatemapresolver');
@@ -62,8 +64,9 @@ class TemplateMapListener implements ListenerAggregateInterface
                 break;
             }
             case 'Application':{
-
+                
                 //ADMINISTRADOR AERSA
+                $notification_flag = false;
                 if($session['idrol'] == 1 && is_null($session['idempresa']) && is_null($session['idsucursal'])){
                     
                     $template_map->merge(
@@ -94,6 +97,9 @@ class TemplateMapListener implements ListenerAggregateInterface
                         'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
+                    
+                   
+                    $notification_flag = true;
                     break;
                     
                     
@@ -118,6 +124,8 @@ class TemplateMapListener implements ListenerAggregateInterface
                         'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
+                    
+                    $notification_flag = true;
                     break;
                     
                     
@@ -129,6 +137,8 @@ class TemplateMapListener implements ListenerAggregateInterface
                         'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
+                    
+                    $notification_flag = true;
                     break;
                     
                 //ADMINISTRADOR DE EMPRESA
@@ -140,6 +150,7 @@ class TemplateMapListener implements ListenerAggregateInterface
                         'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
+                    
                     break;
                     
                     
@@ -151,6 +162,8 @@ class TemplateMapListener implements ListenerAggregateInterface
                         'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
+                    
+                    $notification_flag = true;
                     break;
                      
                 }elseif($session['idrol'] == 4 && !is_null($session['idempresa']) && is_null($session['idsucursal'])){
@@ -171,6 +184,8 @@ class TemplateMapListener implements ListenerAggregateInterface
                         'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                         'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                     ));
+                    
+                    $notification_flag = true;
                     break;
                     
                     
@@ -188,7 +203,75 @@ class TemplateMapListener implements ListenerAggregateInterface
             }
 
 
-        }       
+        }   
+        
+        /*
+         * NOTIFICACIONES
+         */
+        $notifications_url = array();
+        if($section[1] == 'Proceso'){
+            
+             $server = $_SERVER['REQUEST_URI'] ;
+             $server = explode("/", $server);
+             $proceso = $server[2];
+             if($server[3] == "editar"){
+                $idproceso = $server[4];
+                $notification_exist = \NotificacionQuery::create()->filterByNotificacionProceso($proceso)->filterByIdproceso($idproceso)->exists();
+                if($notification_exist){
+                    $notification = \NotificacionQuery::create()->filterByNotificacionProceso($proceso)->filterByIdproceso($idproceso)->findOne();
+                    if($session['idrol'] == 1){
+                        $notification->setRol1(1)->save();
+
+                    }elseif($session['idrol'] == 2){
+                         $notification->setRol2(1)->save();
+                    }elseif($session['idrol'] == 3){
+                         $notification->setRol3(1)->save();
+                    }elseif($session['idrol'] == 4){
+                         $notification->setRol4(1)->save();
+                    }elseif($session['idrol'] == 5){
+                         $notification->setRol5(1)->save();
+                    }
+                    
+                }
+         
+             }
+
+        }
+        
+
+        if($notification_flag){
+            
+            //BUSCAMOS NOTIFICACIONES DE ACUERDO AL ROL
+            if($session['idrol'] == 1){
+                $notificaciones = \NotificacionQuery::create()->select(array('idnotificacion','notificacion_proceso','idproceso'))->filterByIdsucursal($session['idsucursal'])->filterByRol1(0)->find()->toArray(null,false, \BasePeer::TYPE_FIELDNAME);
+                $session = new \Shared\Session\AouthSession();
+                $session->setNotifications($notificaciones);
+
+            }elseif($session['idrol'] == 2){
+                $notificaciones = \NotificacionQuery::create()->select(array('idnotificacion','notificacion_proceso','idproceso'))->filterByIdsucursal($session['idsucursal'])->filterByRol2(0)->find()->toArray(null,false, \BasePeer::TYPE_FIELDNAME);
+                $session = new \Shared\Session\AouthSession();
+                $session->setNotifications($notificaciones);
+                
+            }elseif($session['idrol'] == 3){
+                $notificaciones = \NotificacionQuery::create()->select(array('idnotificacion','notificacion_proceso','idproceso'))->filterByIdsucursal($session['idsucursal'])->filterByRol3(0)->find()->toArray(null,false, \BasePeer::TYPE_FIELDNAME);
+                $session = new \Shared\Session\AouthSession();
+                $session->setNotifications($notificaciones);
+                
+            }elseif($session['idrol'] == 4){
+                $notificaciones = \NotificacionQuery::create()->select(array('idnotificacion','notificacion_proceso','idproceso'))->filterByIdsucursal($session['idsucursal'])->filterByRol4(0)->find()->toArray(null,false, \BasePeer::TYPE_FIELDNAME);
+                $session = new \Shared\Session\AouthSession();
+                $session->setNotifications($notificaciones);
+                
+            }elseif($session['idrol'] == 5){
+                $notificaciones = \NotificacionQuery::create()->select(array('idnotificacion','notificacion_proceso','idproceso'))->filterByIdsucursal($session['idsucursal'])->filterByRol5(0)->find()->toArray(null,false, \BasePeer::TYPE_FIELDNAME);
+                $session = new \Shared\Session\AouthSession();
+                $session->setNotifications($notificaciones);
+                
+            }
+            
+        }
+       
+
          
     }
       

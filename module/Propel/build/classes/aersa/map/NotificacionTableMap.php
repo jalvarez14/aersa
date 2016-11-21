@@ -39,23 +39,26 @@ class NotificacionTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idnotificacion', 'Idnotificacion', 'INTEGER', true, null, null);
-        $this->addColumn('notificacion_proceso', 'NotificacionProceso', 'CHAR', false, null, null);
+        $this->addColumn('notificacion_proceso', 'NotificacionProceso', 'CHAR', true, null, null);
         $this->getColumn('notificacion_proceso', false)->setValueSet(array (
   0 => 'compra',
   1 => 'requisicion',
   2 => 'tablajeria',
-  3 => 'ordencredito',
-  4 => 'consignacion',
-  5 => 'ingresos',
-  6 => 'ventas',
-  7 => 'inventarios',
+  3 => 'credito',
+  4 => 'devolucion',
+  5 => 'consignacion',
+  6 => 'ingresos',
+  7 => 'venta',
+  8 => 'ajustesinventarios',
 ));
-        $this->addColumn('idproceso', 'Idproceso', 'INTEGER', false, null, null);
-        $this->addColumn('rol1', 'Rol1', 'BOOLEAN', false, 1, true);
-        $this->addColumn('rol2', 'Rol2', 'BOOLEAN', false, 1, true);
-        $this->addColumn('rol3', 'Rol3', 'BOOLEAN', false, 1, true);
-        $this->addColumn('rol4', 'Rol4', 'BOOLEAN', false, 1, true);
-        $this->addColumn('rol5', 'Rol5', 'BOOLEAN', false, 1, true);
+        $this->addColumn('idproceso', 'Idproceso', 'INTEGER', true, null, null);
+        $this->addColumn('rol1', 'Rol1', 'BOOLEAN', true, 1, false);
+        $this->addColumn('rol2', 'Rol2', 'BOOLEAN', true, 1, false);
+        $this->addColumn('rol3', 'Rol3', 'BOOLEAN', true, 1, false);
+        $this->addColumn('rol4', 'Rol4', 'BOOLEAN', true, 1, false);
+        $this->addColumn('rol5', 'Rol5', 'BOOLEAN', true, 1, false);
+        $this->addColumn('idsucursal', 'Idsucursal', 'INTEGER', true, null, null);
+        $this->addColumn('idempresa', 'Idempresa', 'INTEGER', true, null, null);
         // validators
     } // initialize()
 

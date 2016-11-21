@@ -22,7 +22,7 @@ class AouthSession extends AbstractActionController {
             $session["usuario_username"] = array_key_exists( "usuario_username", $session ) ? $session["usuario_username"] : null;
             $session["idempresa"] = array_key_exists( "idempresa", $session ) ? $session["idempresa"] : null;
             $session["idsucursal"] = array_key_exists( "idsucursal", $session ) ? $session["idsucursal"] : null;
-
+            
 
             $session_data = new Container('session_data');
             $session_data->idusuario        = $session["idusuario"];
@@ -31,6 +31,7 @@ class AouthSession extends AbstractActionController {
             $session_data->usuario_username = $session["usuario_username"];
             $session_data->idempresa        = $session["idempresa"];
             $session_data->idsucursal       = $session["idsucursal"];
+            $session_data->notifications    = array();
     }
     
     /**
@@ -46,6 +47,7 @@ class AouthSession extends AbstractActionController {
         $session_data->usuario_username     = null;
         $session_data->idempresa            = null;
         $session_data->idsucursal           = null;
+         $session_data->notifications           = null;
 
         $session_data->getManager()->getStorage()->clear('session_data');
         
@@ -80,6 +82,7 @@ class AouthSession extends AbstractActionController {
             "usuario_username"          => $session_data->usuario_username,
             "idempresa"                 => $session_data->idempresa,
             "idsucursal"                => $session_data->idsucursal,
+            "notifications"             => $session_data->notifications,
 
         );
     }
@@ -100,6 +103,16 @@ class AouthSession extends AbstractActionController {
         $session_data->idempresa        = $idempresa;
 
 
+    }
+    
+    public function setNotifications($notifications){
+       
+
+        $session_data = new Container('session_data');
+        $session_data->notifications = array();
+        $session_data->notifications = $notifications;
+        
+        
     }
 
 }

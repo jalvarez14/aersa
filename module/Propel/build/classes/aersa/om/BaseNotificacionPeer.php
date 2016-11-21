@@ -24,13 +24,13 @@ abstract class BaseNotificacionPeer
     const TM_CLASS = 'NotificacionTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 10;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /** the column name for the idnotificacion field */
     const IDNOTIFICACION = 'notificacion.idnotificacion';
@@ -56,15 +56,22 @@ abstract class BaseNotificacionPeer
     /** the column name for the rol5 field */
     const ROL5 = 'notificacion.rol5';
 
+    /** the column name for the idsucursal field */
+    const IDSUCURSAL = 'notificacion.idsucursal';
+
+    /** the column name for the idempresa field */
+    const IDEMPRESA = 'notificacion.idempresa';
+
     /** The enumerated values for the notificacion_proceso field */
     const NOTIFICACION_PROCESO_COMPRA = 'compra';
     const NOTIFICACION_PROCESO_REQUISICION = 'requisicion';
     const NOTIFICACION_PROCESO_TABLAJERIA = 'tablajeria';
-    const NOTIFICACION_PROCESO_ORDENCREDITO = 'ordencredito';
+    const NOTIFICACION_PROCESO_CREDITO = 'credito';
+    const NOTIFICACION_PROCESO_DEVOLUCION = 'devolucion';
     const NOTIFICACION_PROCESO_CONSIGNACION = 'consignacion';
     const NOTIFICACION_PROCESO_INGRESOS = 'ingresos';
-    const NOTIFICACION_PROCESO_VENTAS = 'ventas';
-    const NOTIFICACION_PROCESO_INVENTARIOS = 'inventarios';
+    const NOTIFICACION_PROCESO_VENTA = 'venta';
+    const NOTIFICACION_PROCESO_AJUSTESINVENTARIOS = 'ajustesinventarios';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -85,12 +92,12 @@ abstract class BaseNotificacionPeer
      * e.g. NotificacionPeer::$fieldNames[NotificacionPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotificacion', 'NotificacionProceso', 'Idproceso', 'Rol1', 'Rol2', 'Rol3', 'Rol4', 'Rol5', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotificacion', 'notificacionProceso', 'idproceso', 'rol1', 'rol2', 'rol3', 'rol4', 'rol5', ),
-        BasePeer::TYPE_COLNAME => array (NotificacionPeer::IDNOTIFICACION, NotificacionPeer::NOTIFICACION_PROCESO, NotificacionPeer::IDPROCESO, NotificacionPeer::ROL1, NotificacionPeer::ROL2, NotificacionPeer::ROL3, NotificacionPeer::ROL4, NotificacionPeer::ROL5, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTIFICACION', 'NOTIFICACION_PROCESO', 'IDPROCESO', 'ROL1', 'ROL2', 'ROL3', 'ROL4', 'ROL5', ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotificacion', 'notificacion_proceso', 'idproceso', 'rol1', 'rol2', 'rol3', 'rol4', 'rol5', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idnotificacion', 'NotificacionProceso', 'Idproceso', 'Rol1', 'Rol2', 'Rol3', 'Rol4', 'Rol5', 'Idsucursal', 'Idempresa', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotificacion', 'notificacionProceso', 'idproceso', 'rol1', 'rol2', 'rol3', 'rol4', 'rol5', 'idsucursal', 'idempresa', ),
+        BasePeer::TYPE_COLNAME => array (NotificacionPeer::IDNOTIFICACION, NotificacionPeer::NOTIFICACION_PROCESO, NotificacionPeer::IDPROCESO, NotificacionPeer::ROL1, NotificacionPeer::ROL2, NotificacionPeer::ROL3, NotificacionPeer::ROL4, NotificacionPeer::ROL5, NotificacionPeer::IDSUCURSAL, NotificacionPeer::IDEMPRESA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTIFICACION', 'NOTIFICACION_PROCESO', 'IDPROCESO', 'ROL1', 'ROL2', 'ROL3', 'ROL4', 'ROL5', 'IDSUCURSAL', 'IDEMPRESA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotificacion', 'notificacion_proceso', 'idproceso', 'rol1', 'rol2', 'rol3', 'rol4', 'rol5', 'idsucursal', 'idempresa', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -100,12 +107,12 @@ abstract class BaseNotificacionPeer
      * e.g. NotificacionPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idnotificacion' => 0, 'NotificacionProceso' => 1, 'Idproceso' => 2, 'Rol1' => 3, 'Rol2' => 4, 'Rol3' => 5, 'Rol4' => 6, 'Rol5' => 7, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotificacion' => 0, 'notificacionProceso' => 1, 'idproceso' => 2, 'rol1' => 3, 'rol2' => 4, 'rol3' => 5, 'rol4' => 6, 'rol5' => 7, ),
-        BasePeer::TYPE_COLNAME => array (NotificacionPeer::IDNOTIFICACION => 0, NotificacionPeer::NOTIFICACION_PROCESO => 1, NotificacionPeer::IDPROCESO => 2, NotificacionPeer::ROL1 => 3, NotificacionPeer::ROL2 => 4, NotificacionPeer::ROL3 => 5, NotificacionPeer::ROL4 => 6, NotificacionPeer::ROL5 => 7, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTIFICACION' => 0, 'NOTIFICACION_PROCESO' => 1, 'IDPROCESO' => 2, 'ROL1' => 3, 'ROL2' => 4, 'ROL3' => 5, 'ROL4' => 6, 'ROL5' => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('idnotificacion' => 0, 'notificacion_proceso' => 1, 'idproceso' => 2, 'rol1' => 3, 'rol2' => 4, 'rol3' => 5, 'rol4' => 6, 'rol5' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('Idnotificacion' => 0, 'NotificacionProceso' => 1, 'Idproceso' => 2, 'Rol1' => 3, 'Rol2' => 4, 'Rol3' => 5, 'Rol4' => 6, 'Rol5' => 7, 'Idsucursal' => 8, 'Idempresa' => 9, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idnotificacion' => 0, 'notificacionProceso' => 1, 'idproceso' => 2, 'rol1' => 3, 'rol2' => 4, 'rol3' => 5, 'rol4' => 6, 'rol5' => 7, 'idsucursal' => 8, 'idempresa' => 9, ),
+        BasePeer::TYPE_COLNAME => array (NotificacionPeer::IDNOTIFICACION => 0, NotificacionPeer::NOTIFICACION_PROCESO => 1, NotificacionPeer::IDPROCESO => 2, NotificacionPeer::ROL1 => 3, NotificacionPeer::ROL2 => 4, NotificacionPeer::ROL3 => 5, NotificacionPeer::ROL4 => 6, NotificacionPeer::ROL5 => 7, NotificacionPeer::IDSUCURSAL => 8, NotificacionPeer::IDEMPRESA => 9, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDNOTIFICACION' => 0, 'NOTIFICACION_PROCESO' => 1, 'IDPROCESO' => 2, 'ROL1' => 3, 'ROL2' => 4, 'ROL3' => 5, 'ROL4' => 6, 'ROL5' => 7, 'IDSUCURSAL' => 8, 'IDEMPRESA' => 9, ),
+        BasePeer::TYPE_FIELDNAME => array ('idnotificacion' => 0, 'notificacion_proceso' => 1, 'idproceso' => 2, 'rol1' => 3, 'rol2' => 4, 'rol3' => 5, 'rol4' => 6, 'rol5' => 7, 'idsucursal' => 8, 'idempresa' => 9, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /** The enumerated values for this table */
@@ -114,11 +121,12 @@ abstract class BaseNotificacionPeer
             NotificacionPeer::NOTIFICACION_PROCESO_COMPRA,
             NotificacionPeer::NOTIFICACION_PROCESO_REQUISICION,
             NotificacionPeer::NOTIFICACION_PROCESO_TABLAJERIA,
-            NotificacionPeer::NOTIFICACION_PROCESO_ORDENCREDITO,
+            NotificacionPeer::NOTIFICACION_PROCESO_CREDITO,
+            NotificacionPeer::NOTIFICACION_PROCESO_DEVOLUCION,
             NotificacionPeer::NOTIFICACION_PROCESO_CONSIGNACION,
             NotificacionPeer::NOTIFICACION_PROCESO_INGRESOS,
-            NotificacionPeer::NOTIFICACION_PROCESO_VENTAS,
-            NotificacionPeer::NOTIFICACION_PROCESO_INVENTARIOS,
+            NotificacionPeer::NOTIFICACION_PROCESO_VENTA,
+            NotificacionPeer::NOTIFICACION_PROCESO_AJUSTESINVENTARIOS,
         ),
     );
 
@@ -246,6 +254,8 @@ abstract class BaseNotificacionPeer
             $criteria->addSelectColumn(NotificacionPeer::ROL3);
             $criteria->addSelectColumn(NotificacionPeer::ROL4);
             $criteria->addSelectColumn(NotificacionPeer::ROL5);
+            $criteria->addSelectColumn(NotificacionPeer::IDSUCURSAL);
+            $criteria->addSelectColumn(NotificacionPeer::IDEMPRESA);
         } else {
             $criteria->addSelectColumn($alias . '.idnotificacion');
             $criteria->addSelectColumn($alias . '.notificacion_proceso');
@@ -255,6 +265,8 @@ abstract class BaseNotificacionPeer
             $criteria->addSelectColumn($alias . '.rol3');
             $criteria->addSelectColumn($alias . '.rol4');
             $criteria->addSelectColumn($alias . '.rol5');
+            $criteria->addSelectColumn($alias . '.idsucursal');
+            $criteria->addSelectColumn($alias . '.idempresa');
         }
     }
 

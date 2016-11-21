@@ -49,38 +49,50 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
 
     /**
      * The value for the rol1 field.
-     * Note: this column has a database default value of: true
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $rol1;
 
     /**
      * The value for the rol2 field.
-     * Note: this column has a database default value of: true
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $rol2;
 
     /**
      * The value for the rol3 field.
-     * Note: this column has a database default value of: true
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $rol3;
 
     /**
      * The value for the rol4 field.
-     * Note: this column has a database default value of: true
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $rol4;
 
     /**
      * The value for the rol5 field.
-     * Note: this column has a database default value of: true
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $rol5;
+
+    /**
+     * The value for the idsucursal field.
+     * @var        int
+     */
+    protected $idsucursal;
+
+    /**
+     * The value for the idempresa field.
+     * @var        int
+     */
+    protected $idempresa;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -110,11 +122,11 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->rol1 = true;
-        $this->rol2 = true;
-        $this->rol3 = true;
-        $this->rol4 = true;
-        $this->rol5 = true;
+        $this->rol1 = false;
+        $this->rol2 = false;
+        $this->rol3 = false;
+        $this->rol4 = false;
+        $this->rol5 = false;
     }
 
     /**
@@ -213,6 +225,28 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     {
 
         return $this->rol5;
+    }
+
+    /**
+     * Get the [idsucursal] column value.
+     *
+     * @return int
+     */
+    public function getIdsucursal()
+    {
+
+        return $this->idsucursal;
+    }
+
+    /**
+     * Get the [idempresa] column value.
+     *
+     * @return int
+     */
+    public function getIdempresa()
+    {
+
+        return $this->idempresa;
     }
 
     /**
@@ -424,6 +458,48 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     } // setRol5()
 
     /**
+     * Set the value of [idsucursal] column.
+     *
+     * @param  int $v new value
+     * @return Notificacion The current object (for fluent API support)
+     */
+    public function setIdsucursal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idsucursal !== $v) {
+            $this->idsucursal = $v;
+            $this->modifiedColumns[] = NotificacionPeer::IDSUCURSAL;
+        }
+
+
+        return $this;
+    } // setIdsucursal()
+
+    /**
+     * Set the value of [idempresa] column.
+     *
+     * @param  int $v new value
+     * @return Notificacion The current object (for fluent API support)
+     */
+    public function setIdempresa($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = NotificacionPeer::IDEMPRESA;
+        }
+
+
+        return $this;
+    } // setIdempresa()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -433,23 +509,23 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->rol1 !== true) {
+            if ($this->rol1 !== false) {
                 return false;
             }
 
-            if ($this->rol2 !== true) {
+            if ($this->rol2 !== false) {
                 return false;
             }
 
-            if ($this->rol3 !== true) {
+            if ($this->rol3 !== false) {
                 return false;
             }
 
-            if ($this->rol4 !== true) {
+            if ($this->rol4 !== false) {
                 return false;
             }
 
-            if ($this->rol5 !== true) {
+            if ($this->rol5 !== false) {
                 return false;
             }
 
@@ -483,6 +559,8 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
             $this->rol3 = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
             $this->rol4 = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
             $this->rol5 = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->idsucursal = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+            $this->idempresa = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -492,7 +570,7 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = NotificacionPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = NotificacionPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Notificacion object", $e);
@@ -728,6 +806,12 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         if ($this->isColumnModified(NotificacionPeer::ROL5)) {
             $modifiedColumns[':p' . $index++]  = '`rol5`';
         }
+        if ($this->isColumnModified(NotificacionPeer::IDSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
+        }
+        if ($this->isColumnModified(NotificacionPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `notificacion` (%s) VALUES (%s)',
@@ -762,6 +846,12 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
                         break;
                     case '`rol5`':
                         $stmt->bindValue($identifier, (int) $this->rol5, PDO::PARAM_INT);
+                        break;
+                    case '`idsucursal`':
+                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
+                        break;
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -921,6 +1011,12 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
             case 7:
                 return $this->getRol5();
                 break;
+            case 8:
+                return $this->getIdsucursal();
+                break;
+            case 9:
+                return $this->getIdempresa();
+                break;
             default:
                 return null;
                 break;
@@ -957,6 +1053,8 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
             $keys[5] => $this->getRol3(),
             $keys[6] => $this->getRol4(),
             $keys[7] => $this->getRol5(),
+            $keys[8] => $this->getIdsucursal(),
+            $keys[9] => $this->getIdempresa(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1020,6 +1118,12 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
             case 7:
                 $this->setRol5($value);
                 break;
+            case 8:
+                $this->setIdsucursal($value);
+                break;
+            case 9:
+                $this->setIdempresa($value);
+                break;
         } // switch()
     }
 
@@ -1052,6 +1156,8 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         if (array_key_exists($keys[5], $arr)) $this->setRol3($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setRol4($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setRol5($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setIdsucursal($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setIdempresa($arr[$keys[9]]);
     }
 
     /**
@@ -1071,6 +1177,8 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         if ($this->isColumnModified(NotificacionPeer::ROL3)) $criteria->add(NotificacionPeer::ROL3, $this->rol3);
         if ($this->isColumnModified(NotificacionPeer::ROL4)) $criteria->add(NotificacionPeer::ROL4, $this->rol4);
         if ($this->isColumnModified(NotificacionPeer::ROL5)) $criteria->add(NotificacionPeer::ROL5, $this->rol5);
+        if ($this->isColumnModified(NotificacionPeer::IDSUCURSAL)) $criteria->add(NotificacionPeer::IDSUCURSAL, $this->idsucursal);
+        if ($this->isColumnModified(NotificacionPeer::IDEMPRESA)) $criteria->add(NotificacionPeer::IDEMPRESA, $this->idempresa);
 
         return $criteria;
     }
@@ -1141,6 +1249,8 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         $copyObj->setRol3($this->getRol3());
         $copyObj->setRol4($this->getRol4());
         $copyObj->setRol5($this->getRol5());
+        $copyObj->setIdsucursal($this->getIdsucursal());
+        $copyObj->setIdempresa($this->getIdempresa());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdnotificacion(NULL); // this is a auto-increment column, so set to default value
@@ -1200,6 +1310,8 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         $this->rol3 = null;
         $this->rol4 = null;
         $this->rol5 = null;
+        $this->idsucursal = null;
+        $this->idempresa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

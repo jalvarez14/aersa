@@ -27,6 +27,9 @@ class Module
         
         $authListener = new \Shared\CustomListener\AuthListener();
         $authListener->attach($eventManager);
+        
+        //$notificationListener = new \Shared\CustomListener\NotificationListener();
+        //$notificationListener->attach($eventManager);
     }
 
     public function getConfig()
