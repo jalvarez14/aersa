@@ -355,18 +355,6 @@
                 },
             });
 
-            var almacenes_table = $container.find('#almacenes_table');
-            $.ajax({
-                url: '/application/json/datatable/lang_es.json',
-                dataType: 'json',
-                success: function (data) {
-                    almacenes_table.dataTable({
-                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
-                        "language": data,
-                        "order": [],
-                    });
-                },
-            });
 
             $('#proveedores_sel').on('click', function () {
                 $container.find('#proveedores_table input:checkbox').prop('checked', true);
