@@ -18,7 +18,7 @@ class InventariociclicoForm extends Form {
                 'class' => 'form-control'
             ),
             'options' => array(
-                    'label' => 'Alamacén *',
+                    'label' => 'Almacén *',
                 'empty_option' => 'Seleccione un almacén',
                 'value_options' => $almacen_array,
             ),

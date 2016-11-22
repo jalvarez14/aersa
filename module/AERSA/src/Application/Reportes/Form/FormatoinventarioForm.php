@@ -18,7 +18,7 @@ class FormatoinventarioForm extends Form {
                 'class' => 'form-control'
             ),
             'options' => array(
-                'label' => 'Almacen *',
+                'label' => 'Almacén *',
                 
                 'value_options' => $almacen,
             ),

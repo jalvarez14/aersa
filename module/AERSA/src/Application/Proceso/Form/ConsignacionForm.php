@@ -74,7 +74,7 @@ use Zend\Form\Form;
             'name' => 'idalmacen',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Almacen *',
+                'label' => 'Almacén *',
                 
                 'value_options' => $almacen_array,
             ),

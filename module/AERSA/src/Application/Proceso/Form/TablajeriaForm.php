@@ -48,7 +48,7 @@ use Zend\Form\Form;
             'name' => 'idalmacenorigen',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Almacen origen *',
+                'label' => 'Almacén origen *',
                 
                 'value_options' => $almacen_array,
             ),
@@ -62,7 +62,7 @@ use Zend\Form\Form;
             'name' => 'idalmacendestino',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Almacen destino *',
+                'label' => 'Almacén destino *',
                 
                 'value_options' => $almacen_array,
             ),
