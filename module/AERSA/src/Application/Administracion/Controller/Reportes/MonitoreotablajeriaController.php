@@ -128,7 +128,7 @@ class MonitoreotablajeriaController extends AbstractActionController {
                 if (isset($productos[$productoObj->getIdproducto()]['total']))
                     $reporte[1][$productoObj->getIdproducto()] = $productos[$productoObj->getIdproducto()]['total'] / $productos[$productoObj->getIdproducto()]['rep'];
                 else
-                    $reporte[1][$productoObj->getIdproducto()] = 0;
+                   $reporte[1][$productoObj->getIdproducto()] = 0;
             }
 
             $mes = $post_data['mes'];
@@ -228,6 +228,7 @@ class MonitoreotablajeriaController extends AbstractActionController {
                     $mes1 = $reporte[1][$id];
                     $mes2 = $reporte[2][$id];
                     $mes3 = $reporte[3][$id];
+                    if ($mes3>0 || $mes2 >0 || mes1>0)
                     array_push($reporte2, array('uno'=>$nombreProducto,'dos'=>$mes1,'tres'=>$mes2,'cuatro'=>$mes3));
                 }
                 
@@ -268,6 +269,7 @@ class MonitoreotablajeriaController extends AbstractActionController {
                     $mes1 = $reporte[1][$id];
                     $mes2 = $reporte[2][$id];
                     $mes3 = $reporte[3][$id];
+                    if ($mes3>0 || $mes2 >0 || mes1>0)
                     array_push($reporte2, "<tr><td>$nombreProducto</td><td>$mes1</td><td>$mes2</td><td>$mes3</td></tr>");
                 }
                 return $this->getResponse()->setContent(json_encode($reporte2));
