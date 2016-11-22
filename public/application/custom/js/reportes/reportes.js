@@ -182,15 +182,30 @@
                     }
                     controlBoton();
                 });
-
+                
+                /*
                 $('#producto_search').on('keyup', function () {
                     var busqueda = $(this).val();
                     $container.find('#reporte_table tbody tr').filter(function () {
+
                         var palabra = $(this).find('td').eq(1).text();
                         $(this).attr("hidden", !palabra.includes(busqueda));
                     });
                 });
-
+                */
+               
+               var table = $container.find('#reporte_table');
+                $.ajax({
+                    url:'/application/json/datatable/lang_es.json',
+                    dataType:'json',
+                    success:function(data){
+                       table.dataTable({
+                           "language":data,
+                           "order":[],
+                           "bPaginate": false
+                       });
+                    },
+                });
                 $container.find('select').on('change', function () {
                     controlBoton();
                 });
