@@ -39,7 +39,7 @@ class InventariociclicoController extends AbstractActionController {
         if ($request->isPost()) {
             $post_data = $request->getPost();
             $reporte = array();
-            array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'Ajst', 'doce' => 'StT', 'trece' => 'Unid', 'catorce' => 'StF', 'quince' => 'Explo', 'dieciseis' => 'FisTot', 'diecisiete' => 'ImpFis', 'quiciocho' => 'Dif', 'diecinueve' => 'CostProm', 'veinte' => 'DifImp','veintiuno' => 'SubCat'));
+            array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'Ajst', 'doce' => 'StT', 'trece' => 'Unid', 'catorce' => 'StF', 'quince' => 'Explo', 'dieciseis' => 'FisTot', 'diecisiete' => 'ImpFis', 'dieciocho' => 'DifCant', 'diecinueve' => 'CostProm', 'veinte' => 'DifImp','veintiuno' => 'SubCat'));
             foreach ($post_data['reporte'] as $key => $value) {
                 if (isset($value['categoria'])) {
                     array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $value['categoria'], 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => '','veintiuno' => ''));
@@ -356,7 +356,7 @@ class InventariociclicoController extends AbstractActionController {
                                 $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                 $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico']=$explosion+$stockFisico;
                                 $totalFisico=$arrayReporte[$idpr]['inventariomesdetalle_totalfisico'];
-                                $dif =$totalFisico - abs($stockTeorico);
+                                $dif =$totalFisico - $stockTeorico;
                                 $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
                                 $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
                                 $difImporte = $dif * $costoPromedio;
@@ -380,7 +380,7 @@ class InventariociclicoController extends AbstractActionController {
                     $idproducto = $objproducto->getIdproducto();
                     $explosion=(isset($arrayReporte[$idproducto]['inventariomesdetalle_explosion'])) ? $arrayReporte[$idproducto]['inventariomesdetalle_explosion']  : 0;
                     $totalFisico=$explosion+$stockFisico;
-                    $dif =$totalFisico - abs($stockTeorico);
+                    $dif =$totalFisico - $stockTeorico;
 
                     $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
                     if ($has_compras > 0) {

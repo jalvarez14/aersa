@@ -395,7 +395,7 @@ class CierresinventariosController extends AbstractActionController {
                                 $stockFisico = $arrayReporte[$idpr]['inventariomesdetalle_stockfisico'];
                                 $arrayReporte[$idpr]['inventariomesdetalle_totalfisico']=$explosion+$stockFisico;
                                 $totalFisico=$arrayReporte[$idpr]['inventariomesdetalle_totalfisico'];
-                                $dif =$totalFisico - abs($stockTeorico);
+                                $dif =$totalFisico - $stockTeorico;
                                 $arrayReporte[$idpr]['inventariomesdetalle_diferencia'] = $dif;
                                 $costoPromedio = $arrayReporte[$idpr]['inventariomesdetalle_costopromedio'];
                                 $difImporte = $dif * $costoPromedio;
@@ -419,12 +419,12 @@ class CierresinventariosController extends AbstractActionController {
                     $idproducto = $objproducto->getIdproducto();
                     $explosion=(isset($arrayReporte[$idproducto]['inventariomesdetalle_explosion'])) ? $arrayReporte[$idproducto]['inventariomesdetalle_explosion']  : 0;
                     $totalFisico=$explosion+$stockFisico;
-                    $dif =$totalFisico - abs($stockTeorico);
+                    $dif =$totalFisico - $stockTeorico;
 
                     $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
                     if ($has_compras > 0) {
                         $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
-                        $costoPromedio = abs($costoPromedio);
+                        $costoPromedio = $costoPromedio;
                     } else {
                         $costoPromedio = $objproducto->getProductoCosto();
                     }
@@ -593,7 +593,7 @@ array_push
                     $reporte = array();
                     $subcategoriasObj = \CategoriaQuery::create()->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
                     $subcategoriaObj = new \Categoria();
-                    array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'Ajst', 'doce' => 'StT', 'trece' => 'Unid', 'catorce' => 'StF', 'quince' => 'Explo', 'dieciseis' => 'FisTot', 'diecisiete' => 'ImpFis', 'quiciocho' => 'Dif', 'diecinueve' => 'CostProm', 'veinte' => 'DifImp', 'veintiuno' => 'SubCat', 'veintidos' => 'Revisado'));
+                    array_push($reporte, array('uno' => 'ID', 'dos' => 'Nomb', 'tres' => 'ExistIni', 'cuatro' => 'Cmpr', 'cinco' => 'ReqIng', 'seis' => 'OrdTabIng', 'siete' => 'Vnt', 'ocho' => 'ReqEg', 'nueve' => 'OrdTabEg', 'diez' => 'Dev', 'once' => 'Ajst', 'doce' => 'StT', 'trece' => 'Unid', 'catorce' => 'StF', 'quince' => 'Explo', 'dieciseis' => 'FisTot', 'diecisiete' => 'ImpFis', 'dieciocho' => 'DifCant', 'diecinueve' => 'CostProm', 'veinte' => 'DifImp', 'veintiuno' => 'SubCat', 'veintidos' => 'Revisado'));
                     foreach ($subcategoriasObj as $subcategoriaObj) {
                         array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $subcategoriaObj->getCategoriaNombre(), 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => '', 'veintiuno' => '', 'veintidos' => ''));
                         $productosObj = \ProductoQuery::create()->filterByIdsubcategoria($subcategoriaObj->getIdcategoria())->orderByProductoNombre('asc')->find();
