@@ -39,7 +39,7 @@ class AjustesinventariosForm extends Form {
             'type' => 'Select',
             'options' => array(
                 
-                'label' => 'Almacen *',
+                'label' => 'Almacén *',
                 'value_options' => $almacen_array,
             ),
             'attributes' => array(
