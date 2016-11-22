@@ -293,6 +293,33 @@ CREATE TABLE `conceptosalida`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- conceptoscfdi
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `conceptoscfdi`;
+
+CREATE TABLE `conceptoscfdi`
+(
+    `idconceptoscfdi` INTEGER NOT NULL AUTO_INCREMENT,
+    `conceptoscfdi_nombre` TEXT NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `idempresa` INTEGER,
+    PRIMARY KEY (`idconceptoscfdi`),
+    INDEX `idproducto` (`idproducto`),
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_conceptoscfdi`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_conceptoscfdi`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- cuentabancaria
 -- ---------------------------------------------------------------------
 
@@ -888,6 +915,33 @@ CREATE TABLE `producto`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- productocfdi
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `productocfdi`;
+
+CREATE TABLE `productocfdi`
+(
+    `idproductocfdi` INTEGER NOT NULL AUTO_INCREMENT,
+    `idempresa` INTEGER NOT NULL,
+    `idproducto` INTEGER NOT NULL,
+    `productocfdi_nombre` TEXT NOT NULL,
+    PRIMARY KEY (`idproductocfdi`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idempresa_productocfdi`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_empresacfdi`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- productosucursalalmacen
 -- ---------------------------------------------------------------------
 
@@ -931,6 +985,33 @@ CREATE TABLE `proveedor`
     `proveedor_estatus` TINYINT DEFAULT 1,
     PRIMARY KEY (`idproveedor`),
     INDEX `idempresa` (`idempresa`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- proveedorescfdi
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `proveedorescfdi`;
+
+CREATE TABLE `proveedorescfdi`
+(
+    `idproveedorescfdi` INTEGER NOT NULL AUTO_INCREMENT,
+    `proveedorescfdi_nombre` TEXT NOT NULL,
+    `idproveedor` INTEGER NOT NULL,
+    `idempresa` INTEGER NOT NULL,
+    PRIMARY KEY (`idproveedorescfdi`),
+    INDEX `idproveedor` (`idproveedor`),
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_proveedorescfdi`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproveedor_proveedorescfdi`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
