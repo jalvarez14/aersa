@@ -325,6 +325,14 @@
             });
             
             $('input[name=ajusteinventario_cantidad]').numeric();
+            
+            //COMENTARIOS
+            var id = $('input[name=idajusteinventario]').val();
+            $('#comentarios_container').comentarios({
+                table:'ajusteinventarionota',
+                id: id,
+                parent:'idajusteinventario',
+            });
         }
 
         /*

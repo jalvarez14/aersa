@@ -494,6 +494,14 @@
 
             });
             revisadaControl();
+            
+            //COMENTARIOS
+            var id = $('input[name=idinventariomes]').val();
+            $('#comentarios_container').comentarios({
+                table:'cierresemananota',
+                id: id,
+                parent:'idcierresemana',
+            });
         }
 
         /*

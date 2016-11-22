@@ -185,15 +185,20 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <?php foreach ($session['notifications'] as $notification):?>
                                                <?php 
                                                     $proceso_label = ucfirst($notification['notificacion_proceso']);
+                                                    
+                                                    $url ="/procesos/".$notification['notificacion_proceso']."/editar/".$notification['idproceso'];
+                                                    
                                                     if($notification['notificacion_proceso'] == 'credito'){
                                                         $proceso_label = 'Nota de credito';
                                                     }elseif($notification['notificacion_proceso'] == 'ajustesinventarios'){
                                                         $proceso_label = 'Ajustes inventarios';
+                                                    }elseif($notification['notificacion_proceso'] == 'cierresemana'){
+                                                        $url ="/auditoria/".$notification['notificacion_proceso']."/editar/".$notification['idproceso'];
                                                     }
                                                ?>
 
                                                 <li>
-                                                    <a href="/procesos/<?php echo $notification['notificacion_proceso']?>/editar/<?php echo $notification['idproceso']?>">
+                                                    <a href="<?php echo $url?>">
                                                         <!--<span class="time">10 mins</span>-->
                                                         <span class="details">
                                                         <span class="label label-sm label-icon label-warning">

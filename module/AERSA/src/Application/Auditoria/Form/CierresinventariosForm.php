@@ -10,6 +10,13 @@ class CierresinventariosForm extends Form {
         
         parent::__construct('cierresinventariosForm');
         
+        
+        $this->add(array(
+            'name' => 'idinventariomes',
+            'type' => 'Hidden',
+
+        ));
+        
         $this->add(array(
             'name' => 'idalmacen',
             'type' => 'Select',

@@ -76,6 +76,28 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="ajusteinventarionota" phpName="Ajusteinventarionota" idMethod="native">
+    <column name="idajusteinventarionota" phpName="Idajusteinventarionota" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
+    <column name="idajusteinventario" phpName="Idajusteinventario" type="INTEGER" required="true"/>
+    <column name="ajusteinventarionota_nota" phpName="AjusteinventarionotaNota" type="LONGVARCHAR" required="true"/>
+    <column name="ajusteinventarionota_fecha" phpName="AjusteinventarionotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="ajusteinventario" name="idordentablajeria_ordentablajerianota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idajusteinventario" foreign="idajusteinventario"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_ordentablajerianota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <index name="idusuario">
+      <index-column name="idusuario"/>
+    </index>
+    <index name="idajusteinventario">
+      <index-column name="idajusteinventario"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="almacen" phpName="Almacen" idMethod="native">
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
@@ -96,6 +118,28 @@
     <column name="categoria_almacenable" phpName="CategoriaAlmacenable" type="BOOLEAN" size="1" required="false"/>
     <index name="idcategoriapadre">
       <index-column name="idcategoriapadre"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="cierresemananota" phpName="Cierresemananota" idMethod="native">
+    <column name="idcierresemananota" phpName="Idcierresemananota" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
+    <column name="idcierresemana" phpName="Idcierresemana" type="INTEGER" required="true"/>
+    <column name="cierresemananota_nota" phpName="CierresemananotaNota" type="LONGVARCHAR" required="true"/>
+    <column name="cierresemananota_fecha" phpName="CierresemananotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="inventariomes" name="idcierresemana_cierresemananota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcierresemana" foreign="idinventariomes"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_cierresemananota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <index name="idusuario">
+      <index-column name="idusuario"/>
+    </index>
+    <index name="idcierresemananota">
+      <index-column name="idcierresemana"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -652,7 +696,7 @@
   </table>
   <table name="notificacion" phpName="Notificacion" idMethod="native">
     <column name="idnotificacion" phpName="Idnotificacion" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="notificacion_proceso" phpName="NotificacionProceso" type="CHAR" sqlType="enum('compra','requisicion','tablajeria','credito','devolucion','consignacion','ingresos','venta','ajustesinventarios')" required="true"/>
+    <column name="notificacion_proceso" phpName="NotificacionProceso" type="CHAR" sqlType="enum('compra','requisicion','tablajeria','credito','devolucion','consignacion','ingresos','venta','ajustesinventarios','cierresemana')" required="true"/>
     <column name="idproceso" phpName="Idproceso" type="INTEGER" required="true"/>
     <column name="rol1" phpName="Rol1" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="rol2" phpName="Rol2" type="BOOLEAN" size="1" required="true" defaultValue="false"/>

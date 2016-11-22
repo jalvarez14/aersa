@@ -101,7 +101,8 @@ class ComentariosController extends AbstractActionController {
              $class->setIdusuario($session['idusuario']);
              $class->setByName($post_data['table'].'_fecha', new \DateTime(), \BasePeer::TYPE_FIELDNAME);
              $class->setByName($post_data['table'].'_nota', $post_data['nota'], \BasePeer::TYPE_FIELDNAME);
-       
+            
+
              $class->save();
 
              $nota['id'] = $class->getByName('id'.$post_data['table'],  \BasePeer::TYPE_FIELDNAME);

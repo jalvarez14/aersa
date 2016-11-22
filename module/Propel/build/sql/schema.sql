@@ -75,6 +75,34 @@ CREATE TABLE `ajusteinventario`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- ajusteinventarionota
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `ajusteinventarionota`;
+
+CREATE TABLE `ajusteinventarionota`
+(
+    `idajusteinventarionota` INTEGER NOT NULL AUTO_INCREMENT,
+    `idusuario` INTEGER NOT NULL,
+    `idajusteinventario` INTEGER NOT NULL,
+    `ajusteinventarionota_nota` TEXT NOT NULL,
+    `ajusteinventarionota_fecha` DATETIME NOT NULL,
+    PRIMARY KEY (`idajusteinventarionota`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idajusteinventario` (`idajusteinventario`),
+    CONSTRAINT `idordentablajeria_ordentablajerianota`
+        FOREIGN KEY (`idajusteinventario`)
+        REFERENCES `ajusteinventario` (`idajusteinventario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_ordentablajerianota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- almacen
 -- ---------------------------------------------------------------------
 
@@ -105,6 +133,34 @@ CREATE TABLE `categoria`
     `categoria_almacenable` TINYINT(1),
     PRIMARY KEY (`idcategoria`),
     INDEX `idcategoriapadre` (`idcategoriapadre`)
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- cierresemananota
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `cierresemananota`;
+
+CREATE TABLE `cierresemananota`
+(
+    `idcierresemananota` INTEGER NOT NULL AUTO_INCREMENT,
+    `idusuario` INTEGER NOT NULL,
+    `idcierresemana` INTEGER NOT NULL,
+    `cierresemananota_nota` TEXT NOT NULL,
+    `cierresemananota_fecha` DATETIME NOT NULL,
+    PRIMARY KEY (`idcierresemananota`),
+    INDEX `idusuario` (`idusuario`),
+    INDEX `idcierresemananota` (`idcierresemana`),
+    CONSTRAINT `idcierresemana_cierresemananota`
+        FOREIGN KEY (`idcierresemana`)
+        REFERENCES `inventariomes` (`idinventariomes`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_cierresemananota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -671,7 +727,7 @@ DROP TABLE IF EXISTS `notificacion`;
 CREATE TABLE `notificacion`
 (
     `idnotificacion` INTEGER NOT NULL AUTO_INCREMENT,
-    `notificacion_proceso` enum('compra','requisicion','tablajeria','ordencredito','consignacion','ingresos','ventas','inventarios') NOT NULL,
+    `notificacion_proceso` enum('compra','requisicion','tablajeria','credito','devolucion','consignacion','ingresos','venta','ajustesinventarios','cierresemana') NOT NULL,
     `idproceso` INTEGER NOT NULL,
     `rol1` TINYINT(1) DEFAULT 0 NOT NULL,
     `rol2` TINYINT(1) DEFAULT 0 NOT NULL,
