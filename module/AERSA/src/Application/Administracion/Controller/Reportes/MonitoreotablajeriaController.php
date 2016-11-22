@@ -34,10 +34,10 @@ class MonitoreotablajeriaController extends AbstractActionController {
             $productos = array();
             foreach ($ordenesTablajeria as $ordenTablajeria) {
                 if (isset($productos[$ordenTablajeria->getIdproducto()]['total'])) {
-                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajemerma();
+                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajeMerma();
                     $productos[$ordenTablajeria->getIdproducto()]['rep']+=1;
                 } else {
-                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajemerma();
+                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajeMerma();
                     $productos[$ordenTablajeria->getIdproducto()]['rep'] = 1;
                 }
             }
@@ -74,10 +74,10 @@ class MonitoreotablajeriaController extends AbstractActionController {
             $productos = array();
             foreach ($ordenesTablajeria as $ordenTablajeria) {
                 if (isset($productos[$ordenTablajeria->getIdproducto()]['total'])) {
-                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaMerma();
+                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajeMerma();
                     $productos[$ordenTablajeria->getIdproducto()]['rep']+=1;
                 } else {
-                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajemerma();
+                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajeMerma();
                     $productos[$ordenTablajeria->getIdproducto()]['rep'] = 1;
                 }
             }
@@ -114,10 +114,10 @@ class MonitoreotablajeriaController extends AbstractActionController {
             $productos = array();
             foreach ($ordenesTablajeria as $ordenTablajeria) {
                 if (isset($productos[$ordenTablajeria->getIdproducto()]['total'])) {
-                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaMerma();
+                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajeMerma();
                     $productos[$ordenTablajeria->getIdproducto()]['rep']+=1;
                 } else {
-                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajemerma();
+                    $productos[$ordenTablajeria->getIdproducto()]['total']+=$ordenTablajeria->getOrdentablajeriaPorcentajeMerma();
                     $productos[$ordenTablajeria->getIdproducto()]['rep'] = 1;
                 }
             }
