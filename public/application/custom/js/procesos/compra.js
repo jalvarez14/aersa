@@ -427,31 +427,48 @@
                             
                              var data = e.target.result;
                              var xml = jQuery.parseXML(data);
+                             
                              var json = xmlToJson(xml);
+                            // console.log(json);
+                             //console.log(json);
                              var emisor_nombre = json['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['nombre'];
-                             var numRequests =  ObjectLength(json['cfdi:Comprobante']['cfdi:Conceptos']);
+                             //var numRequests =  ObjectLength(json['cfdi:Comprobante']['cfdi:Conceptos']);
                              var count = 0;
                              var total = 0;
                              var productos_array = Array();
-                             $.each(json['cfdi:Comprobante']['cfdi:Conceptos'],function(index,row){
-                                var row = row['@attributes'];
-                                
-                                var tmp = {
-                                    cantidad:row.cantidad,
-                                    descripcion:row.descripcion,
-                                    importe:row.importe,
-                                    unidad:row.unidad,
-                                    valorUnitario:row.valorUnitario,
-      
+                             //console.log(json);
+                             $.each(json['cfdi:Comprobante']['cfdi:Conceptos']['cfdi:Concepto'],function(index,row){
+                             //console.log(row);  
+                            // console.log(typeof row);
+                                //var row = row['@attributes']; 
+                                if(typeof row['@attributes'] != 'undefined'){
+                                    var row = row['@attributes']; 
                                 }
-                                productos_array.push(tmp);
+                                if(typeof row == 'object'){
+                                    var tmp = {
+                                        cantidad:row.cantidad,
+                                        descripcion:row.descripcion,
+                                        importe:row.importe,
+                                        unidad:row.unidad,
+                                        valorUnitario:row.valorUnitario,
+
+                                    }
+                                    productos_array.push(tmp);
+                                }
                              });
+                             
                              var countImpuestos = 0;
-                             $.each(json['cfdi:Comprobante']['cfdi:Impuestos']['cfdi:Traslados'],function(index,row){
-                                var row = row['@attributes'];
-                                productos_array[countImpuestos].iva = row.importe;
-                                countImpuestos++;
+                             $.each(json['cfdi:Comprobante']['cfdi:Impuestos']['cfdi:Traslados']['cfdi:Traslado'],function(index,row){
+                                if(typeof row['@attributes'] != 'undefined'){
+                                    var row = row['@attributes']; 
+                                }
+                                 if(typeof row == 'object'){
+                                    productos_array[countImpuestos].iva = row.importe;
+                                    countImpuestos++;
+                                }
                              });
+                            
+                            var numRequests = productos_array.length;
                              function nextAjax(){
                                    if(count < numRequests){
                                         $.ajax({
@@ -484,7 +501,7 @@
                                                                     '</div>',
                                                                     '<div class="col-md-12">',
                                                                         '<div class="form-group">',
-                                                                            '<label for="producto_nombre">Proveedor *</label>',
+                                                                            '<label for="producto_nombre">Producto *</label>',
                                                                             '<div class="input-group">',
                                                                                 '<span class="input-group-addon">',
                                                                                     '<i class="fa fa-search"></i>',
@@ -655,6 +672,8 @@
                                         });
                                         $modal.modal();
                                     }else{
+                                        
+                                       
                                         $('input[name=idproveedor_autocomplete]').typeahead('val',data.proveedor.value);
                                         $('input[name=idproveedor]').val(data.proveedor.id);
                                         nextAjax();
