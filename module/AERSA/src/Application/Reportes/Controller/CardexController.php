@@ -432,11 +432,33 @@ class CardexController extends AbstractActionController {
 
                             $objrequisicion = new \Requisicion();
                             foreach ($objrequisicionesOrigen as $objrequisicion) {
-                                $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                                
+                                if($objproducto->getProductoTipo()=="simple") //cuando el producto es simple solo se consideran los padres
+                                {
+                                /*$objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                         ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
                                         ->filterByIdpadre(NULL, \Criteria::NOT_EQUAL)
                                         ->filterByIdproducto($objproducto->getIdproducto())
-                                        ->find();
+                                        ->find();*/
+                                $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                                ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                ->filterByIdpadre(NULL)
+                                ->filterByIdproducto($objproducto->getIdproducto())
+                                ->find();
+                                }
+                                if($objproducto->getProductoTipo()=="subreceta")//cuando el producto es subreceta solo se consideran los hijos
+                                {
+                                    /*$objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                                     ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                     ->filterByIdpadre(NULL, \Criteria::NOT_EQUAL)
+                                     ->filterByIdproducto($objproducto->getIdproducto())
+                                     ->find();*/
+                                   $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                                    ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                    ->filterByIdpadre(NULL, \Criteria::NOT_EQUAL)
+                                    ->filterByIdproducto($objproducto->getIdproducto())
+                                    ->find();
+                                }
                                 $objrequisiciondetalle = new \Requisiciondetalle();
                                 foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
                                     $colorbg = ($color) ? $bgfila : $bgfila2;
@@ -730,7 +752,7 @@ class CardexController extends AbstractActionController {
         $prod = array();
         //$search = $post_data['texto'];
         $search = $this->params()->fromQuery('q');
-        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%' . $search . '%', \Criteria::LIKE)->filterByProductoBaja(0, \Criteria::EQUAL)->orderByProductoNombre('asc')->find();
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%' . $search . '%', \Criteria::LIKE)->filterByProductoBaja(0, \Criteria::EQUAL)->orderByProductoNombre('asc')->filterByProductoTipo('plu', \Criteria::NOT_EQUAL)->find();
         return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre', array('producto_iva', 'producto_costo', array('unidadmedida', 'idunidadmedida', 'unidadmedida_nombre', 'UnidadmedidaQuery')))));
 //            $producto= new \Producto();
 //            foreach ($query as $producto) {
