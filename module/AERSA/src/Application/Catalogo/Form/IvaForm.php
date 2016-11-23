@@ -21,7 +21,7 @@ class IvaForm extends Form
             'name' => 'tasaiva_valor',
             'type' => 'Number',
             'options' => array(
-                'label' => 'Iva *',
+                'label' => 'IVA *',
             ),
             'attributes' => array(
                 'required' => true,

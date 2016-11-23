@@ -34,7 +34,7 @@ class ProductosForm extends Form
             'name' => 'idcategoria',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Categoria *',
+                'label' => 'Categoría *',
                 
                 'value_options' => $categorias,
             ),
@@ -48,7 +48,7 @@ class ProductosForm extends Form
             'name' => 'idsubcategoria',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Subcategoria',
+                'label' => 'Subcategoría',
                 
                 'value_options' => $subcategorias
             ),
@@ -99,7 +99,7 @@ class ProductosForm extends Form
             'name' => 'producto_iva',
             'type' => 'Select',
             'options' => array(
-                'label' => 'Iva *',
+                'label' => 'IVA *',
                 'value_options' => array(
                     1 => 'Si',
                     0 => 'No',
