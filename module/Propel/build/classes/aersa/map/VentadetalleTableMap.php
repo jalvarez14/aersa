@@ -39,13 +39,14 @@ class VentadetalleTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idventadetalle', 'Idventadetalle', 'INTEGER', true, null, null);
-        $this->addForeignKey('idventa', 'Idventa', 'INTEGER', 'venta', 'idventa', true, null, null);
-        $this->addForeignKey('idalmacen', 'Idalmacen', 'INTEGER', 'almacen', 'idalmacen', true, null, null);
-        $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
+        $this->addColumn('idventa', 'Idventa', 'INTEGER', true, null, null);
+        $this->addColumn('idalmacen', 'Idalmacen', 'INTEGER', true, null, null);
+        $this->addColumn('idproducto', 'Idproducto', 'INTEGER', true, null, null);
         $this->addColumn('ventadetalle_cantidad', 'VentadetalleCantidad', 'FLOAT', true, null, null);
         $this->addColumn('ventadetalle_subtotal', 'VentadetalleSubtotal', 'DECIMAL', true, 15, null);
-        $this->addForeignKey('idpadre', 'Idpadre', 'INTEGER', 'ventadetalle', 'idventadetalle', false, null, null);
+        $this->addColumn('idpadre', 'Idpadre', 'INTEGER', false, null, null);
         $this->addColumn('ventadetalle_revisada', 'VentadetalleRevisada', 'BOOLEAN', true, 1, null);
+        $this->addColumn('ventadetalle_contable', 'VentadetalleContable', 'BOOLEAN', true, 1, false);
         // validators
     } // initialize()
 
@@ -54,11 +55,6 @@ class VentadetalleTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Almacen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('VentadetalleRelatedByIdpadre', 'Ventadetalle', RelationMap::MANY_TO_ONE, array('idpadre' => 'idventadetalle', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Venta', 'Venta', RelationMap::MANY_TO_ONE, array('idventa' => 'idventa', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('VentadetalleRelatedByIdventadetalle', 'Ventadetalle', RelationMap::ONE_TO_MANY, array('idventadetalle' => 'idpadre', ), 'CASCADE', 'CASCADE', 'VentadetallesRelatedByIdventadetalle');
     } // buildRelations()
 
 } // VentadetalleTableMap
