@@ -65,6 +65,7 @@ class InventariomesTableMap extends TableMap
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Cierresemananota', 'Cierresemananota', RelationMap::ONE_TO_MANY, array('idinventariomes' => 'idcierresemana', ), 'CASCADE', 'CASCADE', 'Cierresemananotas');
         $this->addRelation('Inventariomesdetalle', 'Inventariomesdetalle', RelationMap::ONE_TO_MANY, array('idinventariomes' => 'idinventariomes', ), 'CASCADE', 'CASCADE', 'Inventariomesdetalles');
     } // buildRelations()
 

@@ -41,24 +41,25 @@ class NotificacionTableMap extends TableMap
         $this->addPrimaryKey('idnotificacion', 'Idnotificacion', 'INTEGER', true, null, null);
         $this->addColumn('notificacion_proceso', 'NotificacionProceso', 'CHAR', true, null, null);
         $this->getColumn('notificacion_proceso', false)->setValueSet(array (
-  0 => 'compra',
-  1 => 'requisicion',
-  2 => 'tablajeria',
-  3 => 'credito',
-  4 => 'devolucion',
-  5 => 'consignacion',
-  6 => 'ingresos',
-  7 => 'venta',
-  8 => 'ajustesinventarios',
+  0 => 'cierresemana',
+  1 => 'compra',
+  2 => 'requisicion',
+  3 => 'tablajeria',
+  4 => 'credito',
+  5 => 'devolucion',
+  6 => 'consignacion',
+  7 => 'ingresos',
+  8 => 'venta',
+  9 => 'ajustesinventarios',
 ));
+        $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addColumn('idproceso', 'Idproceso', 'INTEGER', true, null, null);
+        $this->addForeignKey('idsucursal', 'Idsucursal', 'INTEGER', 'sucursal', 'idsucursal', true, null, null);
         $this->addColumn('rol1', 'Rol1', 'BOOLEAN', true, 1, false);
         $this->addColumn('rol2', 'Rol2', 'BOOLEAN', true, 1, false);
         $this->addColumn('rol3', 'Rol3', 'BOOLEAN', true, 1, false);
         $this->addColumn('rol4', 'Rol4', 'BOOLEAN', true, 1, false);
         $this->addColumn('rol5', 'Rol5', 'BOOLEAN', true, 1, false);
-        $this->addColumn('idsucursal', 'Idsucursal', 'INTEGER', true, null, null);
-        $this->addColumn('idempresa', 'Idempresa', 'INTEGER', true, null, null);
         // validators
     } // initialize()
 
@@ -67,6 +68,8 @@ class NotificacionTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
 } // NotificacionTableMap

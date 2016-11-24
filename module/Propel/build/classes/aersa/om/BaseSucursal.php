@@ -144,6 +144,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $collNotacreditosPartial;
 
     /**
+     * @var        PropelObjectCollection|Notificacion[] Collection to store aggregation of Notificacion objects.
+     */
+    protected $collNotificacions;
+    protected $collNotificacionsPartial;
+
+    /**
      * @var        PropelObjectCollection|Ordentablajeria[] Collection to store aggregation of Ordentablajeria objects.
      */
     protected $collOrdentablajerias;
@@ -282,6 +288,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $notacreditosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $notificacionsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -697,6 +709,8 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             $this->collNotacreditos = null;
 
+            $this->collNotificacions = null;
+
             $this->collOrdentablajerias = null;
 
             $this->collProductosucursalalmacens = null;
@@ -1047,6 +1061,23 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             if ($this->collNotacreditos !== null) {
                 foreach ($this->collNotacreditos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->notificacionsScheduledForDeletion !== null) {
+                if (!$this->notificacionsScheduledForDeletion->isEmpty()) {
+                    NotificacionQuery::create()
+                        ->filterByPrimaryKeys($this->notificacionsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->notificacionsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collNotificacions !== null) {
+                foreach ($this->collNotificacions as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1469,6 +1500,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collNotificacions !== null) {
+                    foreach ($this->collNotificacions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collOrdentablajerias !== null) {
                     foreach ($this->collOrdentablajerias as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1666,6 +1705,9 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             }
             if (null !== $this->collNotacreditos) {
                 $result['Notacreditos'] = $this->collNotacreditos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collNotificacions) {
+                $result['Notificacions'] = $this->collNotificacions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrdentablajerias) {
                 $result['Ordentablajerias'] = $this->collOrdentablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1938,6 +1980,12 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getNotificacions() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addNotificacion($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getOrdentablajerias() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addOrdentablajeria($relObj->copy($deepCopy));
@@ -2134,6 +2182,9 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         }
         if ('Notacredito' == $relationName) {
             $this->initNotacreditos();
+        }
+        if ('Notificacion' == $relationName) {
+            $this->initNotificacions();
         }
         if ('Ordentablajeria' == $relationName) {
             $this->initOrdentablajerias();
@@ -5837,6 +5888,256 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collNotificacions collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addNotificacions()
+     */
+    public function clearNotificacions()
+    {
+        $this->collNotificacions = null; // important to set this to null since that means it is uninitialized
+        $this->collNotificacionsPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collNotificacions collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialNotificacions($v = true)
+    {
+        $this->collNotificacionsPartial = $v;
+    }
+
+    /**
+     * Initializes the collNotificacions collection.
+     *
+     * By default this just sets the collNotificacions collection to an empty array (like clearcollNotificacions());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initNotificacions($overrideExisting = true)
+    {
+        if (null !== $this->collNotificacions && !$overrideExisting) {
+            return;
+        }
+        $this->collNotificacions = new PropelObjectCollection();
+        $this->collNotificacions->setModel('Notificacion');
+    }
+
+    /**
+     * Gets an array of Notificacion objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Notificacion[] List of Notificacion objects
+     * @throws PropelException
+     */
+    public function getNotificacions($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collNotificacionsPartial && !$this->isNew();
+        if (null === $this->collNotificacions || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collNotificacions) {
+                // return empty collection
+                $this->initNotificacions();
+            } else {
+                $collNotificacions = NotificacionQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collNotificacionsPartial && count($collNotificacions)) {
+                      $this->initNotificacions(false);
+
+                      foreach ($collNotificacions as $obj) {
+                        if (false == $this->collNotificacions->contains($obj)) {
+                          $this->collNotificacions->append($obj);
+                        }
+                      }
+
+                      $this->collNotificacionsPartial = true;
+                    }
+
+                    $collNotificacions->getInternalIterator()->rewind();
+
+                    return $collNotificacions;
+                }
+
+                if ($partial && $this->collNotificacions) {
+                    foreach ($this->collNotificacions as $obj) {
+                        if ($obj->isNew()) {
+                            $collNotificacions[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collNotificacions = $collNotificacions;
+                $this->collNotificacionsPartial = false;
+            }
+        }
+
+        return $this->collNotificacions;
+    }
+
+    /**
+     * Sets a collection of Notificacion objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $notificacions A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setNotificacions(PropelCollection $notificacions, PropelPDO $con = null)
+    {
+        $notificacionsToDelete = $this->getNotificacions(new Criteria(), $con)->diff($notificacions);
+
+
+        $this->notificacionsScheduledForDeletion = $notificacionsToDelete;
+
+        foreach ($notificacionsToDelete as $notificacionRemoved) {
+            $notificacionRemoved->setSucursal(null);
+        }
+
+        $this->collNotificacions = null;
+        foreach ($notificacions as $notificacion) {
+            $this->addNotificacion($notificacion);
+        }
+
+        $this->collNotificacions = $notificacions;
+        $this->collNotificacionsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Notificacion objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Notificacion objects.
+     * @throws PropelException
+     */
+    public function countNotificacions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collNotificacionsPartial && !$this->isNew();
+        if (null === $this->collNotificacions || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collNotificacions) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getNotificacions());
+            }
+            $query = NotificacionQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collNotificacions);
+    }
+
+    /**
+     * Method called to associate a Notificacion object to this object
+     * through the Notificacion foreign key attribute.
+     *
+     * @param    Notificacion $l Notificacion
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addNotificacion(Notificacion $l)
+    {
+        if ($this->collNotificacions === null) {
+            $this->initNotificacions();
+            $this->collNotificacionsPartial = true;
+        }
+
+        if (!in_array($l, $this->collNotificacions->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddNotificacion($l);
+
+            if ($this->notificacionsScheduledForDeletion and $this->notificacionsScheduledForDeletion->contains($l)) {
+                $this->notificacionsScheduledForDeletion->remove($this->notificacionsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Notificacion $notificacion The notificacion object to add.
+     */
+    protected function doAddNotificacion($notificacion)
+    {
+        $this->collNotificacions[]= $notificacion;
+        $notificacion->setSucursal($this);
+    }
+
+    /**
+     * @param	Notificacion $notificacion The notificacion object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeNotificacion($notificacion)
+    {
+        if ($this->getNotificacions()->contains($notificacion)) {
+            $this->collNotificacions->remove($this->collNotificacions->search($notificacion));
+            if (null === $this->notificacionsScheduledForDeletion) {
+                $this->notificacionsScheduledForDeletion = clone $this->collNotificacions;
+                $this->notificacionsScheduledForDeletion->clear();
+            }
+            $this->notificacionsScheduledForDeletion[]= clone $notificacion;
+            $notificacion->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Notificacions from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Notificacion[] List of Notificacion objects
+     */
+    public function getNotificacionsJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = NotificacionQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getNotificacions($query, $con);
+    }
+
+    /**
      * Clears out the collOrdentablajerias collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -8405,6 +8706,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collNotificacions) {
+                foreach ($this->collNotificacions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collOrdentablajerias) {
                 foreach ($this->collOrdentablajerias as $o) {
                     $o->clearAllReferences($deep);
@@ -8500,6 +8806,10 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->collNotacreditos->clearIterator();
         }
         $this->collNotacreditos = null;
+        if ($this->collNotificacions instanceof PropelCollection) {
+            $this->collNotificacions->clearIterator();
+        }
+        $this->collNotificacions = null;
         if ($this->collOrdentablajerias instanceof PropelCollection) {
             $this->collOrdentablajerias->clearIterator();
         }

@@ -55,6 +55,8 @@ class UsuarioTableMap extends TableMap
         $this->addRelation('Rol', 'Rol', RelationMap::MANY_TO_ONE, array('idrol' => 'idrol', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Abonoproveedordetalle', 'Abonoproveedordetalle', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Abonoproveedordetalles');
         $this->addRelation('Ajusteinventario', 'Ajusteinventario', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Ajusteinventarios');
+        $this->addRelation('Ajusteinventarionota', 'Ajusteinventarionota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Ajusteinventarionotas');
+        $this->addRelation('Cierresemananota', 'Cierresemananota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Cierresemananotas');
         $this->addRelation('CompraRelatedByIdauditor', 'Compra', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'ComprasRelatedByIdauditor');
         $this->addRelation('CompraRelatedByIdusuario', 'Compra', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'ComprasRelatedByIdusuario');
         $this->addRelation('Compranota', 'Compranota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Compranotas');
@@ -74,7 +76,6 @@ class UsuarioTableMap extends TableMap
         $this->addRelation('Notacreditonota', 'Notacreditonota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Notacreditonotas');
         $this->addRelation('OrdentablajeriaRelatedByIdauditor', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'OrdentablajeriasRelatedByIdauditor');
         $this->addRelation('OrdentablajeriaRelatedByIdusuario', 'Ordentablajeria', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'OrdentablajeriasRelatedByIdusuario');
-        $this->addRelation('Ordentablajerianota', 'Ordentablajerianota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Ordentablajerianotas');
         $this->addRelation('RequisicionRelatedByIdauditor', 'Requisicion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idauditor', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdauditor');
         $this->addRelation('RequisicionRelatedByIdusuario', 'Requisicion', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'RequisicionsRelatedByIdusuario');
         $this->addRelation('Requisicionnota', 'Requisicionnota', RelationMap::ONE_TO_MANY, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE', 'Requisicionnotas');

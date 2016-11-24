@@ -98,10 +98,6 @@
  * @method OrdentablajeriaQuery rightJoinOrdentablajeriadetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeriadetalle relation
  * @method OrdentablajeriaQuery innerJoinOrdentablajeriadetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeriadetalle relation
  *
- * @method OrdentablajeriaQuery leftJoinOrdentablajerianota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajerianota relation
- * @method OrdentablajeriaQuery rightJoinOrdentablajerianota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajerianota relation
- * @method OrdentablajeriaQuery innerJoinOrdentablajerianota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajerianota relation
- *
  * @method Ordentablajeria findOne(PropelPDO $con = null) Return the first Ordentablajeria matching the query
  * @method Ordentablajeria findOneOrCreate(PropelPDO $con = null) Return the first Ordentablajeria matching the query, or a new Ordentablajeria object populated from the query conditions when no match is found
  *
@@ -2021,80 +2017,6 @@ abstract class BaseOrdentablajeriaQuery extends ModelCriteria
         return $this
             ->joinOrdentablajeriadetalle($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ordentablajeriadetalle', 'OrdentablajeriadetalleQuery');
-    }
-
-    /**
-     * Filter the query by a related Ordentablajerianota object
-     *
-     * @param   Ordentablajerianota|PropelObjectCollection $ordentablajerianota  the related object to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 OrdentablajeriaQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByOrdentablajerianota($ordentablajerianota, $comparison = null)
-    {
-        if ($ordentablajerianota instanceof Ordentablajerianota) {
-            return $this
-                ->addUsingAlias(OrdentablajeriaPeer::IDORDENTABLAJERIA, $ordentablajerianota->getIdordentablajeria(), $comparison);
-        } elseif ($ordentablajerianota instanceof PropelObjectCollection) {
-            return $this
-                ->useOrdentablajerianotaQuery()
-                ->filterByPrimaryKeys($ordentablajerianota->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByOrdentablajerianota() only accepts arguments of type Ordentablajerianota or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Ordentablajerianota relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return OrdentablajeriaQuery The current query, for fluid interface
-     */
-    public function joinOrdentablajerianota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Ordentablajerianota');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Ordentablajerianota');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Ordentablajerianota relation Ordentablajerianota object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   OrdentablajerianotaQuery A secondary query class using the current class as primary query
-     */
-    public function useOrdentablajerianotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinOrdentablajerianota($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Ordentablajerianota', 'OrdentablajerianotaQuery');
     }
 
     /**

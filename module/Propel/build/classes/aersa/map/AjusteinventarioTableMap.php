@@ -65,6 +65,7 @@ class AjusteinventarioTableMap extends TableMap
         $this->addRelation('Producto', 'Producto', RelationMap::MANY_TO_ONE, array('idproducto' => 'idproducto', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Usuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Ajusteinventarionota', 'Ajusteinventarionota', RelationMap::ONE_TO_MANY, array('idajusteinventario' => 'idajusteinventario', ), 'CASCADE', 'CASCADE', 'Ajusteinventarionotas');
     } // buildRelations()
 
 } // AjusteinventarioTableMap

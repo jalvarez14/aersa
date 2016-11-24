@@ -109,8 +109,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
 
     /**
      * The value for the proveedor_estatus field.
-     * Note: this column has a database default value of: 1
-     * @var        int
+     * @var        boolean
      */
     protected $proveedor_estatus;
 
@@ -210,27 +209,6 @@ abstract class BaseProveedor extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $proveedorescfdisScheduledForDeletion = null;
-
-    /**
-     * Applies default values to this object.
-     * This method should be called from the object's constructor (or
-     * equivalent initialization method).
-     * @see        __construct()
-     */
-    public function applyDefaultValues()
-    {
-        $this->proveedor_estatus = 1;
-    }
-
-    /**
-     * Initializes internal state of BaseProveedor object.
-     * @see        applyDefaults()
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->applyDefaultValues();
-    }
 
     /**
      * Get the [idproveedor] column value.
@@ -378,7 +356,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     /**
      * Get the [proveedor_estatus] column value.
      *
-     * @return int
+     * @return boolean
      */
     public function getProveedorEstatus()
     {
@@ -664,15 +642,23 @@ abstract class BaseProveedor extends BaseObject implements Persistent
     } // setProveedorCodigopostal()
 
     /**
-     * Set the value of [proveedor_estatus] column.
+     * Sets the value of the [proveedor_estatus] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
-     * @param  int $v new value
+     * @param boolean|integer|string $v The new value
      * @return Proveedor The current object (for fluent API support)
      */
     public function setProveedorEstatus($v)
     {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
         }
 
         if ($this->proveedor_estatus !== $v) {
@@ -694,10 +680,6 @@ abstract class BaseProveedor extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->proveedor_estatus !== 1) {
-                return false;
-            }
-
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -733,7 +715,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
             $this->proveedor_ciudad = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
             $this->proveedor_estado = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
             $this->proveedor_codigopostal = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
-            $this->proveedor_estatus = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+            $this->proveedor_estatus = ($row[$startcol + 13] !== null) ? (boolean) $row[$startcol + 13] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1179,7 +1161,7 @@ abstract class BaseProveedor extends BaseObject implements Persistent
                         $stmt->bindValue($identifier, $this->proveedor_codigopostal, PDO::PARAM_STR);
                         break;
                     case '`proveedor_estatus`':
-                        $stmt->bindValue($identifier, $this->proveedor_estatus, PDO::PARAM_INT);
+                        $stmt->bindValue($identifier, (int) $this->proveedor_estatus, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -3878,7 +3860,6 @@ abstract class BaseProveedor extends BaseObject implements Persistent
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
-        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

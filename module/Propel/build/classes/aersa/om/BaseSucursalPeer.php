@@ -413,6 +413,9 @@ abstract class BaseSucursalPeer
         // Invalidate objects in NotacreditoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         NotacreditoPeer::clearInstancePool();
+        // Invalidate objects in NotificacionPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        NotificacionPeer::clearInstancePool();
         // Invalidate objects in OrdentablajeriaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         OrdentablajeriaPeer::clearInstancePool();
@@ -1074,6 +1077,12 @@ abstract class BaseSucursalPeer
 
             $criteria->add(NotacreditoPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += NotacreditoPeer::doDelete($criteria, $con);
+
+            // delete related Notificacion objects
+            $criteria = new Criteria(NotificacionPeer::DATABASE_NAME);
+
+            $criteria->add(NotificacionPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += NotificacionPeer::doDelete($criteria, $con);
 
             // delete related Ordentablajeria objects
             $criteria = new Criteria(OrdentablajeriaPeer::DATABASE_NAME);

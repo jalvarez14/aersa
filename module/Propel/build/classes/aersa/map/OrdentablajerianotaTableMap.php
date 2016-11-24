@@ -39,8 +39,8 @@ class OrdentablajerianotaTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('idordentablajerianota', 'Idordentablajerianota', 'INTEGER', true, null, null);
-        $this->addForeignKey('idusuario', 'Idusuario', 'INTEGER', 'usuario', 'idusuario', true, null, null);
-        $this->addForeignKey('idordentablajeria', 'Idordentablajeria', 'INTEGER', 'ordentablajeria', 'idordentablajeria', true, null, null);
+        $this->addColumn('idusuario', 'Idusuario', 'INTEGER', true, null, null);
+        $this->addColumn('idordentablajeria', 'Idordentablajeria', 'INTEGER', true, null, null);
         $this->addColumn('ordentablajerianota_nota', 'OrdentablajerianotaNota', 'LONGVARCHAR', true, null, null);
         $this->addColumn('ordentablajerianota_fecha', 'OrdentablajerianotaFecha', 'TIMESTAMP', true, null, null);
         // validators
@@ -51,8 +51,6 @@ class OrdentablajerianotaTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Ordentablajeria', 'Ordentablajeria', RelationMap::MANY_TO_ONE, array('idordentablajeria' => 'idordentablajeria', ), 'CASCADE', 'CASCADE');
-        $this->addRelation('Usuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
     } // buildRelations()
 
 } // OrdentablajerianotaTableMap

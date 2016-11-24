@@ -60,6 +60,10 @@
  * @method InventariomesQuery rightJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdusuario relation
  * @method InventariomesQuery innerJoinUsuarioRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdusuario relation
  *
+ * @method InventariomesQuery leftJoinCierresemananota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cierresemananota relation
+ * @method InventariomesQuery rightJoinCierresemananota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cierresemananota relation
+ * @method InventariomesQuery innerJoinCierresemananota($relationAlias = null) Adds a INNER JOIN clause to the query using the Cierresemananota relation
+ *
  * @method InventariomesQuery leftJoinInventariomesdetalle($relationAlias = null) Adds a LEFT JOIN clause to the query using the Inventariomesdetalle relation
  * @method InventariomesQuery rightJoinInventariomesdetalle($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Inventariomesdetalle relation
  * @method InventariomesQuery innerJoinInventariomesdetalle($relationAlias = null) Adds a INNER JOIN clause to the query using the Inventariomesdetalle relation
@@ -1253,6 +1257,80 @@ abstract class BaseInventariomesQuery extends ModelCriteria
         return $this
             ->joinUsuarioRelatedByIdusuario($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UsuarioRelatedByIdusuario', 'UsuarioQuery');
+    }
+
+    /**
+     * Filter the query by a related Cierresemananota object
+     *
+     * @param   Cierresemananota|PropelObjectCollection $cierresemananota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 InventariomesQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCierresemananota($cierresemananota, $comparison = null)
+    {
+        if ($cierresemananota instanceof Cierresemananota) {
+            return $this
+                ->addUsingAlias(InventariomesPeer::IDINVENTARIOMES, $cierresemananota->getIdcierresemana(), $comparison);
+        } elseif ($cierresemananota instanceof PropelObjectCollection) {
+            return $this
+                ->useCierresemananotaQuery()
+                ->filterByPrimaryKeys($cierresemananota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCierresemananota() only accepts arguments of type Cierresemananota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Cierresemananota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return InventariomesQuery The current query, for fluid interface
+     */
+    public function joinCierresemananota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Cierresemananota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Cierresemananota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Cierresemananota relation Cierresemananota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CierresemananotaQuery A secondary query class using the current class as primary query
+     */
+    public function useCierresemananotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCierresemananota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Cierresemananota', 'CierresemananotaQuery');
     }
 
     /**

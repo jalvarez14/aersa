@@ -8,53 +8,61 @@
  *
  * @method NotificacionQuery orderByIdnotificacion($order = Criteria::ASC) Order by the idnotificacion column
  * @method NotificacionQuery orderByNotificacionProceso($order = Criteria::ASC) Order by the notificacion_proceso column
+ * @method NotificacionQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method NotificacionQuery orderByIdproceso($order = Criteria::ASC) Order by the idproceso column
+ * @method NotificacionQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
  * @method NotificacionQuery orderByRol1($order = Criteria::ASC) Order by the rol1 column
  * @method NotificacionQuery orderByRol2($order = Criteria::ASC) Order by the rol2 column
  * @method NotificacionQuery orderByRol3($order = Criteria::ASC) Order by the rol3 column
  * @method NotificacionQuery orderByRol4($order = Criteria::ASC) Order by the rol4 column
  * @method NotificacionQuery orderByRol5($order = Criteria::ASC) Order by the rol5 column
- * @method NotificacionQuery orderByIdsucursal($order = Criteria::ASC) Order by the idsucursal column
- * @method NotificacionQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  *
  * @method NotificacionQuery groupByIdnotificacion() Group by the idnotificacion column
  * @method NotificacionQuery groupByNotificacionProceso() Group by the notificacion_proceso column
+ * @method NotificacionQuery groupByIdempresa() Group by the idempresa column
  * @method NotificacionQuery groupByIdproceso() Group by the idproceso column
+ * @method NotificacionQuery groupByIdsucursal() Group by the idsucursal column
  * @method NotificacionQuery groupByRol1() Group by the rol1 column
  * @method NotificacionQuery groupByRol2() Group by the rol2 column
  * @method NotificacionQuery groupByRol3() Group by the rol3 column
  * @method NotificacionQuery groupByRol4() Group by the rol4 column
  * @method NotificacionQuery groupByRol5() Group by the rol5 column
- * @method NotificacionQuery groupByIdsucursal() Group by the idsucursal column
- * @method NotificacionQuery groupByIdempresa() Group by the idempresa column
  *
  * @method NotificacionQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method NotificacionQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method NotificacionQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
+ * @method NotificacionQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
+ * @method NotificacionQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
+ * @method NotificacionQuery innerJoinEmpresa($relationAlias = null) Adds a INNER JOIN clause to the query using the Empresa relation
+ *
+ * @method NotificacionQuery leftJoinSucursal($relationAlias = null) Adds a LEFT JOIN clause to the query using the Sucursal relation
+ * @method NotificacionQuery rightJoinSucursal($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Sucursal relation
+ * @method NotificacionQuery innerJoinSucursal($relationAlias = null) Adds a INNER JOIN clause to the query using the Sucursal relation
+ *
  * @method Notificacion findOne(PropelPDO $con = null) Return the first Notificacion matching the query
  * @method Notificacion findOneOrCreate(PropelPDO $con = null) Return the first Notificacion matching the query, or a new Notificacion object populated from the query conditions when no match is found
  *
  * @method Notificacion findOneByNotificacionProceso(string $notificacion_proceso) Return the first Notificacion filtered by the notificacion_proceso column
+ * @method Notificacion findOneByIdempresa(int $idempresa) Return the first Notificacion filtered by the idempresa column
  * @method Notificacion findOneByIdproceso(int $idproceso) Return the first Notificacion filtered by the idproceso column
+ * @method Notificacion findOneByIdsucursal(int $idsucursal) Return the first Notificacion filtered by the idsucursal column
  * @method Notificacion findOneByRol1(boolean $rol1) Return the first Notificacion filtered by the rol1 column
  * @method Notificacion findOneByRol2(boolean $rol2) Return the first Notificacion filtered by the rol2 column
  * @method Notificacion findOneByRol3(boolean $rol3) Return the first Notificacion filtered by the rol3 column
  * @method Notificacion findOneByRol4(boolean $rol4) Return the first Notificacion filtered by the rol4 column
  * @method Notificacion findOneByRol5(boolean $rol5) Return the first Notificacion filtered by the rol5 column
- * @method Notificacion findOneByIdsucursal(int $idsucursal) Return the first Notificacion filtered by the idsucursal column
- * @method Notificacion findOneByIdempresa(int $idempresa) Return the first Notificacion filtered by the idempresa column
  *
  * @method array findByIdnotificacion(int $idnotificacion) Return Notificacion objects filtered by the idnotificacion column
  * @method array findByNotificacionProceso(string $notificacion_proceso) Return Notificacion objects filtered by the notificacion_proceso column
+ * @method array findByIdempresa(int $idempresa) Return Notificacion objects filtered by the idempresa column
  * @method array findByIdproceso(int $idproceso) Return Notificacion objects filtered by the idproceso column
+ * @method array findByIdsucursal(int $idsucursal) Return Notificacion objects filtered by the idsucursal column
  * @method array findByRol1(boolean $rol1) Return Notificacion objects filtered by the rol1 column
  * @method array findByRol2(boolean $rol2) Return Notificacion objects filtered by the rol2 column
  * @method array findByRol3(boolean $rol3) Return Notificacion objects filtered by the rol3 column
  * @method array findByRol4(boolean $rol4) Return Notificacion objects filtered by the rol4 column
  * @method array findByRol5(boolean $rol5) Return Notificacion objects filtered by the rol5 column
- * @method array findByIdsucursal(int $idsucursal) Return Notificacion objects filtered by the idsucursal column
- * @method array findByIdempresa(int $idempresa) Return Notificacion objects filtered by the idempresa column
  *
  * @package    propel.generator.aersa.om
  */
@@ -162,7 +170,7 @@ abstract class BaseNotificacionQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idnotificacion`, `notificacion_proceso`, `idproceso`, `rol1`, `rol2`, `rol3`, `rol4`, `rol5`, `idsucursal`, `idempresa` FROM `notificacion` WHERE `idnotificacion` = :p0';
+        $sql = 'SELECT `idnotificacion`, `notificacion_proceso`, `idempresa`, `idproceso`, `idsucursal`, `rol1`, `rol2`, `rol3`, `rol4`, `rol5` FROM `notificacion` WHERE `idnotificacion` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -323,6 +331,50 @@ abstract class BaseNotificacionQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idempresa column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
+     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
+     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
+     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
+     * </code>
+     *
+     * @see       filterByEmpresa()
+     *
+     * @param     mixed $idempresa The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotificacionQuery The current query, for fluid interface
+     */
+    public function filterByIdempresa($idempresa = null, $comparison = null)
+    {
+        if (is_array($idempresa)) {
+            $useMinMax = false;
+            if (isset($idempresa['min'])) {
+                $this->addUsingAlias(NotificacionPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idempresa['max'])) {
+                $this->addUsingAlias(NotificacionPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotificacionPeer::IDEMPRESA, $idempresa, $comparison);
+    }
+
+    /**
      * Filter the query on the idproceso column
      *
      * Example usage:
@@ -362,6 +414,50 @@ abstract class BaseNotificacionQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(NotificacionPeer::IDPROCESO, $idproceso, $comparison);
+    }
+
+    /**
+     * Filter the query on the idsucursal column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
+     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
+     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
+     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
+     * </code>
+     *
+     * @see       filterBySucursal()
+     *
+     * @param     mixed $idsucursal The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return NotificacionQuery The current query, for fluid interface
+     */
+    public function filterByIdsucursal($idsucursal = null, $comparison = null)
+    {
+        if (is_array($idsucursal)) {
+            $useMinMax = false;
+            if (isset($idsucursal['min'])) {
+                $this->addUsingAlias(NotificacionPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idsucursal['max'])) {
+                $this->addUsingAlias(NotificacionPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(NotificacionPeer::IDSUCURSAL, $idsucursal, $comparison);
     }
 
     /**
@@ -500,87 +596,155 @@ abstract class BaseNotificacionQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the idsucursal column
+     * Filter the query by a related Empresa object
      *
-     * Example usage:
-     * <code>
-     * $query->filterByIdsucursal(1234); // WHERE idsucursal = 1234
-     * $query->filterByIdsucursal(array(12, 34)); // WHERE idsucursal IN (12, 34)
-     * $query->filterByIdsucursal(array('min' => 12)); // WHERE idsucursal >= 12
-     * $query->filterByIdsucursal(array('max' => 12)); // WHERE idsucursal <= 12
-     * </code>
-     *
-     * @param     mixed $idsucursal The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param   Empresa|PropelObjectCollection $empresa The related object(s) to use as filter
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return NotificacionQuery The current query, for fluid interface
+     * @return                 NotificacionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
      */
-    public function filterByIdsucursal($idsucursal = null, $comparison = null)
+    public function filterByEmpresa($empresa, $comparison = null)
     {
-        if (is_array($idsucursal)) {
-            $useMinMax = false;
-            if (isset($idsucursal['min'])) {
-                $this->addUsingAlias(NotificacionPeer::IDSUCURSAL, $idsucursal['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idsucursal['max'])) {
-                $this->addUsingAlias(NotificacionPeer::IDSUCURSAL, $idsucursal['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
+        if ($empresa instanceof Empresa) {
+            return $this
+                ->addUsingAlias(NotificacionPeer::IDEMPRESA, $empresa->getIdempresa(), $comparison);
+        } elseif ($empresa instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
-        }
 
-        return $this->addUsingAlias(NotificacionPeer::IDSUCURSAL, $idsucursal, $comparison);
+            return $this
+                ->addUsingAlias(NotificacionPeer::IDEMPRESA, $empresa->toKeyValue('PrimaryKey', 'Idempresa'), $comparison);
+        } else {
+            throw new PropelException('filterByEmpresa() only accepts arguments of type Empresa or PropelCollection');
+        }
     }
 
     /**
-     * Filter the query on the idempresa column
+     * Adds a JOIN clause to the query using the Empresa relation
      *
-     * Example usage:
-     * <code>
-     * $query->filterByIdempresa(1234); // WHERE idempresa = 1234
-     * $query->filterByIdempresa(array(12, 34)); // WHERE idempresa IN (12, 34)
-     * $query->filterByIdempresa(array('min' => 12)); // WHERE idempresa >= 12
-     * $query->filterByIdempresa(array('max' => 12)); // WHERE idempresa <= 12
-     * </code>
-     *
-     * @param     mixed $idempresa The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return NotificacionQuery The current query, for fluid interface
      */
-    public function filterByIdempresa($idempresa = null, $comparison = null)
+    public function joinEmpresa($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
-        if (is_array($idempresa)) {
-            $useMinMax = false;
-            if (isset($idempresa['min'])) {
-                $this->addUsingAlias(NotificacionPeer::IDEMPRESA, $idempresa['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($idempresa['max'])) {
-                $this->addUsingAlias(NotificacionPeer::IDEMPRESA, $idempresa['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Empresa');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Empresa');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Empresa relation Empresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   EmpresaQuery A secondary query class using the current class as primary query
+     */
+    public function useEmpresaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEmpresa($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Empresa', 'EmpresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Sucursal object
+     *
+     * @param   Sucursal|PropelObjectCollection $sucursal The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 NotificacionQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterBySucursal($sucursal, $comparison = null)
+    {
+        if ($sucursal instanceof Sucursal) {
+            return $this
+                ->addUsingAlias(NotificacionPeer::IDSUCURSAL, $sucursal->getIdsucursal(), $comparison);
+        } elseif ($sucursal instanceof PropelObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
+
+            return $this
+                ->addUsingAlias(NotificacionPeer::IDSUCURSAL, $sucursal->toKeyValue('PrimaryKey', 'Idsucursal'), $comparison);
+        } else {
+            throw new PropelException('filterBySucursal() only accepts arguments of type Sucursal or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Sucursal relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return NotificacionQuery The current query, for fluid interface
+     */
+    public function joinSucursal($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Sucursal');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
         }
 
-        return $this->addUsingAlias(NotificacionPeer::IDEMPRESA, $idempresa, $comparison);
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Sucursal');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Sucursal relation Sucursal object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   SucursalQuery A secondary query class using the current class as primary query
+     */
+    public function useSucursalQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinSucursal($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Sucursal', 'SucursalQuery');
     }
 
     /**

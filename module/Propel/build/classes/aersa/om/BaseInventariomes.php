@@ -140,6 +140,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     protected $aUsuarioRelatedByIdusuario;
 
     /**
+     * @var        PropelObjectCollection|Cierresemananota[] Collection to store aggregation of Cierresemananota objects.
+     */
+    protected $collCierresemananotas;
+    protected $collCierresemananotasPartial;
+
+    /**
      * @var        PropelObjectCollection|Inventariomesdetalle[] Collection to store aggregation of Inventariomesdetalle objects.
      */
     protected $collInventariomesdetalles;
@@ -164,6 +170,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $cierresemananotasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -840,6 +852,8 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             $this->aEmpresa = null;
             $this->aSucursal = null;
             $this->aUsuarioRelatedByIdusuario = null;
+            $this->collCierresemananotas = null;
+
             $this->collInventariomesdetalles = null;
 
         } // if (deep)
@@ -1004,6 +1018,23 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->cierresemananotasScheduledForDeletion !== null) {
+                if (!$this->cierresemananotasScheduledForDeletion->isEmpty()) {
+                    CierresemananotaQuery::create()
+                        ->filterByPrimaryKeys($this->cierresemananotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->cierresemananotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCierresemananotas !== null) {
+                foreach ($this->collCierresemananotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             if ($this->inventariomesdetallesScheduledForDeletion !== null) {
@@ -1279,6 +1310,14 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             }
 
 
+                if ($this->collCierresemananotas !== null) {
+                    foreach ($this->collCierresemananotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collInventariomesdetalles !== null) {
                     foreach ($this->collInventariomesdetalles as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1428,6 +1467,9 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             }
             if (null !== $this->aUsuarioRelatedByIdusuario) {
                 $result['UsuarioRelatedByIdusuario'] = $this->aUsuarioRelatedByIdusuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collCierresemananotas) {
+                $result['Cierresemananotas'] = $this->collCierresemananotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInventariomesdetalles) {
                 $result['Inventariomesdetalles'] = $this->collInventariomesdetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1654,6 +1696,12 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getCierresemananotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCierresemananota($relObj->copy($deepCopy));
+                }
+            }
 
             foreach ($this->getInventariomesdetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
@@ -1982,9 +2030,262 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
      */
     public function initRelation($relationName)
     {
+        if ('Cierresemananota' == $relationName) {
+            $this->initCierresemananotas();
+        }
         if ('Inventariomesdetalle' == $relationName) {
             $this->initInventariomesdetalles();
         }
+    }
+
+    /**
+     * Clears out the collCierresemananotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Inventariomes The current object (for fluent API support)
+     * @see        addCierresemananotas()
+     */
+    public function clearCierresemananotas()
+    {
+        $this->collCierresemananotas = null; // important to set this to null since that means it is uninitialized
+        $this->collCierresemananotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collCierresemananotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialCierresemananotas($v = true)
+    {
+        $this->collCierresemananotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collCierresemananotas collection.
+     *
+     * By default this just sets the collCierresemananotas collection to an empty array (like clearcollCierresemananotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCierresemananotas($overrideExisting = true)
+    {
+        if (null !== $this->collCierresemananotas && !$overrideExisting) {
+            return;
+        }
+        $this->collCierresemananotas = new PropelObjectCollection();
+        $this->collCierresemananotas->setModel('Cierresemananota');
+    }
+
+    /**
+     * Gets an array of Cierresemananota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Inventariomes is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Cierresemananota[] List of Cierresemananota objects
+     * @throws PropelException
+     */
+    public function getCierresemananotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collCierresemananotasPartial && !$this->isNew();
+        if (null === $this->collCierresemananotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCierresemananotas) {
+                // return empty collection
+                $this->initCierresemananotas();
+            } else {
+                $collCierresemananotas = CierresemananotaQuery::create(null, $criteria)
+                    ->filterByInventariomes($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collCierresemananotasPartial && count($collCierresemananotas)) {
+                      $this->initCierresemananotas(false);
+
+                      foreach ($collCierresemananotas as $obj) {
+                        if (false == $this->collCierresemananotas->contains($obj)) {
+                          $this->collCierresemananotas->append($obj);
+                        }
+                      }
+
+                      $this->collCierresemananotasPartial = true;
+                    }
+
+                    $collCierresemananotas->getInternalIterator()->rewind();
+
+                    return $collCierresemananotas;
+                }
+
+                if ($partial && $this->collCierresemananotas) {
+                    foreach ($this->collCierresemananotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collCierresemananotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCierresemananotas = $collCierresemananotas;
+                $this->collCierresemananotasPartial = false;
+            }
+        }
+
+        return $this->collCierresemananotas;
+    }
+
+    /**
+     * Sets a collection of Cierresemananota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $cierresemananotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function setCierresemananotas(PropelCollection $cierresemananotas, PropelPDO $con = null)
+    {
+        $cierresemananotasToDelete = $this->getCierresemananotas(new Criteria(), $con)->diff($cierresemananotas);
+
+
+        $this->cierresemananotasScheduledForDeletion = $cierresemananotasToDelete;
+
+        foreach ($cierresemananotasToDelete as $cierresemananotaRemoved) {
+            $cierresemananotaRemoved->setInventariomes(null);
+        }
+
+        $this->collCierresemananotas = null;
+        foreach ($cierresemananotas as $cierresemananota) {
+            $this->addCierresemananota($cierresemananota);
+        }
+
+        $this->collCierresemananotas = $cierresemananotas;
+        $this->collCierresemananotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Cierresemananota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Cierresemananota objects.
+     * @throws PropelException
+     */
+    public function countCierresemananotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collCierresemananotasPartial && !$this->isNew();
+        if (null === $this->collCierresemananotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCierresemananotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCierresemananotas());
+            }
+            $query = CierresemananotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByInventariomes($this)
+                ->count($con);
+        }
+
+        return count($this->collCierresemananotas);
+    }
+
+    /**
+     * Method called to associate a Cierresemananota object to this object
+     * through the Cierresemananota foreign key attribute.
+     *
+     * @param    Cierresemananota $l Cierresemananota
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function addCierresemananota(Cierresemananota $l)
+    {
+        if ($this->collCierresemananotas === null) {
+            $this->initCierresemananotas();
+            $this->collCierresemananotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collCierresemananotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddCierresemananota($l);
+
+            if ($this->cierresemananotasScheduledForDeletion and $this->cierresemananotasScheduledForDeletion->contains($l)) {
+                $this->cierresemananotasScheduledForDeletion->remove($this->cierresemananotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Cierresemananota $cierresemananota The cierresemananota object to add.
+     */
+    protected function doAddCierresemananota($cierresemananota)
+    {
+        $this->collCierresemananotas[]= $cierresemananota;
+        $cierresemananota->setInventariomes($this);
+    }
+
+    /**
+     * @param	Cierresemananota $cierresemananota The cierresemananota object to remove.
+     * @return Inventariomes The current object (for fluent API support)
+     */
+    public function removeCierresemananota($cierresemananota)
+    {
+        if ($this->getCierresemananotas()->contains($cierresemananota)) {
+            $this->collCierresemananotas->remove($this->collCierresemananotas->search($cierresemananota));
+            if (null === $this->cierresemananotasScheduledForDeletion) {
+                $this->cierresemananotasScheduledForDeletion = clone $this->collCierresemananotas;
+                $this->cierresemananotasScheduledForDeletion->clear();
+            }
+            $this->cierresemananotasScheduledForDeletion[]= clone $cierresemananota;
+            $cierresemananota->setInventariomes(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Inventariomes is new, it will return
+     * an empty collection; or if this Inventariomes has previously
+     * been saved, it will retrieve related Cierresemananotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Inventariomes.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Cierresemananota[] List of Cierresemananota objects
+     */
+    public function getCierresemananotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CierresemananotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getCierresemananotas($query, $con);
     }
 
     /**
@@ -2254,6 +2555,11 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collCierresemananotas) {
+                foreach ($this->collCierresemananotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collInventariomesdetalles) {
                 foreach ($this->collInventariomesdetalles as $o) {
                     $o->clearAllReferences($deep);
@@ -2278,6 +2584,10 @@ abstract class BaseInventariomes extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collCierresemananotas instanceof PropelCollection) {
+            $this->collCierresemananotas->clearIterator();
+        }
+        $this->collCierresemananotas = null;
         if ($this->collInventariomesdetalles instanceof PropelCollection) {
             $this->collInventariomesdetalles->clearIterator();
         }

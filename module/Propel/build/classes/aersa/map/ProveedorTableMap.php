@@ -51,7 +51,7 @@ class ProveedorTableMap extends TableMap
         $this->addColumn('proveedor_ciudad', 'ProveedorCiudad', 'VARCHAR', false, 45, null);
         $this->addColumn('proveedor_estado', 'ProveedorEstado', 'VARCHAR', false, 45, null);
         $this->addColumn('proveedor_codigopostal', 'ProveedorCodigopostal', 'VARCHAR', false, 45, null);
-        $this->addColumn('proveedor_estatus', 'ProveedorEstatus', 'TINYINT', true, null, 1);
+        $this->addColumn('proveedor_estatus', 'ProveedorEstatus', 'BOOLEAN', false, 1, null);
         // validators
     } // initialize()
 

@@ -237,12 +237,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     protected $collOrdentablajeriadetallesPartial;
 
     /**
-     * @var        PropelObjectCollection|Ordentablajerianota[] Collection to store aggregation of Ordentablajerianota objects.
-     */
-    protected $collOrdentablajerianotas;
-    protected $collOrdentablajerianotasPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -267,12 +261,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $ordentablajeriadetallesScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var		PropelObjectCollection
-     */
-    protected $ordentablajerianotasScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -1468,8 +1456,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->aUsuarioRelatedByIdusuario = null;
             $this->collOrdentablajeriadetalles = null;
 
-            $this->collOrdentablajerianotas = null;
-
         } // if (deep)
     }
 
@@ -1659,23 +1645,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
 
             if ($this->collOrdentablajeriadetalles !== null) {
                 foreach ($this->collOrdentablajeriadetalles as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->ordentablajerianotasScheduledForDeletion !== null) {
-                if (!$this->ordentablajerianotasScheduledForDeletion->isEmpty()) {
-                    OrdentablajerianotaQuery::create()
-                        ->filterByPrimaryKeys($this->ordentablajerianotasScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->ordentablajerianotasScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collOrdentablajerianotas !== null) {
-                foreach ($this->collOrdentablajerianotas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -2036,14 +2005,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                     }
                 }
 
-                if ($this->collOrdentablajerianotas !== null) {
-                    foreach ($this->collOrdentablajerianotas as $referrerFK) {
-                        if (!$referrerFK->validate($columns)) {
-                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-                        }
-                    }
-                }
-
 
             $this->alreadyInValidation = false;
         }
@@ -2246,9 +2207,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             }
             if (null !== $this->collOrdentablajeriadetalles) {
                 $result['Ordentablajeriadetalles'] = $this->collOrdentablajeriadetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collOrdentablajerianotas) {
-                $result['Ordentablajerianotas'] = $this->collOrdentablajerianotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -2554,12 +2512,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             foreach ($this->getOrdentablajeriadetalles() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addOrdentablajeriadetalle($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getOrdentablajerianotas() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addOrdentablajerianota($relObj->copy($deepCopy));
                 }
             }
 
@@ -2991,9 +2943,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
         if ('Ordentablajeriadetalle' == $relationName) {
             $this->initOrdentablajeriadetalles();
         }
-        if ('Ordentablajerianota' == $relationName) {
-            $this->initOrdentablajerianotas();
-        }
     }
 
     /**
@@ -3247,256 +3196,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
     }
 
     /**
-     * Clears out the collOrdentablajerianotas collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return Ordentablajeria The current object (for fluent API support)
-     * @see        addOrdentablajerianotas()
-     */
-    public function clearOrdentablajerianotas()
-    {
-        $this->collOrdentablajerianotas = null; // important to set this to null since that means it is uninitialized
-        $this->collOrdentablajerianotasPartial = null;
-
-        return $this;
-    }
-
-    /**
-     * reset is the collOrdentablajerianotas collection loaded partially
-     *
-     * @return void
-     */
-    public function resetPartialOrdentablajerianotas($v = true)
-    {
-        $this->collOrdentablajerianotasPartial = $v;
-    }
-
-    /**
-     * Initializes the collOrdentablajerianotas collection.
-     *
-     * By default this just sets the collOrdentablajerianotas collection to an empty array (like clearcollOrdentablajerianotas());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initOrdentablajerianotas($overrideExisting = true)
-    {
-        if (null !== $this->collOrdentablajerianotas && !$overrideExisting) {
-            return;
-        }
-        $this->collOrdentablajerianotas = new PropelObjectCollection();
-        $this->collOrdentablajerianotas->setModel('Ordentablajerianota');
-    }
-
-    /**
-     * Gets an array of Ordentablajerianota objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this Ordentablajeria is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @return PropelObjectCollection|Ordentablajerianota[] List of Ordentablajerianota objects
-     * @throws PropelException
-     */
-    public function getOrdentablajerianotas($criteria = null, PropelPDO $con = null)
-    {
-        $partial = $this->collOrdentablajerianotasPartial && !$this->isNew();
-        if (null === $this->collOrdentablajerianotas || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collOrdentablajerianotas) {
-                // return empty collection
-                $this->initOrdentablajerianotas();
-            } else {
-                $collOrdentablajerianotas = OrdentablajerianotaQuery::create(null, $criteria)
-                    ->filterByOrdentablajeria($this)
-                    ->find($con);
-                if (null !== $criteria) {
-                    if (false !== $this->collOrdentablajerianotasPartial && count($collOrdentablajerianotas)) {
-                      $this->initOrdentablajerianotas(false);
-
-                      foreach ($collOrdentablajerianotas as $obj) {
-                        if (false == $this->collOrdentablajerianotas->contains($obj)) {
-                          $this->collOrdentablajerianotas->append($obj);
-                        }
-                      }
-
-                      $this->collOrdentablajerianotasPartial = true;
-                    }
-
-                    $collOrdentablajerianotas->getInternalIterator()->rewind();
-
-                    return $collOrdentablajerianotas;
-                }
-
-                if ($partial && $this->collOrdentablajerianotas) {
-                    foreach ($this->collOrdentablajerianotas as $obj) {
-                        if ($obj->isNew()) {
-                            $collOrdentablajerianotas[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collOrdentablajerianotas = $collOrdentablajerianotas;
-                $this->collOrdentablajerianotasPartial = false;
-            }
-        }
-
-        return $this->collOrdentablajerianotas;
-    }
-
-    /**
-     * Sets a collection of Ordentablajerianota objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param PropelCollection $ordentablajerianotas A Propel collection.
-     * @param PropelPDO $con Optional connection object
-     * @return Ordentablajeria The current object (for fluent API support)
-     */
-    public function setOrdentablajerianotas(PropelCollection $ordentablajerianotas, PropelPDO $con = null)
-    {
-        $ordentablajerianotasToDelete = $this->getOrdentablajerianotas(new Criteria(), $con)->diff($ordentablajerianotas);
-
-
-        $this->ordentablajerianotasScheduledForDeletion = $ordentablajerianotasToDelete;
-
-        foreach ($ordentablajerianotasToDelete as $ordentablajerianotaRemoved) {
-            $ordentablajerianotaRemoved->setOrdentablajeria(null);
-        }
-
-        $this->collOrdentablajerianotas = null;
-        foreach ($ordentablajerianotas as $ordentablajerianota) {
-            $this->addOrdentablajerianota($ordentablajerianota);
-        }
-
-        $this->collOrdentablajerianotas = $ordentablajerianotas;
-        $this->collOrdentablajerianotasPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related Ordentablajerianota objects.
-     *
-     * @param Criteria $criteria
-     * @param boolean $distinct
-     * @param PropelPDO $con
-     * @return int             Count of related Ordentablajerianota objects.
-     * @throws PropelException
-     */
-    public function countOrdentablajerianotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-    {
-        $partial = $this->collOrdentablajerianotasPartial && !$this->isNew();
-        if (null === $this->collOrdentablajerianotas || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collOrdentablajerianotas) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getOrdentablajerianotas());
-            }
-            $query = OrdentablajerianotaQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByOrdentablajeria($this)
-                ->count($con);
-        }
-
-        return count($this->collOrdentablajerianotas);
-    }
-
-    /**
-     * Method called to associate a Ordentablajerianota object to this object
-     * through the Ordentablajerianota foreign key attribute.
-     *
-     * @param    Ordentablajerianota $l Ordentablajerianota
-     * @return Ordentablajeria The current object (for fluent API support)
-     */
-    public function addOrdentablajerianota(Ordentablajerianota $l)
-    {
-        if ($this->collOrdentablajerianotas === null) {
-            $this->initOrdentablajerianotas();
-            $this->collOrdentablajerianotasPartial = true;
-        }
-
-        if (!in_array($l, $this->collOrdentablajerianotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
-            $this->doAddOrdentablajerianota($l);
-
-            if ($this->ordentablajerianotasScheduledForDeletion and $this->ordentablajerianotasScheduledForDeletion->contains($l)) {
-                $this->ordentablajerianotasScheduledForDeletion->remove($this->ordentablajerianotasScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param	Ordentablajerianota $ordentablajerianota The ordentablajerianota object to add.
-     */
-    protected function doAddOrdentablajerianota($ordentablajerianota)
-    {
-        $this->collOrdentablajerianotas[]= $ordentablajerianota;
-        $ordentablajerianota->setOrdentablajeria($this);
-    }
-
-    /**
-     * @param	Ordentablajerianota $ordentablajerianota The ordentablajerianota object to remove.
-     * @return Ordentablajeria The current object (for fluent API support)
-     */
-    public function removeOrdentablajerianota($ordentablajerianota)
-    {
-        if ($this->getOrdentablajerianotas()->contains($ordentablajerianota)) {
-            $this->collOrdentablajerianotas->remove($this->collOrdentablajerianotas->search($ordentablajerianota));
-            if (null === $this->ordentablajerianotasScheduledForDeletion) {
-                $this->ordentablajerianotasScheduledForDeletion = clone $this->collOrdentablajerianotas;
-                $this->ordentablajerianotasScheduledForDeletion->clear();
-            }
-            $this->ordentablajerianotasScheduledForDeletion[]= clone $ordentablajerianota;
-            $ordentablajerianota->setOrdentablajeria(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Ordentablajeria is new, it will return
-     * an empty collection; or if this Ordentablajeria has previously
-     * been saved, it will retrieve related Ordentablajerianotas from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Ordentablajeria.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param PropelPDO $con optional connection object
-     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return PropelObjectCollection|Ordentablajerianota[] List of Ordentablajerianota objects
-     */
-    public function getOrdentablajerianotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $query = OrdentablajerianotaQuery::create(null, $criteria);
-        $query->joinWith('Usuario', $join_behavior);
-
-        return $this->getOrdentablajerianotas($query, $con);
-    }
-
-    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -3556,11 +3255,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collOrdentablajerianotas) {
-                foreach ($this->collOrdentablajerianotas as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->aAlmacenRelatedByIdalmacendestino instanceof Persistent) {
               $this->aAlmacenRelatedByIdalmacendestino->clearAllReferences($deep);
             }
@@ -3590,10 +3284,6 @@ abstract class BaseOrdentablajeria extends BaseObject implements Persistent
             $this->collOrdentablajeriadetalles->clearIterator();
         }
         $this->collOrdentablajeriadetalles = null;
-        if ($this->collOrdentablajerianotas instanceof PropelCollection) {
-            $this->collOrdentablajerianotas->clearIterator();
-        }
-        $this->collOrdentablajerianotas = null;
         $this->aAlmacenRelatedByIdalmacendestino = null;
         $this->aAlmacenRelatedByIdalmacenorigen = null;
         $this->aUsuarioRelatedByIdauditor = null;

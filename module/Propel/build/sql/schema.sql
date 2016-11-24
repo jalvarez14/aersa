@@ -19,7 +19,22 @@ CREATE TABLE `abonoproveedor`
     PRIMARY KEY (`idabonoproveedor`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
-    INDEX `idproveedor` (`idproveedor`)
+    INDEX `idproveedor` (`idproveedor`),
+    CONSTRAINT `idempresa_abonoproveedor`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproveedor_abonoproveedor`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_abonoproveedor`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -45,7 +60,22 @@ CREATE TABLE `abonoproveedordetalle`
     PRIMARY KEY (`idabonoproveedordetalle`),
     INDEX `idusuario` (`idusuario`),
     INDEX `idcuentabancaria` (`idcuentabancaria`),
-    INDEX `idabonoproveedor` (`idabonoproveedor`)
+    INDEX `idabonoproveedor` (`idabonoproveedor`),
+    CONSTRAINT `idabonoproveedor_abonoproveedordetalle`
+        FOREIGN KEY (`idabonoproveedor`)
+        REFERENCES `abonoproveedor` (`idabonoproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idcuentabancaria_abonoproveedordetalle`
+        FOREIGN KEY (`idcuentabancaria`)
+        REFERENCES `cuentabancaria` (`idcuentabancaria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_abonoproveedordetalle`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -71,7 +101,32 @@ CREATE TABLE `ajusteinventario`
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idalmacen` (`idalmacen`),
     INDEX `idproducto` (`idproducto`),
-    INDEX `idusuario` (`idusuario`)
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `idalmacen_ajusteinventario`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_ajusteinventario`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_ajusteinventario`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_ajusteinventario`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_ajusteinventario`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -113,10 +168,15 @@ CREATE TABLE `almacen`
     `idalmacen` INTEGER NOT NULL AUTO_INCREMENT,
     `idsucursal` INTEGER NOT NULL,
     `almacen_nombre` VARCHAR(255) NOT NULL,
-    `almacen_encargado` VARCHAR(45) NOT NULL,
+    `almacen_encargado` VARCHAR(255),
     `almacen_estatus` TINYINT(1) NOT NULL,
     PRIMARY KEY (`idalmacen`),
-    INDEX `idsucursal` (`idsucursal`)
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idsucursal_almacen`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -132,7 +192,12 @@ CREATE TABLE `categoria`
     `idcategoriapadre` INTEGER,
     `categoria_almacenable` TINYINT(1),
     PRIMARY KEY (`idcategoria`),
-    INDEX `idcategoriapadre` (`idcategoriapadre`)
+    INDEX `idcategoriapadre` (`idcategoriapadre`),
+    CONSTRAINT `idcategoriapadre_categoria`
+        FOREIGN KEY (`idcategoriapadre`)
+        REFERENCES `categoria` (`idcategoria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -176,7 +241,12 @@ CREATE TABLE `codigobarras`
     `codigobarras_codigo` VARCHAR(45) NOT NULL,
     `codigobarras_cantidad` FLOAT NOT NULL,
     PRIMARY KEY (`idcodigobarras`),
-    INDEX `idproducto` (`idproducto`)
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idproducto_codigobarras`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -215,7 +285,37 @@ CREATE TABLE `compra`
     INDEX `idalmacen` (`idalmacen`),
     INDEX `idusuario` (`idusuario`),
     INDEX `idauditor` (`idauditor`),
-    INDEX `idproveedor` (`idproveedor`)
+    INDEX `idproveedor` (`idproveedor`),
+    CONSTRAINT `idalmacen_compra`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_compra`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_compra`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproveedor_compra`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_compra`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_compra`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -231,9 +331,9 @@ CREATE TABLE `compradetalle`
     `idproducto` INTEGER NOT NULL,
     `idalmacen` INTEGER,
     `compradetalle_cantidad` FLOAT NOT NULL,
+    `compradetalle_precio` DECIMAL(15,5) NOT NULL,
     `compradetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `compradetalle_costounitario` DECIMAL(15,5) NOT NULL,
-    `compradetalle_precio` DECIMAL(15,5) NOT NULL,
     `compradetalle_costounitarioneto` DECIMAL(15,5),
     `compradetalle_descuento` FLOAT,
     `compradetalle_ieps` FLOAT,
@@ -241,7 +341,22 @@ CREATE TABLE `compradetalle`
     PRIMARY KEY (`idcompradetalle`),
     INDEX `idcompra` (`idcompra`),
     INDEX `idalmacen` (`idalmacen`),
-    INDEX `idproducto` (`idproducto`)
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idalmacen_compradetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idcompra_compradetalle`
+        FOREIGN KEY (`idcompra`)
+        REFERENCES `compra` (`idcompra`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_compradetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -259,7 +374,17 @@ CREATE TABLE `compranota`
     `compranota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`idcompranota`),
     INDEX `idcompra` (`idcompra`),
-    INDEX `idusuario` (`idusuario`)
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `idcompra_compranota`
+        FOREIGN KEY (`idcompra`)
+        REFERENCES `compra` (`idcompra`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_compranota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -335,7 +460,17 @@ CREATE TABLE `cuentabancaria`
     `cuentabancaria_balance` DECIMAL(15,5),
     PRIMARY KEY (`idcuentabancaria`),
     INDEX `idempresa` (`idempresa`),
-    INDEX `idsucursal` (`idsucursal`)
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_cuentabancaria`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_cuentabancaria`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -354,13 +489,28 @@ CREATE TABLE `cuentaporcobrar`
     `cuentaporcobrar_cliente` VARCHAR(255) NOT NULL,
     `cuentaporcobrar_fecha` DATETIME NOT NULL,
     `cuentaporcobrar_referencia` TEXT,
-    `cuentaporcobrar_abonado` DECIMAL(15,5),
+    `cuentaporcobrar_abonado` DECIMAL(15,5) DEFAULT 0.00000,
     `cuentaporcobrar_estatuspago` TINYINT(1) NOT NULL,
     `cuentaporcobrar_comprobante` TEXT,
     PRIMARY KEY (`idcuentaporcobrar`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
-    INDEX `idusuario` (`idusuario`)
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `idempresa_cuentaporcobrar`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_cuentaporcobrar`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_cuentaporcobrar`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -387,16 +537,46 @@ CREATE TABLE `devolucion`
     `devolucion_iva` DECIMAL(10,5),
     `devolucion_total` DECIMAL(10,5),
     `devolucion_subtotal` DECIMAL(15,5),
-    `notaauditorempresa` TINYINT DEFAULT 1,
-    `notaalmacenistaempresa` TINYINT DEFAULT 1,
-    `notaauditoraersa` TINYINT DEFAULT 1,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`iddevolucion`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idusuario` (`idusuario`),
     INDEX `idauditor` (`idauditor`),
     INDEX `idalmacen` (`idalmacen`),
     INDEX `idempresa` (`idempresa`),
-    INDEX `idproveedor` (`idproveedor`)
+    INDEX `idproveedor` (`idproveedor`),
+    CONSTRAINT `idalmacen_devolucion`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_devolucion`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_devolucion`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproveedor_devolucion`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_devolucion`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_devolucion`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -421,7 +601,22 @@ CREATE TABLE `devoluciondetalle`
     PRIMARY KEY (`iddevoluciondetalle`),
     INDEX `iddevolucion` (`iddevolucion`),
     INDEX `idproducto` (`idproducto`),
-    INDEX `idalmacen` (`idalmacen`)
+    INDEX `idalmacen` (`idalmacen`),
+    CONSTRAINT `idalmacen_devoluciondetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `iddevolucion_devoluciondetalle`
+        FOREIGN KEY (`iddevolucion`)
+        REFERENCES `devolucion` (`iddevolucion`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_devoluciondetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -439,7 +634,17 @@ CREATE TABLE `devolucionnota`
     `devolucionnota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`iddevolucionnota`),
     INDEX `iddevolucion` (`iddevolucion`),
-    INDEX `idusuario` (`idusuario`)
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `iddevolucion_devolucionnota`
+        FOREIGN KEY (`iddevolucion`)
+        REFERENCES `devolucion` (`iddevolucion`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_devolucionnota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -455,8 +660,8 @@ CREATE TABLE `empresa`
     `empresa_razonsocial` VARCHAR(255) NOT NULL,
     `empresa_estatus` TINYINT(1) DEFAULT 1,
     `empresa_administracion` TINYINT(1),
-    `empresa_habilitarrecetas` TINYINT(1),
-    `empresa_habilitarproductos` TINYINT(1),
+    `empresa_habilitarrecetas` TINYINT(1) NOT NULL,
+    `empresa_habilitarproductos` TINYINT(1) NOT NULL,
     PRIMARY KEY (`idempresa`)
 ) ENGINE=InnoDB;
 
@@ -496,7 +701,31 @@ CREATE TABLE `flujoefectivo`
     INDEX `idusuario` (`idusuario`),
     INDEX `idingreso` (`idingreso`),
     INDEX `idcompra` (`idcompra`),
-    INDEX `idcuentaporcobrar` (`idcuentaporcobrar`)
+    INDEX `idcuentaporcobrar` (`idcuentaporcobrar`),
+    CONSTRAINT `idcompra_flujoefectivo`
+        FOREIGN KEY (`idcompra`)
+        REFERENCES `compra` (`idcompra`),
+    CONSTRAINT `idcuentabancaria_flujoefectivo`
+        FOREIGN KEY (`idcuentabancaria`)
+        REFERENCES `cuentabancaria` (`idcuentabancaria`),
+    CONSTRAINT `idcuentaporcobrar_flujoefectivo`
+        FOREIGN KEY (`idcuentaporcobrar`)
+        REFERENCES `cuentaporcobrar` (`idcuentaporcobrar`),
+    CONSTRAINT `idempresa_flujoefectivo`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`),
+    CONSTRAINT `idingreso_flujoefectivo`
+        FOREIGN KEY (`idingreso`)
+        REFERENCES `ingreso` (`idingreso`),
+    CONSTRAINT `idproveedor_flujoefectivo`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`),
+    CONSTRAINT `idsucursal_flujoefectivo`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`),
+    CONSTRAINT `idusuario_flujoefectivo`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -513,7 +742,17 @@ CREATE TABLE `foliorequisicion`
     `idsucursal` INTEGER NOT NULL,
     PRIMARY KEY (`idfoliorequisicion`),
     INDEX `idempresa` (`idempresa`),
-    INDEX `idsucursal` (`idsucursal`)
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_foliorequisicion`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_foliorequisicion`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -536,14 +775,34 @@ CREATE TABLE `ingreso`
     `ingreso_totalmiscelanea` DECIMAL(15,5) NOT NULL,
     `ingreso_fecha` DATETIME NOT NULL,
     `ingreso_fechacreacion` DATETIME NOT NULL,
-    `notaauditorempresa` TINYINT DEFAULT 1,
-    `notaalmacenistaempresa` TINYINT DEFAULT 1,
-    `notaauditoraersa` TINYINT DEFAULT 1,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idingreso`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idauditor` (`idauditor`)
+    INDEX `idauditor` (`idauditor`),
+    CONSTRAINT `idauditor_ingreso`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_ingreso`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_ingreso`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_ingreso`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -565,7 +824,22 @@ CREATE TABLE `ingresodetalle`
     PRIMARY KEY (`idingresodetalle`),
     INDEX `idingreso` (`idingreso`),
     INDEX `idconceptoingreso` (`idconceptoingreso`),
-    INDEX `idrubroingreso` (`idrubroingreso`)
+    INDEX `idrubroingreso` (`idrubroingreso`),
+    CONSTRAINT `idconceptoingreso_ingresodetalle`
+        FOREIGN KEY (`idconceptoingreso`)
+        REFERENCES `conceptoingreso` (`idconceptoingreso`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idingreso_ingresodetalle`
+        FOREIGN KEY (`idingreso`)
+        REFERENCES `ingreso` (`idingreso`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idrubroingreso_ingresodetalle`
+        FOREIGN KEY (`idrubroingreso`)
+        REFERENCES `rubroingreso` (`idrubroingreso`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -583,7 +857,17 @@ CREATE TABLE `ingresonota`
     `ingresonota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`idingresonota`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idingreso` (`idingreso`)
+    INDEX `idingreso` (`idingreso`),
+    CONSTRAINT `ingresonota_idingreso`
+        FOREIGN KEY (`idingreso`)
+        REFERENCES `ingreso` (`idingreso`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `ingresonota_idusuario`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -599,21 +883,46 @@ CREATE TABLE `inventariomes`
     `idsucursal` INTEGER NOT NULL,
     `idalmacen` INTEGER NOT NULL,
     `idusuario` INTEGER NOT NULL,
-    `idauditor` INTEGER NOT NULL,
+    `idauditor` INTEGER,
     `inventariomes_fecha` DATE NOT NULL,
     `inventariomes_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
-    `inventariomes_finalalimentos` DECIMAL(16,6),
-    `inventariomes_finalbebidas` DECIMAL(16,6),
-    `inventariomes_faltantes` DECIMAL(16,6),
-    `inventariomes_sobrantes` DECIMAL(16,6),
-    `inventariomes_total` DECIMAL(16,6),
-    `inventariomes_totalimportefisico` DECIMAL(16,6),
+    `inventariomes_finalalimentos` DECIMAL(16,6) NOT NULL,
+    `inventariomes_finalbebidas` DECIMAL(16,6) NOT NULL,
+    `inventariomes_faltantes` DECIMAL(16,6) NOT NULL,
+    `inventariomes_sobrantes` DECIMAL(16,6) NOT NULL,
+    `inventariomes_total` DECIMAL(16,6) NOT NULL,
+    `inventariomes_totalimportefisico` DECIMAL(16,6) NOT NULL,
     PRIMARY KEY (`idinventariomes`),
     INDEX `idauditor` (`idauditor`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idalmacen` (`idalmacen`),
-    INDEX `idusuario` (`idusuario`)
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `idalmacen_inventariomes`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_inventariomes`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_inventariomes`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_inventariomes`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_inventariomes`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -629,24 +938,29 @@ CREATE TABLE `inventariomesdetalle`
     `idproducto` INTEGER NOT NULL,
     `inventariomesdetalle_stockinicial` FLOAT NOT NULL,
     `inventariomesdetalle_stockteorico` FLOAT NOT NULL,
+    `inventariomesdetalle_explosion` FLOAT NOT NULL,
     `inventariomesdetalle_stockfisico` FLOAT NOT NULL,
-    `inventariomesdetalle_explosion` FLOAT,
-    `inventariomesdetalle_totalfisico` FLOAT,
-    `inventariomesdetalle_reajuste` FLOAT NOT NULL,
+    `inventariomesdetalle_totalfisico` FLOAT NOT NULL,
     `inventariomesdetalle_diferencia` FLOAT,
     `inventariomesdetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `inventariomesdetalle_ingresocompra` FLOAT NOT NULL,
     `inventariomesdetalle_ingresorequisicion` FLOAT NOT NULL,
     `inventariomesdetalle_egresorequisicion` FLOAT NOT NULL,
     `inventariomesdetalle_egresoventa` FLOAT NOT NULL,
+    `inventariomesdetalle_reajuste` FLOAT NOT NULL,
     `inventariomesdetalle_ingresoordentablajeria` FLOAT NOT NULL,
     `inventariomesdetalle_egresoordentablajeria` FLOAT NOT NULL,
     `inventariomesdetalle_egresodevolucion` FLOAT NOT NULL,
-    `inventariomesdetalle_costopromedio` DECIMAL(16,6),
-    `inventariomesdetalle_difimporte` DECIMAL(16,6),
-    `inventariomesdetalle_importefisico` DECIMAL(16,6),
+    `inventariomesdetalle_costopromedio` DECIMAL(16,6) NOT NULL,
+    `inventariomesdetalle_difimporte` DECIMAL(16,6) NOT NULL,
+    `inventariomesdetalle_importefisico` DECIMAL(16,6) NOT NULL,
     PRIMARY KEY (`idinventariomesdetalle`),
-    INDEX `idinventariomes` (`idinventariomes`)
+    INDEX `idinventariomes` (`idinventariomes`),
+    CONSTRAINT `idinventariomes_inventariomesdetalle`
+        FOREIGN KEY (`idinventariomes`)
+        REFERENCES `inventariomes` (`idinventariomes`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -664,7 +978,17 @@ CREATE TABLE `inventariomesdetallenota`
     `inventariomesdetallenota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`idinventariomesdetallenota`),
     INDEX `idinventariomesdetalle` (`idinventariomesdetalle`),
-    INDEX `idusuario_inventariomesdetallenota_idx` (`idusuario`)
+    INDEX `idusuario_inventariomesdetallenota_idx` (`idusuario`),
+    CONSTRAINT `idinventariomesdetalle_inventariomesdetallenota`
+        FOREIGN KEY (`idinventariomesdetalle`)
+        REFERENCES `inventariomesdetalle` (`idinventariomesdetalle`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_inventariomesdetallenota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -691,16 +1015,46 @@ CREATE TABLE `notacredito`
     `notacredito_iva` DECIMAL(15,5),
     `notacredito_total` DECIMAL(15,5),
     `notacredito_subtotal` DECIMAL(15,5),
-    `notaauditorempresa` TINYINT DEFAULT 1,
-    `notaalmacenistaempresa` TINYINT DEFAULT 1,
-    `notaauditoraersa` TINYINT DEFAULT 1,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idnotacredito`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idusuario` (`idusuario`),
     INDEX `idauditor` (`idauditor`),
     INDEX `idalmacen` (`idalmacen`),
     INDEX `idempresa` (`idempresa`),
-    INDEX `idproveedor` (`idproveedor`)
+    INDEX `idproveedor` (`idproveedor`),
+    CONSTRAINT `idalmacen_notacredito`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_notacredito`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_notacredito`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproveedor_notacredito`
+        FOREIGN KEY (`idproveedor`)
+        REFERENCES `proveedor` (`idproveedor`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_notacredito`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_notacredito`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -725,7 +1079,22 @@ CREATE TABLE `notacreditodetalle`
     PRIMARY KEY (`idnotacreditodetalle`),
     INDEX `idnotacredito` (`idnotacredito`),
     INDEX `idproducto` (`idproducto`),
-    INDEX `idalmacen` (`idalmacen`)
+    INDEX `idalmacen` (`idalmacen`),
+    CONSTRAINT `idalmacen_notacreditodetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idnotacredito_notacreditodetalle`
+        FOREIGN KEY (`idnotacredito`)
+        REFERENCES `notacredito` (`idnotacredito`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_notacreditodetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -740,9 +1109,20 @@ CREATE TABLE `notacreditonota`
     `idnotacredito` INTEGER NOT NULL,
     `idusuario` INTEGER NOT NULL,
     `notacreditonota_nota` TEXT NOT NULL,
+    `notacreditonota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`idnotacreditonota`),
     INDEX `idnotacredito` (`idnotacredito`),
-    INDEX `idusuario` (`idusuario`)
+    INDEX `idusuario` (`idusuario`),
+    CONSTRAINT `idnotacredito_notacreditonota`
+        FOREIGN KEY (`idnotacredito`)
+        REFERENCES `notacredito` (`idnotacredito`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_notacreditonota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -754,16 +1134,28 @@ DROP TABLE IF EXISTS `notificacion`;
 CREATE TABLE `notificacion`
 (
     `idnotificacion` INTEGER NOT NULL AUTO_INCREMENT,
-    `notificacion_proceso` enum('compra','requisicion','tablajeria','credito','devolucion','consignacion','ingresos','venta','ajustesinventarios','cierresemana') NOT NULL,
+    `notificacion_proceso` enum('cierresemana','compra','requisicion','tablajeria','credito','devolucion','consignacion','ingresos','venta','ajustesinventarios') NOT NULL,
+    `idempresa` INTEGER NOT NULL,
     `idproceso` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
     `rol1` TINYINT(1) DEFAULT 0 NOT NULL,
     `rol2` TINYINT(1) DEFAULT 0 NOT NULL,
     `rol3` TINYINT(1) DEFAULT 0 NOT NULL,
     `rol4` TINYINT(1) DEFAULT 0 NOT NULL,
     `rol5` TINYINT(1) DEFAULT 0 NOT NULL,
-    `idsucursal` INTEGER NOT NULL,
-    `idempresa` INTEGER NOT NULL,
-    PRIMARY KEY (`idnotificacion`)
+    PRIMARY KEY (`idnotificacion`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_notificacion`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_notificacion`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -791,16 +1183,16 @@ CREATE TABLE `ordentablajeria`
     `ordentablajeria_precioneto` DECIMAL(15,5) NOT NULL,
     `ordentablajeria_inyeccion` FLOAT,
     `ordentablajeria_merma` FLOAT NOT NULL,
-    `ordentablajeria_porcentajemerma` FLOAT,
+    `ordentablajeria_porcentajemerma` FLOAT NOT NULL,
     `ordentablajeria_aprovechamiento` FLOAT NOT NULL,
     `ordentablajeria_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `ordentablajeria_folio` VARCHAR(10) NOT NULL,
     `ordentablajeria_fecha` DATETIME NOT NULL,
     `ordentablajeria_fechacreacion` DATETIME NOT NULL,
     `ordentablajeria_pesoporcion` FLOAT,
-    `notaauditorempresa` TINYINT DEFAULT 1,
-    `notaalmacenistaempresa` TINYINT DEFAULT 1,
-    `notaauditoraersa` TINYINT DEFAULT 1,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idordentablajeria`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
@@ -808,7 +1200,42 @@ CREATE TABLE `ordentablajeria`
     INDEX `idalmacendestino` (`idalmacendestino`),
     INDEX `idproducto` (`idproducto`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idauditor` (`idauditor`)
+    INDEX `idauditor` (`idauditor`),
+    CONSTRAINT `idalmacendestino_ordentablajeria`
+        FOREIGN KEY (`idalmacendestino`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idalmacenorigen_ordentablajeria`
+        FOREIGN KEY (`idalmacenorigen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_ordentablajeria`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_ordentablajeria`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_ordentablajeria`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_ordentablajeria`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_ordentablajeria`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -830,7 +1257,17 @@ CREATE TABLE `ordentablajeriadetalle`
     `ordentablajeriadetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`idordentablajeriadetalle`),
     INDEX `idordentablajeria` (`idordentablajeria`),
-    INDEX `idproducto` (`idproducto`)
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idordentablajeria_ordentablajeriadetalle`
+        FOREIGN KEY (`idordentablajeria`)
+        REFERENCES `ordentablajeria` (`idordentablajeria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_ordentablajeriadetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -866,7 +1303,17 @@ CREATE TABLE `plantillatablajeria`
     `plantillatablajeria_descripcion` TEXT,
     PRIMARY KEY (`idplantillatablajeria`),
     INDEX `idempresa` (`idempresa`),
-    INDEX `idproducto` (`idproducto`)
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idempresa_plantillatablajeria`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_plantillatablejeria`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -882,7 +1329,17 @@ CREATE TABLE `plantillatablajeriadetalle`
     `idproducto` INTEGER NOT NULL,
     PRIMARY KEY (`idplantillatablajeriadetalle`),
     INDEX `idplantillatablajeria` (`idplantillatablajeria`),
-    INDEX `idproducto` (`idproducto`)
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idplantillatablajeria_plantillatablajeriadetalle`
+        FOREIGN KEY (`idplantillatablajeria`)
+        REFERENCES `plantillatablajeria` (`idplantillatablajeria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_plantillatablajeriadetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -899,19 +1356,39 @@ CREATE TABLE `producto`
     `producto_nombre` TEXT NOT NULL,
     `idcategoria` INTEGER,
     `idsubcategoria` INTEGER,
-    `producto_rendimiento` INTEGER,
+    `producto_rendimiento` FLOAT,
     `producto_ultimocosto` FLOAT,
-    `producto_baja` TINYINT(1) NOT NULL,
+    `producto_baja` TINYINT(1) DEFAULT 0 NOT NULL,
     `producto_tipo` enum('simple','subreceta','plu') NOT NULL,
     `producto_costo` FLOAT,
     `producto_iva` TINYINT(1) NOT NULL,
     `producto_precio` FLOAT,
-    `producto_rendimientooriginal` FLOAT NOT NULL,
+    `producto_rendimientooriginal` FLOAT,
     PRIMARY KEY (`idproducto`),
     INDEX `idunidadmedida` (`idunidadmedida`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsubcategoria` (`idsubcategoria`),
-    INDEX `idcategoria` (`idcategoria`)
+    INDEX `idcategoria` (`idcategoria`),
+    CONSTRAINT `idcategoria_producto`
+        FOREIGN KEY (`idcategoria`)
+        REFERENCES `categoria` (`idcategoria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_producto`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsubcategoria_producto`
+        FOREIGN KEY (`idsubcategoria`)
+        REFERENCES `categoria` (`idcategoria`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idunidadmedida_producto`
+        FOREIGN KEY (`idunidadmedida`)
+        REFERENCES `unidadmedida` (`idunidadmedida`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -958,7 +1435,27 @@ CREATE TABLE `productosucursalalmacen`
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idalmacen` (`idalmacen`),
-    INDEX `idproducto` (`idproducto`)
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idalmacen_productosucursalalmacen`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_productosucursalalmacen`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_productosucursalalmacen`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_productosucursalalmacen`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -982,9 +1479,14 @@ CREATE TABLE `proveedor`
     `proveedor_ciudad` VARCHAR(45),
     `proveedor_estado` VARCHAR(45),
     `proveedor_codigopostal` VARCHAR(45),
-    `proveedor_estatus` TINYINT DEFAULT 1,
+    `proveedor_estatus` TINYINT(1),
     PRIMARY KEY (`idproveedor`),
-    INDEX `idempresa` (`idempresa`)
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_proveedor`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1026,11 +1528,21 @@ CREATE TABLE `receta`
     `idproducto` INTEGER NOT NULL,
     `idproductoreceta` INTEGER NOT NULL,
     `receta_cantidad` FLOAT NOT NULL,
-    `receta_cantidadoriginal` FLOAT NOT NULL,
-    `receta_unidad` enum('Botella','Pieza','Onza','Copa vino 187.5 ML','Copa vino 150 ML') NOT NULL,
+    `receta_cantidadoriginal` FLOAT,
+    `receta_unidad` enum('Botella','Pieza','Onza','Copa vino 187.5 ML','Copa vino 150 ML'),
     PRIMARY KEY (`idreceta`),
     INDEX `idproducto` (`idproducto`),
-    INDEX `idproductoreceta` (`idproductoreceta`)
+    INDEX `idproductoreceta` (`idproductoreceta`),
+    CONSTRAINT `idproducto_receta`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproductoreceta_receta`
+        FOREIGN KEY (`idproductoreceta`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1055,9 +1567,9 @@ CREATE TABLE `requisicion`
     `requisicion_revisada` TINYINT(1) NOT NULL,
     `requisicion_folio` VARCHAR(10) NOT NULL,
     `requisicion_total` DECIMAL(15,5),
-    `notaauditorempresa` TINYINT DEFAULT 1,
-    `notaalmacenistaempresa` TINYINT DEFAULT 1,
-    `notaauditoraersa` TINYINT DEFAULT 1,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idrequisicion`),
     INDEX `idconceptosalida` (`idconceptosalida`),
     INDEX `idusuario` (`idusuario`),
@@ -1066,7 +1578,47 @@ CREATE TABLE `requisicion`
     INDEX `idsucursalorigen` (`idsucursalorigen`),
     INDEX `idalmacenorigen` (`idalmacenorigen`),
     INDEX `idalmacendestino` (`idalmacendestino`),
-    INDEX `idsucursaldestino` (`idsucursaldestino`)
+    INDEX `idsucursaldestino` (`idsucursaldestino`),
+    CONSTRAINT `idalmacendestino_requisicion`
+        FOREIGN KEY (`idalmacendestino`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idalmacenorigen_requisicion`
+        FOREIGN KEY (`idalmacenorigen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idauditor_requisicion`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idconceptosalida_requisicion`
+        FOREIGN KEY (`idconceptosalida`)
+        REFERENCES `conceptosalida` (`idconceptosalida`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_requisicion`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursaldestino_requisicion`
+        FOREIGN KEY (`idsucursaldestino`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursalorigen_requisicion`
+        FOREIGN KEY (`idsucursalorigen`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_requisicion`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1085,10 +1637,26 @@ CREATE TABLE `requisiciondetalle`
     `requisiciondetalle_preciounitario` DECIMAL(15,5) NOT NULL,
     `requisiciondetalle_subtotal` DECIMAL(15,5) NOT NULL,
     `idpadre` INTEGER,
+    `requisiciondetalle_contable` TINYINT(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`idrequisiciondetalle`),
     INDEX `idrequisicion` (`idrequisicion`),
     INDEX `idproducto` (`idproducto`),
-    INDEX `idpadre` (`idpadre`)
+    INDEX `idpadre` (`idpadre`),
+    CONSTRAINT `idpadre_requisiciondetalle`
+        FOREIGN KEY (`idpadre`)
+        REFERENCES `requisiciondetalle` (`idrequisiciondetalle`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_requisiciondetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idrequisicion_requisiciondetalle`
+        FOREIGN KEY (`idrequisicion`)
+        REFERENCES `requisicion` (`idrequisicion`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1106,7 +1674,17 @@ CREATE TABLE `requisicionnota`
     `requisicionnota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`idrequisicionnota`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idrequisicion` (`idrequisicion`)
+    INDEX `idrequisicion` (`idrequisicion`),
+    CONSTRAINT `idrequisicion_requisicionnota`
+        FOREIGN KEY (`idrequisicion`)
+        REFERENCES `requisicion` (`idrequisicion`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_requisicionnota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1180,7 +1758,12 @@ CREATE TABLE `sucursal`
     `sucursal_anioactivo` INTEGER NOT NULL,
     `sucursal_mesactivo` INTEGER NOT NULL,
     PRIMARY KEY (`idsucursal`),
-    INDEX `idempresa` (`idempresa`)
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_sucursal`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1212,7 +1795,17 @@ CREATE TABLE `trabajadorespromedio`
     `trabajadorespromedio_cantidad` FLOAT NOT NULL,
     PRIMARY KEY (`idtrabajadorespromedio`),
     INDEX `idempresa` (`idempresa`),
-    INDEX `idsucursal` (`idsucursal`)
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idempresa_trabajadorespromedio`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_trabajadorespromedio`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1243,7 +1836,12 @@ CREATE TABLE `usuario`
     `usuario_username` VARCHAR(45) NOT NULL,
     `usuario_password` VARCHAR(45) NOT NULL,
     PRIMARY KEY (`idusuario`),
-    INDEX `idrol` (`idrol`)
+    INDEX `idrol` (`idrol`),
+    CONSTRAINT `idrol_usuario`
+        FOREIGN KEY (`idrol`)
+        REFERENCES `rol` (`idrol`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1259,7 +1857,17 @@ CREATE TABLE `usuarioempresa`
     `idempresa` INTEGER NOT NULL,
     PRIMARY KEY (`idusuarioempresa`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idempresa` (`idempresa`)
+    INDEX `idempresa` (`idempresa`),
+    CONSTRAINT `idempresa_usuarioempresa`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_usuarioempresa`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1275,7 +1883,17 @@ CREATE TABLE `usuariosucursal`
     `idsucursal` INTEGER NOT NULL,
     PRIMARY KEY (`idusuariosucursal`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idsucursal` (`idsucursal`)
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `idsucursal_usuariosucursal`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_usuariosucursal`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1296,14 +1914,34 @@ CREATE TABLE `venta`
     `venta_fechacreacion` DATETIME NOT NULL,
     `venta_total` DECIMAL(15,5) NOT NULL,
     `venta_folio` VARCHAR(10) NOT NULL,
-    `notaauditorempresa` TINYINT DEFAULT 1,
-    `notaalmacenistaempresa` TINYINT DEFAULT 1,
-    `notaauditoraersa` TINYINT DEFAULT 1,
+    `notaauditorempresa` TINYINT(1) DEFAULT 1,
+    `notaalmacenistaempresa` TINYINT(1) DEFAULT 1,
+    `notaauditoraersa` TINYINT(1) DEFAULT 1,
     PRIMARY KEY (`idventa`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idauditor` (`idauditor`)
+    INDEX `idauditor` (`idauditor`),
+    CONSTRAINT `idauditor_venta`
+        FOREIGN KEY (`idauditor`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idempresa_venta`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idsucursal_venta`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idusuario_venta`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1322,11 +1960,32 @@ CREATE TABLE `ventadetalle`
     `ventadetalle_subtotal` DECIMAL(15,5) NOT NULL,
     `idpadre` INTEGER,
     `ventadetalle_revisada` TINYINT(1) NOT NULL,
+    `ventadetalle_contable` TINYINT(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`idventadetalle`),
     INDEX `idventa` (`idventa`),
     INDEX `idpadre` (`idpadre`),
     INDEX `idalmacen` (`idalmacen`),
-    INDEX `idproducto` (`idproducto`)
+    INDEX `idproducto` (`idproducto`),
+    CONSTRAINT `idalmacen_ventadetalle`
+        FOREIGN KEY (`idalmacen`)
+        REFERENCES `almacen` (`idalmacen`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idpadre_ventadetalle`
+        FOREIGN KEY (`idpadre`)
+        REFERENCES `ventadetalle` (`idventadetalle`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idproducto_ventadetalle`
+        FOREIGN KEY (`idproducto`)
+        REFERENCES `producto` (`idproducto`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idventa_ventadetalle`
+        FOREIGN KEY (`idventa`)
+        REFERENCES `venta` (`idventa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
@@ -1344,7 +2003,17 @@ CREATE TABLE `ventanota`
     `ventanota_fecha` DATETIME NOT NULL,
     PRIMARY KEY (`idventanota`),
     INDEX `idusuario` (`idusuario`),
-    INDEX `idventa` (`idventa`)
+    INDEX `idventa` (`idventa`),
+    CONSTRAINT `idusuario_ventanota`
+        FOREIGN KEY (`idusuario`)
+        REFERENCES `usuario` (`idusuario`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `idventa_ventanota`
+        FOREIGN KEY (`idventa`)
+        REFERENCES `venta` (`idventa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

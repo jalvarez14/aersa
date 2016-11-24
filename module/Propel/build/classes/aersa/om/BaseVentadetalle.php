@@ -85,6 +85,32 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     protected $ventadetalle_contable;
 
     /**
+     * @var        Almacen
+     */
+    protected $aAlmacen;
+
+    /**
+     * @var        Ventadetalle
+     */
+    protected $aVentadetalleRelatedByIdpadre;
+
+    /**
+     * @var        Producto
+     */
+    protected $aProducto;
+
+    /**
+     * @var        Venta
+     */
+    protected $aVenta;
+
+    /**
+     * @var        PropelObjectCollection|Ventadetalle[] Collection to store aggregation of Ventadetalle objects.
+     */
+    protected $collVentadetallesRelatedByIdventadetalle;
+    protected $collVentadetallesRelatedByIdventadetallePartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -103,6 +129,12 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ventadetallesRelatedByIdventadetalleScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -262,6 +294,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
             $this->modifiedColumns[] = VentadetallePeer::IDVENTA;
         }
 
+        if ($this->aVenta !== null && $this->aVenta->getIdventa() !== $v) {
+            $this->aVenta = null;
+        }
+
 
         return $this;
     } // setIdventa()
@@ -283,6 +319,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
             $this->modifiedColumns[] = VentadetallePeer::IDALMACEN;
         }
 
+        if ($this->aAlmacen !== null && $this->aAlmacen->getIdalmacen() !== $v) {
+            $this->aAlmacen = null;
+        }
+
 
         return $this;
     } // setIdalmacen()
@@ -302,6 +342,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
         if ($this->idproducto !== $v) {
             $this->idproducto = $v;
             $this->modifiedColumns[] = VentadetallePeer::IDPRODUCTO;
+        }
+
+        if ($this->aProducto !== null && $this->aProducto->getIdproducto() !== $v) {
+            $this->aProducto = null;
         }
 
 
@@ -365,6 +409,10 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
         if ($this->idpadre !== $v) {
             $this->idpadre = $v;
             $this->modifiedColumns[] = VentadetallePeer::IDPADRE;
+        }
+
+        if ($this->aVentadetalleRelatedByIdpadre !== null && $this->aVentadetalleRelatedByIdpadre->getIdventadetalle() !== $v) {
+            $this->aVentadetalleRelatedByIdpadre = null;
         }
 
 
@@ -506,6 +554,18 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aVenta !== null && $this->idventa !== $this->aVenta->getIdventa()) {
+            $this->aVenta = null;
+        }
+        if ($this->aAlmacen !== null && $this->idalmacen !== $this->aAlmacen->getIdalmacen()) {
+            $this->aAlmacen = null;
+        }
+        if ($this->aProducto !== null && $this->idproducto !== $this->aProducto->getIdproducto()) {
+            $this->aProducto = null;
+        }
+        if ($this->aVentadetalleRelatedByIdpadre !== null && $this->idpadre !== $this->aVentadetalleRelatedByIdpadre->getIdventadetalle()) {
+            $this->aVentadetalleRelatedByIdpadre = null;
+        }
     } // ensureConsistency
 
     /**
@@ -544,6 +604,12 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
         $this->hydrate($row, 0, true); // rehydrate
 
         if ($deep) {  // also de-associate any related objects?
+
+            $this->aAlmacen = null;
+            $this->aVentadetalleRelatedByIdpadre = null;
+            $this->aProducto = null;
+            $this->aVenta = null;
+            $this->collVentadetallesRelatedByIdventadetalle = null;
 
         } // if (deep)
     }
@@ -658,6 +724,39 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aAlmacen !== null) {
+                if ($this->aAlmacen->isModified() || $this->aAlmacen->isNew()) {
+                    $affectedRows += $this->aAlmacen->save($con);
+                }
+                $this->setAlmacen($this->aAlmacen);
+            }
+
+            if ($this->aVentadetalleRelatedByIdpadre !== null) {
+                if ($this->aVentadetalleRelatedByIdpadre->isModified() || $this->aVentadetalleRelatedByIdpadre->isNew()) {
+                    $affectedRows += $this->aVentadetalleRelatedByIdpadre->save($con);
+                }
+                $this->setVentadetalleRelatedByIdpadre($this->aVentadetalleRelatedByIdpadre);
+            }
+
+            if ($this->aProducto !== null) {
+                if ($this->aProducto->isModified() || $this->aProducto->isNew()) {
+                    $affectedRows += $this->aProducto->save($con);
+                }
+                $this->setProducto($this->aProducto);
+            }
+
+            if ($this->aVenta !== null) {
+                if ($this->aVenta->isModified() || $this->aVenta->isNew()) {
+                    $affectedRows += $this->aVenta->save($con);
+                }
+                $this->setVenta($this->aVenta);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -667,6 +766,23 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->ventadetallesRelatedByIdventadetalleScheduledForDeletion !== null) {
+                if (!$this->ventadetallesRelatedByIdventadetalleScheduledForDeletion->isEmpty()) {
+                    VentadetalleQuery::create()
+                        ->filterByPrimaryKeys($this->ventadetallesRelatedByIdventadetalleScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collVentadetallesRelatedByIdventadetalle !== null) {
+                foreach ($this->collVentadetallesRelatedByIdventadetalle as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -854,10 +970,48 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aAlmacen !== null) {
+                if (!$this->aAlmacen->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aAlmacen->getValidationFailures());
+                }
+            }
+
+            if ($this->aVentadetalleRelatedByIdpadre !== null) {
+                if (!$this->aVentadetalleRelatedByIdpadre->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aVentadetalleRelatedByIdpadre->getValidationFailures());
+                }
+            }
+
+            if ($this->aProducto !== null) {
+                if (!$this->aProducto->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aProducto->getValidationFailures());
+                }
+            }
+
+            if ($this->aVenta !== null) {
+                if (!$this->aVenta->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aVenta->getValidationFailures());
+                }
+            }
+
+
             if (($retval = VentadetallePeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
 
+
+                if ($this->collVentadetallesRelatedByIdventadetalle !== null) {
+                    foreach ($this->collVentadetallesRelatedByIdventadetalle as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
 
 
             $this->alreadyInValidation = false;
@@ -938,10 +1092,11 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Ventadetalle'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -964,6 +1119,23 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aAlmacen) {
+                $result['Almacen'] = $this->aAlmacen->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aVentadetalleRelatedByIdpadre) {
+                $result['VentadetalleRelatedByIdpadre'] = $this->aVentadetalleRelatedByIdpadre->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aProducto) {
+                $result['Producto'] = $this->aProducto->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aVenta) {
+                $result['Venta'] = $this->aVenta->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collVentadetallesRelatedByIdventadetalle) {
+                $result['VentadetallesRelatedByIdventadetalle'] = $this->collVentadetallesRelatedByIdventadetalle->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+        }
 
         return $result;
     }
@@ -1148,6 +1320,24 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
         $copyObj->setIdpadre($this->getIdpadre());
         $copyObj->setVentadetalleRevisada($this->getVentadetalleRevisada());
         $copyObj->setVentadetalleContable($this->getVentadetalleContable());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            foreach ($this->getVentadetallesRelatedByIdventadetalle() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addVentadetalleRelatedByIdventadetalle($relObj->copy($deepCopy));
+                }
+            }
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdventadetalle(NULL); // this is a auto-increment column, so set to default value
@@ -1195,6 +1385,530 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Almacen object.
+     *
+     * @param                  Almacen $v
+     * @return Ventadetalle The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setAlmacen(Almacen $v = null)
+    {
+        if ($v === null) {
+            $this->setIdalmacen(NULL);
+        } else {
+            $this->setIdalmacen($v->getIdalmacen());
+        }
+
+        $this->aAlmacen = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Almacen object, it will not be re-added.
+        if ($v !== null) {
+            $v->addVentadetalle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Almacen object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Almacen The associated Almacen object.
+     * @throws PropelException
+     */
+    public function getAlmacen(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aAlmacen === null && ($this->idalmacen !== null) && $doQuery) {
+            $this->aAlmacen = AlmacenQuery::create()->findPk($this->idalmacen, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aAlmacen->addVentadetalles($this);
+             */
+        }
+
+        return $this->aAlmacen;
+    }
+
+    /**
+     * Declares an association between this object and a Ventadetalle object.
+     *
+     * @param                  Ventadetalle $v
+     * @return Ventadetalle The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setVentadetalleRelatedByIdpadre(Ventadetalle $v = null)
+    {
+        if ($v === null) {
+            $this->setIdpadre(NULL);
+        } else {
+            $this->setIdpadre($v->getIdventadetalle());
+        }
+
+        $this->aVentadetalleRelatedByIdpadre = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Ventadetalle object, it will not be re-added.
+        if ($v !== null) {
+            $v->addVentadetalleRelatedByIdventadetalle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Ventadetalle object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Ventadetalle The associated Ventadetalle object.
+     * @throws PropelException
+     */
+    public function getVentadetalleRelatedByIdpadre(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aVentadetalleRelatedByIdpadre === null && ($this->idpadre !== null) && $doQuery) {
+            $this->aVentadetalleRelatedByIdpadre = VentadetalleQuery::create()->findPk($this->idpadre, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aVentadetalleRelatedByIdpadre->addVentadetallesRelatedByIdventadetalle($this);
+             */
+        }
+
+        return $this->aVentadetalleRelatedByIdpadre;
+    }
+
+    /**
+     * Declares an association between this object and a Producto object.
+     *
+     * @param                  Producto $v
+     * @return Ventadetalle The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setProducto(Producto $v = null)
+    {
+        if ($v === null) {
+            $this->setIdproducto(NULL);
+        } else {
+            $this->setIdproducto($v->getIdproducto());
+        }
+
+        $this->aProducto = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Producto object, it will not be re-added.
+        if ($v !== null) {
+            $v->addVentadetalle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Producto object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Producto The associated Producto object.
+     * @throws PropelException
+     */
+    public function getProducto(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aProducto === null && ($this->idproducto !== null) && $doQuery) {
+            $this->aProducto = ProductoQuery::create()->findPk($this->idproducto, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aProducto->addVentadetalles($this);
+             */
+        }
+
+        return $this->aProducto;
+    }
+
+    /**
+     * Declares an association between this object and a Venta object.
+     *
+     * @param                  Venta $v
+     * @return Ventadetalle The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setVenta(Venta $v = null)
+    {
+        if ($v === null) {
+            $this->setIdventa(NULL);
+        } else {
+            $this->setIdventa($v->getIdventa());
+        }
+
+        $this->aVenta = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Venta object, it will not be re-added.
+        if ($v !== null) {
+            $v->addVentadetalle($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Venta object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Venta The associated Venta object.
+     * @throws PropelException
+     */
+    public function getVenta(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aVenta === null && ($this->idventa !== null) && $doQuery) {
+            $this->aVenta = VentaQuery::create()->findPk($this->idventa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aVenta->addVentadetalles($this);
+             */
+        }
+
+        return $this->aVenta;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('VentadetalleRelatedByIdventadetalle' == $relationName) {
+            $this->initVentadetallesRelatedByIdventadetalle();
+        }
+    }
+
+    /**
+     * Clears out the collVentadetallesRelatedByIdventadetalle collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Ventadetalle The current object (for fluent API support)
+     * @see        addVentadetallesRelatedByIdventadetalle()
+     */
+    public function clearVentadetallesRelatedByIdventadetalle()
+    {
+        $this->collVentadetallesRelatedByIdventadetalle = null; // important to set this to null since that means it is uninitialized
+        $this->collVentadetallesRelatedByIdventadetallePartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collVentadetallesRelatedByIdventadetalle collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialVentadetallesRelatedByIdventadetalle($v = true)
+    {
+        $this->collVentadetallesRelatedByIdventadetallePartial = $v;
+    }
+
+    /**
+     * Initializes the collVentadetallesRelatedByIdventadetalle collection.
+     *
+     * By default this just sets the collVentadetallesRelatedByIdventadetalle collection to an empty array (like clearcollVentadetallesRelatedByIdventadetalle());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initVentadetallesRelatedByIdventadetalle($overrideExisting = true)
+    {
+        if (null !== $this->collVentadetallesRelatedByIdventadetalle && !$overrideExisting) {
+            return;
+        }
+        $this->collVentadetallesRelatedByIdventadetalle = new PropelObjectCollection();
+        $this->collVentadetallesRelatedByIdventadetalle->setModel('Ventadetalle');
+    }
+
+    /**
+     * Gets an array of Ventadetalle objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Ventadetalle is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
+     * @throws PropelException
+     */
+    public function getVentadetallesRelatedByIdventadetalle($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collVentadetallesRelatedByIdventadetallePartial && !$this->isNew();
+        if (null === $this->collVentadetallesRelatedByIdventadetalle || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collVentadetallesRelatedByIdventadetalle) {
+                // return empty collection
+                $this->initVentadetallesRelatedByIdventadetalle();
+            } else {
+                $collVentadetallesRelatedByIdventadetalle = VentadetalleQuery::create(null, $criteria)
+                    ->filterByVentadetalleRelatedByIdpadre($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collVentadetallesRelatedByIdventadetallePartial && count($collVentadetallesRelatedByIdventadetalle)) {
+                      $this->initVentadetallesRelatedByIdventadetalle(false);
+
+                      foreach ($collVentadetallesRelatedByIdventadetalle as $obj) {
+                        if (false == $this->collVentadetallesRelatedByIdventadetalle->contains($obj)) {
+                          $this->collVentadetallesRelatedByIdventadetalle->append($obj);
+                        }
+                      }
+
+                      $this->collVentadetallesRelatedByIdventadetallePartial = true;
+                    }
+
+                    $collVentadetallesRelatedByIdventadetalle->getInternalIterator()->rewind();
+
+                    return $collVentadetallesRelatedByIdventadetalle;
+                }
+
+                if ($partial && $this->collVentadetallesRelatedByIdventadetalle) {
+                    foreach ($this->collVentadetallesRelatedByIdventadetalle as $obj) {
+                        if ($obj->isNew()) {
+                            $collVentadetallesRelatedByIdventadetalle[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collVentadetallesRelatedByIdventadetalle = $collVentadetallesRelatedByIdventadetalle;
+                $this->collVentadetallesRelatedByIdventadetallePartial = false;
+            }
+        }
+
+        return $this->collVentadetallesRelatedByIdventadetalle;
+    }
+
+    /**
+     * Sets a collection of VentadetalleRelatedByIdventadetalle objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ventadetallesRelatedByIdventadetalle A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Ventadetalle The current object (for fluent API support)
+     */
+    public function setVentadetallesRelatedByIdventadetalle(PropelCollection $ventadetallesRelatedByIdventadetalle, PropelPDO $con = null)
+    {
+        $ventadetallesRelatedByIdventadetalleToDelete = $this->getVentadetallesRelatedByIdventadetalle(new Criteria(), $con)->diff($ventadetallesRelatedByIdventadetalle);
+
+
+        $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion = $ventadetallesRelatedByIdventadetalleToDelete;
+
+        foreach ($ventadetallesRelatedByIdventadetalleToDelete as $ventadetalleRelatedByIdventadetalleRemoved) {
+            $ventadetalleRelatedByIdventadetalleRemoved->setVentadetalleRelatedByIdpadre(null);
+        }
+
+        $this->collVentadetallesRelatedByIdventadetalle = null;
+        foreach ($ventadetallesRelatedByIdventadetalle as $ventadetalleRelatedByIdventadetalle) {
+            $this->addVentadetalleRelatedByIdventadetalle($ventadetalleRelatedByIdventadetalle);
+        }
+
+        $this->collVentadetallesRelatedByIdventadetalle = $ventadetallesRelatedByIdventadetalle;
+        $this->collVentadetallesRelatedByIdventadetallePartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ventadetalle objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ventadetalle objects.
+     * @throws PropelException
+     */
+    public function countVentadetallesRelatedByIdventadetalle(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collVentadetallesRelatedByIdventadetallePartial && !$this->isNew();
+        if (null === $this->collVentadetallesRelatedByIdventadetalle || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collVentadetallesRelatedByIdventadetalle) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getVentadetallesRelatedByIdventadetalle());
+            }
+            $query = VentadetalleQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByVentadetalleRelatedByIdpadre($this)
+                ->count($con);
+        }
+
+        return count($this->collVentadetallesRelatedByIdventadetalle);
+    }
+
+    /**
+     * Method called to associate a Ventadetalle object to this object
+     * through the Ventadetalle foreign key attribute.
+     *
+     * @param    Ventadetalle $l Ventadetalle
+     * @return Ventadetalle The current object (for fluent API support)
+     */
+    public function addVentadetalleRelatedByIdventadetalle(Ventadetalle $l)
+    {
+        if ($this->collVentadetallesRelatedByIdventadetalle === null) {
+            $this->initVentadetallesRelatedByIdventadetalle();
+            $this->collVentadetallesRelatedByIdventadetallePartial = true;
+        }
+
+        if (!in_array($l, $this->collVentadetallesRelatedByIdventadetalle->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddVentadetalleRelatedByIdventadetalle($l);
+
+            if ($this->ventadetallesRelatedByIdventadetalleScheduledForDeletion and $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion->contains($l)) {
+                $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion->remove($this->ventadetallesRelatedByIdventadetalleScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	VentadetalleRelatedByIdventadetalle $ventadetalleRelatedByIdventadetalle The ventadetalleRelatedByIdventadetalle object to add.
+     */
+    protected function doAddVentadetalleRelatedByIdventadetalle($ventadetalleRelatedByIdventadetalle)
+    {
+        $this->collVentadetallesRelatedByIdventadetalle[]= $ventadetalleRelatedByIdventadetalle;
+        $ventadetalleRelatedByIdventadetalle->setVentadetalleRelatedByIdpadre($this);
+    }
+
+    /**
+     * @param	VentadetalleRelatedByIdventadetalle $ventadetalleRelatedByIdventadetalle The ventadetalleRelatedByIdventadetalle object to remove.
+     * @return Ventadetalle The current object (for fluent API support)
+     */
+    public function removeVentadetalleRelatedByIdventadetalle($ventadetalleRelatedByIdventadetalle)
+    {
+        if ($this->getVentadetallesRelatedByIdventadetalle()->contains($ventadetalleRelatedByIdventadetalle)) {
+            $this->collVentadetallesRelatedByIdventadetalle->remove($this->collVentadetallesRelatedByIdventadetalle->search($ventadetalleRelatedByIdventadetalle));
+            if (null === $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion) {
+                $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion = clone $this->collVentadetallesRelatedByIdventadetalle;
+                $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion->clear();
+            }
+            $this->ventadetallesRelatedByIdventadetalleScheduledForDeletion[]= $ventadetalleRelatedByIdventadetalle;
+            $ventadetalleRelatedByIdventadetalle->setVentadetalleRelatedByIdpadre(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ventadetalle is new, it will return
+     * an empty collection; or if this Ventadetalle has previously
+     * been saved, it will retrieve related VentadetallesRelatedByIdventadetalle from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ventadetalle.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
+     */
+    public function getVentadetallesRelatedByIdventadetalleJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getVentadetallesRelatedByIdventadetalle($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ventadetalle is new, it will return
+     * an empty collection; or if this Ventadetalle has previously
+     * been saved, it will retrieve related VentadetallesRelatedByIdventadetalle from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ventadetalle.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
+     */
+    public function getVentadetallesRelatedByIdventadetalleJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getVentadetallesRelatedByIdventadetalle($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ventadetalle is new, it will return
+     * an empty collection; or if this Ventadetalle has previously
+     * been saved, it will retrieve related VentadetallesRelatedByIdventadetalle from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ventadetalle.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ventadetalle[] List of Ventadetalle objects
+     */
+    public function getVentadetallesRelatedByIdventadetalleJoinVenta($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = VentadetalleQuery::create(null, $criteria);
+        $query->joinWith('Venta', $join_behavior);
+
+        return $this->getVentadetallesRelatedByIdventadetalle($query, $con);
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1231,10 +1945,35 @@ abstract class BaseVentadetalle extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collVentadetallesRelatedByIdventadetalle) {
+                foreach ($this->collVentadetallesRelatedByIdventadetalle as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->aAlmacen instanceof Persistent) {
+              $this->aAlmacen->clearAllReferences($deep);
+            }
+            if ($this->aVentadetalleRelatedByIdpadre instanceof Persistent) {
+              $this->aVentadetalleRelatedByIdpadre->clearAllReferences($deep);
+            }
+            if ($this->aProducto instanceof Persistent) {
+              $this->aProducto->clearAllReferences($deep);
+            }
+            if ($this->aVenta instanceof Persistent) {
+              $this->aVenta->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collVentadetallesRelatedByIdventadetalle instanceof PropelCollection) {
+            $this->collVentadetallesRelatedByIdventadetalle->clearIterator();
+        }
+        $this->collVentadetallesRelatedByIdventadetalle = null;
+        $this->aAlmacen = null;
+        $this->aVentadetalleRelatedByIdpadre = null;
+        $this->aProducto = null;
+        $this->aVenta = null;
     }
 
     /**

@@ -488,9 +488,6 @@ abstract class BaseOrdentablajeriaPeer
         // Invalidate objects in OrdentablajeriadetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         OrdentablajeriadetallePeer::clearInstancePool();
-        // Invalidate objects in OrdentablajerianotaPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        OrdentablajerianotaPeer::clearInstancePool();
     }
 
     /**
@@ -3607,12 +3604,6 @@ abstract class BaseOrdentablajeriaPeer
 
             $criteria->add(OrdentablajeriadetallePeer::IDORDENTABLAJERIA, $obj->getIdordentablajeria());
             $affectedRows += OrdentablajeriadetallePeer::doDelete($criteria, $con);
-
-            // delete related Ordentablajerianota objects
-            $criteria = new Criteria(OrdentablajerianotaPeer::DATABASE_NAME);
-
-            $criteria->add(OrdentablajerianotaPeer::IDORDENTABLAJERIA, $obj->getIdordentablajeria());
-            $affectedRows += OrdentablajerianotaPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

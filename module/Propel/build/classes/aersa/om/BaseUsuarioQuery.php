@@ -36,6 +36,14 @@
  * @method UsuarioQuery rightJoinAjusteinventario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ajusteinventario relation
  * @method UsuarioQuery innerJoinAjusteinventario($relationAlias = null) Adds a INNER JOIN clause to the query using the Ajusteinventario relation
  *
+ * @method UsuarioQuery leftJoinAjusteinventarionota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ajusteinventarionota relation
+ * @method UsuarioQuery rightJoinAjusteinventarionota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ajusteinventarionota relation
+ * @method UsuarioQuery innerJoinAjusteinventarionota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ajusteinventarionota relation
+ *
+ * @method UsuarioQuery leftJoinCierresemananota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Cierresemananota relation
+ * @method UsuarioQuery rightJoinCierresemananota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Cierresemananota relation
+ * @method UsuarioQuery innerJoinCierresemananota($relationAlias = null) Adds a INNER JOIN clause to the query using the Cierresemananota relation
+ *
  * @method UsuarioQuery leftJoinCompraRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the CompraRelatedByIdauditor relation
  * @method UsuarioQuery rightJoinCompraRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CompraRelatedByIdauditor relation
  * @method UsuarioQuery innerJoinCompraRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the CompraRelatedByIdauditor relation
@@ -111,10 +119,6 @@
  * @method UsuarioQuery leftJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
  * @method UsuarioQuery rightJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
  * @method UsuarioQuery innerJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
- *
- * @method UsuarioQuery leftJoinOrdentablajerianota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajerianota relation
- * @method UsuarioQuery rightJoinOrdentablajerianota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajerianota relation
- * @method UsuarioQuery innerJoinOrdentablajerianota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajerianota relation
  *
  * @method UsuarioQuery leftJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
  * @method UsuarioQuery rightJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
@@ -781,6 +785,154 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinAjusteinventario($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ajusteinventario', 'AjusteinventarioQuery');
+    }
+
+    /**
+     * Filter the query by a related Ajusteinventarionota object
+     *
+     * @param   Ajusteinventarionota|PropelObjectCollection $ajusteinventarionota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAjusteinventarionota($ajusteinventarionota, $comparison = null)
+    {
+        if ($ajusteinventarionota instanceof Ajusteinventarionota) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $ajusteinventarionota->getIdusuario(), $comparison);
+        } elseif ($ajusteinventarionota instanceof PropelObjectCollection) {
+            return $this
+                ->useAjusteinventarionotaQuery()
+                ->filterByPrimaryKeys($ajusteinventarionota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAjusteinventarionota() only accepts arguments of type Ajusteinventarionota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ajusteinventarionota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinAjusteinventarionota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ajusteinventarionota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ajusteinventarionota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ajusteinventarionota relation Ajusteinventarionota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AjusteinventarionotaQuery A secondary query class using the current class as primary query
+     */
+    public function useAjusteinventarionotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAjusteinventarionota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ajusteinventarionota', 'AjusteinventarionotaQuery');
+    }
+
+    /**
+     * Filter the query by a related Cierresemananota object
+     *
+     * @param   Cierresemananota|PropelObjectCollection $cierresemananota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByCierresemananota($cierresemananota, $comparison = null)
+    {
+        if ($cierresemananota instanceof Cierresemananota) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $cierresemananota->getIdusuario(), $comparison);
+        } elseif ($cierresemananota instanceof PropelObjectCollection) {
+            return $this
+                ->useCierresemananotaQuery()
+                ->filterByPrimaryKeys($cierresemananota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByCierresemananota() only accepts arguments of type Cierresemananota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Cierresemananota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinCierresemananota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Cierresemananota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Cierresemananota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Cierresemananota relation Cierresemananota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   CierresemananotaQuery A secondary query class using the current class as primary query
+     */
+    public function useCierresemananotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinCierresemananota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Cierresemananota', 'CierresemananotaQuery');
     }
 
     /**
@@ -2187,80 +2339,6 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinOrdentablajeriaRelatedByIdusuario($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'OrdentablajeriaRelatedByIdusuario', 'OrdentablajeriaQuery');
-    }
-
-    /**
-     * Filter the query by a related Ordentablajerianota object
-     *
-     * @param   Ordentablajerianota|PropelObjectCollection $ordentablajerianota  the related object to use as filter
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return                 UsuarioQuery The current query, for fluid interface
-     * @throws PropelException - if the provided filter is invalid.
-     */
-    public function filterByOrdentablajerianota($ordentablajerianota, $comparison = null)
-    {
-        if ($ordentablajerianota instanceof Ordentablajerianota) {
-            return $this
-                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $ordentablajerianota->getIdusuario(), $comparison);
-        } elseif ($ordentablajerianota instanceof PropelObjectCollection) {
-            return $this
-                ->useOrdentablajerianotaQuery()
-                ->filterByPrimaryKeys($ordentablajerianota->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByOrdentablajerianota() only accepts arguments of type Ordentablajerianota or PropelCollection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Ordentablajerianota relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return UsuarioQuery The current query, for fluid interface
-     */
-    public function joinOrdentablajerianota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Ordentablajerianota');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Ordentablajerianota');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Ordentablajerianota relation Ordentablajerianota object
-     *
-     * @see       useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return   OrdentablajerianotaQuery A secondary query class using the current class as primary query
-     */
-    public function useOrdentablajerianotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinOrdentablajerianota($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Ordentablajerianota', 'OrdentablajerianotaQuery');
     }
 
     /**

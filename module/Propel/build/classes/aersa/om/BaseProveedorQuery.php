@@ -83,7 +83,7 @@
  * @method Proveedor findOneByProveedorCiudad(string $proveedor_ciudad) Return the first Proveedor filtered by the proveedor_ciudad column
  * @method Proveedor findOneByProveedorEstado(string $proveedor_estado) Return the first Proveedor filtered by the proveedor_estado column
  * @method Proveedor findOneByProveedorCodigopostal(string $proveedor_codigopostal) Return the first Proveedor filtered by the proveedor_codigopostal column
- * @method Proveedor findOneByProveedorEstatus(int $proveedor_estatus) Return the first Proveedor filtered by the proveedor_estatus column
+ * @method Proveedor findOneByProveedorEstatus(boolean $proveedor_estatus) Return the first Proveedor filtered by the proveedor_estatus column
  *
  * @method array findByIdproveedor(int $idproveedor) Return Proveedor objects filtered by the idproveedor column
  * @method array findByIdempresa(int $idempresa) Return Proveedor objects filtered by the idempresa column
@@ -98,7 +98,7 @@
  * @method array findByProveedorCiudad(string $proveedor_ciudad) Return Proveedor objects filtered by the proveedor_ciudad column
  * @method array findByProveedorEstado(string $proveedor_estado) Return Proveedor objects filtered by the proveedor_estado column
  * @method array findByProveedorCodigopostal(string $proveedor_codigopostal) Return Proveedor objects filtered by the proveedor_codigopostal column
- * @method array findByProveedorEstatus(int $proveedor_estatus) Return Proveedor objects filtered by the proveedor_estatus column
+ * @method array findByProveedorEstatus(boolean $proveedor_estatus) Return Proveedor objects filtered by the proveedor_estatus column
  *
  * @package    propel.generator.aersa.om
  */
@@ -705,38 +705,23 @@ abstract class BaseProveedorQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByProveedorEstatus(1234); // WHERE proveedor_estatus = 1234
-     * $query->filterByProveedorEstatus(array(12, 34)); // WHERE proveedor_estatus IN (12, 34)
-     * $query->filterByProveedorEstatus(array('min' => 12)); // WHERE proveedor_estatus >= 12
-     * $query->filterByProveedorEstatus(array('max' => 12)); // WHERE proveedor_estatus <= 12
+     * $query->filterByProveedorEstatus(true); // WHERE proveedor_estatus = true
+     * $query->filterByProveedorEstatus('yes'); // WHERE proveedor_estatus = true
      * </code>
      *
-     * @param     mixed $proveedorEstatus The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     boolean|string $proveedorEstatus The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ProveedorQuery The current query, for fluid interface
      */
     public function filterByProveedorEstatus($proveedorEstatus = null, $comparison = null)
     {
-        if (is_array($proveedorEstatus)) {
-            $useMinMax = false;
-            if (isset($proveedorEstatus['min'])) {
-                $this->addUsingAlias(ProveedorPeer::PROVEEDOR_ESTATUS, $proveedorEstatus['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($proveedorEstatus['max'])) {
-                $this->addUsingAlias(ProveedorPeer::PROVEEDOR_ESTATUS, $proveedorEstatus['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
+        if (is_string($proveedorEstatus)) {
+            $proveedorEstatus = in_array(strtolower($proveedorEstatus), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
         }
 
         return $this->addUsingAlias(ProveedorPeer::PROVEEDOR_ESTATUS, $proveedorEstatus, $comparison);

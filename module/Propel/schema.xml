@@ -7,6 +7,15 @@
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idproveedor" phpName="Idproveedor" type="INTEGER" required="true"/>
     <column name="abonoproveedor_balance" phpName="AbonoproveedorBalance" type="DECIMAL" size="15" scale="5" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_abonoproveedor" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="proveedor" name="idproveedor_abonoproveedor" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproveedor" foreign="idproveedor"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_abonoproveedor" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -33,6 +42,15 @@
     <column name="abonoproveedordetalle_mediodepago" phpName="AbonoproveedordetalleMediodepago" type="CHAR" sqlType="enum('cheque','efectivo','transferencia')" required="true"/>
     <column name="abonoproveedordetalle_chequecirculacion" phpName="AbonoproveedordetalleChequecirculacion" type="BOOLEAN" size="1" required="false"/>
     <column name="abonoproveedordetalle_fechacobrocheque" phpName="AbonoproveedordetalleFechacobrocheque" type="TIMESTAMP" required="false"/>
+    <foreign-key foreignTable="abonoproveedor" name="idabonoproveedor_abonoproveedordetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idabonoproveedor" foreign="idabonoproveedor"/>
+    </foreign-key>
+    <foreign-key foreignTable="cuentabancaria" name="idcuentabancaria_abonoproveedordetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcuentabancaria" foreign="idcuentabancaria"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_abonoproveedordetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idusuario">
       <index-column name="idusuario"/>
     </index>
@@ -57,6 +75,21 @@
     <column name="ajusteinventario_comentario" phpName="AjusteinventarioComentario" type="LONGVARCHAR" required="false"/>
     <column name="ajusteinventario_fecha" phpName="AjusteinventarioFecha" type="TIMESTAMP" required="true"/>
     <column name="ajusteinventario_tipo" phpName="AjusteinventarioTipo" type="CHAR" sqlType="enum('sobrante','faltante')" required="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_ajusteinventario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_ajusteinventario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_ajusteinventario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_ajusteinventario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_ajusteinventario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -102,8 +135,11 @@
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="almacen_nombre" phpName="AlmacenNombre" type="VARCHAR" size="255" required="true"/>
-    <column name="almacen_encargado" phpName="AlmacenEncargado" type="VARCHAR" size="45" required="true"/>
+    <column name="almacen_encargado" phpName="AlmacenEncargado" type="VARCHAR" size="255" required="false"/>
     <column name="almacen_estatus" phpName="AlmacenEstatus" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="sucursal" name="idsucursal_almacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
     <index name="idsucursal">
       <index-column name="idsucursal"/>
     </index>
@@ -116,6 +152,9 @@
     <column name="categoria_nombre" phpName="CategoriaNombre" type="VARCHAR" size="255" required="true"/>
     <column name="idcategoriapadre" phpName="Idcategoriapadre" type="INTEGER" required="false"/>
     <column name="categoria_almacenable" phpName="CategoriaAlmacenable" type="BOOLEAN" size="1" required="false"/>
+    <foreign-key foreignTable="categoria" name="idcategoriapadre_categoria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcategoriapadre" foreign="idcategoria"/>
+    </foreign-key>
     <index name="idcategoriapadre">
       <index-column name="idcategoriapadre"/>
     </index>
@@ -150,6 +189,9 @@
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="codigobarras_codigo" phpName="CodigobarrasCodigo" type="VARCHAR" size="45" required="true"/>
     <column name="codigobarras_cantidad" phpName="CodigobarrasCantidad" type="FLOAT" required="true"/>
+    <foreign-key foreignTable="producto" name="idproducto_codigobarras" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <index name="idproducto">
       <index-column name="idproducto"/>
     </index>
@@ -180,6 +222,24 @@
     <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <column name="compra_estatuspago" phpName="CompraEstatuspago" type="CHAR" sqlType="enum('pagada','nopagada')" required="false" defaultValue="nopagada"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_compra" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_compra" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_compra" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="proveedor" name="idproveedor_compra" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproveedor" foreign="idproveedor"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_compra" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_compra" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -208,13 +268,22 @@
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="false"/>
     <column name="compradetalle_cantidad" phpName="CompradetalleCantidad" type="FLOAT" required="true"/>
+    <column name="compradetalle_precio" phpName="CompradetallePrecio" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="compradetalle_revisada" phpName="CompradetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="compradetalle_costounitario" phpName="CompradetalleCostounitario" type="DECIMAL" size="15" scale="5" required="true"/>
-    <column name="compradetalle_precio" phpName="CompradetallePrecio" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="compradetalle_costounitarioneto" phpName="CompradetalleCostounitarioneto" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="compradetalle_descuento" phpName="CompradetalleDescuento" type="FLOAT" required="false"/>
     <column name="compradetalle_ieps" phpName="CompradetalleIeps" type="FLOAT" required="false"/>
     <column name="compradetalle_subtotal" phpName="CompradetalleSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_compradetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="compra" name="idcompra_compradetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcompra" foreign="idcompra"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_compradetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <index name="idcompra">
       <index-column name="idcompra"/>
     </index>
@@ -234,6 +303,12 @@
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="compranota_nota" phpName="CompranotaNota" type="LONGVARCHAR" required="true"/>
     <column name="compranota_fecha" phpName="CompranotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="compra" name="idcompra_compranota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcompra" foreign="idcompra"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_compranota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idcompra">
       <index-column name="idcompra"/>
     </index>
@@ -290,6 +365,12 @@
     <column name="cuentabancaria_banco" phpName="CuentabancariaBanco" type="VARCHAR" size="255" required="true"/>
     <column name="cuentabancaria_nocuenta" phpName="CuentabancariaNocuenta" type="VARCHAR" size="45" required="true"/>
     <column name="cuentabancaria_balance" phpName="CuentabancariaBalance" type="DECIMAL" size="15" scale="5" required="false"/>
+    <foreign-key foreignTable="empresa" name="idempresa_cuentabancaria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_cuentabancaria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -309,9 +390,18 @@
     <column name="cuentaporcobrar_cliente" phpName="CuentaporcobrarCliente" type="VARCHAR" size="255" required="true"/>
     <column name="cuentaporcobrar_fecha" phpName="CuentaporcobrarFecha" type="TIMESTAMP" required="true"/>
     <column name="cuentaporcobrar_referencia" phpName="CuentaporcobrarReferencia" type="LONGVARCHAR" required="false"/>
-    <column name="cuentaporcobrar_abonado" phpName="CuentaporcobrarAbonado" type="DECIMAL" size="15" scale="5" required="false"/>
+    <column name="cuentaporcobrar_abonado" phpName="CuentaporcobrarAbonado" type="DECIMAL" size="15" scale="5" required="false" defaultValue="0.00000"/>
     <column name="cuentaporcobrar_estatuspago" phpName="CuentaporcobrarEstatuspago" type="BOOLEAN" size="1" required="true"/>
     <column name="cuentaporcobrar_comprobante" phpName="CuentaporcobrarComprobante" type="LONGVARCHAR" required="false"/>
+    <foreign-key foreignTable="empresa" name="idempresa_cuentaporcobrar" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_cuentaporcobrar" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_cuentaporcobrar" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -342,9 +432,27 @@
     <column name="devolucion_iva" phpName="DevolucionIva" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_total" phpName="DevolucionTotal" type="DECIMAL" size="10" scale="5" required="false"/>
     <column name="devolucion_subtotal" phpName="DevolucionSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
-    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="TINYINT" required="false" defaultValue="1"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="proveedor" name="idproveedor_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproveedor" foreign="idproveedor"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_devolucion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idsucursal">
       <index-column name="idsucursal"/>
     </index>
@@ -379,6 +487,15 @@
     <column name="devoluciondetalle_descuento" phpName="DevoluciondetalleDescuento" type="FLOAT" required="false"/>
     <column name="devoluciondetalle_costounitario" phpName="DevoluciondetalleCostounitario" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="devoluciondetalle_costounitarioneto" phpName="DevoluciondetalleCostounitarioneto" type="DECIMAL" size="15" scale="5" required="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_devoluciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="devolucion" name="iddevolucion_devoluciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="iddevolucion" foreign="iddevolucion"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_devoluciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <index name="iddevolucion">
       <index-column name="iddevolucion"/>
     </index>
@@ -398,6 +515,12 @@
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="devolucionnota_nota" phpName="DevolucionnotaNota" type="LONGVARCHAR" required="true"/>
     <column name="devolucionnota_fecha" phpName="DevolucionnotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="devolucion" name="iddevolucion_devolucionnota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="iddevolucion" foreign="iddevolucion"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_devolucionnota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="iddevolucion">
       <index-column name="iddevolucion"/>
     </index>
@@ -414,8 +537,8 @@
     <column name="empresa_razonsocial" phpName="EmpresaRazonsocial" type="VARCHAR" size="255" required="true"/>
     <column name="empresa_estatus" phpName="EmpresaEstatus" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
     <column name="empresa_administracion" phpName="EmpresaAdministracion" type="BOOLEAN" size="1" required="false"/>
-    <column name="empresa_habilitarrecetas" phpName="EmpresaHabilitarrecetas" type="BOOLEAN" size="1" required="false"/>
-    <column name="empresa_habilitarproductos" phpName="EmpresaHabilitarproductos" type="BOOLEAN" size="1" required="false"/>
+    <column name="empresa_habilitarrecetas" phpName="EmpresaHabilitarrecetas" type="BOOLEAN" size="1" required="true"/>
+    <column name="empresa_habilitarproductos" phpName="EmpresaHabilitarproductos" type="BOOLEAN" size="1" required="true"/>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -441,6 +564,30 @@
     <column name="flujoefectivo_tipo" phpName="FlujoefectivoTipo" type="CHAR" sqlType="enum('ingreso','egreso')" required="true"/>
     <column name="flujoefectivo_chequecirculacion" phpName="FlujoefectivoChequecirculacion" type="BOOLEAN" size="1" required="false"/>
     <column name="flujoefectivo_fechacobrocheque" phpName="FlujoefectivoFechacobrocheque" type="TIMESTAMP" required="false"/>
+    <foreign-key foreignTable="compra" name="idcompra_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idcompra" foreign="idcompra"/>
+    </foreign-key>
+    <foreign-key foreignTable="cuentabancaria" name="idcuentabancaria_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idcuentabancaria" foreign="idcuentabancaria"/>
+    </foreign-key>
+    <foreign-key foreignTable="cuentaporcobrar" name="idcuentaporcobrar_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idcuentaporcobrar" foreign="idcuentaporcobrar"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="ingreso" name="idingreso_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idingreso" foreign="idingreso"/>
+    </foreign-key>
+    <foreign-key foreignTable="proveedor" name="idproveedor_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idproveedor" foreign="idproveedor"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_flujoefectivo" onDelete="RESTRICT" onUpdate="RESTRICT">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idcuentabancaria">
       <index-column name="idcuentabancaria"/>
     </index>
@@ -474,6 +621,12 @@
     <column name="folio" phpName="Folio" type="INTEGER" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_foliorequisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_foliorequisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -497,9 +650,21 @@
     <column name="ingreso_totalmiscelanea" phpName="IngresoTotalmiscelanea" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="ingreso_fecha" phpName="IngresoFecha" type="TIMESTAMP" required="true"/>
     <column name="ingreso_fechacreacion" phpName="IngresoFechacreacion" type="TIMESTAMP" required="true"/>
-    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="TINYINT" required="false" defaultValue="1"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <foreign-key foreignTable="usuario" name="idauditor_ingreso" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_ingreso" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_ingreso" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_ingreso" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -525,6 +690,15 @@
     <column name="ingresodetalle_IVA" phpName="IngresodetalleIva" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="ingresodetalle_total" phpName="IngresodetalleTotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="ingresodetalle_revisada" phpName="IngresodetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <foreign-key foreignTable="conceptoingreso" name="idconceptoingreso_ingresodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idconceptoingreso" foreign="idconceptoingreso"/>
+    </foreign-key>
+    <foreign-key foreignTable="ingreso" name="idingreso_ingresodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idingreso" foreign="idingreso"/>
+    </foreign-key>
+    <foreign-key foreignTable="rubroingreso" name="idrubroingreso_ingresodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idrubroingreso" foreign="idrubroingreso"/>
+    </foreign-key>
     <index name="idingreso">
       <index-column name="idingreso"/>
     </index>
@@ -544,6 +718,12 @@
     <column name="idingreso" phpName="Idingreso" type="INTEGER" required="true"/>
     <column name="ingresonota_nota" phpName="IngresonotaNota" type="LONGVARCHAR" required="true"/>
     <column name="ingresonota_fecha" phpName="IngresonotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="ingreso" name="ingresonota_idingreso" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idingreso" foreign="idingreso"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="ingresonota_idusuario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idusuario">
       <index-column name="idusuario"/>
     </index>
@@ -560,15 +740,30 @@
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
-    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="true"/>
+    <column name="idauditor" phpName="Idauditor" type="INTEGER" required="false"/>
     <column name="inventariomes_fecha" phpName="InventariomesFecha" type="DATE" required="true"/>
     <column name="inventariomes_revisada" phpName="InventariomesRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
-    <column name="inventariomes_finalalimentos" phpName="InventariomesFinalalimentos" type="DECIMAL" size="16" scale="6" required="false"/>
-    <column name="inventariomes_finalbebidas" phpName="InventariomesFinalbebidas" type="DECIMAL" size="16" scale="6" required="false"/>
-    <column name="inventariomes_faltantes" phpName="InventariomesFaltantes" type="DECIMAL" size="16" scale="6" required="false"/>
-    <column name="inventariomes_sobrantes" phpName="InventariomesSobrantes" type="DECIMAL" size="16" scale="6" required="false"/>
-    <column name="inventariomes_total" phpName="InventariomesTotal" type="DECIMAL" size="16" scale="6" required="false"/>
-    <column name="inventariomes_totalimportefisico" phpName="InventariomesTotalimportefisico" type="DECIMAL" size="16" scale="6" required="false"/>
+    <column name="inventariomes_finalalimentos" phpName="InventariomesFinalalimentos" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_finalbebidas" phpName="InventariomesFinalbebidas" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_faltantes" phpName="InventariomesFaltantes" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_sobrantes" phpName="InventariomesSobrantes" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_total" phpName="InventariomesTotal" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomes_totalimportefisico" phpName="InventariomesTotalimportefisico" type="DECIMAL" size="16" scale="6" required="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_inventariomes" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_inventariomes" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_inventariomes" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_inventariomes" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_inventariomes" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idauditor">
       <index-column name="idauditor"/>
     </index>
@@ -594,22 +789,25 @@
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="inventariomesdetalle_stockinicial" phpName="InventariomesdetalleStockinicial" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_stockteorico" phpName="InventariomesdetalleStockteorico" type="FLOAT" required="true"/>
+    <column name="inventariomesdetalle_explosion" phpName="InventariomesdetalleExplosion" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_stockfisico" phpName="InventariomesdetalleStockfisico" type="FLOAT" required="true"/>
-    <column name="inventariomesdetalle_explosion" phpName="InventariomesdetalleExplosion" type="FLOAT" required="false"/>
-    <column name="inventariomesdetalle_totalfisico" phpName="InventariomesdetalleTotalfisico" type="FLOAT" required="false"/>
-    <column name="inventariomesdetalle_reajuste" phpName="InventariomesdetalleReajuste" type="FLOAT" required="true"/>
+    <column name="inventariomesdetalle_totalfisico" phpName="InventariomesdetalleTotalfisico" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_diferencia" phpName="InventariomesdetalleDiferencia" type="FLOAT" required="false"/>
     <column name="inventariomesdetalle_revisada" phpName="InventariomesdetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="inventariomesdetalle_ingresocompra" phpName="InventariomesdetalleIngresocompra" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_ingresorequisicion" phpName="InventariomesdetalleIngresorequisicion" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_egresorequisicion" phpName="InventariomesdetalleEgresorequisicion" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_egresoventa" phpName="InventariomesdetalleEgresoventa" type="FLOAT" required="true"/>
+    <column name="inventariomesdetalle_reajuste" phpName="InventariomesdetalleReajuste" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_ingresoordentablajeria" phpName="InventariomesdetalleIngresoordentablajeria" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_egresoordentablajeria" phpName="InventariomesdetalleEgresoordentablajeria" type="FLOAT" required="true"/>
     <column name="inventariomesdetalle_egresodevolucion" phpName="InventariomesdetalleEgresodevolucion" type="FLOAT" required="true"/>
-    <column name="inventariomesdetalle_costopromedio" phpName="InventariomesdetalleCostopromedio" type="DECIMAL" size="16" scale="6" required="false"/>
-    <column name="inventariomesdetalle_difimporte" phpName="InventariomesdetalleDifimporte" type="DECIMAL" size="16" scale="6" required="false"/>
-    <column name="inventariomesdetalle_importefisico" phpName="InventariomesdetalleImportefisico" type="DECIMAL" size="16" scale="6" required="false"/>
+    <column name="inventariomesdetalle_costopromedio" phpName="InventariomesdetalleCostopromedio" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomesdetalle_difimporte" phpName="InventariomesdetalleDifimporte" type="DECIMAL" size="16" scale="6" required="true"/>
+    <column name="inventariomesdetalle_importefisico" phpName="InventariomesdetalleImportefisico" type="DECIMAL" size="16" scale="6" required="true"/>
+    <foreign-key foreignTable="inventariomes" name="idinventariomes_inventariomesdetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idinventariomes" foreign="idinventariomes"/>
+    </foreign-key>
     <index name="idinventariomes">
       <index-column name="idinventariomes"/>
     </index>
@@ -623,6 +821,12 @@
     <column name="idinventariomesdetalle" phpName="Idinventariomesdetalle" type="INTEGER" required="true"/>
     <column name="inventariomesdetallenota_nota" phpName="InventariomesdetallenotaNota" type="LONGVARCHAR" required="true"/>
     <column name="inventariomesdetallenota_fecha" phpName="InventariomesdetallenotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="inventariomesdetalle" name="idinventariomesdetalle_inventariomesdetallenota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idinventariomesdetalle" foreign="idinventariomesdetalle"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_inventariomesdetallenota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idinventariomesdetalle">
       <index-column name="idinventariomesdetalle"/>
     </index>
@@ -650,9 +854,27 @@
     <column name="notacredito_iva" phpName="NotacreditoIva" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacredito_total" phpName="NotacreditoTotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacredito_subtotal" phpName="NotacreditoSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
-    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="TINYINT" required="false" defaultValue="1"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="proveedor" name="idproveedor_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproveedor" foreign="idproveedor"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_notacredito" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idsucursal">
       <index-column name="idsucursal"/>
     </index>
@@ -687,6 +909,15 @@
     <column name="notacreditodetalle_subtotal" phpName="NotacreditodetalleSubtotal" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacreditodetalle_costounitario" phpName="NotacreditodetalleCostounitario" type="DECIMAL" size="15" scale="5" required="false"/>
     <column name="notacreditodetalle_costounitarioneto" phpName="NotacreditodetalleCostounitarioneto" type="DECIMAL" size="15" scale="5" required="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_notacreditodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="notacredito" name="idnotacredito_notacreditodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idnotacredito" foreign="idnotacredito"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_notacreditodetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <index name="idnotacredito">
       <index-column name="idnotacredito"/>
     </index>
@@ -705,6 +936,13 @@
     <column name="idnotacredito" phpName="Idnotacredito" type="INTEGER" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="notacreditonota_nota" phpName="NotacreditonotaNota" type="LONGVARCHAR" required="true"/>
+    <column name="notacreditonota_fecha" phpName="NotacreditonotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="notacredito" name="idnotacredito_notacreditonota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idnotacredito" foreign="idnotacredito"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_notacreditonota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idnotacredito">
       <index-column name="idnotacredito"/>
     </index>
@@ -717,15 +955,27 @@
   </table>
   <table name="notificacion" phpName="Notificacion" idMethod="native">
     <column name="idnotificacion" phpName="Idnotificacion" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="notificacion_proceso" phpName="NotificacionProceso" type="CHAR" sqlType="enum('compra','requisicion','tablajeria','credito','devolucion','consignacion','ingresos','venta','ajustesinventarios','cierresemana')" required="true"/>
+    <column name="notificacion_proceso" phpName="NotificacionProceso" type="CHAR" sqlType="enum('cierresemana','compra','requisicion','tablajeria','credito','devolucion','consignacion','ingresos','venta','ajustesinventarios')" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
     <column name="idproceso" phpName="Idproceso" type="INTEGER" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="rol1" phpName="Rol1" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="rol2" phpName="Rol2" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="rol3" phpName="Rol3" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="rol4" phpName="Rol4" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="rol5" phpName="Rol5" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
-    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
-    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_notificacion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_notificacion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
+    </index>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
+    </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -748,16 +998,37 @@
     <column name="ordentablajeria_precioneto" phpName="OrdentablajeriaPrecioneto" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="ordentablajeria_inyeccion" phpName="OrdentablajeriaInyeccion" type="FLOAT" required="false"/>
     <column name="ordentablajeria_merma" phpName="OrdentablajeriaMerma" type="FLOAT" required="true"/>
-    <column name="ordentablajeria_porcentajemerma" phpName="OrdentablajeriaPorcentajemerma" type="FLOAT" required="false"/>
+    <column name="ordentablajeria_porcentajemerma" phpName="OrdentablajeriaPorcentajemerma" type="FLOAT" required="true"/>
     <column name="ordentablajeria_aprovechamiento" phpName="OrdentablajeriaAprovechamiento" type="FLOAT" required="true"/>
     <column name="ordentablajeria_revisada" phpName="OrdentablajeriaRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="ordentablajeria_folio" phpName="OrdentablajeriaFolio" type="VARCHAR" size="10" required="true"/>
     <column name="ordentablajeria_fecha" phpName="OrdentablajeriaFecha" type="TIMESTAMP" required="true"/>
     <column name="ordentablajeria_fechacreacion" phpName="OrdentablajeriaFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="ordentablajeria_pesoporcion" phpName="OrdentablajeriaPesoporcion" type="FLOAT" required="false"/>
-    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="TINYINT" required="false" defaultValue="1"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacendestino_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacendestino" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="almacen" name="idalmacenorigen_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacenorigen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_ordentablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -793,6 +1064,12 @@
     <column name="ordentablajeriadetalle_pesototal" phpName="OrdentablajeriadetallePesototal" type="FLOAT" required="true"/>
     <column name="ordentablajeriadetalle_subtotal" phpName="OrdentablajeriadetalleSubtotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="ordentablajeriadetalle_revisada" phpName="OrdentablajeriadetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <foreign-key foreignTable="ordentablajeria" name="idordentablajeria_ordentablajeriadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idordentablajeria" foreign="idordentablajeria"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_ordentablajeriadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <index name="idordentablajeria">
       <index-column name="idordentablajeria"/>
     </index>
@@ -825,6 +1102,12 @@
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="plantillatablajeria_nombre" phpName="PlantillatablajeriaNombre" type="VARCHAR" size="255" required="true"/>
     <column name="plantillatablajeria_descripcion" phpName="PlantillatablajeriaDescripcion" type="LONGVARCHAR" required="false"/>
+    <foreign-key foreignTable="empresa" name="idempresa_plantillatablajeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_plantillatablejeria" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -839,6 +1122,12 @@
     <column name="idplantillatablajeriadetalle" phpName="Idplantillatablajeriadetalle" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idplantillatablajeria" phpName="Idplantillatablajeria" type="INTEGER" required="true"/>
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="plantillatablajeria" name="idplantillatablajeria_plantillatablajeriadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idplantillatablajeria" foreign="idplantillatablajeria"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_plantillatablajeriadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
     <index name="idplantillatablajeria">
       <index-column name="idplantillatablajeria"/>
     </index>
@@ -856,14 +1145,26 @@
     <column name="producto_nombre" phpName="ProductoNombre" type="LONGVARCHAR" required="true"/>
     <column name="idcategoria" phpName="Idcategoria" type="INTEGER" required="false"/>
     <column name="idsubcategoria" phpName="Idsubcategoria" type="INTEGER" required="false"/>
-    <column name="producto_rendimiento" phpName="ProductoRendimiento" type="INTEGER" required="false"/>
+    <column name="producto_rendimiento" phpName="ProductoRendimiento" type="FLOAT" required="false"/>
     <column name="producto_ultimocosto" phpName="ProductoUltimocosto" type="FLOAT" required="false"/>
-    <column name="producto_baja" phpName="ProductoBaja" type="BOOLEAN" size="1" required="true"/>
+    <column name="producto_baja" phpName="ProductoBaja" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="producto_tipo" phpName="ProductoTipo" type="CHAR" sqlType="enum('simple','subreceta','plu')" required="true"/>
     <column name="producto_costo" phpName="ProductoCosto" type="FLOAT" required="false"/>
     <column name="producto_iva" phpName="ProductoIva" type="BOOLEAN" size="1" required="true"/>
     <column name="producto_precio" phpName="ProductoPrecio" type="FLOAT" required="false"/>
-    <column name="producto_rendimientooriginal" phpName="ProductoRendimientooriginal" type="FLOAT" required="true"/>
+    <column name="producto_rendimientooriginal" phpName="ProductoRendimientooriginal" type="FLOAT" required="false"/>
+    <foreign-key foreignTable="categoria" name="idcategoria_producto" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idcategoria" foreign="idcategoria"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_producto" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="categoria" name="idsubcategoria_producto" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsubcategoria" foreign="idcategoria"/>
+    </foreign-key>
+    <foreign-key foreignTable="unidadmedida" name="idunidadmedida_producto" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idunidadmedida" foreign="idunidadmedida"/>
+    </foreign-key>
     <index name="idunidadmedida">
       <index-column name="idunidadmedida"/>
     </index>
@@ -907,6 +1208,18 @@
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
     <column name="idalmacen" phpName="Idalmacen" type="INTEGER" required="true"/>
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_productosucursalalmacen" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -937,7 +1250,10 @@
     <column name="proveedor_ciudad" phpName="ProveedorCiudad" type="VARCHAR" size="45" required="false"/>
     <column name="proveedor_estado" phpName="ProveedorEstado" type="VARCHAR" size="45" required="false"/>
     <column name="proveedor_codigopostal" phpName="ProveedorCodigopostal" type="VARCHAR" size="45" required="false"/>
-    <column name="proveedor_estatus" phpName="ProveedorEstatus" type="TINYINT" required="false" defaultValue="1"/>
+    <column name="proveedor_estatus" phpName="ProveedorEstatus" type="BOOLEAN" size="1" required="false"/>
+    <foreign-key foreignTable="empresa" name="idempresa_proveedor" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -971,8 +1287,14 @@
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="idproductoreceta" phpName="Idproductoreceta" type="INTEGER" required="true"/>
     <column name="receta_cantidad" phpName="RecetaCantidad" type="FLOAT" required="true"/>
-    <column name="receta_cantidadoriginal" phpName="RecetaCantidadoriginal" type="FLOAT" required="true"/>
-    <column name="receta_unidad" phpName="RecetaUnidad" type="CHAR" sqlType="enum('Botella','Pieza','Onza','Copa vino 187.5 ML','Copa vino 150 ML')" required="true"/>
+    <column name="receta_cantidadoriginal" phpName="RecetaCantidadoriginal" type="FLOAT" required="false"/>
+    <column name="receta_unidad" phpName="RecetaUnidad" type="CHAR" sqlType="enum('Botella','Pieza','Onza','Copa vino 187.5 ML','Copa vino 150 ML')" required="false"/>
+    <foreign-key foreignTable="producto" name="idproducto_receta" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproductoreceta_receta" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproductoreceta" foreign="idproducto"/>
+    </foreign-key>
     <index name="idproducto">
       <index-column name="idproducto"/>
     </index>
@@ -998,9 +1320,33 @@
     <column name="requisicion_revisada" phpName="RequisicionRevisada" type="BOOLEAN" size="1" required="true"/>
     <column name="requisicion_folio" phpName="RequisicionFolio" type="VARCHAR" size="10" required="true"/>
     <column name="requisicion_total" phpName="RequisicionTotal" type="DECIMAL" size="15" scale="5" required="false"/>
-    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="TINYINT" required="false" defaultValue="1"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <foreign-key foreignTable="almacen" name="idalmacendestino_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacendestino" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="almacen" name="idalmacenorigen_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacenorigen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idauditor_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="conceptosalida" name="idconceptosalida_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idconceptosalida" foreign="idconceptosalida"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursaldestino_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursaldestino" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursalorigen_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursalorigen" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_requisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idconceptosalida">
       <index-column name="idconceptosalida"/>
     </index>
@@ -1038,6 +1384,16 @@
     <column name="requisiciondetalle_preciounitario" phpName="RequisiciondetallePreciounitario" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="requisiciondetalle_subtotal" phpName="RequisiciondetalleSubtotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="idpadre" phpName="Idpadre" type="INTEGER" required="false"/>
+    <column name="requisiciondetalle_contable" phpName="RequisiciondetalleContable" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <foreign-key foreignTable="requisiciondetalle" name="idpadre_requisiciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idpadre" foreign="idrequisiciondetalle"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_requisiciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <foreign-key foreignTable="requisicion" name="idrequisicion_requisiciondetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idrequisicion" foreign="idrequisicion"/>
+    </foreign-key>
     <index name="idrequisicion">
       <index-column name="idrequisicion"/>
     </index>
@@ -1057,6 +1413,12 @@
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="requisicionnota_nota" phpName="RequisicionnotaNota" type="LONGVARCHAR" required="true"/>
     <column name="requisicionnota_fecha" phpName="RequisicionnotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="requisicion" name="idrequisicion_requisicionnota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idrequisicion" foreign="idrequisicion"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_requisicionnota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idusuario">
       <index-column name="idusuario"/>
     </index>
@@ -1112,6 +1474,9 @@
     <column name="sucursal_estatus" phpName="SucursalEstatus" type="BOOLEAN" size="1" required="true" defaultValue="true"/>
     <column name="sucursal_anioactivo" phpName="SucursalAnioactivo" type="INTEGER" required="true"/>
     <column name="sucursal_mesactivo" phpName="SucursalMesactivo" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_sucursal" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -1133,6 +1498,12 @@
     <column name="trabajadorespromedio_anio" phpName="TrabajadorespromedioAnio" type="INTEGER" required="true"/>
     <column name="trabajadorespromedio_mes" phpName="TrabajadorespromedioMes" type="INTEGER" required="true"/>
     <column name="trabajadorespromedio_cantidad" phpName="TrabajadorespromedioCantidad" type="FLOAT" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_trabajadorespromedio" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_trabajadorespromedio" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -1157,6 +1528,9 @@
     <column name="usuario_estatus" phpName="UsuarioEstatus" type="BOOLEAN" size="1" required="true"/>
     <column name="usuario_username" phpName="UsuarioUsername" type="VARCHAR" size="45" required="true"/>
     <column name="usuario_password" phpName="UsuarioPassword" type="VARCHAR" size="45" required="true"/>
+    <foreign-key foreignTable="rol" name="idrol_usuario" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idrol" foreign="idrol"/>
+    </foreign-key>
     <index name="idrol">
       <index-column name="idrol"/>
     </index>
@@ -1168,6 +1542,12 @@
     <column name="idusuarioempresa" phpName="Idusuarioempresa" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="empresa" name="idempresa_usuarioempresa" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_usuarioempresa" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idusuario">
       <index-column name="idusuario"/>
     </index>
@@ -1182,6 +1562,12 @@
     <column name="idusuariosucursal" phpName="Idusuariosucursal" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="idusuario" phpName="Idusuario" type="INTEGER" required="true"/>
     <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="sucursal" name="idsucursal_usuariosucursal" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_usuariosucursal" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idusuario">
       <index-column name="idusuario"/>
     </index>
@@ -1203,9 +1589,21 @@
     <column name="venta_fechacreacion" phpName="VentaFechacreacion" type="TIMESTAMP" required="true"/>
     <column name="venta_total" phpName="VentaTotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="venta_folio" phpName="VentaFolio" type="VARCHAR" size="10" required="true"/>
-    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="TINYINT" required="false" defaultValue="1"/>
-    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="TINYINT" required="false" defaultValue="1"/>
+    <column name="notaauditorempresa" phpName="Notaauditorempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaalmacenistaempresa" phpName="Notaalmacenistaempresa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <column name="notaauditoraersa" phpName="Notaauditoraersa" type="BOOLEAN" size="1" required="false" defaultValue="true"/>
+    <foreign-key foreignTable="usuario" name="idauditor_venta" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idauditor" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="empresa" name="idempresa_venta" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="idsucursal_venta" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <foreign-key foreignTable="usuario" name="idusuario_venta" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
     <index name="idempresa">
       <index-column name="idempresa"/>
     </index>
@@ -1231,6 +1629,19 @@
     <column name="ventadetalle_subtotal" phpName="VentadetalleSubtotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="idpadre" phpName="Idpadre" type="INTEGER" required="false"/>
     <column name="ventadetalle_revisada" phpName="VentadetalleRevisada" type="BOOLEAN" size="1" required="true"/>
+    <column name="ventadetalle_contable" phpName="VentadetalleContable" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
+    <foreign-key foreignTable="almacen" name="idalmacen_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idalmacen" foreign="idalmacen"/>
+    </foreign-key>
+    <foreign-key foreignTable="ventadetalle" name="idpadre_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idpadre" foreign="idventadetalle"/>
+    </foreign-key>
+    <foreign-key foreignTable="producto" name="idproducto_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idproducto" foreign="idproducto"/>
+    </foreign-key>
+    <foreign-key foreignTable="venta" name="idventa_ventadetalle" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idventa" foreign="idventa"/>
+    </foreign-key>
     <index name="idventa">
       <index-column name="idventa"/>
     </index>
@@ -1253,6 +1664,12 @@
     <column name="idventa" phpName="Idventa" type="INTEGER" required="true"/>
     <column name="ventanota_nota" phpName="VentanotaNota" type="VARCHAR" size="45" required="true"/>
     <column name="ventanota_fecha" phpName="VentanotaFecha" type="TIMESTAMP" required="true"/>
+    <foreign-key foreignTable="usuario" name="idusuario_ventanota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idusuario" foreign="idusuario"/>
+    </foreign-key>
+    <foreign-key foreignTable="venta" name="idventa_ventanota" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idventa" foreign="idventa"/>
+    </foreign-key>
     <index name="idusuario">
       <index-column name="idusuario"/>
     </index>

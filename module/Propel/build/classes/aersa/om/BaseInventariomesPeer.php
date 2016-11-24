@@ -420,6 +420,9 @@ abstract class BaseInventariomesPeer
      */
     public static function clearRelatedInstancePool()
     {
+        // Invalidate objects in CierresemananotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CierresemananotaPeer::clearInstancePool();
         // Invalidate objects in InventariomesdetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         InventariomesdetallePeer::clearInstancePool();
@@ -2529,6 +2532,12 @@ abstract class BaseInventariomesPeer
         $objects = InventariomesPeer::doSelect($criteria, $con);
         foreach ($objects as $obj) {
 
+
+            // delete related Cierresemananota objects
+            $criteria = new Criteria(CierresemananotaPeer::DATABASE_NAME);
+
+            $criteria->add(CierresemananotaPeer::IDCIERRESEMANA, $obj->getIdinventariomes());
+            $affectedRows += CierresemananotaPeer::doDelete($criteria, $con);
 
             // delete related Inventariomesdetalle objects
             $criteria = new Criteria(InventariomesdetallePeer::DATABASE_NAME);

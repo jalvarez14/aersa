@@ -386,6 +386,12 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in AjusteinventarioPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AjusteinventarioPeer::clearInstancePool();
+        // Invalidate objects in AjusteinventarionotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AjusteinventarionotaPeer::clearInstancePool();
+        // Invalidate objects in CierresemananotaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        CierresemananotaPeer::clearInstancePool();
         // Invalidate objects in CompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompraPeer::clearInstancePool();
@@ -440,9 +446,6 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in OrdentablajeriaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         OrdentablajeriaPeer::clearInstancePool();
-        // Invalidate objects in OrdentablajerianotaPeer instance pool,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        OrdentablajerianotaPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -1051,6 +1054,18 @@ abstract class BaseUsuarioPeer
             $criteria->add(AjusteinventarioPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += AjusteinventarioPeer::doDelete($criteria, $con);
 
+            // delete related Ajusteinventarionota objects
+            $criteria = new Criteria(AjusteinventarionotaPeer::DATABASE_NAME);
+
+            $criteria->add(AjusteinventarionotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += AjusteinventarionotaPeer::doDelete($criteria, $con);
+
+            // delete related Cierresemananota objects
+            $criteria = new Criteria(CierresemananotaPeer::DATABASE_NAME);
+
+            $criteria->add(CierresemananotaPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += CierresemananotaPeer::doDelete($criteria, $con);
+
             // delete related Compra objects
             $criteria = new Criteria(CompraPeer::DATABASE_NAME);
 
@@ -1158,12 +1173,6 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(OrdentablajeriaPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
-
-            // delete related Ordentablajerianota objects
-            $criteria = new Criteria(OrdentablajerianotaPeer::DATABASE_NAME);
-
-            $criteria->add(OrdentablajerianotaPeer::IDUSUARIO, $obj->getIdusuario());
-            $affectedRows += OrdentablajerianotaPeer::doDelete($criteria, $con);
 
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);

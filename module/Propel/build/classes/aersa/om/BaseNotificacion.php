@@ -42,10 +42,22 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     protected $notificacion_proceso;
 
     /**
+     * The value for the idempresa field.
+     * @var        int
+     */
+    protected $idempresa;
+
+    /**
      * The value for the idproceso field.
      * @var        int
      */
     protected $idproceso;
+
+    /**
+     * The value for the idsucursal field.
+     * @var        int
+     */
+    protected $idsucursal;
 
     /**
      * The value for the rol1 field.
@@ -83,16 +95,14 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     protected $rol5;
 
     /**
-     * The value for the idsucursal field.
-     * @var        int
+     * @var        Empresa
      */
-    protected $idsucursal;
+    protected $aEmpresa;
 
     /**
-     * The value for the idempresa field.
-     * @var        int
+     * @var        Sucursal
      */
-    protected $idempresa;
+    protected $aSucursal;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -162,6 +172,17 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [idempresa] column value.
+     *
+     * @return int
+     */
+    public function getIdempresa()
+    {
+
+        return $this->idempresa;
+    }
+
+    /**
      * Get the [idproceso] column value.
      *
      * @return int
@@ -170,6 +191,17 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     {
 
         return $this->idproceso;
+    }
+
+    /**
+     * Get the [idsucursal] column value.
+     *
+     * @return int
+     */
+    public function getIdsucursal()
+    {
+
+        return $this->idsucursal;
     }
 
     /**
@@ -228,28 +260,6 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     }
 
     /**
-     * Get the [idsucursal] column value.
-     *
-     * @return int
-     */
-    public function getIdsucursal()
-    {
-
-        return $this->idsucursal;
-    }
-
-    /**
-     * Get the [idempresa] column value.
-     *
-     * @return int
-     */
-    public function getIdempresa()
-    {
-
-        return $this->idempresa;
-    }
-
-    /**
      * Set the value of [idnotificacion] column.
      *
      * @param  int $v new value
@@ -292,6 +302,31 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     } // setNotificacionProceso()
 
     /**
+     * Set the value of [idempresa] column.
+     *
+     * @param  int $v new value
+     * @return Notificacion The current object (for fluent API support)
+     */
+    public function setIdempresa($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idempresa !== $v) {
+            $this->idempresa = $v;
+            $this->modifiedColumns[] = NotificacionPeer::IDEMPRESA;
+        }
+
+        if ($this->aEmpresa !== null && $this->aEmpresa->getIdempresa() !== $v) {
+            $this->aEmpresa = null;
+        }
+
+
+        return $this;
+    } // setIdempresa()
+
+    /**
      * Set the value of [idproceso] column.
      *
      * @param  int $v new value
@@ -311,6 +346,31 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
 
         return $this;
     } // setIdproceso()
+
+    /**
+     * Set the value of [idsucursal] column.
+     *
+     * @param  int $v new value
+     * @return Notificacion The current object (for fluent API support)
+     */
+    public function setIdsucursal($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idsucursal !== $v) {
+            $this->idsucursal = $v;
+            $this->modifiedColumns[] = NotificacionPeer::IDSUCURSAL;
+        }
+
+        if ($this->aSucursal !== null && $this->aSucursal->getIdsucursal() !== $v) {
+            $this->aSucursal = null;
+        }
+
+
+        return $this;
+    } // setIdsucursal()
 
     /**
      * Sets the value of the [rol1] column.
@@ -458,48 +518,6 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     } // setRol5()
 
     /**
-     * Set the value of [idsucursal] column.
-     *
-     * @param  int $v new value
-     * @return Notificacion The current object (for fluent API support)
-     */
-    public function setIdsucursal($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idsucursal !== $v) {
-            $this->idsucursal = $v;
-            $this->modifiedColumns[] = NotificacionPeer::IDSUCURSAL;
-        }
-
-
-        return $this;
-    } // setIdsucursal()
-
-    /**
-     * Set the value of [idempresa] column.
-     *
-     * @param  int $v new value
-     * @return Notificacion The current object (for fluent API support)
-     */
-    public function setIdempresa($v)
-    {
-        if ($v !== null && is_numeric($v)) {
-            $v = (int) $v;
-        }
-
-        if ($this->idempresa !== $v) {
-            $this->idempresa = $v;
-            $this->modifiedColumns[] = NotificacionPeer::IDEMPRESA;
-        }
-
-
-        return $this;
-    } // setIdempresa()
-
-    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -553,14 +571,14 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
 
             $this->idnotificacion = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
             $this->notificacion_proceso = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-            $this->idproceso = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-            $this->rol1 = ($row[$startcol + 3] !== null) ? (boolean) $row[$startcol + 3] : null;
-            $this->rol2 = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
-            $this->rol3 = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
-            $this->rol4 = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
-            $this->rol5 = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
-            $this->idsucursal = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-            $this->idempresa = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+            $this->idempresa = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
+            $this->idproceso = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+            $this->idsucursal = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+            $this->rol1 = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
+            $this->rol2 = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
+            $this->rol3 = ($row[$startcol + 7] !== null) ? (boolean) $row[$startcol + 7] : null;
+            $this->rol4 = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
+            $this->rol5 = ($row[$startcol + 9] !== null) ? (boolean) $row[$startcol + 9] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -593,6 +611,12 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
+        if ($this->aEmpresa !== null && $this->idempresa !== $this->aEmpresa->getIdempresa()) {
+            $this->aEmpresa = null;
+        }
+        if ($this->aSucursal !== null && $this->idsucursal !== $this->aSucursal->getIdsucursal()) {
+            $this->aSucursal = null;
+        }
     } // ensureConsistency
 
     /**
@@ -632,6 +656,8 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aEmpresa = null;
+            $this->aSucursal = null;
         } // if (deep)
     }
 
@@ -745,6 +771,25 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
 
+            // We call the save method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aEmpresa !== null) {
+                if ($this->aEmpresa->isModified() || $this->aEmpresa->isNew()) {
+                    $affectedRows += $this->aEmpresa->save($con);
+                }
+                $this->setEmpresa($this->aEmpresa);
+            }
+
+            if ($this->aSucursal !== null) {
+                if ($this->aSucursal->isModified() || $this->aSucursal->isNew()) {
+                    $affectedRows += $this->aSucursal->save($con);
+                }
+                $this->setSucursal($this->aSucursal);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -788,8 +833,14 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         if ($this->isColumnModified(NotificacionPeer::NOTIFICACION_PROCESO)) {
             $modifiedColumns[':p' . $index++]  = '`notificacion_proceso`';
         }
+        if ($this->isColumnModified(NotificacionPeer::IDEMPRESA)) {
+            $modifiedColumns[':p' . $index++]  = '`idempresa`';
+        }
         if ($this->isColumnModified(NotificacionPeer::IDPROCESO)) {
             $modifiedColumns[':p' . $index++]  = '`idproceso`';
+        }
+        if ($this->isColumnModified(NotificacionPeer::IDSUCURSAL)) {
+            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
         }
         if ($this->isColumnModified(NotificacionPeer::ROL1)) {
             $modifiedColumns[':p' . $index++]  = '`rol1`';
@@ -805,12 +856,6 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         }
         if ($this->isColumnModified(NotificacionPeer::ROL5)) {
             $modifiedColumns[':p' . $index++]  = '`rol5`';
-        }
-        if ($this->isColumnModified(NotificacionPeer::IDSUCURSAL)) {
-            $modifiedColumns[':p' . $index++]  = '`idsucursal`';
-        }
-        if ($this->isColumnModified(NotificacionPeer::IDEMPRESA)) {
-            $modifiedColumns[':p' . $index++]  = '`idempresa`';
         }
 
         $sql = sprintf(
@@ -829,8 +874,14 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
                     case '`notificacion_proceso`':
                         $stmt->bindValue($identifier, $this->notificacion_proceso, PDO::PARAM_STR);
                         break;
+                    case '`idempresa`':
+                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
+                        break;
                     case '`idproceso`':
                         $stmt->bindValue($identifier, $this->idproceso, PDO::PARAM_INT);
+                        break;
+                    case '`idsucursal`':
+                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
                         break;
                     case '`rol1`':
                         $stmt->bindValue($identifier, (int) $this->rol1, PDO::PARAM_INT);
@@ -846,12 +897,6 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
                         break;
                     case '`rol5`':
                         $stmt->bindValue($identifier, (int) $this->rol5, PDO::PARAM_INT);
-                        break;
-                    case '`idsucursal`':
-                        $stmt->bindValue($identifier, $this->idsucursal, PDO::PARAM_INT);
-                        break;
-                    case '`idempresa`':
-                        $stmt->bindValue($identifier, $this->idempresa, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -947,6 +992,24 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
             $failureMap = array();
 
 
+            // We call the validate method on the following object(s) if they
+            // were passed to this object by their corresponding set
+            // method.  This object relates to these object(s) by a
+            // foreign key reference.
+
+            if ($this->aEmpresa !== null) {
+                if (!$this->aEmpresa->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aEmpresa->getValidationFailures());
+                }
+            }
+
+            if ($this->aSucursal !== null) {
+                if (!$this->aSucursal->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aSucursal->getValidationFailures());
+                }
+            }
+
+
             if (($retval = NotificacionPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -994,28 +1057,28 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
                 return $this->getNotificacionProceso();
                 break;
             case 2:
-                return $this->getIdproceso();
+                return $this->getIdempresa();
                 break;
             case 3:
-                return $this->getRol1();
+                return $this->getIdproceso();
                 break;
             case 4:
-                return $this->getRol2();
-                break;
-            case 5:
-                return $this->getRol3();
-                break;
-            case 6:
-                return $this->getRol4();
-                break;
-            case 7:
-                return $this->getRol5();
-                break;
-            case 8:
                 return $this->getIdsucursal();
                 break;
+            case 5:
+                return $this->getRol1();
+                break;
+            case 6:
+                return $this->getRol2();
+                break;
+            case 7:
+                return $this->getRol3();
+                break;
+            case 8:
+                return $this->getRol4();
+                break;
             case 9:
-                return $this->getIdempresa();
+                return $this->getRol5();
                 break;
             default:
                 return null;
@@ -1034,10 +1097,11 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
         if (isset($alreadyDumpedObjects['Notificacion'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -1047,20 +1111,28 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
         $result = array(
             $keys[0] => $this->getIdnotificacion(),
             $keys[1] => $this->getNotificacionProceso(),
-            $keys[2] => $this->getIdproceso(),
-            $keys[3] => $this->getRol1(),
-            $keys[4] => $this->getRol2(),
-            $keys[5] => $this->getRol3(),
-            $keys[6] => $this->getRol4(),
-            $keys[7] => $this->getRol5(),
-            $keys[8] => $this->getIdsucursal(),
-            $keys[9] => $this->getIdempresa(),
+            $keys[2] => $this->getIdempresa(),
+            $keys[3] => $this->getIdproceso(),
+            $keys[4] => $this->getIdsucursal(),
+            $keys[5] => $this->getRol1(),
+            $keys[6] => $this->getRol2(),
+            $keys[7] => $this->getRol3(),
+            $keys[8] => $this->getRol4(),
+            $keys[9] => $this->getRol5(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
+        if ($includeForeignObjects) {
+            if (null !== $this->aEmpresa) {
+                $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aSucursal) {
+                $result['Sucursal'] = $this->aSucursal->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+        }
 
         return $result;
     }
@@ -1101,28 +1173,28 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
                 $this->setNotificacionProceso($value);
                 break;
             case 2:
-                $this->setIdproceso($value);
+                $this->setIdempresa($value);
                 break;
             case 3:
-                $this->setRol1($value);
+                $this->setIdproceso($value);
                 break;
             case 4:
-                $this->setRol2($value);
-                break;
-            case 5:
-                $this->setRol3($value);
-                break;
-            case 6:
-                $this->setRol4($value);
-                break;
-            case 7:
-                $this->setRol5($value);
-                break;
-            case 8:
                 $this->setIdsucursal($value);
                 break;
+            case 5:
+                $this->setRol1($value);
+                break;
+            case 6:
+                $this->setRol2($value);
+                break;
+            case 7:
+                $this->setRol3($value);
+                break;
+            case 8:
+                $this->setRol4($value);
+                break;
             case 9:
-                $this->setIdempresa($value);
+                $this->setRol5($value);
                 break;
         } // switch()
     }
@@ -1150,14 +1222,14 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
 
         if (array_key_exists($keys[0], $arr)) $this->setIdnotificacion($arr[$keys[0]]);
         if (array_key_exists($keys[1], $arr)) $this->setNotificacionProceso($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setIdproceso($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setRol1($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setRol2($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setRol3($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setRol4($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setRol5($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setIdsucursal($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setIdempresa($arr[$keys[9]]);
+        if (array_key_exists($keys[2], $arr)) $this->setIdempresa($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setIdproceso($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setIdsucursal($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setRol1($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setRol2($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setRol3($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setRol4($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setRol5($arr[$keys[9]]);
     }
 
     /**
@@ -1171,14 +1243,14 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
 
         if ($this->isColumnModified(NotificacionPeer::IDNOTIFICACION)) $criteria->add(NotificacionPeer::IDNOTIFICACION, $this->idnotificacion);
         if ($this->isColumnModified(NotificacionPeer::NOTIFICACION_PROCESO)) $criteria->add(NotificacionPeer::NOTIFICACION_PROCESO, $this->notificacion_proceso);
+        if ($this->isColumnModified(NotificacionPeer::IDEMPRESA)) $criteria->add(NotificacionPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(NotificacionPeer::IDPROCESO)) $criteria->add(NotificacionPeer::IDPROCESO, $this->idproceso);
+        if ($this->isColumnModified(NotificacionPeer::IDSUCURSAL)) $criteria->add(NotificacionPeer::IDSUCURSAL, $this->idsucursal);
         if ($this->isColumnModified(NotificacionPeer::ROL1)) $criteria->add(NotificacionPeer::ROL1, $this->rol1);
         if ($this->isColumnModified(NotificacionPeer::ROL2)) $criteria->add(NotificacionPeer::ROL2, $this->rol2);
         if ($this->isColumnModified(NotificacionPeer::ROL3)) $criteria->add(NotificacionPeer::ROL3, $this->rol3);
         if ($this->isColumnModified(NotificacionPeer::ROL4)) $criteria->add(NotificacionPeer::ROL4, $this->rol4);
         if ($this->isColumnModified(NotificacionPeer::ROL5)) $criteria->add(NotificacionPeer::ROL5, $this->rol5);
-        if ($this->isColumnModified(NotificacionPeer::IDSUCURSAL)) $criteria->add(NotificacionPeer::IDSUCURSAL, $this->idsucursal);
-        if ($this->isColumnModified(NotificacionPeer::IDEMPRESA)) $criteria->add(NotificacionPeer::IDEMPRESA, $this->idempresa);
 
         return $criteria;
     }
@@ -1243,14 +1315,26 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setNotificacionProceso($this->getNotificacionProceso());
+        $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setIdproceso($this->getIdproceso());
+        $copyObj->setIdsucursal($this->getIdsucursal());
         $copyObj->setRol1($this->getRol1());
         $copyObj->setRol2($this->getRol2());
         $copyObj->setRol3($this->getRol3());
         $copyObj->setRol4($this->getRol4());
         $copyObj->setRol5($this->getRol5());
-        $copyObj->setIdsucursal($this->getIdsucursal());
-        $copyObj->setIdempresa($this->getIdempresa());
+
+        if ($deepCopy && !$this->startCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+            // store object hash to prevent cycle
+            $this->startCopy = true;
+
+            //unflag object copy
+            $this->startCopy = false;
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdnotificacion(NULL); // this is a auto-increment column, so set to default value
@@ -1298,20 +1382,124 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     }
 
     /**
+     * Declares an association between this object and a Empresa object.
+     *
+     * @param                  Empresa $v
+     * @return Notificacion The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEmpresa(Empresa $v = null)
+    {
+        if ($v === null) {
+            $this->setIdempresa(NULL);
+        } else {
+            $this->setIdempresa($v->getIdempresa());
+        }
+
+        $this->aEmpresa = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Empresa object, it will not be re-added.
+        if ($v !== null) {
+            $v->addNotificacion($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Empresa object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Empresa The associated Empresa object.
+     * @throws PropelException
+     */
+    public function getEmpresa(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aEmpresa === null && ($this->idempresa !== null) && $doQuery) {
+            $this->aEmpresa = EmpresaQuery::create()->findPk($this->idempresa, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEmpresa->addNotificacions($this);
+             */
+        }
+
+        return $this->aEmpresa;
+    }
+
+    /**
+     * Declares an association between this object and a Sucursal object.
+     *
+     * @param                  Sucursal $v
+     * @return Notificacion The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setSucursal(Sucursal $v = null)
+    {
+        if ($v === null) {
+            $this->setIdsucursal(NULL);
+        } else {
+            $this->setIdsucursal($v->getIdsucursal());
+        }
+
+        $this->aSucursal = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Sucursal object, it will not be re-added.
+        if ($v !== null) {
+            $v->addNotificacion($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Sucursal object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Sucursal The associated Sucursal object.
+     * @throws PropelException
+     */
+    public function getSucursal(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aSucursal === null && ($this->idsucursal !== null) && $doQuery) {
+            $this->aSucursal = SucursalQuery::create()->findPk($this->idsucursal, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aSucursal->addNotificacions($this);
+             */
+        }
+
+        return $this->aSucursal;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
     {
         $this->idnotificacion = null;
         $this->notificacion_proceso = null;
+        $this->idempresa = null;
         $this->idproceso = null;
+        $this->idsucursal = null;
         $this->rol1 = null;
         $this->rol2 = null;
         $this->rol3 = null;
         $this->rol4 = null;
         $this->rol5 = null;
-        $this->idsucursal = null;
-        $this->idempresa = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -1335,10 +1523,18 @@ abstract class BaseNotificacion extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->aEmpresa instanceof Persistent) {
+              $this->aEmpresa->clearAllReferences($deep);
+            }
+            if ($this->aSucursal instanceof Persistent) {
+              $this->aSucursal->clearAllReferences($deep);
+            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        $this->aEmpresa = null;
+        $this->aSucursal = null;
     }
 
     /**

@@ -76,6 +76,10 @@
  * @method SucursalQuery rightJoinNotacredito($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notacredito relation
  * @method SucursalQuery innerJoinNotacredito($relationAlias = null) Adds a INNER JOIN clause to the query using the Notacredito relation
  *
+ * @method SucursalQuery leftJoinNotificacion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Notificacion relation
+ * @method SucursalQuery rightJoinNotificacion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Notificacion relation
+ * @method SucursalQuery innerJoinNotificacion($relationAlias = null) Adds a INNER JOIN clause to the query using the Notificacion relation
+ *
  * @method SucursalQuery leftJoinOrdentablajeria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajeria relation
  * @method SucursalQuery rightJoinOrdentablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajeria relation
  * @method SucursalQuery innerJoinOrdentablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajeria relation
@@ -1507,6 +1511,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinNotacredito($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Notacredito', 'NotacreditoQuery');
+    }
+
+    /**
+     * Filter the query by a related Notificacion object
+     *
+     * @param   Notificacion|PropelObjectCollection $notificacion  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByNotificacion($notificacion, $comparison = null)
+    {
+        if ($notificacion instanceof Notificacion) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $notificacion->getIdsucursal(), $comparison);
+        } elseif ($notificacion instanceof PropelObjectCollection) {
+            return $this
+                ->useNotificacionQuery()
+                ->filterByPrimaryKeys($notificacion->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByNotificacion() only accepts arguments of type Notificacion or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Notificacion relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinNotificacion($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Notificacion');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Notificacion');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Notificacion relation Notificacion object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   NotificacionQuery A secondary query class using the current class as primary query
+     */
+    public function useNotificacionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinNotificacion($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Notificacion', 'NotificacionQuery');
     }
 
     /**

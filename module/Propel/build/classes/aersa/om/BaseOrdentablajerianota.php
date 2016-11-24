@@ -60,16 +60,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
     protected $ordentablajerianota_fecha;
 
     /**
-     * @var        Ordentablajeria
-     */
-    protected $aOrdentablajeria;
-
-    /**
-     * @var        Usuario
-     */
-    protected $aUsuario;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -211,10 +201,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
             $this->modifiedColumns[] = OrdentablajerianotaPeer::IDUSUARIO;
         }
 
-        if ($this->aUsuario !== null && $this->aUsuario->getIdusuario() !== $v) {
-            $this->aUsuario = null;
-        }
-
 
         return $this;
     } // setIdusuario()
@@ -234,10 +220,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
         if ($this->idordentablajeria !== $v) {
             $this->idordentablajeria = $v;
             $this->modifiedColumns[] = OrdentablajerianotaPeer::IDORDENTABLAJERIA;
-        }
-
-        if ($this->aOrdentablajeria !== null && $this->aOrdentablajeria->getIdordentablajeria() !== $v) {
-            $this->aOrdentablajeria = null;
         }
 
 
@@ -357,12 +339,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
     public function ensureConsistency()
     {
 
-        if ($this->aUsuario !== null && $this->idusuario !== $this->aUsuario->getIdusuario()) {
-            $this->aUsuario = null;
-        }
-        if ($this->aOrdentablajeria !== null && $this->idordentablajeria !== $this->aOrdentablajeria->getIdordentablajeria()) {
-            $this->aOrdentablajeria = null;
-        }
     } // ensureConsistency
 
     /**
@@ -402,8 +378,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aOrdentablajeria = null;
-            $this->aUsuario = null;
         } // if (deep)
     }
 
@@ -516,25 +490,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
         $affectedRows = 0; // initialize var to track total num of affected rows
         if (!$this->alreadyInSave) {
             $this->alreadyInSave = true;
-
-            // We call the save method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aOrdentablajeria !== null) {
-                if ($this->aOrdentablajeria->isModified() || $this->aOrdentablajeria->isNew()) {
-                    $affectedRows += $this->aOrdentablajeria->save($con);
-                }
-                $this->setOrdentablajeria($this->aOrdentablajeria);
-            }
-
-            if ($this->aUsuario !== null) {
-                if ($this->aUsuario->isModified() || $this->aUsuario->isNew()) {
-                    $affectedRows += $this->aUsuario->save($con);
-                }
-                $this->setUsuario($this->aUsuario);
-            }
 
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
@@ -708,24 +663,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
             $failureMap = array();
 
 
-            // We call the validate method on the following object(s) if they
-            // were passed to this object by their corresponding set
-            // method.  This object relates to these object(s) by a
-            // foreign key reference.
-
-            if ($this->aOrdentablajeria !== null) {
-                if (!$this->aOrdentablajeria->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aOrdentablajeria->getValidationFailures());
-                }
-            }
-
-            if ($this->aUsuario !== null) {
-                if (!$this->aUsuario->validate($columns)) {
-                    $failureMap = array_merge($failureMap, $this->aUsuario->getValidationFailures());
-                }
-            }
-
-
             if (($retval = OrdentablajerianotaPeer::doValidate($this, $columns)) !== true) {
                 $failureMap = array_merge($failureMap, $retval);
             }
@@ -798,11 +735,10 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
      *                    Defaults to BasePeer::TYPE_PHPNAME.
      * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to true.
      * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
-    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
+    public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array())
     {
         if (isset($alreadyDumpedObjects['Ordentablajerianota'][$this->getPrimaryKey()])) {
             return '*RECURSION*';
@@ -821,14 +757,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
             $result[$key] = $virtualColumn;
         }
 
-        if ($includeForeignObjects) {
-            if (null !== $this->aOrdentablajeria) {
-                $result['Ordentablajeria'] = $this->aOrdentablajeria->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aUsuario) {
-                $result['Usuario'] = $this->aUsuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-        }
 
         return $result;
     }
@@ -989,18 +917,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
         $copyObj->setIdordentablajeria($this->getIdordentablajeria());
         $copyObj->setOrdentablajerianotaNota($this->getOrdentablajerianotaNota());
         $copyObj->setOrdentablajerianotaFecha($this->getOrdentablajerianotaFecha());
-
-        if ($deepCopy && !$this->startCopy) {
-            // important: temporarily setNew(false) because this affects the behavior of
-            // the getter/setter methods for fkey referrer objects.
-            $copyObj->setNew(false);
-            // store object hash to prevent cycle
-            $this->startCopy = true;
-
-            //unflag object copy
-            $this->startCopy = false;
-        } // if ($deepCopy)
-
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setIdordentablajerianota(NULL); // this is a auto-increment column, so set to default value
@@ -1048,110 +964,6 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
     }
 
     /**
-     * Declares an association between this object and a Ordentablajeria object.
-     *
-     * @param                  Ordentablajeria $v
-     * @return Ordentablajerianota The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setOrdentablajeria(Ordentablajeria $v = null)
-    {
-        if ($v === null) {
-            $this->setIdordentablajeria(NULL);
-        } else {
-            $this->setIdordentablajeria($v->getIdordentablajeria());
-        }
-
-        $this->aOrdentablajeria = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Ordentablajeria object, it will not be re-added.
-        if ($v !== null) {
-            $v->addOrdentablajerianota($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Ordentablajeria object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Ordentablajeria The associated Ordentablajeria object.
-     * @throws PropelException
-     */
-    public function getOrdentablajeria(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aOrdentablajeria === null && ($this->idordentablajeria !== null) && $doQuery) {
-            $this->aOrdentablajeria = OrdentablajeriaQuery::create()->findPk($this->idordentablajeria, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aOrdentablajeria->addOrdentablajerianotas($this);
-             */
-        }
-
-        return $this->aOrdentablajeria;
-    }
-
-    /**
-     * Declares an association between this object and a Usuario object.
-     *
-     * @param                  Usuario $v
-     * @return Ordentablajerianota The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setUsuario(Usuario $v = null)
-    {
-        if ($v === null) {
-            $this->setIdusuario(NULL);
-        } else {
-            $this->setIdusuario($v->getIdusuario());
-        }
-
-        $this->aUsuario = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Usuario object, it will not be re-added.
-        if ($v !== null) {
-            $v->addOrdentablajerianota($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Usuario object
-     *
-     * @param PropelPDO $con Optional Connection object.
-     * @param $doQuery Executes a query to get the object if required
-     * @return Usuario The associated Usuario object.
-     * @throws PropelException
-     */
-    public function getUsuario(PropelPDO $con = null, $doQuery = true)
-    {
-        if ($this->aUsuario === null && ($this->idusuario !== null) && $doQuery) {
-            $this->aUsuario = UsuarioQuery::create()->findPk($this->idusuario, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aUsuario->addOrdentablajerianotas($this);
-             */
-        }
-
-        return $this->aUsuario;
-    }
-
-    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -1183,18 +995,10 @@ abstract class BaseOrdentablajerianota extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
-            if ($this->aOrdentablajeria instanceof Persistent) {
-              $this->aOrdentablajeria->clearAllReferences($deep);
-            }
-            if ($this->aUsuario instanceof Persistent) {
-              $this->aUsuario->clearAllReferences($deep);
-            }
 
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
-        $this->aOrdentablajeria = null;
-        $this->aUsuario = null;
     }
 
     /**

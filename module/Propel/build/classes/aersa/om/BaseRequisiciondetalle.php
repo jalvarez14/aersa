@@ -78,6 +78,13 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     protected $idpadre;
 
     /**
+     * The value for the requisiciondetalle_contable field.
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $requisiciondetalle_contable;
+
+    /**
      * @var        Requisiciondetalle
      */
     protected $aRequisiciondetalleRelatedByIdpadre;
@@ -123,6 +130,27 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $requisiciondetallesRelatedByIdrequisiciondetalleScheduledForDeletion = null;
+
+    /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see        __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->requisiciondetalle_contable = false;
+    }
+
+    /**
+     * Initializes internal state of BaseRequisiciondetalle object.
+     * @see        applyDefaults()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->applyDefaultValues();
+    }
 
     /**
      * Get the [idrequisiciondetalle] column value.
@@ -210,6 +238,17 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     {
 
         return $this->idpadre;
+    }
+
+    /**
+     * Get the [requisiciondetalle_contable] column value.
+     *
+     * @return boolean
+     */
+    public function getRequisiciondetalleContable()
+    {
+
+        return $this->requisiciondetalle_contable;
     }
 
     /**
@@ -401,6 +440,35 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
     } // setIdpadre()
 
     /**
+     * Sets the value of the [requisiciondetalle_contable] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param boolean|integer|string $v The new value
+     * @return Requisiciondetalle The current object (for fluent API support)
+     */
+    public function setRequisiciondetalleContable($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->requisiciondetalle_contable !== $v) {
+            $this->requisiciondetalle_contable = $v;
+            $this->modifiedColumns[] = RequisiciondetallePeer::REQUISICIONDETALLE_CONTABLE;
+        }
+
+
+        return $this;
+    } // setRequisiciondetalleContable()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -410,6 +478,10 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->requisiciondetalle_contable !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return true
         return true;
     } // hasOnlyDefaultValues()
@@ -440,6 +512,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $this->requisiciondetalle_preciounitario = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
             $this->requisiciondetalle_subtotal = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
             $this->idpadre = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+            $this->requisiciondetalle_contable = ($row[$startcol + 8] !== null) ? (boolean) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -449,7 +522,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 8; // 8 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = RequisiciondetallePeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Requisiciondetalle object", $e);
@@ -742,6 +815,9 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::IDPADRE)) {
             $modifiedColumns[':p' . $index++]  = '`idpadre`';
         }
+        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_CONTABLE)) {
+            $modifiedColumns[':p' . $index++]  = '`requisiciondetalle_contable`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `requisiciondetalle` (%s) VALUES (%s)',
@@ -776,6 +852,9 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
                         break;
                     case '`idpadre`':
                         $stmt->bindValue($identifier, $this->idpadre, PDO::PARAM_INT);
+                        break;
+                    case '`requisiciondetalle_contable`':
+                        $stmt->bindValue($identifier, (int) $this->requisiciondetalle_contable, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -967,6 +1046,9 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 7:
                 return $this->getIdpadre();
                 break;
+            case 8:
+                return $this->getRequisiciondetalleContable();
+                break;
             default:
                 return null;
                 break;
@@ -1004,6 +1086,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             $keys[5] => $this->getRequisiciondetallePreciounitario(),
             $keys[6] => $this->getRequisiciondetalleSubtotal(),
             $keys[7] => $this->getIdpadre(),
+            $keys[8] => $this->getRequisiciondetalleContable(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1081,6 +1164,9 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
             case 7:
                 $this->setIdpadre($value);
                 break;
+            case 8:
+                $this->setRequisiciondetalleContable($value);
+                break;
         } // switch()
     }
 
@@ -1113,6 +1199,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if (array_key_exists($keys[5], $arr)) $this->setRequisiciondetallePreciounitario($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setRequisiciondetalleSubtotal($arr[$keys[6]]);
         if (array_key_exists($keys[7], $arr)) $this->setIdpadre($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setRequisiciondetalleContable($arr[$keys[8]]);
     }
 
     /**
@@ -1132,6 +1219,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_PRECIOUNITARIO, $this->requisiciondetalle_preciounitario);
         if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_SUBTOTAL, $this->requisiciondetalle_subtotal);
         if ($this->isColumnModified(RequisiciondetallePeer::IDPADRE)) $criteria->add(RequisiciondetallePeer::IDPADRE, $this->idpadre);
+        if ($this->isColumnModified(RequisiciondetallePeer::REQUISICIONDETALLE_CONTABLE)) $criteria->add(RequisiciondetallePeer::REQUISICIONDETALLE_CONTABLE, $this->requisiciondetalle_contable);
 
         return $criteria;
     }
@@ -1202,6 +1290,7 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $copyObj->setRequisiciondetallePreciounitario($this->getRequisiciondetallePreciounitario());
         $copyObj->setRequisiciondetalleSubtotal($this->getRequisiciondetalleSubtotal());
         $copyObj->setIdpadre($this->getIdpadre());
+        $copyObj->setRequisiciondetalleContable($this->getRequisiciondetalleContable());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1726,10 +1815,12 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
         $this->requisiciondetalle_preciounitario = null;
         $this->requisiciondetalle_subtotal = null;
         $this->idpadre = null;
+        $this->requisiciondetalle_contable = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

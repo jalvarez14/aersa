@@ -115,6 +115,12 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
     protected $aUsuario;
 
     /**
+     * @var        PropelObjectCollection|Ajusteinventarionota[] Collection to store aggregation of Ajusteinventarionota objects.
+     */
+    protected $collAjusteinventarionotas;
+    protected $collAjusteinventarionotasPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -133,6 +139,12 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInClearAllReferencesDeep = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $ajusteinventarionotasScheduledForDeletion = null;
 
     /**
      * Get the [idajusteinventario] column value.
@@ -638,6 +650,8 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
             $this->aProducto = null;
             $this->aSucursal = null;
             $this->aUsuario = null;
+            $this->collAjusteinventarionotas = null;
+
         } // if (deep)
     }
 
@@ -800,6 +814,23 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
                 }
                 $affectedRows += 1;
                 $this->resetModified();
+            }
+
+            if ($this->ajusteinventarionotasScheduledForDeletion !== null) {
+                if (!$this->ajusteinventarionotasScheduledForDeletion->isEmpty()) {
+                    AjusteinventarionotaQuery::create()
+                        ->filterByPrimaryKeys($this->ajusteinventarionotasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ajusteinventarionotasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAjusteinventarionotas !== null) {
+                foreach ($this->collAjusteinventarionotas as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -1034,6 +1065,14 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
             }
 
 
+                if ($this->collAjusteinventarionotas !== null) {
+                    foreach ($this->collAjusteinventarionotas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -1159,6 +1198,9 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
             }
             if (null !== $this->aUsuario) {
                 $result['Usuario'] = $this->aUsuario->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collAjusteinventarionotas) {
+                $result['Ajusteinventarionotas'] = $this->collAjusteinventarionotas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1358,6 +1400,12 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
             $copyObj->setNew(false);
             // store object hash to prevent cycle
             $this->startCopy = true;
+
+            foreach ($this->getAjusteinventarionotas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAjusteinventarionota($relObj->copy($deepCopy));
+                }
+            }
 
             //unflag object copy
             $this->startCopy = false;
@@ -1669,6 +1717,272 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
         return $this->aUsuario;
     }
 
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName)
+    {
+        if ('Ajusteinventarionota' == $relationName) {
+            $this->initAjusteinventarionotas();
+        }
+    }
+
+    /**
+     * Clears out the collAjusteinventarionotas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Ajusteinventario The current object (for fluent API support)
+     * @see        addAjusteinventarionotas()
+     */
+    public function clearAjusteinventarionotas()
+    {
+        $this->collAjusteinventarionotas = null; // important to set this to null since that means it is uninitialized
+        $this->collAjusteinventarionotasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAjusteinventarionotas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAjusteinventarionotas($v = true)
+    {
+        $this->collAjusteinventarionotasPartial = $v;
+    }
+
+    /**
+     * Initializes the collAjusteinventarionotas collection.
+     *
+     * By default this just sets the collAjusteinventarionotas collection to an empty array (like clearcollAjusteinventarionotas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAjusteinventarionotas($overrideExisting = true)
+    {
+        if (null !== $this->collAjusteinventarionotas && !$overrideExisting) {
+            return;
+        }
+        $this->collAjusteinventarionotas = new PropelObjectCollection();
+        $this->collAjusteinventarionotas->setModel('Ajusteinventarionota');
+    }
+
+    /**
+     * Gets an array of Ajusteinventarionota objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Ajusteinventario is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Ajusteinventarionota[] List of Ajusteinventarionota objects
+     * @throws PropelException
+     */
+    public function getAjusteinventarionotas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventarionotasPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarionotas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarionotas) {
+                // return empty collection
+                $this->initAjusteinventarionotas();
+            } else {
+                $collAjusteinventarionotas = AjusteinventarionotaQuery::create(null, $criteria)
+                    ->filterByAjusteinventario($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAjusteinventarionotasPartial && count($collAjusteinventarionotas)) {
+                      $this->initAjusteinventarionotas(false);
+
+                      foreach ($collAjusteinventarionotas as $obj) {
+                        if (false == $this->collAjusteinventarionotas->contains($obj)) {
+                          $this->collAjusteinventarionotas->append($obj);
+                        }
+                      }
+
+                      $this->collAjusteinventarionotasPartial = true;
+                    }
+
+                    $collAjusteinventarionotas->getInternalIterator()->rewind();
+
+                    return $collAjusteinventarionotas;
+                }
+
+                if ($partial && $this->collAjusteinventarionotas) {
+                    foreach ($this->collAjusteinventarionotas as $obj) {
+                        if ($obj->isNew()) {
+                            $collAjusteinventarionotas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAjusteinventarionotas = $collAjusteinventarionotas;
+                $this->collAjusteinventarionotasPartial = false;
+            }
+        }
+
+        return $this->collAjusteinventarionotas;
+    }
+
+    /**
+     * Sets a collection of Ajusteinventarionota objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $ajusteinventarionotas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Ajusteinventario The current object (for fluent API support)
+     */
+    public function setAjusteinventarionotas(PropelCollection $ajusteinventarionotas, PropelPDO $con = null)
+    {
+        $ajusteinventarionotasToDelete = $this->getAjusteinventarionotas(new Criteria(), $con)->diff($ajusteinventarionotas);
+
+
+        $this->ajusteinventarionotasScheduledForDeletion = $ajusteinventarionotasToDelete;
+
+        foreach ($ajusteinventarionotasToDelete as $ajusteinventarionotaRemoved) {
+            $ajusteinventarionotaRemoved->setAjusteinventario(null);
+        }
+
+        $this->collAjusteinventarionotas = null;
+        foreach ($ajusteinventarionotas as $ajusteinventarionota) {
+            $this->addAjusteinventarionota($ajusteinventarionota);
+        }
+
+        $this->collAjusteinventarionotas = $ajusteinventarionotas;
+        $this->collAjusteinventarionotasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Ajusteinventarionota objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Ajusteinventarionota objects.
+     * @throws PropelException
+     */
+    public function countAjusteinventarionotas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAjusteinventarionotasPartial && !$this->isNew();
+        if (null === $this->collAjusteinventarionotas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAjusteinventarionotas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAjusteinventarionotas());
+            }
+            $query = AjusteinventarionotaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAjusteinventario($this)
+                ->count($con);
+        }
+
+        return count($this->collAjusteinventarionotas);
+    }
+
+    /**
+     * Method called to associate a Ajusteinventarionota object to this object
+     * through the Ajusteinventarionota foreign key attribute.
+     *
+     * @param    Ajusteinventarionota $l Ajusteinventarionota
+     * @return Ajusteinventario The current object (for fluent API support)
+     */
+    public function addAjusteinventarionota(Ajusteinventarionota $l)
+    {
+        if ($this->collAjusteinventarionotas === null) {
+            $this->initAjusteinventarionotas();
+            $this->collAjusteinventarionotasPartial = true;
+        }
+
+        if (!in_array($l, $this->collAjusteinventarionotas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAjusteinventarionota($l);
+
+            if ($this->ajusteinventarionotasScheduledForDeletion and $this->ajusteinventarionotasScheduledForDeletion->contains($l)) {
+                $this->ajusteinventarionotasScheduledForDeletion->remove($this->ajusteinventarionotasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Ajusteinventarionota $ajusteinventarionota The ajusteinventarionota object to add.
+     */
+    protected function doAddAjusteinventarionota($ajusteinventarionota)
+    {
+        $this->collAjusteinventarionotas[]= $ajusteinventarionota;
+        $ajusteinventarionota->setAjusteinventario($this);
+    }
+
+    /**
+     * @param	Ajusteinventarionota $ajusteinventarionota The ajusteinventarionota object to remove.
+     * @return Ajusteinventario The current object (for fluent API support)
+     */
+    public function removeAjusteinventarionota($ajusteinventarionota)
+    {
+        if ($this->getAjusteinventarionotas()->contains($ajusteinventarionota)) {
+            $this->collAjusteinventarionotas->remove($this->collAjusteinventarionotas->search($ajusteinventarionota));
+            if (null === $this->ajusteinventarionotasScheduledForDeletion) {
+                $this->ajusteinventarionotasScheduledForDeletion = clone $this->collAjusteinventarionotas;
+                $this->ajusteinventarionotasScheduledForDeletion->clear();
+            }
+            $this->ajusteinventarionotasScheduledForDeletion[]= clone $ajusteinventarionota;
+            $ajusteinventarionota->setAjusteinventario(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Ajusteinventario is new, it will return
+     * an empty collection; or if this Ajusteinventario has previously
+     * been saved, it will retrieve related Ajusteinventarionotas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Ajusteinventario.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Ajusteinventarionota[] List of Ajusteinventarionota objects
+     */
+    public function getAjusteinventarionotasJoinUsuario($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = AjusteinventarionotaQuery::create(null, $criteria);
+        $query->joinWith('Usuario', $join_behavior);
+
+        return $this->getAjusteinventarionotas($query, $con);
+    }
+
     /**
      * Clears the current object and sets all attributes to their default values
      */
@@ -1706,6 +2020,11 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
     {
         if ($deep && !$this->alreadyInClearAllReferencesDeep) {
             $this->alreadyInClearAllReferencesDeep = true;
+            if ($this->collAjusteinventarionotas) {
+                foreach ($this->collAjusteinventarionotas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aAlmacen instanceof Persistent) {
               $this->aAlmacen->clearAllReferences($deep);
             }
@@ -1725,6 +2044,10 @@ abstract class BaseAjusteinventario extends BaseObject implements Persistent
             $this->alreadyInClearAllReferencesDeep = false;
         } // if ($deep)
 
+        if ($this->collAjusteinventarionotas instanceof PropelCollection) {
+            $this->collAjusteinventarionotas->clearIterator();
+        }
+        $this->collAjusteinventarionotas = null;
         $this->aAlmacen = null;
         $this->aEmpresa = null;
         $this->aProducto = null;
