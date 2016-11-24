@@ -103,6 +103,10 @@
                     }
                     $requisicion_detalle->setIdrequisicion($requisicion->getIdrequisicion());
                     
+                    if($tipopro->getProductoTipo() == 'simple'){
+                        $requisicion_detalle->setRequisiciondetalleContable(1);
+                    }
+                    
                     $requisicion_detalle->save();
                     
                     // if ($tipopro->getProductoTipo() != 'simple' && ($requisicion->getIdsucursalorigen() !=  $requisicion->getIdsucursaldestino())) {
@@ -119,6 +123,13 @@
                             ->setRequisiciondetallePreciounitario($costouni)
                             ->setRequisiciondetalleSubtotal($costouni * ($pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad()))
                             ->setIdpadre($requisicion_detalle->getIdrequisiciondetalle());
+                            
+                            $productocontable = \ProductoQuery::create()->filterByIdproducto($pro->getIdproductoreceta())->findOne()->getProductoTipo();
+
+                            if($productocontable == 'simple'){
+                                $requisiciond->setRequisicionDetalleContable(1);
+                            }
+                            
                             $requisiciond->save();
                             $productorecnivel2= $pro->getIdproductoreceta();
                             $productocantidadnivel2= $pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad();
@@ -139,6 +150,13 @@
                                     ->setRequisiciondetallePreciounitario($costouni)
                                     ->setRequisiciondetalleSubtotal($costouni * ($pronivel2->getRecetaCantidad() * $productocantidadnivel2))
                                     ->setIdpadre($requisiciond->getIdrequisiciondetalle());
+                                    
+                                    $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel2->getIdproductoreceta())->findOne()->getProductoTipo();
+                                    
+                                    if($productocontable == 'simple'){
+                                        $requisiciondnivel2->setRequisicionDetalleContable(1);
+                                    }
+                                    
                                     $requisiciondnivel2->save();
                                     $productorecnivel3= $pronivel2->getIdproductoreceta();
                                     $productocantidadnivel3= $pronivel2->getRecetaCantidad() * $productocantidadnivel2;
@@ -159,6 +177,13 @@
                                             ->setRequisiciondetallePreciounitario($costouni)
                                             ->setRequisiciondetalleSubtotal($costouni * ($pronivel3->getRecetaCantidad() * $productocantidadnivel3))
                                             ->setIdpadre($requisiciondnivel2->getIdrequisiciondetalle());
+                                            
+                                            $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel3->getIdproductoreceta())->findOne()->getProductoTipo();
+                                            
+                                            if($productocontable == 'simple'){
+                                                $requisiciondnivel3->setRequisicionDetalleContable(1);
+                                            }
+                                            
                                             $requisiciondnivel3->save();
                                             $productorecnivel4= $pronivel3->getIdproductoreceta();
                                             $productocantidadnivel4= $pronivel3->getRecetaCantidad() * $productocantidadnivel3;
@@ -179,6 +204,13 @@
                                                     ->setRequisiciondetallePreciounitario($costouni)
                                                     ->setRequisiciondetalleSubtotal($costouni * ($pronivel4->getRecetaCantidad() * $productocantidadnivel4))
                                                     ->setIdpadre($requisiciondnivel3->getIdrequisiciondetalle());
+                                                    
+                                                    $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel4->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                    
+                                                    if($productocontable == 'simple'){
+                                                        $requisiciondnivel4->setRequisicionDetalleContable(1);
+                                                    }
+                                                    
                                                     $requisiciondnivel4->save();
                                                     $productorecnivel5= $pronivel4->getIdproductoreceta();
                                                     $productocantidadnivel5= $pronivel4->getRecetaCantidad() * $productocantidadnivel4;
@@ -199,6 +231,13 @@
                                                             ->setRequisiciondetallePreciounitario($costouni)
                                                             ->setRequisiciondetalleSubtotal($costouni * ($pronivel5->getRecetaCantidad() * $productocantidadnivel5))
                                                             ->setIdpadre($requisiciondnivel4->getIdrequisiciondetalle());
+                                                            
+                                                            $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel5->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                            
+                                                            if($productocontable == 'simple'){
+                                                                $requisiciondnivel5->setRequisicionDetalleContable(1);
+                                                            }
+                                                            
                                                             $requisiciondnivel5->save();
                                                             $productorecnivel6= $pronivel5->getIdproductoreceta();
                                                             $productocantidadnivel6= $pronivel5->getRecetaCantidad() * $productocantidadnivel5;
@@ -219,6 +258,13 @@
                                                                     ->setRequisiciondetallePreciounitario($costouni)
                                                                     ->setRequisiciondetalleSubtotal($costouni * ($pronivel6->getRecetaCantidad() * $productocantidadnivel6))
                                                                     ->setIdpadre($requisiciondnivel5->getIdrequisiciondetalle());
+                                                                    
+                                                                    $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel6->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                                    
+                                                                    if($productocontable == 'simple'){
+                                                                        $requisiciondnivel6->setRequisicionDetalleContable(1);
+                                                                    }
+                                                                    
                                                                     $requisiciondnivel6->save();
                                                                     $productorecnivel7= $pronivel6->getIdproductoreceta();
                                                                     $productocantidadnivel7= $pronivel6->getRecetaCantidad() * $productocantidadnivel6;
@@ -239,6 +285,13 @@
                                                                             ->setRequisiciondetallePreciounitario($costouni)
                                                                             ->setRequisiciondetalleSubtotal($costouni * ($pronivel7->getRecetaCantidad() * $productocantidadnivel7))
                                                                             ->setIdpadre($requisiciondnivel6->getIdrequisiciondetalle());
+                                                                            
+                                                                            $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel7->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                                            
+                                                                            if($productocontable == 'simple'){
+                                                                                $requisiciondnivel7->setRequisicionDetalleContable(1);
+                                                                            }
+                                                                            
                                                                             $requisiciondnivel7->save();
                                                                         }
                                                                     }
@@ -438,6 +491,13 @@
                                 ->setRequisiciondetallePreciounitario($costouni)
                                 ->setRequisiciondetalleSubtotal($costouni * ($pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad()))
                                 ->setIdpadre($requisicion_detalle->getIdrequisiciondetalle());
+                                
+                                $productocontable = \ProductoQuery::create()->filterByIdproducto($pro->getIdproductoreceta())->findOne()->getProductoTipo();
+                                
+                                if($productocontable == 'simple'){
+                                    $requisiciond->setRequisicionDetalleContable(1);
+                                }
+                                
                                 $requisiciond->save();
                                 $productorecnivel2= $pro->getIdproductoreceta();
                                 $productocantidadnivel2= $pro->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad();
@@ -458,6 +518,13 @@
                                     ->setRequisiciondetallePreciounitario($costouni)
                                     ->setRequisiciondetalleSubtotal($costouni * ($pronivel2->getRecetaCantidad() * $productocantidadnivel2))
                                     ->setIdpadre($requisiciond->getIdrequisiciondetalle());
+                                        
+                                        $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel2->getIdproductoreceta())->findOne()->getProductoTipo();
+                                        
+                                        if($productocontable == 'simple'){
+                                            $requisiciondnivel2->setRequisicionDetalleContable(1);
+                                        }
+                                        
                                     $requisiciondnivel2->save();
                                     $productorecnivel3= $pronivel2->getIdproductoreceta();
                                     $productocantidadnivel3= $pronivel2->getRecetaCantidad() * $productocantidadnivel2;
@@ -478,6 +545,13 @@
                                                 ->setRequisiciondetallePreciounitario($costouni)
                                                 ->setRequisiciondetalleSubtotal($costouni * ($pronivel3->getRecetaCantidad() * $productocantidadnivel3))
                                                 ->setIdpadre($requisiciondnivel2->getIdrequisiciondetalle());
+                                                
+                                                $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel3->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                
+                                                if($productocontable == 'simple'){
+                                                    $requisiciondnivel3->setRequisicionDetalleContable(1);
+                                                }
+                                                
                                                 $requisiciondnivel3->save();
                                                 $productorecnivel4= $pronivel3->getIdproductoreceta();
                                                 $productocantidadnivel4= $pronivel3->getRecetaCantidad() * $productocantidadnivel3;
@@ -498,6 +572,13 @@
                                                         ->setRequisiciondetallePreciounitario($costouni)
                                                         ->setRequisiciondetalleSubtotal($costouni * ($pronivel4->getRecetaCantidad() * $productocantidadnivel4))
                                                         ->setIdpadre($requisiciondnivel3->getIdrequisiciondetalle());
+                                                        
+                                                        $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel4->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                        
+                                                        if($productocontable == 'simple'){
+                                                            $requisiciondnivel4->setRequisicionDetalleContable(1);
+                                                        }
+                                                        
                                                         $requisiciondnivel4->save();
                                                         $productorecnivel5= $pronivel4->getIdproductoreceta();
                                                         $productocantidadnivel5= $pronivel4->getRecetaCantidad() * $productocantidadnivel4;
@@ -518,6 +599,13 @@
                                                                 ->setRequisiciondetallePreciounitario($costouni)
                                                                 ->setRequisiciondetalleSubtotal($costouni * ($pronivel5->getRecetaCantidad() * $productocantidadnivel5))
                                                                 ->setIdpadre($requisiciondnivel4->getIdrequisiciondetalle());
+                                                                
+                                                                $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel5->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                                
+                                                                if($productocontable == 'simple'){
+                                                                    $requisiciondnivel5->setRequisicionDetalleContable(1);
+                                                                }
+                                                                
                                                                 $requisiciondnivel5->save();
                                                                 $productorecnivel6= $pronivel5->getIdproductoreceta();
                                                                 $productocantidadnivel6= $pronivel5->getRecetaCantidad() * $productocantidadnivel5;
@@ -538,6 +626,13 @@
                                                                         ->setRequisiciondetallePreciounitario($costouni)
                                                                         ->setRequisiciondetalleSubtotal($costouni * ($pronivel6->getRecetaCantidad() * $productocantidadnivel6))
                                                                         ->setIdpadre($requisiciondnivel5->getIdrequisiciondetalle());
+                                                                        
+                                                                        $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel6->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                                        
+                                                                        if($productocontable == 'simple'){
+                                                                            $requisiciondnivel6->setRequisicionDetalleContable(1);
+                                                                        }
+                                                                        
                                                                         $requisiciondnivel6->save();
                                                                         $productorecnivel7= $pronivel6->getIdproductoreceta();
                                                                         $productocantidadnivel7= $pronivel6->getRecetaCantidad() * $productocantidadnivel6;
@@ -558,6 +653,13 @@
                                                                                 ->setRequisiciondetallePreciounitario($costouni)
                                                                                 ->setRequisiciondetalleSubtotal($costouni * ($pronivel7->getRecetaCantidad() * $productocantidadnivel7))
                                                                                 ->setIdpadre($requisiciondnivel6->getIdrequisiciondetalle());
+                                                                                
+                                                                                $productocontable = \ProductoQuery::create()->filterByIdproducto($pronivel7->getIdproductoreceta())->findOne()->getProductoTipo();
+                                                                                
+                                                                                if($productocontable == 'simple'){
+                                                                                    $requisiciondnivel7->setRequisicionDetalleContable(1);
+                                                                                }
+                                                                                
                                                                                 $requisiciondnivel7->save();
                                                                             }
                                                                         }

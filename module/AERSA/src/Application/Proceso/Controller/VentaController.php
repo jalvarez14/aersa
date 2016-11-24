@@ -167,6 +167,12 @@ class VentaController extends AbstractActionController {
                     $venta_detalle->setVentadetalleRevisada(1);
                 }
                 
+                $productocontable = \ProductoQuery::create()->filterByIdproducto($producto['idproducto'])->findOne()->getProductoTipo();
+
+                if($productocontable =='simple'){
+                    $venta_detalle->setVentadetalleContable(1);
+                }
+                
                 $venta_detalle->save();
                 
                 //SI TIENE RECETA
