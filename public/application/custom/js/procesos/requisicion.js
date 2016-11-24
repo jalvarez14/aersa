@@ -800,7 +800,9 @@
 
                 });
 
-                var count = count;
+                
+                var count = $('#productos_table tbody tr').length + 1;
+                
                 $('#producto_add').on('click', function () {
 
                     //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
@@ -852,7 +854,7 @@
 
                     //INSERTAMOS EN LA TABLA
                     $('#productos_table tbody').append(tr);
-
+                    
                     //LIMPIAMOS EL AUTOCOMPLETE
                     $('input#producto_autocomplete').typeahead('val', '');
                     $('input#idproducto').val('');
