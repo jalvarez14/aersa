@@ -820,7 +820,7 @@
                         },
                     });
                     tr.append('<td> ' + tipopro + '</td>');
-                    tr.append('<td><input disabled required type="hidden" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="' + precio + '"><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
+                    tr.append('<td><input type="hidden" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="' + precio + '"><input name=productos[' + count + '][requisiciondetalle_subtotal] type=hidden><input type="hidden"  name=productos[' + count + '][idproducto] value="' + $('input#idproducto').val() + '">' + $('input#producto_autocomplete').typeahead('val') + '</td>');
                     tr.append('<td> ' + $('#unidadmedida_nombre').val() + '</td>');
                     tr.append('<td class="pro_cantidad"><input required type="text" name=productos[' + count + '][requisiciondetalle_cantidad] value="0"></td>');
                     tr.append('<td><input disabled required type="text" class="pu-input" name=productos[' + count + '][requisiciondetalle_preciounitario] value="' + precio + '"></td>');
