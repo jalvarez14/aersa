@@ -186,6 +186,167 @@ class VentaController extends AbstractActionController {
                                              ->setIdpadre($venta_detalle->getIdventadetalle());
                         
                         $venta_detalle_receta->save();
+                        $productorecnivel2= $detalle->getIdproductoreceta();
+                        
+                        //receta 2do nivel
+                        $productonivel2 = \ProductoQuery::create()->findPk($productorecnivel2);
+                        
+                        $has_recetanivel2 = \RecetaQuery::create()->filterByIdproducto($productonivel2->getIdproducto())->exists();
+                        if($has_recetanivel2){
+                            
+                            $receta2 = \RecetaQuery::create()->filterByIdproducto($productonivel2->getIdproducto())->find();
+                            $detalle2 = new \Receta();
+                            foreach ($receta2 as $detalle2){
+                                //var_dump("his");
+                                //exit();
+                                $venta_detalle_receta = new \Ventadetalle();
+                                $venta_detalle_receta->setIdventa($entity->getIdventa())
+                                ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
+                                ->setIdalmacen($venta_detalle->getIdalmacen())
+                                ->setIdproducto($detalle2->getIdproductoreceta())
+                                ->setVentadetalleCantidad($detalle2->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                ->setVentadetalleSubtotal(0)
+                                ->setIdpadre($venta_detalle->getIdventadetalle());
+                                
+                                $venta_detalle_receta->save();
+                                
+                                $productorecnivel3= $detalle2->getIdproductoreceta();
+                                
+                                //receta 3er nivel
+                                $productonivel3 = \ProductoQuery::create()->findPk($productorecnivel3);
+                                
+                                $has_recetanivel3 = \RecetaQuery::create()->filterByIdproducto($productonivel3->getIdproducto())->exists();
+                                
+                                if($has_recetanivel3){
+                                    $receta3 = \RecetaQuery::create()->filterByIdproducto($productonivel3->getIdproducto())->find();
+                                    $detalle3 = new \Receta();
+                                    foreach ($receta3 as $detalle3){
+                                        //var_dump("his");
+                                        //exit();
+                                        $venta_detalle_receta = new \Ventadetalle();
+                                        $venta_detalle_receta->setIdventa($entity->getIdventa())
+                                        ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
+                                        ->setIdalmacen($venta_detalle->getIdalmacen())
+                                        ->setIdproducto($detalle3->getIdproductoreceta())
+                                        ->setVentadetalleCantidad($detalle3->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                        ->setVentadetalleSubtotal(0)
+                                        ->setIdpadre($venta_detalle->getIdventadetalle());
+                                        
+                                        $venta_detalle_receta->save();
+                                        
+                                        $productorecnivel4= $detalle3->getIdproductoreceta();
+                                        
+                                        //receta 4to nivel
+                                        $productonivel4 = \ProductoQuery::create()->findPk($productorecnivel4);
+                                        
+                                        $has_recetanivel4 = \RecetaQuery::create()->filterByIdproducto($productonivel4->getIdproducto())->exists();
+                                        
+                                        if($has_recetanivel4){
+                                            $receta4 = \RecetaQuery::create()->filterByIdproducto($productonivel4->getIdproducto())->find();
+                                            $detalle4 = new \Receta();
+                                            foreach ($receta4 as $detalle4){
+                                                //var_dump("his");
+                                                //exit();
+                                                $venta_detalle_receta = new \Ventadetalle();
+                                                $venta_detalle_receta->setIdventa($entity->getIdventa())
+                                                ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
+                                                ->setIdalmacen($venta_detalle->getIdalmacen())
+                                                ->setIdproducto($detalle4->getIdproductoreceta())
+                                                ->setVentadetalleCantidad($detalle4->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                ->setVentadetalleSubtotal(0)
+                                                ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                
+                                                $venta_detalle_receta->save();
+                                                
+                                                $productorecnivel5= $detalle4->getIdproductoreceta();
+                                                
+                                                //receta 5to nivel
+                                                $productonivel5 = \ProductoQuery::create()->findPk($productorecnivel5);
+                                                
+                                                $has_recetanivel5 = \RecetaQuery::create()->filterByIdproducto($productonivel5->getIdproducto())->exists();
+                                                
+                                                if($has_recetanivel5){
+                                                    $receta5 = \RecetaQuery::create()->filterByIdproducto($productonivel5->getIdproducto())->find();
+                                                    $detalle5 = new \Receta();
+                                                    foreach ($receta5 as $detalle5){
+                                                        //var_dump("his");
+                                                        //exit();
+                                                        $venta_detalle_receta = new \Ventadetalle();
+                                                        $venta_detalle_receta->setIdventa($entity->getIdventa())
+                                                        ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
+                                                        ->setIdalmacen($venta_detalle->getIdalmacen())
+                                                        ->setIdproducto($detalle5->getIdproductoreceta())
+                                                        ->setVentadetalleCantidad($detalle5->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                        ->setVentadetalleSubtotal(0)
+                                                        ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                        
+                                                        $venta_detalle_receta->save();
+                                                        
+                                                        
+                                                        $productorecnivel6= $detalle5->getIdproductoreceta();
+                                                        
+                                                        //receta 6to nivel
+                                                        $productonivel6 = \ProductoQuery::create()->findPk($productorecnivel6);
+                                                        
+                                                        $has_recetanivel6 = \RecetaQuery::create()->filterByIdproducto($productonivel6->getIdproducto())->exists();
+                                                        if($has_recetanivel6){
+                                                            $receta6 = \RecetaQuery::create()->filterByIdproducto($productonivel6->getIdproducto())->find();
+                                                            $detalle6 = new \Receta();
+                                                            foreach ($receta6 as $detalle6){
+                                                                //var_dump("his");
+                                                                //exit();
+                                                                $venta_detalle_receta = new \Ventadetalle();
+                                                                $venta_detalle_receta->setIdventa($entity->getIdventa())
+                                                                ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
+                                                                ->setIdalmacen($venta_detalle->getIdalmacen())
+                                                                ->setIdproducto($detalle6->getIdproductoreceta())
+                                                                ->setVentadetalleCantidad($detalle6->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                                ->setVentadetalleSubtotal(0)
+                                                                ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                                
+                                                                $venta_detalle_receta->save();
+                                                                
+                                                                $productorecnivel7= $detalle7->getIdproductoreceta();
+                                                                
+                                                                //receta 7mo nivel
+                                                                $productonivel7 = \ProductoQuery::create()->findPk($productorecnivel7);
+                                                                
+                                                                $has_recetanivel7 = \RecetaQuery::create()->filterByIdproducto($productonivel7->getIdproducto())->exists();
+                                                                if($has_recetanivel7){
+                                                                    $receta7 = \RecetaQuery::create()->filterByIdproducto($productonivel7->getIdproducto())->find();
+                                                                    $detalle7 = new \Receta();
+                                                                    foreach ($receta7 as $detalle7){
+                                                                        //var_dump("his");
+                                                                        //exit();
+                                                                        $venta_detalle_receta = new \Ventadetalle();
+                                                                        $venta_detalle_receta->setIdventa($entity->getIdventa())
+                                                                        ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
+                                                                        ->setIdalmacen($venta_detalle->getIdalmacen())
+                                                                        ->setIdproducto($detalle7->getIdproductoreceta())
+                                                                        ->setVentadetalleCantidad($detalle7->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                                        ->setVentadetalleSubtotal(0)
+                                                                        ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                                        
+                                                                        $venta_detalle_receta->save();
+                                                                    }
+                                                                }
+                                                                
+                                                            }
+                                                            
+                                                        }
+                                                        
+                                                    }
+                                                    
+                                                }
+                                            }
+                                            
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            }
+                        }
                     }
                 }
                               
