@@ -213,7 +213,7 @@ class VentaController extends AbstractActionController {
                                 ->setVentadetalleSubtotal(0)
                                 ->setIdpadre($venta_detalle->getIdventadetalle());
                                 
-                                if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                if($detalle2->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                     $venta_detalle_receta->setVentadetalleContable(1);
                                 }
                                 $venta_detalle_receta->save();
@@ -240,7 +240,7 @@ class VentaController extends AbstractActionController {
                                         ->setVentadetalleSubtotal(0)
                                         ->setIdpadre($venta_detalle->getIdventadetalle());
                                         
-                                        if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                        if($detalle3->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                             $venta_detalle_receta->setVentadetalleContable(1);
                                         }
                                         $venta_detalle_receta->save();
@@ -267,7 +267,7 @@ class VentaController extends AbstractActionController {
                                                 ->setVentadetalleSubtotal(0)
                                                 ->setIdpadre($venta_detalle->getIdventadetalle());
                                                 
-                                               if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                               if($detalle4->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                     $venta_detalle_receta->setVentadetalleContable(1);
                                                 }
                                                 $venta_detalle_receta->save();
@@ -294,7 +294,7 @@ class VentaController extends AbstractActionController {
                                                         ->setVentadetalleSubtotal(0)
                                                         ->setIdpadre($venta_detalle->getIdventadetalle());
                                                         
-                                                        if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                        if($detalle5->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                             $venta_detalle_receta->setVentadetalleContable(1);
                                                         }
                                                         $venta_detalle_receta->save();
@@ -321,7 +321,7 @@ class VentaController extends AbstractActionController {
                                                                 ->setVentadetalleSubtotal(0)
                                                                 ->setIdpadre($venta_detalle->getIdventadetalle());
                                                                 
-                                                                if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                                if($detalle6->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                                     $venta_detalle_receta->setVentadetalleContable(1);
                                                                 }
                                                                 $venta_detalle_receta->save();
@@ -347,7 +347,7 @@ class VentaController extends AbstractActionController {
                                                                         ->setVentadetalleSubtotal(0)
                                                                         ->setIdpadre($venta_detalle->getIdventadetalle());
                                                                         
-                                                                        if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                                        if($detalle7->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                                             $venta_detalle_receta->setVentadetalleContable(1);
                                                                         }
                                                                         $venta_detalle_receta->save();
