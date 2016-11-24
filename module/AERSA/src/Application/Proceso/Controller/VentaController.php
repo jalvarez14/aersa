@@ -185,7 +185,12 @@ class VentaController extends AbstractActionController {
                                              ->setVentadetalleSubtotal(0)
                                              ->setIdpadre($venta_detalle->getIdventadetalle());
                         
+                      
+                        if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                            $venta_detalle_receta->setVentadetalleContable(1);
+                        }
                         $venta_detalle_receta->save();
+                        
                         $productorecnivel2= $detalle->getIdproductoreceta();
                         
                         //receta 2do nivel
@@ -208,6 +213,9 @@ class VentaController extends AbstractActionController {
                                 ->setVentadetalleSubtotal(0)
                                 ->setIdpadre($venta_detalle->getIdventadetalle());
                                 
+                                if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                    $venta_detalle_receta->setVentadetalleContable(1);
+                                }
                                 $venta_detalle_receta->save();
                                 
                                 $productorecnivel3= $detalle2->getIdproductoreceta();
@@ -232,6 +240,9 @@ class VentaController extends AbstractActionController {
                                         ->setVentadetalleSubtotal(0)
                                         ->setIdpadre($venta_detalle->getIdventadetalle());
                                         
+                                        if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                            $venta_detalle_receta->setVentadetalleContable(1);
+                                        }
                                         $venta_detalle_receta->save();
                                         
                                         $productorecnivel4= $detalle3->getIdproductoreceta();
@@ -256,6 +267,9 @@ class VentaController extends AbstractActionController {
                                                 ->setVentadetalleSubtotal(0)
                                                 ->setIdpadre($venta_detalle->getIdventadetalle());
                                                 
+                                               if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                    $venta_detalle_receta->setVentadetalleContable(1);
+                                                }
                                                 $venta_detalle_receta->save();
                                                 
                                                 $productorecnivel5= $detalle4->getIdproductoreceta();
@@ -280,6 +294,9 @@ class VentaController extends AbstractActionController {
                                                         ->setVentadetalleSubtotal(0)
                                                         ->setIdpadre($venta_detalle->getIdventadetalle());
                                                         
+                                                        if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                            $venta_detalle_receta->setVentadetalleContable(1);
+                                                        }
                                                         $venta_detalle_receta->save();
                                                         
                                                         
@@ -304,6 +321,9 @@ class VentaController extends AbstractActionController {
                                                                 ->setVentadetalleSubtotal(0)
                                                                 ->setIdpadre($venta_detalle->getIdventadetalle());
                                                                 
+                                                                if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                                    $venta_detalle_receta->setVentadetalleContable(1);
+                                                                }
                                                                 $venta_detalle_receta->save();
                                                                 
                                                                 $productorecnivel7= $detalle7->getIdproductoreceta();
@@ -327,6 +347,9 @@ class VentaController extends AbstractActionController {
                                                                         ->setVentadetalleSubtotal(0)
                                                                         ->setIdpadre($venta_detalle->getIdventadetalle());
                                                                         
+                                                                        if($detalle->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                                            $venta_detalle_receta->setVentadetalleContable(1);
+                                                                        }
                                                                         $venta_detalle_receta->save();
                                                                     }
                                                                 }
