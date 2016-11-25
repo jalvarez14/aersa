@@ -477,7 +477,24 @@
                         if (isset($productosReporte[$objproducto->getIdproducto()]))
                             $stockFisico = (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'])) ? $arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'] + $productosReporte[$objproducto->getIdproducto()]: $productosReporte[$objproducto->getIdproducto()];
                         
-                        if ($stockFisico != 0 && $objproducto->getProductoTipo() == 'subreceta') {
+                        // para saber si explosionar o no
+                        
+                        $idproduc= $objproducto->getIdproducto();
+                        $conn = \Propel::getConnection();
+                        $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto= '$idproduc') AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'";
+                        //var_dump($sqlrequisicioningreso);
+                        //exit();
+                        $st = $conn->prepare($sqlrequisicioningreso);
+                        $st->execute();
+                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                        
+                        $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto='$idproduc') AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                        $st2 = $conn->prepare($sqlrequisicionegreso);
+                        $st2->execute();
+                        $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
+                        //
+                        
+                        if (($stockFisico != 0 && $objproducto->getProductoTipo() == 'subreceta') && (($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] >0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))) {
                             $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
                             $recetaObj = new \Receta();
                             foreach ($recetasObj as $recetaObj) {
@@ -513,7 +530,7 @@
                             }//termina for each de elementos de la receta
                             
                             
-                            $stockFisico = 0;
+                            $stockFisico = 0; // si el producto padre es subreceta, no se le coloca stockfisico
                             
                         }
                             $idproducto = $objproducto->getIdproducto();
