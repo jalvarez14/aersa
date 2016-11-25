@@ -47,6 +47,8 @@
          * Private methods
          */
         
+        /*
+        
         $.datepicker.regional['es'] = {
             closeText: 'Cerrar',
             prevText: '<Ant',
@@ -68,7 +70,9 @@
         $(function () {
             $("#fecha").datepicker();
         });
-
+        
+        */
+       
         function to_json(workbook) {
             var result = {};
             workbook.SheetNames.forEach(function (sheetName) {
@@ -80,6 +84,9 @@
             return result;
         }
         
+        
+       
+       
         var revisadaControl = function () {
             $('select[name=inventariomes_revisada]').on('change', function () {
                 var selected = $('select[name=inventariomes_revisada] option:selected').val();
