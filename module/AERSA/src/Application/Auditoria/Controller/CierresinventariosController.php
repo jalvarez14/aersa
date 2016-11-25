@@ -376,7 +376,7 @@ class CierresinventariosController extends AbstractActionController {
                                         $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
                                         
                                         
-                                        if (($results[0]['count(idrequisicion)'] > 0 && $results[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results[0]['count(idrequisicion)'] ==0))
+                                        if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                                         {
                                             $venta+=$objventadetalle->getVentadetalleCantidad();
                                         }
@@ -481,13 +481,27 @@ class CierresinventariosController extends AbstractActionController {
                              //falta sacar papa
                              
                              
-                             $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                             $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                              $st = $conn->prepare(sqlrequisicioningreso);
                              $st->execute();
                              $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                             
+                             $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                             $st2 = $conn->prepare(sqlrequisicionegreso);
+                             $st2->execute();
+                             $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
+                             
+                             if (($results[0]['count(idrequisicion)'] > 0) || ($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] > 0))
+                             {
+                                $idproducto = $objproducto->getIdproducto();
+                                $explosion=(isset($arrayReporte[$idproducto]['inventariomesdetalle_explosion'])) ? $arrayReporte[$idproducto]['inventariomesdetalle_explosion']  : 0;
+                                $totalFisico=$explosion+$stockFisico;
+                                $dif =$totalFisico - $stockTeorico;
+                             }
                             */
                         
                         //preguntar si el producto tuvo requisiciones de entrada a este almacen ó si tuvo requisiciones como egreso e ingreso APLICAR SIMPLE
+                        //if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                         //{
                         //} termina el if que pregunta si el producto fue recibido en una requisicion en los últimos 6 meses
                         //preguntar si el producto tuvo requisiciones como salida o bien no tuvo ni entrada ni salida - APLiCAR EXPLOSION
@@ -529,11 +543,14 @@ class CierresinventariosController extends AbstractActionController {
                         $stockFisico = 0;
                         
                     }
-                    $idproducto = $objproducto->getIdproducto();
-                    $explosion=(isset($arrayReporte[$idproducto]['inventariomesdetalle_explosion'])) ? $arrayReporte[$idproducto]['inventariomesdetalle_explosion']  : 0;
-                    $totalFisico=$explosion+$stockFisico;
-                    $dif =$totalFisico - $stockTeorico;
-
+                    //si el producto es simple, simplemente se agrega
+                    if($stockFisico != 0 && $objproducto->getProductoTipo() == 'simple')
+                    {
+                        $idproducto = $objproducto->getIdproducto();
+                        $explosion=(isset($arrayReporte[$idproducto]['inventariomesdetalle_explosion'])) ? $arrayReporte[$idproducto]['inventariomesdetalle_explosion']  : 0;
+                        $totalFisico=$explosion+$stockFisico;
+                        $dif =$totalFisico - $stockTeorico;
+                    }
                     $has_compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->count();
                     if ($has_compras > 0) {
                         $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? $totalProductoCompra / $compra : 0;
