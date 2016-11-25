@@ -180,7 +180,7 @@ class CierresinventariosController extends AbstractActionController {
             $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
             $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
             
-            
+            $fecharequisicion6meses = date($fin_semana, strtotime('-6 month')) ;
 
 
             $inicio_semana = $inicio_semana . " 00:00:00   ";
@@ -278,15 +278,38 @@ class CierresinventariosController extends AbstractActionController {
                     }
 
                     $requisicionIng = 0;
-                    foreach ($objrequisicionesDestino as $objrequisicion) {
-                        $objrequisiciondetalles = \RequisiciondetalleQuery::create()
-                                ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                ->filterByIdpadre(NULL)
-                                ->filterByIdproducto($objproducto->getIdproducto())
-                                ->find();
-                        $objrequisiciondetalle = new \Requisiciondetalle();
-                        foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
-                            $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                    
+                    if ($objproducto->getProductoTipo()=="simple")
+                    {
+                       // var_dump("HOLA");
+                        //exit();
+                        foreach ($objrequisicionesDestino as $objrequisicion) {
+                            $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                                    ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                    ->filterByIdpadre(NULL)
+                                    ->filterByRequisicionDetalleContable(1) //como entradas sólo se consideran los productos raiz que no sean contables
+                                    ->filterByIdproducto($objproducto->getIdproducto())
+                                    ->find();
+                            $objrequisiciondetalle = new \Requisiciondetalle();
+                            foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
+                                $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            }
+                        }
+                    }
+                    
+                    if ($objproducto->getProductoTipo()=="subreceta")
+                    {
+                        foreach ($objrequisicionesDestino as $objrequisicion) {
+                            $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                            ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                            ->filterByIdpadre(NULL)
+                            ->filterByRequisicionDetalleContable(0) //como entradas sólo se consideran los productos raiz que no sean contables
+                            ->filterByIdproducto($objproducto->getIdproducto())
+                            ->find();
+                            $objrequisiciondetalle = new \Requisiciondetalle();
+                            foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
+                                $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            }
                         }
                     }
 
@@ -303,29 +326,102 @@ class CierresinventariosController extends AbstractActionController {
                     }
 
                     $venta = 0;
-                    foreach ($objventas as $objventa) {
-                        $objventadetalles = \VentadetalleQuery::create()
-                                ->filterByIdventa($objventa->getIdventa())
-                                ->filterByIdalmacen($idalmacen)
-                                ->filterByIdproducto($objproducto->getIdproducto())
-                                ->find();
-                        $objventadetalle = new \Ventadetalle();
-                        foreach ($objventadetalles as $objventadetalle) {
-                            $venta+=$objventadetalle->getVentadetalleCantidad();
-                        }
+                    
+                            foreach ($objventas as $objventa) {
+                                $objventadetalles = \VentadetalleQuery::create()
+                                    ->filterByIdventa($objventa->getIdventa())
+                                    ->filterByIdalmacen($idalmacen)
+                                    ->filterByIdproducto($objproducto->getIdproducto())
+                                    ->find();
+                               
+                                
+                                $objventadetalle = new \Ventadetalle();
+                                foreach ($objventadetalles as $objventadetalle) {
+                                    
+                                    ///
+                                    
+                                    if ($objproducto->getProductoTipo()=="subreceta" && $objventadetalle->getIdPadre()=="NULL" )
+                                    {
+                                        $conn = \Propel::getConnection();
+                                        $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                                        $st = $conn->prepare(sqlrequisicioningreso);
+                                        $st->execute();
+                                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                                        
+                                        $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                                        $st2 = $conn->prepare(sqlrequisicionegreso);
+                                        $st2->execute();
+                                        $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
+                                    
+                                        
+                                        if (($results[0]['count(idrequisicion)'] > 0) || ($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] > 0))
+                                        {
+                                            $venta+=$objventadetalle->getVentadetalleCantidad();
+                                        }
+                                    }
+                                    if ($objproducto->getProductoTipo()=="simple" && $objventadetalle->getIdPadre()!="NULL" && $objventadetalle->getVentaDetalleContable()==1)
+                                    {
+                                        //falta sacar papa
+                                        $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
+                                        $producto_padre = $venta_detalle_padre->getIdproducto();
+                                        
+                                        $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$producto_padre) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                                        $st = $conn->prepare(sqlrequisicioningreso);
+                                        $st->execute();
+                                        $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                                        
+                                        $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                                        $st2 = $conn->prepare(sqlrequisicionegreso);
+                                        $st2->execute();
+                                        $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
+                                        
+                                        
+                                        if (($results[0]['count(idrequisicion)'] > 0 && $results[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results[0]['count(idrequisicion)'] ==0))
+                                        {
+                                            $venta+=$objventadetalle->getVentadetalleCantidad();
+                                        }
+                                    }
+                                    ///
+                                    
+                                    //$venta+=$objventadetalle->getVentadetalleCantidad();
+                                }
+                            
                     }
 
                     $requisicionEg = 0;
-                    foreach ($objrequisicionesOrigen as $objrequisicion) {
-                        $objrequisiciondetalles = \RequisiciondetalleQuery::create()
-                                ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                ->filterByIdpadre(NULL,  \Criteria::NOT_EQUAL)
-                                ->filterByIdproducto($objproducto->getIdproducto())
-                                ->find();
-                        $objrequisiciondetalle = new \Requisiciondetalle();
-                        foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
-                            $requisicionEg+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                    
+                    if ($objproducto->getProductoTipo()=="simple")
+                    {
+                        foreach ($objrequisicionesOrigen as $objrequisicion) {
+                            $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                                    ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                    //->filterByIdpadre(NULL)
+                                    ->filterByRequisicionDetalleContable(1) //como salidas cuando es simple sólo se consideran los productos hojas que sean contables
+                                    ->filterByIdproducto($objproducto->getIdproducto())
+                                    ->find();
+                            $objrequisiciondetalle = new \Requisiciondetalle();
+                            foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
+                                $requisicionEg+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            }
                         }
+                        
+                    }
+                    
+                    if ($objproducto->getProductoTipo()=="subreceta")
+                    {
+                        foreach ($objrequisicionesOrigen as $objrequisicion) {
+                            $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                            ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                            ->filterByIdpadre(NULL,  \Criteria::NOT_EQUAL)
+                            ->filterByRequisicionDetalleContable(1) //como salidas cuando es simple sólo se consideran los productos hojas que sean contables
+                            ->filterByIdproducto($objproducto->getIdproducto())
+                            ->find();
+                            $objrequisiciondetalle = new \Requisiciondetalle();
+                            foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
+                                $requisicionEg+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                            }
+                        }
+                        
                     }
 
                     $ordenTabEg = 0;
@@ -380,6 +476,21 @@ class CierresinventariosController extends AbstractActionController {
                         $stockFisico = (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'])) ? $arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'] + $productosReporte[$objproducto->getIdproducto()]: $productosReporte[$objproducto->getIdproducto()];
 
                     if ($stockFisico != 0 && $objproducto->getProductoTipo() == 'subreceta') {
+                        
+                            /*
+                             //falta sacar papa
+                             
+                             
+                             $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+                             $st = $conn->prepare(sqlrequisicioningreso);
+                             $st->execute();
+                             $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            */
+                        
+                        //preguntar si el producto tuvo requisiciones de entrada a este almacen ó si tuvo requisiciones como egreso e ingreso APLICAR SIMPLE
+                        //{
+                        //} termina el if que pregunta si el producto fue recibido en una requisicion en los últimos 6 meses
+                        //preguntar si el producto tuvo requisiciones como salida o bien no tuvo ni entrada ni salida - APLiCAR EXPLOSION
                         $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
                         $recetaObj = new \Receta();
                         foreach ($recetasObj as $recetaObj) {
@@ -412,7 +523,9 @@ class CierresinventariosController extends AbstractActionController {
                             } else {
                                 $arrayReporte[$idpr][$exp] =(isset($arrayReporte[$idpr][$exp]))?  $arrayReporte[$idpr][$exp]+($cant * $stockFisico): ($cant * $stockFisico);
                             }
-                        }
+                        }//termina for each de elementos de la receta
+                        
+                    
                         $stockFisico = 0;
                         
                     }

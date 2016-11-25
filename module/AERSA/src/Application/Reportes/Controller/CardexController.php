@@ -300,14 +300,31 @@ class CardexController extends AbstractActionController {
                                     $row++;
                                 }
                             }
+                            
+                            
+                            
 
                             $objrequisicion = new \Requisicion();
                             foreach ($objrequisicionesDestino as $objrequisicion) {
+                                if($objproducto->getProductoTipo()=="simple") //cuando el producto es simple solo se consideran los padres
+                                {
                                 $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                         ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
                                         ->filterByIdpadre(NULL)
+                                        ->filterByRequisicionDetalleContable(1) //como entradas sólo se consideran los hoja raiz que sean contables
                                         ->filterByIdproducto($objproducto->getIdproducto())
                                         ->find();
+                                }
+                                if($objproducto->getProductoTipo()=="subreceta") //cuando el producto es simple solo se consideran los padres
+                                {
+                                    $objrequisiciondetalles = \RequisiciondetalleQuery::create()
+                                    ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
+                                    ->filterByIdpadre(NULL)
+                                    ->filterByRequisicionDetalleContable(0) //como entradas sólo se consideran los productos raiz que no sean contables
+                                    ->filterByIdproducto($objproducto->getIdproducto())
+                                    ->find();
+                                }
+                                
                                 $objrequisiciondetalle = new \Requisiciondetalle();
                                 foreach ($objrequisiciondetalles as $objrequisiciondetalle) {
                                     $colorbg = ($color) ? $bgfila : $bgfila2;
@@ -402,6 +419,7 @@ class CardexController extends AbstractActionController {
                                         ->filterByIdventa($objventa->getIdventa())
                                         ->filterByIdalmacen($idalmacen)
                                         ->filterByIdproducto($objproducto->getIdproducto())
+                                        ->filterByVentaDetalleContable(1) //para contemplar sólo los productos que son contables
                                         ->find();
                                 $objventadetalle = new \Ventadetalle();
                                 foreach ($objventadetalles as $objventadetalle) {
@@ -442,7 +460,8 @@ class CardexController extends AbstractActionController {
                                         ->find();*/
                                 $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                 ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                ->filterByIdpadre(NULL)
+                                //->filterByIdpadre(NULL) //como salidas cuando es simple sólo se consideran los productos hojas que sean contables
+                                ->filterByRequisicionDetalleContable(1)
                                 ->filterByIdproducto($objproducto->getIdproducto())
                                 ->find();
                                 }
@@ -455,7 +474,8 @@ class CardexController extends AbstractActionController {
                                      ->find();*/
                                    $objrequisiciondetalles = \RequisiciondetalleQuery::create()
                                     ->filterByIdrequisicion($objrequisicion->getIdrequisicion())
-                                    ->filterByIdpadre(NULL, \Criteria::NOT_EQUAL)
+                                    ->filterByIdpadre(NULL, \Criteria::NOT_EQUAL)//como salidas cuando es receta sólo se consideran los productos hojas que sean contables
+                                    ->filterByRequisicionDetalleContable(1)
                                     ->filterByIdproducto($objproducto->getIdproducto())
                                     ->find();
                                 }
