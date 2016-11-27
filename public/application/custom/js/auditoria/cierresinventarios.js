@@ -292,6 +292,7 @@
             });
             var inventario_array = {};
             $('#subir_inventario').on('click', function () {
+                                      alert("En caso de que el formato se edite o modifique de cualquier manera, este será incompatible con la carga automática desde Excel a CFCI, por lo que no se debe modificar");
                 $('input[name=batch_inventario]').trigger('click');
             });
             $('input[name=batch_inventario]').on('change', function () {

@@ -324,10 +324,10 @@ class TablajeriaController extends AbstractActionController {
 
                 if ($post_data['ordentablajeria_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
-                    $product = \ProductoQuery::create()->findPk($entity->getIdproducto());
-                    $product->setProductoCosto($post_data['ordentablajeria_precioneto'])->save();
+                   // $product = \ProductoQuery::create()->findPk($entity->getIdproducto());
+                    //$product->setProductoCosto($post_data['ordentablajeria_precioneto'])->save();
                     
-                    \Application\Catalogo\Controller\ProductoController::updateSubreceta($product->getIdproducto());
+                    //\Application\Catalogo\Controller\ProductoController::updateSubreceta($product->getIdproducto());
                 }
                  
                 $entity->save();
@@ -350,7 +350,9 @@ class TablajeriaController extends AbstractActionController {
 
                     if (isset($producto['revisada'])) {
                         $ordentablajeria_detalle->setOrdentablajeriadetalleRevisada(1);
-                        
+                        $product = \ProductoQuery::create()->findPk($producto['idproducto']);
+                        $product->setProductoCosto($producto['precioporcion'])->save();
+                        \Application\Catalogo\Controller\ProductoController::updateSubreceta($producto['idproducto']);
                     }
 
                     $ordentablajeria_detalle->save();
