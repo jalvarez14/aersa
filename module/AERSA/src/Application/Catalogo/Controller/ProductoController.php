@@ -347,6 +347,7 @@ class ProductoController extends AbstractActionController
             if($post_data['producto_tipo'] == 'plu')
             {
                 $this->flashMessenger()->addSuccessMessage('Producto registrado satisfactoriamente, ahora ingresa una subreceta');
+                $entity->setProductoRendimiento(1)->setProductoRendimientooriginal(1)->save();
                 return $this->redirect()->toUrl('/catalogo/producto/nuevasubreceta/'.$entity->getIdproducto());
             }
             $this->flashMessenger()->addSuccessMessage('Producto registrado satisfactoriamente!');
