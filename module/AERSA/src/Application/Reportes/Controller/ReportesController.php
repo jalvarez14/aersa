@@ -638,6 +638,7 @@ class ReportesController extends AbstractActionController {
                                 $reporte[$fila] = "<tr bgcolor='" . $bgfila . "'><td></td><td></td><td></td><td></td><td> Total </td><td> " . $totalc . " </td></tr>";
                             $fila++;
                         }
+                        $totalc=0;
                     }
                 }
                 if ($totalp != 0) {
@@ -1215,22 +1216,24 @@ class ReportesController extends AbstractActionController {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
             $recetaObj = new \Receta();
             $idProducto = $productoObj->getIdproducto();
+            $unidad= $productoObj->getUnidadmedida()->getUnidadmedidaNombre();
             $nombreProducto = $productoObj->getProductoNombre();
             $totalReceta = 0;
             $bgazulclaro = "#ADD8E6";
             $bgazul = "#819FF7";
             if ($archivo) {
-                array_push($reporte, array('uno' => 'Clave:', 'dos' => $idProducto, 'tres' => 'Producto', 'cuatro' => $nombreProducto, 'cinco' => '', 'seis' => '', 'siete' => ''));
-                array_push($reporte, array('uno' => 'ProdPadre', 'dos' => 'ProdHijo', 'tres' => 'Tipo', 'cuatro' => 'Clave', 'cinco' => 'Cantidad', 'seis' => 'Costo', 'siete' => 'Total'));
+                array_push($reporte, array('uno' => 'Clave:', 'dos' => $idProducto, 'tres' => 'Producto', 'cuatro' => $nombreProducto, 'cinco' => 'Unidad:', 'seis' => $unidad, 'siete' => '','ocho'=>'','nueve'=>''));
+                array_push($reporte, array('uno' => 'ProdPadre','dos'=>'Unidad', 'tres' => 'ProdHijo','cuatro'=>'Unidad', 'cinco' => 'Tipo', 'seis' => 'Clave', 'siete' => 'Cantidad', 'ocho' => 'Costo', 'nueve' => 'Total'));
             } else {
-                array_push($reporte, "<tr bgcolor='" . $bgazul . "'><td>Clave:</td><td>$idProducto</td><td>Producto:</td><td>$nombreProducto</td><td></td><td></td><td></td></tr>");
-                array_push($reporte, "<tr bgcolor='" . $bgazulclaro . "'><td>ProdPadre</td><td>ProdHijo</td><td>Tipo</td><td>Clave</td><td>Cantidad</td><td>Costo</td><td>Total</td></tr>");
+                array_push($reporte, "<tr bgcolor='" . $bgazul . "'><td>Clave:</td><td>$idProducto</td><td>Producto:</td><td>$nombreProducto</td><td>Unidad:</td><td>$unidad</td><td></td><td></td><td></td></tr>");
+                array_push($reporte, "<tr bgcolor='" . $bgazulclaro . "'><td>ProdPadre</td><td>Unidad</td><td>ProdHijo</td><td>Unidad</td><td>Tipo</td><td>Clave</td><td>Cantidad</td><td>Costo</td><td>Total</td></tr>");
             }
             $color = true;
             foreach ($recetasObj as $recetaObj) {
                 $producto = \ProductoQuery::create()->filterByIdproducto($recetaObj->getIdproductoreceta())->findOne();
                 $clave = $producto->getIdproducto();
                 $nombre = $producto->getProductoNombre();
+                $unidad = $producto->getUnidadmedida()->getUnidadmedidaNombre();
                 $cantidad = $recetaObj->getRecetaCantidad();
                 $costo = $producto->getProductoCosto();
                 $tipo = $producto->getProductoTipo();
@@ -1251,9 +1254,9 @@ class ReportesController extends AbstractActionController {
                         $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
                         $color = !$color;
                         if ($archivo) {
-                            array_push($reporte, array('uno' => $nombre, 'dos' => $nombreDetalle, 'tres' => $tipoDetalle, 'cuatro' => $claveDetalle, 'cinco' => $cantidadDetalle, 'seis' => $costoDetalle, 'siete' => $totalDetalle));
+                            array_push($reporte, array('uno' => $nombre, 'dos' => $unidad, 'tres' => $nombreDetalle, 'cuatro' => $unidadDetalle ,'cinco' => $tipoDetalle, 'seis' => $claveDetalle, 'siete' => $cantidadDetalle, 'ocho' => $costoDetalle, 'nueve' => $totalDetalle));
                         } else {
-                            array_push($reporte, "<tr bgcolor='" . $bg . "'><td>$nombre</td><td>$nombreDetalle</td><td>$tipoDetalle</td><td>$claveDetalle</td><td>$cantidadDetalle</td><td>$costoDetalle</td><td>$totalDetalle</td></tr>");
+                            array_push($reporte, "<tr bgcolor='" . $bg . "'><td>$nombre</td><td>$unidad</td><td>$nombreDetalle</td><td>$unidadDetalle</td><td>$tipoDetalle</td><td>$claveDetalle</td><td>$cantidadDetalle</td><td>$costoDetalle</td><td>$totalDetalle</td></tr>");
                         }
                     }
                 } else {
@@ -1261,16 +1264,16 @@ class ReportesController extends AbstractActionController {
                     $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
                     $color = !$color;
                     if ($archivo) {
-                        array_push($reporte, array('uno' => '', 'dos' => $nombre, 'tres' => $tipo, 'cuatro' => $clave, 'cinco' => $cantidad, 'seis' => $costo, 'siete' => $total));
+                        array_push($reporte, array('uno' => '', 'dos'=>'','tres' => $nombre,'cuatro'=>$unidad, 'tres' => $tipo, 'cuatro' => $clave, 'cinco' => $cantidad, 'seis' => $costo, 'siete' => $total));
                     } else {
-                        array_push($reporte, "<tr bgcolor='" . $bg . "'><td></td><td>$nombre</td><td>$tipo</td><td>$clave</td><td>$cantidad</td><td>$costo</td><td>$total</td></tr>");
+                        array_push($reporte, "<tr bgcolor='" . $bg . "'><td></td><td></td><td>$nombre</td><td>$unidad</td><td>$tipo</td><td>$clave</td><td>$cantidad</td><td>$costo</td><td>$total</td></tr>");
                     }
                 }
             }
             if ($archivo) {
-                array_push($reporte, array('uno' => '', 'dos' => '', 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => 'Total', 'siete' => $totalReceta));
+                array_push($reporte, array('uno' => '', 'dos' => '', 'tres' => '', 'cuatro' => '', 'cinco' => '','seis'=>'','siete'=>'', 'ocho' => 'Total', 'ocho' => $totalReceta));
             } else {
-                array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td>Total</td><td>$totalReceta</td></tr>");
+                array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Total</td><td>$totalReceta</td></tr>");
             }
         }
         $fecha = date('d/m/Y');
@@ -1339,15 +1342,16 @@ class ReportesController extends AbstractActionController {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
             $recetaObj = new \Receta();
             $idProducto = $productoObj->getIdproducto();
+            $unidad=$productoObj->getUnidadmedida()->getUnidadmedidaNombre();
             $nombreProducto = $productoObj->getProductoNombre();
             $totalReceta = 0;
             $bgazulclaro = "#ADD8E6";
             $bgazul = "#819FF7";
             if ($archivo) {
-                array_push($reporte, array('uno' => 'Clave:', 'dos' => $idProducto, 'tres' => 'Producto', 'cuatro' => $nombreProducto, 'cinco' => '', 'seis' => ''));
+                array_push($reporte, array('uno' => 'Clave:', 'dos' => $idProducto, 'tres' => 'Producto', 'cuatro' => $nombreProducto, 'cinco' => 'Unidad', 'seis' => $unidad));
                 array_push($reporte, array('uno' => 'Clave', 'dos' => 'Nombre Producto', 'tres' => 'Cantidad', 'cuatro' => 'Unidad', 'cinco' => 'Costo', 'seis' => 'Total'));
             } else {
-                array_push($reporte, "<tr bgcolor='" . $bgazul . "'><td>Clave:</td><td>$idProducto</td><td>Producto:</td><td>$nombreProducto</td><td></td><td></td></tr>");
+                array_push($reporte, "<tr bgcolor='" . $bgazul . "'><td>Clave:</td><td>$idProducto</td><td>Producto:</td><td>$nombreProducto</td><td>Unidad:</td><td>$unidad</td></tr>");
                 array_push($reporte, "<tr bgcolor='" . $bgazulclaro . "'><td>Clave</td><td>Nombre Producto</td><td>Cantidad</td><td>Unidad</td><td>Costo</td><td>Total</td></tr>");
             }
             $color = true;
