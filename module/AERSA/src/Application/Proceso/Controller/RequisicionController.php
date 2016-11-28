@@ -199,7 +199,7 @@
                                                     $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel4->getIdproductoreceta())->findOne()->getProductoCosto();
                                                     $requisiciondnivel4->setIdrequisicion($requisicion->getIdrequisicion())
                                                     ->setIdproducto($pronivel4->getIdproductoreceta())
-                                                    ->setRequisiciondetalleCantidad($pronivel4->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                    ->setRequisiciondetalleCantidad($pronivel4->getRecetaCantidad() * $productocantidadnivel4)
                                                     ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                     ->setRequisiciondetallePreciounitario($costouni)
                                                     ->setRequisiciondetalleSubtotal($costouni * ($pronivel4->getRecetaCantidad() * $productocantidadnivel4))
@@ -226,7 +226,7 @@
                                                             $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel5->getIdproductoreceta())->findOne()->getProductoCosto();
                                                             $requisiciondnivel5->setIdrequisicion($requisicion->getIdrequisicion())
                                                             ->setIdproducto($pronivel5->getIdproductoreceta())
-                                                            ->setRequisiciondetalleCantidad($pronivel5->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                            ->setRequisiciondetalleCantidad($pronivel5->getRecetaCantidad() * $productocantidadnivel5)
                                                             ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                             ->setRequisiciondetallePreciounitario($costouni)
                                                             ->setRequisiciondetalleSubtotal($costouni * ($pronivel5->getRecetaCantidad() * $productocantidadnivel5))
@@ -253,7 +253,7 @@
                                                                     $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel6->getIdproductoreceta())->findOne()->getProductoCosto();
                                                                     $requisiciondnivel6->setIdrequisicion($requisicion->getIdrequisicion())
                                                                     ->setIdproducto($pronivel6->getIdproductoreceta())
-                                                                    ->setRequisiciondetalleCantidad($pronivel6->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                                    ->setRequisiciondetalleCantidad($pronivel6->getRecetaCantidad() * $productocantidadnivel6)
                                                                     ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                                     ->setRequisiciondetallePreciounitario($costouni)
                                                                     ->setRequisiciondetalleSubtotal($costouni * ($pronivel6->getRecetaCantidad() * $productocantidadnivel6))
@@ -269,18 +269,18 @@
                                                                     $productorecnivel7= $pronivel6->getIdproductoreceta();
                                                                     $productocantidadnivel7= $pronivel6->getRecetaCantidad() * $productocantidadnivel6;
                                                                     
-                                                                    //nivel 6
+                                                                    //nivel 7
                                                                     $productotiponivel7 = \ProductoQuery::create()->filterByIdproducto($productorecnivel7)->findOne()->getProductoTipo();
                                                                     
                                                                     if ($productotiponivel7!= 'simple') {
                                                                         $recetanivel7 = new \Receta();
-                                                                        $recetanivel7 = \RecetaQuery::create()->filterByIdproducto($productorecnivel6)->find();
-                                                                        foreach ($recetanivel7 as $pronivel6) {
+                                                                        $recetanivel7 = \RecetaQuery::create()->filterByIdproducto($productorecnivel7)->find();
+                                                                        foreach ($recetanivel7 as $pronivel7) {
                                                                             $requisiciondnivel7 = new \Requisiciondetalle();
                                                                             $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel7->getIdproductoreceta())->findOne()->getProductoCosto();
                                                                             $requisiciondnivel7->setIdrequisicion($requisicion->getIdrequisicion())
                                                                             ->setIdproducto($pronivel7->getIdproductoreceta())
-                                                                            ->setRequisiciondetalleCantidad($pronivel7->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                                            ->setRequisiciondetalleCantidad($pronivel7->getRecetaCantidad() * $productocantidadnivel7)
                                                                             ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                                             ->setRequisiciondetallePreciounitario($costouni)
                                                                             ->setRequisiciondetalleSubtotal($costouni * ($pronivel7->getRecetaCantidad() * $productocantidadnivel7))
@@ -567,7 +567,7 @@
                                                         $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel4->getIdproductoreceta())->findOne()->getProductoCosto();
                                                         $requisiciondnivel4->setIdrequisicion($entity->getIdrequisicion())
                                                         ->setIdproducto($pronivel4->getIdproductoreceta())
-                                                        ->setRequisiciondetalleCantidad($pronivel4->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                        ->setRequisiciondetalleCantidad($pronivel4->getRecetaCantidad() * $productocantidadnivel4)
                                                         ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                         ->setRequisiciondetallePreciounitario($costouni)
                                                         ->setRequisiciondetalleSubtotal($costouni * ($pronivel4->getRecetaCantidad() * $productocantidadnivel4))
@@ -594,7 +594,7 @@
                                                                 $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel5->getIdproductoreceta())->findOne()->getProductoCosto();
                                                                 $requisiciondnivel5->setIdrequisicion($entity->getIdrequisicion())
                                                                 ->setIdproducto($pronivel5->getIdproductoreceta())
-                                                                ->setRequisiciondetalleCantidad($pronivel5->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                                ->setRequisiciondetalleCantidad($pronivel5->getRecetaCantidad() * $productocantidadnivel5)
                                                                 ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                                 ->setRequisiciondetallePreciounitario($costouni)
                                                                 ->setRequisiciondetalleSubtotal($costouni * ($pronivel5->getRecetaCantidad() * $productocantidadnivel5))
@@ -621,7 +621,7 @@
                                                                         $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel6->getIdproductoreceta())->findOne()->getProductoCosto();
                                                                         $requisiciondnivel6->setIdrequisicion($entity->getIdrequisicion())
                                                                         ->setIdproducto($pronivel6->getIdproductoreceta())
-                                                                        ->setRequisiciondetalleCantidad($pronivel6->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                                        ->setRequisiciondetalleCantidad($pronivel6->getRecetaCantidad() * $productocantidadnivel6)
                                                                         ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                                         ->setRequisiciondetallePreciounitario($costouni)
                                                                         ->setRequisiciondetalleSubtotal($costouni * ($pronivel6->getRecetaCantidad() * $productocantidadnivel6))
@@ -642,13 +642,13 @@
                                                                         
                                                                         if ($productotiponivel7!= 'simple') {
                                                                             $recetanivel7 = new \Receta();
-                                                                            $recetanivel7 = \RecetaQuery::create()->filterByIdproducto($productorecnivel6)->find();
-                                                                            foreach ($recetanivel7 as $pronivel6) {
+                                                                            $recetanivel7 = \RecetaQuery::create()->filterByIdproducto($productorecnivel7)->find();
+                                                                            foreach ($recetanivel7 as $pronivel7) {
                                                                                 $requisiciondnivel7 = new \Requisiciondetalle();
                                                                                 $costouni = \ProductoQuery::create()->filterByIdproducto($pronivel7->getIdproductoreceta())->findOne()->getProductoCosto();
                                                                                 $requisiciondnivel7->setIdrequisicion($entity->getIdrequisicion())
                                                                                 ->setIdproducto($pronivel7->getIdproductoreceta())
-                                                                                ->setRequisiciondetalleCantidad($pronivel7->getRecetaCantidad() * $requisicion_detalle->getRequisiciondetalleCantidad())
+                                                                                ->setRequisiciondetalleCantidad($pronivel7->getRecetaCantidad() * $productocantidadnivel7)
                                                                                 ->setRequisiciondetalleRevisada($requisicion_detalle->getRequisiciondetalleRevisada())
                                                                                 ->setRequisiciondetallePreciounitario($costouni)
                                                                                 ->setRequisiciondetalleSubtotal($costouni * ($pronivel7->getRecetaCantidad() * $productocantidadnivel7))
