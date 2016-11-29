@@ -353,7 +353,7 @@ class VentaController extends AbstractActionController {
                                                                     foreach ($receta7 as $detalle7){
                                                                         //var_dump("his");
                                                                         //exit();
-                                                                        echo "idprod: ".$detalle7->getIdproductoreceta();
+                                                                        //echo "idprod: ".$detalle7->getIdproductoreceta();
                                                                         $venta_detalle_receta = new \Ventadetalle();
                                                                         $venta_detalle_receta->setIdventa($entity->getIdventa())
                                                                         ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())

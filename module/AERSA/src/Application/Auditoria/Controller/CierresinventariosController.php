@@ -64,7 +64,8 @@
                 $idauditor = $post_data['idauditor'];
                 $post_data['idempresa'] = $idempresa;
                 $post_data['idsucursal'] = $idsucursal;
-                $post_data["inventariomes_fecha"] = date_create_from_format('d/m/Y', $post_data["inventariomes_fecha"]);
+                //$post_data["inventariomes_fecha"] = date_create_from_format('d/m/Y', $post_data["inventariomes_fecha"]);
+                $post_data["inventariomes_fecha"] = date_create_from_format('m/d/Y', $post_data["inventariomes_fecha"]);
                 $inventariocierremes = new \Inventariomes();
                 foreach ($post_data as $key => $value) {
                     if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
@@ -446,7 +447,7 @@
                                     {
                                         //var_dump($padrenivel1);
                                         //exit();
-                                        $venta_detalle_padrenivel2 = \VentadetalleQuery::create()->findPk($padrenivel1->getIdPadre());
+                                        $venta_detalle_padrenivel2 = \VentadetalleQuery::create()->findPk($padrenivel1);
                                         $padrenivel2=$venta_detalle_padrenivel2->getIdPadre();
                                         
                                         if($padrenivel2=='')
@@ -480,7 +481,7 @@
                                         }
                                         else //el papa nivel 2 no es la raiz
                                         {
-                                            $venta_detalle_padrenivel3 = \VentadetalleQuery::create()->findPk($padrenivel2->getIdPadre());
+                                            $venta_detalle_padrenivel3 = \VentadetalleQuery::create()->findPk($padrenivel2);
                                             $padrenivel3=$venta_detalle_padrenivel3->getIdPadre();
                                             
                                             if($padrenivel3=='')
@@ -514,7 +515,7 @@
                                             }
                                             else //si papá nivel 3 no es la raiz
                                             {
-                                                $venta_detalle_padrenivel4 = \VentadetalleQuery::create()->findPk($padrenivel3->getIdPadre());
+                                                $venta_detalle_padrenivel4 = \VentadetalleQuery::create()->findPk($padrenivel3);
                                                 $padrenivel4=$venta_detalle_padrenivel4->getIdPadre();
                                                 if($padrenivel4=='')
                                                 {
@@ -547,7 +548,7 @@
                                                 }
                                                 else //si papá nivel 4 no es la raiz
                                                 {
-                                                    $venta_detalle_padrenivel5 = \VentadetalleQuery::create()->findPk($padrenivel4->getIdPadre());
+                                                    $venta_detalle_padrenivel5 = \VentadetalleQuery::create()->findPk($padrenivel4);
                                                     $padrenivel5=$venta_detalle_padrenivel5->getIdPadre();
                                                     
                                                     if($padrenivel5=='')
@@ -581,7 +582,7 @@
                                                     }
                                                     else //si el papá nivel 5 no es la raiz
                                                     {
-                                                        $venta_detalle_padrenivel6 = \VentadetalleQuery::create()->findPk($padrenivel5->getIdPadre());
+                                                        $venta_detalle_padrenivel6 = \VentadetalleQuery::create()->findPk($padrenivel5);
                                                         $padrenivel6=$venta_detalle_padrenivel6->getIdPadre();
                                                         
                                                         if($padrenivel6=='')
@@ -616,7 +617,7 @@
                                                         }
                                                         else //si el papa 6 no es nivel
                                                         {
-                                                            $venta_detalle_padrenivel7 = \VentadetalleQuery::create()->findPk($padrenivel6->getIdPadre());
+                                                            $venta_detalle_padrenivel7 = \VentadetalleQuery::create()->findPk($padrenivel6);
                                                             $padrenivel7=$venta_detalle_padrenivel7->getIdPadre();
                                                             if($padrenivel7=="NULL")
                                                             {
