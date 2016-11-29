@@ -89,10 +89,13 @@ class InventariociclicoController extends AbstractActionController {
         $time += 6 * 24 * 3600;
         $fecha = date('Y-m-d', $time);
         $form = new \Application\Auditoria\Form\InventariociclicoForm($fecha, $almacen_array, $auditor_array);
+        $form->get('fecha')->setValue("");
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/auditoria/inventariociclico/index');
+        
         $view_model->setVariables(array(
             'form' => $form,
+             'fecha'=>$fecha,
             'messages' => $this->flashMessenger(),
         ));
         return $view_model;
