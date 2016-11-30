@@ -332,11 +332,12 @@
 //                                console.log(workbook_array[k]);
 //                            }
                                 var table = $('#reporte_table');
+                                var fecha = $('input[name=inventariomes_fecha]').val();
                                 $.ajax({
                                     url: '/auditoria/cierresemana/batch',
                                     type: 'POST',
                                     dataType: 'json',
-                                    data: {inventario: workbook_array, almacen: almacen, auditor: auditor},
+                                       data: {inventario: workbook_array, almacen: almacen, auditor: auditor, fecha:fecha},
                                     beforeSend: function (xhr) {
                                         $('body').addClass('loading');
                                     },

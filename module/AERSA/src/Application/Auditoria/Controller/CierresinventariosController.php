@@ -176,24 +176,39 @@
                 $start = strtotime('last monday', $time);
                 $inicio_semana = date('Y-m-d', strtotime('last monday', $time));
                 
-                $fin_semana = date('Y-m-d', $time);
+                $fin_semana2 = date('Y-m-d', $time);
                 
                 $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
                 $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
                 
-                $fecharequisicion6meses = strtotime ('-6 month', strtotime($fin_semana));
+                $fecharequisicion6meses = strtotime ('-6 month', strtotime($fin_semana2));
                 $fecharequisicion6meses = date('Y-m-d',  $fecharequisicion6meses);
                 $fecharequisicion6meses = $fecharequisicion6meses. " 00:00:00" ;
                 
+                //var_dump($fecharequisicion6meses);
+                //exit();
+                $inicio_semana = $inicio_semana . " 00:00:00";
+                $fin_semana2 =  date_create_from_format('m/d/Y H:i:s', $post_data["fecha"]." 23:59:59");
+                $fin_semana = $fin_semana2->format("Y-m-d H:i:s");
                 
-                $inicio_semana = $inicio_semana . " 00:00:00   ";
-                $fin_semana = $fin_semana . " 23:59:59";
                 
-                
-                //inventario anterior
                 $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->exists();
                 if ($inventario_anterior)
+                {
                     $id_inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->findOne()->getIdinventariomes();
+                    $inicio_semana2 = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->findOne()->getInventariomesFecha();
+                    $inicio_semana3 = strtotime ('+1 day', strtotime($inicio_semana2));
+                    $inicio_semana3 = date('Y-m-d',  $inicio_semana3);
+                    $inicio_semana  = $inicio_semana3. " 00:00:00";
+                }
+                else
+                {
+                    $inicio_semana3 = strtotime ('-6 day', strtotime($fin_semana));
+                    $inicio_semana3 = date('Y-m-d',  $inicio_semana3);
+                    $inicio_semana  = $inicio_semana3. " 00:00:00";
+
+                }
+                
                 $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
                 $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
                 
@@ -349,12 +364,12 @@
                                     //se considera como simple
                                     $conn = \Propel::getConnection();
                                     $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st = $conn->prepare(sqlrequisicioningreso);
+                                    $st = $conn->prepare($sqlrequisicioningreso);
                                     $st->execute();
                                     $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                                     
                                     $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st2 = $conn->prepare(sqlrequisicionegreso);
+                                    $st2 = $conn->prepare($sqlrequisicionegreso);
                                     $st2->execute();
                                     $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
                                     
@@ -373,12 +388,12 @@
                                     //var_dump("caso2");
                                     //exit();
                                     $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$producto_padre) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st = $conn->prepare(sqlrequisicioningreso);
+                                    $st = $conn->prepare($sqlrequisicioningreso);
                                     $st->execute();
                                     $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                                     
                                     $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st2 = $conn->prepare(sqlrequisicionegreso);
+                                    $st2 = $conn->prepare($sqlrequisicionegreso);
                                     $st2->execute();
                                     $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
                                     
