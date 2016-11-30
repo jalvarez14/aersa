@@ -203,9 +203,20 @@
                 }
                 else
                 {
-                    $inicio_semana3 = strtotime ('-6 day', strtotime($fin_semana));
-                    $inicio_semana3 = date('Y-m-d',  $inicio_semana3);
-                    $inicio_semana  = $inicio_semana3. " 00:00:00";
+                    //si es el primer inventario, la fecha de inicio es un dia después de la semana revisada
+                    $idsuc= $session['idsucursal'];
+                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadasemana();
+                    
+                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadaanio();
+                    $time = strtotime("1 January $anio_act", time());
+                    $day = date('w', $time);
+                    $time += ((7 * $semana_rev) + 2 - $day) * 24 * 3600;
+                    $time += 6 * 24 * 3600;
+                    $inicio_semana = date('Y-m-d', $time)." 00:00:00";
+                    
+                    //$inicio_semana3 = strtotime ('-6 day', strtotime($fin_semana));
+                    //$inicio_semana3 = date('Y-m-d',  $inicio_semana3);
+                    //$inicio_semana  = $inicio_semana3. " 00:00:00";
 
                 }
                 
