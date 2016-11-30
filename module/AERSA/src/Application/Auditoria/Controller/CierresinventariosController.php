@@ -1250,6 +1250,9 @@
         }
         
         public function encargadoAction() {
+            $session = new \Shared\Session\AouthSession();
+            $session = $session->getData();
+            
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $post_data = $request->getPost();
@@ -1261,7 +1264,21 @@
                 $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($id)->exists();
                 $fecha=null;
                 if ($inventario_anterior)
+                {
                     $fecha = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('desc')->findOne()->getInventariomesFecha('Y-m-d');
+                }
+                else
+                {
+                    $idsuc= $session['idsucursal'];
+                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadasemana();
+                    
+                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadaanio();
+                    $time = strtotime("1 January $anio_act", time());
+                    $day = date('w', $time);
+                    $time += ((7 * $semana_rev) + 1 - $day) * 24 * 3600;
+                    $time += 6 * 24 * 3600;
+                    $fecha = date('Y-m-d', $time);
+                }
                 $resp=array('con' => $con,'fecha'=>$fecha);
                 return $this->getResponse()->setContent(json_encode($resp));
             }
