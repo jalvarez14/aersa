@@ -853,7 +853,7 @@
                                          //si el producto de la receta segundo nivel es hijo
                                          if($tipopr2=="subreceta")
                                          {
-                                             $recetasObjnivel3 = \RecetaQuery::create()->filterByIdproducto($idprnivel2->getIdproducto())->find();
+                                             $recetasObjnivel3 = \RecetaQuery::create()->filterByIdproducto($idprnivel2)->find();
                                              $recetaObjnivel3 = new \Receta();
                                              //se recorren elementos de la receta nivel 2
                                              
@@ -864,7 +864,7 @@
                                                  //si el producto de la receta tercer nivel es hijo
                                                  if($tipopr3=="subreceta")
                                                  {
-                                                     $recetasObjnivel4 = \RecetaQuery::create()->filterByIdproducto($idprnivel3->getIdproducto())->find();
+                                                     $recetasObjnivel4 = \RecetaQuery::create()->filterByIdproducto($idprnivel3)->find();
                                                      $recetaObjnivel4 = new \Receta();
                                                      //se recorren elementos de la receta nivel 3
                                                      foreach ($recetasObjnivel4 as $recetaObjnivel4) {
@@ -874,7 +874,7 @@
                                                          //si el producto de la receta cuarto nivel es hijo
                                                          if($tipopr4=="subreceta")
                                                          {
-                                                             $recetasObjnivel5 = \RecetaQuery::create()->filterByIdproducto($idprnivel4->getIdproducto())->find();
+                                                             $recetasObjnivel5 = \RecetaQuery::create()->filterByIdproducto($idprnivel4)->find();
                                                              $recetaObjnivel5 = new \Receta();
                                                              //se recorren elementos de la receta nivel 4
                                                              foreach ($recetasObjnivel5 as $recetaObjnivel5) {
@@ -884,7 +884,7 @@
                                                                  //si el producto de la receta quinto nivel es hijo
                                                                  if($tipopr5=="subreceta")
                                                                  {
-                                                                     $recetasObjnivel6 = \RecetaQuery::create()->filterByIdproducto($idprnivel5->getIdproducto())->find();
+                                                                     $recetasObjnivel6 = \RecetaQuery::create()->filterByIdproducto($idprnivel5)->find();
                                                                      $recetaObjnivel6 = new \Receta();
                                                                      //se recorren elementos de la receta nivel 5
                                                                      
