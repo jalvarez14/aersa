@@ -423,7 +423,7 @@
                                 {
                                     //var_dump("caso3");
                                     //conocer el producto del cual salió, puede ser el nivel superior, dos niveles arriba, hasta 6 niveles arriba
-                                    
+                                    $conn = \Propel::getConnection();
                                     //se conoce el papa
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrenivel1=$venta_detalle_padre->getIdPadre();
@@ -835,55 +835,65 @@
                             foreach ($recetasObj as $recetaObj) {
                                 
                                 $idpr = $recetaObj->getIdproductoreceta();
+                                
+                                $productoquery1 = \ProductoQuery::create()->filterByIdproducto($idpr)->findOne();
+                                
+                                $tipopr= $productoquery1->getProductoTipo();
                                 //si el producto de la receta primer nivel es hijo
-                                if($idpr->getProductoTipo()=="subreceta")
+                                if($tipopr=="subreceta")
                                 {
                                     
                                     $recetasObjnivel2 = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
                                     $recetaObjnivel2 = new \Receta();
                                     //se recorren elementos de la receta nivel 2
                                      foreach ($recetasObjnivel2 as $recetaObjnivel2) {
-                                         $idprnivel2=$$recetaObjnivel2->getIdproductoreceta();
-                                         
+                                         $idprnivel2=$recetaObjnivel2->getIdproductoreceta();
+                                         $productoquery2 = \ProductoQuery::create()->filterByIdproducto($idprnivel2)->findOne();
+                                         $tipopr2= $productoquery2->getProductoTipo();
                                          //si el producto de la receta segundo nivel es hijo
-                                         if($idprnivel2->getProductoTipo()=="subreceta")
+                                         if($tipopr2=="subreceta")
                                          {
                                              $recetasObjnivel3 = \RecetaQuery::create()->filterByIdproducto($idprnivel2->getIdproducto())->find();
                                              $recetaObjnivel3 = new \Receta();
                                              //se recorren elementos de la receta nivel 2
                                              
                                              foreach ($recetasObjnivel3 as $recetaObjnivel3) {
-                                                 $idprnivel3=$$recetaObjnivel3->getIdproductoreceta();
-                                                 
+                                                 $idprnivel3=$recetaObjnivel3->getIdproductoreceta();
+                                                 $productoquery3 = \ProductoQuery::create()->filterByIdproducto($idprnivel3)->findOne();
+                                                 $tipopr3= $productoquery3->getProductoTipo();
                                                  //si el producto de la receta tercer nivel es hijo
-                                                 if($idprnivel3->getProductoTipo()=="subreceta")
+                                                 if($tipopr3=="subreceta")
                                                  {
                                                      $recetasObjnivel4 = \RecetaQuery::create()->filterByIdproducto($idprnivel3->getIdproducto())->find();
                                                      $recetaObjnivel4 = new \Receta();
                                                      //se recorren elementos de la receta nivel 3
                                                      foreach ($recetasObjnivel4 as $recetaObjnivel4) {
-                                                         $idprnivel4=$$recetaObjnivel4->getIdproductoreceta();
-                                                         
+                                                         $idprnivel4=$recetaObjnivel4->getIdproductoreceta();
+                                                         $productoquery4 = \ProductoQuery::create()->filterByIdproducto($idprnivel4)->findOne();
+                                                         $tipopr4= $productoquery4->getProductoTipo();
                                                          //si el producto de la receta cuarto nivel es hijo
-                                                         if($idprnivel4->getProductoTipo()=="subreceta")
+                                                         if($tipopr4=="subreceta")
                                                          {
                                                              $recetasObjnivel5 = \RecetaQuery::create()->filterByIdproducto($idprnivel4->getIdproducto())->find();
                                                              $recetaObjnivel5 = new \Receta();
                                                              //se recorren elementos de la receta nivel 4
                                                              foreach ($recetasObjnivel5 as $recetaObjnivel5) {
-                                                                 $idprnivel5=$$recetaObjnivel5->getIdproductoreceta();
-                                                                 
+                                                                 $idprnivel5=$recetaObjnivel5->getIdproductoreceta();
+                                                                 $productoquery5 = \ProductoQuery::create()->filterByIdproducto($idprnivel5)->findOne();
+                                                                 $tipopr5= $productoquery5->getProductoTipo();
                                                                  //si el producto de la receta quinto nivel es hijo
-                                                                 if($idprnivel5->getProductoTipo()=="subreceta")
+                                                                 if($tipopr5=="subreceta")
                                                                  {
                                                                      $recetasObjnivel6 = \RecetaQuery::create()->filterByIdproducto($idprnivel5->getIdproducto())->find();
                                                                      $recetaObjnivel6 = new \Receta();
                                                                      //se recorren elementos de la receta nivel 5
                                                                      
                                                                      foreach ($recetasObjnivel6 as $recetaObjnivel6) {
-                                                                         $idprnivel6=$$recetaObjnivel6->getIdproductoreceta();
+                                                                         $idprnivel6=$recetaObjnivel6->getIdproductoreceta();
+                                                                         $productoquery6 = \ProductoQuery::create()->filterByIdproducto($idprnivel6)->findOne();
+                                                                         $tipopr6= $productoquery6->getProductoTipo();
                                                                          //si el producto de la receta sexto nivel es hijo
-                                                                         if($idprnivel6->getProductoTipo()=="subreceta")
+                                                                         if($tipopr6=="subreceta")
                                                                          {
                                                                              
                                                                          }
