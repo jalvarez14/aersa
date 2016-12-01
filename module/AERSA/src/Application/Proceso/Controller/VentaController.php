@@ -196,7 +196,7 @@ class VentaController extends AbstractActionController {
                             $venta_detalle_receta->setVentadetalleContable(1);
                         }
                         $venta_detalle_receta->save();
-                        
+                        $idpadre1=$venta_detalle_receta->getIdventadetalle();
                         $productorecnivel2= $detalle->getIdproductoreceta();
                         
                         //receta 2do nivel
@@ -217,7 +217,7 @@ class VentaController extends AbstractActionController {
                                 ->setIdproducto($detalle2->getIdproductoreceta())
                                 ->setVentadetalleCantidad($detalle2->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
                                 ->setVentadetalleSubtotal(0)
-                                ->setIdpadre($venta_detalle->getIdventadetalle());
+                                ->setIdpadre($idpadre1);
                                 
                                 if($detalle2->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                     $venta_detalle_receta->setVentadetalleContable(1);
@@ -225,7 +225,8 @@ class VentaController extends AbstractActionController {
                                 $venta_detalle_receta->save();
                                 
                                 $productorecnivel3= $detalle2->getIdproductoreceta();
-                                
+                                $cantidadpadre2=$detalle2->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad();
+                                $idpadre2=$venta_detalle_receta->getIdventadetalle();
                                 //receta 3er nivel
                                 $productonivel3 = \ProductoQuery::create()->findPk($productorecnivel3);
                                 
@@ -242,9 +243,10 @@ class VentaController extends AbstractActionController {
                                         ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
                                         ->setIdalmacen($venta_detalle->getIdalmacen())
                                         ->setIdproducto($detalle3->getIdproductoreceta())
-                                        ->setVentadetalleCantidad($detalle3->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                        //->setVentadetalleCantidad($detalle3->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                        ->setVentadetalleCantidad($detalle3->getRecetaCantidad()* $cantidadpadre2)
                                         ->setVentadetalleSubtotal(0)
-                                        ->setIdpadre($venta_detalle->getIdventadetalle());
+                                        ->setIdpadre($idpadre2);
                                         
                                         if($detalle3->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                             $venta_detalle_receta->setVentadetalleContable(1);
@@ -252,7 +254,8 @@ class VentaController extends AbstractActionController {
                                         $venta_detalle_receta->save();
                                         
                                         $productorecnivel4= $detalle3->getIdproductoreceta();
-                                        
+                                        $cantidadpadre3=$detalle3->getRecetaCantidad() * $cantidadpadre2;
+                                        $idpadre3=$venta_detalle_receta->getIdventadetalle();
                                         //receta 4to nivel
                                         $productonivel4 = \ProductoQuery::create()->findPk($productorecnivel4);
                                         
@@ -269,9 +272,10 @@ class VentaController extends AbstractActionController {
                                                 ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
                                                 ->setIdalmacen($venta_detalle->getIdalmacen())
                                                 ->setIdproducto($detalle4->getIdproductoreceta())
-                                                ->setVentadetalleCantidad($detalle4->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                //->setVentadetalleCantidad($detalle4->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                ->setVentadetalleCantidad($detalle4->getRecetaCantidad()* $cantidadpadre3)
                                                 ->setVentadetalleSubtotal(0)
-                                                ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                ->setIdpadre($idpadre3);
                                                 
                                                if($detalle4->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                     $venta_detalle_receta->setVentadetalleContable(1);
@@ -279,7 +283,8 @@ class VentaController extends AbstractActionController {
                                                 $venta_detalle_receta->save();
                                                 
                                                 $productorecnivel5= $detalle4->getIdproductoreceta();
-                                                
+                                                $cantidadpadre4=$detalle4->getRecetaCantidad() * $cantidadpadre3;
+                                                $idpadre4=$venta_detalle_receta->getIdventadetalle();
                                                 //receta 5to nivel
                                                 $productonivel5 = \ProductoQuery::create()->findPk($productorecnivel5);
                                                 
@@ -296,9 +301,10 @@ class VentaController extends AbstractActionController {
                                                         ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
                                                         ->setIdalmacen($venta_detalle->getIdalmacen())
                                                         ->setIdproducto($detalle5->getIdproductoreceta())
-                                                        ->setVentadetalleCantidad($detalle5->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                        //->setVentadetalleCantidad($detalle5->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                        ->setVentadetalleCantidad($detalle5->getRecetaCantidad()* $cantidadpadre4)
                                                         ->setVentadetalleSubtotal(0)
-                                                        ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                        ->setIdpadre($idpadre4);
                                                         
                                                         if($detalle5->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                             $venta_detalle_receta->setVentadetalleContable(1);
@@ -307,7 +313,8 @@ class VentaController extends AbstractActionController {
                                                         
                                                         
                                                         $productorecnivel6= $detalle5->getIdproductoreceta();
-                                                        
+                                                        $cantidadpadre5=$detalle5->getRecetaCantidad() * $cantidadpadre4;
+                                                        $idpadre5=$venta_detalle_receta->getIdventadetalle();
                                                         //receta 6to nivel
                                                         $productonivel6 = \ProductoQuery::create()->findPk($productorecnivel6);
                                                         
@@ -323,17 +330,19 @@ class VentaController extends AbstractActionController {
                                                                 ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
                                                                 ->setIdalmacen($venta_detalle->getIdalmacen())
                                                                 ->setIdproducto($detalle6->getIdproductoreceta())
-                                                                ->setVentadetalleCantidad($detalle6->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                                //->setVentadetalleCantidad($detalle6->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                                ->setVentadetalleCantidad($detalle6->getRecetaCantidad()* $cantidadpadre5)
                                                                 ->setVentadetalleSubtotal(0)
-                                                                ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                                ->setIdpadre($idpadre5);
                                                                 
                                                                 if($detalle6->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                                     $venta_detalle_receta->setVentadetalleContable(1);
                                                                 }
                                                                 $venta_detalle_receta->save();
                                                                 
-                                                                $productorecnivel7= $detalle7->getIdproductoreceta();
-                                                                
+                                                                $productorecnivel7= $detalle6->getIdproductoreceta();
+                                                                $cantidadpadre6=$detalle6->getRecetaCantidad() * $cantidadpadre5;
+                                                                $idpadre6=$venta_detalle_receta->getIdventadetalle();
                                                                 //receta 7mo nivel
                                                                 $productonivel7 = \ProductoQuery::create()->findPk($productorecnivel7);
                                                                 
@@ -344,19 +353,53 @@ class VentaController extends AbstractActionController {
                                                                     foreach ($receta7 as $detalle7){
                                                                         //var_dump("his");
                                                                         //exit();
+                                                                        //echo "idprod: ".$detalle7->getIdproductoreceta();
                                                                         $venta_detalle_receta = new \Ventadetalle();
                                                                         $venta_detalle_receta->setIdventa($entity->getIdventa())
                                                                         ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
                                                                         ->setIdalmacen($venta_detalle->getIdalmacen())
                                                                         ->setIdproducto($detalle7->getIdproductoreceta())
-                                                                        ->setVentadetalleCantidad($detalle7->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                                        //->setVentadetalleCantidad($detalle7->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                                        ->setVentadetalleCantidad($detalle7->getRecetaCantidad()* $cantidadpadre6)
                                                                         ->setVentadetalleSubtotal(0)
-                                                                        ->setIdpadre($venta_detalle->getIdventadetalle());
+                                                                        ->setIdpadre($idpadre6);
                                                                         
                                                                         if($detalle7->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
                                                                             $venta_detalle_receta->setVentadetalleContable(1);
                                                                         }
                                                                         $venta_detalle_receta->save();
+                                                                        
+                                                                        $productorecnivel8= $detalle7->getIdproductoreceta();
+                                                                        $cantidadpadre7=$detalle7->getRecetaCantidad() * $cantidadpadre6;
+                                                                        $idpadre7=$venta_detalle_receta->getIdventadetalle();
+                                                                        //receta 6to nivel
+                                                                        $productonivel8 = \ProductoQuery::create()->findPk($productorecnivel8);
+                                                                        
+                                                                        $has_recetanivel8 = \RecetaQuery::create()->filterByIdproducto($productonivel8->getIdproducto())->exists();
+                                                                        if($has_recetanivel8){
+                                                                            
+                                                                            $receta8 = \RecetaQuery::create()->filterByIdproducto($productonivel8->getIdproducto())->find();
+                                                                            $detalle8 = new \Receta();
+                                                                            foreach ($receta8 as $detalle8){
+                                                                                //var_dump("his");
+                                                                                //exit();
+                                                                                $venta_detalle_receta = new \Ventadetalle();
+                                                                                $venta_detalle_receta->setIdventa($entity->getIdventa())
+                                                                                ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
+                                                                                ->setIdalmacen($venta_detalle->getIdalmacen())
+                                                                                ->setIdproducto($detalle8->getIdproductoreceta())
+                                                                                //->setVentadetalleCantidad($detalle7->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                                                                ->setVentadetalleCantidad($detalle8->getRecetaCantidad()* $cantidadpadre7)
+                                                                                ->setVentadetalleSubtotal(0)
+                                                                                ->setIdpadre($idpadre7);
+                                                                                
+                                                                                if($detalle8->getProductoRelatedByIdproductoreceta()->getProductoTipo() == 'simple'){
+                                                                                    $venta_detalle_receta->setVentadetalleContable(1);
+                                                                                }
+                                                                                $venta_detalle_receta->save();
+                                                                                
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
                                                                 

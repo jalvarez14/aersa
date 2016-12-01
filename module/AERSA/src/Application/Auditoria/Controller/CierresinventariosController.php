@@ -64,7 +64,8 @@
                 $idauditor = $post_data['idauditor'];
                 $post_data['idempresa'] = $idempresa;
                 $post_data['idsucursal'] = $idsucursal;
-                $post_data["inventariomes_fecha"] = date_create_from_format('d/m/Y', $post_data["inventariomes_fecha"]);
+                //$post_data["inventariomes_fecha"] = date_create_from_format('d/m/Y', $post_data["inventariomes_fecha"]);
+                $post_data["inventariomes_fecha"] = date_create_from_format('m/d/Y', $post_data["inventariomes_fecha"]);
                 $inventariocierremes = new \Inventariomes();
                 foreach ($post_data as $key => $value) {
                     if (\InventariomesPeer::getTableMap()->hasColumn($key)) {
@@ -175,24 +176,50 @@
                 $start = strtotime('last monday', $time);
                 $inicio_semana = date('Y-m-d', strtotime('last monday', $time));
                 
-                $fin_semana = date('Y-m-d', $time);
+                $fin_semana2 = date('Y-m-d', $time);
                 
                 $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
                 $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
                 
-                $fecharequisicion6meses = strtotime ('-6 month', strtotime($fin_semana));
+                $fecharequisicion6meses = strtotime ('-6 month', strtotime($fin_semana2));
                 $fecharequisicion6meses = date('Y-m-d',  $fecharequisicion6meses);
                 $fecharequisicion6meses = $fecharequisicion6meses. " 00:00:00" ;
                 
+                //var_dump($fecharequisicion6meses);
+                //exit();
+                $inicio_semana = $inicio_semana . " 00:00:00";
+                $fin_semana2 =  date_create_from_format('m/d/Y H:i:s', $post_data["fecha"]." 23:59:59");
+                $fin_semana = $fin_semana2->format("Y-m-d H:i:s");
                 
-                $inicio_semana = $inicio_semana . " 00:00:00   ";
-                $fin_semana = $fin_semana . " 23:59:59";
                 
-                
-                //inventario anterior
                 $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->exists();
                 if ($inventario_anterior)
+                {
                     $id_inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->findOne()->getIdinventariomes();
+                    $inicio_semana2 = \InventariomesQuery::create()->filterByIdalmacen($idalmacen)->orderByInventariomesFecha('desc')->findOne()->getInventariomesFecha();
+                    $inicio_semana3 = strtotime ('+1 day', strtotime($inicio_semana2));
+                    $inicio_semana3 = date('Y-m-d',  $inicio_semana3);
+                    $inicio_semana  = $inicio_semana3. " 00:00:00";
+                }
+                else
+                {
+                    //si es el primer inventario, la fecha de inicio es un dia después de la semana revisada
+                    $idsuc= $session['idsucursal'];
+                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadasemana();
+                    
+                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadaanio();
+                    $time = strtotime("1 January $anio_act", time());
+                    $day = date('w', $time);
+                    $time += ((7 * $semana_rev) + 2 - $day) * 24 * 3600;
+                    $time += 6 * 24 * 3600;
+                    $inicio_semana = date('Y-m-d', $time)." 00:00:00";
+                    
+                    //$inicio_semana3 = strtotime ('-6 day', strtotime($fin_semana));
+                    //$inicio_semana3 = date('Y-m-d',  $inicio_semana3);
+                    //$inicio_semana  = $inicio_semana3. " 00:00:00";
+
+                }
+                
                 $objcompras = \CompraQuery::create()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdempresa($idempresa)->filterByIdsucursal($idsucursal)->find();
                 $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
                 
@@ -348,12 +375,12 @@
                                     //se considera como simple
                                     $conn = \Propel::getConnection();
                                     $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st = $conn->prepare(sqlrequisicioningreso);
+                                    $st = $conn->prepare($sqlrequisicioningreso);
                                     $st->execute();
                                     $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                                     
                                     $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st2 = $conn->prepare(sqlrequisicionegreso);
+                                    $st2 = $conn->prepare($sqlrequisicionegreso);
                                     $st2->execute();
                                     $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
                                     
@@ -372,12 +399,12 @@
                                     //var_dump("caso2");
                                     //exit();
                                     $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$producto_padre) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st = $conn->prepare(sqlrequisicioningreso);
+                                    $st = $conn->prepare($sqlrequisicioningreso);
                                     $st->execute();
                                     $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                                     
                                     $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$objproducto->getIdProducto()) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                                    $st2 = $conn->prepare(sqlrequisicionegreso);
+                                    $st2 = $conn->prepare($sqlrequisicionegreso);
                                     $st2->execute();
                                     $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
                                     
@@ -407,7 +434,7 @@
                                 {
                                     //var_dump("caso3");
                                     //conocer el producto del cual salió, puede ser el nivel superior, dos niveles arriba, hasta 6 niveles arriba
-                                    
+                                    $conn = \Propel::getConnection();
                                     //se conoce el papa
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrenivel1=$venta_detalle_padre->getIdPadre();
@@ -446,7 +473,7 @@
                                     {
                                         //var_dump($padrenivel1);
                                         //exit();
-                                        $venta_detalle_padrenivel2 = \VentadetalleQuery::create()->findPk($padrenivel1->getIdPadre());
+                                        $venta_detalle_padrenivel2 = \VentadetalleQuery::create()->findPk($padrenivel1);
                                         $padrenivel2=$venta_detalle_padrenivel2->getIdPadre();
                                         
                                         if($padrenivel2=='')
@@ -480,7 +507,7 @@
                                         }
                                         else //el papa nivel 2 no es la raiz
                                         {
-                                            $venta_detalle_padrenivel3 = \VentadetalleQuery::create()->findPk($padrenivel2->getIdPadre());
+                                            $venta_detalle_padrenivel3 = \VentadetalleQuery::create()->findPk($padrenivel2);
                                             $padrenivel3=$venta_detalle_padrenivel3->getIdPadre();
                                             
                                             if($padrenivel3=='')
@@ -514,7 +541,7 @@
                                             }
                                             else //si papá nivel 3 no es la raiz
                                             {
-                                                $venta_detalle_padrenivel4 = \VentadetalleQuery::create()->findPk($padrenivel3->getIdPadre());
+                                                $venta_detalle_padrenivel4 = \VentadetalleQuery::create()->findPk($padrenivel3);
                                                 $padrenivel4=$venta_detalle_padrenivel4->getIdPadre();
                                                 if($padrenivel4=='')
                                                 {
@@ -547,7 +574,7 @@
                                                 }
                                                 else //si papá nivel 4 no es la raiz
                                                 {
-                                                    $venta_detalle_padrenivel5 = \VentadetalleQuery::create()->findPk($padrenivel4->getIdPadre());
+                                                    $venta_detalle_padrenivel5 = \VentadetalleQuery::create()->findPk($padrenivel4);
                                                     $padrenivel5=$venta_detalle_padrenivel5->getIdPadre();
                                                     
                                                     if($padrenivel5=='')
@@ -581,7 +608,7 @@
                                                     }
                                                     else //si el papá nivel 5 no es la raiz
                                                     {
-                                                        $venta_detalle_padrenivel6 = \VentadetalleQuery::create()->findPk($padrenivel5->getIdPadre());
+                                                        $venta_detalle_padrenivel6 = \VentadetalleQuery::create()->findPk($padrenivel5);
                                                         $padrenivel6=$venta_detalle_padrenivel6->getIdPadre();
                                                         
                                                         if($padrenivel6=='')
@@ -616,7 +643,7 @@
                                                         }
                                                         else //si el papa 6 no es nivel
                                                         {
-                                                            $venta_detalle_padrenivel7 = \VentadetalleQuery::create()->findPk($padrenivel6->getIdPadre());
+                                                            $venta_detalle_padrenivel7 = \VentadetalleQuery::create()->findPk($padrenivel6);
                                                             $padrenivel7=$venta_detalle_padrenivel7->getIdPadre();
                                                             if($padrenivel7=="NULL")
                                                             {
@@ -819,55 +846,65 @@
                             foreach ($recetasObj as $recetaObj) {
                                 
                                 $idpr = $recetaObj->getIdproductoreceta();
+                                
+                                $productoquery1 = \ProductoQuery::create()->filterByIdproducto($idpr)->findOne();
+                                
+                                $tipopr= $productoquery1->getProductoTipo();
                                 //si el producto de la receta primer nivel es hijo
-                                if($idpr->getProductoTipo()=="subreceta")
+                                if($tipopr=="subreceta")
                                 {
                                     
                                     $recetasObjnivel2 = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
                                     $recetaObjnivel2 = new \Receta();
                                     //se recorren elementos de la receta nivel 2
                                      foreach ($recetasObjnivel2 as $recetaObjnivel2) {
-                                         $idprnivel2=$$recetaObjnivel2->getIdproductoreceta();
-                                         
+                                         $idprnivel2=$recetaObjnivel2->getIdproductoreceta();
+                                         $productoquery2 = \ProductoQuery::create()->filterByIdproducto($idprnivel2)->findOne();
+                                         $tipopr2= $productoquery2->getProductoTipo();
                                          //si el producto de la receta segundo nivel es hijo
-                                         if($idprnivel2->getProductoTipo()=="subreceta")
+                                         if($tipopr2=="subreceta")
                                          {
-                                             $recetasObjnivel3 = \RecetaQuery::create()->filterByIdproducto($idprnivel2->getIdproducto())->find();
+                                             $recetasObjnivel3 = \RecetaQuery::create()->filterByIdproducto($idprnivel2)->find();
                                              $recetaObjnivel3 = new \Receta();
                                              //se recorren elementos de la receta nivel 2
                                              
                                              foreach ($recetasObjnivel3 as $recetaObjnivel3) {
-                                                 $idprnivel3=$$recetaObjnivel3->getIdproductoreceta();
-                                                 
+                                                 $idprnivel3=$recetaObjnivel3->getIdproductoreceta();
+                                                 $productoquery3 = \ProductoQuery::create()->filterByIdproducto($idprnivel3)->findOne();
+                                                 $tipopr3= $productoquery3->getProductoTipo();
                                                  //si el producto de la receta tercer nivel es hijo
-                                                 if($idprnivel3->getProductoTipo()=="subreceta")
+                                                 if($tipopr3=="subreceta")
                                                  {
-                                                     $recetasObjnivel4 = \RecetaQuery::create()->filterByIdproducto($idprnivel3->getIdproducto())->find();
+                                                     $recetasObjnivel4 = \RecetaQuery::create()->filterByIdproducto($idprnivel3)->find();
                                                      $recetaObjnivel4 = new \Receta();
                                                      //se recorren elementos de la receta nivel 3
                                                      foreach ($recetasObjnivel4 as $recetaObjnivel4) {
-                                                         $idprnivel4=$$recetaObjnivel4->getIdproductoreceta();
-                                                         
+                                                         $idprnivel4=$recetaObjnivel4->getIdproductoreceta();
+                                                         $productoquery4 = \ProductoQuery::create()->filterByIdproducto($idprnivel4)->findOne();
+                                                         $tipopr4= $productoquery4->getProductoTipo();
                                                          //si el producto de la receta cuarto nivel es hijo
-                                                         if($idprnivel4->getProductoTipo()=="subreceta")
+                                                         if($tipopr4=="subreceta")
                                                          {
-                                                             $recetasObjnivel5 = \RecetaQuery::create()->filterByIdproducto($idprnivel4->getIdproducto())->find();
+                                                             $recetasObjnivel5 = \RecetaQuery::create()->filterByIdproducto($idprnivel4)->find();
                                                              $recetaObjnivel5 = new \Receta();
                                                              //se recorren elementos de la receta nivel 4
                                                              foreach ($recetasObjnivel5 as $recetaObjnivel5) {
-                                                                 $idprnivel5=$$recetaObjnivel5->getIdproductoreceta();
-                                                                 
+                                                                 $idprnivel5=$recetaObjnivel5->getIdproductoreceta();
+                                                                 $productoquery5 = \ProductoQuery::create()->filterByIdproducto($idprnivel5)->findOne();
+                                                                 $tipopr5= $productoquery5->getProductoTipo();
                                                                  //si el producto de la receta quinto nivel es hijo
-                                                                 if($idprnivel5->getProductoTipo()=="subreceta")
+                                                                 if($tipopr5=="subreceta")
                                                                  {
-                                                                     $recetasObjnivel6 = \RecetaQuery::create()->filterByIdproducto($idprnivel5->getIdproducto())->find();
+                                                                     $recetasObjnivel6 = \RecetaQuery::create()->filterByIdproducto($idprnivel5)->find();
                                                                      $recetaObjnivel6 = new \Receta();
                                                                      //se recorren elementos de la receta nivel 5
                                                                      
                                                                      foreach ($recetasObjnivel6 as $recetaObjnivel6) {
-                                                                         $idprnivel6=$$recetaObjnivel6->getIdproductoreceta();
+                                                                         $idprnivel6=$recetaObjnivel6->getIdproductoreceta();
+                                                                         $productoquery6 = \ProductoQuery::create()->filterByIdproducto($idprnivel6)->findOne();
+                                                                         $tipopr6= $productoquery6->getProductoTipo();
                                                                          //si el producto de la receta sexto nivel es hijo
-                                                                         if($idprnivel6->getProductoTipo()=="subreceta")
+                                                                         if($tipopr6=="subreceta")
                                                                          {
                                                                              
                                                                          }
@@ -1224,6 +1261,9 @@
         }
         
         public function encargadoAction() {
+            $session = new \Shared\Session\AouthSession();
+            $session = $session->getData();
+            
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $post_data = $request->getPost();
@@ -1235,7 +1275,21 @@
                 $inventario_anterior = \InventariomesQuery::create()->filterByIdalmacen($id)->exists();
                 $fecha=null;
                 if ($inventario_anterior)
+                {
                     $fecha = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('desc')->findOne()->getInventariomesFecha('Y-m-d');
+                }
+                else
+                {
+                    $idsuc= $session['idsucursal'];
+                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadasemana();
+                    
+                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->findOne()->getSemanarevisadaanio();
+                    $time = strtotime("1 January $anio_act", time());
+                    $day = date('w', $time);
+                    $time += ((7 * $semana_rev) + 1 - $day) * 24 * 3600;
+                    $time += 6 * 24 * 3600;
+                    $fecha = date('Y-m-d', $time);
+                }
                 $resp=array('con' => $con,'fecha'=>$fecha);
                 return $this->getResponse()->setContent(json_encode($resp));
             }
