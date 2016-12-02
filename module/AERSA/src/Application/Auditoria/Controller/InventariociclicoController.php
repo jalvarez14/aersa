@@ -861,7 +861,7 @@ class InventariociclicoController extends AbstractActionController {
                             if($tipopr=="subreceta")
                             {
                                 
-                                $recetasObjnivel2 = \RecetaQuery::create()->filterByIdproducto($idpr->getIdproducto())->find();
+                                $recetasObjnivel2 = \RecetaQuery::create()->filterByIdproducto($idpr)->find();
                                 $recetaObjnivel2 = new \Receta();
                                 //se recorren elementos de la receta nivel 2
                                 foreach ($recetasObjnivel2 as $recetaObjnivel2) {

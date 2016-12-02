@@ -58,7 +58,9 @@
             }
             $request = $this->getRequest();
             if ($request->isPost()) {
+                
                 $post_data = $request->getPost();
+                //echo '<pre>';var_dump($post_data);echo '</pre>';exit();
                 $idalmacen = $post_data['idalmacen'];
                 $post_data['idusuario'] = $session['idusuario'];
                 $idauditor = $post_data['idauditor'];
@@ -893,7 +895,7 @@
                                 if($tipopr=="subreceta")
                                 {
                                     
-                                    $recetasObjnivel2 = \RecetaQuery::create()->filterByIdproducto($idpr->getIdproducto())->find();
+                                    $recetasObjnivel2 = \RecetaQuery::create()->filterByIdproducto($idpr)->find();
                                     $recetaObjnivel2 = new \Receta();
                                     //se recorren elementos de la receta nivel 2
                                      foreach ($recetasObjnivel2 as $recetaObjnivel2) {
