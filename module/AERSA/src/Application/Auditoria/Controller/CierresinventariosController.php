@@ -29,7 +29,7 @@
         
         public function nuevoAction() {
             ini_set("log_errors", 1);
-            ini_set("error_log", "/home/aersa/logs/error_log.txt");
+            ini_set("error_log", "/home/aersa/public_html/logs/error_log.txt");
             //CARGAMOS LA SESSION PARA HACER VALIDACIONES
             $session = new \Shared\Session\AouthSession();
             $session = $session->getData();
