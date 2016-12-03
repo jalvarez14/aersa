@@ -200,7 +200,7 @@ class VentaController extends AbstractActionController {
                         $venta_detalle_receta->save();
                         $idpadre1=$venta_detalle_receta->getIdventadetalle();
                         $productorecnivel2= $detalle->getIdproductoreceta();
-                        
+                        $cantidadpadre=$detalle->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad();
                         //receta 2do nivel
                         $productonivel2 = \ProductoQuery::create()->findPk($productorecnivel2);
                         
@@ -217,7 +217,7 @@ class VentaController extends AbstractActionController {
                                 ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
                                 ->setIdalmacen($venta_detalle->getIdalmacen())
                                 ->setIdproducto($detalle2->getIdproductoreceta())
-                                ->setVentadetalleCantidad($detalle2->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                ->setVentadetalleCantidad($detalle2->getRecetaCantidad() * $cantidadpadre)
                                 ->setVentadetalleSubtotal(0)
                                 ->setIdpadre($idpadre1);
                                 
@@ -355,7 +355,7 @@ class VentaController extends AbstractActionController {
                                                                     foreach ($receta7 as $detalle7){
                                                                         //var_dump("his");
                                                                         //exit();
-                                                                        echo "idprod: ".$detalle7->getIdproductoreceta();
+                                                                        //echo "idprod: ".$detalle7->getIdproductoreceta();
                                                                         $venta_detalle_receta = new \Ventadetalle();
                                                                         $venta_detalle_receta->setIdventa($entity->getIdventa())
                                                                         ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())

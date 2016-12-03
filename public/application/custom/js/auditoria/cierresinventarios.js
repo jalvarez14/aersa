@@ -337,7 +337,7 @@
                                     url: '/auditoria/cierresemana/batch',
                                     type: 'POST',
                                     dataType: 'json',
-                                    data: {inventario: workbook_array, almacen: almacen, auditor: auditor},
+                                       data: {inventario: workbook_array, almacen: almacen, auditor: auditor, fecha:fecha},
                                     beforeSend: function (xhr) {
                                         $('body').addClass('loading');
                                     },
