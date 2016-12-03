@@ -290,7 +290,9 @@
                                 //                            }
                             }
                         }
-                        echo '<pre>'.$objproducto-getProductoNombre().'</pre>';
+                        //echo '<pre>'.$objproducto->getProductoNombre().'</pre>';
+                        file_put_contents("/home/aersa/public_html/logs/error_log.txt", $objproducto->getProductoNombre()."\n",FILE_APPEND);
+                        
                         if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                             $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
                         $totalProductoCompra = 0;
