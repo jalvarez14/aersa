@@ -52,6 +52,8 @@ class VentaController extends AbstractActionController {
             }
             
             $entity->setIdempresa($session['idempresa']);
+            $entity->setProductoRendimiento(1);
+            $entity->setProductoRendimientooriginal(1);
             $entity->save();
             $entity_array = $entity->toArray(\BasePeer::TYPE_FIELDNAME);
             

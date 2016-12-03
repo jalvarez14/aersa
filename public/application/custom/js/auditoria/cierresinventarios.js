@@ -332,6 +332,7 @@
 //                                console.log(workbook_array[k]);
 //                            }
                                 var table = $('#reporte_table');
+                                var fecha = $('input[name=inventariomes_fecha]').val();
                                 $.ajax({
                                     url: '/auditoria/cierresemana/batch',
                                     type: 'POST',
