@@ -290,7 +290,7 @@
                                 //                            }
                             }
                         }
-                        echo '<pre>';var_dump($objproducto-getProductoNombre());echo '</pre>';
+                        echo '<pre>'.$objproducto-getProductoNombre().'</pre>';
                         if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                             $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
                         $totalProductoCompra = 0;
