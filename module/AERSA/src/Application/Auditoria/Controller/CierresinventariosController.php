@@ -28,6 +28,8 @@
         }
         
         public function nuevoAction() {
+            ini_set("log_errors", 1);
+            ini_set("error_log", "/tmp/php-error.log");
             //CARGAMOS LA SESSION PARA HACER VALIDACIONES
             $session = new \Shared\Session\AouthSession();
             $session = $session->getData();
