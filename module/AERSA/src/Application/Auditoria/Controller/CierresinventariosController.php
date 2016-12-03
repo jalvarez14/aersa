@@ -62,7 +62,7 @@
             if ($request->isPost()) {
                 
                 $post_data = $request->getPost();
-                //echo '<pre>';var_dump($post_data);echo '</pre>';exit();
+                
                 $idalmacen = $post_data['idalmacen'];
                 $post_data['idusuario'] = $session['idusuario'];
                 $idauditor = $post_data['idauditor'];
@@ -290,6 +290,7 @@
                                 //                            }
                             }
                         }
+                        echo '<pre>';var_dump($objproducto-getProductoNombre());echo '</pre>';
                         if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                             $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
                         $totalProductoCompra = 0;
