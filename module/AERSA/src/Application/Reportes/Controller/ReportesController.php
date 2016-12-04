@@ -1179,7 +1179,6 @@ class ReportesController extends AbstractActionController {
     }
 
     public function recetasAction() {
-        
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         
@@ -1190,11 +1189,10 @@ class ReportesController extends AbstractActionController {
                 return $this->redirect()->toUrl("/");
             }
         }
-        $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
+        $categorias = \CategoriaQuery::create()->filterByIdcategoria(array('1','2'))->find();
 
         $subcatsAlimentos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
         $subcatsBebidas = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
-        $subcatsGastos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(3)->orderByCategoriaNombre('asc')->find();
         
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/reportes/recetas/index');
@@ -1202,7 +1200,6 @@ class ReportesController extends AbstractActionController {
             'categorias' => $categorias,
             'subcatsAlimentos' => $subcatsAlimentos,
             'subcatsBebidas' => $subcatsBebidas,
-            'subcatsGastos' => $subcatsGastos,
         ));
         return $view_model;
     }
