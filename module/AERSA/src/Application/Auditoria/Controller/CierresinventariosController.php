@@ -142,13 +142,14 @@
         }
         
         public function batchAction() {
-            ini_set("log_errors", 1);
-            ini_set("error_log", "/home/aersa/public_html/logs/error_log.txt");
-            error_reporting(E_ALL);
+            //ini_set("log_errors", 1);
+            //ini_set("error_log", "/home/aersa/public_html/logs/error_log.txt");
+            //error_reporting(E_ALL);
             //CARGAMOS LA SESSION PARA HACER VALIDACIONES
             $session = new \Shared\Session\AouthSession();
             $session = $session->getData();
-            
+            $conn = \Propel::getConnection();
+
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $idempresa = $session['idempresa'];
@@ -293,7 +294,7 @@
                             }
                         }
                         //echo '<pre>'.$objproducto->getProductoNombre().'</pre>';
-                        file_put_contents("/home/aersa/public_html/logs/error_log.txt", $objproducto->getProductoNombre()."\n",FILE_APPEND);
+                        //file_put_contents("/Applications/AMPPS/www/aersa/public/logs/error_log.txt", $objproducto->getProductoNombre()."\n",FILE_APPEND);
                         
                         if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                             $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
@@ -375,7 +376,7 @@
                                 
                                 if ($objproducto->getProductoTipo()=="subreceta" && $objventadetalle->getIdPadre()!="NULL" ) //producto receta
                                 {
-                                    $conn = \Propel::getConnection();
+                                    //$conn = \Propel::getConnection();
                                     //se conoce el papa
                                     $venta_detalle = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrereceta=$venta_detalle_padre->getIdPadre();
@@ -388,7 +389,7 @@
                                             //echo "entre";
                                         }
                                         
-                                        $conn = \Propel::getConnection();
+                                        //$conn = \Propel::getConnection();
                                         $idprod=$objproducto->getIdProducto();
                                         $cantidad = $objventadetalle->getVentadetalleCantidad();
                                         $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idprod) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -417,7 +418,6 @@
                                 if ($objproducto->getProductoTipo()=="simple" && $objventadetalle->getIdPadre()=="NULL" && $objventadetalle->getVentaDetalleContable()==1) //simple que no salio de una receta
                                 {
                                    //se explosiona si el producto es simple y no tiene registro padre
-                                    $conn = \Propel::getConnection();
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $producto_padre = $venta_detalle_padre->getIdproducto();
                                     $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT iddrequisicion FROM `requisiciondetalle` WHERE idproducto=$producto_padre) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -455,7 +455,7 @@
                                 if ($objproducto->getProductoTipo()=="simple" && $objventadetalle->getIdPadre()!="NULL" && $objventadetalle->getVentaDetalleContable()==1) //simple que si salio de una receta
                                 {
                                     //conocer el producto del cual salió, puede ser el nivel superior, dos niveles arriba, hasta 6 niveles arriba
-                                    $conn = \Propel::getConnection();
+                                    //$conn = \Propel::getConnection();
                                     //se conoce el papa
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrenivel1=$venta_detalle_padre->getIdPadre();
@@ -874,7 +874,7 @@
                         
                         // para saber si explosionar o no, se verifican las requisiciones como ingreso y egreso al almacen seleccionado
                         $idproduc= $objproducto->getIdproducto();
-                        $conn = \Propel::getConnection();
+                        //$conn = \Propel::getConnection();
                         $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto= '$idproduc') AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'";
                         $st = $conn->prepare($sqlrequisicioningreso);
                         $st->execute();
@@ -1320,6 +1320,8 @@
                 array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Importe Fisico</td><td class='inventariomes_totalimportefisico'><input type='hidden'  name='inventariomes_totalimportefisico' value='$impFisTotal'><span>$impFisTotal</span></td></tr>");
                 return $this->getResponse()->setContent(json_encode($reporte));
             }
+            $conn->useDebug(false);
+            Propel::close();
         }
         
         public function encargadoAction() {
