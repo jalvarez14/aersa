@@ -169,7 +169,22 @@
             settings = plugin.settings = $.extend({}, defaults, options);
         }
 
-        plugin.new = function () {
+        plugin.new = function (str) {
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            container.find('input[name=fecha]').attr('disabled', true);
+            container.find('input[name=fecha]').keydown(false);
+            var res = str.split("-");
+            container.find('input[name=fecha]').datepicker({
+                format: 'dd/mm/yyyy',
+                maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
+                beforeShowDay: function (date) {
+                    var a = new Array();
+                    a[0] = date.getDay() == 0;
+                    a[1] = '';
+                    a[2] = '';
+                    return a;
+                }
+            });
             $('#batch_inventario_b').attr('disabled', true);
             $('select[name=idalmacen]').on('change', function () {
                 var $this=$(this);
@@ -184,8 +199,18 @@
                         success: function (data) {
                             if(data){
                                 $('#batch_inventario_b').attr('disabled', false);
+                                if(data['fecha']!=null) {
+                                var res = data['fecha'].split("-");
+                                container.find('input[name=fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
+                                container.find('input[name=fecha]').attr('disabled', false);
+                                } else {
+                                    var res = str.split("-");
+                                    container.find('input[name=fecha]').datepicker( "option", "minDate", new Date(res[0]+"/"+res[1]+"/"+res[2]) );
+                                    container.find('input[name=fecha]').attr('disabled', false);
+                                }
                             } else {
                                 $('#batch_inventario_b').attr('disabled', true);
+                                container.find('input[name=fecha]').attr('disabled', true);
                                 alert("Almacen sin encargado");
                             }
                         },
@@ -233,11 +258,12 @@
 //                                console.log(workbook_array[k]);
 //                            }
                                 var table = $('#reporte_table');
+                                var fecha = $('input[name=fecha]').val();
                                 $.ajax({
                                     url: '/auditoria/inventariociclico/batch',
                                     type: 'POST',
                                     dataType: 'json',
-                                    data: {inventario: workbook_array, almacen: almacen},
+                                       data: {inventario: workbook_array, almacen: almacen, fecha:fecha},
                                     beforeSend: function (xhr) {
                                         $('body').addClass('loading');
                                     },

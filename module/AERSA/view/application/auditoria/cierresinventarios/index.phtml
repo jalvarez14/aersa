@@ -32,6 +32,10 @@
                             <th class="text"> Acciones </th>
                         </tr>
                     </thead>
+                    <?php 
+                        $session = new \Shared\Session\AouthSession();
+                        $session = $session->getData();
+                    ?>
                     <tbody class="text">
                         <?php $inventario = new Inventariomes();foreach ($inventarios as $inventario) : ?>
                         <?php 
@@ -53,10 +57,12 @@
                                                 <a href="/auditoria/cierresemana/editar/<?php echo $inventario->getIdinventariomes()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
+                                            <?php if($session['idrol'] < 5) :?>
                                             <li>
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>
                                             </li>
+                                            <?php endif;?>
                                         </ul>
                                     </div>
                                     
