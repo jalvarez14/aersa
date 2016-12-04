@@ -1190,10 +1190,20 @@ class ReportesController extends AbstractActionController {
                 return $this->redirect()->toUrl("/");
             }
         }
-        
+        $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
+
+        $subcatsAlimentos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
+        $subcatsBebidas = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
+        $subcatsGastos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(3)->orderByCategoriaNombre('asc')->find();
         
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/reportes/recetas/index');
+        $view_model->setVariables(array(
+            'categorias' => $categorias,
+            'subcatsAlimentos' => $subcatsAlimentos,
+            'subcatsBebidas' => $subcatsBebidas,
+            'subcatsGastos' => $subcatsGastos,
+        ));
         return $view_model;
     }
 
@@ -1204,13 +1214,23 @@ class ReportesController extends AbstractActionController {
         $idsucursal = $session['idsucursal'];
         $request = $this->getRequest();
         $archivo = false;
-        if ($request->isPost()) {
-            $post_data = $request->getPost();
+        $idcategorias=array();
+        $post_data = $request->getPost();
+        if(isset($post_data['generar_excel'])||isset($post_data['generar_pdf'])) {
             $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";
             $archivo = true;
+            foreach ($post_data as $key => $value) {
+                if (strpos($key, '-'))
+                    array_push($idcategorias, substr($key, 9));
+            }
+        } else {
+        foreach ($post_data['subcat'] as $key => $value) {
+                if (strpos($value, '-'))
+                    array_push($idcategorias, substr($value, 9));
+            }
         }
         $reporte = array();
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta', 'plu'))->orderByProductoNombre('asc')->find();
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta', 'plu'))->filterByIdsubcategoria($idcategorias)->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
@@ -1310,6 +1330,7 @@ class ReportesController extends AbstractActionController {
             echo $R->render($formato);
             exit();
         } else {
+            return $this->getResponse()->setContent(json_encode($reporte));
             $view_model = new ViewModel();
             $view_model->setVariables(array(
                 'fecha' => $fecha,
@@ -1331,12 +1352,32 @@ class ReportesController extends AbstractActionController {
         $reporte = array();
         $archivo = false;
         $request = $this->getRequest();
-        if ($request->isPost()) {
-            $post_data = $request->getPost();
+        $idcategorias=array();
+        $post_data = $request->getPost();
+//        foreach ($post_data['subcat'] as $key => $value) {
+//                if (strpos($value, '-'))
+//                    array_push($idcategorias, substr($value, 9));
+//            }
+        if(isset($post_data['generar_excel'])||isset($post_data['generar_pdf'])) {
             $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";
             $archivo = true;
+            foreach ($post_data as $key => $value) {
+                if (strpos($key, '-'))
+                    array_push($idcategorias, substr($key, 9));
+            }
+        } else {
+        foreach ($post_data['subcat'] as $key => $value) {
+                if (strpos($value, '-'))
+                    array_push($idcategorias, substr($value, 9));
+            }
         }
-        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta', 'plu'))->orderByProductoNombre('asc')->find();
+//        if ($request->isPost()) {
+//            
+//            $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";
+//            $archivo = true;
+//        }
+            
+        $productosObj = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo(array('subreceta', 'plu'))->filterByIdsubcategoria($idcategorias)->orderByProductoNombre('asc')->find();
         $productoObj = new \Producto();
         foreach ($productosObj as $productoObj) {
             $recetasObj = \RecetaQuery::create()->filterByIdproducto($productoObj->getIdproducto())->find();
@@ -1410,6 +1451,8 @@ class ReportesController extends AbstractActionController {
             echo $R->render($formato);
             exit();
         } else {
+            return $this->getResponse()->setContent(json_encode($reporte));
+            exit;
             $view_model = new ViewModel();
             $view_model->setVariables(array(
                 'fecha' => $fecha,
