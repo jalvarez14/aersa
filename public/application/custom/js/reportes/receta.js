@@ -47,7 +47,7 @@
          * Private methods
          */
 
-         var controlBoton = function () {
+        var controlBoton = function () {
             var select = true;
             $container.find('select').filter(function () {
                 if ($(this).val() == "")
@@ -62,29 +62,30 @@
             if (checkbox && select)
                 activar = false;
             $('#generar_reporte').attr('disabled', activar);
-            $('#generar_pdf').attr('disabled', activar);
             $('#generar_excel').attr('disabled', activar);
+            $('#generar_pdf').attr('disabled', activar);
+
         }
 
-        var controlBotones = function () {
-            var almacen = true;
-            var formato = true;
-            var checkbox = false;
-            var activar = true;
-
-            if ($('select[name=almacen]').val() == "")
-                almacen = false;
-            if ($('select[name=formato]').val() == "")
-                formato = false;
-
-            $container.find('.generado').filter(function () {
-                if ($(this).prop('checked'))
-                    checkbox = true;
+        var revisarCheckbox = function () {
+            var all_checked = true;
+            $container.find('.generadoc').filter(function () {
+                var cat_checked = true;
+                $container.find('.' + $(this).val()).filter(function () {
+                    if (!$(this).prop('checked')) {
+                        cat_checked = false;
+                    }
+                });
+                if ($container.find('.' + $(this).val()).length > 0)
+                    $(this).prop('checked', cat_checked);
             });
 
-            if (almacen && formato && checkbox)
-                activar = false;
-            $('#generar_reporte').attr('disabled', activar);
+            $container.find('.generadoc').filter(function () {
+                if (!$(this).prop('checked')) {
+                    all_checked = false;
+                }
+            });
+            $('#todos').prop('checked', all_checked);
         }
         /*
          * Public methods
@@ -96,7 +97,7 @@
 
 
         }
-        
+
         plugin.inicio = function () {
             $('select[name=formato]').on('change', function () {
                 controlBotones();
@@ -138,8 +139,43 @@
                     $(this).attr("hidden", !palabra.includes(busqueda));
                 });
             });
+
+            $("#generar_reporte").on('click', function () {
+                var subcat=new Array();
+                var table = $('#reporte_table tbody');
+                
+                var url;
+                
+                $container.find('.tiporep').filter(function () {
+                    if ($(this).prop('checked'))
+                        url=$(this).val();
+                });
+                $container.find('.generado').filter(function () {
+                    if ($(this).prop('checked'))
+                        subcat.push($(this).attr('id'));
+                });
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "/reportes/recetas/"+url,
+                    dataType: "json",
+                    data: {subcat: subcat},
+                    success: function (data) {
+                        if (data.length != 0) {
+                            $('#reporte_table > tbody').empty();
+                            for (var k in data) {
+                                table.append(data[k]);
+                            }
+                        }
+                    },
+                });
+            });
+            
+            $container.find('input:radio').on('change', function () {
+                $('#formaction').attr('action', 'recetas/'+$(this).val());
+            });
         }
-        
+
         plugin.resumen = function () {
         }
 

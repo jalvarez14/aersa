@@ -258,11 +258,12 @@
 //                                console.log(workbook_array[k]);
 //                            }
                                 var table = $('#reporte_table');
+                                var fecha = $('input[name=fecha]').val();
                                 $.ajax({
                                     url: '/auditoria/inventariociclico/batch',
                                     type: 'POST',
                                     dataType: 'json',
-                                    data: {inventario: workbook_array, almacen: almacen},
+                                       data: {inventario: workbook_array, almacen: almacen, fecha:fecha},
                                     beforeSend: function (xhr) {
                                         $('body').addClass('loading');
                                     },

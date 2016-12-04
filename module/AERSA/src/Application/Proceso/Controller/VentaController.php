@@ -52,6 +52,8 @@ class VentaController extends AbstractActionController {
             }
             
             $entity->setIdempresa($session['idempresa']);
+            $entity->setProductoRendimiento(1);
+            $entity->setProductoRendimientooriginal(1);
             $entity->save();
             $entity_array = $entity->toArray(\BasePeer::TYPE_FIELDNAME);
             
@@ -198,7 +200,7 @@ class VentaController extends AbstractActionController {
                         $venta_detalle_receta->save();
                         $idpadre1=$venta_detalle_receta->getIdventadetalle();
                         $productorecnivel2= $detalle->getIdproductoreceta();
-                        
+                        $cantidadpadre=$detalle->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad();
                         //receta 2do nivel
                         $productonivel2 = \ProductoQuery::create()->findPk($productorecnivel2);
                         
@@ -215,7 +217,7 @@ class VentaController extends AbstractActionController {
                                 ->setVentadetalleRevisada($venta_detalle->getVentadetalleRevisada())
                                 ->setIdalmacen($venta_detalle->getIdalmacen())
                                 ->setIdproducto($detalle2->getIdproductoreceta())
-                                ->setVentadetalleCantidad($detalle2->getRecetaCantidad() * $venta_detalle->getVentadetalleCantidad())
+                                ->setVentadetalleCantidad($detalle2->getRecetaCantidad() * $cantidadpadre)
                                 ->setVentadetalleSubtotal(0)
                                 ->setIdpadre($idpadre1);
                                 
