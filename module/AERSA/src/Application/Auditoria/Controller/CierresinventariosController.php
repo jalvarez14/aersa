@@ -28,6 +28,7 @@
         }
         
         public function nuevoAction() {
+            
             //CARGAMOS LA SESSION PARA HACER VALIDACIONES
             $session = new \Shared\Session\AouthSession();
             $session = $session->getData();
@@ -60,7 +61,7 @@
             if ($request->isPost()) {
                 
                 $post_data = $request->getPost();
-                //echo '<pre>';var_dump($post_data);echo '</pre>';exit();
+                
                 $idalmacen = $post_data['idalmacen'];
                 $post_data['idusuario'] = $session['idusuario'];
                 $idauditor = $post_data['idauditor'];
@@ -141,6 +142,9 @@
         }
         
         public function batchAction() {
+            ini_set("log_errors", 1);
+            ini_set("error_log", "/home/aersa/public_html/logs/error_log.txt");
+            error_reporting(E_ALL);
             //CARGAMOS LA SESSION PARA HACER VALIDACIONES
             $session = new \Shared\Session\AouthSession();
             $session = $session->getData();
@@ -288,6 +292,9 @@
                                 //                            }
                             }
                         }
+                        //echo '<pre>'.$objproducto->getProductoNombre().'</pre>';
+                        file_put_contents("/home/aersa/public_html/logs/error_log.txt", $objproducto->getProductoNombre()."\n",FILE_APPEND);
+                        
                         if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                             $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
                         $totalProductoCompra = 0;

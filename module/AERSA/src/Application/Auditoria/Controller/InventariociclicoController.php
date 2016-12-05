@@ -36,6 +36,7 @@ class InventariociclicoController extends AbstractActionController {
             $auditor_array[$id] = $usuario->getUsuarioNombre();
         }
         $request = $this->getRequest();
+        
         if ($request->isPost()) {
             $post_data = $request->getPost();
             $reporte = array();
@@ -45,7 +46,26 @@ class InventariociclicoController extends AbstractActionController {
                     array_push($reporte, array('uno' => 'Subcategoria', 'dos' => $value['categoria'], 'tres' => '', 'cuatro' => '', 'cinco' => '', 'seis' => '', 'siete' => '', 'ocho' => '', 'nueve' => '', 'diez' => '', 'once' => '', 'doce' => '', 'trece' => '', 'catorce' => '', 'quince' => '', 'dieciseis' => '', 'diecisiete' => '', 'dieciocho' => '', 'diecinueve' => '', 'veinte' => '','veintiuno' => ''));
                 } else {
                     $subcat= \ProductoQuery::create()->filterByIdproducto($value['idproducto'])->findOne()->getCategoriaRelatedByIdsubcategoria()->getCategoriaNombre();
-                    array_push($reporte, array('uno' => $value['idproducto'], 'dos' => $value['inventariomesdetalle_nombre'], 'tres' => $value['inventariomesdetalle_stockinicial'], 'cuatro' => $value['inventariomesdetalle_ingresocompra'], 'cinco' => $value['inventariomesdetalle_ingresorequisicion'], 'seis' => $value['inventariomesdetalle_ingresoordentablajeria'], 'siete' => $value['inventariomesdetalle_egresoventa'], 'ocho' => $value['inventariomesdetalle_egresorequisicion'], 'nueve' => $value['inventariomesdetalle_egresoordentablajeria'], 'diez' => $value['inventariomesdetalle_egresodevolucion'], 'once' => $value['inventariomesdetalle_reajuste'], 'doce' => $value['inventariomesdetalle_stockteorico'], 'trece' => $value['inventariomesdetalle_unidad'], 'catorce' => $value['inventariomesdetalle_stockfisico'], 'quince' => $value['inventariomesdetalle_importefisico'], 'dieciseis' => $value['inventariomesdetalle_diferencia'], 'diecisiete' => $value['inventariomesdetalle_costopromedio'], 'dieciocho' => $value['inventariomesdetalle_difimporte'], 'diecinueve' => $value['inventariomesdetalle_difimporte'], 'veinte' => $value['inventariomesdetalle_difimporte'],'veintiuno' => $subcat));
+                    array_push($reporte, array('uno' => $value['idproducto'], 'dos' => $value['inventariomesdetalle_nombre'], 
+                        'tres' => $value['inventariomesdetalle_stockinicial'], 
+                        'cuatro' => $value['inventariomesdetalle_ingresocompra'],
+                        'cinco' => $value['inventariomesdetalle_ingresorequisicion'], 
+                        'seis' => $value['inventariomesdetalle_ingresoordentablajeria'], 
+                        'siete' => $value['inventariomesdetalle_egresoventa'],
+                        'ocho' => $value['inventariomesdetalle_egresorequisicion'], 
+                        'nueve' => $value['inventariomesdetalle_egresoordentablajeria'], 
+                        'diez' => $value['inventariomesdetalle_egresodevolucion'],
+                        'once' => $value['inventariomesdetalle_reajuste'], 
+                        'doce' => $value['inventariomesdetalle_stockteorico'],
+                        'trece' => $value['inventariomesdetalle_unidad'],
+                        'catorce' => $value['inventariomesdetalle_stockfisico'],
+                        'quince' => $value['inventariomesdetalle_importefisico'], 
+                        'dieciseis' => $value['inventariomesdetalle_diferencia'],
+                        'diecisiete' => $value['inventariomesdetalle_costopromedio'], 
+                        'dieciocho' => $value['inventariomesdetalle_difimporte'], 
+                        'diecinueve' => $value['inventariomesdetalle_difimporte'], 
+                        'veinte' => $value['inventariomesdetalle_difimporte'],
+                        'veintiuno' => $subcat));
                 }
             }
             $nombreEmpresa = \EmpresaQuery::create()->findPk($idempresa)->getEmpresaNombrecomercial();
@@ -1236,7 +1256,7 @@ class InventariociclicoController extends AbstractActionController {
                     ($reporte,
                      "<tr id='$idproducto' bgcolor='" . $colorbg . "'>"
                      . "<td><input type='hidden' name='reporte[$row][idcategoria]' value='$cat'/><input type='hidden' name='reporte[$row][idproducto]' value='$idproducto' />$idproducto</td>"
-                     . "<td>$nomPro</td>"
+                     . "<td><input type='hidden' name='reporte[$row][inventariomesdetalle_nombre]' value='$nomPro'/>$nomPro</td>"
                      . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockinicial]' value='$exisinicial'> $exisinicial</td>"
                      . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresocompra]' value='$compra'>$compra</td>"
                      . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_ingresorequisicion]' value='$requisicionIng'>$requisicionIng</td>"
@@ -1247,7 +1267,7 @@ class InventariociclicoController extends AbstractActionController {
                      . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_egresodevolucion]' value='$devolucion'>$devolucion</td>"
                      . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_reajuste]' value='$ajuste'>$ajuste</td>"
                      . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_stockteorico]' value='$stockTeorico'>$stockTeorico</td>"
-                     . "<td>$unidad</td><td><input class='numero' required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td>"
+                     . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_unidad]' value='$unidad'>$unidad</td><td><input class='numero' required type='text' name='reporte[$row][inventariomesdetalle_stockfisico]' value='$stockFisico'></td>"
                      . "<td><input type='hidden'  name='reporte[$row][inventariomesdetalle_explosion]' value='$explosion'>$explosion</td>"
                      . "<td class='inventariomesdetalle_totalfisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_totalfisico]' value='$totalFisico'><span>$totalFisico</span></td>"
                      . "<td class='inventariomesdetalle_importefisico'><input type='hidden'  name='reporte[$row][inventariomesdetalle_importefisico]' value='$impFis'><span>$impFis</span></td>"
@@ -1274,7 +1294,6 @@ class InventariociclicoController extends AbstractActionController {
             return $this->getResponse()->setContent(json_encode($reporte));
         }
     }
-    
 
     public function encargadoAction() {
         $session = new \Shared\Session\AouthSession();
