@@ -94,7 +94,8 @@
         
        var formBind = function(anio,mes){
            
-           
+           //VALIDADOR DE FECHA - VENTA
+           $container.find()
            
             var minDate = firstDayOfWeek(anio,mes);
             var maxDate = new Date(minDate);
@@ -136,8 +137,28 @@
             }
             
             $('input[name=venta_fechaventa]').on('changeDate', function(e) {
+                var date = $('input[name=venta_fechaventa]').val() + '00:00:00';
+                var idventa = (typeof $('input[name=idventa]').val() != 'undefined') ? $('input[name=idventa]').val() : 0;
+                console.log(idventa)
+                $.ajax({
+                    url:'/procesos/venta/datevalidation',
+                    dataType: 'json',
+                    async: false,
+                    type: 'POST',
+                    data:{date:date,idventa:idventa},
+                     success: function (data) {
+                         if(data.response){
+                            $('span[for=venta_fechaventa]').show();
+                             $('button[type=submit]').attr('disabled',true);
+                         }else{
+                            $('span[for=venta_fechaventa]').hide();
+                             $('button[type=submit]').attr('disabled',false);
+                         }
+                         $('#upload_file').attr('disabled',false); 
+                     }
+                });
                 
-                $('#upload_file').attr('disabled',false);
+               
             });
             $('#upload_file').on('click',function(){
                 

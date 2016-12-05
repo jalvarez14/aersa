@@ -368,7 +368,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                  url: '/autocomplete/getproductossimples?q=%QUERY',
+                  url: '/autocomplete/getproductosfornotadecreditoAction?q=%QUERY',
                   wildcard: '%QUERY'
                 }
             });
@@ -620,7 +620,7 @@
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
                 remote: {
-                  url: '/autocomplete/getproductos?q=%QUERY',
+                  url: '/autocomplete/getproductosfornotadecreditoAction?q=%QUERY',
                   wildcard: '%QUERY'
                 }
             });

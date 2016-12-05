@@ -1435,6 +1435,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'datevalidation' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/datevalidation',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Proceso\Controller\Venta',
+                                                'action' => 'datevalidation',
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             ),
                             'ordentablajeria' => array(

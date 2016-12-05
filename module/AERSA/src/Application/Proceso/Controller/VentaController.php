@@ -8,6 +8,46 @@ use Zend\Console\Request as ConsoleRequest;
 
 class VentaController extends AbstractActionController {
 
+    public function datevalidationAction(){
+        
+         $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+        
+        $request = $this->getRequest();
+        if($request->isPost()){
+            $post_data = $request->getPost();
+            
+            $from = date_create_from_format('d/m/Y H:i:s', $post_data['date']);
+            $to = date_create_from_format('d/m/Y H:i:s', $post_data['date']);
+            $to->setTime(23,59);
+            
+            if($post_data['idventa'] > 0){
+                $venta = \VentaQuery::create()->findPk($post_data['idventa']);
+                
+                $venta_from = new \DateTime($venta->getVentaFechaventa());
+                $venta_from->setTime(0,0);
+                $venta_to = new \Datetime($venta->getVentaFechaventa());
+                $venta_to->setTime(23,59);
+                
+               // $exist = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByVentaFechaventa(array('min' => $venta_from,'max' => $venta_to))->toString();
+               //  echo '<pre>';var_dump($exist);echo '</pre>';exit();
+                if($venta_from == $from){
+                    
+                    return $this->getResponse()->setContent(json_encode(array('response' => false)));
+                }else{
+                   
+                    $exist = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByVentaFechaventa(array('min' => $from, 'max' => $to))->exists();
+                }
+            }else{
+                $exist = \VentaQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByVentaFechaventa(array('min' => $from, 'max' => $to))->exists();
+             
+            }
+            
+            return $this->getResponse()->setContent(json_encode(array('response' => $exist)));
+        }
+        
+    }
+    
     public function indexAction() 
     {
 

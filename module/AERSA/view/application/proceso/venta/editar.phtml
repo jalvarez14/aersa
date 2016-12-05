@@ -34,24 +34,28 @@
             <div class="form-body">
                 <h3 class="page-title">Ventas - <?php echo '#'.$form->get('idventa')->getValue()?></h3>
                 <div class="row">
-                    <div class="form-group">
+                    
                         <div class="col-md-6">
                             <?php echo $this->formHidden($form->get('idventa')) ?> 
                             <?php echo $this->formLabel($form->get('venta_fechaventa')) ?>  
                             <?php echo $this->formText($form->get('venta_fechaventa')) ?> 
+                            <span for="venta_fechaventa" style="color:red; display: none">Ya existe una venta con la fecha seleccionada</span>
                         </div>
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('venta_folio')) ?>  
                             <?php echo $this->formText($form->get('venta_folio')) ?> 
                         </div>
-                        <div class="col-md-6">
+                        
+                    </div>
+                <div class="row">
+                    <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('venta_revisada')) ?>  
                             <?php echo $this->formSelect($form->get('venta_revisada')) ?> 
                         </div>
-                    </div>
                 </div>
+                    
                 <div class="row">
-                    <div class="form-group">
+                    
                         <div class="col-md-6">
                             <label>Creado por</label>
                             <input class="form-control" type="text" value="<?php echo $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();?>" readonly="readonly"> 
@@ -67,7 +71,7 @@
                             ?>
                             <input class="form-control" type="text" value="<?php echo $auditor;?>" readonly="readonly"> 
                         </div>
-                    </div>
+          
                 </div>
             </div>
         </div>

@@ -34,20 +34,24 @@
             <div class="form-body">
                 <h3 class="page-title">Ventas - Registro</h3><br><br>
                 <div class="row">
-                    <div class="form-group">
+                    
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('venta_fechaventa')) ?>  
                             <?php echo $this->formText($form->get('venta_fechaventa')) ?> 
+                            <span for="venta_fechaventa" style="color:red; display: none">Ya existe una venta con la fecha seleccionada</span>
                         </div>
                         <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('venta_folio')) ?>  
                             <?php echo $this->formText($form->get('venta_folio')) ?> 
                         </div>
-                        <div class="col-md-6">
+                        
+                    </div>
+                <div class="row">
+                    <div class="col-md-6">
                             <?php echo $this->formLabel($form->get('venta_revisada')) ?>  
                             <?php echo $this->formSelect($form->get('venta_revisada')) ?> 
                         </div>
-                    </div>
+                </div>
                     
                 </div>
             </div>
