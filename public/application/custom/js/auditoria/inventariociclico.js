@@ -177,13 +177,13 @@
             container.find('input[name=fecha]').datepicker({
                 format: 'dd/mm/yyyy',
                 maxDate: new Date(res[0]+"/"+res[1]+"/"+res[2]),
-                beforeShowDay: function (date) {
-                    var a = new Array();
-                    a[0] = date.getDay() == 0;
-                    a[1] = '';
-                    a[2] = '';
-                    return a;
-                }
+//                beforeShowDay: function (date) {
+//                    var a = new Array();
+//                    a[0] = date.getDay() == 0;
+//                    a[1] = '';
+//                    a[2] = '';
+//                    return a;
+//                }
             });
             $('#batch_inventario_b').attr('disabled', true);
             $('select[name=idalmacen]').on('change', function () {
