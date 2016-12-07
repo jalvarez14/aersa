@@ -378,7 +378,7 @@
                                 {
                                     //$conn = \Propel::getConnection();
                                     //se conoce el papa
-                                    $venta_detalle = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
+                                    $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrereceta=$venta_detalle_padre->getIdPadre();
                                     
                                     if($padrereceta=='')
