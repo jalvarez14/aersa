@@ -59,12 +59,12 @@ class InventariociclicoController extends AbstractActionController {
                         'doce' => $value['inventariomesdetalle_stockteorico'],
                         'trece' => $value['inventariomesdetalle_unidad'],
                         'catorce' => $value['inventariomesdetalle_stockfisico'],
-                        'quince' => $value['inventariomesdetalle_importefisico'], 
-                        'dieciseis' => $value['inventariomesdetalle_diferencia'],
-                        'diecisiete' => $value['inventariomesdetalle_costopromedio'], 
-                        'dieciocho' => $value['inventariomesdetalle_difimporte'], 
+                        'quince' => $value['inventariomesdetalle_explosion'],
+                        'dieciseis' => $value['inventariomesdetalle_totalfisico'],
+                        'diecisiete' => $value['inventariomesdetalle_importefisico'],
+                        'dieciocho' => $value['inventariomesdetalle_diferencia'],
                         'diecinueve' => $value['inventariomesdetalle_difimporte'], 
-                        'veinte' => $value['inventariomesdetalle_difimporte'],
+                        'veinte' => $value['inventariomesdetalle_costopromedio'],
                         'veintiuno' => $subcat));
                 }
             }
@@ -359,7 +359,7 @@ class InventariociclicoController extends AbstractActionController {
                             {
                                 $conn = \Propel::getConnection();
                                 //se conoce el papa
-                                $venta_detalle = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
+                                $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                 $padrereceta=$venta_detalle_padre->getIdPadre();
                                 
                                 if($padrereceta=='')
