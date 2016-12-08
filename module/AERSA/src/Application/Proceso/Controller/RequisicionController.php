@@ -457,6 +457,7 @@
                     if ($post_data['requisicion_revisada']) {
                         $entity->setIdauditor($session['idusuario']);
                     }
+                    
                     $entity->save();
                     
                     //Requisicion DETALLES
@@ -472,10 +473,17 @@
                         if (isset($producto['requisiciondetalle_revisada'])) {
                             $requisicion_detalle->setRequisiciondetalleRevisada(1);
                         }
+                        
+                        $tipopro = \ProductoQuery::create()->filterByIdproducto($requisicion_detalle->getIdproducto())->findOne();
+                        
+                        if($tipopro->getProductoTipo() == 'simple'){
+                            $requisicion_detalle->setRequisiciondetalleContable(1);
+                        }
+                        
                         $requisicion_detalle->setIdrequisicion($entity->getIdrequisicion());
                         $requisicion_detalle->save();
                         
-                        $tipopro = \ProductoQuery::create()->filterByIdproducto($requisicion_detalle->getIdproducto())->findOne();
+                        
                         
                         //inician niveles
                         if ($tipopro->getProductoTipo() != 'simple') {
