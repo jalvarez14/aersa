@@ -225,18 +225,67 @@ class IndexController extends AbstractActionController
         return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
     }
     
+    public function getproductosforajustesinventariosAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $search = $this->params()->fromQuery('q');
+
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoTipo('plu', \Criteria::NOT_EQUAL)->filterByProductoNombre('%'.utf8_encode($search).'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+        $array = array();
+        $entity = new \Producto();
+        foreach ($query as $entity){
+            $tmp['id'] = $entity->getIdproducto();
+            $tmp['value'] = $entity->getProductoNombre()." - ".$entity->getUnidadmedida()->getUnidadmedidaNombre();
+            $array[] = $tmp;
+        }
+        return $this->getResponse()->setContent(json_encode($array));
+    }
+    
+    
+    
+    
     public function getproductosAction(){
 
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
 
-        $search = $this->params()->fromQuery('q');
+        $search_value = $this->params()->fromQuery('q');
         $type = $this->params()->fromQuery('type') ? $this->params()->fromQuery('type') : false;
        
+        $search_value = str_replace("Ñ", "Ã‘", $search_value);
+        $search_value = str_replace("L'", "L'", $search_value);
+        $search_value = str_replace("Ç", "Ã‡", $search_value);
+        $search_value = str_replace("À", "Ã€", $search_value);
+        $search_value = str_replace("È", "Ãˆ", $search_value);
+        $search_value = str_replace("Û", "Ã›", $search_value);
+        $search_value = str_replace("´", "Â´", $search_value);
+        $search_value = str_replace("ñ", "Ã±", $search_value);
+        $search_value = str_replace("Ú", "Ãš", $search_value);
+        $search_value = str_replace("é", "Ã©", $search_value);
+        $search_value = str_replace("Á", "Ã", $search_value);
+        $search_value = str_replace("ó", "Ã³", $search_value);
+        $search_value = str_replace("'", "'", $search_value);
+        $search_value = str_replace("ú", "Ãº", $search_value);
+        if ( strpos($search_value, 'Ð') !== false)
+        {
+            $search_value = str_replace("Ð", "Ã", $search_value);
+        }
+        if ( strpos($search_value, 'Á') !== false )
+        {
+            $search_value = str_replace("Á", "Ã", $search_value);
+        }
+        if ( strpos($search_value, 'Í') !== false )
+        {
+            $search_value = str_replace("Í", "Ã", $search_value);
+        }
+        
+        
         if($type == 'simple'){
-            $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoTipo('simple')->filterByProductoNombre('%'.utf8_encode($search).'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+            $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoTipo('simple')->filterByProductoNombre('%'.utf8_encode($search_value).'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
         }else{
-            $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+            $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search_value.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
         }
         
         return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
