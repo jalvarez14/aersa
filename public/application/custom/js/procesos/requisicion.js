@@ -197,28 +197,30 @@
                 url: "/procesos/requisicion/getalmdes/" + sucursal_destino,
                 dataType: "json",
                 success: function (data) {
+                    
                     if (data.length != 0)
                     {
-                        $("[name=idalmacendestino]").html('');
-                        for (var k in data)
-                        {
+                        $container.find('select[name=idalmacendestino] option').remove();
+                        
+                        
                             $container.find('select[name=idalmacendestino] option').remove();
                             $.each(data,function(index,value){
                                 var option = $('<option>');
                                 option.text(value);
                                 option.attr('value',index);
-                                if ((value == $("[name=idsucursalorigen]").val()) && ($("[name=idalmacenorigen]").val() == data[k]))
+                                if ((($('[name=idsucursalorigen]').val() == $('[name=idsucursaldestino]').val())) && ($("[name=idalmacenorigen] option:selected").text() == value))
                                 {
                                 } else{
-                                    $("[name=idalmacendestino]").append('<option value="' + k + '">' + data[k]+ '</option>');
+                                    
+                                    $("[name=idalmacendestino]").append('<option value="' + index + '">' + value+ '</option>');
                                 }
-                                $('select[name=idalmacendestino]').append(option);
+                               // $('select[name=idalmacendestino]').append(option);
                             });
                             
-                        }
+                        //}
                     } else
                     {
-                        $("[name=idalmacendestino]").html('');
+                        $container.find('select[name=idalmacendestino] option').remove();
                         alert('No existen almacenes para sucursal destino');
                     }
                 },
