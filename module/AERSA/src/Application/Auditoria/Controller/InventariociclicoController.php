@@ -939,7 +939,7 @@ class InventariociclicoController extends AbstractActionController {
                                                                     {
                                                                         $pos = 'inventariomesdetalle_stockfisico';
                                                                         $exp='inventariomesdetalle_explosion';
-                                                                        $cant = $recetaObjnivel6->getRecetaCantidad();
+                                                                        $cant = $recetaObjnivel6->getRecetaCantidad()*$recetaObjnivel5->getRecetaCantidad()*$recetaObjnivel4->getRecetaCantidad()*$recetaObjnivel3->getRecetaCantidad()*$recetaObjnivel2->getRecetaCantidad()*$recetaObj->getRecetaCantidad();
                                                                         if (isset($arrayReporte[$idprnivel6]['inventariomesdetalle_diferencia'])) {
                                                                             ////
                                                                             //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
@@ -973,7 +973,7 @@ class InventariociclicoController extends AbstractActionController {
                                                             {
                                                                 $pos = 'inventariomesdetalle_stockfisico';
                                                                 $exp='inventariomesdetalle_explosion';
-                                                                $cant = $recetaObjnivel5->getRecetaCantidad();
+                                                                $cant = $recetaObjnivel5->getRecetaCantidad()*$recetaObjnivel4->getRecetaCantidad()*$recetaObjnivel3->getRecetaCantidad()*$recetaObjnivel2->getRecetaCantidad()*$recetaObj->getRecetaCantidad();
                                                                 if (isset($arrayReporte[$idprnivel5]['inventariomesdetalle_diferencia'])) {
                                                                     ////
                                                                     //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
@@ -1007,7 +1007,7 @@ class InventariociclicoController extends AbstractActionController {
                                                     {
                                                         $pos = 'inventariomesdetalle_stockfisico';
                                                         $exp='inventariomesdetalle_explosion';
-                                                        $cant = $recetaObjnivel4->getRecetaCantidad();
+                                                        $cant = $recetaObjnivel4->getRecetaCantidad()*$recetaObjnivel3->getRecetaCantidad()*$recetaObjnivel2->getRecetaCantidad()*$recetaObj->getRecetaCantidad();
                                                         if (isset($arrayReporte[$idprnivel4]['inventariomesdetalle_diferencia'])) {
                                                             ////
                                                             //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
@@ -1042,7 +1042,7 @@ class InventariociclicoController extends AbstractActionController {
                                             {
                                                 $pos = 'inventariomesdetalle_stockfisico';
                                                 $exp='inventariomesdetalle_explosion';
-                                                $cant = $recetaObjnivel3->getRecetaCantidad();
+                                                $cant = $recetaObjnivel3->getRecetaCantidad()*$recetaObjnivel2->getRecetaCantidad()*$recetaObj->getRecetaCantidad();
                                                 if (isset($arrayReporte[$idprnivel3]['inventariomesdetalle_diferencia'])) {
                                                     ////
                                                     //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
@@ -1076,7 +1076,7 @@ class InventariociclicoController extends AbstractActionController {
                                     {
                                         $pos = 'inventariomesdetalle_stockfisico';
                                         $exp='inventariomesdetalle_explosion';
-                                        $cant = $recetaObjnivel2->getRecetaCantidad();
+                                        $cant = $recetaObjnivel2->getRecetaCantidad()*$recetaObj->getRecetaCantidad();
                                         if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                             ////
                                             //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
