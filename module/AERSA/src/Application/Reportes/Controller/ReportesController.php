@@ -1262,10 +1262,10 @@ class ReportesController extends AbstractActionController {
                         $productoDetalle = \ProductoQuery::create()->filterByIdproducto($recetaDetalleObj->getIdproductoreceta())->findOne();
                         $claveDetalle = $productoDetalle->getIdproducto();
                         $nombreDetalle = $productoDetalle->getProductoNombre();
-                        $cantidadDetalle = $recetaDetalleObj->getRecetaCantidad();
+                        $cantidadDetalle = $recetaDetalleObj->getRecetaCantidad()*$cantidad;
                         $unidadDetalle = $productoDetalle->getUnidadmedida()->getUnidadmedidaNombre();
                         $costoDetalle = $productoDetalle->getProductoCosto();
-                        $totalDetalle = $costoDetalle * $cantidadDetalle*$cantidad;
+                        $totalDetalle = $costoDetalle * $cantidadDetalle;
                         //if($productoDetalle->getProductoTipo()!="simple")
                         $totalReceta+=$totalDetalle;
                         $tipoDetalle = $productoDetalle->getProductoTipo();
