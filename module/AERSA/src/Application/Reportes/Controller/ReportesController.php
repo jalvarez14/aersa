@@ -1265,7 +1265,8 @@ class ReportesController extends AbstractActionController {
                         $cantidadDetalle = $recetaDetalleObj->getRecetaCantidad();
                         $unidadDetalle = $productoDetalle->getUnidadmedida()->getUnidadmedidaNombre();
                         $costoDetalle = $productoDetalle->getProductoCosto();
-                        $totalDetalle = $costoDetalle * $cantidadDetalle;
+                        $totalDetalle = $costoDetalle * $cantidadDetalle*$cantidad;
+                        //if($productoDetalle->getProductoTipo()!="simple")
                         $totalReceta+=$totalDetalle;
                         $tipoDetalle = $productoDetalle->getProductoTipo();
                         $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
