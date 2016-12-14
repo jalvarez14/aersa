@@ -821,22 +821,33 @@ class ProductoController extends AbstractActionController
     }
     
     //RECIBE EL IDPRODUCTO DE EL PRODUCTO TIPO SIMPLE Y ACTUALIZA EL COSTO DEL PRODUCTO TIPO SUBRECETA
-    public static function updateSubreceta($idproducto){
-      
-        $recetas = \RecetaQuery::create()->filterByIdproductoreceta($idproducto)->find();
-        $receta = new \Receta();
-        foreach ($recetas as $receta){
-            $producto_padre = \ProductoQuery::create()->findPk($receta->getIdproducto());
-            if($producto_padre->getProductoTipo('subreceta') && $producto_padre->getIdcategoria() == 1){
-                $costo_padre = \RecetaQuery::create()->filterByIdproducto($producto_padre->getIdproducto())->joinProductoRelatedByIdproductoreceta()->withColumn('SUM(producto_costo)')->findOne()->toArray();
-                $costo_padre = !is_null($costo_padre['SUMproducto_costo']) ? $costo_padre['SUMproducto_costo'] : 0;
-                $costo_padre = $costo_padre * $receta->getRecetaCantidad();
-                $producto_padre->setProductoCosto($costo_padre)->save();
-            }
-            
-        }
-
-    }
+     public static function updateSubreceta($idproducto){
+         
+         $recetas = \RecetaQuery::create()->filterByIdproductoreceta($idproducto)->find();
+         $receta = new \Receta();
+         foreach ($recetas as $receta){
+             $producto_padre = \ProductoQuery::create()->findPk($receta->getIdproducto());
+             if($producto_padre->getProductoTipo('subreceta') && $producto_padre->getIdcategoria() == 1){
+                 $costo_padre = 0;
+                 $receta_hijos = \RecetaQuery::create()->filterByIdproducto($producto_padre->getIdproducto())->find();
+                 
+                 $value = new \Receta();
+                 foreach ($receta_hijos as $value){
+                     $cantidad  = $value->getRecetaCantidad();
+                     $costo = !is_null($value->getProductoRelatedByIdproductoreceta()->getProductoCosto()) ? $value->getProductoRelatedByIdproductoreceta()->getProductoCosto() : 0;
+                     $costo_padre +=$cantidad*$costo;
+                     
+                 }
+                 
+                 
+                 //$costo_padre = !is_null($costo_padre['SUMproducto_costo']) ? $costo_padre['SUMproducto_costo'] : 0;
+                 //$costo_padre = $costo_padre * $receta->getRecetaCantidad();
+                 $producto_padre->setProductoCosto($costo_padre)->save();
+             }
+             
+         }
+         
+     }
     
     public function  exportAction() {
         $request = $this->getRequest();
