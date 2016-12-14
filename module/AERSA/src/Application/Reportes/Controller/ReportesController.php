@@ -1281,14 +1281,14 @@ class ReportesController extends AbstractActionController {
                     $bg = ($color) ? '#FFFFFF' : '#F2F2F2';
                     $color = !$color;
                     if ($archivo) {
-                        array_push($reporte, array('uno' => '', 'dos'=>'','tres' => $nombre,'cuatro'=>$unidad, 'tres' => $tipo, 'cuatro' => $clave, 'cinco' => $cantidad, 'seis' => $costo, 'siete' => $total));
+                        array_push($reporte, array('uno' => '', 'dos'=>'','tres' => $nombre,'cuatro'=>$unidad, 'cinco' => $tipo, 'seis' => $clave, 'siete' => $cantidad, 'ocho' => $costo, 'nueve' => $total));
                     } else {
                         array_push($reporte, "<tr bgcolor='" . $bg . "'><td></td><td></td><td>$nombre</td><td>$unidad</td><td>$tipo</td><td>$clave</td><td>$cantidad</td><td>$costo</td><td>$total</td></tr>");
                     }
                 }
             }
             if ($archivo) {
-                array_push($reporte, array('uno' => '', 'dos' => '', 'tres' => '', 'cuatro' => '', 'cinco' => '','seis'=>'','siete'=>'', 'ocho' => 'Total', 'ocho' => $totalReceta));
+                array_push($reporte, array('uno' => '', 'dos' => '', 'tres' => '', 'cuatro' => '', 'cinco' => '','seis'=>'','siete'=>'', 'ocho' => 'Total', 'nueve' => $totalReceta));
             } else {
                 array_push($reporte, "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Total</td><td>$totalReceta</td></tr>");
             }

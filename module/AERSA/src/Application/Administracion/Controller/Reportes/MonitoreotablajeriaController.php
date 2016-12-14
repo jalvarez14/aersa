@@ -61,13 +61,13 @@ class MonitoreotablajeriaController extends AbstractActionController {
                 $mes = '0' . $mes;
             $inicio = "$anio-$mes-01 00:00:00";
             if (checkdate($mes, '31', $anio))
-                $fin = "$anio-$mes-31 00:00:00";
+                $fin = "$anio-$mes-31 23:59:59";
             elseif (checkdate($mes, '30', $anio))
-                $fin = "$anio-$mes-30 00:00:00";
+                $fin = "$anio-$mes-30 23:59:59";
             elseif (checkdate($mes, '28', $anio))
-                $fin = "$anio-$mes-28 00:00:00";
+                $fin = "$anio-$mes-28 23:59:59";
             else
-                $fin = "$anio-$mes-29 00:00:00";
+                $fin = "$anio-$mes-29 23:59:59";
 
             $ordenesTablajeria = \OrdentablajeriaQuery::create()->filterByIdsucursal($idsucursal)->filterByOrdentablajeriaFecha(array('min' => $inicio, 'max' => $fin))->find();
             $ordenTablajeria = new \Ordentablajeria();
@@ -101,13 +101,13 @@ class MonitoreotablajeriaController extends AbstractActionController {
                 $mes = '0' . $mes;
             $inicio = "$anio-$mes-01 00:00:00";
             if (checkdate($mes, '31', $anio))
-                $fin = "$anio-$mes-31 00:00:00";
+                $fin = "$anio-$mes-31 23:59:59";
             elseif (checkdate($mes, '30', $anio))
-                $fin = "$anio-$mes-30 00:00:00";
+                $fin = "$anio-$mes-30 23:59:59";
             elseif (checkdate($mes, '28', $anio))
-                $fin = "$anio-$mes-28 00:00:00";
+                $fin = "$anio-$mes-28 23:59:59";
             else
-                $fin = "$anio-$mes-29 00:00:00";
+                $fin = "$anio-$mes-29 23:59:59";
 
             $ordenesTablajeria = \OrdentablajeriaQuery::create()->filterByIdsucursal($idsucursal)->filterByOrdentablajeriaFecha(array('min' => $inicio, 'max' => $fin))->find();
             $ordenTablajeria = new \Ordentablajeria();
