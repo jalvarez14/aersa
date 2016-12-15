@@ -20,6 +20,32 @@ use Zend\Console\Request as ConsoleRequest;
 class CategoriaController extends AbstractActionController
 {
     
+    public function validatesubcategoryAction(){
+        
+         $request = $this->getRequest();
+         
+        if($request->isPost())
+        {
+            $post_data = $request->getPost();
+            
+            if($post_data['idsubcategory'] > 0){
+                $category = \CategoriaQuery::create()->findPk($post_data['idsubcategory']);
+                $exist = \CategoriaQuery::create()->filterByIdcategoriapadre($category->getIdcategoriapadre())->filterByCategoriaNombre($category->getCategoriaNombre(), \Criteria::NOT_EQUAL)->filterByCategoriaNombre($post_data['subcategory_name'])->exists();
+            }else{
+                
+                $exist = \CategoriaQuery::create()->filterByIdcategoriapadre($post_data['idcategory'])->filterByCategoriaNombre($post_data['subcategory_name'])->exists();
+                
+            }
+          
+            return $this->getResponse()->setContent(json_encode($exist));
+            
+            
+            
+            //$exist 
+        }
+      
+        
+    }
     
     public function indexAction()
     {

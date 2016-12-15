@@ -209,7 +209,9 @@ class CompraController extends AbstractActionController {
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
 
         $form = new \Application\Proceso\Form\CompraForm($almecenes);
+        
 
+        
         //Obtenemos el iva
         $iva = \TasaivaQuery::create()->findOne();
         $iva = $iva->getTasaivaValor();

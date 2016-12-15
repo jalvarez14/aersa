@@ -610,6 +610,16 @@ return array(
                                 ),
                                 'may_terminate' => true,
                                 'child_routes' => array(
+                                    'validatesubcategory' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/validatesubcategory',
+                                            'defaults' => array(
+                                                'controller' => 'Application\Catalogo\Controller\Categoria',
+                                                'action' => 'validatesubcategory',
+                                            ),
+                                        ),
+                                    ),
                                     'nuevo' => array(
                                         'type' => 'Literal',
                                         'options' => array(
@@ -2303,9 +2313,9 @@ return array(
                         ),
                     ),
                     'servicios' => array(
-                        'type'    => 'Literal',
+                        'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/servicios',
+                            'route'    => '/servicios/empresas/:tipo',
                             'defaults' => array(
                                 'controller'    => 'Website\Controller\Website',
                                 'action'        => 'servicios',

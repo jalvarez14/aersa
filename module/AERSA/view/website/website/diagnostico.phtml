@@ -1,7 +1,8 @@
+
 <?php $indexRespuesta = 0; ?>
 
 <div class="row bot">
-		<img src="/website/img/banners/Diagnóstico.jpg" alt="" class="img-responsive img-index" />
+		<img src="/website/img/banners/diagnosticov2.jpg" alt="" class="img-responsive img-index" />
 </div>
 
 <div class="row">
@@ -9,7 +10,7 @@
     <form  class="form-horizontal" id="formDiagnostico" method="post" action="">
 
       <div class="col-lg-12 col-md-12">
-        <button class="btn col-xs-12 text-left panel-green btn-panel" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >Administración <i class="fa fa-angle-up pull-right"></i></button>
+          <button style="text-height: 10"class="btn col-xs-12 text-left panel-green btn-panel" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >Administración <i class="fa fa-angle-up pull-right"></i></button>
         <div class="collapse in col-xs-12 mini-top" id="collapseExample">
 
 					<div class="form-group " >
@@ -218,9 +219,9 @@ function setData($data,$section)
 			 }
 			 else
 			 {?>
-				 <div class="form-group">
-					<label for="" class="col-xs-12"><?php echo $data[$i] ?></label>
-					<textarea required name="<?php echo $data[$i] ?> : " class="form-control" rows="3" ></textarea>
+				 <div class="form-group" >
+					<label for="" class="col-xs-12" ><?php echo $data[$i] ?></label>
+					<textarea  required name="<?php echo $data[$i] ?> : " class="form-control" rows="3" ></textarea>
 				</div>
 				<?php
 			 }

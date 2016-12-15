@@ -117,8 +117,17 @@ class WebsiteController extends AbstractActionController
     }
     public function serviciosAction()
     {
+        
         $this->layout('website/layout/layout');
-        return new Viewmodel();
+        $tipo = $this->params()->fromRoute('tipo');
+        $view_model = new ViewModel();
+        if($tipo == 'servicios'){
+             $view_model->setTemplate('website/servicios/servicios');
+        }else{
+            $view_model->setTemplate('website/servicios/productos');
+        }
+       
+        return $view_model;
     }
 
 

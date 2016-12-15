@@ -38,7 +38,9 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('categoria_nombre')) ?>  
+                        <?php echo $this->formHidden($form->get('idcategoria')) ?>
                         <?php echo $this->formText($form->get('categoria_nombre')) ?>
+                        <span for="categoria_nombre" style="color:red; display: none"><b>Ya existe una subcategoria con el mismo nombre</b></span>
                     </div>
                 </div>
                 <div class="col-md-6" style="padding-top: 30px;">
@@ -65,3 +67,29 @@
     </div>
     
 </div>
+
+<script>
+
+    $('button[type=submit]').on('click',function(e){
+        
+        e.preventDefault();
+        var subcategoria = $('input[name=categoria_nombre]').val();
+        
+        var idsubcategory = $('input[name=idcategoria]').val();
+        $.ajax({
+            url:'/catalogo/categoria/validatesubcategory',
+            data:{subcategory_name:subcategoria,idsubcategory:idsubcategory},
+            dataType: 'JSON',
+            type: 'POST',
+            success: function (data, textStatus, jqXHR) {
+                if(data){
+                    $('[for=categoria_nombre]').show();
+                }else{
+                    $('form').submit();
+                }
+            }
+        });
+        
+    });
+
+</script>

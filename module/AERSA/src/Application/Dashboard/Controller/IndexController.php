@@ -174,7 +174,7 @@ class IndexController extends AbstractActionController
         $cfdi = $this->params()->fromQuery('cfdi') ? (int)$this->params()->fromQuery('cfdi') : 0;
             
         $query = \ProveedorQuery::create()->filterByProveedorEstatus(1)->filterByIdempresa($session['idempresa'])->filterByProveedorNombrecomercial('%'.$search.'%',  \Criteria::LIKE)->_or()->filterByProveedorRazonsocial('%'.$search.'%',  \Criteria::LIKE)->find();
-        
+       
         if(!$cfdi){
              
             $result = array();
