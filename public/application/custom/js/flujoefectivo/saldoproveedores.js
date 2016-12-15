@@ -78,6 +78,9 @@
                     table.dataTable({
                         "language": data,
                         "order": [],
+                        "columnDefs": [
+                            { "type": "date-eu", targets: 0 }
+                        ]
                     });
                 },
             });
@@ -94,6 +97,9 @@
                     table.dataTable({
                         "language": data,
                         "order": [],
+                        "columnDefs": [
+                            { "type": "date-eu", targets: 0 }
+                        ]
                     });
                 },
             });
