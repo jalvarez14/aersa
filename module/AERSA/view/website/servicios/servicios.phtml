@@ -1,299 +1,252 @@
+<script src="website/js/servicios.js"></script>
+<script src="website/js/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-<script src="/js/servicios/servicios.js"></script>
-<script src="/js/jquery-ui.js"></script>
+<script src="website/js/responsiveMap.js"></script>
+
 
 <div class="page-header row"></div>
-<div class="row top">
-    <div class="col-lg-12">
-        <h2><?php echo $this->translate('Servicios') ?></h2>
-        <h5 class="justifyText"><?php echo $this->translate('En ITRADE MÉXICO ponemos a su servicio soluciones integrales en logística y transporte para sus importaciones, exportaciones, distribución a nivel nacional e internacional, despacho de aduanas, manejo de mercancía peligrosas, perecederos y aseguramiento.') ?></h5>
-    </div>
+<div class="row bot">
+        <img src="/website/img/banners/servicios.png" alt="" class="img-responsive img-index" />
 </div>
-<div class="row top">
-    <div class="hidden-xs">
-        <div style="position: relative;">
+
+<div class="container">
+    <div class="row top">
+        <div class="hidden-xs">
+            <div style="position: relative;">
+
+                <img class="img-responsive img-center img-100" id="imgTransportes" src="website/img/servicios/prueba.jpg"  usemap="#mapTransportes" alt="" />
+                <div id="detalleMaritimo">
+                    <div class="detalle-content">
+                        <span id="maritimoClose" class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+                <div id="detalleTerrestre">
+                    <div class="detalle-content">
+                        <span id="terrestreClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="detalleAereo">
+                    <div class="detalle-content">
+                        <span id="aereoClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <map name="mapTransportes">
+                <area  id="btnMaritimo"  shape="rect" coords="0,0,321,428"        />
+                <area  id="btnAereo"     shape="rect" coords="321,0,640,428"      />
+                <area  id="btnTerrestre" shape="rect" coords="640,0,959,428"     />
+            </map>
+        </div>
+        <div class="hidden visible-xs">
             <?php if (lan == 'es') : ?>
-                <img class="img-responsive" id="imgTransportes" src="/img/servicios/Servicios-transporte.jpg"  usemap="#mapTransportes" alt="" />
+                <img class="img-responsive col-xs-10 col-xs-offset-1 " id="imgMaritimoM" src="website/img/servicios/prueba-mini.jpg" usemap="#maritimoM" alt="" />
             <?php else : ?>
-                <img class="img-responsive" id="imgTransportes" src="/img/servicios/Servicios-transporte-en.jpg"  usemap="#mapTransportes" alt="" />
+                <img class="img-responsive col-xs-10 col-xs-offset-1 " id="imgMaritimoM" src="website/img/servicios/prueba-mini.jpg" usemap="#maritimoM" alt="" />
             <?php endif; ?>
-            <div id="detalleMaritimo">
-                <div class="detalle-content">
-                    <span id="maritimoClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
-                    <br>
-                    <h4><strong><?php echo $this->translate('TRANSPORTE MARÍTIMO') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('Somos especialistas en todo de tipo de carga marítima, desde un paquete pequeño hasta un contenedor completo. Tenemos acuerdos con diversas navieras para embarcar y desembarcar en puertos de todo el mundo.'); ?>
-                    <br>
-                    <ul>
-                        •	<?php echo $this->translate('Contenedor completo (FCL)') ?>
-                        <ul>
-                            -	<?php echo $this->translate('Dry Van	20’ DV / 40’ DV / 40’ HC') ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleMaritimoM" class="col-xs-12 " >
+                    <span id="maritimoMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12 row">
+                        <div class="content">
                             <br>
-                            -	<?php echo $this->translate('Reefer 	20’ RF / 40’ RF / 40’ HFR') ?>
                             <br>
-                            -	<?php echo $this->translate('Open Top 	20’ OT / 20’ OP') ?>
                             <br>
-                            -	<?php echo $this->translate('Flat Rack	20’ FR / 40’ FR') ?>
-                            <br>
-                        </ul>
-                        •	<?php echo $this->translate('Carga consolidada') ?>
-                    </ul>
-
-                </div>
-                <a style="color: white; background: #2E3192; border:none"class="cotizar text-right btn btn-default"href="/contacto/maritimo"><?php echo $this->translate('COTIZAR') ?></a>
-            </div>
-            <div id="detalleTerrestre">
-                <div class="detalle-content">
-                    <span id="terrestreClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
-                    <br>
-                    <h4><strong><?php echo $this->translate('TRANSPORTE TERRESTRE') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('Ponemos a su disposición nuestro servicio de transporte terrestre. Contamos con unidades propias y una red de servicios para satisfacer las necesidades del mercado global. Enfocamos nuestras entregas y recolecciones en Canadá, Estados Unidos, México y Latinoamérica.') ?>
-                    <br><br> 
-                    •	<?php echo $this->translate('Caja completa (FTL-Reefer-Isotanques)') ?> <br>
-                    •	<?php echo $this->translate('Servicio de carga consolidada (LTL)') ?> <br>
-                    •	<?php echo $this->translate('Custodia de mercancías. ') ?> <br>
-                    •	<?php echo $this->translate('Sobredimensionado ') ?> <br>
-                </div>
-                <a class="cotizar  text-right btn btn-default" style="color: white; background: #2E3192; border:none" href="/contacto/terrestre"><?php echo $this->translate('COTIZAR') ?></a>
-            </div>
-            <div id="detalleAereo">
-                <div class="detalle-content">
-                    <span id="aereoClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
-                    <br>
-                    <h4><strong><?php echo $this->translate('TRANSPORTE AÉREO') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('Servicio aéreo doméstico y global para sus embarques de importación y exportación. Puede estar tranquilo: nuestro equipo de aeropuerto acompañará su mercancía durante el trámite aduanal. Aseguraremos en tiempo su ingreso y/o liberación.') ?>
-                </div>
-                <a style="color: white; background: #2E3192; border:none" class="cotizar btn btn-default text-right"href="/contacto/aereo"><?php echo $this->translate('COTIZAR') ?></a>
-            </div>
-        </div>
-        <map name="mapTransportes">
-            <area  id="btnMaritimo"  shape="rect" coords="0,253,335,335"        />
-            <area  id="btnAereo"     shape="rect" coords="335,254,667,336"      />
-            <area  id="btnTerrestre" shape="rect" coords="666,253,1000,336"     />
-        </map>
-    </div>
-    <div class="hidden visible-xs">
-        <?php if (lan == 'es') : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 " id="imgMaritimoM" src="/img/servicios/movil/transporte1.jpg" usemap="#maritimoM" alt="" />
-        <?php else : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 " id="imgMaritimoM" src="/img/servicios/movil/transporte1_en.jpg" usemap="#maritimoM" alt="" />
-        <?php endif; ?>
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="detalleMaritimoM" class="col-xs-12 " >
-                <span id="maritimoMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
-                <div class="col-xs-12 row">
-                    <br>
-                    <h4><strong><?php echo $this->translate('TRANSPORTE MARÍTIMO') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('Somos especialistas en todo de tipo de carga marítima, desde un paquete pequeño hasta un contenedor completo. Tenemos acuerdos con diversas navieras para embarcar y desembarcar en puertos de todo el mundo.') ?>
-                    <br>
-                    <ul>
-                        •	<?php echo $this->translate('Contenedor completo (FCL)') ?>
-                        <ul>
-                            -	<?php echo $this->translate('Dry Van	20’ DV / 40’ DV / 40’ HC') ?>
-                            <br>
-                            -	<?php echo $this->translate('Reefer 	20’ RF / 40’ RF / 40’ HFR') ?>
-                            <br> 
-                            -	<?php echo $this->translate('Open Top 	20’ OT / 20’ OP') ?>
-                            <br>
-                            -	<?php echo $this->translate('Flat Rack	20’ FR / 40’ FR') ?>
-                            <br>
-                        </ul>
-                        •	<?php echo $this->translate('Carga consolidada') ?>
-                    </ul>
-                    <br>
-                    <a style="text-align: center; font-size: 13px; color: white; background: #2E3192; border:none; float: right" class="cotizar-xs col-xs-6 top btn btn-default"href="/contacto/aereo"><?php echo $this->translate('COTIZAR') ?></a>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <map name="maritimoM">
-            <area id="btnMaritimoM" alt="" title=""  shape="rect" coords="0,253,335,335"  target="_self"    />
-        </map>
-        <?php if (lan == 'es') : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded" 	id="imgAereoM" src="/img/servicios/movil/transporte2.jpg"  usemap="#aereoM" alt="" />
-        <?php else : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded" 	id="imgAereoM" src="/img/servicios/movil/transporte2_en.jpg"  usemap="#aereoM" alt="" />
-        <?php endif; ?>
-
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="detalleAereoM" class="col-xs-12 " >
-                <span id="aereoMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
-                <div class="col-xs-12">
-                    <br>
-                    <h4><strong><?php echo $this->translate('TRANSPORTE AÉREO') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('Servicio aéreo doméstico y global para tus embarques de importación y exportación. Con Nuestro equipo de trabajo en aeropuerto puedes estar tranquilo, este acompañara tu mercancía durante el trámite aduanal para asegurar su ingreso o liberación en tiempo.Servicio aéreo doméstico y global para sus embarques de importación y exportación. Puede estar tranquilo: nuestro equipo de aeropuerto acompañará su mercancía durante el trámite aduanal. Aseguraremos en tiempo su ingreso y/o liberación.') ?>
-                    <a style="text-align: center; font-size: 13px; color: white; background: #2E3192; border:none; float: right" class="cotizar-xs col-xs-6 top btn btn-default"href="/contacto/aereo"><?php echo $this->translate('COTIZAR') ?></a>
-                </div>
-            </div>
-        </div>
-
-        <map name="aereoM">
-            <area id="btnAereoM" alt="" title=""  shape="rect" coords="0,253,335,335"  target="_self"    />
-        </map>
-        <?php if (lan == 'es') : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded" id="imgTerrestreM" src="/img/servicios/movil/transporte3.jpg"  usemap="#terrestreM" alt="" />
-        <?php else : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded"  id="imgTerrestreM" src="/img/servicios/movil/transporte3_en.jpg"  usemap="#terrestreM" alt="" />
-        <?php endif; ?>
-
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="detalleTerrestreM" class="col-xs-12 " >
-                <span id="terrestreMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
-                <div class="col-xs-12">
-                    <br>
-                    <h4><strong><?php echo $this->translate('TRANSPORTE TERRESTRE') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('Ponemos a su disposición nuestro servicio de transporte terrestre. Contamos con unidades propias y una red de servicios para satisfacer las necesidades del mercado global. Enfocamos nuestras entregas y recolecciones en Canadá, Estados Unidos, México y Latinoamérica.') ?>
-                    <br><br>
-                    <ul style="list-style: circle">
-                        <li>•<?php echo $this->translate('Caja completa (FTL-Reefer-Isotanques)') ?></li>
-                        <li>•<?php echo $this->translate('Servicio de carga consolidada (LTL)') ?></li>
-                        <li>•<?php echo $this->translate('Custodia de mercancías. ') ?></li>
-                        <li>•<?php echo $this->translate('Sobredimensionado ') ?></li>
-                    </ul>
-                    <a style="text-align: center; font-size: 13px;  color: white; background: #2E3192; border:none;float: right" class="btn btn-default cotizar-xs col-xs-6 top"href="/contacto/terrestre"><?php echo $this->translate('COTIZAR') ?></a>
-                </div>
-            </div>
-        </div>
-        <map name="terrestreM">
-            <area id="btnTerrestreM" alt="" title=""  shape="rect" coords="0,253,335,335"  target="_self"    />
-        </map>
-    </div>
-
-</div>
-<div class="row top">
-    <div class="hidden-xs">
-        <div style="position: relative;">
+            <map name="maritimoM">
+                <area id="btnMaritimoM" alt="" title=""  shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
             <?php if (lan == 'es') : ?>
-                <img class="img-responsive" id="imgLogistica" src="/img/servicios/Servicios-logisticos.jpg" usemap="#mapLogistica" alt="" >	
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded " 	id="imgAereoM" src="website/img/servicios/prueba-mini.jpg"  usemap="#aereoM" alt="" />
             <?php else : ?>
-                <img class="img-responsive" id="imgLogistica" src="/img/servicios/Servicios-logisticos-en.jpg" usemap="#mapLogistica" alt="" >	
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded " 	id="imgAereoM" src="website/img/servicios/prueba-mini.jpg"  usemap="#aereoM" alt="" />
             <?php endif; ?>
-            <div id="detalleAduana">
-                <div class="detalle-content">
-                    <span id="aduanaClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
-                    <br>
-                    <h4><strong><?php echo $this->translate('ADUANA') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('En ITRADE nos preocupamos por optimizar los tiempos en su despacho de aduanas, en la elaboración correcta de certificados de origen y cada documento requerido por la autoridad. Trabajamos en cada aduana del país de cualquier modalidad, puerto, aeropuerto o frontera terrestre.') ?>
-                    <br><br>
-                    •	<?php echo $this->translate('Despacho aduanal') ?><br>
-                    •	<?php echo $this->translate('Análisis previo de impuestos y gastos en aduana') ?><br>
-                    •	<?php echo $this->translate('Asesoría en trámites aduanales') ?><br>
-                </div>
-                 <a style="color: white; background: #2E3192; border:none" class="cotizar btn btn-default text-right"href="/contacto/aereo"><?php echo $this->translate('COTIZAR')?></a>
-            </div>
-            <div id="detalleLogistica">
-                <div class="detalle-content">
-                    <span id="logisticaClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
-                    <br>
-                    <h4><strong><?php echo $this->translate('COMPRAS Y LOGISTICA INTERNACIONAL') ?></strong></h4>
-                    <?php echo $this->translate('Departamento diseñado para todas aquellas empresas que no cuentan con área propia de compras y/o logística internacional.') ?>
-                    <br><br>
-                    <?php echo $this->translate('Funge como tu departamento externo y exclusivo para brindarte el servicio y asesoría en tus compras internacionales.') ?>
-                    <br><br>
-                    <?php echo $this->translate('Contamos con personal especializado para colocar tus órdenes de compra en el extranjero, seguimiento a pedidos, diseño de logística, transferencias internacionales, despacho de aduanas de importación y facturación nacional en caso de requerirlo.') ?>
-                    <br><br>
-                    <?php echo $this->translate('Un departamento fuera de la nómina de tu empresa, sin gastos adicionales, por expertos en comercio internacional y dedicado a cumplir con las compras que requieras.') ?>
-                </div>      
-            </div>
-            <div id="detalleSeguro">
-                <div class="detalle-content">
-                    <span id="seguroClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
-                    <br>
-                    <h4><strong><?php echo $this->translate('SEGURO') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('En ITRADE la seguridad de tu carga es nuestra mayor preocupación. Ofrecemos una póliza que brinda  protección desde el lugar de recolección hasta su entrega final, contra daños o pérdidas de su mercancía correctamente embalada.') ?>
-                    <br><br> 
-                </div>
-                <a style="color: white; background: #2E3192; border:none" class="cotizar btn btn-default text-right"href="/contacto/seguro"><?php echo $this->translate('COTIZAR') ?></a>
-            </div>
-        </div>
-        <map name="mapLogistica">
-            <area id="btnAduana" 	alt="" shape="rect" coords="0,253,335,335"      />
-            <area id="btnSeguro"        alt="" shape="rect" coords="335,254,667,336"      />
-            <area id="btnLogistica"	alt="" shape="rect" coords="666,253,1000,336"     />
-        </map>
-    </div>
-    <div class="hidden visible-xs">
-        <?php if (lan == 'es') : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded" id="imgAduanaM " src="/img/servicios/movil/logistica1.jpg"  usemap="#aduanaM" alt="" />
-        <?php else : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded" id="imgAduanaM " src="/img/servicios/movil/logistica1_en.jpg"  usemap="#aduanaM" alt="" />
-        <?php endif; ?>
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="detalleAduanaM" class="col-xs-12 " >
-                <span id="aduanaMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
-                <div class="col-xs-12">
-                    <br>
-                    <h4><strong><?php echo $this->translate('ADUANA') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('En ITRADE nos preocupamos por optimizar los tiempos en su despacho de aduanas, en la elaboración correcta de certificados de origen y cada documento requerido por la autoridad. Trabajamos en cada aduana del país de cualquier modalidad, puerto, aeropuerto o frontera terrestre.') ?>
-                    <br>
-                    •<?php echo $this->translate('Despacho aduanal') ?> <br>
-                    •<?php echo $this->translate('Análisis previo de impuestos y gastos en aduana') ?> <br>
-                    •<?php echo $this->translate('Asesoría en trámites aduanales') ?> <br>
-                </div>
-                <a style="text-align: center; font-size: 13px;  color: white; background: #2E3192; border:none;float: right" class="btn btn-default cotizar-xs col-xs-6 top" href="/contacto/aduana"><?php echo $this->translate('COTIZAR')?></a>  
-            </div>
-        </div>
-        <map name="aduanaM">
-            <area  id="btnAduanaM" shape="rect" coords="0,255,334,337"  target="_self"    />
-        </map>
-        <?php if (lan == 'es') : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded" id="imgAduanaM " src="/img/servicios/movil/logistica2.jpg"  usemap="#seguroM" alt="" />
-        <?php else : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded" id="imgAduanaM " src="/img/servicios/movil/logistica2_en.jpg"  usemap="#seguroM" alt="" />
-        <?php endif; ?>
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="detalleSeguroM" class="col-xs-12 " >
-                <span id="seguroMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
-                <div class="col-xs-12">
-                    <h4><strong><?php echo $this->translate('SEGURO') ?></strong></h4>
-                    <br>
-                    <?php echo $this->translate('En ITRADE la seguridad de tu carga es nuestra mayor preocupación. Ofrecemos una póliza que brinda  protección desde el lugar de recolección hasta su entrega final, contra daños o pérdidas de su mercancía correctamente embalada.') ?>
-                    <br><br>
-                </div>
-                <div class="row top">
-                    <a style="text-align: center; font-size: 13px;  color: white; background: #2E3192; border:none;float: right" class="btn btn-default cotizar-xs col-xs-6 top"href="/contacto/seguro"><?php echo $this->translate('COTIZAR')?></a>
-                </div>
-            </div>
-        </div>
-        <map name="seguroM">
-            <area  id="btnSeguroM" shape="rect" coords="0,255,334,337"  target="_self"    />
-        </map>
-        <?php if (lan == 'es') : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded" id="imgAduanaM " src="/img/servicios/movil/logistica3.jpg"  usemap="#logisticaM" alt="" />
-        <?php else : ?>
-            <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded" id="imgAduanaM " src="/img/servicios/movil/logistica3_en.jpg"  usemap="#logisticaM" alt="" />
-        <?php endif; ?>
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="detalleLogisticaM" class="col-xs-12 " >
-                <span id="logsticaMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
-                <div class="col-xs-12">
-                    <br>
-                    <h4><strong><?php echo $this->translate('COMPRAS Y LOGISTICA INTERNACIONAL') ?></strong></h4>
-                    <?php echo $this->translate('Departamento diseñado para todas aquellas empresas que no cuentan con área propia de compras y/o logística internacional.') ?>
-                    <br><br>
-                    <?php echo $this->translate('Funge como tu departamento externo y exclusivo para brindarte el servicio y asesoría en tus compras internacionales.') ?>
-                    <?php if (lan == 'es') : ?>
-                        <br><br>
-                        <?php echo $this->translate('Contamos con personal especializado para colocar tus órdenes de compra en el extranjero, seguimiento a pedidos, diseño de logística, transferencias internacionales, despacho de aduanas de importación y facturación nacional en caso de requerirlo.') ?>
-                        <br><br>
-                        <?php echo $this->translate('Un departamento fuera de la nómina de tu empresa, sin gastos adicionales, por expertos en comercio internacional y dedicado a cumplir con las compras que requieras. ') ?>
-                    <?php endif; ?>
-                </div>
 
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleAereoM" class="col-xs-12 " >
+                    <span id="aereoMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <map name="aereoM">
+                <area id="btnAereoM" alt="" title=""  shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded " id="imgTerrestreM" src="website/img/servicios/prueba-mini.jpg"  usemap="#terrestreM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 top img-rounded "  id="imgTerrestreM" src="website/img/servicios/prueba-mini.jpg"  usemap="#terrestreM" alt="" />
+            <?php endif; ?>
+
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleTerrestreM" class="col-xs-12 " >
+                    <span id="terrestreMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <map name="terrestreM">
+                <area id="btnTerrestreM" alt="" title=""  shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
         </div>
-        <map name="logisticaM">
-            <area  id="btnLogisticaM" shape="rect" coords="0,255,334,337"  target="_self"    />
-        </map>
+
+    </div>
+
+    <div class="row top">
+        <div class="hidden-xs">
+            <div style="position: relative;">
+                <?php if (lan == 'es') : ?>
+                    <img class="img-responsive img-center img-100" id="imgLogistica" src="website/img/servicios/prueba.jpg" usemap="#mapLogistica" alt="" >	
+                <?php else : ?>
+                    <img class="img-responsive img-center img-100" id="imgLogistica" src="website/img/servicios/prueba.jpg" usemap="#mapLogistica" alt="" >	
+                <?php endif; ?>
+                <div id="detalleAduana">
+                    <div class="detalle-content">
+                        <span id="aduanaClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                     
+
+                </div>
+                <div id="detalleLogistica">
+                    <div class="detalle-content">
+                        <span id="logisticaClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>      
+                </div>
+                <div id="detalleSeguro">
+                    <div class="detalle-content">
+                        <span id="seguroClose"class="glyphicon glyphicon-remove pull-right icon-close" aria-hidden="true"></span>
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <map name="mapLogistica">
+                <area id="btnAduana" 	alt="" shape="rect" coords="0,0,321,428"      />
+                <area id="btnSeguro"    alt="" shape="rect" coords="321,0,640,428"      />
+                <area id="btnLogistica"	alt="" shape="rect" coords="640,0,959,428"     />
+            </map>
+        </div>
+        <div class="hidden visible-xs">
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#aduanaM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#aduanaM" alt="" />
+            <?php endif; ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleAduanaM" class="col-xs-12 " >
+                    <span id="aduanaMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <map name="aduanaM">
+                <area  id="btnAduanaM" shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#seguroM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#seguroM" alt="" />
+            <?php endif; ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleSeguroM" class="col-xs-12 " >
+                    <span id="seguroMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <map name="seguroM">
+                <area  id="btnSeguroM" shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+            <?php if (lan == 'es') : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#logisticaM" alt="" />
+            <?php else : ?>
+                <img class="img-responsive col-xs-10 col-xs-offset-1 img-rounded " id="imgAduanaM " src="website/img/servicios/prueba-mini.jpg"  usemap="#logisticaM" alt="" />
+            <?php endif; ?>
+            <div class="col-xs-10 col-xs-offset-1">
+                <div id="detalleLogisticaM" class="col-xs-12 " >
+                    <span id="logsticaMClose" class="glyphicon glyphicon-remove pull-right top " ></span>
+                    <div class="col-xs-12">
+                        <div class="content">
+                            <br>
+                            <br>
+                            <br>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus quisquam unde, veritatis culpa, sint dicta sed ipsam numquam quos voluptatibus reiciendis dolorum quae vitae quasi, dolores doloribus debitis incidunt praesentium!
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <map name="logisticaM">
+                <area  id="btnLogisticaM" shape="rect" coords="1,0,501,670"  target="_self"    />
+            </map>
+        </div>
     </div>
 </div>
 <script>

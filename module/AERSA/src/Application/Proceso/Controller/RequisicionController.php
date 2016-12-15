@@ -350,9 +350,11 @@
             $anio_activo = $sucursal->getSucursalAnioactivo();
             $mes_activo = $sucursal->getSucursalMesactivo();
             
-            //INTANCIAMOS NUESTRA VISTA
+            
+            
             $form = new \Application\Proceso\Form\RequisicionForm($sucursalorg, $almacen_array, $almacen_array2,$sucursaldes_array, $concepto_array);
             $form->get('requisicion_folio')->setValue($folio_default);
+            $form->get('idsucursaldestino')->setValue($session['idsucursal']);
             $view_model = new ViewModel();
             $view_model->setVariables(array(
                                             'form' => $form,
