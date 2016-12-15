@@ -729,6 +729,33 @@ CREATE TABLE `flujoefectivo`
 ) ENGINE=InnoDB;
 
 -- ---------------------------------------------------------------------
+-- foliocompra
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `foliocompra`;
+
+CREATE TABLE `foliocompra`
+(
+    `idfoliocompra` INTEGER NOT NULL AUTO_INCREMENT,
+    `folio` INTEGER NOT NULL,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    PRIMARY KEY (`idfoliocompra`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `foliocompra_ibfk_1`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `foliocompra_ibfk_2`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
 -- foliorequisicion
 -- ---------------------------------------------------------------------
 
@@ -749,6 +776,33 @@ CREATE TABLE `foliorequisicion`
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT `idsucursal_foliorequisicion`
+        FOREIGN KEY (`idsucursal`)
+        REFERENCES `sucursal` (`idsucursal`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- ---------------------------------------------------------------------
+-- foliotablajeria
+-- ---------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `foliotablajeria`;
+
+CREATE TABLE `foliotablajeria`
+(
+    `idfoliotablajeria` INTEGER NOT NULL AUTO_INCREMENT,
+    `folio` INTEGER NOT NULL,
+    `idempresa` INTEGER NOT NULL,
+    `idsucursal` INTEGER NOT NULL,
+    PRIMARY KEY (`idfoliotablajeria`),
+    INDEX `idempresa` (`idempresa`),
+    INDEX `idsucursal` (`idsucursal`),
+    CONSTRAINT `foliotablajeria_ibfk_1`
+        FOREIGN KEY (`idempresa`)
+        REFERENCES `empresa` (`idempresa`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT `foliotablajeria_ibfk_2`
         FOREIGN KEY (`idsucursal`)
         REFERENCES `sucursal` (`idsucursal`)
         ON UPDATE CASCADE
@@ -1633,7 +1687,7 @@ CREATE TABLE `requisiciondetalle`
     `idrequisicion` INTEGER NOT NULL,
     `idproducto` INTEGER NOT NULL,
     `requisiciondetalle_cantidad` FLOAT NOT NULL,
-    `requisiciondetalle_revisada` TINYINT(1) NOT NULL,
+    `requisiciondetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
     `requisiciondetalle_preciounitario` DECIMAL(15,5) NOT NULL,
     `requisiciondetalle_subtotal` DECIMAL(15,5) NOT NULL,
     `idpadre` INTEGER,

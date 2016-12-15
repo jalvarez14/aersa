@@ -120,10 +120,22 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     protected $collFlujoefectivosPartial;
 
     /**
+     * @var        PropelObjectCollection|Foliocompra[] Collection to store aggregation of Foliocompra objects.
+     */
+    protected $collFoliocompras;
+    protected $collFoliocomprasPartial;
+
+    /**
      * @var        PropelObjectCollection|Foliorequisicion[] Collection to store aggregation of Foliorequisicion objects.
      */
     protected $collFoliorequisicions;
     protected $collFoliorequisicionsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Foliotablajeria[] Collection to store aggregation of Foliotablajeria objects.
+     */
+    protected $collFoliotablajerias;
+    protected $collFoliotablajeriasPartial;
 
     /**
      * @var        PropelObjectCollection|Ingreso[] Collection to store aggregation of Ingreso objects.
@@ -269,7 +281,19 @@ abstract class BaseSucursal extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $foliocomprasScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $foliorequisicionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $foliotablajeriasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -701,7 +725,11 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             $this->collFlujoefectivos = null;
 
+            $this->collFoliocompras = null;
+
             $this->collFoliorequisicions = null;
+
+            $this->collFoliotablajerias = null;
 
             $this->collIngresos = null;
 
@@ -999,6 +1027,23 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->foliocomprasScheduledForDeletion !== null) {
+                if (!$this->foliocomprasScheduledForDeletion->isEmpty()) {
+                    FoliocompraQuery::create()
+                        ->filterByPrimaryKeys($this->foliocomprasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->foliocomprasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collFoliocompras !== null) {
+                foreach ($this->collFoliocompras as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->foliorequisicionsScheduledForDeletion !== null) {
                 if (!$this->foliorequisicionsScheduledForDeletion->isEmpty()) {
                     FoliorequisicionQuery::create()
@@ -1010,6 +1055,23 @@ abstract class BaseSucursal extends BaseObject implements Persistent
 
             if ($this->collFoliorequisicions !== null) {
                 foreach ($this->collFoliorequisicions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->foliotablajeriasScheduledForDeletion !== null) {
+                if (!$this->foliotablajeriasScheduledForDeletion->isEmpty()) {
+                    FoliotablajeriaQuery::create()
+                        ->filterByPrimaryKeys($this->foliotablajeriasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->foliotablajeriasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collFoliotablajerias !== null) {
+                foreach ($this->collFoliotablajerias as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1468,8 +1530,24 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collFoliocompras !== null) {
+                    foreach ($this->collFoliocompras as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collFoliorequisicions !== null) {
                     foreach ($this->collFoliorequisicions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collFoliotablajerias !== null) {
+                    foreach ($this->collFoliotablajerias as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1694,8 +1772,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             if (null !== $this->collFlujoefectivos) {
                 $result['Flujoefectivos'] = $this->collFlujoefectivos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collFoliocompras) {
+                $result['Foliocompras'] = $this->collFoliocompras->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collFoliorequisicions) {
                 $result['Foliorequisicions'] = $this->collFoliorequisicions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collFoliotablajerias) {
+                $result['Foliotablajerias'] = $this->collFoliotablajerias->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collIngresos) {
                 $result['Ingresos'] = $this->collIngresos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1956,9 +2040,21 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getFoliocompras() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addFoliocompra($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getFoliorequisicions() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addFoliorequisicion($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getFoliotablajerias() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addFoliotablajeria($relObj->copy($deepCopy));
                 }
             }
 
@@ -2171,8 +2267,14 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         if ('Flujoefectivo' == $relationName) {
             $this->initFlujoefectivos();
         }
+        if ('Foliocompra' == $relationName) {
+            $this->initFoliocompras();
+        }
         if ('Foliorequisicion' == $relationName) {
             $this->initFoliorequisicions();
+        }
+        if ('Foliotablajeria' == $relationName) {
+            $this->initFoliotablajerias();
         }
         if ('Ingreso' == $relationName) {
             $this->initIngresos();
@@ -4663,6 +4765,256 @@ abstract class BaseSucursal extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collFoliocompras collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addFoliocompras()
+     */
+    public function clearFoliocompras()
+    {
+        $this->collFoliocompras = null; // important to set this to null since that means it is uninitialized
+        $this->collFoliocomprasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collFoliocompras collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialFoliocompras($v = true)
+    {
+        $this->collFoliocomprasPartial = $v;
+    }
+
+    /**
+     * Initializes the collFoliocompras collection.
+     *
+     * By default this just sets the collFoliocompras collection to an empty array (like clearcollFoliocompras());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initFoliocompras($overrideExisting = true)
+    {
+        if (null !== $this->collFoliocompras && !$overrideExisting) {
+            return;
+        }
+        $this->collFoliocompras = new PropelObjectCollection();
+        $this->collFoliocompras->setModel('Foliocompra');
+    }
+
+    /**
+     * Gets an array of Foliocompra objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Foliocompra[] List of Foliocompra objects
+     * @throws PropelException
+     */
+    public function getFoliocompras($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collFoliocomprasPartial && !$this->isNew();
+        if (null === $this->collFoliocompras || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collFoliocompras) {
+                // return empty collection
+                $this->initFoliocompras();
+            } else {
+                $collFoliocompras = FoliocompraQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collFoliocomprasPartial && count($collFoliocompras)) {
+                      $this->initFoliocompras(false);
+
+                      foreach ($collFoliocompras as $obj) {
+                        if (false == $this->collFoliocompras->contains($obj)) {
+                          $this->collFoliocompras->append($obj);
+                        }
+                      }
+
+                      $this->collFoliocomprasPartial = true;
+                    }
+
+                    $collFoliocompras->getInternalIterator()->rewind();
+
+                    return $collFoliocompras;
+                }
+
+                if ($partial && $this->collFoliocompras) {
+                    foreach ($this->collFoliocompras as $obj) {
+                        if ($obj->isNew()) {
+                            $collFoliocompras[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collFoliocompras = $collFoliocompras;
+                $this->collFoliocomprasPartial = false;
+            }
+        }
+
+        return $this->collFoliocompras;
+    }
+
+    /**
+     * Sets a collection of Foliocompra objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $foliocompras A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setFoliocompras(PropelCollection $foliocompras, PropelPDO $con = null)
+    {
+        $foliocomprasToDelete = $this->getFoliocompras(new Criteria(), $con)->diff($foliocompras);
+
+
+        $this->foliocomprasScheduledForDeletion = $foliocomprasToDelete;
+
+        foreach ($foliocomprasToDelete as $foliocompraRemoved) {
+            $foliocompraRemoved->setSucursal(null);
+        }
+
+        $this->collFoliocompras = null;
+        foreach ($foliocompras as $foliocompra) {
+            $this->addFoliocompra($foliocompra);
+        }
+
+        $this->collFoliocompras = $foliocompras;
+        $this->collFoliocomprasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Foliocompra objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Foliocompra objects.
+     * @throws PropelException
+     */
+    public function countFoliocompras(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collFoliocomprasPartial && !$this->isNew();
+        if (null === $this->collFoliocompras || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collFoliocompras) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getFoliocompras());
+            }
+            $query = FoliocompraQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collFoliocompras);
+    }
+
+    /**
+     * Method called to associate a Foliocompra object to this object
+     * through the Foliocompra foreign key attribute.
+     *
+     * @param    Foliocompra $l Foliocompra
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addFoliocompra(Foliocompra $l)
+    {
+        if ($this->collFoliocompras === null) {
+            $this->initFoliocompras();
+            $this->collFoliocomprasPartial = true;
+        }
+
+        if (!in_array($l, $this->collFoliocompras->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddFoliocompra($l);
+
+            if ($this->foliocomprasScheduledForDeletion and $this->foliocomprasScheduledForDeletion->contains($l)) {
+                $this->foliocomprasScheduledForDeletion->remove($this->foliocomprasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Foliocompra $foliocompra The foliocompra object to add.
+     */
+    protected function doAddFoliocompra($foliocompra)
+    {
+        $this->collFoliocompras[]= $foliocompra;
+        $foliocompra->setSucursal($this);
+    }
+
+    /**
+     * @param	Foliocompra $foliocompra The foliocompra object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeFoliocompra($foliocompra)
+    {
+        if ($this->getFoliocompras()->contains($foliocompra)) {
+            $this->collFoliocompras->remove($this->collFoliocompras->search($foliocompra));
+            if (null === $this->foliocomprasScheduledForDeletion) {
+                $this->foliocomprasScheduledForDeletion = clone $this->collFoliocompras;
+                $this->foliocomprasScheduledForDeletion->clear();
+            }
+            $this->foliocomprasScheduledForDeletion[]= clone $foliocompra;
+            $foliocompra->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Foliocompras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Foliocompra[] List of Foliocompra objects
+     */
+    public function getFoliocomprasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FoliocompraQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getFoliocompras($query, $con);
+    }
+
+    /**
      * Clears out the collFoliorequisicions collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -4910,6 +5262,256 @@ abstract class BaseSucursal extends BaseObject implements Persistent
         $query->joinWith('Empresa', $join_behavior);
 
         return $this->getFoliorequisicions($query, $con);
+    }
+
+    /**
+     * Clears out the collFoliotablajerias collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Sucursal The current object (for fluent API support)
+     * @see        addFoliotablajerias()
+     */
+    public function clearFoliotablajerias()
+    {
+        $this->collFoliotablajerias = null; // important to set this to null since that means it is uninitialized
+        $this->collFoliotablajeriasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collFoliotablajerias collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialFoliotablajerias($v = true)
+    {
+        $this->collFoliotablajeriasPartial = $v;
+    }
+
+    /**
+     * Initializes the collFoliotablajerias collection.
+     *
+     * By default this just sets the collFoliotablajerias collection to an empty array (like clearcollFoliotablajerias());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initFoliotablajerias($overrideExisting = true)
+    {
+        if (null !== $this->collFoliotablajerias && !$overrideExisting) {
+            return;
+        }
+        $this->collFoliotablajerias = new PropelObjectCollection();
+        $this->collFoliotablajerias->setModel('Foliotablajeria');
+    }
+
+    /**
+     * Gets an array of Foliotablajeria objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Sucursal is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Foliotablajeria[] List of Foliotablajeria objects
+     * @throws PropelException
+     */
+    public function getFoliotablajerias($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collFoliotablajeriasPartial && !$this->isNew();
+        if (null === $this->collFoliotablajerias || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collFoliotablajerias) {
+                // return empty collection
+                $this->initFoliotablajerias();
+            } else {
+                $collFoliotablajerias = FoliotablajeriaQuery::create(null, $criteria)
+                    ->filterBySucursal($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collFoliotablajeriasPartial && count($collFoliotablajerias)) {
+                      $this->initFoliotablajerias(false);
+
+                      foreach ($collFoliotablajerias as $obj) {
+                        if (false == $this->collFoliotablajerias->contains($obj)) {
+                          $this->collFoliotablajerias->append($obj);
+                        }
+                      }
+
+                      $this->collFoliotablajeriasPartial = true;
+                    }
+
+                    $collFoliotablajerias->getInternalIterator()->rewind();
+
+                    return $collFoliotablajerias;
+                }
+
+                if ($partial && $this->collFoliotablajerias) {
+                    foreach ($this->collFoliotablajerias as $obj) {
+                        if ($obj->isNew()) {
+                            $collFoliotablajerias[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collFoliotablajerias = $collFoliotablajerias;
+                $this->collFoliotablajeriasPartial = false;
+            }
+        }
+
+        return $this->collFoliotablajerias;
+    }
+
+    /**
+     * Sets a collection of Foliotablajeria objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $foliotablajerias A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function setFoliotablajerias(PropelCollection $foliotablajerias, PropelPDO $con = null)
+    {
+        $foliotablajeriasToDelete = $this->getFoliotablajerias(new Criteria(), $con)->diff($foliotablajerias);
+
+
+        $this->foliotablajeriasScheduledForDeletion = $foliotablajeriasToDelete;
+
+        foreach ($foliotablajeriasToDelete as $foliotablajeriaRemoved) {
+            $foliotablajeriaRemoved->setSucursal(null);
+        }
+
+        $this->collFoliotablajerias = null;
+        foreach ($foliotablajerias as $foliotablajeria) {
+            $this->addFoliotablajeria($foliotablajeria);
+        }
+
+        $this->collFoliotablajerias = $foliotablajerias;
+        $this->collFoliotablajeriasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Foliotablajeria objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Foliotablajeria objects.
+     * @throws PropelException
+     */
+    public function countFoliotablajerias(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collFoliotablajeriasPartial && !$this->isNew();
+        if (null === $this->collFoliotablajerias || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collFoliotablajerias) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getFoliotablajerias());
+            }
+            $query = FoliotablajeriaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterBySucursal($this)
+                ->count($con);
+        }
+
+        return count($this->collFoliotablajerias);
+    }
+
+    /**
+     * Method called to associate a Foliotablajeria object to this object
+     * through the Foliotablajeria foreign key attribute.
+     *
+     * @param    Foliotablajeria $l Foliotablajeria
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function addFoliotablajeria(Foliotablajeria $l)
+    {
+        if ($this->collFoliotablajerias === null) {
+            $this->initFoliotablajerias();
+            $this->collFoliotablajeriasPartial = true;
+        }
+
+        if (!in_array($l, $this->collFoliotablajerias->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddFoliotablajeria($l);
+
+            if ($this->foliotablajeriasScheduledForDeletion and $this->foliotablajeriasScheduledForDeletion->contains($l)) {
+                $this->foliotablajeriasScheduledForDeletion->remove($this->foliotablajeriasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Foliotablajeria $foliotablajeria The foliotablajeria object to add.
+     */
+    protected function doAddFoliotablajeria($foliotablajeria)
+    {
+        $this->collFoliotablajerias[]= $foliotablajeria;
+        $foliotablajeria->setSucursal($this);
+    }
+
+    /**
+     * @param	Foliotablajeria $foliotablajeria The foliotablajeria object to remove.
+     * @return Sucursal The current object (for fluent API support)
+     */
+    public function removeFoliotablajeria($foliotablajeria)
+    {
+        if ($this->getFoliotablajerias()->contains($foliotablajeria)) {
+            $this->collFoliotablajerias->remove($this->collFoliotablajerias->search($foliotablajeria));
+            if (null === $this->foliotablajeriasScheduledForDeletion) {
+                $this->foliotablajeriasScheduledForDeletion = clone $this->collFoliotablajerias;
+                $this->foliotablajeriasScheduledForDeletion->clear();
+            }
+            $this->foliotablajeriasScheduledForDeletion[]= clone $foliotablajeria;
+            $foliotablajeria->setSucursal(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Sucursal is new, it will return
+     * an empty collection; or if this Sucursal has previously
+     * been saved, it will retrieve related Foliotablajerias from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Sucursal.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Foliotablajeria[] List of Foliotablajeria objects
+     */
+    public function getFoliotablajeriasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = FoliotablajeriaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getFoliotablajerias($query, $con);
     }
 
     /**
@@ -8686,8 +9288,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collFoliocompras) {
+                foreach ($this->collFoliocompras as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collFoliorequisicions) {
                 foreach ($this->collFoliorequisicions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collFoliotablajerias) {
+                foreach ($this->collFoliotablajerias as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -8790,10 +9402,18 @@ abstract class BaseSucursal extends BaseObject implements Persistent
             $this->collFlujoefectivos->clearIterator();
         }
         $this->collFlujoefectivos = null;
+        if ($this->collFoliocompras instanceof PropelCollection) {
+            $this->collFoliocompras->clearIterator();
+        }
+        $this->collFoliocompras = null;
         if ($this->collFoliorequisicions instanceof PropelCollection) {
             $this->collFoliorequisicions->clearIterator();
         }
         $this->collFoliorequisicions = null;
+        if ($this->collFoliotablajerias instanceof PropelCollection) {
+            $this->collFoliotablajerias->clearIterator();
+        }
+        $this->collFoliotablajerias = null;
         if ($this->collIngresos instanceof PropelCollection) {
             $this->collIngresos->clearIterator();
         }

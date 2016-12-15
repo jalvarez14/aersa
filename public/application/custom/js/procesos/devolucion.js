@@ -385,6 +385,7 @@
             $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
                 $('#producto_add').attr('disabled',false);
                 $('input#idproducto').val(suggestion.id);
+                $('input#producto_costo').val(suggestion.producto_costo);
                 $('input#producto_iva').val(suggestion.producto_iva);
                 $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
                 
@@ -393,6 +394,7 @@
             var count = 0;
             $('#producto_add').on('click',function(){  
                 
+                
                 //CREAMOS NUESTRO SELECT PARA CADA PRODUCTO
                 var almacenen_select = $('<td>');
                 almacenen_select.append($('select[name=idalmacen]').clone());
@@ -400,13 +402,14 @@
                 almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
                 almacenen_select.find('select').attr('name',"productos["+count+"][almacen]");
                 
+                var producto_costo = (typeof $('input#producto_costo').val() != 'undefined') ? $('input#producto_costo').val() : 0;
 
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
                 tr.append('<td >'+$('input#unidadmedida_nombre').val()+'</td>');
                 tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
-                tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');
+                tr.append('<td><input type="text" name=productos['+count+'][precio] value="'+producto_costo+'"></td>');
+                tr.append('<td class="costo_unitario">'+accounting.formatMoney(producto_costo)+'</td>');;
                 tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
                 tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');
@@ -638,6 +641,7 @@
                 $('#producto_add').attr('disabled',false);
                 $('input#idproducto').val(suggestion.id);
                 $('input#producto_iva').val(suggestion.producto_iva);
+                $('input#producto_costo').val(suggestion.producto_iva);
                 $('input#unidadmedida_nombre').val(suggestion.unidadmedida_nombre);
                 
             });
@@ -654,13 +658,14 @@
                 almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
                 almacenen_select.find('select').attr('name',"productos["+count+"][almacen]");
                 
+                 var producto_costo = (typeof $('input#producto_costo').val() != 'undefined') ? $('input#producto_costo').val() : 0;
                                
                 var tr = $('<tr>');
                 tr.append('<td><input name=productos['+count+'][subtotal] type=hidden><input name=productos['+count+'][costo_unitario] type=hidden><input type="hidden"  name=productos['+count+'][producto_iva] value="'+$('input#producto_iva').val()+'"><input type="hidden"  name=productos['+count+'][idproducto] value="'+$('input#idproducto').val()+'">'+$('input#producto_autocomplete').typeahead('val')+'</td>');
                 tr.append('<td >'+$('input#unidadmedida_nombre').val()+'</td>');
                 tr.append('<td><input type="text" name=productos['+count+'][cantidad] value="1"></td>');
-                tr.append('<td><input type="text" name=productos['+count+'][precio] value="0"></td>');
-                tr.append('<td class="costo_unitario">'+accounting.formatMoney(0)+'</td>');
+                tr.append('<td><input type="text" name=productos['+count+'][precio] value="'+producto_costo+'"></td>');
+                tr.append('<td class="costo_unitario">'+accounting.formatMoney(producto_costo)+'</td>');
                 tr.append('<td><input type="text" name=productos['+count+'][descuento] value="0"></td>');
                 tr.append('<td><input type="text" name=productos['+count+'][ieps] value="0"></td>');
                 tr.append('<td class="subtotal">'+accounting.formatMoney(0)+'</td>');

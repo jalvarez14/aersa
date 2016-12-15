@@ -60,9 +60,17 @@
  * @method SucursalQuery rightJoinFlujoefectivo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Flujoefectivo relation
  * @method SucursalQuery innerJoinFlujoefectivo($relationAlias = null) Adds a INNER JOIN clause to the query using the Flujoefectivo relation
  *
+ * @method SucursalQuery leftJoinFoliocompra($relationAlias = null) Adds a LEFT JOIN clause to the query using the Foliocompra relation
+ * @method SucursalQuery rightJoinFoliocompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Foliocompra relation
+ * @method SucursalQuery innerJoinFoliocompra($relationAlias = null) Adds a INNER JOIN clause to the query using the Foliocompra relation
+ *
  * @method SucursalQuery leftJoinFoliorequisicion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Foliorequisicion relation
  * @method SucursalQuery rightJoinFoliorequisicion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Foliorequisicion relation
  * @method SucursalQuery innerJoinFoliorequisicion($relationAlias = null) Adds a INNER JOIN clause to the query using the Foliorequisicion relation
+ *
+ * @method SucursalQuery leftJoinFoliotablajeria($relationAlias = null) Adds a LEFT JOIN clause to the query using the Foliotablajeria relation
+ * @method SucursalQuery rightJoinFoliotablajeria($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Foliotablajeria relation
+ * @method SucursalQuery innerJoinFoliotablajeria($relationAlias = null) Adds a INNER JOIN clause to the query using the Foliotablajeria relation
  *
  * @method SucursalQuery leftJoinIngreso($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ingreso relation
  * @method SucursalQuery rightJoinIngreso($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ingreso relation
@@ -1218,6 +1226,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Foliocompra object
+     *
+     * @param   Foliocompra|PropelObjectCollection $foliocompra  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByFoliocompra($foliocompra, $comparison = null)
+    {
+        if ($foliocompra instanceof Foliocompra) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $foliocompra->getIdsucursal(), $comparison);
+        } elseif ($foliocompra instanceof PropelObjectCollection) {
+            return $this
+                ->useFoliocompraQuery()
+                ->filterByPrimaryKeys($foliocompra->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByFoliocompra() only accepts arguments of type Foliocompra or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Foliocompra relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinFoliocompra($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Foliocompra');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Foliocompra');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Foliocompra relation Foliocompra object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   FoliocompraQuery A secondary query class using the current class as primary query
+     */
+    public function useFoliocompraQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinFoliocompra($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Foliocompra', 'FoliocompraQuery');
+    }
+
+    /**
      * Filter the query by a related Foliorequisicion object
      *
      * @param   Foliorequisicion|PropelObjectCollection $foliorequisicion  the related object to use as filter
@@ -1289,6 +1371,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinFoliorequisicion($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Foliorequisicion', 'FoliorequisicionQuery');
+    }
+
+    /**
+     * Filter the query by a related Foliotablajeria object
+     *
+     * @param   Foliotablajeria|PropelObjectCollection $foliotablajeria  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByFoliotablajeria($foliotablajeria, $comparison = null)
+    {
+        if ($foliotablajeria instanceof Foliotablajeria) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $foliotablajeria->getIdsucursal(), $comparison);
+        } elseif ($foliotablajeria instanceof PropelObjectCollection) {
+            return $this
+                ->useFoliotablajeriaQuery()
+                ->filterByPrimaryKeys($foliotablajeria->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByFoliotablajeria() only accepts arguments of type Foliotablajeria or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Foliotablajeria relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinFoliotablajeria($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Foliotablajeria');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Foliotablajeria');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Foliotablajeria relation Foliotablajeria object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   FoliotablajeriaQuery A secondary query class using the current class as primary query
+     */
+    public function useFoliotablajeriaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinFoliotablajeria($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Foliotablajeria', 'FoliotablajeriaQuery');
     }
 
     /**

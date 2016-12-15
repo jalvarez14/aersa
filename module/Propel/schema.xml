@@ -616,6 +616,27 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="foliocompra" phpName="Foliocompra" idMethod="native">
+    <column name="idfoliocompra" phpName="Idfoliocompra" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="folio" phpName="Folio" type="INTEGER" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="empresa" name="foliocompra_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="foliocompra_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
+    </index>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="foliorequisicion" phpName="Foliorequisicion" idMethod="native">
     <column name="idfoliorequisicion" phpName="Idfoliorequisicion" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="folio" phpName="Folio" type="INTEGER" required="true"/>
@@ -625,6 +646,27 @@
       <reference local="idempresa" foreign="idempresa"/>
     </foreign-key>
     <foreign-key foreignTable="sucursal" name="idsucursal_foliorequisicion" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idsucursal" foreign="idsucursal"/>
+    </foreign-key>
+    <index name="idempresa">
+      <index-column name="idempresa"/>
+    </index>
+    <index name="idsucursal">
+      <index-column name="idsucursal"/>
+    </index>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="foliotablajeria" phpName="Foliotablajeria" idMethod="native">
+    <column name="idfoliotablajeria" phpName="Idfoliotablajeria" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="folio" phpName="Folio" type="INTEGER" required="true"/>
+    <column name="idempresa" phpName="Idempresa" type="INTEGER" required="true"/>
+    <column name="idsucursal" phpName="Idsucursal" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="empresa" name="foliotablajeria_ibfk_1" onDelete="CASCADE" onUpdate="CASCADE">
+      <reference local="idempresa" foreign="idempresa"/>
+    </foreign-key>
+    <foreign-key foreignTable="sucursal" name="foliotablajeria_ibfk_2" onDelete="CASCADE" onUpdate="CASCADE">
       <reference local="idsucursal" foreign="idsucursal"/>
     </foreign-key>
     <index name="idempresa">
@@ -1380,7 +1422,7 @@
     <column name="idrequisicion" phpName="Idrequisicion" type="INTEGER" required="true"/>
     <column name="idproducto" phpName="Idproducto" type="INTEGER" required="true"/>
     <column name="requisiciondetalle_cantidad" phpName="RequisiciondetalleCantidad" type="FLOAT" required="true"/>
-    <column name="requisiciondetalle_revisada" phpName="RequisiciondetalleRevisada" type="BOOLEAN" size="1" required="true"/>
+    <column name="requisiciondetalle_revisada" phpName="RequisiciondetalleRevisada" type="BOOLEAN" size="1" required="true" defaultValue="false"/>
     <column name="requisiciondetalle_preciounitario" phpName="RequisiciondetallePreciounitario" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="requisiciondetalle_subtotal" phpName="RequisiciondetalleSubtotal" type="DECIMAL" size="15" scale="5" required="true"/>
     <column name="idpadre" phpName="Idpadre" type="INTEGER" required="false"/>

@@ -189,9 +189,19 @@ class TablajeriaController extends AbstractActionController {
                 ->find();
         
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
-
+        
+        //FOLIO DEFAULT
+        $folio_default = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+        if ($folio_default) {
+            $folio_default = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
+            $folio_default = $folio_default['folio'];
+        } else {
+            $folio_default = 1001;
+        }
+        
         $form = new \Application\Proceso\Form\TablajeriaForm($almecenes);
-
+        $form->get('ordentablajeria_folio')->setValue($folio_default);
+        
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/proceso/ordentablajeria/nuevo');
         $view_model->setVariables(array(

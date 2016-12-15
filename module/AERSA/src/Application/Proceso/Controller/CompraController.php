@@ -102,7 +102,7 @@ class CompraController extends AbstractActionController {
         if ($request->isPost()) {
 
             $post_data = $request->getPost();
-
+            
             $post_files = $request->getFiles();
 
             $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
@@ -207,9 +207,19 @@ class CompraController extends AbstractActionController {
 
         $almecenes = \AlmacenQuery::create()->filterByIdsucursal($session['idsucursal'])->filterByAlmacenEstatus(1)->filterByAlmacenNombre('Créditos al costo', \Criteria::NOT_EQUAL)->find();
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
-
-        $form = new \Application\Proceso\Form\CompraForm($almecenes);
         
+        
+        //FOLIO DEFAULT
+        $folio_default = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+        if ($folio_default) {
+            $folio_default = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
+            $folio_default = $folio_default['folio'];
+        } else {
+            $folio_default = 1001;
+        }
+        
+        $form = new \Application\Proceso\Form\CompraForm($almecenes);
+        $form->get('compra_folio')->setValue($folio_default);
 
         
         //Obtenemos el iva

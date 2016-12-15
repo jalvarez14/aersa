@@ -401,9 +401,15 @@ abstract class BaseSucursalPeer
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
+        // Invalidate objects in FoliocompraPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        FoliocompraPeer::clearInstancePool();
         // Invalidate objects in FoliorequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         FoliorequisicionPeer::clearInstancePool();
+        // Invalidate objects in FoliotablajeriaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        FoliotablajeriaPeer::clearInstancePool();
         // Invalidate objects in IngresoPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         IngresoPeer::clearInstancePool();
@@ -1054,11 +1060,23 @@ abstract class BaseSucursalPeer
             $criteria->add(DevolucionPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += DevolucionPeer::doDelete($criteria, $con);
 
+            // delete related Foliocompra objects
+            $criteria = new Criteria(FoliocompraPeer::DATABASE_NAME);
+
+            $criteria->add(FoliocompraPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += FoliocompraPeer::doDelete($criteria, $con);
+
             // delete related Foliorequisicion objects
             $criteria = new Criteria(FoliorequisicionPeer::DATABASE_NAME);
 
             $criteria->add(FoliorequisicionPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += FoliorequisicionPeer::doDelete($criteria, $con);
+
+            // delete related Foliotablajeria objects
+            $criteria = new Criteria(FoliotablajeriaPeer::DATABASE_NAME);
+
+            $criteria->add(FoliotablajeriaPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += FoliotablajeriaPeer::doDelete($criteria, $con);
 
             // delete related Ingreso objects
             $criteria = new Criteria(IngresoPeer::DATABASE_NAME);
