@@ -285,7 +285,14 @@ class CompraController extends AbstractActionController {
                 $fecha = $entity->getCompraFechacompra('d/m/Y');
                 $proveedor = $entity->getProveedor()->getProveedorNombrecomercial();
                 $fechaentrega = $entity->getCompraFechaentrega();
-                $almacen = $entity->getAlmacen()->getAlmacenNombre();
+                if($entity->getCompraTipo()=="compra")
+                {
+                    $almacen = $entity->getAlmacen()->getAlmacenNombre();
+                }
+                else
+                {
+                    $almacen="";
+                }
                 $creado = $entity->getUsuarioRelatedByIdusuario()->getUsuarioNombre();
                 $tipo = $entity->getCompraTipo();
                 $folio = $entity->getCompraFolio();
@@ -308,7 +315,15 @@ class CompraController extends AbstractActionController {
                     $ieps=$compradetalleobj->getCompradetalleIeps();
                     $subtotal=$compradetalleobj->getCompradetalleSubtotal();
                     $rev=($compradetalleobj->getCompradetalleRevisada()==1) ? "Si": "No";
-                    $alm=$compradetalleobj->getAlmacen()->getAlmacenNombre();
+                    if($entity->getCompraTipo()=="compra")
+                    {
+                        $alm=$compradetalleobj->getAlmacen()->getAlmacenNombre();
+                    }
+                    else
+                    {
+                        $alm="";
+                    }
+                    
                     array_push($col, array('uno'=>$prod,'dos'=>$unid,'tres'=>$cant,'cuatro'=>$prec,'cinco'=>$cuneto,'seis'=>$desc,'siete'=>$ieps,'ocho'=>$subtotal,'nueve'=>$rev,'diez'=>$alm));
                 }
                 $subtotal_c=$entity->getCompraSubtotal();
