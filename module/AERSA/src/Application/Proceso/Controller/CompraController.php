@@ -354,7 +354,6 @@ class CompraController extends AbstractActionController {
                     ),
                     array(
                         'id' => 'costo',
-                        'repeat' => true,
                         'data' => $costo,
                     )
                     ,
