@@ -111,7 +111,16 @@ class TablajeriaController extends AbstractActionController {
         $session = $session->getData();
 
         $request = $this->getRequest();
-
+        
+        //FOLIO DEFAULT
+        $folio_default = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+        if ($folio_default) {
+            $folio_default = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
+            $folio_default = $folio_default['folio'];
+        } else {
+            $folio_default = 1001;
+        }
+        
         if ($request->isPost()) 
         {
 
@@ -152,6 +161,22 @@ class TablajeriaController extends AbstractActionController {
             
            
             $entity->save();
+            
+            //FOLIO
+            if ($folio_default == $post_data['ordentablajeria_folio']) {
+                $folio_exist = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+                if ($folio_exist) {
+                    $folio_tablajeria = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne();
+                    $folio_tablajeria->setFolio($folio_default + 1);
+                    $folio_tablajeria->save();
+                } else {
+                    $folio_tablajeria = new \Foliotablajeria();
+                    $folio_tablajeria->setFolio($folio_default + 1);
+                    $folio_tablajeria->setIdempresa($session['idempresa']);
+                    $folio_tablajeria->setIdsucursal($session['idsucursal']);
+                    $folio_tablajeria->save();
+                }
+            }
 
             //DETALLES
             foreach ($post_data['productos'] as $producto) {
@@ -189,16 +214,7 @@ class TablajeriaController extends AbstractActionController {
                 ->find();
         
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
-        
-        //FOLIO DEFAULT
-        $folio_default = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
-        if ($folio_default) {
-            $folio_default = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
-            $folio_default = $folio_default['folio'];
-        } else {
-            $folio_default = 1001;
-        }
-        
+
         $form = new \Application\Proceso\Form\TablajeriaForm($almecenes);
         $form->get('ordentablajeria_folio')->setValue($folio_default);
         

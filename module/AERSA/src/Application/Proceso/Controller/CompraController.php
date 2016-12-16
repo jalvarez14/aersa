@@ -98,7 +98,16 @@ class CompraController extends AbstractActionController {
         $session = $session->getData();
 
         $request = $this->getRequest();
-
+        
+        //FOLIO DEFAULT
+        $folio_default = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+        if ($folio_default) {
+            $folio_default = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
+            $folio_default = $folio_default['folio'];
+        } else {
+            $folio_default = 1001;
+        }
+        
         if ($request->isPost()) {
 
             $post_data = $request->getPost();
@@ -149,6 +158,22 @@ class CompraController extends AbstractActionController {
                 $compra_existente->delete();
                 $this->flashMessenger()->addWarningMessage('Ocurrio un error de conexion durante el proceso de guardar, validar la compra registrada!');
             }
+            
+            //FOLIO
+            if ($folio_default == $post_data['compra_folio']) {
+                $folio_exist = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
+                if ($folio_exist) {
+                    $folio_compra = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne();
+                    $folio_compra->setFolio($folio_default + 1);
+                    $folio_compra->save();
+                } else {
+                    $folio_compra = new \Foliocompra();
+                    $folio_compra->setFolio($folio_default + 1);
+                    $folio_compra->setIdempresa($session['idempresa']);
+                    $folio_compra->setIdsucursal($session['idsucursal']);
+                    $folio_compra->save();
+                }
+            }
 
             //EL COMPROBANTE
             if (!empty($post_files['compra_factura']['name'])) {
@@ -195,7 +220,7 @@ class CompraController extends AbstractActionController {
 
                 $compra_detalle->save();
             }
-
+            
             //REDIRECCIONAMOS AL LISTADO
             $this->flashMessenger()->addSuccessMessage('Registro guardado satisfactoriamente!');
             return $this->redirect()->toUrl('/procesos/compra');
@@ -209,14 +234,7 @@ class CompraController extends AbstractActionController {
         $almecenes = \Shared\GeneralFunctions::collectionToSelectArray($almecenes, 'idalmacen', 'almacen_nombre');
         
         
-        //FOLIO DEFAULT
-        $folio_default = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->exists();
-        if ($folio_default) {
-            $folio_default = \FoliocompraQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne()->toArray(\BasePeer::TYPE_FIELDNAME);
-            $folio_default = $folio_default['folio'];
-        } else {
-            $folio_default = 1001;
-        }
+        
         
         $form = new \Application\Proceso\Form\CompraForm($almecenes);
         $form->get('compra_folio')->setValue($folio_default);
