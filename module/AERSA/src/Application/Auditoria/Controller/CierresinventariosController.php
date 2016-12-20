@@ -1329,9 +1329,14 @@
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrenivel1=$venta_detalle_padre->getIdPadre();
                                     
-                                    
+                                    if($objproducto->getIdProducto()==24027)
+                                    {
+                                        //echo "Prod 1".$objventadetalle->getIdventaDetalle()." ".$padrenivel1;
+                                        //exit();
+                                    }
                                     if($padrenivel1=='')
                                     {
+                                        
                                         $idpadrenivel1=$venta_detalle_padre->getIdProducto();
                                         $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel1) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                                         $st = $conn->prepare($sqlrequisicioningreso);
@@ -1369,10 +1374,13 @@
                                         $venta_detalle_padrenivel2 = \VentadetalleQuery::create()->findPk($padrenivel1);
                                         $padrenivel2=$venta_detalle_padrenivel2->getIdPadre();
                                         
-                                        if($padrenivel2=='')
+                                        //echo "Prod 2 ".$objventadetalle->getIdventaDetalle()." ".$padrenivel2;
+                                        if($padrenivel2=='' || $venta_detalle_padrenivel2->getProducto()->getProductoTipo()=="plu")
                                         {
                                             
+                                            
                                             $idpadrenivel2=$venta_detalle_padre->getIdProducto();
+                                            
                                             
                                             $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel2) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                                             $st = $conn->prepare($sqlrequisicioningreso);
@@ -1386,6 +1394,7 @@
                                             
                                             if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                                             {
+                                                
                                                 
                                                  $exp='inventariomesdetalle_egresoventa';
                                                 if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
@@ -1410,7 +1419,7 @@
                                             $venta_detalle_padrenivel3 = \VentadetalleQuery::create()->findPk($padrenivel2);
                                             $padrenivel3=$venta_detalle_padrenivel3->getIdPadre();
                                             
-                                            if($padrenivel3=='')
+                                            if($padrenivel3=='' || $venta_detalle_padrenivel3->getProducto()->getProductoTipo()=="plu")
                                             {
                                                 $idpadrenivel3=$venta_detalle_padrenivel2->getIdProducto();
                                                 $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel3) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -1426,6 +1435,11 @@
                                                 if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                                                 {
                                                     $exp='inventariomesdetalle_egresoventa';
+                                                    if($objproducto->getIdProducto()==24027)
+                                                    {
+                                                        //echo "Prod 3: ".$objventadetalle->getIdventaDetalle()." ".$idpadrenivel2;
+                                                        //exit();
+                                                    }
                                                     if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                     {
                                                         $exp='inventariomesdetalle_egresoventa';
@@ -1446,7 +1460,7 @@
                                             {
                                                 $venta_detalle_padrenivel4 = \VentadetalleQuery::create()->findPk($padrenivel3);
                                                 $padrenivel4=$venta_detalle_padrenivel4->getIdPadre();
-                                                if($padrenivel4=='')
+                                                if($padrenivel4==''|| $venta_detalle_padrenivel4->getProducto()->getProductoTipo()=="plu")
                                                 {
                                                     $idpadrenivel4=$venta_detalle_padrenivel3->getIdProducto();
                                                     $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel4) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -1483,7 +1497,7 @@
                                                     $venta_detalle_padrenivel5 = \VentadetalleQuery::create()->findPk($padrenivel4);
                                                     $padrenivel5=$venta_detalle_padrenivel5->getIdPadre();
                                                     
-                                                    if($padrenivel5=='')
+                                                    if($padrenivel5=='' || $venta_detalle_padrenivel5->getProducto()->getProductoTipo()=="plu")
                                                     {
                                                         $idpadrenivel5=$venta_detalle_padrenivel4->getIdProducto();
                                                         $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel5) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -1520,7 +1534,7 @@
                                                         $venta_detalle_padrenivel6 = \VentadetalleQuery::create()->findPk($padrenivel5);
                                                         $padrenivel6=$venta_detalle_padrenivel6->getIdPadre();
                                                         
-                                                        if($padrenivel6=='')
+                                                        if($padrenivel6=='' || $venta_detalle_padrenivel6->getProducto()->getProductoTipo()=="plu")
                                                         {
                                                             $idpadrenivel6=$venta_detalle_padrenivel5->getIdProducto();
                                                             $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel6) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -1540,7 +1554,7 @@
                                                                 {
                                                                     $exp='inventariomesdetalle_egresoventa';
                                                                     //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
-                                                                    $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
+                                                                    $explosion=$arrayReporte[$objproducto->getProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
                                                                     $venta = $explosion;
                                                                 }
@@ -1557,7 +1571,7 @@
                                                         {
                                                             $venta_detalle_padrenivel7 = \VentadetalleQuery::create()->findPk($padrenivel6);
                                                             $padrenivel7=$venta_detalle_padrenivel7->getIdPadre();
-                                                            if($padrenivel7=="NULL")
+                                                            if($padrenivel7=='' || $venta_detalle_padrenivel7->getProducto()->getProductoTipo()=="plu")
                                                             {
                                                                 $idpadrenivel7=$venta_detalle_padrenivel6->getIdProducto();
                                                                 $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel7) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
