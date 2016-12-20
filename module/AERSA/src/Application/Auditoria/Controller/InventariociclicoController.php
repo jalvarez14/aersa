@@ -456,7 +456,7 @@ class InventariociclicoController extends AbstractActionController {
                                         {
                                             $exp='inventariomesdetalle_ingresorequisicion';
                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
-                                            $requisicionIng = $objequisiciondetalle->getRequisiciondetalleCantidad();
+                                            $requisicionIng = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                         }
                                     }
                                     
@@ -889,7 +889,7 @@ class InventariociclicoController extends AbstractActionController {
                                         {
                                             $exp='inventariomesdetalle_egresorequisicion';
                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
-                                            $requisicionEg = $objequisiciondetalle->getRequisiciondetalleCantidad();
+                                            $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                         }
                                     }
                                     
@@ -2073,7 +2073,54 @@ class InventariociclicoController extends AbstractActionController {
                     $totalFisico=$arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'];
                     $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
                     $subcat=$arrayReporte[$idproducto]['subcategoria'];
-                    if($dif!=0)
+                    if($explosion!=0 && $stockfisico==0 )
+                    {
+                        $nomPro = $objproducto->getProductoNombre();
+                        $arrayReporte[$idproducto]['nomPro'] = $nomPro;
+                        $arrayReporte[$idproducto]['unidad'] = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        $unidad =$objproducto->getUnidadmedida()->getUnidadmedidaNombre();
+                        $row= $rowmax++;
+                        $exisinicial = 0;
+                        $compra = 0;
+                        $requisicionIng = 0;
+                        $ordenTabIng =0;
+                        $venta = 0;
+                        $requisicionEg = 0;
+                        $ordenTabEg = 0;
+                        $devolucion = 0;
+                        $stockTeorico = 0;
+                        $stockFisico = 0;
+                        $impFis = 0;
+                        $dif = 0-$explosion;
+                        $costoPromedio = abs($objproducto->getProductoCosto());
+                        $difImporte = (0-$explosion)*$objproducto->getProductoCosto();
+                        $explosion = $explosion;
+                        $totalFisico=$explosion;
+                        $ajuste=0;
+                        $subcat=$nombreSubcategoria;
+                        ///
+                        
+                        $arrayReporte[$idproducto]['inventariomesdetalle_stockinicial'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_ingresocompra'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_ingresorequisicion'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_ingresoordentablajeria'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_egresoventa'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_egresorequisicion'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_egresoordentablajeria'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_egresodevolucion'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_stockteorico'] = 0;
+                        //$arrayReporte[$idproducto]['unidad'] = $unidad;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_stockfisico'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_importefisico'] = 0;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_diferencia'] = 0-$explosion;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_costopromedio'] = $objproducto->getProductoCosto();
+                        $arrayReporte[$idproducto]['inventariomesdetalle_difimporte'] = (0-$explosion)*$objproducto->getProductoCosto();
+                        $arrayReporte[$idproducto]['inventariomesdetalle_explosion'] = $explosion;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'] = $explosion;
+                        $arrayReporte[$idproducto]['inventariomesdetalle_reajuste'] = 0;
+                        $arrayReporte[$idproducto]['subcategoria'] =$subcat;
+                    }
+                    if($dif!=0 || $explosion!=0)
                     {
                     array_push
                     ($reporte,
