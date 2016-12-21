@@ -460,6 +460,7 @@
             }
             $('input[name=requisicion_fecha]').on('changeDate', function(e) {
                 var date = $('input[name=requisicion_fecha]').val();
+                                                  var cont=0;
                 $.ajax({
                     url:'/autocomplete/getalmacenesbyinventario',
                     type: 'POST',
@@ -472,9 +473,13 @@
                             var option = $('<option>');
                             option.text(value);
                             option.attr('value',index);
-                   
-                            $('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);
-                        });
+                   if(cont==0)
+                               {
+                               $('select[name=idalmacenorigen]').append(option);}
+                               else
+                               {
+                               $('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);}
+                               cont++;});
                     }
                 });
             }); 
