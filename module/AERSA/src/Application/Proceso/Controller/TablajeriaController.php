@@ -168,7 +168,7 @@ class TablajeriaController extends AbstractActionController {
                 if ($folio_exist) {
                     $folio_tablajeria = \FoliotablajeriaQuery::create()->filterByIdsucursal($session['idsucursal'])->findOne();
                     $folio_tablajeria->setFolio($folio_default + 1);
-                    $folio_tablajeria->save();
+                    $folio_tablajeria->save();  
                 } else {
                     $folio_tablajeria = new \Foliotablajeria();
                     $folio_tablajeria->setFolio($folio_default + 1);
