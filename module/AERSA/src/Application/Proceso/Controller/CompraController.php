@@ -444,7 +444,7 @@ class CompraController extends AbstractActionController {
                     if (isset($producto['revisada'])) {
                         $compra_detalle->setCompradetalleRevisada(1);
                     }
-                     echo '<pre>';var_dump($compra_detalle->save());echo '</pre>';exit();
+                    
                     $compra_detalle->save();
                 }
 
