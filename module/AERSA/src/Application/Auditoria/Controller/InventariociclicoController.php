@@ -230,6 +230,7 @@ class InventariociclicoController extends AbstractActionController {
             $bgfila2 = "#FFFFFF";
             $color = true;
             $row = 0;
+            //
             $rowmax = 0;
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
             $categoriaObj = new \Categoria();
