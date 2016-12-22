@@ -110,8 +110,15 @@
                             var option = $('<option>');
                             option.text(value);
                             option.attr('value',index);
-
+                            //if($("[name=idsucursalorigen] option:selected").val()== $("[name=idsucursaldestino] option:selected").val() && $("[name=idalmacenorigen] option:selected").text()!=value)
+                            if ((($('[name=idsucursalorigen]').val() == $('[name=idsucursaldestino]').val())) && ($("[name=idalmacenorigen] option:selected").text() != value))
+                               {
                             $('select[name=idalmacendestino]').append(option);
+                               }
+                               else if (($('[name=idsucursalorigen]').val() != $('[name=idsucursaldestino]').val()))
+                               {
+                                $('select[name=idalmacendestino]').append(option);
+                               }
                         });
                     } else
                     {
@@ -397,7 +404,7 @@
 
         plugin.new = function (anio, mes) {
             //getAlmacenesSucDes();
-
+            getConceptos();
             $('[name=idsucursaldestino]').on('change', function () {
                 getAlmacenesSucDes();
             });
@@ -480,9 +487,9 @@
                                {
                                $('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);}
                                cont++;});
-                    }
+                   getConceptos(); }
                 });
-            }); 
+                                                  });
            
             var data = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -778,11 +785,27 @@
                             var option = $('<option>');
                             option.text(value);
                             option.attr('value',index);
-                            $('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);
+                            //$('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);
+                               
+                               
+                               if ((($('[name=idsucursalorigen]').val() == $('[name=idsucursaldestino]').val())))
+                               {
+                                $('select[name=idalmacendestino],select[name=idalmacenorigen]').append(option);
+                               var idorigen=$('select[name=idalmacenorigen]').val();
+                               $('select[name=idalmacendestino] option[value='+idorigen+']').remove();
+                                //$('select[name=idalmacendestino]').append(option);
+                               }
+                               else
+                               {
+                                    $('select[name=idalmacenorigen]').append(option);
+                               
+                               
+                               }
                         });
+                       getAlmacenesSucDes();
                     }
                 });
-            });  
+            getConceptos();});
                    
                    
                 var data = new Bloodhound({
