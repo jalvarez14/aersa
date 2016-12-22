@@ -410,12 +410,12 @@ class CompraController extends AbstractActionController {
                         $entity->save();
                     }
                 }
-               echo '<pre>';var_dump($post_data['productos']);echo '</pre>';exit();
+              
                 //COMPRA DETALLES
                 $entity->getCompradetalles()->delete();
                 
                 foreach ($post_data['productos'] as $producto) {
-                   
+                     echo '<pre>';var_dump($producto);echo '</pre>';exit();
                     $compra_detalle = new \Compradetalle();
                     $compra_detalle->setIdcompra($entity->getIdcompra())
                             ->setCompradetalleRevisada(0)
