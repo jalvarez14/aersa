@@ -2089,7 +2089,7 @@ class InventariociclicoController extends AbstractActionController {
                     $totalFisico=$arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'];
                     $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
                     $subcat=$arrayReporte[$idproducto]['subcategoria'];
-                    if($explosion!=0 && $stockfisico==0 )
+                    if($explosion!=0 && $stockFisico==0 )
                     {
                         $nomPro = $objproducto->getProductoNombre();
                         $arrayReporte[$idproducto]['nomPro'] = $nomPro;
@@ -2136,7 +2136,7 @@ class InventariociclicoController extends AbstractActionController {
                         $arrayReporte[$idproducto]['inventariomesdetalle_reajuste'] = 0;
                         $arrayReporte[$idproducto]['subcategoria'] =$subcat;
                     }
-                    if($dif!=0 || $explosion!=0)
+                    if($dif!=0 || $explosion!=0 || $stockFisico!=0)
                     {
                     array_push
                     ($reporte,

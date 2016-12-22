@@ -283,7 +283,7 @@
                             $stockFisico = (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'])) ? $arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'] + $productosReporte[$objproducto->getIdproducto()]: $productosReporte[$objproducto->getIdproducto()];
                         /////
                         
-                        if ($objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaAlmacenable(1)) {
+                        if ($objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaAlmacenable()) {
                             if ($inventario_anterior) {
                                 $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                                 if ($exisinicial)
@@ -324,8 +324,8 @@
                             
                             //si el producto tiene algún movimiento o stockfisico se procesa, en caso contrario no se considera
                     if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restab[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0){
-                            
-                            
+                        
+                       
                         //}
                         //echo '<pre>'.$objproducto->getProductoNombre().'</pre>';
                         //file_put_contents("/Applications/AMPPS/www/aersa/public/logs/error_log.txt", $objproducto->getProductoNombre()."\n",FILE_APPEND);
@@ -346,7 +346,11 @@
                                 $totalProductoCompra+=$objcompradetalle->getCompradetalleSubtotal();
                             }
                         }
-                        
+                        if($objproducto->getIdProducto()==22040)
+                        {
+                            //echo "stock fisico: ".$stockFisico." exis inicial: ".$exisinicial;
+                            //exit();
+                        }
                         
                         //Para las requisiciones de subrecetas aplica el mismo criterio que ventas y stock fisico
                         //Recibió
@@ -2108,8 +2112,10 @@
                     $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->filterByProductoTipo(array('simple', 'subreceta'))->orderByProductoNombre('asc')->find();
                     $objproducto = new \Producto();
                     foreach ($objproductos as $objproducto) {
-                        if($objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaAlmacenable(1))
+                        
+                        if($objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaAlmacenable())
                         {
+                            
                         $idproducto = $objproducto->getIdproducto();
                         $colorbg = $arrayReporte[$idproducto]['colorbg'];
                         $cat = $arrayReporte[$idproducto]['idcategoria'];
@@ -2135,7 +2141,12 @@
                         $totalFisico=$arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'];
                         $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
                         $subcat=$arrayReporte[$idproducto]['subcategoria'];
-                            if($explosion!=0 && $stockfisico==0 )
+                            if($objproducto->getIdProducto()==22040)
+                            {
+                                //echo "HOLA dif:".$dif." fisico: ".$stockFisico;
+                                //exit();
+                            }
+                            if($explosion!=0 && $stockFisico==0 )
                             {
                                 $nomPro = $objproducto->getProductoNombre();
                                 $arrayReporte[$idproducto]['nomPro'] = $nomPro;
@@ -2182,7 +2193,7 @@
                                 $arrayReporte[$idproducto]['inventariomesdetalle_reajuste'] = 0;
                                 $arrayReporte[$idproducto]['subcategoria'] =$subcat;
                             }
-                            if($dif!=0 || $explosion!=0)
+                            if($dif!=0 || $explosion!=0 || $stockFisico!=0)
                             {
                         array_push
                         ($reporte,
