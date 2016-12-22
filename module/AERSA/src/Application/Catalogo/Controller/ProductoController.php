@@ -827,7 +827,8 @@ class ProductoController extends AbstractActionController
          $receta = new \Receta();
          foreach ($recetas as $receta){
              $producto_padre = \ProductoQuery::create()->findPk($receta->getIdproducto());
-             if($producto_padre->getProductoTipo('subreceta') && $producto_padre->getIdcategoria() == 1){
+             if($producto_padre->getProductoTipo('subreceta') || $producto_padre->getProductoTipo('plu')) //antes sólo contemplaban las de categoría 1 $producto_padre->getIdcategoria() == 1
+             {
                  $costo_padre = 0;
                  $receta_hijos = \RecetaQuery::create()->filterByIdproducto($producto_padre->getIdproducto())->find();
                  
