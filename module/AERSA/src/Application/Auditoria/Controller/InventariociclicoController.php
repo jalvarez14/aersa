@@ -266,7 +266,7 @@ class InventariociclicoController extends AbstractActionController {
                         $stockFisico = (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'])) ? $arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'] + $productosReporte[$objproducto->getIdproducto()]: $productosReporte[$objproducto->getIdproducto()];
                     /////
                     
-                    if ($objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaAlmacenable(1)) {
+                    if ($objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaAlmacenable()) {
                         if ($inventario_anterior) {
                             $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
                             if ($exisinicial)
@@ -306,10 +306,13 @@ class InventariociclicoController extends AbstractActionController {
                         }
                     //}
                         
+                       
                     //si el producto tiene algún movimiento o stockfisico se procesa, en caso contrario no se considera
                     if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restab[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0){
                     if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                         $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
+                        
+                       
                     $totalProductoCompra = 0;
                     $compra = 0;
                     foreach ($objcompras as $objcompra) {
@@ -834,12 +837,6 @@ class InventariociclicoController extends AbstractActionController {
                             
                             if ($objproducto->getProductoTipo()=="simple" && is_null($objrequisiciondetalle->getIdPadre()) && $objrequisiciondetalle->getRequisicionDetalleContable()==1) //simple que no salio de una receta
                             {
-                                if($objproducto->getIdProducto()==24067)
-                                {
-                                    //echo '<pre>'."holaaaaaaaaaa".'</pre>';
-                                    //exit();
-                                }
-                                
                                 if(isset($arrayReporte[$idpr][$exp]))
                                 {
                                     $exp='inventariomesdetalle_egresorequisicion';
@@ -2089,7 +2086,8 @@ class InventariociclicoController extends AbstractActionController {
                     $totalFisico=$arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'];
                     $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
                     $subcat=$arrayReporte[$idproducto]['subcategoria'];
-                    if($explosion!=0 && $stockFisico==0 )
+                    
+                    if($explosion!=0 && $stockFisico==0 && $stockTeorico==0)
                     {
                         $nomPro = $objproducto->getProductoNombre();
                         $arrayReporte[$idproducto]['nomPro'] = $nomPro;

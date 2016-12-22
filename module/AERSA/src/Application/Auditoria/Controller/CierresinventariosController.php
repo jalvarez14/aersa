@@ -2146,7 +2146,7 @@
                                 //echo "HOLA dif:".$dif." fisico: ".$stockFisico;
                                 //exit();
                             }
-                            if($explosion!=0 && $stockFisico==0 )
+                            if($explosion!=0 && $stockFisico==0 && $stockTeorico==0)
                             {
                                 $nomPro = $objproducto->getProductoNombre();
                                 $arrayReporte[$idproducto]['nomPro'] = $nomPro;
