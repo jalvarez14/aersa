@@ -376,7 +376,7 @@ class CompraController extends AbstractActionController {
             if ($request->isPost()) {
 
                 $post_data = $request->getPost();
-               echo '<pre>';var_dump($post_data);echo '</pre>';exit();
+               
                 $post_files = $request->getFiles();
 
                 $post_data["compra_fechacompra"] = date_create_from_format('d/m/Y', $post_data["compra_fechacompra"]);
@@ -410,7 +410,7 @@ class CompraController extends AbstractActionController {
                         $entity->save();
                     }
                 }
-               
+               echo '<pre>';var_dump($post_data['productos']);echo '</pre>';exit();
                 //COMPRA DETALLES
                 $entity->getCompradetalles()->delete();
                 
