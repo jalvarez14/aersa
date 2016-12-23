@@ -1208,7 +1208,7 @@ class InventariociclicoController extends AbstractActionController {
                                 
                                 ///
                                 
-                                if ($objproducto->getProductoTipo()=="subreceta" && $objventadetalle->getIdPadre()!="NULL" ) //producto receta
+                                if ($objproducto->getProductoTipo()=="subreceta" && is_null($objventadetalle->getIdPadre()) ) //producto receta
                                 {
                                     //$conn = \Propel::getConnection();
                                     //se conoce el papa
@@ -1249,7 +1249,7 @@ class InventariociclicoController extends AbstractActionController {
                                         
                                     }
                                 }
-                                if ($objproducto->getProductoTipo()=="simple" && $objventadetalle->getIdPadre()=="NULL" && $objventadetalle->getVentaDetalleContable()==1) //simple que no salio de una receta
+                                if ($objproducto->getProductoTipo()=="simple" && is_null($objventadetalle->getIdPadre()) && $objventadetalle->getVentaDetalleContable()==1) //simple que no salio de una receta
                                 {
                                     //se explosiona si el producto es simple y no tiene registro padre
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
@@ -1286,7 +1286,7 @@ class InventariociclicoController extends AbstractActionController {
                                         $venta+=$objventadetalle->getVentadetalleCantidad();
                                     }
                                 }
-                                if ($objproducto->getProductoTipo()=="simple" && $objventadetalle->getIdPadre()!="NULL" && $objventadetalle->getVentaDetalleContable()==1) //simple que si salio de una receta
+                                if ($objproducto->getProductoTipo()=="simple" && !is_null($objventadetalle->getIdPadre()) && $objventadetalle->getVentaDetalleContable()==1) //simple que si salio de una receta
                                 {
                                     //conocer el producto del cual salió, puede ser el nivel superior, dos niveles arriba, hasta 6 niveles arriba
                                     //$conn = \Propel::getConnection();
