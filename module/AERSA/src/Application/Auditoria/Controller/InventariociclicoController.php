@@ -931,8 +931,8 @@ class InventariociclicoController extends AbstractActionController {
                                             {
                                                 
                                                 $exp='inventariomesdetalle_egresorequisicion';
-                                                $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
-                                                $requisicionEg = $objventadetalle->getVentadetalleCantidad();
+                                                $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                                $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                             }
                                         }
                                     }
@@ -1218,11 +1218,6 @@ class InventariociclicoController extends AbstractActionController {
                                     if($padrereceta=='')
                                     {
                                         
-                                        if($objproducto->getIdProducto()==22737)
-                                        {
-                                            //echo "entre";
-                                        }
-                                        
                                         //$conn = \Propel::getConnection();
                                         $idprod=$objproducto->getIdProducto();
                                         $cantidad = $objventadetalle->getVentadetalleCantidad();
@@ -1267,16 +1262,16 @@ class InventariociclicoController extends AbstractActionController {
                                     
                                     if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                                     {
-                                        
+                                         $exp='inventariomesdetalle_egresoventa';
                                         if(isset($arrayReporte[$idpr][$exp]))
                                         {
-                                            $exp='inventariomesdetalle_egresoventa';
+                                            
                                             $explosion=$arrayReporte[$idpr][$exp]+ ($cant * $stockFisico);
                                             $arrayReporte[$idpr][$exp] = $explosion;
                                         }
                                         else
                                         {
-                                            $exp='inventariomesdetalle_egresoventa';
+                                            
                                             $arrayReporte[$idpr][$exp] = $objventadetalle->getVentadetalleCantidad();
                                         }
                                         
@@ -1294,12 +1289,8 @@ class InventariociclicoController extends AbstractActionController {
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrenivel1=$venta_detalle_padre->getIdPadre();
                                     
-                                    if($objproducto->getIdProducto()==24027)
-                                    {
-                                        //echo "Prod 1".$objventadetalle->getIdventaDetalle()." ".$padrenivel1;
-                                        //exit();
-                                    }
-                                    if($padrenivel1=='')
+                                    
+                                    if($padrenivel1=='' || $venta_detalle_padre->getProducto()->getProductoTipo()=="plu")
                                     {
                                         
                                         $idpadrenivel1=$venta_detalle_padre->getIdProducto();
@@ -1315,10 +1306,10 @@ class InventariociclicoController extends AbstractActionController {
                                         
                                         if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                                         {
-                                            
+                                             $exp='inventariomesdetalle_egresoventa';
                                             if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                             {
-                                                $exp='inventariomesdetalle_egresoventa';
+                                               
                                                 //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                 $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1326,7 +1317,7 @@ class InventariociclicoController extends AbstractActionController {
                                             }
                                             else
                                             {
-                                                $exp='inventariomesdetalle_egresoventa';
+                                                
                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                 $venta = $objventadetalle->getVentadetalleCantidad();
                                             }
@@ -1364,7 +1355,7 @@ class InventariociclicoController extends AbstractActionController {
                                                 $exp='inventariomesdetalle_egresoventa';
                                                 if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                 {
-                                                    $exp='inventariomesdetalle_egresoventa';
+                                                   
                                                     //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                     $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1373,7 +1364,7 @@ class InventariociclicoController extends AbstractActionController {
                                                 else
                                                 {
                                                     
-                                                    $exp='inventariomesdetalle_egresoventa';
+                                                    
                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                     $venta = $objventadetalle->getVentadetalleCantidad();
                                                 }
@@ -1400,14 +1391,10 @@ class InventariociclicoController extends AbstractActionController {
                                                 if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                                                 {
                                                     $exp='inventariomesdetalle_egresoventa';
-                                                    if($objproducto->getIdProducto()==24027)
-                                                    {
-                                                        //echo "Prod 3: ".$objventadetalle->getIdventaDetalle()." ".$idpadrenivel2;
-                                                        //exit();
-                                                    }
+                                                    
                                                     if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                     {
-                                                        $exp='inventariomesdetalle_egresoventa';
+                                                        
                                                         //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                         $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                         $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1415,7 +1402,7 @@ class InventariociclicoController extends AbstractActionController {
                                                     }
                                                     else
                                                     {
-                                                        $exp='inventariomesdetalle_egresoventa';
+                                                        
                                                         $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                         $venta = $objventadetalle->getVentadetalleCantidad();
                                                     }
@@ -1443,7 +1430,7 @@ class InventariociclicoController extends AbstractActionController {
                                                         $exp='inventariomesdetalle_egresoventa';
                                                         if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                         {
-                                                            $exp='inventariomesdetalle_egresoventa';
+                                                            
                                                             //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                             $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1451,7 +1438,7 @@ class InventariociclicoController extends AbstractActionController {
                                                         }
                                                         else
                                                         {
-                                                            $exp='inventariomesdetalle_egresoventa';
+                                                            
                                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                             $venta = $objventadetalle->getVentadetalleCantidad();
                                                         }
@@ -1480,7 +1467,7 @@ class InventariociclicoController extends AbstractActionController {
                                                             $exp='inventariomesdetalle_egresoventa';
                                                             if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                             {
-                                                                $exp='inventariomesdetalle_egresoventa';
+                                                                
                                                                 //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                                 $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1488,7 +1475,7 @@ class InventariociclicoController extends AbstractActionController {
                                                             }
                                                             else
                                                             {
-                                                                $exp='inventariomesdetalle_egresoventa';
+                                                                
                                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                                 $venta = $objventadetalle->getVentadetalleCantidad();
                                                             }
@@ -1517,7 +1504,7 @@ class InventariociclicoController extends AbstractActionController {
                                                                 $exp='inventariomesdetalle_egresoventa';
                                                                 if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                                 {
-                                                                    $exp='inventariomesdetalle_egresoventa';
+                                                                    
                                                                     //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                                     $explosion=$arrayReporte[$objproducto->getProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1525,7 +1512,7 @@ class InventariociclicoController extends AbstractActionController {
                                                                 }
                                                                 else
                                                                 {
-                                                                    $exp='inventariomesdetalle_egresoventa';
+                                                                    
                                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                                     $venta = $objventadetalle->getVentadetalleCantidad();
                                                                 }
@@ -1554,7 +1541,7 @@ class InventariociclicoController extends AbstractActionController {
                                                                     $exp='inventariomesdetalle_egresoventa';
                                                                     if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                                     {
-                                                                        $exp='inventariomesdetalle_egresoventa';
+                                                                        
                                                                         //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                                         $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                                         $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1562,7 +1549,7 @@ class InventariociclicoController extends AbstractActionController {
                                                                     }
                                                                     else
                                                                     {
-                                                                        $exp='inventariomesdetalle_egresoventa';
+                                                                        
                                                                         $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                                         $venta = $objventadetalle->getVentadetalleCantidad();
                                                                     }
