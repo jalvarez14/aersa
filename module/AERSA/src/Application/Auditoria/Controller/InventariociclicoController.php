@@ -214,6 +214,7 @@ class InventariociclicoController extends AbstractActionController {
             $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->filterByIdsucursal($idsucursal)->find();
             
             $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->filterByIdsucursaldestino($idsucursal)->find();
+            
             $objordentabDestino = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->filterByIdsucursal($idsucursal)->find();
             
             $objdevoluciones = \DevolucionQuery::create()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->find();
@@ -1632,7 +1633,7 @@ class InventariociclicoController extends AbstractActionController {
                    
                     
                     $ordenTabEg = 0;
-                    foreach ($objordentabOrigen as $objordentab) {
+                   /* foreach ($objordentabOrigen as $objordentab) {
                         $objordentabdetalles = \OrdentablajeriadetalleQuery::create()
                         ->filterByIdordentablajeria($objordentab->getIdordentablajeria())
                         ->filterByIdproducto($objproducto->getIdproducto())
@@ -1641,7 +1642,19 @@ class InventariociclicoController extends AbstractActionController {
                         foreach ($objordentabdetalles as $objordentabdetalle) {
                             $ordenTabEg+=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
                         }
-                    }
+                    }*/
+                        
+                        foreach ($objordentabOrigen as $objordentab) {
+                            $objordentabdetalles = \OrdentablajeriaQuery::create()
+                            ->filterByIdordentablajeria($objordentab->getIdordentablajeria())
+                            ->filterByIdproducto($objproducto->getIdproducto())
+                            ->find();
+                            
+                            $objordentabdetalle = new \Ordentablajeria();
+                            foreach ($objordentabdetalles as $objordentabdetalle) {
+                                $ordenTabEg+=$objordentabdetalle->getOrdentablajerianumeroporciones();
+                            }
+                        }
                     
                     $devolucion = 0;
                     foreach ($objdevoluciones as $objdevolucion) {
@@ -1673,7 +1686,7 @@ class InventariociclicoController extends AbstractActionController {
                     }
                     
                     $ajuste=$ajusteSob - $ajusteFal;
-                    
+                        
                     $stockTeorico = ($compra + $requisicionIng + $ordenTabIng + $exisinicial) - ($venta + $requisicionEg + $ordenTabEg);
                     $stockTeorico+=$ajuste;
                     
@@ -2000,7 +2013,6 @@ class InventariociclicoController extends AbstractActionController {
                     
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
-                    
                     
                     
                     $costoPromedio = ($costoPromedio == 0) ? $objproducto->getProductoCosto() : $costoPromedio;

@@ -346,11 +346,7 @@
                                 $totalProductoCompra+=$objcompradetalle->getCompradetalleSubtotal();
                             }
                         }
-                        if($objproducto->getIdProducto()==22040)
-                        {
-                            //echo "stock fisico: ".$stockFisico." exis inicial: ".$exisinicial;
-                            //exit();
-                        }
+                        
                         
                         //Para las requisiciones de subrecetas aplica el mismo criterio que ventas y stock fisico
                         //Recibió
@@ -1671,7 +1667,7 @@
                         
                         
                         $ordenTabEg = 0;
-                        foreach ($objordentabOrigen as $objordentab) {
+                        /*foreach ($objordentabOrigen as $objordentab) {
                             $objordentabdetalles = \OrdentablajeriadetalleQuery::create()
                             ->filterByIdordentablajeria($objordentab->getIdordentablajeria())
                             ->filterByIdproducto($objproducto->getIdproducto())
@@ -1679,6 +1675,19 @@
                             $objordentabdetalle = new \Ordentablajeriadetalle();
                             foreach ($objordentabdetalles as $objordentabdetalle) {
                                 $ordenTabEg+=$objordentabdetalle->getOrdentablajeriadetalleCantidad();
+                            }
+                        }*/
+                        
+                        
+                        foreach ($objordentabOrigen as $objordentab) {
+                            $objordentabdetalles = \OrdentablajeriaQuery::create()
+                            ->filterByIdordentablajeria($objordentab->getIdordentablajeria())
+                            ->filterByIdproducto($objproducto->getIdproducto())
+                            ->find();
+                            
+                            $objordentabdetalle = new \Ordentablajeria();
+                            foreach ($objordentabdetalles as $objordentabdetalle) {
+                                $ordenTabEg+=$objordentabdetalle->getOrdentablajerianumeroporciones();
                             }
                         }
                         
@@ -2141,11 +2150,7 @@
                         $totalFisico=$arrayReporte[$idproducto]['inventariomesdetalle_totalfisico'];
                         $ajuste=$arrayReporte[$idproducto]['inventariomesdetalle_reajuste'];
                         $subcat=$arrayReporte[$idproducto]['subcategoria'];
-                            if($objproducto->getIdProducto()==22040)
-                            {
-                                //echo "HOLA dif:".$dif." fisico: ".$stockFisico;
-                                //exit();
-                            }
+                            
                             if($explosion!=0 && $stockFisico==0 && $stockTeorico==0)
                             {
                                 $nomPro = $objproducto->getProductoNombre();
