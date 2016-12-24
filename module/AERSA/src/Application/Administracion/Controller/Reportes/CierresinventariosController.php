@@ -228,15 +228,18 @@ class CierresinventariosController extends AbstractActionController {
             $dato = null;
             $dias_activos = 0;
             $ingreso = new \Ingreso();
+            
             foreach ($ingresos as $ingreso) {
-                if ($dato == null)
+                if ($dato == null) {
                     $dato = $ingreso->getIngresoFecha('d/m/Y');
+                    $dias_activos++;
+                }
                 if ($dato != $ingreso->getIngresoFecha('d/m/Y')) {
                     $dato = $ingreso->getIngresoFecha('d/m/Y');
                     $dias_activos++;
                 }
             }
-            $ventasPromDiar = ($ventasNetasConsolidado != 0 || $dias_activos != 0) ? $ventasNetasConsolidado / $dias_activos : 0;
+            $ventasPromDiar = ($ventasNetasConsolidado != 0 && $dias_activos != 0) ? $ventasNetasConsolidado / $dias_activos : 0;
 
             //Consumo promedio p/empleado diario
             //(sumatoria de comedor empleados/dias activos)/promedio empleados
@@ -301,20 +304,20 @@ class CierresinventariosController extends AbstractActionController {
                 $inicio =$post_data['fecha_inicio'];
                 $fin =$post_data['fecha_fin'];
                 array_push($reporte, array('uno'=>'Concepto','dos'=>'Alimento','tres'=>'%','cuatro'=>'Bebidas','cinco'=>'%','seis'=>'Consolidado','siete'=>'%'));
-                array_push($reporte, array('uno'=>'Ventas netas sin IVA','dos'=>$ventasNetasAlimentos,'tres'=>'%','cuatro'=>'$ventasNetasBebidas','cinco'=>'','seis'=>$ventasNetasConsolidado,'siete'=>''));
+                array_push($reporte, array('uno'=>'Ventas netas sin IVA','dos'=>$ventasNetasAlimentos,'tres'=>'=+B7/G7','cuatro'=>$ventasNetasBebidas,'cinco'=>'=+E7/G7','seis'=>$ventasNetasConsolidado,'siete'=>''));
                 array_push($reporte, array('uno'=>'Inventario inicial','dos'=>$invIniAlimentos,'tres'=>'','cuatro'=>$invIniBebidas,'cinco'=>'','seis'=>$invIniConsolidado,'siete'=>''));
                 array_push($reporte, array('uno'=>'Compras del mes','dos'=>$compraMesAlimentos,'tres'=>$porcComprasMesAlimentos.' %','cuatro'=>$compraMesBebidas,'cinco'=>$porcComprasMesBebidas.' %','seis'=>$compraMesConsolidado,'siete'=>$porcComprasMesConsolidado.' %'));
-                array_push($reporte, array('uno'=>'Existencia','dos'=>$existenciaAlimentos,'tres'=>'','cuatro'=>$existenciaBebidas,'cinco'=>'%','seis'=>$existenciaConsolidado,'siete'=>''));
+                array_push($reporte, array('uno'=>'Existencia','dos'=>$existenciaAlimentos,'tres'=>'','cuatro'=>$existenciaBebidas,'cinco'=>'','seis'=>$existenciaConsolidado,'siete'=>''));
                 array_push($reporte, array('uno'=>'Inventario Final','dos'=>$invFinAlimentos,'tres'=>'','cuatro'=>$invFinBebidas,'cinco'=>'','seis'=>$invFinConsolidado,'siete'=>''));
                 array_push($reporte, array('uno'=>'Costo bruto','dos'=>$costoBrutoAlimentos,'tres'=>$porcCostoBrutoAlimentos.' %','cuatro'=>$costoBrutoBebidas,'cinco'=>$porcCostoBrutoBebidas.' %','seis'=>$costoBrutoConsolidado,'siete'=>$porcCostoBrutoConsolidado.' %'));
                 array_push($reporte, array('uno'=>'Creditos al costo','dos'=>$creditosCostAlimentos,'tres'=>'','cuatro'=>$creditosCostBebidas,'cinco'=>'%','seis'=>$creditosCostConsolidado,'siete'=>''));
                 array_push($reporte, array('uno'=>'Costo neto venta','dos'=>$costVentAlimentos,'tres'=>$porcCostoNetoVentaAlimentos.' %','cuatro'=>$costVentBebidas,'cinco'=>$porcCostoNetoVentaBebidas.' %','seis'=>$costVentConsolidado,'siete'=>$porcCostoNetoVentaConsolidado.' %'));
                 array_push($reporte, array('uno'=>'Venta promedio diaria sin IVA','dos'=>'','tres'=>'','cuatro'=>$ventasPromDiar,'cinco'=>'','seis'=>$dias_activos.' dias activo','siete'=>''));
-                array_push($reporte, array('uno'=>'Consumo promedio P/Empleado diario','dos'=>'','tres'=>'','cuatro'=>$consumoPromEmpl,'cinco'=>'%','seis'=>'Consolidado','siete'=>'%'));
+                array_push($reporte, array('uno'=>'Consumo promedio P/Empleado diario','dos'=>'','tres'=>'','cuatro'=>$consumoPromEmpl,'cinco'=>'','seis'=>'Consolidado','siete'=>'%'));
                 array_push($reporte, array('uno'=>'Comedor empleado','dos'=>$consumoEmplAlimentos,'tres'=>$porcConsumoEjecAlimentos.' %','cuatro'=>$consumoEmplBebidas,'cinco'=>$porcConsumoEjecBebidas.' %','seis'=>'','siete'=>''));
                 array_push($reporte, array('uno'=>'Consumo ejecutivo','dos'=>$consumoEjecAlimentos,'tres'=>$porcConsumoEjecAlimentos.' %','cuatro'=>$consumoEjecBebidas,'cinco'=>$porcConsumoEjecBebidas.' %','seis'=>'','siete'=>''));
                 array_push($reporte, array('uno'=>'Cortesias','dos'=>$cortesiasAlimentos,'tres'=>$porcCortesiasAlimentos.' %','cuatro'=>$cortesiasBebidas,'cinco'=>$porcCortesiasBebidas.' %','seis'=>'','siete'=>''));
-                array_push($reporte, array('uno'=>'Transpaso a servicio','dos'=>$transpasoSerAlimentos,'tres'=>$porcTranspAlimentos.' %','cuatro'=>$transpasoSerBebidas,'cinco'=>$porcTranspBebidas.' %','seis'=>'','siete'=>''));
+                array_push($reporte, array('uno'=>'Traspaso a servicio','dos'=>$transpasoSerAlimentos,'tres'=>$porcTranspAlimentos.' %','cuatro'=>$transpasoSerBebidas,'cinco'=>$porcTranspBebidas.' %','seis'=>'','siete'=>''));
                 array_push($reporte, array('uno'=>'Mermas','dos'=>$mermaAlimentos,'tres'=>$porcMermasAlimentos.' %','cuatro'=>$mermaBebidas,'cinco'=>$porcMermasBebidas.' %','seis'=>'','siete'=>''));
                 $template = '/cierremes.xlsx';
                 $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
