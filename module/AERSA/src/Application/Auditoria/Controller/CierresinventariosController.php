@@ -273,10 +273,15 @@
                         $st3->execute();
                         $resdev = $st3->fetchAll(\PDO::FETCH_ASSOC);
                         
-                        $tab = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
-                        $st4 = $conn->prepare($tab);
+                        $tabsalida = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND idproducto=$idprod AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+                        $st4 = $conn->prepare($tabsalida);
                         $st4->execute();
-                        $restab = $st4->fetchAll(\PDO::FETCH_ASSOC);
+                        $restabsalida = $st4->fetchAll(\PDO::FETCH_ASSOC);
+                        
+                        $tabentrada = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+                        $st5 = $conn->prepare($tabentrada);
+                        $st5->execute();
+                        $restabentrada = $st5->fetchAll(\PDO::FETCH_ASSOC);
                         
                         $stockFisico = 0;
                         if (isset($productosReporte[$objproducto->getIdproducto()]))
@@ -322,10 +327,12 @@
                                 //                            }
                             }
                             
+                            
+                            
                             //si el producto tiene algún movimiento o stockfisico se procesa, en caso contrario no se considera
-                    if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restab[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0){
+                    if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restabsalida[0]['count(idordentablajeria)']>0 || $restabentrada[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0){
                         
-                       
+                        
                         //}
                         //echo '<pre>'.$objproducto->getProductoNombre().'</pre>';
                         //file_put_contents("/Applications/AMPPS/www/aersa/public/logs/error_log.txt", $objproducto->getProductoNombre()."\n",FILE_APPEND);
@@ -866,11 +873,6 @@
                                 
                                 if ($objproducto->getProductoTipo()=="simple" && is_null($objrequisiciondetalle->getIdPadre()) && $objrequisiciondetalle->getRequisicionDetalleContable()==1) //simple que no salio de una receta
                                 {
-                                    if($objproducto->getIdProducto()==24067)
-                                    {
-                                        //echo '<pre>'."holaaaaaaaaaa".'</pre>';
-                                        //exit();
-                                    }
                                     
                                     if(isset($arrayReporte[$idpr][$exp]))
                                     {
@@ -1122,7 +1124,7 @@
                                                         {
                                                             $requisicion_detalle_padrenivel7 = \RequisiciondetalleQuery::create()->findPk($padrenivel6);
                                                             $padrenivel7=$requisicion_detalle_padrenivel7->getIdPadre();
-                                                            if($padrenivel7=="NULL")
+                                                            if($padrenivel7=='')
                                                             {
                                                                 $idpadrenivel7=$requisicion_detalle_padrenivel6->getIdProducto();
                                                                 $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel7) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -1250,13 +1252,10 @@
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrereceta=$venta_detalle_padre->getIdPadre();
                                     
-                                    if($padrereceta=='')
+                                    if($padrereceta=='' || $venta_detalle_padre->getProducto()->getProductoTipo()=="plu")
                                     {
                                     
-                                        if($objproducto->getIdProducto()==22737)
-                                        {
-                                            //echo "entre";
-                                        }
+                                        
                                         
                                         //$conn = \Propel::getConnection();
                                         $idprod=$objproducto->getIdProducto();
@@ -1329,15 +1328,11 @@
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrenivel1=$venta_detalle_padre->getIdPadre();
                                     
-                                    if($objproducto->getIdProducto()==24027)
-                                    {
-                                        //echo "Prod 1".$objventadetalle->getIdventaDetalle()." ".$padrenivel1;
-                                        //exit();
-                                    }
-                                    if($padrenivel1=='')
+                                    
+                                    if($padrenivel1=='' || $venta_detalle_padre->getProducto()->getProductoTipo()=="plu")
                                     {
                                         
-                                        $idpadrenivel1=$venta_detalle_padre->getIdProducto();
+                                        /*$idpadrenivel1=$venta_detalle_padre->getIdProducto();
                                         $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel1) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                                         $st = $conn->prepare($sqlrequisicioningreso);
                                         $st->execute();
@@ -1346,10 +1341,10 @@
                                         $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel1) AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                                         $st2 = $conn->prepare($sqlrequisicionegreso);
                                         $st2->execute();
-                                        $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
+                                        $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);*/
                                         
-                                        if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
-                                        {
+                                        //if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
+                                        //{
                                             
                                             if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                             {
@@ -1365,7 +1360,7 @@
                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
                                                 $venta = $objventadetalle->getVentadetalleCantidad();
                                             }
-                                        }
+                                        //}
                                         
                                     }
                                     else //el papa nivel 1 no es la raiz

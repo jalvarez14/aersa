@@ -211,6 +211,7 @@ class InventariociclicoController extends AbstractActionController {
             $objventas = \VentaQuery::create()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdsucursal($idsucursal)->find();
             
             $objrequisicionesOrigen = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->filterByIdsucursalorigen($idsucursal)->find();
+            
             $objordentabOrigen = \OrdentablajeriaQuery::create()->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacenorigen($idalmacen)->filterByIdsucursal($idsucursal)->find();
             
             $objrequisicionesDestino = \RequisicionQuery::create()->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->filterByIdalmacendestino($idalmacen)->filterByIdsucursaldestino($idsucursal)->find();
@@ -257,10 +258,15 @@ class InventariociclicoController extends AbstractActionController {
                     $st3->execute();
                     $resdev = $st3->fetchAll(\PDO::FETCH_ASSOC);
                     
-                    $tab = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
-                    $st4 = $conn->prepare($tab);
+                    $tabsalida = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND idproducto=$idprod AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+                    $st4 = $conn->prepare($tabsalida);
                     $st4->execute();
-                    $restab = $st4->fetchAll(\PDO::FETCH_ASSOC);
+                    $restabsalida = $st4->fetchAll(\PDO::FETCH_ASSOC);
+                    
+                    $tabentrada = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+                    $st5 = $conn->prepare($tabentrada);
+                    $st5->execute();
+                    $restabentrada = $st5->fetchAll(\PDO::FETCH_ASSOC);
                     
                     $stockFisico = 0;
                     if (isset($productosReporte[$objproducto->getIdproducto()]))
@@ -307,9 +313,10 @@ class InventariociclicoController extends AbstractActionController {
                         }
                     //}
                         
+                        
                        
                     //si el producto tiene algún movimiento o stockfisico se procesa, en caso contrario no se considera
-                    if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restab[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0){
+                    if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restabsalida[0]['count(idordentablajeria)']>0 || $restabentrada[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0){
                     if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                         $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
                         
@@ -1088,7 +1095,7 @@ class InventariociclicoController extends AbstractActionController {
                                                     {
                                                         $requisicion_detalle_padrenivel7 = \RequisiciondetalleQuery::create()->findPk($padrenivel6);
                                                         $padrenivel7=$requisicion_detalle_padrenivel7->getIdPadre();
-                                                        if($padrenivel7=="NULL")
+                                                        if($padrenivel7=='')
                                                         {
                                                             $idpadrenivel7=$requisicion_detalle_padrenivel6->getIdProducto();
                                                             $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel7) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
@@ -1215,7 +1222,7 @@ class InventariociclicoController extends AbstractActionController {
                                     $venta_detalle_padre = \VentadetalleQuery::create()->findPk($objventadetalle->getIdpadre());
                                     $padrereceta=$venta_detalle_padre->getIdPadre();
                                     
-                                    if($padrereceta=='')
+                                    if($padrereceta=='' || $venta_detalle_padre->getProducto()->getProductoTipo()=="plu")
                                     {
                                         
                                         //$conn = \Propel::getConnection();
@@ -2001,6 +2008,7 @@ class InventariociclicoController extends AbstractActionController {
                     $colorbg = ($color) ? $bgfila : $bgfila2;
                     $color = !$color;
                     
+                        
                     
                     $costoPromedio = ($costoPromedio == 0) ? $objproducto->getProductoCosto() : $costoPromedio;
                     
