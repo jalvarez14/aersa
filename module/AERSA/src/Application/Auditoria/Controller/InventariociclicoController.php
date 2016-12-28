@@ -248,6 +248,11 @@ class InventariociclicoController extends AbstractActionController {
                     $st->execute();
                     $resreq = $st->fetchAll(\PDO::FETCH_ASSOC);
                     
+                    $compras = "SELECT count(idcompra) FROM compra WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= compra_fechacompra AND compra_fechacompra <= '$fin_semana';";
+                    $st = $conn->prepare($compras);
+                    $st->execute();
+                    $rescompras = $st->fetchAll(\PDO::FETCH_ASSOC);
+                    
                     $ventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana';";
                     $st2 = $conn->prepare($ventas);
                     $st2->execute();
@@ -316,7 +321,7 @@ class InventariociclicoController extends AbstractActionController {
                         
                        
                     //si el producto tiene algún movimiento o stockfisico se procesa, en caso contrario no se considera
-                    if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restabsalida[0]['count(idordentablajeria)']>0 || $restabentrada[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0){
+                    if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restabsalida[0]['count(idordentablajeria)']>0 || $restabentrada[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0 || $rescompras[0]['count(idcompra)']>0  ){
                     if (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial']))
                         $exisinicial+=$arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockinicial'];
                         
@@ -406,7 +411,7 @@ class InventariociclicoController extends AbstractActionController {
                                 {
                                     $exp='inventariomesdetalle_ingresorequisicion';
                                     $explosion=$cantidad;
-                                    $arrayReporte[$idprod][$exp] = $explosion;
+                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
                                     $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                                     
                                 }
@@ -416,16 +421,16 @@ class InventariociclicoController extends AbstractActionController {
                             if ($objproducto->getProductoTipo()=="simple" && is_null($objrequisiciondetalle->getIdPadre()) && $objrequisiciondetalle->getRequisicionDetalleContable()==1) //simple que no salio de una receta
                             {
                                 
-                                if(isset($arrayReporte[$idpr][$exp]))
+                                if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                 {
                                     $exp='inventariomesdetalle_ingresorequisicion';
-                                    $explosion=$arrayReporte[$idpr][$exp]+ ($cant * $stockFisico);
-                                    $arrayReporte[$idpr][$exp] = $explosion;
+                                    $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
+                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
                                 }
                                 else
                                 {
                                     $exp='inventariomesdetalle_ingresorequisicion';
-                                    $arrayReporte[$idpr][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                 }
                                 $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                                 
@@ -845,16 +850,15 @@ class InventariociclicoController extends AbstractActionController {
                             
                             if ($objproducto->getProductoTipo()=="simple" && is_null($objrequisiciondetalle->getIdPadre()) && $objrequisiciondetalle->getRequisicionDetalleContable()==1) //simple que no salio de una receta
                             {
-                                if(isset($arrayReporte[$idpr][$exp]))
+                                 $exp='inventariomesdetalle_egresorequisicion';
+                                if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                 {
-                                    $exp='inventariomesdetalle_egresorequisicion';
-                                    $explosion=$arrayReporte[$idpr][$exp]+ ($cant * $stockFisico);
+                                    $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                     $arrayReporte[$idpr][$exp] = $explosion;
                                 }
                                 else
                                 {
-                                    $exp='inventariomesdetalle_egresorequisicion';
-                                    $arrayReporte[$idpr][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                 }
                                 $requisicionEg+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                                 
@@ -884,9 +888,9 @@ class InventariociclicoController extends AbstractActionController {
                                     if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)) // SÍ SÓLO SE ENVIO Y NO RECIBIO
                                     {
                                         
+                                        $exp='inventariomesdetalle_egresorequisicion';
                                         if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                         {
-                                            $exp='inventariomesdetalle_egresorequisicion';
                                             //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                             $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -894,7 +898,6 @@ class InventariociclicoController extends AbstractActionController {
                                         }
                                         else
                                         {
-                                            $exp='inventariomesdetalle_egresorequisicion';
                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                             $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                         }
@@ -925,10 +928,9 @@ class InventariociclicoController extends AbstractActionController {
                                         if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)) // SÍ SÓLO SE ENVIO Y NO RECIBIO
                                         {
                                             
-                                            $exp='inventariomesdetalle_ingresorequisicion';
+                                            $exp='inventariomesdetalle_egresorequisicion';
                                             if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                             {
-                                                $exp='inventariomesdetalle_egresorequisicion';
                                                 //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                 $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -937,7 +939,6 @@ class InventariociclicoController extends AbstractActionController {
                                             else
                                             {
                                                 
-                                                $exp='inventariomesdetalle_egresorequisicion';
                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                 $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                             }
@@ -966,7 +967,6 @@ class InventariociclicoController extends AbstractActionController {
                                                 $exp='inventariomesdetalle_egresorequisicion';
                                                 if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                 {
-                                                    $exp='inventariomesdetalle_egresorequisicion';
                                                     //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                     $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -974,7 +974,6 @@ class InventariociclicoController extends AbstractActionController {
                                                 }
                                                 else
                                                 {
-                                                    $exp='inventariomesdetalle_egresorequisicion';
                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                     $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                 }
@@ -1002,7 +1001,6 @@ class InventariociclicoController extends AbstractActionController {
                                                     $exp='inventariomesdetalle_egresorequisicion';
                                                     if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                     {
-                                                        $exp='inventariomesdetalle_egresorequisicion';
                                                         //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                         $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                         $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1010,7 +1008,6 @@ class InventariociclicoController extends AbstractActionController {
                                                     }
                                                     else
                                                     {
-                                                        $exp='inventariomesdetalle_egresorequisicion';
                                                         $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                         $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                     }
@@ -1039,7 +1036,6 @@ class InventariociclicoController extends AbstractActionController {
                                                         $exp='inventariomesdetalle_egresorequisicion';
                                                         if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                         {
-                                                            $exp='inventariomesdetalle_egresorequisicion';
                                                             //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                             $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1047,7 +1043,6 @@ class InventariociclicoController extends AbstractActionController {
                                                         }
                                                         else
                                                         {
-                                                            $exp='inventariomesdetalle_egresorequisicion';
                                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                             $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                         }
@@ -1076,7 +1071,6 @@ class InventariociclicoController extends AbstractActionController {
                                                             $exp='inventariomesdetalle_egresorequisicion';
                                                             if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                             {
-                                                                $exp='inventariomesdetalle_egresorequisicion';
                                                                 //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                                 $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1084,7 +1078,6 @@ class InventariociclicoController extends AbstractActionController {
                                                             }
                                                             else
                                                             {
-                                                                $exp='inventariomesdetalle_egresorequisicion';
                                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                                 $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                             }
@@ -1113,7 +1106,6 @@ class InventariociclicoController extends AbstractActionController {
                                                                 $exp='inventariomesdetalle_egresorequisicion';
                                                                 if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                                 {
-                                                                    $exp='inventariomesdetalle_egresorequisicion';
                                                                     //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                                     $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
@@ -1121,7 +1113,6 @@ class InventariociclicoController extends AbstractActionController {
                                                                 }
                                                                 else
                                                                 {
-                                                                    $exp='inventariomesdetalle_egresorequisicion';
                                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                                     $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                                 }
