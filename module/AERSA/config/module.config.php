@@ -2315,7 +2315,7 @@ return array(
                     'servicios' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/servicios/empresas/:tipo',
+                            'route'    => '/servicios',
                             'defaults' => array(
                                 'controller'    => 'Website\Controller\Website',
                                 'action'        => 'servicios',
