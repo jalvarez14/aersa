@@ -13,15 +13,35 @@
           <button style="text-height: 10"class="btn col-xs-12 text-left panel-green btn-panel" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >Administración <i class="fa fa-angle-up pull-right"></i></button>
         <div class="collapse in col-xs-12 mini-top" id="collapseExample">
 
-					<div class="form-group " >
-            <label class="col-md-2 " for="">¿Giro de la empresa? </label>
-            <div class="col-md-4 ">
-              <select class="form-control" id="giro">
-                <option value="Empresa de servicios"> Empresa de servicios</option>
-              </select>
-            </div>
-          </div>
+
 					<div id="administracion">
+                                            <div class="form-group">
+					<label for="" class="col-xs-12">Nombre</label>
+                                        <textarea style="margin-left: 10px;" type="text" required="" name="Nombre: " class="form-control" rows="1"></textarea>
+				</div>
+                                            <div class="form-group">
+					<label for="" class="col-xs-12">Nombre de la empresa</label>
+                                        <textarea style="margin-left: 10px;" type="text" required="" name="Nombre de la empresa: " class="form-control" rows="1"></textarea>
+				</div>
+                                            <div class="form-group">
+					<label for="" class="col-xs-12">Medio de contacto</label>
+                                        <textarea  style="margin-left: 10px;" type="text" name="Medio de contacto: " class="form-control" rows="1"></textarea>
+				</div>
+                                            <div class="form-group">
+				<label for="" class="col-xs-12">Giro de la empresa</label>
+  				<div class="radio col-lg-3">
+  					<label>
+  						<input required="" name="administracionRadio99" value="<b>¿Giro de la empresa?</b><br>Empresa de servicios" type="radio">
+  						Empresa de servicios
+  					</label>
+  				</div>
+  				<div class="radio col-lg-3">
+  					<label>
+  						<input required="" name="administracionRadio99" value="<b>¿Giro de la empresa?</b><br>Empresa de productos" type="radio">
+  						Empresa de productos
+  					</label>
+  				</div>
+				</div>
 					<?php
 					$data = array(
 						'¿Está definida la estructura organizacional de la empresa?',
@@ -66,7 +86,7 @@
 						'¿Se cuenta con sello de “recibido” en el almacén y se coteja la mercancía contra la orden de compra?',
 						'1',
 						'¿Cuál es el costo parámetro? ¿Cuál es el costo potencial?',
-						'1',
+						'',
 						'¿Hacen traspasos a otras empresas del mismo grupo?',
 						'1'
 					)?>
@@ -87,13 +107,13 @@
 					$data = array(
 						'¿Existe un sistema para gestionar el punto de venta y/o los almacenes?',
 						'1',
-						'En caso afirmativo, ¿dicho sistema puede generar los siguientes informes? (todos exportables a Excel) .',
+						'En caso afirmativo, ¿dicho sistema puede generar los siguientes informes? (todos exportables a Excel):',
+						'N',
+						'1. Reporte de todos los movimientos realizados en cada uno de los almacenes (compras, traspasos, ventas, rendimientos).',
 						'1',
-						'Reporte de todos los movimientos realizados en cada uno de los almacenes (compras, traspasos, ventas, rendimientos).',
+						'2. Listado en de todos los insumos dados de alta con costos promedio (alimentos, bebidas, suministros y gastos).',
 						'1',
-						'Listado en de todos los insumos dados de alta con costos promedio (alimentos, bebidas, suministros y gastos).',
-						'1',
-						'Un registro completo de las existencias de cada uno de los almacenes, valuadas a costo promedio o último costo.',
+						'3. Un registro completo de las existencias de cada uno de los almacenes, valuadas a costo promedio o último costo.',
 						'1'
 					)?>
 
@@ -197,19 +217,26 @@ function setData($data,$section)
 	$aux = 0;
 	 for ($i=0; $i < count($data) ; $i++,$aux++)
 	 {
-	     if ($data[$i+1] == '1')
+             if ($data[$i+1] == 'N'){ ?>
+                
+             <div class="form-group">
+				<label for="" class="col-xs-12"><?php echo $data[$i] ?></label>
+  			
+				</div>
+             <?php }
+	     else if($data[$i+1] == '1')
 			 { ?>
 				<div class="form-group">
 				<label for="" class="col-xs-12"><?php echo $data[$i] ?></label>
   				<div class="radio col-lg-1">
   					<label>
-  						<input required type="radio" name="<?php echo $section ?>Radio<?php echo $aux ?>" value="<b><?php echo $data[$i] ?> :</b><br> si">
+  						<input required type="radio" name="<?php echo $section ?>Radio<?php echo $aux ?>" value="<b><?php echo $data[$i] ?> :</b><br> SI">
   						Si
   					</label>
   				</div>
   				<div class="radio col-lg-1">
   					<label>
-  						<input required type="radio" name="<?php echo $section ?>Radio<?php echo $aux ?>" value="<b><?php echo $data[$i] ?> :</b><br> no">
+  						<input required type="radio" name="<?php echo $section ?>Radio<?php echo $aux ?>" value="<b><?php echo $data[$i] ?> :</b><br> NO">
   						No
   					</label>
   				</div>
@@ -217,11 +244,11 @@ function setData($data,$section)
 
 		    <?php
 			 }
-			 else
+			 else if($data[$i+1] == '')
 			 {?>
 				 <div class="form-group" >
 					<label for="" class="col-xs-12" ><?php echo $data[$i] ?></label>
-					<textarea  required name="<?php echo $data[$i] ?> : " class="form-control" rows="3" ></textarea>
+					<textarea    style="margin-left: 10px;" required name="<?php echo $data[$i] ?> : " class="form-control" rows="3" ></textarea>
 				</div>
 				<?php
 			 }

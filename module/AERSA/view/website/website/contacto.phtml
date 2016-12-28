@@ -1,48 +1,75 @@
 
-
-<div class="row bg-contacto">
-  <div class="col-lg-5 col-lg-offset-6 col-md-6 col-md-offset-6 col-sm-8 col-sm-offset-2 white">
-    <h1>¿En que podemos ayudarte?</h1>
-    <p>
-      Dejanos tus datos y alguno de nuestros asesores se comunicara contigo a la brevedad
-    </p>
-    <form class="" action="index.html" method="post">
-      <div class="form-groupb">
-        <div class="row">
-          <div class="col-lg-6">
-            <label for="">Nombre</label>
-            <input type="text" name="" class="form-control" value="">
-          </div>
-          <div class="col-lg-6">
-            <label for="">Telefono</label>
-            <input type="text" name="" class="form-control" value="">
-          </div>
-        </div>
+<?php if($mail_send) :?>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="success-mail" style="display: block">
+      <div class="alert alert-success">
+        <h1 class="text-center">
+          <span class="glyphicon glyphicon-ok "></span>
+          Información enviada correctamente
+        </h1>
       </div>
+		</div>
+    </div>
+    </div>
+<?php endif;?>
+<div class="row bg-contacto">
+    
+  <?php if(!$mail_send) :?>
+  <div class="col-lg-5 col-lg-offset-6 col-md-6 col-md-offset-6 col-sm-8 col-sm-offset-2 white">
+    <h1>¿En qué podemos ayudarte?</h1>
+    <p>
+      Déjanos tus datos y uno de nuestros asesores se comunicará contigo a la brevedad
+    </p>
+    <form class="" action="/contacto" method="post">
       <div class="form-group">
         <div class="row">
-          <div class="col-lg-12">
-            <label for=""><br>Correo electronico</label>
-            <input type="text" name="" class="form-control" value="">
+          <div class="col-lg-6">
+            <label for="">Nombre *</label>
+            <input required type="text" name="nombre" class="form-control" value="">
+          </div>
+          <div class="col-lg-6">
+            <label for="">Telefono *</label>
+            <input required  type="text" name="telefono" class="form-control" value="">
           </div>
         </div>
       </div>
+        <div class="form-group">
+        <div class="row">
+          <div class="col-lg-6">
+            <label for="">Empresa *</label>
+            <input required type="text" name="Empresa" class="form-control" value="">
+          </div>
+          <div class="col-lg-6">
+            <label for="">Medio de contacto</label>
+            <input type="text" name="medio" class="form-control" value="">
+          </div>
+            <div class="col-lg-12">
+            <label for=""><br>Correo electronico *</label>
+            <input type="text" name="email" class="form-control" value="">
+          </div>
+            <div class="col-lg-12">
+            <label for=""><br>Mensaje *</label>
+            <textarea name="mensaje" class="form-control" rows="4" cols="40"></textarea>
+          </div>
+        </div>
+      </div>
+        
       <div class="form-group" style="margin-top: -25px;">
         <div class="row">
-          <div class="col-lg-12">
-            <label for=""><br>Mensaje</label>
-            <textarea name="" class="form-control" rows="4" cols="40"></textarea>
-          </div>
+          
         </div>
       </div>
-        <button type="button" class="btn btn-success col-xs-12 btn-submit" name="" style="margin-bottom: 8px"> Enviar </button>
+        <button type="submit" class="btn btn-success col-xs-12 btn-submit" name="" style="margin-bottom: 8px"> Enviar </button>
  
     </form>
+    <p>* Campos obligatorios</p>
   </div>
+  <?php endif;?>
 
   <div class="col-xs-12 no-bot">
-    <div class="row" onClick="style.pointerEvents='none'">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.387447913683!2d-103.41560998453117!3d20.65381038620258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428ac2f263fec91%3A0x6898c0354e220bf2!2sTulum+4234%2C+El+Zapote%2C+45050+Zapopan%2C+Jal.!5e0!3m2!1ses!2smx!4v1468707824068"
+    <div class="row" onClick="style.pointerEvents='none'">  
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3732.7103021028515!2d-103.43115064939232!3d20.681361804854667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8428aebfe854bd2b%3A0x47ab67a997b9d469!2sGabrielle+D&#39;annunzio+5588%2C+Jardines+Vallarta%2C+45027+Zapopan%2C+Jal.!5e0!3m2!1sen!2smx!4v1482886206856"
     width="100%" height="450" frameborder="0" scrolling="false" style="border:0" allowfullscreen></iframe>
     </div>
   </div>

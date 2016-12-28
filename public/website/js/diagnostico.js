@@ -12,9 +12,11 @@ $(document).ready(function()
     var finanzasText    = [];
     var compras         = [];
     var comprasText     = [];
+    var administracionText = [];
 
     giro            = $("#giro") .val();
     administracion  = getInputData("#administracion input");
+    administracionText  = getTextareaData("#administracion textarea");
     almacen         = getInputData("#almacen input");
     almacenText     = getTextareaData("#almacen textarea");
     sistemas        = getInputData("#sistemas input");
@@ -22,7 +24,7 @@ $(document).ready(function()
     finanzasText    = getTextareaData("#compras textarea");
     compras         = getInputData("#compras input");
     comprasText     = getTextareaData("#compras textarea");
-
+    console.log() 
     $("#imgLoading").removeClass('hidden');
     $.ajax({
         url:'sendCotizacion',
@@ -32,6 +34,7 @@ $(document).ready(function()
         {
           'giro'            : giro,
           'administracion'  : administracion,
+          'administracionText'  : administracionText,
           'almacen'         : almacen,
           'almacenText'     : almacenText,
           'sistemas'        : sistemas,

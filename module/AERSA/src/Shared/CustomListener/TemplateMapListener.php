@@ -239,7 +239,7 @@ class TemplateMapListener implements ListenerAggregateInterface
         }
         
 
-        if($notification_flag){
+        if(isset($notification_flag) && $notification_flag){
             
             //BUSCAMOS NOTIFICACIONES DE ACUERDO AL ROL
             if($session['idrol'] == 1){
