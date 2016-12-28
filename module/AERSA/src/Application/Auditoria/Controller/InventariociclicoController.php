@@ -63,8 +63,8 @@ class InventariociclicoController extends AbstractActionController {
                         'dieciseis' => $value['inventariomesdetalle_totalfisico'],
                         'diecisiete' => $value['inventariomesdetalle_importefisico'],
                         'dieciocho' => $value['inventariomesdetalle_diferencia'],
-                        'diecinueve' => $value['inventariomesdetalle_difimporte'], 
-                        'veinte' => $value['inventariomesdetalle_costopromedio'],
+                        'diecinueve' => $value['inventariomesdetalle_costopromedio'],
+                        'veinte' => $value['inventariomesdetalle_difimporte'],
                         'veintiuno' => $subcat));
                 }
             }
