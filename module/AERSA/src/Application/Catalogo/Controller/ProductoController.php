@@ -445,7 +445,7 @@ class ProductoController extends AbstractActionController
                         $recetas = \RecetaQuery::create()->filterByIdproductoreceta($entity->getIdproducto())->find();
                         $value = new \Receta();
                         foreach ($recetas as $value){
-                            $value->setProductoRelatedByIdproductoreceta($post_data['idproducto_replace'])->save();
+                            $value->setIdproductoreceta($post_data['idproducto_replace'])->save();
                         }
                     }else if($post_data['baja_option'] == 'delete'){
                         \RecetaQuery::create()->filterByIdproductoreceta($entity->getIdproducto())->delete();
