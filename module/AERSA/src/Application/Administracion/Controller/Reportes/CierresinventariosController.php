@@ -67,13 +67,15 @@ class CierresinventariosController extends AbstractActionController {
             $almacen = new \Almacen();
             foreach ($almacenesActi as $almacen) {
                 $compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->filterByIdalmacen($almacen->getIdalmacen())->filterByCompraFechacompra(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
+                
                 $compra = new \Compra();
                 foreach ($compras as $compra) {
                     $comprasDetalle = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
                     $compraDetalle = new \Compradetalle();
                     foreach ($comprasDetalle as $compraDetalle) {
-                        $cantidad = number_format(($compraDetalle->getCompradetalleSubtotal() * $iva), 6);
-                        $cantidad = str_replace(",", "", $cantidad);
+                        //$cantidad = number_format(($compraDetalle->getCompradetalleSubtotal() * $iva), 6);
+                        $cantidad = $compraDetalle->getCompradetalleSubtotal();
+                        //$cantidad = str_replace(",", "", $cantidad);
                         if ($compraDetalle->getProducto()->getIdcategoria() == 1)
                             $compraMesAlimentos+=$cantidad;
                         elseif ($compraDetalle->getProducto()->getIdcategoria() == 2)

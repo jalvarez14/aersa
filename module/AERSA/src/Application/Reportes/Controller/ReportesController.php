@@ -567,7 +567,7 @@ class ReportesController extends AbstractActionController {
                 array_push($proveedores, $key);
             }
             $completo = 1;
-            $objalmacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->orderByAlmacenNombre('asc')->find();
+            $objalmacenes = \AlmacenQuery::create()->filterByIdsucursal($idsucursal)->filterByAlmacenEstatus(1)->orderByAlmacenNombre('asc')->find();
             $objalmacen = new \Almacen();
             $almacenesord = array();
             do {

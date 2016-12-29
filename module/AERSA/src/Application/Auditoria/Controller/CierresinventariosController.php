@@ -949,8 +949,8 @@
                                                 else
                                                 {
                                                     
-                                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
-                                                    $requisicionEg = $objventadetalle->getVentadetalleCantidad();
+                                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                                    $requisicionEg = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                 }
                                             }
                                         }
