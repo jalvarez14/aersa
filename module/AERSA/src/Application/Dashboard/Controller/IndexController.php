@@ -255,7 +255,7 @@ class IndexController extends AbstractActionController
         $entity = new \Producto();
         foreach ($query as $entity){
             $tmp['id'] = $entity->getIdproducto();
-            $tmp['value'] = $entity->getProductoNombre()." - ".$entity->getUnidadmedida()->getUnidadmedidaNombre();
+            $tmp['value'] = $entity->getProductoNombre()." - ".$entity->getProductoTipo()." - ".$entity->getUnidadmedida()->getUnidadmedidaNombre();
             $array[] = $tmp;
         }
         return $this->getResponse()->setContent(json_encode($array));
