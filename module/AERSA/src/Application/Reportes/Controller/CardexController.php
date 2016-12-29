@@ -46,7 +46,13 @@ class CardexController extends AbstractActionController {
             $idalmacen=$post_data['almacenes'];
                 $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
                 $objproducto = new \Producto();
-
+            $inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->exists();
+            if ($inventario_anterior)
+            {
+                $id_inventario_anterior = \InventariomesQuery::create()->filterByInventariomesFecha($fin_semana_anterior)->filterByIdsucursal($idsucursal)->filterByIdalmacen($idalmacen)->findOne()->getIdinventariomes();
+                
+            }
+            
                 foreach ($objproductos as $objproducto) {
 
                     $pedido = true;
@@ -125,6 +131,20 @@ class CardexController extends AbstractActionController {
                             $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                             if ($results[0]['count(iddevolucion)'] != 0)
                                 array_push($productosArray, $idproducto);
+                        }
+                        
+                        if (!in_array($idproducto, $productosArray) && $inventario_anterior==1) {
+                            $existenciaanterior;
+                            
+                            
+                            $existe = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($idproducto)->exists();
+                            if ($existe==1)
+                            {
+                                //echo "exis: ".\InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($idproducto)->findOne()->getInventariomesdetalleTotalfisico();
+                                $existenciaanterior = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($idproducto)->findOne()->getInventariomesdetalleTotalfisico();
+                            if ($existenciaanterior != 0)
+                                array_push($productosArray, $idproducto);
+                            }
                         }
                     }
                 }
