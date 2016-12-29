@@ -67,13 +67,15 @@ class CierresinventariosController extends AbstractActionController {
             $almacen = new \Almacen();
             foreach ($almacenesActi as $almacen) {
                 $compras = \CompraQuery::create()->filterByIdsucursal($idsucursal)->filterByIdalmacen($almacen->getIdalmacen())->filterByCompraFechacompra(array('min' => $inicio . ' 00:00:00', 'max' => $fin . ' 23:59:59'))->find();
+                
                 $compra = new \Compra();
                 foreach ($compras as $compra) {
                     $comprasDetalle = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->find();
                     $compraDetalle = new \Compradetalle();
                     foreach ($comprasDetalle as $compraDetalle) {
-                        $cantidad = number_format(($compraDetalle->getCompradetalleSubtotal() * $iva), 6);
-                        $cantidad = str_replace(",", "", $cantidad);
+                        //$cantidad = number_format(($compraDetalle->getCompradetalleSubtotal() * $iva), 6);
+                        $cantidad = $compraDetalle->getCompradetalleSubtotal();
+                        //$cantidad = str_replace(",", "", $cantidad);
                         if ($compraDetalle->getProducto()->getIdcategoria() == 1)
                             $compraMesAlimentos+=$cantidad;
                         elseif ($compraDetalle->getProducto()->getIdcategoria() == 2)
@@ -304,7 +306,7 @@ class CierresinventariosController extends AbstractActionController {
                 $inicio =$post_data['fecha_inicio'];
                 $fin =$post_data['fecha_fin'];
                 array_push($reporte, array('uno'=>'Concepto','dos'=>'Alimento','tres'=>'%','cuatro'=>'Bebidas','cinco'=>'%','seis'=>'Consolidado','siete'=>'%'));
-                array_push($reporte, array('uno'=>'Ventas netas sin IVA','dos'=>$ventasNetasAlimentos,'tres'=>'=+B7/G7','cuatro'=>$ventasNetasBebidas,'cinco'=>'=+E7/G7','seis'=>$ventasNetasConsolidado,'siete'=>''));
+                array_push($reporte, array('uno'=>'Ventas netas sin IVA','dos'=>$ventasNetasAlimentos,'tres'=>($ventasNetasAlimentos/$ventasNetasConsolidado),'cuatro'=>$ventasNetasBebidas,'cinco'=>($ventasNetasBebidas/$ventasNetasConsolidado),'seis'=>$ventasNetasConsolidado,'siete'=>''));
                 array_push($reporte, array('uno'=>'Inventario inicial','dos'=>$invIniAlimentos,'tres'=>'','cuatro'=>$invIniBebidas,'cinco'=>'','seis'=>$invIniConsolidado,'siete'=>''));
                 array_push($reporte, array('uno'=>'Compras del mes','dos'=>$compraMesAlimentos,'tres'=>$porcComprasMesAlimentos.' %','cuatro'=>$compraMesBebidas,'cinco'=>$porcComprasMesBebidas.' %','seis'=>$compraMesConsolidado,'siete'=>$porcComprasMesConsolidado.' %'));
                 array_push($reporte, array('uno'=>'Existencia','dos'=>$existenciaAlimentos,'tres'=>'','cuatro'=>$existenciaBebidas,'cinco'=>'','seis'=>$existenciaConsolidado,'siete'=>''));
@@ -353,11 +355,13 @@ class CierresinventariosController extends AbstractActionController {
                 else
                     echo $R->render('excel');
             } else {
+                $porcalim=($ventasNetasAlimentos/$ventasNetasConsolidado);
+                $porcbeb=($ventasNetasBebidas/$ventasNetasConsolidado);
                 array_push($reporte, "<tr><td>$nombreEmpresa</td></tr>");
                 array_push($reporte, "<tr><td>Cierre inventario mes</td></tr>");
                 array_push($reporte, "<tr><td>$inicio - $fin</td></tr>");
                 array_push($reporte, "<tr><td>Concepto</td><td>Alimento</td><td>%</td><td>Bebidas</td><td>%</td><td>Consolidado</td><td>%</td></tr>");
-                array_push($reporte, "<tr><td>Ventas netas sin IVA</td><td>$ventasNetasAlimentos</td><td></td><td>$ventasNetasBebidas</td><td></td><td>$ventasNetasConsolidado</td><td></td></tr>");
+                array_push($reporte, "<tr><td>Ventas netas sin IVA</td><td>$ventasNetasAlimentos</td><td>$porcalim</td><td>$ventasNetasBebidas</td><td>$porcbeb</td><td>$ventasNetasConsolidado</td><td></td></tr>");
                 array_push($reporte, "<tr><td>Inventario inicial</td><td>$invIniAlimentos</td><td></td><td>$invIniBebidas</td><td></td><td>$invIniConsolidado</td><td></td></tr>");
                 array_push($reporte, "<tr><td>Compras del mes</td><td>$compraMesAlimentos</td><td>$porcComprasMesAlimentos %</td><td>$compraMesBebidas</td><td>$porcComprasMesBebidas %</td><td>$compraMesConsolidado</td><td>$porcComprasMesConsolidado %</td></tr>");
                 array_push($reporte, "<tr><td>Existencia</td><td>$existenciaAlimentos</td><td></td><td>$existenciaBebidas</td><td></td><td>$existenciaConsolidado</td><td></td></tr>");
@@ -370,7 +374,7 @@ class CierresinventariosController extends AbstractActionController {
                 array_push($reporte, "<tr><td>Comedor empleado</td><td>$consumoEmplAlimentos</td><td>$porcConsumoEjecAlimentos %</td><td>$consumoEmplBebidas</td><td>$porcConsumoEjecBebidas %</td><td></td><td></td></tr>");
                 array_push($reporte, "<tr><td>Consumo ejecutivo</td><td>$consumoEjecAlimentos</td><td>$porcConsumoEjecAlimentos %</td><td>$consumoEjecBebidas</td><td>$porcConsumoEjecBebidas %</td><td></td><td></td></tr>");
                 array_push($reporte, "<tr><td>Cortesias</td><td>$cortesiasAlimentos</td><td>$porcCortesiasAlimentos %</td><td>$cortesiasBebidas</td><td>$porcCortesiasBebidas %</td><td></td><td></td></tr>");
-                array_push($reporte, "<tr><td>Transpaso a servicio</td><td>$transpasoSerAlimentos</td><td>$porcTranspAlimentos %</td><td>$transpasoSerBebidas</td><td>$porcTranspBebidas %</td><td></td><td></td></tr>");
+                array_push($reporte, "<tr><td>Traspaso a servicio</td><td>$transpasoSerAlimentos</td><td>$porcTranspAlimentos %</td><td>$transpasoSerBebidas</td><td>$porcTranspBebidas %</td><td></td><td></td></tr>");
                 array_push($reporte, "<tr><td>Mermas</td><td>$mermaAlimentos</td><td>$porcMermasAlimentos %</td><td>$mermaBebidas</td><td>$porcMermasBebidas %</td><td></td><td></td></tr>");
                 return $this->getResponse()->setContent(json_encode($reporte));
             }
