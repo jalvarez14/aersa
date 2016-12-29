@@ -243,7 +243,23 @@ class IndexController extends AbstractActionController
         return $this->getResponse()->setContent(json_encode($array));
     }
     
-    
+    public function getproductosforreplaceproductobajaAction(){
+        
+        $session = new \Shared\Session\AouthSession();
+        $session = $session->getData();
+
+        $search = $this->params()->fromQuery('q');
+
+        $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.utf8_encode($search).'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->find();
+        $array = array();
+        $entity = new \Producto();
+        foreach ($query as $entity){
+            $tmp['id'] = $entity->getIdproducto();
+            $tmp['value'] = $entity->getProductoNombre()." - ".$entity->getUnidadmedida()->getUnidadmedidaNombre();
+            $array[] = $tmp;
+        }
+        return $this->getResponse()->setContent(json_encode($array));
+    }
     
     
     public function getproductosAction(){
