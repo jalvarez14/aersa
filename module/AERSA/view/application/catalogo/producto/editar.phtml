@@ -95,6 +95,18 @@
                         <?php echo $this->formText  ($form->get('producto_costo')) ?>
                     </div>
                 </div>
+                <div id="baja_options" class="col-md-6" style="border: 1px solid orange; padding-bottom: 15px; display: none">
+                    <p style="color:orange"><b>Al dar de baja este producto ¿ Como le gustaría proceder con las recetas que lo contienen ?</b></p>
+                    <select name="baja_option" required="required" class="form-control">
+                        <option value="delete">Eliminarlo</option>
+                        <option value="replace">Reemplazarlo</option>
+                    </select>
+                    <div class="form-group" style="margin-top: 10px; display: none" id="baja_replace">
+                        <label for="producto_nombre">Remplazar por *</label>
+                        <input class="form-control" name="idproducto_replace" type="hidden">
+                        <input class="form-control" name="producto_replace_autocomplete" type="text">
+                    </div>
+                </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_rendimientooriginal')) ?>  
@@ -395,6 +407,72 @@
             },
         });
     });
+    
+    
+    
+    
+    
+    var producto_tipo = $('select[name=producto_tipo]').val();
+    if(producto_tipo == 'plu'){
+        $('input[name=producto_costo]').attr('readonly',true);
+    }
+    
+    $('select[name=producto_tipo]').on('change',function(){
+        var producto_tipo = $('select[name=producto_tipo]').val();
+        if(producto_tipo == 'plu'){
+            $('input[name=producto_costo]').attr('readonly',true);
+        }else{
+            $('input[name=producto_costo]').attr('readonly',false);
+        }
+    });
+        
+    var data = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+          url: '/autocomplete/getproductosreceta?q=%QUERY&type=simple',
+          wildcard: '%QUERY'
+        }
+    });
+            
+    $('input[name=producto_replace_autocomplete]').typeahead(null, {
+        name: 'best-pictures',
+        display: 'value',
+        hint: true,
+        highlight: true,
+        source: data,
+        limit:100,
+    });
+    
+    $('select[name=producto_baja]').on('change',function(){
+        var producto_baja = $('select[name=producto_baja]').val();
+        if(producto_baja == 1){
+            $('#baja_options').slideDown();
+        }else{
+  
+            $('#baja_options').slideUp();
+        }
+       
+    });
+    
+    $('select[name=baja_option]').on('change',function(){
+        var producto_baja_option = $('select[name=baja_option]').val();
+        if(producto_baja_option == 'replace'){
+            $('input[name=idproducto_replace]').attr('required',true);
+            $('input[name=producto_replace_autocomplete]').attr('required',true);
+            $('#baja_replace').slideDown();
+        }else{
+            $('input[name=idproducto_replace]').attr('required',false);
+            $('input[name=producto_replace_autocomplete]').attr('required',false);
+            $('#baja_replace').slideUp();
+        }
+    });
+    
+    $('input[name=producto_replace_autocomplete]').bind('typeahead:select', function(ev, suggestion) {
+        $('input[name=idproducto_replace]').val(suggestion.id);
+
+    });
+    
 
 }); 
 </script>
