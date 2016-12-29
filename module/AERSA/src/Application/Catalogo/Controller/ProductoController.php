@@ -254,7 +254,7 @@ class ProductoController extends AbstractActionController
                 $tmp['categoria_nombre'] = '<td><span class="label label-sm label-success">'.$value['categoria_nombre'].'</span></td>';
                 $tmp['subcategoria_nombre'] = '<td><span class="label label-sm label-success">'.$value['subcategoria_nombre'].'</span></td>';
                 $tmp['producto_iva'] = $iva;
-                $tmp['options'] = '<td class="text-left"><div class="btn-group"><button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones <i class="fa fa-angle-down"></i></button><ul class="dropdown-menu" role="menu"><li><a href="/catalogo/producto/editar/'.$value['idproducto'].'"> <i class="fa fa-pencil"></i> Editar</a></li><li><a href="javascript:;" class="delete_modal"><i class="fa fa-trash"></i> Eliminar </a></li></ul></div></td>';
+                $tmp['options'] = '<td class="text-left"><div class="btn-group"><button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Acciones <i class="fa fa-angle-down"></i></button><ul class="dropdown-menu" role="menu"><li><a href="/catalogo/producto/editar/'.$value['idproducto'].'"> <i class="fa fa-pencil"></i> Editar</a></li></ul></div></td>';
 
                 
                 $data[] = $tmp;
@@ -419,20 +419,41 @@ class ProductoController extends AbstractActionController
                 
             //INTANCIAMOS NUESTRO FORMULARIO
             $form = new \Application\Catalogo\Form\ProductosForm($categorias,$subcategorias);
-                
+      
+    
             //SI NOS ENVIAN UNA PETICION POST
             if ($request->isPost()) 
             {
                 $post_data = $request->getPost();
-              
+               
+
                 //LE PONEMOS LOS DATOS A NUESTRA ENTIDAD
-                foreach ($post_data as $key => $value)
-                    $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                foreach ($post_data as $key => $value){
+                    if (\ProductoPeer::getTableMap()->hasColumn($key)) {
+                        $entity->setByName($key, $value, \BasePeer::TYPE_FIELDNAME);
+                    }
+                }
+                   
                 
                 
                 
                 $entity->save();
+                
+                if((bool)$post_data["producto_baja"]){
+                    
+                    if($post_data['baja_option'] == 'replace'){
+                        $recetas = \RecetaQuery::create()->filterByIdproductoreceta($entity->getIdproducto())->find();
+                        $value = new \Receta();
+                        foreach ($recetas as $value){
+                            $value->setProductoRelatedByIdproductoreceta($post_data['idproducto_replace'])->save();
+                        }
+                    }else if($post_data['baja_option'] == 'delete'){
+                        \RecetaQuery::create()->filterByIdproductoreceta($entity->getIdproducto())->delete();
+                    }
 
+                }
+                
+                
                 $this->flashMessenger()->addSuccessMessage('Registro actualizado satisfactoriamente!');
 
                 return $this->redirect()->toUrl('/catalogo/producto/editar/'.$id);
