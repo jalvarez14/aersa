@@ -5,7 +5,7 @@ return array(
         'routes' => array(
             /*
              * HOME
-             */
+             */        
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
@@ -2279,6 +2279,75 @@ return array(
                 'options' => array(
                     //'route' => 'aersa', //LOCAL
                     'route' => 'aersamx.com', //PRODUCCION
+                ),
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'index' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/',
+                            'defaults' => array(
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'index',
+                            ),
+                        ),
+                    ),
+                    'nosotros' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/nosotros',
+                            'defaults' => array(
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'nosotros',
+                            ),
+                        ),
+                    ),
+                    'diagnostico' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/diagnostico',
+                            'defaults' => array(
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'diagnostico',
+                            ),
+                        ),
+                    ),
+                    'servicios' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/servicios',
+                            'defaults' => array(
+                                'controller'    => 'Website\Controller\Website',
+                                'action'        => 'servicios',
+                            ),
+                        ),
+                    ),
+                    'contacto' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/contacto',
+                            'defaults' => array(
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'contacto',
+                            ),
+                        ),
+                    ),
+                    'sendCotizacion' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/sendCotizacion',
+                            'defaults' => array(
+                                'controller' => 'Website\Controller\Website',
+                                'action' => 'sendCotizacion',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            'wwwwebsite' => array(
+                'type' => 'Hostname',
+                'options' => array(
+                    'route' => 'www.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
