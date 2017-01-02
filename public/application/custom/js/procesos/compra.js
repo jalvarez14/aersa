@@ -434,6 +434,9 @@
                              var json = xmlToJson(xml);
                             // console.log(json);
                              //console.log(json);
+                             var folio = json['cfdi:Comprobante']['@attributes']['folio'];
+                
+                             $('input[name=compra_folio]').val(folio);
                              var emisor_nombre = json['cfdi:Comprobante']['cfdi:Emisor']['@attributes']['nombre'];
                              //var numRequests =  ObjectLength(json['cfdi:Comprobante']['cfdi:Conceptos']);
                              var count = 0;
@@ -471,7 +474,7 @@
                                 }
                              });
                             
-                            var numRequests = productos_array.length;
+                             var numRequests = productos_array.length;
                              function nextAjax(){
                                    if(count < numRequests){
                                         $.ajax({
@@ -581,7 +584,7 @@
                                         });
                                    }
                              }
-                            $.ajax({
+                             $.ajax({
                                 url: '/catalogo/proveedor/validateproveedorcfdi',
                                 type: 'POST',
                                 dataType: 'JSON',
