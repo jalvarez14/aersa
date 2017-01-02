@@ -15,6 +15,7 @@ class ReportesController extends AbstractActionController {
         $session = $session->getData();
         $idempresa = $session['idempresa'];
         $idsucursal = $session['idsucursal'];
+        $conn = \Propel::getConnection();
         $request = $this->getRequest();
         if ($request->isPost()) {
             $productos = array();
@@ -28,7 +29,34 @@ class ReportesController extends AbstractActionController {
                 $documento = false;
             foreach ($post_data as $key => $value) {
                 if (strpos($key, '-'))
+                {
+                    $mes1inicio =$ano_inicio . '-' . $mes_inicio . '-01 00:00:00';
+                    $mes1final =$ano_inicio . '-' . $mes_inicio . '-31 23:59:59';
+                    //var_dump(substr($key, 9));
+                    //exit();
+                    $idprod=(int)substr($key, 9);
+                    $compras = "SELECT count(idcompra) FROM `compra` WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod) AND idsucursal=$idsucursal AND '$mes1inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes1final';";
+                    $st = $conn->prepare($compras);
+                    $st->execute();
+                    $rescomprasmes1 = $st->fetchAll(\PDO::FETCH_ASSOC);
+                    
+                    $mes2inicio =$ano_fin . '-' . $mes_fin . '-01 00:00:00';
+                    $mes2final =$ano_fin . '-' . $mes_fin . '-31 23:59:59';
+                    
+                    
+                    $compras2 = "SELECT count(idcompra) FROM `compra` WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod) AND idsucursal=$idsucursal AND '$mes2inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes2final';";
+                    $st2 = $conn->prepare($compras2);
+                    $st2->execute();
+                    $rescomprasmes2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
+                    
+                    if($rescomprasmes1[0]["count(idcompra)"]>0 || $rescomprasmes2[0]["count(idcompra)"]>0)
+                    {
+                        
                     array_push($productos, substr($key, 9));
+                    }
+                    
+                        
+                }
             }
             $empresa = \EmpresaQuery::create()->filterByIdempresa($idempresa)->findOne()->getEmpresaNombrecomercial();
             $fila = 0;
@@ -39,7 +67,12 @@ class ReportesController extends AbstractActionController {
             }
             $color = true;
             $compra = new \Compra();
+            
             foreach ($productos as $idproducto) {
+                
+                //if($rescomprasmes1>0 || $rescomprasmes2>0)
+                //{
+                    
                 $objproducto = \ProductoQuery::create()->findPk($idproducto);
                 $nombre = $objproducto->getProductoNombre();
                 $unidad = $objproducto->getUnidadmedida()->getUnidadmedidaNombre();
@@ -49,15 +82,34 @@ class ReportesController extends AbstractActionController {
 
                 $total = 0;
                 $cantidad = 0;
-                foreach ($compras as $compra) {
+                
+                $costoviejo = "SELECT avg(compradetalle_costounitario) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` WHERE '$mes1inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes1final' AND idsucursal=$idsucursal) AND  idproducto=$idproducto ;";
+                $st = $conn->prepare($costoviejo);
+                $st->execute();
+                $valorcostoviejo = $st->fetchAll(\PDO::FETCH_ASSOC);
+                //var_dump($costoviejo);
+                //exit();
+                if(!is_null($valorcostoviejo[0]["avg(compradetalle_costounitario)"]))
+                {
+                    $costoold = $valorcostoviejo[0]["avg(compradetalle_costounitario)"];
+                }
+                else
+                {
+                    $costoold = 0;
+                }
+                
+                
+                /*foreach ($compras as $compra) {
                     $objcomprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->filterByIdproducto($idproducto)->find();
                     $objcompradetalle = new \Compradetalle();
                     foreach ($objcomprasdetalles as $objcompradetalle) {
                         $cantidad++;
                         $total+=$objcompradetalle->getCompradetalleCostounitario();
                     }
-                }
-                $costoold = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
+                }*/
+                
+                //$costoold = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
+                
                 $search = $ano_fin . '-' . $mes_fin;
 
                 $compras = \CompraQuery::create()
@@ -65,15 +117,35 @@ class ReportesController extends AbstractActionController {
                                         (array('min' => $ano_fin . '-' . $mes_fin . '-01 00:00:00', 'max' => $ano_fin . '-' . $mes_fin . '-31 23:59:59'))->find();
                 $total = 0;
                 $cantidad = 0;
-                foreach ($compras as $compra) {
+                
+                $costonuevo = "SELECT avg(compradetalle_costounitario) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` WHERE '$mes2inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes2final' AND idsucursal=$idsucursal) AND  idproducto=$idproducto ;";
+                $st = $conn->prepare($costonuevo);
+                $st->execute();
+                $valorcostonuevo = $st->fetchAll(\PDO::FETCH_ASSOC);
+                //echo "nuevo ".$valorcostonuevo;
+                
+                /*foreach ($compras as $compra) {
                     $objcomprasdetalles = \CompradetalleQuery::create()->filterByIdcompra($compra->getIdcompra())->filterByIdproducto($idproducto)->find();
                     $objcompradetalle = new \Compradetalle();
                     foreach ($objcomprasdetalles as $objcompradetalle) {
                         $cantidad++;
                         $total+=$objcompradetalle->getCompradetalleCostounitario();
                     }
+                }*/
+                
+                //$costonew = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
+                
+                if(!is_null($valorcostonuevo[0]["avg(compradetalle_costounitario)"]))
+                {
+                    $costonew = $valorcostonuevo[0]["avg(compradetalle_costounitario)"];
                 }
-                $costonew = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
+                else
+                {
+                    $costonew = 0;
+                }
+                
+                
+                //echo " ".$$costoold." - ".$costonew;
                 $variacion = $costoold - $costonew;
                 $variacion = ($variacion < 0) ? $variacion * -1 : $variacion;
                 if ($costoold == 0)
@@ -93,7 +165,9 @@ class ReportesController extends AbstractActionController {
                 else
                     $reporte[$fila] = "<tr bgcolor='" . $bg . "'><td> " . $nombre . " </td><td> " . $unidad . " </td><td> " . $costoold . " </td><td> " . $costonew . " </td><td> " . $variacion . " </td><td> " . $porcentajevar . " </td></tr>";
                 $fila++;
+            //}//termina validación si el producto tiene compras
             }
+            
             if ($documento) {
                 $template = '/variacioncostos.xlsx';
                 $templateDir = $_SERVER['DOCUMENT_ROOT'] . '/application/files/jasper/templates';
