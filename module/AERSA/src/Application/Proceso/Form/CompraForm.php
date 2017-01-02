@@ -25,6 +25,14 @@ use Zend\Form\Form;
         ));
         
         $this->add(array(
+           'name'  => 'compra_foliohidden',
+            'type' => 'Hidden',
+            'attributes' => array(
+                'required' => true,
+            ),
+        ));
+        
+        $this->add(array(
             'name' => 'compra_fechacompra',
             'type' => 'Text',
             'attributes' => array(

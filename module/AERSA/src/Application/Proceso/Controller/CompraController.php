@@ -237,7 +237,7 @@ class CompraController extends AbstractActionController {
         
         
         $form = new \Application\Proceso\Form\CompraForm($almecenes);
-        $form->get('compra_folio')->setValue($folio_default);
+        $form->get('compra_foliohidden')->setValue($folio_default);
 
         
         //Obtenemos el iva

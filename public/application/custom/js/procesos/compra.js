@@ -942,10 +942,13 @@
                
                var selected = $('select[name=compra_tipo] option:selected').val();
                if(selected == 'ordecompra'){
+                   var folio = $('input[name=compra_foliohidden]').val();
+                   $('input[name=compra_folio]').val(folio);
                    $('select[name=idalmacen]').attr('disabled',true);
                    $('select[name=idalmacen]').attr('required',false);
                    $('#productos_table tbody select').attr('disabled',true);
                }else{
+                    $('input[name=compra_folio]').val('');
                    $('select[name=idalmacen]').attr('disabled',false);
                    $('select[name=idalmacen]').attr('required',true);
                    $('#productos_table tbody select').attr('disabled',false);
