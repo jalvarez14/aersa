@@ -434,11 +434,10 @@
                                         $st2->execute();
                                         $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
                                         
-                                        
                                         if (($results[0]['count(idrequisicion)'] > 0) || ($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] > 0)) // receta que se recibe ó (recibe y envía) POR LO TANTO SE CONSIDERA SIMPLE
                                         {
                                             $exp='inventariomesdetalle_ingresorequisicion';
-                                            $explosion=$cantidad;
+                                            $explosion=$arrayReporte[$idprod][$exp] + $cantidad;
                                             $arrayReporte[$idprod][$exp] = $explosion;
                                             $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                                             
@@ -448,17 +447,24 @@
                                 }
                                 if ($objproducto->getProductoTipo()=="simple" && is_null($objrequisiciondetalle->getIdPadre()) && $objrequisiciondetalle->getRequisicionDetalleContable()==1) //simple que no salio de una receta
                                 {
+                                    
                                         $exp='inventariomesdetalle_ingresorequisicion';
-                                        if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
+                                        $idprod=$objproducto->getIdProducto();
+                                        $cantidad = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                        if(isset($arrayReporte[$idprod][$exp]))
                                         {
-                                            $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
-                                            $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
+                                            $explosion=$arrayReporte[$idprod][$exp]+ $cantidad;
+                                            $arrayReporte[$idprod][$exp] = $explosion;
+                                            $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                            
                                         }
                                         else
                                         {
                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                            $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                            
                                         }
-                                        $requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                        //$requisicionIng+=$objrequisiciondetalle->getRequisiciondetalleCantidad();
                                     
                                 }
                                 if ($objproducto->getProductoTipo()=="simple" && !is_null($objrequisiciondetalle->getIdPadre()) && $objrequisiciondetalle->getRequisicionDetalleContable()==1) //simple que si salio de una receta, SE DEBE DE CONOCER AL PADRE PARA SABER SI EL SIMPLE SE CONSIDERA O NO
@@ -904,7 +910,7 @@
                                                 //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                                 $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                 $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
-                                                $requisicionIng = $explosion;
+                                                $requisicionEg = $explosion;
                                             }
                                             else
                                             {
@@ -1402,11 +1408,7 @@
                                                 if (($results[0]['count(idrequisicion)'] > 0 && $results2[0]['count(idrequisicion)'] ==0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))
                                                 {
                                                     $exp='inventariomesdetalle_egresoventa';
-                                                    if($objproducto->getIdProducto()==24027)
-                                                    {
-                                                        //echo "Prod 3: ".$objventadetalle->getIdventaDetalle()." ".$idpadrenivel2;
-                                                        //exit();
-                                                    }
+                                                    
                                                     if(isset($arrayReporte[$objproducto->getIdProducto()][$exp]))
                                                     {
                                                         $exp='inventariomesdetalle_egresoventa';

@@ -894,7 +894,7 @@ class InventariociclicoController extends AbstractActionController {
                                             //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
                                             $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                             $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
-                                            $requisicionIng = $explosion;
+                                            $requisicionEg = $explosion;
                                         }
                                         else
                                         {
