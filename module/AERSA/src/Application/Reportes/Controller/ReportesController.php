@@ -35,7 +35,7 @@ class ReportesController extends AbstractActionController {
                     //var_dump(substr($key, 9));
                     //exit();
                     $idprod=(int)substr($key, 9);
-                    $compras = "SELECT count(idcompra) FROM `compra` WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod) AND idsucursal=$idsucursal AND '$mes1inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes1final';";
+                    $compras = "SELECT count(idcompra) FROM `compra` WHERE compra_tipo='compra' and idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod) AND idsucursal=$idsucursal AND '$mes1inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes1final';";
                     $st = $conn->prepare($compras);
                     $st->execute();
                     $rescomprasmes1 = $st->fetchAll(\PDO::FETCH_ASSOC);
@@ -44,7 +44,7 @@ class ReportesController extends AbstractActionController {
                     $mes2final =$ano_fin . '-' . $mes_fin . '-31 23:59:59';
                     
                     
-                    $compras2 = "SELECT count(idcompra) FROM `compra` WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod) AND idsucursal=$idsucursal AND '$mes2inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes2final';";
+                    $compras2 = "SELECT count(idcompra) FROM `compra` WHERE compra_tipo='compra' and idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod) AND idsucursal=$idsucursal AND '$mes2inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes2final';";
                     $st2 = $conn->prepare($compras2);
                     $st2->execute();
                     $rescomprasmes2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
@@ -83,15 +83,15 @@ class ReportesController extends AbstractActionController {
                 $total = 0;
                 $cantidad = 0;
                 
-                $costoviejo = "SELECT avg(compradetalle_costounitario) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` WHERE '$mes1inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes1final' AND idsucursal=$idsucursal) AND  idproducto=$idproducto ;";
+                $costoviejo = "SELECT sum(compradetalle_subtotal)/sum(compradetalle_cantidad) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` WHERE compra_tipo='compra' and '$mes1inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes1final' AND idsucursal=$idsucursal) AND  idproducto=$idproducto ;";
                 $st = $conn->prepare($costoviejo);
                 $st->execute();
                 $valorcostoviejo = $st->fetchAll(\PDO::FETCH_ASSOC);
                 //var_dump($costoviejo);
                 //exit();
-                if(!is_null($valorcostoviejo[0]["avg(compradetalle_costounitario)"]))
+                if(!is_null($valorcostoviejo[0]["sum(compradetalle_subtotal)/sum(compradetalle_cantidad)"]))
                 {
-                    $costoold = $valorcostoviejo[0]["avg(compradetalle_costounitario)"];
+                    $costoold = $valorcostoviejo[0]["sum(compradetalle_subtotal)/sum(compradetalle_cantidad)"];
                 }
                 else
                 {
@@ -118,7 +118,7 @@ class ReportesController extends AbstractActionController {
                 $total = 0;
                 $cantidad = 0;
                 
-                $costonuevo = "SELECT avg(compradetalle_costounitario) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` WHERE '$mes2inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes2final' AND idsucursal=$idsucursal) AND  idproducto=$idproducto ;";
+                $costonuevo = "SELECT sum(compradetalle_subtotal)/sum(compradetalle_cantidad) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` WHERE compra_tipo='compra' and '$mes2inicio' <= compra_fechacompra AND compra_fechacompra <= '$mes2final' AND idsucursal=$idsucursal) AND  idproducto=$idproducto ;";
                 $st = $conn->prepare($costonuevo);
                 $st->execute();
                 $valorcostonuevo = $st->fetchAll(\PDO::FETCH_ASSOC);
@@ -135,9 +135,9 @@ class ReportesController extends AbstractActionController {
                 
                 //$costonew = ($total != 0 && $cantidad != 0) ? $total / $cantidad : 0;
                 
-                if(!is_null($valorcostonuevo[0]["avg(compradetalle_costounitario)"]))
+                if(!is_null($valorcostonuevo[0]["sum(compradetalle_subtotal)/sum(compradetalle_cantidad)"]))
                 {
-                    $costonew = $valorcostonuevo[0]["avg(compradetalle_costounitario)"];
+                    $costonew = $valorcostonuevo[0]["sum(compradetalle_subtotal)/sum(compradetalle_cantidad)"];
                 }
                 else
                 {
@@ -237,7 +237,7 @@ class ReportesController extends AbstractActionController {
             $no_data = 1;
         }
         $categorias = \CategoriaQuery::create()->filterByIdcategoriapadre(NULL)->find();
-        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->find();
+        $productos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByProductoTipo("simple")->find();
         $form = new \Application\Reportes\Form\ReporteForm($ano_array);
         $view_model = new ViewModel();
         $view_model->setVariables(array(
@@ -670,7 +670,7 @@ class ReportesController extends AbstractActionController {
                 $fila++;
                 $totalp = 0;
                 foreach ($almacenes as $idalmacen) {
-                    $objcompras = \CompraQuery::create()->filterByIdproveedor($idproveedor)->filterByIdalmacen($idalmacen)->filterByCompraFechacompra(array('min' => $fecha_inicial, 'max' => $fecha_final))->find();
+                    $objcompras = \CompraQuery::create()->filterByIdproveedor($idproveedor)->filterByIdalmacen($idalmacen)->filterByCompraFechacompra(array('min' => $fecha_inicial, 'max' => $fecha_final))->filterByCompraTipo('compra')->find();
                     $objcompra = new \Compra();
                     $totalc = 0;
                     foreach ($objcompras as $objcompra) {
