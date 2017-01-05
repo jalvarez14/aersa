@@ -25,10 +25,15 @@ class GeneralFunctions {
         
     }
     
-    public static function collectionToAutocomplete($collection, $primary_key,$value,$columns = array()){
+    public static function collectionToAutocomplete($collection, $primary_key,$value,$columns = array(),$autocomplete='twitter'){
        
         $array = array();
-         
+        if($autocomplete == 'twitter'){
+            $autocomplete_variable = 'value';
+        }elseif ($autocomplete == 'select2') {
+            
+        }
+        
         foreach ($collection as $entity){
             
             $id = $entity->getByName($primary_key, \BasePeer::TYPE_FIELDNAME);
