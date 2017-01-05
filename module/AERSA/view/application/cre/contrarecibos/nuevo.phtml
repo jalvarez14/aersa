@@ -1,0 +1,125 @@
+<link rel="stylesheet" type="text/css" href="/application/custom/css/validaciones.css">
+<link href="/application/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css">
+<link href="/application/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css">
+<script src="/application/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <a href="javascript:;">CRE</a>
+             <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/cre/contrarecibos">Contrarecibos</a>
+             <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="/cre/contrarecibos/nuevo">Nuevo</a>
+        </li>
+    </ul>
+</div>
+<div id="form_container">
+    <form class="form-horizontal" action="/procesos/compra/nuevoregistro" method="post" enctype="multipart/form-data">
+    <div class="portlet box green" style="border-left-width: 0px; border-bottom-width: 0px; border-right-width: 0px;">
+        <div class="portlet-body form">
+            <div class="form-body">
+                <h3 class="page-title">Contrarecibos - Nuevo</h3><br><br>
+               
+                    <div class="form-wizard">
+                        <div class="form-body">
+                            <ul class="nav nav-pills nav-justified steps">
+                                <li class="active">
+                                    <a href="#tab1" data-toggle="tab" class="step" aria-expanded="true">
+                                        <span class="number"> 1 </span>
+                                        <span class="desc">
+                                            <i class="fa fa-check"></i> Información general </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#tab3" data-toggle="tab" class="step ">
+                                        <span class="number"> 2 </span>
+                                        <span class="desc">
+                                            <i class="fa fa-check"></i> Carga de archivos </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#tab3" data-toggle="tab" class="step ">
+                                        <span class="number"> 3 </span>
+                                        <span class="desc">
+                                            <i class="fa fa-check"></i> Confirmación </span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <div class="tab-content">
+                                <div id="tab1" class="tab-pane active">
+                                    <h3 class="block">Información general</h3>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Folio
+                                            <span class="required" aria-required="true"> * </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" name="contrarecibo_folio" type="text" readonly value="00001">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Cliente
+                                            <span class="required" aria-required="true"> * </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" name="idcliente" type="text" required>
+                                        </div>
+                                    </div>
+                                     <div class="form-group">
+                                        <label class="control-label col-md-3">Sucursal
+                                            <span class="required" aria-required="true"> * </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="idsucursal" type="text" required></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">Moneda
+                                            <span class="required" aria-required="true"> * </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select class="form-control" name="moneda">
+                                                <option value="mxn">MXN</option>
+                                                <option value="usd">USD</option> 
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <a href="javascript:;" class="btn default button-previous" style="display: inline-block;">
+                                            <i class="fa fa-angle-left"></i> Atras </a>
+                                        <a href="javascript:;" class="btn btn-outline green button-next"> Continuar
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                        <a href="javascript:;" class="btn green button-submit" style="display: none;"> Guardar
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               
+            </div>
+        </div>
+    </div>
+
+</form>
+</div>
+<script type="text/javascript" src="/application/global/plugins/xml2json.js"></script>
+<script type="text/javascript" src="/application/custom/js/cre/contrarecibo.js"></script>
+<script>
+    var plugin = $('#form_container').contrarecibo();
+    plugin.new();
+</script>
+

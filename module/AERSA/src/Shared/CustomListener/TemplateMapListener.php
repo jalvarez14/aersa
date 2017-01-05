@@ -33,7 +33,7 @@ class TemplateMapListener implements ListenerAggregateInterface
         date_default_timezone_set('America/Mexico_City');
         
         $controller_params = $e->getRouteMatch()->getParams();
-        
+  
 
         $controller_of_route = $controller_params['controller'];
       
@@ -71,6 +71,8 @@ class TemplateMapListener implements ListenerAggregateInterface
                     'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
                     'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
                 ));
+                
+                return;
                 
                 //ADMINISTRADOR AERSA
                 $notification_flag = false;

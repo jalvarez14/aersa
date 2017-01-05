@@ -9,8 +9,8 @@ return array(
             'application' => array(
                 'type' => 'Hostname',
                 'options' => array(
-                    //'route' => 'admin.aersa', //LOCAL
-                    'route' => 'admin.aersamx.com', //PRODUCCION
+                    'route' => 'admin.aersa', //LOCAL
+                    //'route' => 'admin.aersamx.com', //PRODUCCION
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -2272,6 +2272,43 @@ return array(
                             ),
                         ),
                     ),
+                    /*
+                     * CRE
+                     */
+                    'contrarecibos' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/cre',
+                        ),
+                        'may_terminate' => true,
+                        'child_routes' => array(
+                            'nuevo' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/contrarecibos',
+                                    'defaults' => array(
+                                        'controller' => 'Application\CRE\Controller\Contrarecibos',
+                                        'action' => 'index',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'nuevo' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/nuevo',
+                                            'defaults' => array(
+                                                'controller' => 'Application\CRE\Controller\Contrarecibos',
+                                                'action' => 'nuevo',
+                                            ),
+                                        ),
+                                    ),
+
+
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
             ),
             'website' => array(
@@ -2501,6 +2538,10 @@ return array(
              */
             'Application\Auditoria\Controller\Cierresinventarios' => 'Application\Auditoria\Controller\CierresinventariosController',
             'Application\Auditoria\Controller\Inventariociclico' => 'Application\Auditoria\Controller\InventariociclicoController',
+            /*
+             * CRE
+             */
+            'Application\CRE\Controller\Contrarecibos' => 'Application\CRE\Controller\ContrarecibosController',
             /*
              * WEBSITE
              */

@@ -33,6 +33,7 @@ class LoginController extends AbstractActionController
             
             if($exist){
                 
+               
                 
                 $usuario = \UsuarioQuery::create()->filterByUsuarioUsername($post_data['usuario_username'])->filterByUsuarioPassword(md5($post_data['usuario_password']))->filterByUsuarioEstatus(1)->findOne();
                 if($usuario->getIdrol() == 3){
@@ -90,7 +91,7 @@ class LoginController extends AbstractActionController
                     "usuario_nombre"    => $usuario->getUsuarioNombre(),
                     "usuario_username"  => $usuario->getUsuarioUsername(),
                 ));
-                
+                return $this->redirect()->toUrl('/');
                 return $this->redirect()->toUrl('/login/select');
 
             }else{
