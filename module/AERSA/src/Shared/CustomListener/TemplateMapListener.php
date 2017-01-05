@@ -65,6 +65,13 @@ class TemplateMapListener implements ListenerAggregateInterface
             }
             case 'Application':{
                 
+                $template_map->merge(
+                array(
+                    'layout/layout'      => __DIR__.'/../../../view/application/layout/layout_6.phtml',
+                    'error/404'          => __DIR__.'/../../../view/application/layout/error/404.phtml',
+                    'error/index'        => __DIR__.'/../../../view/application/layout/error/index.phtml',                                                                  
+                ));
+                
                 //ADMINISTRADOR AERSA
                 $notification_flag = false;
                 if($session['idrol'] == 1 && is_null($session['idempresa']) && is_null($session['idsucursal'])){
