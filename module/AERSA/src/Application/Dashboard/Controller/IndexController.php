@@ -348,7 +348,9 @@ class IndexController extends AbstractActionController
         
         $search = $this->params()->fromQuery('q');
         $query = \SucursalQuery::create()->filterBySucursalNombre('%'.$search.'%',\Criteria::LIKE)->find();
-        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idsucursal', 'sucursal_nombre')));
+            
+
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query,'idsucursal', 'sucursal_nombre')));
         
         
         
