@@ -347,13 +347,23 @@ class IndexController extends AbstractActionController
     public function getsucursalesAction(){
         
         $search = $this->params()->fromQuery('q');
-        $query = \SucursalQuery::create()->filterBySucursalNombre('%'.$search.'%',\Criteria::LIKE)->find();
-            
+        
+        $query = \SucursalQuery::create()->filterBySucursalNombre('%'.$search.'%',\Criteria::LIKE)->orderBySucursalNombre()->find();
+        
 
         return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query,'idsucursal', 'sucursal_nombre')));
+
+    }
+    
+    public function getempresasAction(){
         
+        $search = $this->params()->fromQuery('q');
         
+        $query = \EmpresaQuery::create()->filterByEmpresaNombrecomercial('%'.$search.'%',\Criteria::LIKE)->orderByEmpresaNombrecomercial()->find();
         
+
+        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query,'idempresa', 'empresa_nombrecomercial')));
+
     }
 
 }

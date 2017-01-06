@@ -67,7 +67,8 @@
                                             <span class="required" aria-required="true"> * </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <input class="form-control" name="idcliente" type="text" required>
+                                            <select class="form-control" name="idempresa" type="text" required style="width:100%"></select>
+                                            <span class="error required" style="display: none">Este campo es requerido.</span>
                                         </div>
                                     </div>
                                      <div class="form-group">
@@ -75,7 +76,8 @@
                                             <span class="required" aria-required="true"> * </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <select class="form-control" name="idsucursal" type="text" required></select>
+                                            <select class="form-control" name="idsucursal" type="text" required style="width:100%"></select>
+                                            <span class="error required" style="display: none">Este campo es requerido.</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -91,6 +93,41 @@
                                     </div>
                                     
                                 </div>
+                                 <div id="tab2" class="tab-pane active">
+                                    <h3 class="block">Carga de archivos</h3>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Folio:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="contrarecibo_folio"> 00001 </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Cliente:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="idempresa">  </p>
+                                        </div>
+                                        <label class="control-label col-md-2">Sucursal:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="idsucursal">  </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Moneda:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="moneda"> MXN </p>
+                                        </div>
+                                        <label class="control-label col-md-2">Total:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="moneda"> $0.00 </p>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
                             </div>
                         </div>
                         <div class="form-actions">
@@ -99,7 +136,7 @@
                                     <div class="col-md-offset-3 col-md-9">
                                         <a href="javascript:;" class="btn default button-previous" style="display: inline-block;">
                                             <i class="fa fa-angle-left"></i> Atras </a>
-                                        <a href="javascript:;" class="btn btn-outline green button-next"> Continuar
+                                            <a href="javascript:;" class="btn btn-outline green button-next" id="btn_continue"> Continuar
                                             <i class="fa fa-angle-right"></i>
                                         </a>
                                         <a href="javascript:;" class="btn green button-submit" style="display: none;"> Guardar
