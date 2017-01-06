@@ -5748,10 +5748,14 @@ Dropdown Menu
 .dropdown-menu {
   box-shadow: 5px 5px rgba(102, 102, 102, 0.1); }
 
+td .dropdown-menu{
+    position: static;
+}
+
 .dropdown-menu {
   left: 0/*rtl:auto*/;
   min-width: 175px;
-  position: static;
+  position: absolute;
   z-index: 1000;
   display: none;
   float: left;
