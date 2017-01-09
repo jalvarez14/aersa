@@ -165,8 +165,8 @@
                 $idalmacen = $post_data['almacen'];
                 $idusuario = $post_data['auditor'];
                 $productosReporte = array();
-                var_dump($post_data);
-                exit();
+                //var_dump($post_data);
+                //exit();
                 foreach ($post_data['inventario']["Sheet1"] as $producto) {
                     if (isset($producto['CLAVE']))
                         if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
