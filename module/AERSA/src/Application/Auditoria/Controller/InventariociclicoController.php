@@ -484,8 +484,8 @@ class InventariociclicoController extends AbstractActionController {
                                             {
                                                 
                                                 $exp='inventariomesdetalle_ingresorequisicion';
-                                                $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
-                                                $requisicionIng = $objventadetalle->getVentadetalleCantidad();
+                                                $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                                $requisicionIng = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                             }
                                         }
                                     }
@@ -1343,7 +1343,7 @@ class InventariociclicoController extends AbstractActionController {
                                                                 {
                                                                     
                                                                     //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
-                                                                    $explosion=$arrayReporte[$objproducto->getProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
+                                                                    $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
                                                                     $venta = $explosion;
                                                                 }

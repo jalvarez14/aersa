@@ -165,7 +165,8 @@
                 $idalmacen = $post_data['almacen'];
                 $idusuario = $post_data['auditor'];
                 $productosReporte = array();
-                
+                var_dump($post_data);
+                exit();
                 foreach ($post_data['inventario']["Sheet1"] as $producto) {
                     if (isset($producto['CLAVE']))
                         if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
@@ -518,8 +519,8 @@
                                                 else
                                                 {
                                                     
-                                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $objventadetalle->getVentadetalleCantidad();
-                                                    $requisicionIng = $objventadetalle->getVentadetalleCantidad();
+                                                    $arrayReporte[$objproducto->getIdProducto()][$exp] = $objrequisiciondetalle->getRequisiciondetalleCantidad();
+                                                    $requisicionIng = $objrequisiciondetalle->getRequisiciondetalleCantidad();
                                                 }
                                             }
                                         }
@@ -1378,7 +1379,7 @@
                                                                 {
                                                                     $exp='inventariomesdetalle_egresoventa';
                                                                     //$explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ ($cant * $stockFisico);
-                                                                    $explosion=$arrayReporte[$objproducto->getProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
+                                                                    $explosion=$arrayReporte[$objproducto->getIdProducto()][$exp]+ $objventadetalle->getVentadetalleCantidad();
                                                                     $arrayReporte[$objproducto->getIdProducto()][$exp] = $explosion;
                                                                     $venta = $explosion;
                                                                 }
