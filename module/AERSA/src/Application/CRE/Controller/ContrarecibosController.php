@@ -15,7 +15,22 @@ use Zend\Console\Request as ConsoleRequest;
 
 class ContrarecibosController extends AbstractActionController
 {
-
+    
+    public function dropzoneAction(){
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            
+            $post_files = $request->getFiles();
+            
+            
+            echo '<pre>';var_dump($post_files);echo '</pre>';exit();
+            
+            
+        }
+    }
+    
     public function indexAction()
     {
         

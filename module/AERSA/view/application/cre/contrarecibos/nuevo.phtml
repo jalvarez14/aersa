@@ -3,6 +3,12 @@
 <link href="/application/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css">
 <script src="/application/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
 <script src="/application/global/plugins/select2/js/i18n/es.js" type="text/javascript"></script>
+<link href="/application/global/css/plugins.min.css" rel="stylesheet" type="text/css">
+<link href="/application/global/plugins/dropzone/dropzone.min.css" rel="stylesheet" type="text/css">
+<link href="/application/global/plugins/dropzone/basic.min.css" rel="stylesheet" type="text/css">
+
+
+<script src="/application/global/plugins/dropzone/dropzone.min.js" type="text/javascript"></script>
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -45,6 +51,13 @@
                                 <li>
                                     <a href="#tab3" data-toggle="tab" class="step ">
                                         <span class="number"> 3 </span>
+                                        <span class="desc">
+                                            <i class="fa fa-check"></i> Revisión </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#tab3" data-toggle="tab" class="step ">
+                                        <span class="number"> 4 </span>
                                         <span class="desc">
                                             <i class="fa fa-check"></i> Confirmación </span>
                                     </a>
@@ -124,6 +137,11 @@
                                         </label>
                                         <div class="col-md-3">
                                             <p class="form-control-static" id="moneda"> $0.00 </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-9 col-md-offset-1">
+                                            <div id="dropzone" class="dropzone" style="border: 4px dashed #17C4BB; min-height: 0px !important;"></div>
                                         </div>
                                     </div>
                                     

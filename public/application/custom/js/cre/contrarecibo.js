@@ -131,35 +131,90 @@
                var data =  $(this).select2('data');
                $container.find('p#idempresa').text(data[0].text);
            });
-           $container.find('select[name=idsucursal]').on("change", function(e) { 
+         
+            $container.find('select[name=idsucursal]').on("change", function(e) { 
                var data =  $(this).select2('data');
                $container.find('p#idsucursal').text(data[0].text);
            }); 
+
+            Dropzone.autoDiscover = false;  
+            var myDropzone = new Dropzone("#dropzone",{ 
+                url: "/cre/contrarecibos/dropzone",
+                dictDefaultMessage: '<h2><b>Arrastre sus archivos pdf y xml ó haga click para seleccionarlos</b></h2><h4><i>Maximo 40</i></h4>',
+                dictRemoveFile:'Eliminar',
+                autoProcessQueue: false,
+                addRemoveLinks: true, 
+                acceptedMimeTypes:".pdf,.xml",
+                maxFiles: 40,
+                parallelUploads: 10000,
+                uploadMultiple: true,
+  
+//                init: function() {
+//                    this.on("addedfile", function(file) {
+//                        console.log(file);
+//                        if (this.files[1]!=null){
+//                            this.removeFile(this.files[0]);
+//                          }
+//                          
+//                       });
+//                 }
+
+                accept: function(file, done) {
+                var thumbnail = $('.dropzone .dz-preview.dz-file-preview .dz-image:last');
+                    switch (file.type) {
+                      case 'application/pdf':
+                        thumbnail.css('background', 'url(/application/custom/icons/pdf.png');
+                        break;
+                      case 'text/xml':
+                        thumbnail.css('background', 'url(/application/custom/icons/xml.png');
+                        break;
+                    }
+                    
+                    file.status = Dropzone.ADDED;
+                    file.accepted = true
+                    myDropzone.enqueueFile(file);
+                    
+                },
+               
+               
+            }); 
             
-           $container.find('#btn_continue').on('click',function(){
+            $container.find('#btn_continue').on('click',function(){
+              
+              myDropzone.options.autoProcessQueue = true; 
+               
                var $tab_container = $container.find('div.tab-pane.active');
                var step = $tab_container.attr('id'); step = step.split('tab'); step = parseInt(step[1]);
+               step = parseInt(2);
+               
+               if(step == 1){
+               
+                    $tab_container.find('span.error').hide();
 
-               $tab_container.find('span.error').hide();
-               
-               var empty = false;
-               $.each($tab_container.find('input,select'),function(){
-                   
-                   if($(this).val() == null || $(this).val() == ""){
-                       empty = true;
-                       $(this).siblings('.error.required').show();
-                   }
-                   
-               });
-               
-               if(!empty){
-                   
-                   $('ul.steps li:nth-child('+step+')').addClass('done');
-                   $('ul.steps li:nth-child('+(step + 1)+')').addClass('active');
-                   
-               }
-           }); 
-            
+                    var empty = false;
+                    $.each($tab_container.find('input,select'),function(){
+
+                        if($(this).val() == null || $(this).val() == ""){
+                            empty = true;
+                            $(this).siblings('.error.required').show();
+                        }
+
+                    });
+
+                    if(!empty){
+
+                        $('ul.steps li:nth-child('+step+')').addClass('done');
+                        $('ul.steps li:nth-child('+(step + 1)+')').addClass('active');
+
+                    }
+                }else if(step == 2){
+                    myDropzone.processQueue(); 
+                    console.log(myDropzone);
+                    
+                }
+           });
+           
+          
            /*
             * END WIZARD
             */

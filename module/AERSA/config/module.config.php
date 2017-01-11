@@ -2303,6 +2303,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'dropzone' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/dropzone',
+                                            'defaults' => array(
+                                                'controller' => 'Application\CRE\Controller\Contrarecibos',
+                                                'action' => 'dropzone',
+                                            ),
+                                        ),
+                                    ),
 
 
                                 ),
