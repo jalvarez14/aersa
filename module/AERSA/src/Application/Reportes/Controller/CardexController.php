@@ -1697,7 +1697,7 @@ class CardexController extends AbstractActionController {
             $fecha = array();
             $cont=0;
             if ($inventario_anterior) {
-                $fechas = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('asc')->find();
+                $fechas = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('desc')->find();
                 $fechasobj= new \Inventariomes();
                 foreach($fechas as $fechasobj) {
                     $cont++;
