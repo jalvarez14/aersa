@@ -6,4 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'XmlSchemaValidator\\' => array($vendorDir . '/eclipxe/xmlschemavalidator/sources/XmlSchemaValidator'),
+    'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
+    'CFDIReader\\' => array($vendorDir . '/eclipxe/buzoncfdi-cfdireader/src/CFDIReader'),
 );

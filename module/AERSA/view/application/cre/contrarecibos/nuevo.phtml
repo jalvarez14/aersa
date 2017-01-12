@@ -114,6 +114,13 @@
                                         <div class="col-md-3">
                                             <p class="form-control-static" id="contrarecibo_folio"> 00001 </p>
                                         </div>
+                                        <label class="control-label col-md-2">Fecha:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="contrarecibo_folio"> <?php echo date('d/m/Y') ?> </p>
+                                        </div>
+                                        
+                                        
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-md-2">Cliente:
@@ -136,13 +143,78 @@
                                         <label class="control-label col-md-2">Total:
                                         </label>
                                         <div class="col-md-3">
-                                            <p class="form-control-static" id="moneda"> $0.00 </p>
+                                            <p class="form-control-static" id="total"><b> 0.00 </b></p>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-9 col-md-offset-1">
                                             <div id="dropzone" class="dropzone" style="border: 4px dashed #17C4BB; min-height: 0px !important;"></div>
                                         </div>
+                                    </div>
+                                    
+                                </div>
+                                <div id="tab3" class="tab-pane active">
+                                    <h3 class="block">Revisión</h3>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Folio:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="contrarecibo_folio"> 00001 </p>
+                                        </div>
+                                        <label class="control-label col-md-2">Fecha:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="contrarecibo_folio"> <?php echo date('d/m/Y') ?> </p>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Cliente:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="idempresa">  </p>
+                                        </div>
+                                        <label class="control-label col-md-2">Sucursal:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="idsucursal">  </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">Moneda:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="moneda"> MXN </p>
+                                        </div>
+                                        <label class="control-label col-md-2">Total:
+                                        </label>
+                                        <div class="col-md-3">
+                                            <p class="form-control-static" id="total"><b> 0.00 </b></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 pull-right">
+                                        
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table" id="revision">
+                                            <thead>
+                                                <tr>
+                                                    <th> # </th>
+                                                    <th> Tipo </th>
+                                                    <th> Folio </th>
+                                                    <th> PDF </th>
+                                                    <th> XML </th>
+                                                    <th> Total </th>
+                                                    <th> ¿Eliminar? </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+
+                                            
+                                        </table>
                                     </div>
                                     
                                 </div>

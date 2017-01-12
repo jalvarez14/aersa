@@ -66,6 +66,7 @@
                             page: params.page
                         };
                     },
+                 
                     processResults: function (data, params) {
                         
                         // parse the results into the format expected by Select2
@@ -148,7 +149,7 @@
                 maxFiles: 40,
                 parallelUploads: 10000,
                 uploadMultiple: true,
-  
+                
 //                init: function() {
 //                    this.on("addedfile", function(file) {
 //                        console.log(file);
@@ -175,6 +176,43 @@
                     myDropzone.enqueueFile(file);
                     
                 },
+                successmultiple: function(file, response){
+                    
+                    var data = JSON.parse(response);
+                    $container.find('#total b').text(accounting.formatMoney(data.info.total));
+                    $.each(data.data,function(index,value){
+                        
+                        var $tr = $('<tr>');
+                        $tr.append('<td>'+index+'</td>');
+                        $tr.append('<td><select class="form-control"><option>Anticipo</option><option>Otra cosa</option></select></td>');
+                        if(value.folio != null){
+                            $tr.append('<td>'+value.folio+'</td>');
+                        }else{
+                             $tr.append('<td><input required class="form-control"></td>');
+                        }
+                        if(value.pdf != null){
+                            $tr.append('<td ><a style="color:red" target="_blank" href="'+value.pdf+'"><i class="fa fa-file-pdf-o"></i></a></td>');
+                        }else{
+                            $tr.append('<td ><a style="color:blue" href="javascript:;"> <i class="fa fa-upload"></i>/</a></td>');
+                        }
+                        if(value.xml != null){
+                            $tr.append('<td ><a style="color:green" target="_blank" href="'+value.xml+'"><i class="fa fa-file-pdf-o"></i></a></td>');
+                        }else{
+                            $tr.append('<td><a style="color:blue" href="javascript:;"> <i class="fa fa-upload"></i></a></td>');
+                        }
+                        if(value.total != null){
+                            $tr.append('<td>'+accounting.formatMoney(value.total)+'</td>');
+                        }else{
+                             $tr.append('<td><input required class="form-control"></td>');
+                        }
+                        $tr.append('<td ><a  style="color:red" href="javascript:;"><i class="fa fa fa-trash"></i></a></td>');
+                        $container.find('#revision tbody').append($tr);
+                        
+                    });
+                    console.log();
+                   
+                    
+                }
                
                
             }); 

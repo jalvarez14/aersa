@@ -45,6 +45,7 @@ return array(
   'Application\Catalogo\Form\TrabajadorpromedioForm'                               => __DIR__ . '/src/Application/Catalogo/Form/TrabajadorpromedioForm.php',
   'Application\Catalogo\Form\UsuarioForm'                                          => __DIR__ . '/src/Application/Catalogo/Form/UsuarioForm.php',
   'Application\CRE\Controller\ContrarecibosController'                             => __DIR__ . '/src/Application/CRE/Controller/ContrarecibosController.php',
+  'Application\CRE\Form\ContrarecibosForm'                                         => __DIR__ . '/src/Application/CRE/Form/ContrarecibosForm.php',
   'Application\Dashboard\Controller\IndexController'                               => __DIR__ . '/src/Application/Dashboard/Controller/IndexController.php',
   'Application\Flujoefectivo\Controller\CuentabancariaController'                  => __DIR__ . '/src/Application/Flujoefectivo/Controller/CuentabancariaController.php',
   'Application\Flujoefectivo\Controller\CuentaporcobrarController'                 => __DIR__ . '/src/Application/Flujoefectivo/Controller/CuentaporcobrarController.php',
