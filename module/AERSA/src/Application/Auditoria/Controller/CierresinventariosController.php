@@ -323,6 +323,7 @@
                     }
                         
                  }
+                 
                 ////
                 
                 $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
@@ -983,7 +984,7 @@
                                                     else //si el papá nivel 5 no es la raiz
                                                     {
                                                         $requisicion_detalle_padrenivel6 = \RequisiciondetalleQuery::create()->findPk($padrenivel5);
-                                                        $padrenivel6=$vrequisicion_detalle_padrenivel6->getIdPadre();
+                                                        $padrenivel6=$requisicion_detalle_padrenivel6->getIdPadre();
                                                         
                                                         if(is_null($padrenivel6))
                                                         {
