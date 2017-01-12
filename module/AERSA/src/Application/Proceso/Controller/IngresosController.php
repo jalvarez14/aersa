@@ -291,7 +291,7 @@ class IngresosController extends AbstractActionController {
                     }
                 }
                 
-                if ($post_data['compra_revisada']) {
+                if ($post_data['ingreso_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
                 }
                 

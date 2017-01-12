@@ -222,7 +222,7 @@ class CardexController extends AbstractActionController {
                                     $totalProductoCompra+=$objcompradetalle->getCompradetalleSubtotal();
                                 }
                             }
-                            
+                            /*
                             $objreq= new \Requisicion();
                             $objrequisiciones= $objrequisicionesDestino;
                             foreach ($objrequisiciones as $objreq) {
@@ -249,8 +249,21 @@ class CardexController extends AbstractActionController {
                                     $totalProductoCompra+=$objreqdet->getRequisiciondetalleSubtotal();
                                 }
                             }
+                            */
+                            $idp=$objproducto->getIdproducto();
+                            $time=strtotime($inicio_semana);
+                            $month=date("n",$time);
+                            $year=date("Y",$time);
                             
-                            $costoPromedio = ($compra != 0 && $totalProductoCompra != 0) ? abs($totalProductoCompra / $compra) : $objproducto->getProductoCosto();
+                            $sqlcostopromedioinicial = "SELECT sum(compradetalle_subtotal)/sum(compradetalle_cantidad) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` where compra_tipo='compra' and idempresa=$idempresa and idsucursal=$idsucursal and idalmacen=$idalmacen and YEAR(compra_fechacompra)=$year and MONTH(compra_fechacompra)=$month) and idproducto=$idp;";
+
+                            $st = $conn->prepare($sqlcostopromedioinicial);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            
+                            $costoPromedio = (!is_null($results)) ? $results[0]["sum(compradetalle_subtotal)/sum(compradetalle_cantidad)"] : $objproducto->getProductoCosto();
+                           
+                            $costoPromedio;
                             $rowhead = 0;
 //                            if ($objproducto->getProductoTipo() == 'subreceta' && $exisinicial != 0) {
 //                                $recetasObj = \RecetaQuery::create()->filterByIdproducto($objproducto->getIdproducto())->find();
@@ -294,6 +307,19 @@ class CardexController extends AbstractActionController {
                                         ->filterByIdalmacen($idalmacen)
                                         ->filterByIdproducto($objproducto->getIdproducto())
                                         ->find();
+                                
+                            
+                            $time=strtotime($objcompra->getCompraFechacompra());
+                            $month=date("n",$time);
+                            $year=date("Y",$time);
+                            
+                            /*$sqlcostopromedioinicial = "SELECT sum(compradetalle_subtotal)/sum(compradetalle_cantidad) FROM `compradetalle` WHERE idcompra IN (SELECT idcompra FROM `compra` WHERE compra_tipo='compra' and idempresa=$idempresa and idsucursal=$idsucursal and idalmacen=$idalmacen and YEAR(compra_fechacompra)=$year and MONTH(compra_fechacompra)=$month) and idproducto=$idp;";
+
+                            $st = $conn->prepare($sqlcostopromedioinicial);
+                            $st->execute();
+                            $results = $st->fetchAll(\PDO::FETCH_ASSOC);
+                            $costoPromedio2 = (!is_null($results)) ? $results[0]["sum(compradetalle_subtotal)/sum(compradetalle_cantidad)"] : $costoPromedio;
+                            */
                                 $objcompradetalle = new \Compradetalle();
                                 foreach ($objcompradetalles as $objcompradetalle) {
                                     $colorbg = ($color) ? $bgfila : $bgfila2;
@@ -316,7 +342,7 @@ class CardexController extends AbstractActionController {
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                     $row++;
                                 }
                             }
@@ -424,7 +450,7 @@ class CardexController extends AbstractActionController {
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                            $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                            //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                             
                                         }
                                         
@@ -453,7 +479,7 @@ class CardexController extends AbstractActionController {
                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                        $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                        //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                         
                                     }
                                     if ($objproducto->getProductoTipo()=="simple" && !is_null($objrequisiciondetalle->getIdPadre()) && $objrequisiciondetalle->getRequisicionDetalleContable()==1) //simple que si salio de una receta, SE DEBE DE CONOCER AL PADRE PARA SABER SI EL SIMPLE SE CONSIDERA O NO
@@ -503,7 +529,7 @@ class CardexController extends AbstractActionController {
                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                             }
                                             
                                         }
@@ -551,7 +577,7 @@ class CardexController extends AbstractActionController {
                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                 }
                                             }
                                             else //el papa nivel 2 no es la raiz
@@ -594,7 +620,7 @@ class CardexController extends AbstractActionController {
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                        $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                       // $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                     }
                                                 }
                                                 else //si papá nivel 3 no es la raiz
@@ -634,7 +660,7 @@ class CardexController extends AbstractActionController {
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                        $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                        //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                     }
                                                     else //si papá nivel 4 no es la raiz
                                                     {
@@ -676,7 +702,7 @@ class CardexController extends AbstractActionController {
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                                //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                             }
                                                         }
                                                         else //si el papá nivel 5 no es la raiz
@@ -717,7 +743,7 @@ class CardexController extends AbstractActionController {
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                                //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                                 
                                                             }
                                                             else //si el papa 6 no es nivel
@@ -757,7 +783,7 @@ class CardexController extends AbstractActionController {
                                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                                 }
                                                             }
                                                             
@@ -807,7 +833,7 @@ class CardexController extends AbstractActionController {
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                     $row++;
                                 }
                             }
@@ -835,7 +861,7 @@ class CardexController extends AbstractActionController {
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = $entradaefec;
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = '';
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                     $row++;
                                 }
                             }
@@ -941,7 +967,7 @@ class CardexController extends AbstractActionController {
                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                 $row++;
                                                 
                                             }
@@ -986,7 +1012,7 @@ class CardexController extends AbstractActionController {
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                            $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                            //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                             $row++;
                                         }
                                     }
@@ -1036,7 +1062,7 @@ class CardexController extends AbstractActionController {
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                            $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                            //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                             $row++;
                                             //}
                                             
@@ -1089,7 +1115,7 @@ class CardexController extends AbstractActionController {
                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                     $row++;
                                                 }
                                             }
@@ -1133,7 +1159,7 @@ class CardexController extends AbstractActionController {
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                        $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                        //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                         $row++;
                                                     }
                                                 }
@@ -1176,7 +1202,7 @@ class CardexController extends AbstractActionController {
                                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                                             $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                            $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                            //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                             $row++;
                                                         }
                                                     }
@@ -1220,7 +1246,7 @@ class CardexController extends AbstractActionController {
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                                                 $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                                $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                                //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                                 $row++;
                                                             }
                                                         }
@@ -1264,7 +1290,7 @@ class CardexController extends AbstractActionController {
                                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                                     $row++;
                                                                 }
                                                                 
@@ -1308,7 +1334,7 @@ class CardexController extends AbstractActionController {
                                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                                                         $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                                                        $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                                                        //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                                                         $row++;
                                                                     }
                                                                 }
@@ -1426,7 +1452,7 @@ class CardexController extends AbstractActionController {
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                     $row++;
                                 }
                             }
@@ -1459,7 +1485,7 @@ class CardexController extends AbstractActionController {
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                     $row++;
                                 }
                             }
@@ -1493,7 +1519,7 @@ class CardexController extends AbstractActionController {
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                     $row++;
                                 }
                             }
@@ -1521,7 +1547,7 @@ class CardexController extends AbstractActionController {
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['entradaefec'] = '';
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['salidaefec'] = $salidaefec;
                                     $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['saldoIni'] = $saldoIni;
-                                    $reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
+                                    //$reporteProce[$idalmacen][$objproducto->getIdproducto()][$row]['costoPromedio'] = $costoPromedio;
                                     $row++;
                                 }
                             }
@@ -1574,9 +1600,9 @@ class CardexController extends AbstractActionController {
                                     $saldoIni = $reporte2['saldoIni'];
                                     $costoPromedio = $reporte2['costoPromedio'];
                                     if ($archivo)
-                                        array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => $costoPromedio));
+                                        array_push($reporte, array('uno' => $fecha, 'dos' => $folio, 'tres' => $proceso, 'cuatro' => $prove, 'cinco' => $entrada, 'seis' => $salida, 'siete' => $exisinicial, 'ocho' => $entradaefec, 'nueve' => $salidaefec, 'diez' => $saldoIni, 'once' => ''));
                                     else
-                                        array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td>$salida</td><td>$exisinicial</td><td>$entradaefec</td><td>$salidaefec</td><td>$saldoIni</td><td>$costoPromedio</td></tr>");
+                                        array_push($reporte, "<tr bgcolor='" . $colorbg . "'><td>$fecha</td><td>$folio</td><td>$proceso</td><td>$prove</td><td>$entrada</td><td>$salida</td><td>$exisinicial</td><td>$entradaefec</td><td>$salidaefec</td><td>$saldoIni</td><td></td></tr>");
                                 }
                             }
                         }
@@ -1671,7 +1697,7 @@ class CardexController extends AbstractActionController {
             $fecha = array();
             $cont=0;
             if ($inventario_anterior) {
-                $fechas = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('asc')->find();
+                $fechas = \InventariomesQuery::create()->filterByIdalmacen($id)->orderByInventariomesFecha('desc')->find();
                 $fechasobj= new \Inventariomes();
                 foreach($fechas as $fechasobj) {
                     $cont++;

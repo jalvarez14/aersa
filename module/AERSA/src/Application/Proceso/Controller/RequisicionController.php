@@ -400,7 +400,7 @@
                     $total = $entity->getRequisicionTotal();
                     $requisicion = array('fecha' => $fecha, 'sucorg' => $sucorg, 'sucdes' => $sucdes, 'consal' => $consal, 'creado' => $creado, 'folio' => $folio, 'almorg' => $almorg, 'almdes' => $almdes, 'revision' => $revision, 'auditor' => $auditor, 'total' => $total);
                     $col = array();
-                    $requisicionesdetallesobj = \RequisiciondetalleQuery::create()->filterByIdrequisicion($id)->find();
+                    $requisicionesdetallesobj = \RequisiciondetalleQuery::create()->filterByIdrequisicion($id)->filterByIdpadre(null)->find();
                     $requisiciondetalleobj = new \Requisiciondetalle();
                     array_push($col, array('uno' => 'Tipo', 'dos' => 'Producto', 'tres' => 'Unidad', 'cuatro' => 'Cantidad', 'cinco' => 'Precio unitario', 'seis' => 'Subtotal', 'siete' => 'Revisada'));
                     foreach ($requisicionesdetallesobj as $requisiciondetalleobj) {
