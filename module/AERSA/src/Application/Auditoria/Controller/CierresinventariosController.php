@@ -167,7 +167,8 @@
                 $productosReporte = array();
                 //var_dump($post_data);
                 //exit();
-                echo "";
+                //echo "";
+                $producto =null ;
                 foreach ($post_data['inventario']["Sheet1"] as $producto) {
                     if (isset($producto['CLAVE']) && $producto['CLAVE'] != 'CLAVE')
                     {
@@ -223,10 +224,10 @@
                 else //si no existe un inventario anterior al que se desea registrar, la fecha de inicio para considerar los movimientos de procesos es el día siguiente a la fecha de la semana revisada (un día lunes)
                 {
                     //si es el primer inventario, la fecha de inicio es un dia después de la semana revisada
-                    $idsuc= $session['idsucursal'];
-                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadasemana();
                     
-                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadaanio();
+                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsucursal)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadasemana();
+                    
+                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsucursal)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadaanio();
                     $time = strtotime("1 January $anio_act", time());
                     $day = date('w', $time);
                     $time += ((7 * $semana_rev) + 2 - $day) * 24 * 3600;
