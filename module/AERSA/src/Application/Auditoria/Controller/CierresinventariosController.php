@@ -167,6 +167,7 @@
                 $productosReporte = array();
                 //var_dump($post_data);
                 //exit();
+                echo "";
                 foreach ($post_data['inventario']["Sheet1"] as $producto) {
                     if (isset($producto['CLAVE']) && $producto['CLAVE'] != 'CLAVE')
                     {
@@ -181,7 +182,7 @@
                        // }
                     }
                 }
-                
+                //echo "b";
                 
                 $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
                 $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
