@@ -300,7 +300,6 @@
                 var $tr = $(this).closest('tr');
                 calcular($tr);
             });
-            var inventario_array = {};
             $('#subir_inventario').on('click', function () {
                                       alert("En caso de que el formato se edite o modifique de cualquier manera, este será incompatible con la carga automática desde Excel a CFCI, por lo que no se debe modificar");
                 $('input[name=batch_inventario]').trigger('click');
@@ -323,11 +322,9 @@
                         var i, f;
                         for (i = 0, f = files[i]; i != files.length; ++i) {
                             var reader = new FileReader();
-                            var name = f.name;
                             reader.onload = function (e) {
                                 var data = e.target.result;
                                 var workbook = XLSX.read(data, {type: 'binary'});
-                                var first_sheet_name = workbook.SheetNames[6];
                                 var workbook_array = to_json(workbook);
 
 //                            for (var k in workbook_array) {
@@ -341,10 +338,7 @@
                                     type: 'POST',
                                     dataType: 'json',
                                        data: {inventario: workbook_array, almacen: almacen, auditor: auditor, fecha:fecha},
-                                    beforeSend: function (xhr) {
-                                        $('body').addClass('loading');
-                                    },
-                                    success: function (data, textStatus, jqXHR) {
+                                    success: function (data) {
                                         $('body').removeClass('loading');
                                         if (data.length != 0) {
                                             $('#reporte_table > tbody').empty();
@@ -435,7 +429,6 @@
                 }
             });
             
-            var inventario_array = {};
             
             $('#subir_inventario').on('click', function () {
                 $('input[name=batch_inventario]').trigger('click');
