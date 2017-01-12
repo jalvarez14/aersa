@@ -47,7 +47,7 @@
             }
             
             $auditor_array = array();
-            $productosmov = array();
+            //$productosmov = array();
             $usuarios = \UsuarioQuery::create()->filterByIdrol(4)
             ->useUsuariosucursalQuery()
             ->filterByIdsucursal($idsucursal)
@@ -120,16 +120,16 @@
             $time += 6 * 24 * 3600;
             $fecha = date('Y-m-d', $time);
             
-            $ts = strtotime("now");
-            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
-            //dia inicio de semana date('Y-m-d',$start);
-            $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
-            $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
-            $time = strtotime("1 January $anio_act", time());
-            $day = date('w', $time);
-            $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
-            $time += 6 * 24 * 3600;
-            $fecha = date('Y-m-d', $time);
+//            $ts = strtotime("now");
+//            $start = (date('w', $ts) == 0) ? $ts : strtotime('last monday', $ts);
+//            //dia inicio de semana date('Y-m-d',$start);
+//            $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
+//            $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
+//            $time = strtotime("1 January $anio_act", time());
+//            $day = date('w', $time);
+//            $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
+//            $time += 6 * 24 * 3600;
+//            $fecha = date('Y-m-d', $time);
             
             $form = new \Application\Auditoria\Form\CierresinventariosForm($almacen_array, $auditor_array);
             $view_model = new ViewModel();
@@ -165,10 +165,7 @@
                 $idalmacen = $post_data['almacen'];
                 $idusuario = $post_data['auditor'];
                 $productosReporte = array();
-                //var_dump($post_data);
-                //exit();
-                //echo "";
-                $producto =null ;
+                $producto = null;
                 foreach ($post_data['inventario']["Sheet1"] as $producto) {
                     if (isset($producto['CLAVE']) && $producto['CLAVE'] != 'CLAVE')
                     {
@@ -179,36 +176,40 @@
                             $clave= $producto['CLAVE'];
                             $stock= $producto['TOTAL'];
                             $productosReporte[$clave] = $stock;
+                            //file_put_contents($_SERVER['DOCUMENT_ROOT']."/error_log.txt", $clave."\n",FILE_APPEND); 
+
                             //echo "total- ".$producto['TOTAL']." -\n";
                        // }
                     }
                 }
-                //echo "b";
                 
+                                            //file_put_contents($_SERVER['DOCUMENT_ROOT']."/error_log.txt", "Sali \n",FILE_APPEND); 
+
                 $semana_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalMesactivo();
                 $anio_act = \SucursalQuery::create()->filterByIdsucursal($idsucursal)->findOne()->getSucursalAnioactivo();
                 $time = strtotime("1 January $anio_act", time());
                 $day = date('w', $time);
                 $time += ((7 * $semana_act) + 1 - $day) * 24 * 3600;
                 $time += 6 * 24 * 3600;
-                $fecha = date('Y-m-d', $time);
+                //$fecha = date('Y-m-d', $time);
                 
                 $start = strtotime('last monday', $time);
-                $inicio_semana = date('Y-m-d', strtotime('last monday', $time));
+                //$inicio_semana = date('Y-m-d', strtotime('last monday', $time));
                 
                 $fin_semana2 = date('Y-m-d', $time);
                 
-                $fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
-                $fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
+                //$fin_semana_anterior = date('Y-m-d', strtotime('last sunday', $start));
+                //$fin_semana_anterior = $fin_semana_anterior . " 23:59:59";
                 
                 //para definir si una receta se explosiona o no, se debe de comparar un periodo de 6 meses previos, por ello, se calcula la fecha seleccionada menos 6 meses
-                $fecharequisicion6meses = strtotime ('-6 month', strtotime($fin_semana2));
+                $fecharequisicion6meses = strtotime ('-3 month', strtotime($fin_semana2));
                 $fecharequisicion6meses = date('Y-m-d',  $fecharequisicion6meses);
                 $fecharequisicion6meses = $fecharequisicion6meses. " 00:00:00" ;
                 
                 
-                $inicio_semana = $inicio_semana . " 00:00:00";
+                //$inicio_semana = $inicio_semana . " 00:00:00";
                 $fin_semana2 =  date_create_from_format('m/d/Y H:i:s', $post_data["fecha"]." 23:59:59");
+               
                 $fin_semana = $fin_semana2->format("Y-m-d H:i:s");
             
                 //si existe un inventario anterior al que se desea registrar, la fecha de inicio para considerar los movimientos de procesos es el día siguiente al inventario anterior (un día lunes)
@@ -224,10 +225,10 @@
                 else //si no existe un inventario anterior al que se desea registrar, la fecha de inicio para considerar los movimientos de procesos es el día siguiente a la fecha de la semana revisada (un día lunes)
                 {
                     //si es el primer inventario, la fecha de inicio es un dia después de la semana revisada
+                    $idsuc= $session['idsucursal'];
+                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadasemana();
                     
-                    $semana_rev = \SemanarevisadaQuery::create()->filterByIdsucursal($idsucursal)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadasemana();
-                    
-                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsucursal)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadaanio();
+                    $anio_act = \SemanarevisadaQuery::create()->filterByIdsucursal($idsuc)->orderByIdsemanarevisada(\Criteria::DESC)->findOne()->getSemanarevisadaanio();
                     $time = strtotime("1 January $anio_act", time());
                     $day = date('w', $time);
                     $time += ((7 * $semana_rev) + 2 - $day) * 24 * 3600;
@@ -263,48 +264,57 @@
                 $row = 0;
                 $rowmax = 0;
                 
+                
+                $exisinicial = 0;
                 //Se hace un barrido de todos los productos por categoría, se revisa si tuvieron algún movimiento, sólo aquellos que cuenta
                 //con movimiento o tienen stock físico pasan a segunda etapa
                 $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
                 $categoriaObj = new \Categoria();
-                foreach ($categoriasObj as $categoriaObj) 
+               foreach ($categoriasObj as $categoriaObj) 
                 {
                     $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->filterByProductoTipo('plu', \Criteria::NOT_EQUAL)->find();
                     $objproducto = new \Producto();
                     foreach ($objproductos as $objproducto) 
                     {
-                        $exisinicial = 0;
+                        
                        
                         $idprod=$objproducto->getIdProducto();
+                        //$resreq = \RequisiciondetalleQuery::create()->filterByIdproducto($idprod)->useRequisicionQuery()->filterByIdalmacendestino($idalmacen)_
                         $req = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idprod) AND (idalmacendestino= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                         $st = $conn->prepare($req);
                         $st->execute();
                         $resreq = $st->fetchAll(\PDO::FETCH_ASSOC);
                         
-                        $compras = "SELECT count(idcompra) FROM compra WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= compra_fechacompra AND compra_fechacompra <= '$fin_semana';";
-                        $st = $conn->prepare($compras);
-                        $st->execute();
-                        $rescompras = $st->fetchAll(\PDO::FETCH_ASSOC);
+                        $rescompras = \CompradetalleQuery::create()->filterByIdproducto($idprod)->filterByIdalmacen($idalmacen)->useCompraQuery()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->endUse()->exists();
+//                        $compras = "SELECT count(idcompra) FROM compra WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= compra_fechacompra AND compra_fechacompra <= '$fin_semana';";
+//                        $st = $conn->prepare($compras);
+//                        $st->execute();
+//                        $rescompras = $st->fetchAll(\PDO::FETCH_ASSOC);
                         
-                        $ventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana';";
-                        $st2 = $conn->prepare($ventas);
-                        $st2->execute();
-                        $resventas = $st2->fetchAll(\PDO::FETCH_ASSOC);
+                        $resventas = \VentadetalleQuery::create()->filterByIdproducto($idprod)->filterByIdalmacen($idalmacen)->useVentaQuery()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->endUse()->exists();
+//                        $ventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana';";
+//                        $st2 = $conn->prepare($ventas);
+//                        $st2->execute();
+//                        $resventas = $st2->fetchAll(\PDO::FETCH_ASSOC);
                         
-                        $dev = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion <= '$fin_semana';";
-                        $st3 = $conn->prepare($dev);
-                        $st3->execute();
-                        $resdev = $st3->fetchAll(\PDO::FETCH_ASSOC);
+                        $resdev = \DevoluciondetalleQuery::create()->filterByIdproducto($idprod)->filterByIdalmacen($idalmacen)->useDevolucionQuery()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->endUse()->exists();
+//                        $dev = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion <= '$fin_semana';";
+//                        $st3 = $conn->prepare($dev);
+//                        $st3->execute();
+//                        $resdev = $st3->fetchAll(\PDO::FETCH_ASSOC);
                         
-                        $tabsalida = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND idproducto=$idprod AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
-                        $st4 = $conn->prepare($tabsalida);
-                        $st4->execute();
-                        $restabsalida = $st4->fetchAll(\PDO::FETCH_ASSOC);
+                        $restabsalida = \OrdentablajeriaQuery::create()->filterByIdproducto($idprod)->filterByIdalmacenorigen($idalmacen)->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->exists();
+//                        $tabsalida = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idalmacenorigen= $idalmacen  AND idproducto=$idprod AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+//                        $st4 = $conn->prepare($tabsalida);
+//                        $st4->execute();
+//                        $restabsalida = $st4->fetchAll(\PDO::FETCH_ASSOC);
                         
-                        $tabentrada = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
-                        $st5 = $conn->prepare($tabentrada);
-                        $st5->execute();
-                        $restabentrada = $st5->fetchAll(\PDO::FETCH_ASSOC);
+                        $restabentrada = \OrdentablajeriaQuery::create()->filterByIdproducto($idprod)->filterByIdalmacendestino($idalmacen)->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->exists();
+
+//                        $tabentrada = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND idalmacendestino= $idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+//                        $st5 = $conn->prepare($tabentrada);
+//                        $st5->execute();
+//                        $restabentrada = $st5->fetchAll(\PDO::FETCH_ASSOC);
                         
                         $stockFisico = 0;
                         if (isset($productosReporte[$objproducto->getIdproducto()]))
@@ -316,18 +326,23 @@
                                 
                             }
                         //si el producto tuvo algún movimiento o tiene stock físico, se considera para generar el reporte de cierre semana
-                        if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restabsalida[0]['count(idordentablajeria)']>0 || $restabentrada[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0 || $rescompras[0]['count(idcompra)']>0  )
+                        if($resreq[0]['count(idrequisicion)']>0 || $resventas==1 || $resdev==1 || $restabsalida==1 || $restabentrada==1 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0 || $rescompras[0]['count(idcompra)']>0  )
                         {
                             array_push($productosmov, $objproducto->getIdProducto());
+                            //file_put_contents($_SERVER['DOCUMENT_ROOT']."/error_log.txt", $objproducto->getIdproducto()."\n",FILE_APPEND); 
                         }
+
                     }
                         
                  }
-                 
                 ////
+                 //array_push($productosmov, 22728, 21934, 22504, 21941,21944,22718,22727,21953,22723,22008,22027,51206,22030,22046,22053);
+                //file_put_contents($_SERVER['DOCUMENT_ROOT']."/error_log.txt", "sali array \n",FILE_APPEND); 
+                 //var_dump($productosmov);
+                 //exit();
                 
-                $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
-                $categoriaObj = new \Categoria();
+                //$categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
+                //$categoriaObj = new \Categoria();
                 //foreach ($categoriasObj as $categoriaObj) {
                    //se hace una barrido por todos los productos que tuvieron algún movimiento o stock físico
                    //los productos (ids) vienen en el arreglo de $productosmov
@@ -468,6 +483,7 @@
                                     if(is_null($padrenivel1))
                                     {
                                         $idpadrenivel1=$requisicion_detalle_padre->getIdProducto();
+                                        //$results= \RequisiciondetalleQuery::create()->filterByIdproducto($idpadrenivel1)->useRequisicionQuery()->filterByAlmacenRelatedByIdalmacenorigen($idalmacen)->filterByRequisicionFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->endUse()->exists();
                                         $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idpadrenivel1) AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                                         $st = $conn->prepare($sqlrequisicioningreso);
                                         $st->execute();
@@ -642,7 +658,7 @@
                                                     else //si el papá nivel 5 no es la raiz
                                                     {
                                                         $requisicion_detalle_padrenivel6 = \RequisiciondetalleQuery::create()->findPk($padrenivel5);
-                                                        $padrenivel6=$vrequisicion_detalle_padrenivel6->getIdPadre();
+                                                        $padrenivel6=$requisicion_detalle_padrenivel6->getIdPadre();
                                                         
                                                         if(is_null($padrenivel6))
                                                         {
@@ -1524,17 +1540,24 @@
                         // para saber si explosionar o no, se verifican las requisiciones como ingreso y egreso al almacen seleccionado
                         $idproduc= $objproducto->getIdproducto();
                         //$conn = \Propel::getConnection();
+                        
+                        if($objproducto->getProductoTipo() == 'subreceta')
+                        {
                         $sqlrequisicioningreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto= '$idproduc') AND idalmacendestino= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana'";
                         $st = $conn->prepare($sqlrequisicioningreso);
                         $st->execute();
                         $results = $st->fetchAll(\PDO::FETCH_ASSOC);
                         
+                        
+                        
                         $sqlrequisicionegreso = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto='$idproduc') AND idalmacenorigen= $idalmacen AND '$fecharequisicion6meses' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
                         $st2 = $conn->prepare($sqlrequisicionegreso);
                         $st2->execute();
                         $results2 = $st2->fetchAll(\PDO::FETCH_ASSOC);
-                        //
                         
+                        
+                        //
+                        }
                         // si el producto receta fue recibido en el almacen como requisición o bien, no fue ni enviado ni recibido al almacen, la receta se EXPLOSIONA
                         // si la receta está compuesta a su vez de múltiples recetas en diferentes niveles, se desglosa todo el árbol de la receta para obtener los productos simples u hojas del árbol
                         if (($stockFisico != 0 && $objproducto->getProductoTipo() == 'subreceta') && (($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] >0)  || ($results[0]['count(idrequisicion)'] == 0 && $results2[0]['count(idrequisicion)'] ==0))) {
@@ -1858,8 +1881,7 @@
                         
                         
                         //echo "idproducto: ".$objproducto->getIdproducto()." \n";
-                        
-                        
+
                         $subcat=$objproducto->getCategoriaRelatedByIdsubcategoria()->getCategoriaNombre();
                         $difImporte = $dif * $costoPromedio;
                         if (0 < $difImporte)
@@ -1901,16 +1923,16 @@
                         $row++;
                         $rowmax=$row;
                         
-                        
+                        //file_put_contents($_SERVER['DOCUMENT_ROOT']."/error_log.txt", $objproducto->getProductoNombre()."\n",FILE_APPEND); 
                             
                         //}
                     //}
                     }
                 //}
                 
+                
                 //var_dump($arrayReporte);
                 //exit();
-
                 $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
                 $categoriaObj = new \Categoria();
                 foreach ($categoriasObj as $categoriaObj) {
