@@ -168,9 +168,18 @@
                 //var_dump($post_data);
                 //exit();
                 foreach ($post_data['inventario']["Sheet1"] as $producto) {
-                    if (isset($producto['CLAVE']))
-                        if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
-                            $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
+                    if (isset($producto['CLAVE']) && $producto['CLAVE'] != 'CLAVE')
+                    {
+                       
+                        //if ($producto['CLAVE'] != 'CLAVE')
+                        //{
+                             
+                            $clave= $producto['CLAVE'];
+                            $stock= $producto['TOTAL'];
+                            $productosReporte[$clave] = $stock;
+                            //echo "total- ".$producto['TOTAL']." -\n";
+                       // }
+                    }
                 }
                 
                 
