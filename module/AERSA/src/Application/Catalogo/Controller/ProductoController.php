@@ -843,7 +843,6 @@ class ProductoController extends AbstractActionController
     
     //RECIBE EL IDPRODUCTO DE EL PRODUCTO TIPO SIMPLE Y ACTUALIZA EL COSTO DEL PRODUCTO TIPO SUBRECETA
      public static function updateSubreceta($idproducto){
-         
          $recetas = \RecetaQuery::create()->filterByIdproductoreceta($idproducto)->find();
          $receta = new \Receta();
          foreach ($recetas as $receta){
@@ -859,8 +858,13 @@ class ProductoController extends AbstractActionController
                      $costo = !is_null($value->getProductoRelatedByIdproductoreceta()->getProductoCosto()) ? $value->getProductoRelatedByIdproductoreceta()->getProductoCosto() : 0;
                      $costo_padre +=$cantidad*$costo;
                      
+                     
+                     
                  }
                  
+                 
+                // \Application\Catalogo\Controller\ProductoController::updateSubreceta($producto_padre);
+                     
                  
                  //$costo_padre = !is_null($costo_padre['SUMproducto_costo']) ? $costo_padre['SUMproducto_costo'] : 0;
                  //$costo_padre = $costo_padre * $receta->getRecetaCantidad();
