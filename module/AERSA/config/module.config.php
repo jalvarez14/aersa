@@ -2313,7 +2313,16 @@ return array(
                                             ),
                                         ),
                                     ),
-
+                                    'delete' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/delete',
+                                            'defaults' => array(
+                                                'controller' => 'Application\CRE\Controller\Contrarecibos',
+                                                'action' => 'delete',
+                                            ),
+                                        ),
+                                    ),
 
                                 ),
                             ),

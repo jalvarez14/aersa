@@ -16,6 +16,77 @@ use Zend\Console\Request as ConsoleRequest;
 class ContrarecibosController extends AbstractActionController
 {
     
+    /*
+     * DELETE FUNCTIONS
+     */
+    
+    
+    public function deleteContrarecibodetalle($data){
+        
+       $response = array();
+       
+        if(!is_null($data['pdf']) || !empty($data['pdf'])){
+            if(file_exists ($_SERVER['DOCUMENT_ROOT'].$data['pdf'])){
+                try {
+                    unlink($_SERVER['DOCUMENT_ROOT'].$data['pdf']);
+                    $response['pdf'] = 'deleted';        
+                    
+                } catch (Exception $ex) {
+                     $response['pdf'] = $ex; 
+                }
+            }else{
+                 $response['pdf']= 'file does not exist';    
+            }
+        }
+        
+        if(!is_null($data['xml']) || !empty($data['pdf'])){
+            if(file_exists ($_SERVER['DOCUMENT_ROOT'].$data['xml'])){
+                try {
+                    unlink($_SERVER['DOCUMENT_ROOT'].$data['xml']);
+                    $response['xml'] = 'deleted';        
+                    
+                } catch (Exception $ex) {
+                     $response['xml'] = $ex; 
+                }
+            }else{
+                 $response['xml']= 'file does not exist';    
+            }
+        }
+        
+        return $response;
+        
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+     * END DELELTE FUNCTIONS
+     */
+    
+    
+    public function deleteAction(){
+        
+        $request = $this->getRequest();
+        
+        if($request->isPost()){
+            
+            $post_data = $request->getPost();
+            
+            if($post_data['name'] == 'contrarecibodetalle'){
+                $response = $this->deleteContrarecibodetalle($post_data['data']);
+                return $this->getResponse()->setContent(json_encode(array('response' => true, 'data' => $response)));
+            }
+           
+            
+        }
+    }
+    
     public function dropzoneAction(){
         
         $request = $this->getRequest();
