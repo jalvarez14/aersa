@@ -941,7 +941,7 @@
            $('select[name=compra_tipo]').on('change',function(){
                
                var selected = $('select[name=compra_tipo] option:selected').val();
-               if(selected == 'ordencompra'){
+               if(selected == 'ordecompra'){
                    var folio = $('input[name=compra_foliohidden]').val();
                    $('input[name=compra_folio]').val(folio);
                    $('select[name=idalmacen]').attr('disabled',true);
@@ -1328,9 +1328,7 @@
                 }
             }
             
-            if(compra_tipo == 'ordencompra')
-            
-            
+
             
             //COMENTARIOS
             var id = $('input[name=idcompra]').val();
