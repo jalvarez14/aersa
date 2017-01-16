@@ -31,6 +31,8 @@
                         <tr>
                             <th> Fecha </th>
                             <th> Folio </th>
+                            <th> Origen </th>
+                            <th> Destino </th>
                             <th> Producto </th>
                             <th> Revisada </th>
                             <th> Opciones </th>
@@ -50,6 +52,8 @@
                             <tr date="<?php echo $entity->getOrdentablajeriaFecha('Y/m/d') ?>" id="<?php echo $entity->getIdordentablajeria()?>">
                                 <td><?php echo $entity->getOrdentablajeriaFecha('d/m/Y') ?></td>
                                 <td><?php echo $entity->getOrdentablajeriaFolio() ?></td>
+                                <td><?php echo $entity->getAlmacenRelatedByIdalmacenorigen()->getAlmacenNombre() ?></td>
+                                <td><?php echo $entity->getAlmacenRelatedByIdalmacendestino()->getAlmacenNombre() ?></td>
                                 <td><?php echo $entity->getProducto()->getProductoNombre() ?></td>
                                 <td><span class="label label-sm label-<?php echo $class?>"> <?php echo $revisada ?> </span></td>
                                 <td>
