@@ -144,9 +144,14 @@ class InventariociclicoController extends AbstractActionController {
             $productosReporte = array();
             
             foreach ($post_data['inventario']["Sheet1"] as $producto) {
-                if (isset($producto['CLAVE']))
-                    if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
-                        $productosReporte[$producto['CLAVE']] = $producto['TOTAL'];
+                if (isset($producto['CLAVE']) && $producto['CLAVE'] != 'CLAVE')
+                {
+                    //if ($producto['CLAVE'] != 'CLAVE' && (count($producto) == 6 || count($producto) == 5))
+                        $clave= $producto['CLAVE'];
+                            $stock= $producto['TOTAL'];
+                            $productosReporte[$clave] = $stock;
+                    array_push($productosmov, $producto['CLAVE']);
+                }
             }
             
             
@@ -235,68 +240,76 @@ class InventariociclicoController extends AbstractActionController {
             //
             $rowmax = 0;
             
+            $exisinicial = 0;
+
             //Se hace un barrido de todos los productos por categoría, se revisa si tuvieron algún movimiento, sólo aquellos que cuenta
                 //con movimiento o tienen stock físico pasan a segunda etapa
-                $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
-                $categoriaObj = new \Categoria();
-                foreach ($categoriasObj as $categoriaObj) 
-                {
-                    $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->filterByProductoTipo('plu', \Criteria::NOT_EQUAL)->find();
-                    $objproducto = new \Producto();
-                    foreach ($objproductos as $objproducto) 
-                    {
-                        $exisinicial = 0;
-                       
-                        $idprod=$objproducto->getIdProducto();
-                        $req = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idprod) AND (idalmacendestino= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
-                        $st = $conn->prepare($req);
-                        $st->execute();
-                        $resreq = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        
-                        $compras = "SELECT count(idcompra) FROM compra WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= compra_fechacompra AND compra_fechacompra <= '$fin_semana';";
-                        $st = $conn->prepare($compras);
-                        $st->execute();
-                        $rescompras = $st->fetchAll(\PDO::FETCH_ASSOC);
-                        
-                        $ventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana';";
-                        $st2 = $conn->prepare($ventas);
-                        $st2->execute();
-                        $resventas = $st2->fetchAll(\PDO::FETCH_ASSOC);
-                        
-                        $dev = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion <= '$fin_semana';";
-                        $st3 = $conn->prepare($dev);
-                        $st3->execute();
-                        $resdev = $st3->fetchAll(\PDO::FETCH_ASSOC);
-                        
-                        $tabsalida = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND idproducto=$idprod AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
-                        $st4 = $conn->prepare($tabsalida);
-                        $st4->execute();
-                        $restabsalida = $st4->fetchAll(\PDO::FETCH_ASSOC);
-                        
-                        $tabentrada = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND (idalmacenorigen= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
-                        $st5 = $conn->prepare($tabentrada);
-                        $st5->execute();
-                        $restabentrada = $st5->fetchAll(\PDO::FETCH_ASSOC);
-                        
-                        $stockFisico = 0;
-                        if (isset($productosReporte[$objproducto->getIdproducto()]))
-                            $stockFisico = (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'])) ? $arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'] + $productosReporte[$objproducto->getIdproducto()]: $productosReporte[$objproducto->getIdproducto()];
-                            if ($inventario_anterior) {
-                                $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
-                                if ($exisinicial)
-                                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleTotalfisico();
-                                
-                            }
-                        //si el producto tuvo algún movimiento o tiene stock físico, se considera para generar el reporte de cierre semana
-                        if($resreq[0]['count(idrequisicion)']>0 || $resventas[0]['count(idventa)']>0 || $resdev[0]['count(iddevolucion)']>0 || $restabsalida[0]['count(idordentablajeria)']>0 || $restabentrada[0]['count(idordentablajeria)']>0 || $stockfisico>0 || $exisinicial!=0 || $productosReporte[$objproducto->getIdproducto()]>0 || $rescompras[0]['count(idcompra)']>0  )
-                        {
-                            array_push($productosmov, $objproducto->getIdProducto());
-                        }
-                    }
-                        
-                 }
-                ////
-            
+//                $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
+//                $categoriaObj = new \Categoria();
+//                foreach ($categoriasObj as $categoriaObj) 
+//                {
+//                    $objproductos = \ProductoQuery::create()->filterByIdempresa($idempresa)->filterByIdsubcategoria($categoriaObj->getIdcategoria())->orderByProductoNombre('asc')->filterByProductoTipo('plu', \Criteria::NOT_EQUAL)->find();
+//                    $objproducto = new \Producto();
+//                    foreach ($objproductos as $objproducto) 
+//                    {
+//                        $idprod=$objproducto->getIdProducto();
+//                        //$resreq = \RequisiciondetalleQuery::create()->filterByIdproducto($idprod)->useRequisicionQuery()->filterByIdalmacendestino($idalmacen)_
+//                        //$req = "SELECT count(idrequisicion) FROM requisicion WHERE idrequisicion IN (SELECT idrequisicion FROM `requisiciondetalle` WHERE idproducto=$idprod) AND (idalmacendestino= $idalmacen or idalmacenorigen= $idalmacen) AND '$inicio_semana' <= requisicion_fecha AND requisicion_fecha <= '$fin_semana';";
+//                        //$st = $conn->prepare($req);
+//                        //$st->execute();
+//                        //$resreq = $st->fetchAll(\PDO::FETCH_ASSOC);
+//                        
+//                        //$rescompras = \CompradetalleQuery::create()->filterByIdproducto($idprod)->filterByIdalmacen($idalmacen)->useCompraQuery()->filterByCompraFechacompra(array('min' => $inicio_semana, 'max' => $fin_semana))->endUse()->exists();
+////                        $compras = "SELECT count(idcompra) FROM compra WHERE idcompra IN (SELECT idcompra FROM `compradetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= compra_fechacompra AND compra_fechacompra <= '$fin_semana';";
+////                        $st = $conn->prepare($compras);
+////                        $st->execute();
+////                        $rescompras = $st->fetchAll(\PDO::FETCH_ASSOC);
+//                        
+//                        //$resventas = \VentadetalleQuery::create()->filterByIdproducto($idprod)->filterByIdalmacen($idalmacen)->useVentaQuery()->filterByVentaFechaventa(array('min' => $inicio_semana, 'max' => $fin_semana))->endUse()->exists();
+////                        $ventas = "SELECT count(idventa) FROM venta WHERE idventa IN (SELECT idventa FROM `ventadetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= venta_fechaventa AND venta_fechaventa <= '$fin_semana';";
+////                        $st2 = $conn->prepare($ventas);
+////                        $st2->execute();
+////                        $resventas = $st2->fetchAll(\PDO::FETCH_ASSOC);
+//                        
+//                        //$resdev = \DevoluciondetalleQuery::create()->filterByIdproducto($idprod)->filterByIdalmacen($idalmacen)->useDevolucionQuery()->filterByDevolucionFechadevolucion(array('min' => $inicio_semana, 'max' => $fin_semana))->endUse()->exists();
+////                        $dev = "SELECT count(iddevolucion) FROM devolucion WHERE iddevolucion IN (SELECT iddevolucion FROM `devoluciondetalle` WHERE idproducto=$idprod AND idalmacen= $idalmacen) AND '$inicio_semana' <= devolucion_fechadevolucion AND devolucion_fechadevolucion <= '$fin_semana';";
+////                        $st3 = $conn->prepare($dev);
+////                        $st3->execute();
+////                        $resdev = $st3->fetchAll(\PDO::FETCH_ASSOC);
+//                        
+//                        //$restabsalida = \OrdentablajeriaQuery::create()->filterByIdproducto($idprod)->filterByIdalmacenorigen($idalmacen)->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->exists();
+////                        $tabsalida = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idalmacenorigen= $idalmacen  AND idproducto=$idprod AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+////                        $st4 = $conn->prepare($tabsalida);
+////                        $st4->execute();
+////                        $restabsalida = $st4->fetchAll(\PDO::FETCH_ASSOC);
+//                        
+//                        //$restabentrada = \OrdentablajeriaQuery::create()->filterByIdproducto($idprod)->filterByIdalmacendestino($idalmacen)->filterByOrdentablajeriaFecha(array('min' => $inicio_semana, 'max' => $fin_semana))->exists();
+//
+////                        $tabentrada = "SELECT count(idordentablajeria) FROM ordentablajeria WHERE idordentablajeria IN (SELECT idordentablajeria FROM `ordentablajeriadetalle` WHERE idproducto=$idprod) AND idalmacendestino= $idalmacen AND '$inicio_semana' <= ordentablajeria_fecha AND ordentablajeria_fecha <= '$fin_semana';";
+////                        $st5 = $conn->prepare($tabentrada);
+////                        $st5->execute();
+////                        $restabentrada = $st5->fetchAll(\PDO::FETCH_ASSOC);
+//                        
+//                        $stockFisico = 0;
+//                        if (isset($productosReporte[$objproducto->getIdproducto()]))
+//                            $stockFisico = (isset($arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'])) ? $arrayReporte[$objproducto->getIdproducto()]['inventariomesdetalle_stockfisico'] + $productosReporte[$objproducto->getIdproducto()]: $productosReporte[$objproducto->getIdproducto()];
+//                            if ($inventario_anterior) {
+//                                $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->exists();
+//                                if ($exisinicial)
+//                                    $exisinicial = \InventariomesdetalleQuery::create()->filterByIdinventariomes($id_inventario_anterior)->filterByIdproducto($objproducto->getIdproducto())->findOne()->getInventariomesdetalleTotalfisico();
+//                                
+//                            }
+//                        //si el producto tuvo algún movimiento o tiene stock físico, se considera para generar el reporte de cierre semana
+//                        if($stockfisico>0 || $productosReporte[$objproducto->getIdproducto()]>0)
+//                        {
+//                            array_push($productosmov, $objproducto->getIdProducto());
+//                            //file_put_contents($_SERVER['DOCUMENT_ROOT']."/error_log.txt", $objproducto->getIdproducto()."\n",FILE_APPEND); 
+//                        }
+//                    }
+//                        
+//                 }
+//                ////
+//            
             $categoriasObj = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->orderByCategoriaNombre('asc')->find();
             $categoriaObj = new \Categoria();
             //foreach ($categoriasObj as $categoriaObj) {
