@@ -947,11 +947,13 @@
                    $('select[name=idalmacen]').attr('disabled',true);
                    $('select[name=idalmacen]').attr('required',false);
                    $('#productos_table tbody select').attr('disabled',true);
+                  
                }else{
                     $('input[name=compra_folio]').val('');
                    $('select[name=idalmacen]').attr('disabled',false);
                    $('select[name=idalmacen]').attr('required',true);
                    $('#productos_table tbody select').attr('disabled',false);
+                    $('input[name=compra_fechacompra]').val("");
                }
            });
            
