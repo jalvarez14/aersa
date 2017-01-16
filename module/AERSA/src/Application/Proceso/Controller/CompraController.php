@@ -391,7 +391,7 @@ class CompraController extends AbstractActionController {
 
                 if ($post_data['compra_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
-                    $idproceso = $server[4];
+                    
                     $notification_exist = \NotificacionQuery::create()->filterByNotificacionProceso("compra")->filterByIdproceso($entity->getIdcompra())->exists();
                     if($notification_exist){
                          $notification = \NotificacionQuery::create()->filterByNotificacionProceso("compra")->filterByIdproceso($entity->getIdcompra())->findOne();
