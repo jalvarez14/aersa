@@ -94,7 +94,7 @@
                                                 <a href="/procesos/compra/editar/<?php echo $entity->getIdcompra()?>">
                                                     <i class="fa fa-pencil"></i> Editar </a>
                                             </li>
-                                            <?php if(\Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete($entity->getCompraRevisada(),$entity->getCompraFechacompra(), array($entity->getIdalmacen()))):?>
+                                            <?php if(\Application\Dashboard\Controller\IndexController::validateprocessbyinventariomesfordelete($entity->getCompraRevisada(),$entity->getCompraFechacompra(), array($entity->getIdalmacen())) && $entity->getCompraTipo() == 'compra'):?>
                                             <li>
                                                 <a href="javascript:;" class="delete_modal">
                                                     <i class="fa fa-trash"></i> Eliminar </a>

@@ -1306,7 +1306,7 @@
                 var min_semana_activa = firstDayOfWeek(anio,mes);
                 var maxDate = new Date(min_semana_activa);
                 maxDate.setDate(min_semana_activa.getDate() + 6);
-                if(now < minDate || now > maxDate){
+                if((now < minDate || now > maxDate) && compra_tipo == 'compra' ){
                     $container.find('input,select,button').attr('disabled',true);
                     $('#generar_pdf').attr('disabled',false);
                     $('#generar_excel').attr('disabled',false);
@@ -1323,6 +1323,8 @@
                     $('.fa-trash').css('cursor','not-allowed');
                 }
             }
+            
+            if(compra_tipo == 'ordencompra')
             
             
             
