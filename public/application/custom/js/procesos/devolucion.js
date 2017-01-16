@@ -443,7 +443,7 @@
                 }
                 
                 //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
+                $('#productos_table tbody').prepend(tr);
                 
                 //LIMPIAMOS EL AUTOCOMPLETE
                 $('input#producto_autocomplete').typeahead('val', ''); 
@@ -701,7 +701,7 @@
                 revisadaControl();
                 
                 //INSERTAMOS EN LA TABLA
-                $('#productos_table tbody').append(tr);
+                $('#productos_table tbody').prepend(tr);
                 
                 
                 //LIMPIAMOS EL AUTOCOMPLETE
