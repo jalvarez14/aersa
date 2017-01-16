@@ -941,7 +941,7 @@
            $('select[name=compra_tipo]').on('change',function(){
                
                var selected = $('select[name=compra_tipo] option:selected').val();
-               if(selected == 'ordecompra'){
+               if(selected == 'ordencompra'){
                    var folio = $('input[name=compra_foliohidden]').val();
                    $('input[name=compra_folio]').val(folio);
                    $('select[name=idalmacen]').attr('disabled',true);
@@ -953,7 +953,8 @@
                    $('select[name=idalmacen]').attr('disabled',false);
                    $('select[name=idalmacen]').attr('required',true);
                    $('#productos_table tbody select').attr('disabled',false);
-                    $('input[name=compra_fechacompra]').val("");
+                   
+                    
                }
            });
            
@@ -1269,6 +1270,7 @@
                    $('select[name=idalmacen]').attr('disabled',false);
                    $('select[name=idalmacen]').attr('required',true);
                    $('#productos_table tbody select').attr('disabled',false);
+                   $('input[name=compra_fechacompra]').datepicker('setDate', null);
                }
            });
            
