@@ -694,6 +694,16 @@ class VentaController extends AbstractActionController {
                 
                 if($post_data['venta_revisada']){
                     $entity->setIdauditor($session['idusuario']);
+                    
+                    $notification_exist = \NotificacionQuery::create()->filterByNotificacionProceso("venta")->filterByIdproceso($entity->getIdventa())->exists();
+                        if($notification_exist){
+                            $notification = \NotificacionQuery::create()->filterByNotificacionProceso("venta")->filterByIdproceso($entity->getIdventa())->findOne();
+                            $notification->setRol1(1)->save();
+                            $notification->setRol2(1)->save();
+                            $notification->setRol3(1)->save();
+                            $notification->setRol4(1)->save();
+                            $notification->setRol5(1)->save();
+                        }
                 }
 
                 $entity->save();

@@ -290,6 +290,15 @@ class NotacreditoController extends AbstractActionController {
 
                 if ($post_data['notacredito_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
+                    $notification_exist = \NotificacionQuery::create()->filterByNotificacionProceso("credito")->filterByIdproceso($entity->getIdnotacredito())->exists();
+                    if($notification_exist){
+                         $notification = \NotificacionQuery::create()->filterByNotificacionProceso("credito")->filterByIdproceso($entity->getIdnotacredito())->findOne();
+                         $notification->setRol1(1)->save();
+                         $notification->setRol2(1)->save();
+                         $notification->setRol3(1)->save();
+                         $notification->setRol4(1)->save();
+                         $notification->setRol5(1)->save();
+                    }
                 }
 
                 $entity->save();
