@@ -71,12 +71,28 @@
                         <?php echo $this->formSelect  ($form->get('idunidadmedida')) ?>
                     </div>
                 </div>
+                <?php if ($form->get('producto_tipo')->getValue()=='plu'): php?>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_tipo')) ?>  
+                        <?php echo $this->formSelect  ($form->get('producto_tipo')) ?>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <?php echo $this->formLabel($form->get('producto_precio')) ?>  
+                        <?php echo $this->formText ($form->get('producto_precio')) ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+                <?php if ($form->get('producto_tipo')->getValue()!='plu'): php?>
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_tipo')) ?>  
                         <?php echo $this->formSelect  ($form->get('producto_tipo')) ?>
                     </div>
                 </div>
+                <?php endif; ?>
                 <div class="col-md-6">
                     <div class="form-group">
                         <?php echo $this->formLabel($form->get('producto_iva')) ?>  

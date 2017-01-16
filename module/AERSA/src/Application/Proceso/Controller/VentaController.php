@@ -210,9 +210,14 @@ class VentaController extends AbstractActionController {
                 }
                 
                 $productocontable = \ProductoQuery::create()->filterByIdproducto($producto['idproducto'])->findOne()->getProductoTipo();
-
+                $productoprecio= \ProductoQuery::create()->filterByIdproducto($producto['idproducto'])->findOne();
                 if($productocontable =='simple'){
                     $venta_detalle->setVentadetalleContable(1);
+                }
+                if($productocontable =='plu'){
+                   
+                    $productoprecio->setProductoPrecio($producto['subtotal']/$producto['cantidad']);
+                    $productoprecio->save();
                 }
                 
                 $venta_detalle->save();
