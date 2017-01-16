@@ -107,18 +107,23 @@ class ContrarecibosController extends AbstractActionController
                 
                 if(!isset($cfdi_array[$file_name])){
                     $cfdi_array[$file_name] = array(
+                        
                         'folio' => NULL,
                         'xml' => NULL,
+                        'origina_xml' => NULL,
                         'pdf' => NULL,
+                        'origina_pdf' => NULL,
                         'total' => NULL,
                     );
                 }
 
                 if($file['type'] == 'application/pdf' &&  move_uploaded_file($file["tmp_name"], $_SERVER['DOCUMENT_ROOT'].$target_file.".pdf")){
                     $cfdi_array[$file_name]['pdf'] = $target_file.'.pdf';
+                    $cfdi_array[$file_name]['origina_pdf'] = $file['name'];
                 }elseif($file['type'] == 'text/xml' &&  move_uploaded_file($file["tmp_name"], $_SERVER['DOCUMENT_ROOT'].$target_file.".xml")){
                     
                     $cfdi_array[$file_name]['xml'] = $target_file.'.xml';
+                    $cfdi_array[$file_name]['origina_xml'] = $file['name'];
                     
                     $xml = file_get_contents($_SERVER['DOCUMENT_ROOT'].$target_file.".xml");
                     $reader = new \CFDIReader\CFDIReader($xml);

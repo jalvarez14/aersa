@@ -217,12 +217,12 @@
                              $tr.append('<td><input type="text" name="contrarecibodetalle['+index+'][folio]" required class="form-control"></td>');
                         }
                         if(value.pdf != null){
-                            $tr.append('<td ><a style="color:red" target="_blank" href="'+value.pdf+'"><i class="fa fa-file-pdf-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][pdf]" class="form-control" value="'+value.pdf+'"></td>');
+                            $tr.append('<td ><a style="color:red" target="_blank" href="'+value.pdf+'"><i class="fa fa-file-pdf-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][pdf]" class="form-control" value="'+value.pdf+'"><input type="hidden" name="contrarecibodetalle['+index+'][original_pdf]" class="form-control" value="'+value.original_pdf+'"></td>');
                         }else{
                             $tr.append('<td ><a style="color:blue" href="javascript:;"><i class="fa fa-upload"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][pdf]" class="form-control" value=""></td>');
                         }
                         if(value.xml != null){
-                            $tr.append('<td ><a style="color:green" target="_blank" href="'+value.xml+'"><i class="fa fa-file-pdf-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][xml]" class="form-control" value="'+value.xml+'"></td>');
+                            $tr.append('<td ><a style="color:green" target="_blank" href="'+value.xml+'"><i class="fa fa-file-pdf-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][xml]" class="form-control" value="'+value.xml+'"><input type="hidden" name="contrarecibodetalle['+index+'][original_xml]" class="form-control" value="'+value.original_xml+'"></td>');
                         }else{
                             $tr.append('<td><a style="color:blue" href="javascript:;"> <i class="fa fa-upload"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][xml]" class="form-control" value=""></td>');
                         }
@@ -251,6 +251,7 @@
                             var id = typeof $tr.attr('id') != 'undefined' ? $tr.attr('id') : null;
                             var folio =  $tr.find('input[name*=folio]').val() != "" ? $tr.find('input[name*=folio]').val() :null;
                             var pdf =  $tr.find('input[name*=pdf]').val() != "" ? $tr.find('input[name*=pdf]').val() :null;
+                            var original_pdf =  $tr.find('input[name*=pdf]').val() != "" ? $tr.find('input[name*=pdf]').val() :null;
                             var xml =  $tr.find('input[name*=xml]').val() != "" ? $tr.find('input[name*=xml]').val() :null;
                             var cantidad =  $tr.find('input[name*=cantidad]').val() != "" ? $tr.find('input[name*=cantidad]').val() :null;
                             
