@@ -357,7 +357,7 @@ class CategoriaController extends AbstractActionController
     public function getsubcatAction()
     {
         $cat = $this->params()->fromRoute('idcategoria');
-        $result = \CategoriaQuery::create()->filterByIdcategoriapadre($cat)->find()->toArray();
+        $result = \CategoriaQuery::create()->filterByIdcategoriapadre($cat)->orderByCategoriaNombre('asc')->find()->toArray();
         return $this->getResponse()->setContent(json_encode($result));      
     }
 }
