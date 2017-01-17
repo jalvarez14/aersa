@@ -58,18 +58,70 @@ class ContrarecibosController extends AbstractActionController
 
     }
     
-    
-    
-    
-    
-    
-    
+
     
     /*
      * END DELELTE FUNCTIONS
      */
     
     
+    public function uploadAction() {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post_files = $request->getFiles();
+            $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/application/tmp";
+
+
+            $cfdi_array = array();
+            $total = 0;
+            foreach ($post_files as $file) {
+                 
+                $target_file = "/application/tmp/" . str_replace(" ", "", explode(".", microtime())[1]);
+
+                $file_name = $file['name'];
+                $file_name = explode('.', $file_name);
+                $file_name = $file_name[0];
+
+                if (!isset($cfdi_array[$file_name])) {
+                    $cfdi_array[$file_name] = array(
+                        'folio' => NULL,
+                        'xml' => NULL,
+                        'original_xml' => NULL,
+                        'pdf' => NULL,
+                        'original_pdf' => NULL,
+                        'total' => NULL,
+                    );
+                }
+
+                if ($file['type'] == 'application/pdf' && move_uploaded_file($file["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . $target_file . ".pdf")) {
+                    $cfdi_array[$file_name]['pdf'] = $target_file . '.pdf';
+                    $cfdi_array[$file_name]['original_pdf'] = $file['name'];
+                } elseif ($file['type'] == 'text/xml' && move_uploaded_file($file["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . $target_file . ".xml")) {
+
+                    $cfdi_array[$file_name]['xml'] = $target_file . '.xml';
+                    $cfdi_array[$file_name]['original_xml'] = $file['name'];
+
+                    $xml = file_get_contents($_SERVER['DOCUMENT_ROOT'] . $target_file . ".xml");
+                    $reader = new \CFDIReader\CFDIReader($xml);
+                    $cfdi = $reader->comprobante();
+
+                    $total += floatval($cfdi['total']);
+                    $cfdi_array[$file_name]['total'] = floatval($cfdi['total']);
+                    $cfdi_array[$file_name]['folio'] = floatval($cfdi['folio']);
+                }
+            }
+
+            $cfdi_array_copy = array();
+            $count = 1;
+            foreach ($cfdi_array as $key => $value) {
+                $cfdi_array_copy[$count] = $value;
+                $count++;
+            }
+
+            return $this->getResponse()->setContent(json_encode(array('info' => array('total' => $total), 'data' => $cfdi_array_copy)));
+        }
+    }
+
     public function deleteAction(){
         
         $request = $this->getRequest();
@@ -95,7 +147,7 @@ class ContrarecibosController extends AbstractActionController
             
             $post_files = $request->getFiles();
             $target_dir = $_SERVER['DOCUMENT_ROOT']."/application/tmp";
-
+            
             
             $cfdi_array = array();
             $total = 0;
@@ -110,20 +162,20 @@ class ContrarecibosController extends AbstractActionController
                         
                         'folio' => NULL,
                         'xml' => NULL,
-                        'origina_xml' => NULL,
+                        'original_xml' => NULL,
                         'pdf' => NULL,
-                        'origina_pdf' => NULL,
+                        'original_pdf' => NULL,
                         'total' => NULL,
                     );
                 }
 
                 if($file['type'] == 'application/pdf' &&  move_uploaded_file($file["tmp_name"], $_SERVER['DOCUMENT_ROOT'].$target_file.".pdf")){
                     $cfdi_array[$file_name]['pdf'] = $target_file.'.pdf';
-                    $cfdi_array[$file_name]['origina_pdf'] = $file['name'];
+                    $cfdi_array[$file_name]['original_pdf'] = $file['name'];
                 }elseif($file['type'] == 'text/xml' &&  move_uploaded_file($file["tmp_name"], $_SERVER['DOCUMENT_ROOT'].$target_file.".xml")){
                     
                     $cfdi_array[$file_name]['xml'] = $target_file.'.xml';
-                    $cfdi_array[$file_name]['origina_xml'] = $file['name'];
+                    $cfdi_array[$file_name]['original_xml'] = $file['name'];
                     
                     $xml = file_get_contents($_SERVER['DOCUMENT_ROOT'].$target_file.".xml");
                     $reader = new \CFDIReader\CFDIReader($xml);

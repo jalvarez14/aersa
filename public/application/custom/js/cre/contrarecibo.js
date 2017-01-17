@@ -76,7 +76,7 @@
             
              var date = new Date();
              var d = date.getDay(2);
-             console.log(d);
+            
         }
         
         plugin.new = function(){
@@ -177,14 +177,12 @@
                 dictDefaultMessage: '<h2><b>Arrastre sus archivos pdf y xml ó haga click para seleccionarlos</b></h2><h4><i>Maximo 40</i></h4>',
                 dictRemoveFile:'Eliminar',
                 autoProcessQueue: false,
-                addRemoveLinks: true, 
+                //addRemoveLinks: true, 
                 acceptedMimeTypes:".pdf,.xml",
                 maxFiles: 40,
                 parallelUploads: 100,
                 uploadMultiple: true,
-                removedfile: function(file) {
-                    console.log(file);
-                },          
+          
                 accept: function(file, done) {
                 var thumbnail = $('.dropzone .dz-preview.dz-file-preview .dz-image:last');
                     switch (file.type) {
@@ -202,8 +200,7 @@
                     
                 },
                 successmultiple: function(file, response){
-                    console.log(file);
-                    console.log(response);
+             
                     var data = JSON.parse(response);
                     $container.find('#total b').text(accounting.formatMoney(data.info.total));
                     $.each(data.data,function(index,value){
@@ -217,14 +214,14 @@
                              $tr.append('<td><input type="text" name="contrarecibodetalle['+index+'][folio]" required class="form-control"></td>');
                         }
                         if(value.pdf != null){
-                            $tr.append('<td ><a style="color:red" target="_blank" href="'+value.pdf+'"><i class="fa fa-file-pdf-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][pdf]" class="form-control" value="'+value.pdf+'"><input type="hidden" name="contrarecibodetalle['+index+'][original_pdf]" class="form-control" value="'+value.original_pdf+'"></td>');
-                        }else{
-                            $tr.append('<td ><a style="color:blue" href="javascript:;"><i class="fa fa-upload"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][pdf]" class="form-control" value=""></td>');
+                            $tr.append('<td ><a style="color:red" target="_blank" href="'+value.pdf+'"><i class="fa fa-file-pdf-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][pdf]" class="form-control" value="'+value.pdf+'"><input type="hidden" name="contrarecibodetalle['+index+'][originalpdf]" class="form-control" value="'+value.original_pdf+'"></td>');
+                        }else{  
+                            $tr.append('<td ><a style="color:blue" href="javascript:;"><i class="fa fa-upload"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][pdf]" class="form-control" value=""><input type="file" name="contrarecibodetalle['+index+'][upload_pdf]" style="display:none" accept=".pdf"></td>');
                         }
                         if(value.xml != null){
-                            $tr.append('<td ><a style="color:green" target="_blank" href="'+value.xml+'"><i class="fa fa-file-pdf-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][xml]" class="form-control" value="'+value.xml+'"><input type="hidden" name="contrarecibodetalle['+index+'][original_xml]" class="form-control" value="'+value.original_xml+'"></td>');
+                            $tr.append('<td ><a style="color:green" target="_blank" href="'+value.xml+'"><i class="fa fa-file-code-o"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][xml]" class="form-control" value="'+value.xml+'"><input type="hidden" name="contrarecibodetalle['+index+'][originalxml]" class="form-control" value="'+value.original_xml+'"></td>');
                         }else{
-                            $tr.append('<td><a style="color:blue" href="javascript:;"> <i class="fa fa-upload"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][xml]" class="form-control" value=""></td>');
+                            $tr.append('<td><a style="color:blue" href="javascript:;"> <i class="fa fa-upload"></i></a><input type="hidden" name="contrarecibodetalle['+index+'][xml]" class="form-control" value=""><input type="file" name="contrarecibodetalle['+index+'][upload_xml]" style="display:none" accept=".xml"></td>');
                         }
                         if(value.total != null){
                             $tr.append('<td>'+accounting.formatMoney(value.total)+'<input type="hidden" name="contrarecibodetalle['+index+'][cantidad]" required class="form-control" value="'+value.total+'"></td>');
@@ -243,7 +240,7 @@
                         //CALCULAR
                         $tr.find('input[type=text][name*=cantidad]').on('keyup',calculateTotal);
                         
-                        //
+                        //ELIMINAR
                         $tr.find('.fa-trash').on('click',function(){
                             
                             $tr = $(this).closest('tr');
@@ -251,10 +248,11 @@
                             var id = typeof $tr.attr('id') != 'undefined' ? $tr.attr('id') : null;
                             var folio =  $tr.find('input[name*=folio]').val() != "" ? $tr.find('input[name*=folio]').val() :null;
                             var pdf =  $tr.find('input[name*=pdf]').val() != "" ? $tr.find('input[name*=pdf]').val() :null;
-                            var original_pdf =  $tr.find('input[name*=pdf]').val() != "" ? $tr.find('input[name*=pdf]').val() :null;
+                            var original_pdf =  $tr.find('input[name*=originalpdf]').val() != "" ? $tr.find('input[name*=originalpdf]').val() :null;
                             var xml =  $tr.find('input[name*=xml]').val() != "" ? $tr.find('input[name*=xml]').val() :null;
+                            var original_xml =  $tr.find('input[name*=originalxml]').val() != "" ? $tr.find('input[name*=originalxml]').val() :null;
                             var cantidad =  $tr.find('input[name*=cantidad]').val() != "" ? $tr.find('input[name*=cantidad]').val() :null;
-                            
+                         
                             $.ajax({
                                 url:'/cre/contrarecibos/delete',
                                 dataType: 'json',
@@ -273,11 +271,81 @@
                                     
                                     if(data.response){
                                         $tr.remove();
+                                        //Recalculamos el total
+                                        calculateTotal();
                                         //Reordenamos los indices
                                         reorderIndexTable();
+                                        //Eliminamos thumbails
+                                        var count = 0;
+                                      
+                                        $.each(myDropzone.files,function(index){
+                                            
+                                            if((this.name == original_pdf || this.name == original_xml) && count < 2){
+                                                myDropzone.removeFile(this);
+                                                $(this.previewElement).remove();
+                                                count++;
+                                                 
+                                            }
+                                        });
+                                        
                                     }
                                 }
                             });
+                        });
+                        
+                        
+                        //SUBIR 1 ARCHIVO
+                        $tr.find('.fa-upload').on('click',function(){
+ 
+                            $tr.find('input[name*=upload]').trigger('click');
+                        });
+                        
+                        
+                        $tr.find('input[type=file]').on('change',function(){
+                            var $_this = $(this);
+                            var formData = new FormData();
+                            formData.append('file', $(this)[0].files[0]);
+                            $.ajax({
+                                url: '/cre/contrarecibos/upload',
+                                data: formData,
+                                type: 'POST',
+                                // THIS MUST BE DONE FOR FILE UPLOADING
+                                contentType: false,
+                                processData: false,
+                                dataType: 'json',
+                                success: function (data, textStatus, jqXHR) {
+                                    
+                                        $tr.find('.fa-upload').unbind();
+                                        
+                                    if(data.data[1].pdf != null){
+                                         $tr.find('.fa-upload').removeClass('fa-upload').addClass('fa-file-pdf-o');
+                                         $tr.find('.fa-file-pdf-o').parent('a').css('color','red').attr('href',data.data[1].pdf).attr('target','_blank');
+                                         $tr.find('input[name*=pdf]').val(data.data[1].pdf);
+                                    }else if (data.data[1].xml != null) {
+                                        
+                                         $tr.find('input[name*=folio]').val(data.data[1].folio);
+                                         $tr.find('input[name*=folio]').attr('type','hidden');
+                                         $tr.find('td').eq(2).append(data.data[1].folio);
+                                         
+                                         $tr.find('input[name*=cantidad]').val(data.data[1].total);
+                                         $tr.find('input[name*=cantidad]').attr('type','hidden');
+                                         $tr.find('td').eq(5).append(accounting.formatMoney(data.data[1].total));
+                                         calculateTotal();
+                                         
+                                         $tr.find('.fa-upload').removeClass('fa-upload').addClass('fa-file-code-o');
+                                         $tr.find('.fa-file-code-o').parent('a').css('color','green').attr('href',data.data[1].xml).attr('target','_blank');
+                                         $tr.find('input[name*=xml]').val(data.data[1].xml);
+                             
+                                    }
+
+                                    
+                                    
+                                    console.log();
+                                    console.log(data.data[1].xml == null);
+                                    console.log(typeof data.data[1].pdf);
+                                    console.log(typeof data.data[1].xml);
+                                }
+                            })
                         });
                         
                         
@@ -293,7 +361,7 @@
                
                
             }); 
-            
+            console.log(myDropzone);
             $container.find('#btn_continue').on('click',function(){
               
               myDropzone.options.autoProcessQueue = true; 

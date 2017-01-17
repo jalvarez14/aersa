@@ -2323,6 +2323,16 @@ return array(
                                             ),
                                         ),
                                     ),
+                                    'delete' => array(
+                                        'type' => 'Segment',
+                                        'options' => array(
+                                            'route' => '/upload',
+                                            'defaults' => array(
+                                                'controller' => 'Application\CRE\Controller\Contrarecibos',
+                                                'action' => 'upload',
+                                            ),
+                                        ),
+                                    ),
 
                                 ),
                             ),
