@@ -570,7 +570,7 @@
                 //INSERTAMOS EN LA TABLA
                 $('#productos_table tbody').prepend(tr);
                 tr.find('input[name*=cantidad]').focus();
-                tr.find('input[name*=cantidad]').css("background-color","lightblue");
+                tr.find('input[name*=cantidad]').select();
 
                 //LIMPIAMOS EL AUTOCOMPLETE
                 $('input#producto_autocomplete').typeahead('val', '');
