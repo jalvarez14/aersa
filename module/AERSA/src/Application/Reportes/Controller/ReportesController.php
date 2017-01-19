@@ -1263,10 +1263,11 @@ class ReportesController extends AbstractActionController {
                 return $this->redirect()->toUrl("/");
             }
         }
-        $categorias = \CategoriaQuery::create()->filterByIdcategoria(array('1','2'))->find();
+        $categorias = \CategoriaQuery::create()->filterByIdcategoria(array('1','2','3'))->find();
 
         $subcatsAlimentos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(1)->orderByCategoriaNombre('asc')->find();
         $subcatsBebidas = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(2)->orderByCategoriaNombre('asc')->find();
+        $subcatsGastos = \CategoriaQuery::create()->filterByCategoriaAlmacenable(1)->filterByIdcategoriapadre(3)->orderByCategoriaNombre('asc')->find();
         
         $view_model = new ViewModel();
         $view_model->setTemplate('/application/reportes/recetas/index');
@@ -1274,6 +1275,7 @@ class ReportesController extends AbstractActionController {
             'categorias' => $categorias,
             'subcatsAlimentos' => $subcatsAlimentos,
             'subcatsBebidas' => $subcatsBebidas,
+            'subcatsGastos' => $subcatsGastos,
         ));
         return $view_model;
     }
@@ -1417,6 +1419,7 @@ class ReportesController extends AbstractActionController {
     }
 
     public function recetasresumenAction() {
+        
         $session = new \Shared\Session\AouthSession();
         $session = $session->getData();
         $idempresa = $session['idempresa'];
@@ -1430,6 +1433,7 @@ class ReportesController extends AbstractActionController {
 //                if (strpos($value, '-'))
 //                    array_push($idcategorias, substr($value, 9));
 //            }
+        
         if(isset($post_data['generar_excel'])||isset($post_data['generar_pdf'])) {
             $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";
             $archivo = true;
@@ -1443,6 +1447,8 @@ class ReportesController extends AbstractActionController {
                     array_push($idcategorias, substr($value, 9));
             }
         }
+        
+       
 //        if ($request->isPost()) {
 //            
 //            $formato = (isset($post_data['generar_pdf'])) ? "PDF" : "excel";

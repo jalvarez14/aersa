@@ -19,7 +19,7 @@
                         <label><input id="todos" type="checkbox" class="icheck"> Todos </label>
                     </div>
                     <?php foreach ($categorias as $categoria):?>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label><input id="<?php echo $categoria->getIdcategoria();?>" name="<?php ucfirst($categoria->getCategoriaNombre()) ?>" value="<?php echo ucfirst($categoria->getCategoriaNombre())?>" type="checkbox" class="icheck generadoc"> <?php echo ucfirst($categoria->getCategoriaNombre())?> </label>
                     </div>
                     <?php endforeach;?>
@@ -59,6 +59,19 @@
                                 <tr><td>Bebidas</td></tr>
                                 <?php $color=true;$subcat = new Categoria();
                                 foreach ($subcatsBebidas as $subcat): ?>
+                                <tr id="categoria-<?php echo $subcat->getIdcategoria() ?>"  bgcolor="<?php echo ($color)? '#FFFFFF' : '#F2F2F2';$color=!$color;?>">
+                                        <?php 
+                                        $cat=$subcat->getCategoriaRelatedByIdcategoriapadre();
+                                        ?>
+                                        <td>
+                                            <input type="checkbox" id="generado-<?php echo $subcat->getIdcategoria() ?>" name="generado-<?php echo $subcat->getIdcategoria() ?>" class="icheck generado <?php echo ucfirst($cat->getCategoriaNombre()); ?>" >
+                                        </td>
+                                        <td name="nombre_subcategoria" id="nombre_subcategoria"><?php echo ucfirst($subcat->getCategoriaNombre()); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                    <tr><td>Gastos</td></tr>
+                                <?php $color=true;$subcat = new Categoria();
+                                foreach ($subcatsGastos as $subcat): ?>
                                 <tr id="categoria-<?php echo $subcat->getIdcategoria() ?>"  bgcolor="<?php echo ($color)? '#FFFFFF' : '#F2F2F2';$color=!$color;?>">
                                         <?php 
                                         $cat=$subcat->getCategoriaRelatedByIdcategoriapadre();

@@ -23,13 +23,25 @@ $( document ).ready(function() {
         source: data,
         limit:100,
     });
-
+    
+    $('select[name=receta_unidad] option[value=Litros]').hide();
+    $('select[name=receta_unidad] option[value=Kilos]').hide();
+    
     $('input#producto_autocomplete').bind('typeahead:select', function(ev, suggestion) {
+        
+        $('select[name=receta_unidad] option[value=Litros]').hide();
+        $('select[name=receta_unidad] option[value=Kilos]').hide();
+        
         $('#producto_add').attr('disabled',false);
         $('input#idproducto').val(suggestion.id);
         $('input#producto_iva').val(suggestion.producto_iva);
         $('input#productoreceta_rendimiento').val(suggestion.producto_rendimiento);
-
+        if(suggestion.unidad == 'Kilogramos'){
+            $('select[name=receta_unidad] option[value=Kilos]').show();
+        }
+        if(suggestion.unidad == 'Litros'){
+            $('select[name=receta_unidad] option[value=Litros]').show();
+        }
     });
 
 });

@@ -287,19 +287,19 @@
                 dataType: 'json',
                 success: function (data) {
                     var table = $container.find('#proveedores_table').dataTable({
-                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
+                        "lengthMenu": [ 10, 25, 50, 100, 200, 500,1000 ],
                         "language": data,
                         "order": [],
                     });
                     
                     var table2 = $container.find('#productos_table').dataTable({
-                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
+                        "lengthMenu": [ 10, 25, 50, 100, 200, 500,1000 ],
                         "language": data,
                         "order": [],
                     });
                     
                     var table3 = $container.find('#almacenes_table').dataTable({
-                        "lengthMenu": [ 10, 25, 50, 100, 200, 500 ],
+                        "lengthMenu": [ 10, 25, 50, 100, 200, 500,1000 ],
                         "language": data,
                         "order": [],
                     });

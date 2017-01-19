@@ -304,6 +304,15 @@ class DevolucionController extends AbstractActionController {
 
                 if ($post_data['devolucion_revisada']) {
                     $entity->setIdauditor($session['idusuario']);
+                    $notification_exist = \NotificacionQuery::create()->filterByNotificacionProceso("devolucion")->filterByIdproceso($entity->getIddevolucion())->exists();
+                    if($notification_exist){
+                         $notification = \NotificacionQuery::create()->filterByNotificacionProceso("devolucion")->filterByIdproceso($entity->getIddevolucion())->findOne();
+                         $notification->setRol1(1)->save();
+                         $notification->setRol2(1)->save();
+                         $notification->setRol3(1)->save();
+                         $notification->setRol4(1)->save();
+                         $notification->setRol5(1)->save();
+                    }
                 }
 
                 $entity->save();
@@ -343,6 +352,7 @@ class DevolucionController extends AbstractActionController {
 
                     if (isset($producto['revisada'])) {
                         $devolucion_detalle->setDevoluciondetalleRevisada(1);
+                        
                     }
 
                     $devolucion_detalle->save();

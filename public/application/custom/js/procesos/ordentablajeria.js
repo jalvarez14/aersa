@@ -408,6 +408,7 @@
                         $tr.append('<td><input type="checkbox" name=productos['+count+'][revisada]></td>');
                         $tr.append('<td><a href="javascript:;"><i class="fa fa-trash"></i></a></td>');
                         
+                        
                         //EVENTOS DE NUESTRAS ROW
                         $tr.find('input').numeric();
                         $tr.find('input').on('blur',function(){
@@ -421,7 +422,7 @@
                         });  
 
                         $('#productos_table > tbody').append($tr);
-
+                        
                         calculator($tr);
                         count ++;
                     });
@@ -523,7 +524,8 @@
                 });  
                 
                 $('#productos_table > tbody').append($tr);
-                
+                $tr.find('input[name*=cantidad]').focus();
+                $tr.find('input[name*=cantidad]').select();
                 calculator($tr);
 
                 $('input[name=idproductoautocomplete]').val('');

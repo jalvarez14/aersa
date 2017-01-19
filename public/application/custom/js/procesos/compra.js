@@ -921,6 +921,8 @@
                 //INSERTAMOS EN LA TABLA
                 $('#productos_table tbody').prepend(tr);
                  tr.find('input[name*=cantidad]').focus();
+                 tr.find('input[name*=cantidad]').select();
+                 //tr.find('input[name*=cantidad]').css("background-color","lightblue");
                  
                 //LIMPIAMOS EL AUTOCOMPLETE
                 $('input#producto_autocomplete').typeahead('val', ''); 
@@ -1233,6 +1235,7 @@
                 //INSERTAMOS EN LA TABLA
                 $('#productos_table tbody').prepend(tr);
                 tr.find('input[name*=cantidad]').focus();
+                tr.find('input[name*=cantidad]').css("background-color","lightblue");
                
                 
                 //LIMPIAMOS EL AUTOCOMPLETE
@@ -1318,6 +1321,7 @@
                 var maxDate = new Date(min_semana_activa);
                 maxDate.setDate(min_semana_activa.getDate() + 6);
                 if((now < minDate || now > maxDate) && compra_tipo == 'compra' ){
+                   
                     $container.find('input,select,button').attr('disabled',true);
                     $('#generar_pdf').attr('disabled',false);
                     $('#generar_excel').attr('disabled',false);
@@ -1326,7 +1330,7 @@
                 }
                 
             }else{
-                if(now.format('W') != mes || now.getFullYear() != anio){
+                if((now.format('W') != mes || now.getFullYear()) != anio  && compra_tipo == 'compra'){
                     $container.find('input,select,button').attr('disabled',true);
                     $('#generar_pdf').attr('disabled',false);
                     $('#generar_excel').attr('disabled',false);

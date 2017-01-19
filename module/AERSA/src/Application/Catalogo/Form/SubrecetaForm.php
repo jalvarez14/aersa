@@ -62,11 +62,14 @@ class SubrecetaForm extends Form
             'options' => array(
                 'label' => 'Unidad *',
                 'value_options' => array(
+                    
                     'Botella' => 'Botella',
                     'Pieza' => 'Pieza',
                     'Onza' => 'Onza',
                     'Copa vino 187.5 ML' => 'Copa vino 187.5 ML',
                     'Copa vino 150 ML' => 'Copa vino 150 ML',
+                    'Litros' => 'Litros',
+                    'Kilos' => 'Kilos',
   
                 ),
             ),

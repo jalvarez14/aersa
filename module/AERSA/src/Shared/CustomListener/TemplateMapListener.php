@@ -209,34 +209,34 @@ class TemplateMapListener implements ListenerAggregateInterface
          * NOTIFICACIONES
          */
         $notifications_url = array();
-        if($section[1] == 'Proceso'){
-            
-             $server = $_SERVER['REQUEST_URI'] ;
-             $server = explode("/", $server);
-             $proceso = $server[2];
-             if($server[3] == "editar"){
-                $idproceso = $server[4];
-                $notification_exist = \NotificacionQuery::create()->filterByNotificacionProceso($proceso)->filterByIdproceso($idproceso)->exists();
-                if($notification_exist){
-                    $notification = \NotificacionQuery::create()->filterByNotificacionProceso($proceso)->filterByIdproceso($idproceso)->findOne();
-                    if($session['idrol'] == 1){
-                        $notification->setRol1(1)->save();
-
-                    }elseif($session['idrol'] == 2){
-                         $notification->setRol2(1)->save();
-                    }elseif($session['idrol'] == 3){
-                         $notification->setRol3(1)->save();
-                    }elseif($session['idrol'] == 4){
-                         $notification->setRol4(1)->save();
-                    }elseif($session['idrol'] == 5){
-                         $notification->setRol5(1)->save();
-                    }
-                    
-                }
-         
-             }
-
-        }
+//        if($section[1] == 'Proceso'){
+//            
+//             $server = $_SERVER['REQUEST_URI'] ;
+//             $server = explode("/", $server);
+//             $proceso = $server[2];
+//             if($server[3] == "editar"){
+//                $idproceso = $server[4];
+//                $notification_exist = \NotificacionQuery::create()->filterByNotificacionProceso($proceso)->filterByIdproceso($idproceso)->exists();
+//                if($notification_exist){
+//                    $notification = \NotificacionQuery::create()->filterByNotificacionProceso($proceso)->filterByIdproceso($idproceso)->findOne();
+//                    if($session['idrol'] == 1){
+//                        $notification->setRol1(1)->save();
+//
+//                    }elseif($session['idrol'] == 2){
+//                         $notification->setRol2(1)->save();
+//                    }elseif($session['idrol'] == 3){
+//                         $notification->setRol3(1)->save();
+//                    }elseif($session['idrol'] == 4){
+//                         $notification->setRol4(1)->save();
+//                    }elseif($session['idrol'] == 5){
+//                         $notification->setRol5(1)->save();
+//                    }
+//                    
+//                }
+//         
+//             }
+//
+//        }
         
 
         if(isset($notification_flag) && $notification_flag){

@@ -316,10 +316,18 @@ class IndexController extends AbstractActionController
         $search = $this->params()->fromQuery('q');
         $idproducto = $this->params()->fromQuery('idproducto');
         $query = \ProductoQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductoNombre('%'.$search.'%',  \Criteria::LIKE)->filterByProductoBaja(0,  \Criteria::EQUAL)->filterByIdproducto($idproducto,  \Criteria::NOT_EQUAL)->find();
-
         
-        return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo','producto_rendimiento',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
-
+        $array = array();
+        $entity = new \Producto();
+        foreach ($query as $entity){
+            $tmp['id'] = $entity->getIdproducto();
+            $tmp['value'] = $entity->getProductoNombre()." - ".$entity->getProductoTipo()." - ".$entity->getUnidadmedida()->getUnidadmedidaNombre();
+            $tmp['unidad'] = $entity->getUnidadmedida()->getUnidadmedidaNombre();
+            $array[] = $tmp;
+        }
+        
+        //return $this->getResponse()->setContent(json_encode(\Shared\GeneralFunctions::collectionToAutocomplete($query, 'idproducto', 'producto_nombre',array('producto_iva','producto_costo','producto_rendimiento',array('unidadmedida','idunidadmedida','unidadmedida_nombre','UnidadmedidaQuery')))));
+        return $this->getResponse()->setContent(json_encode($array));
     }
     
     public function getproductossimplesAction(){
