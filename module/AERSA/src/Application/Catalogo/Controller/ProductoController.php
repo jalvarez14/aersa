@@ -101,7 +101,7 @@ class ProductoController extends AbstractActionController
                  return $this->getResponse()->setContent(json_encode(array('response' => false)));
              }else{
                  $cfdi = \ProductocfdiQuery::create()->filterByIdempresa($session['idempresa'])->filterByProductocfdiNombre($post_data['descripcion'])->findOne();
-                 $producto = \ProductoQuery::create()->joinUnidadmedida()->withColumn('unidadmedida_nombre')->filterByIdproducto($cfdi->getIdproducto())->findOne();
+                 $producto = \ProductoQuery::create()->joinProductocfdi()->withColumn('productocfdi_equivalencia')->joinUnidadmedida()->withColumn('unidadmedida_nombre')->filterByIdproducto($cfdi->getIdproducto())->findOne();
                  return $this->getResponse()->setContent(json_encode(array('response' => true,'producto'=> $producto->toArray(\BasePeer::TYPE_FIELDNAME))));
              }
         }

@@ -62,7 +62,6 @@ class SubrecetaForm extends Form
             'options' => array(
                 'label' => 'Unidad *',
                 'value_options' => array(
-                    
                     'Botella' => 'Botella',
                     'Pieza' => 'Pieza',
                     'Onza' => 'Onza',

@@ -50,7 +50,7 @@
         */
        
         var addCompraDetail = function(key,producto,cfdi){
- 
+              
                 var iva = parseFloat(cfdi.iva);
                 if(iva>0){
                     iva = 'true';
@@ -67,17 +67,18 @@
                 
                 var almacen_selected = $('select[name=idalmacen] option:selected').val();
                 almacenen_select.find('option[value="'+almacen_selected+'"]').attr('selected',true);
-                
+                //
+                var unitario=  (parseFloat(cfdi.importe))/(parseFloat(cfdi.equivalencia)*parseFloat(cfdi.cantidad));
                 var tr = $('<tr>');
                 tr.append('<td><input type="hidden"  name="productos['+key+'][producto_iva]" value="'+iva+'"><input name=productos['+key+'][subtotal] type=hidden value="'+cfdi.importe+'"><input name=productos['+key+'][costo_unitario] type=hidden value="'+cfdi.valorUnitario+'"><input type="hidden"  name=productos['+key+'][idproducto] value="'+producto.idproducto+'">'+producto.producto_nombre+'</td>');
                 tr.append('<td>'+producto.unidadmedida_nombre+'</td>');
-                tr.append('<td><input type="text" name=productos['+key+'][cantidad] value="1"></td>');
-                tr.append('<td><input type="text" name=productos['+key+'][precio] value="'+cfdi.valorUnitario+'"></td>');
-                tr.append('<td class="costo_unitario">'+accounting.formatMoney(cfdi.valorUnitario)+'</td>');
+                tr.append('<td><input type="text" name=productos['+key+'][cantidad value="'+parseFloat(cfdi.equivalencia)*parseFloat(cfdi.cantidad)+'"</td>');
+                tr.append('<td><input type="text" name=productos['+key+'][precio] value="'+unitario +'"></td>');
+                tr.append('<td class="costo_unitario" value="'+unitario+'"</td>');
                 tr.append('<td><input type="text" name=productos['+key+'][descuento] value="0"></td>');
                 tr.append('<td><input type="text" name=productos['+key+'][ieps] value="0"></td>');
                 tr.append('<td class="subtotal">'+accounting.formatMoney(cfdi.importe)+'</td>');
-
+                
                 /*
                  * ACL
                  */
@@ -565,11 +566,15 @@
                      
                                                         var idproducto = $modal.find('input[name=idproducto]').val();
                                                         var concepto_nombre = productos_array[count]['descripcion'];
+                                                        var cantidad = productos_array[count]['cantidad'];
                                                         var equivalencia = $modal.find('input[name=equivalencia]').val();
+                                                         
+                                                        productos_array[count]['equivalencia'] = equivalencia;
+                                                        productos_array[count]['cantidad'] = cantidad;
                                                         $.ajax({
                                                             url:'/catalogo/producto/associateproductcfdi',
                                                             type:'POST',
-                                                            data:{idproducto:idproducto,concepto_nombre:concepto_nombre,equivalencia:equivalencia},
+                                                            data:{idproducto:idproducto,concepto_nombre:concepto_nombre,equivalencia:equivalencia, cantidad:cantidad},
                                                             dataType:'JSON',
                                                             success: function (data2) {
                                                                if(data2.response){
@@ -582,6 +587,7 @@
                                                         });
                                                     });
                                                 }else{
+                                                    productos_array[count]['equivalencia'] = data.producto.productocfdi_equivalencia;
                                                     addCompraDetail(count,data.producto,productos_array[count]);
                                                     count++;
                                                     
