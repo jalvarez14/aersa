@@ -323,6 +323,7 @@ class IndexController extends AbstractActionController
             $tmp['id'] = $entity->getIdproducto();
             $tmp['value'] = $entity->getProductoNombre()." - ".$entity->getProductoTipo()." - ".$entity->getUnidadmedida()->getUnidadmedidaNombre();
             $tmp['unidad'] = $entity->getUnidadmedida()->getUnidadmedidaNombre();
+            $tmp['producto_rendimiento'] = $entity->getProductoRendimiento();
             $array[] = $tmp;
         }
         
