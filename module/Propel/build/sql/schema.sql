@@ -743,12 +743,12 @@ CREATE TABLE `foliocompra`
     PRIMARY KEY (`idfoliocompra`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
-    CONSTRAINT `foliocompra_ibfk_1`
+    CONSTRAINT `idempresa_foliocompra`
         FOREIGN KEY (`idempresa`)
         REFERENCES `empresa` (`idempresa`)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT `foliocompra_ibfk_2`
+    CONSTRAINT `idsucursal_foliocompra`
         FOREIGN KEY (`idsucursal`)
         REFERENCES `sucursal` (`idsucursal`)
         ON UPDATE CASCADE
@@ -797,12 +797,12 @@ CREATE TABLE `foliotablajeria`
     PRIMARY KEY (`idfoliotablajeria`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idsucursal` (`idsucursal`),
-    CONSTRAINT `foliotablajeria_ibfk_1`
+    CONSTRAINT `idempresa_foliotablajeria`
         FOREIGN KEY (`idempresa`)
         REFERENCES `empresa` (`idempresa`)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT `foliotablajeria_ibfk_2`
+    CONSTRAINT `idsucursal_foliotablajeria`
         FOREIGN KEY (`idsucursal`)
         REFERENCES `sucursal` (`idsucursal`)
         ON UPDATE CASCADE
@@ -1457,6 +1457,7 @@ CREATE TABLE `productocfdi`
     `idempresa` INTEGER NOT NULL,
     `idproducto` INTEGER NOT NULL,
     `productocfdi_nombre` TEXT NOT NULL,
+    `productocfdi_equivalencia` FLOAT NOT NULL,
     PRIMARY KEY (`idproductocfdi`),
     INDEX `idempresa` (`idempresa`),
     INDEX `idproducto` (`idproducto`),
@@ -1687,11 +1688,11 @@ CREATE TABLE `requisiciondetalle`
     `idrequisicion` INTEGER NOT NULL,
     `idproducto` INTEGER NOT NULL,
     `requisiciondetalle_cantidad` FLOAT NOT NULL,
-    `requisiciondetalle_revisada` TINYINT(1) DEFAULT 0 NOT NULL,
+    `requisiciondetalle_revisada` TINYINT(1) NOT NULL,
     `requisiciondetalle_preciounitario` DECIMAL(15,5) NOT NULL,
     `requisiciondetalle_subtotal` DECIMAL(15,5) NOT NULL,
     `idpadre` INTEGER,
-    `requisiciondetalle_contable` TINYINT(1) DEFAULT 0 NOT NULL,
+    `requisiciondetalle_contable` TINYINT(1) DEFAULT 0,
     PRIMARY KEY (`idrequisiciondetalle`),
     INDEX `idrequisicion` (`idrequisicion`),
     INDEX `idproducto` (`idproducto`),

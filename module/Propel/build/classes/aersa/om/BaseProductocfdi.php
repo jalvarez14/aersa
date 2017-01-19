@@ -54,6 +54,12 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
     protected $productocfdi_nombre;
 
     /**
+     * The value for the productocfdi_equivalencia field.
+     * @var        double
+     */
+    protected $productocfdi_equivalencia;
+
+    /**
      * @var        Empresa
      */
     protected $aEmpresa;
@@ -125,6 +131,17 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
     {
 
         return $this->productocfdi_nombre;
+    }
+
+    /**
+     * Get the [productocfdi_equivalencia] column value.
+     *
+     * @return double
+     */
+    public function getProductocfdiEquivalencia()
+    {
+
+        return $this->productocfdi_equivalencia;
     }
 
     /**
@@ -220,6 +237,27 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
     } // setProductocfdiNombre()
 
     /**
+     * Set the value of [productocfdi_equivalencia] column.
+     *
+     * @param  double $v new value
+     * @return Productocfdi The current object (for fluent API support)
+     */
+    public function setProductocfdiEquivalencia($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (double) $v;
+        }
+
+        if ($this->productocfdi_equivalencia !== $v) {
+            $this->productocfdi_equivalencia = $v;
+            $this->modifiedColumns[] = ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA;
+        }
+
+
+        return $this;
+    } // setProductocfdiEquivalencia()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -255,6 +293,7 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
             $this->idempresa = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
             $this->idproducto = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
             $this->productocfdi_nombre = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+            $this->productocfdi_equivalencia = ($row[$startcol + 4] !== null) ? (double) $row[$startcol + 4] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -264,7 +303,7 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 4; // 4 = ProductocfdiPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = ProductocfdiPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Productocfdi object", $e);
@@ -515,6 +554,9 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductocfdiPeer::PRODUCTOCFDI_NOMBRE)) {
             $modifiedColumns[':p' . $index++]  = '`productocfdi_nombre`';
         }
+        if ($this->isColumnModified(ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA)) {
+            $modifiedColumns[':p' . $index++]  = '`productocfdi_equivalencia`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `productocfdi` (%s) VALUES (%s)',
@@ -537,6 +579,9 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
                         break;
                     case '`productocfdi_nombre`':
                         $stmt->bindValue($identifier, $this->productocfdi_nombre, PDO::PARAM_STR);
+                        break;
+                    case '`productocfdi_equivalencia`':
+                        $stmt->bindValue($identifier, $this->productocfdi_equivalencia, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -702,6 +747,9 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
             case 3:
                 return $this->getProductocfdiNombre();
                 break;
+            case 4:
+                return $this->getProductocfdiEquivalencia();
+                break;
             default:
                 return null;
                 break;
@@ -735,6 +783,7 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
             $keys[1] => $this->getIdempresa(),
             $keys[2] => $this->getIdproducto(),
             $keys[3] => $this->getProductocfdiNombre(),
+            $keys[4] => $this->getProductocfdiEquivalencia(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -794,6 +843,9 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
             case 3:
                 $this->setProductocfdiNombre($value);
                 break;
+            case 4:
+                $this->setProductocfdiEquivalencia($value);
+                break;
         } // switch()
     }
 
@@ -822,6 +874,7 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
         if (array_key_exists($keys[1], $arr)) $this->setIdempresa($arr[$keys[1]]);
         if (array_key_exists($keys[2], $arr)) $this->setIdproducto($arr[$keys[2]]);
         if (array_key_exists($keys[3], $arr)) $this->setProductocfdiNombre($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setProductocfdiEquivalencia($arr[$keys[4]]);
     }
 
     /**
@@ -837,6 +890,7 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
         if ($this->isColumnModified(ProductocfdiPeer::IDEMPRESA)) $criteria->add(ProductocfdiPeer::IDEMPRESA, $this->idempresa);
         if ($this->isColumnModified(ProductocfdiPeer::IDPRODUCTO)) $criteria->add(ProductocfdiPeer::IDPRODUCTO, $this->idproducto);
         if ($this->isColumnModified(ProductocfdiPeer::PRODUCTOCFDI_NOMBRE)) $criteria->add(ProductocfdiPeer::PRODUCTOCFDI_NOMBRE, $this->productocfdi_nombre);
+        if ($this->isColumnModified(ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA)) $criteria->add(ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA, $this->productocfdi_equivalencia);
 
         return $criteria;
     }
@@ -903,6 +957,7 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
         $copyObj->setIdempresa($this->getIdempresa());
         $copyObj->setIdproducto($this->getIdproducto());
         $copyObj->setProductocfdiNombre($this->getProductocfdiNombre());
+        $copyObj->setProductocfdiEquivalencia($this->getProductocfdiEquivalencia());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1074,6 +1129,7 @@ abstract class BaseProductocfdi extends BaseObject implements Persistent
         $this->idempresa = null;
         $this->idproducto = null;
         $this->productocfdi_nombre = null;
+        $this->productocfdi_equivalencia = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;

@@ -76,6 +76,7 @@ class ProductoController extends AbstractActionController
              $cfdi->setIdproducto($post_data['idproducto'])
                   ->setProductocfdiNombre($post_data['concepto_nombre'])
                   ->setIdempresa($session['idempresa'])
+                  ->setProductocfdiEquivalencia($post_data['equivalencia'])
                   ->save();     
              
              $producto = \ProductoQuery::create()->joinUnidadmedida()->withColumn('unidadmedida_nombre')->filterByIdproducto($cfdi->getIdproducto())->findOne();

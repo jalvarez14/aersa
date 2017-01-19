@@ -42,6 +42,7 @@ class ProductocfdiTableMap extends TableMap
         $this->addForeignKey('idempresa', 'Idempresa', 'INTEGER', 'empresa', 'idempresa', true, null, null);
         $this->addForeignKey('idproducto', 'Idproducto', 'INTEGER', 'producto', 'idproducto', true, null, null);
         $this->addColumn('productocfdi_nombre', 'ProductocfdiNombre', 'LONGVARCHAR', true, null, null);
+        $this->addColumn('productocfdi_equivalencia', 'ProductocfdiEquivalencia', 'FLOAT', true, null, null);
         // validators
     } // initialize()
 

@@ -24,13 +24,13 @@ abstract class BaseProductocfdiPeer
     const TM_CLASS = 'ProductocfdiTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /** the column name for the idproductocfdi field */
     const IDPRODUCTOCFDI = 'productocfdi.idproductocfdi';
@@ -43,6 +43,9 @@ abstract class BaseProductocfdiPeer
 
     /** the column name for the productocfdi_nombre field */
     const PRODUCTOCFDI_NOMBRE = 'productocfdi.productocfdi_nombre';
+
+    /** the column name for the productocfdi_equivalencia field */
+    const PRODUCTOCFDI_EQUIVALENCIA = 'productocfdi.productocfdi_equivalencia';
 
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -63,12 +66,12 @@ abstract class BaseProductocfdiPeer
      * e.g. ProductocfdiPeer::$fieldNames[ProductocfdiPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproductocfdi', 'Idempresa', 'Idproducto', 'ProductocfdiNombre', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproductocfdi', 'idempresa', 'idproducto', 'productocfdiNombre', ),
-        BasePeer::TYPE_COLNAME => array (ProductocfdiPeer::IDPRODUCTOCFDI, ProductocfdiPeer::IDEMPRESA, ProductocfdiPeer::IDPRODUCTO, ProductocfdiPeer::PRODUCTOCFDI_NOMBRE, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTOCFDI', 'IDEMPRESA', 'IDPRODUCTO', 'PRODUCTOCFDI_NOMBRE', ),
-        BasePeer::TYPE_FIELDNAME => array ('idproductocfdi', 'idempresa', 'idproducto', 'productocfdi_nombre', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Idproductocfdi', 'Idempresa', 'Idproducto', 'ProductocfdiNombre', 'ProductocfdiEquivalencia', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproductocfdi', 'idempresa', 'idproducto', 'productocfdiNombre', 'productocfdiEquivalencia', ),
+        BasePeer::TYPE_COLNAME => array (ProductocfdiPeer::IDPRODUCTOCFDI, ProductocfdiPeer::IDEMPRESA, ProductocfdiPeer::IDPRODUCTO, ProductocfdiPeer::PRODUCTOCFDI_NOMBRE, ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTOCFDI', 'IDEMPRESA', 'IDPRODUCTO', 'PRODUCTOCFDI_NOMBRE', 'PRODUCTOCFDI_EQUIVALENCIA', ),
+        BasePeer::TYPE_FIELDNAME => array ('idproductocfdi', 'idempresa', 'idproducto', 'productocfdi_nombre', 'productocfdi_equivalencia', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -78,12 +81,12 @@ abstract class BaseProductocfdiPeer
      * e.g. ProductocfdiPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idproductocfdi' => 0, 'Idempresa' => 1, 'Idproducto' => 2, 'ProductocfdiNombre' => 3, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idproductocfdi' => 0, 'idempresa' => 1, 'idproducto' => 2, 'productocfdiNombre' => 3, ),
-        BasePeer::TYPE_COLNAME => array (ProductocfdiPeer::IDPRODUCTOCFDI => 0, ProductocfdiPeer::IDEMPRESA => 1, ProductocfdiPeer::IDPRODUCTO => 2, ProductocfdiPeer::PRODUCTOCFDI_NOMBRE => 3, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTOCFDI' => 0, 'IDEMPRESA' => 1, 'IDPRODUCTO' => 2, 'PRODUCTOCFDI_NOMBRE' => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('idproductocfdi' => 0, 'idempresa' => 1, 'idproducto' => 2, 'productocfdi_nombre' => 3, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('Idproductocfdi' => 0, 'Idempresa' => 1, 'Idproducto' => 2, 'ProductocfdiNombre' => 3, 'ProductocfdiEquivalencia' => 4, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idproductocfdi' => 0, 'idempresa' => 1, 'idproducto' => 2, 'productocfdiNombre' => 3, 'productocfdiEquivalencia' => 4, ),
+        BasePeer::TYPE_COLNAME => array (ProductocfdiPeer::IDPRODUCTOCFDI => 0, ProductocfdiPeer::IDEMPRESA => 1, ProductocfdiPeer::IDPRODUCTO => 2, ProductocfdiPeer::PRODUCTOCFDI_NOMBRE => 3, ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA => 4, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDPRODUCTOCFDI' => 0, 'IDEMPRESA' => 1, 'IDPRODUCTO' => 2, 'PRODUCTOCFDI_NOMBRE' => 3, 'PRODUCTOCFDI_EQUIVALENCIA' => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('idproductocfdi' => 0, 'idempresa' => 1, 'idproducto' => 2, 'productocfdi_nombre' => 3, 'productocfdi_equivalencia' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -161,11 +164,13 @@ abstract class BaseProductocfdiPeer
             $criteria->addSelectColumn(ProductocfdiPeer::IDEMPRESA);
             $criteria->addSelectColumn(ProductocfdiPeer::IDPRODUCTO);
             $criteria->addSelectColumn(ProductocfdiPeer::PRODUCTOCFDI_NOMBRE);
+            $criteria->addSelectColumn(ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA);
         } else {
             $criteria->addSelectColumn($alias . '.idproductocfdi');
             $criteria->addSelectColumn($alias . '.idempresa');
             $criteria->addSelectColumn($alias . '.idproducto');
             $criteria->addSelectColumn($alias . '.productocfdi_nombre');
+            $criteria->addSelectColumn($alias . '.productocfdi_equivalencia');
         }
     }
 

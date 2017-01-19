@@ -55,7 +55,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
 
     /**
      * The value for the requisiciondetalle_revisada field.
-     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $requisiciondetalle_revisada;
@@ -140,7 +139,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function applyDefaultValues()
     {
-        $this->requisiciondetalle_revisada = false;
         $this->requisiciondetalle_contable = false;
     }
 
@@ -480,10 +478,6 @@ abstract class BaseRequisiciondetalle extends BaseObject implements Persistent
      */
     public function hasOnlyDefaultValues()
     {
-            if ($this->requisiciondetalle_revisada !== false) {
-                return false;
-            }
-
             if ($this->requisiciondetalle_contable !== false) {
                 return false;
             }

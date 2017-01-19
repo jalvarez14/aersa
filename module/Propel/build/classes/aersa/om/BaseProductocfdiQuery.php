@@ -10,11 +10,13 @@
  * @method ProductocfdiQuery orderByIdempresa($order = Criteria::ASC) Order by the idempresa column
  * @method ProductocfdiQuery orderByIdproducto($order = Criteria::ASC) Order by the idproducto column
  * @method ProductocfdiQuery orderByProductocfdiNombre($order = Criteria::ASC) Order by the productocfdi_nombre column
+ * @method ProductocfdiQuery orderByProductocfdiEquivalencia($order = Criteria::ASC) Order by the productocfdi_equivalencia column
  *
  * @method ProductocfdiQuery groupByIdproductocfdi() Group by the idproductocfdi column
  * @method ProductocfdiQuery groupByIdempresa() Group by the idempresa column
  * @method ProductocfdiQuery groupByIdproducto() Group by the idproducto column
  * @method ProductocfdiQuery groupByProductocfdiNombre() Group by the productocfdi_nombre column
+ * @method ProductocfdiQuery groupByProductocfdiEquivalencia() Group by the productocfdi_equivalencia column
  *
  * @method ProductocfdiQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method ProductocfdiQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -34,11 +36,13 @@
  * @method Productocfdi findOneByIdempresa(int $idempresa) Return the first Productocfdi filtered by the idempresa column
  * @method Productocfdi findOneByIdproducto(int $idproducto) Return the first Productocfdi filtered by the idproducto column
  * @method Productocfdi findOneByProductocfdiNombre(string $productocfdi_nombre) Return the first Productocfdi filtered by the productocfdi_nombre column
+ * @method Productocfdi findOneByProductocfdiEquivalencia(double $productocfdi_equivalencia) Return the first Productocfdi filtered by the productocfdi_equivalencia column
  *
  * @method array findByIdproductocfdi(int $idproductocfdi) Return Productocfdi objects filtered by the idproductocfdi column
  * @method array findByIdempresa(int $idempresa) Return Productocfdi objects filtered by the idempresa column
  * @method array findByIdproducto(int $idproducto) Return Productocfdi objects filtered by the idproducto column
  * @method array findByProductocfdiNombre(string $productocfdi_nombre) Return Productocfdi objects filtered by the productocfdi_nombre column
+ * @method array findByProductocfdiEquivalencia(double $productocfdi_equivalencia) Return Productocfdi objects filtered by the productocfdi_equivalencia column
  *
  * @package    propel.generator.aersa.om
  */
@@ -146,7 +150,7 @@ abstract class BaseProductocfdiQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idproductocfdi`, `idempresa`, `idproducto`, `productocfdi_nombre` FROM `productocfdi` WHERE `idproductocfdi` = :p0';
+        $sql = 'SELECT `idproductocfdi`, `idempresa`, `idproducto`, `productocfdi_nombre`, `productocfdi_equivalencia` FROM `productocfdi` WHERE `idproductocfdi` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -392,6 +396,48 @@ abstract class BaseProductocfdiQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(ProductocfdiPeer::PRODUCTOCFDI_NOMBRE, $productocfdiNombre, $comparison);
+    }
+
+    /**
+     * Filter the query on the productocfdi_equivalencia column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByProductocfdiEquivalencia(1234); // WHERE productocfdi_equivalencia = 1234
+     * $query->filterByProductocfdiEquivalencia(array(12, 34)); // WHERE productocfdi_equivalencia IN (12, 34)
+     * $query->filterByProductocfdiEquivalencia(array('min' => 12)); // WHERE productocfdi_equivalencia >= 12
+     * $query->filterByProductocfdiEquivalencia(array('max' => 12)); // WHERE productocfdi_equivalencia <= 12
+     * </code>
+     *
+     * @param     mixed $productocfdiEquivalencia The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ProductocfdiQuery The current query, for fluid interface
+     */
+    public function filterByProductocfdiEquivalencia($productocfdiEquivalencia = null, $comparison = null)
+    {
+        if (is_array($productocfdiEquivalencia)) {
+            $useMinMax = false;
+            if (isset($productocfdiEquivalencia['min'])) {
+                $this->addUsingAlias(ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA, $productocfdiEquivalencia['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($productocfdiEquivalencia['max'])) {
+                $this->addUsingAlias(ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA, $productocfdiEquivalencia['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(ProductocfdiPeer::PRODUCTOCFDI_EQUIVALENCIA, $productocfdiEquivalencia, $comparison);
     }
 
     /**

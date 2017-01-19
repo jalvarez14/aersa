@@ -44,6 +44,7 @@ class AsociacionconceptosController extends AbstractActionController
             $producto_cfdi = new \Productocfdi();
             $producto_cfdi->setIdproducto($post_data['idproducto'])
                            ->setProductocfdiNombre($post_data['productocfdi_nombre'])
+                            ->setProductocfdiEquivalencia($post_data['equivalencia'])
                            ->setIdempresa($session['idempresa'])
                            ->save();
                     

@@ -518,6 +518,12 @@
                                                                             '</div>',
                                                                         '</div>',
                                                                     '</div>',
+                                                                    '<div class="col-md-12">',
+                                                                        '<div class="form-group">',
+                                                                            '<label for="producto_nombre">Equivalencia *</label>',
+                                                                            '<input required class="form-control" type="text" name="equivalencia" >',
+                                                                        '</div>',
+                                                                    '</div>',
                                                                 '</div>',
                                                             '</div>',
                                                             '<div class="modal-footer">',
@@ -559,10 +565,11 @@
                      
                                                         var idproducto = $modal.find('input[name=idproducto]').val();
                                                         var concepto_nombre = productos_array[count]['descripcion'];
+                                                        var equivalencia = $modal.find('input[name=equivalencia]').val();
                                                         $.ajax({
                                                             url:'/catalogo/producto/associateproductcfdi',
                                                             type:'POST',
-                                                            data:{idproducto:idproducto,concepto_nombre:concepto_nombre},
+                                                            data:{idproducto:idproducto,concepto_nombre:concepto_nombre,equivalencia:equivalencia},
                                                             dataType:'JSON',
                                                             success: function (data2) {
                                                                if(data2.response){
