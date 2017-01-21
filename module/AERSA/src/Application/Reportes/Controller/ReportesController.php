@@ -557,6 +557,20 @@ class ReportesController extends AbstractActionController {
             }
         }
         
+        $ajustesinventario = \AjusteinventarioQuery::create()->filterByAjusteinventarioFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacen($idAlmacen)->find();
+        $ajusteinventario = new \Ajusteinventario();
+        foreach ($ajustesinventarios as $ajusteinventario) {
+                if (!in_array($ajusteinventario->getIdproducto(), $idproductos))
+                    array_push($idproductos, $ajusteinventario->getIdproducto());
+        }
+        
+        $explosionesreceta = \ExplosionrecetaQuery::create()->filterByExplosionrecetaFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacen($idAlmacen)->find();
+        $explosionreceta = new \Explosionreceta();
+        foreach ( $explosionesreceta as  $explosionreceta) {
+                if (!in_array($explosionreceta->getIdproducto(), $idproductos))
+                    array_push($idproductos, $explosionreceta->getIdproducto());
+        }
+        
         $invsmes= \InventariomesQuery::create()->filterByInventariomesFecha(array('min' => $fecha, 'max' => $hoy))->filterByIdalmacen($idAlmacen)->find();
         $invmes = new \Inventariomes();
         foreach ($invsmes as $invmes) {

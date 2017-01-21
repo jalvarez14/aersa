@@ -1638,6 +1638,14 @@
                                                                              if (isset($arrayReporte[$idprnivel6]['inventariomesdetalle_diferencia'])) {
                                                                                  ////
                                                                                  //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
+                                                                               $recetaexplosion = new \Explosionreceta();
+                                                                                 $recetaexplosion->setIdempresa($idempresa);
+                                                                                 $recetaexplosion->setIdsucursal($idsucursal);
+                                                                                 $recetaexplosion->setIdproducto($objproducto->getIdproducto());
+                                                                                 $recetaexplosion->setIdalmacen($idalmacen);
+                                                                                 $recetaexplosion->setexplosionRecetaFecha($fin_semana);
+                                                                                 $recetaexplosion->save();
+                                                                                 
                                                                                  $stockTeorico = $arrayReporte[$idprnivel6]['inventariomesdetalle_stockteorico'];
                                                                                  $explosion=$arrayReporte[$idprnivel6][$exp] + ($cant * $stockFisico);
                                                                                  $arrayReporte[$idprnivel6][$exp] = $explosion;
@@ -1672,6 +1680,13 @@
                                                                      if (isset($arrayReporte[$idprnivel5]['inventariomesdetalle_diferencia'])) {
                                                                          ////
                                                                          //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
+                                                                        $recetaexplosion = new \Explosionreceta();
+                                                                                 $recetaexplosion->setIdempresa($idempresa);
+                                                                                 $recetaexplosion->setIdsucursal($idsucursal);
+                                                                                 $recetaexplosion->setIdproducto($objproducto->getIdproducto());
+                                                                                 $recetaexplosion->setIdalmacen($idalmacen);
+                                                                                 $recetaexplosion->setexplosionRecetaFecha($fin_semana);
+                                                                                 $recetaexplosion->save();
                                                                          $stockTeorico = $arrayReporte[$idprnivel5]['inventariomesdetalle_stockteorico'];
                                                                          $explosion=$arrayReporte[$idprnivel5][$exp] + ($cant * $stockFisico);
                                                                          $arrayReporte[$idprnivel5][$exp] = $explosion;
@@ -1706,6 +1721,16 @@
                                                              if (isset($arrayReporte[$idprnivel4]['inventariomesdetalle_diferencia'])) {
                                                                  ////
                                                                  //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
+                                                                 
+                                                               $recetaexplosion = new \Explosionreceta();
+                                                                                 $recetaexplosion->setIdempresa($idempresa);
+                                                                                 $recetaexplosion->setIdsucursal($idsucursal);
+                                                                                 $recetaexplosion->setIdproducto($objproducto->getIdproducto());
+                                                                                 $recetaexplosion->setIdalmacen($idalmacen);
+                                                                                 $recetaexplosion->setexplosionRecetaFecha($fin_semana);
+                                                                                 $recetaexplosion->save();
+                                                                                 
+                                                                                 
                                                                  $stockTeorico = $arrayReporte[$idprnivel4]['inventariomesdetalle_stockteorico'];
                                                                  $explosion=$arrayReporte[$idprnivel4][$exp] + ($cant * $stockFisico);
                                                                  $arrayReporte[$idprnivel4][$exp] = $explosion;
@@ -1741,6 +1766,15 @@
                                                      if (isset($arrayReporte[$idprnivel3]['inventariomesdetalle_diferencia'])) {
                                                          ////
                                                          //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
+                                                         
+                                                        $recetaexplosion = new \Explosionreceta();
+                                                                                 $recetaexplosion->setIdempresa($idempresa);
+                                                                                 $recetaexplosion->setIdsucursal($idsucursal);
+                                                                                 $recetaexplosion->setIdproducto($objproducto->getIdproducto());
+                                                                                 $recetaexplosion->setIdalmacen($idalmacen);
+                                                                                 $recetaexplosion->setexplosionRecetaFecha($fin_semana);
+                                                                                 $recetaexplosion->save();
+                                                         
                                                          $stockTeorico = $arrayReporte[$idprnivel3]['inventariomesdetalle_stockteorico'];
                                                          $explosion=$arrayReporte[$idprnivel3][$exp] + ($cant * $stockFisico);
                                                          $arrayReporte[$idprnivel3][$exp] = $explosion;
@@ -1776,6 +1810,14 @@
                                              if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                                  ////
                                                  //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
+                                                $recetaexplosion = new \Explosionreceta();
+                                                                                 $recetaexplosion->setIdempresa($idempresa);
+                                                                                 $recetaexplosion->setIdsucursal($idsucursal);
+                                                                                 $recetaexplosion->setIdproducto($objproducto->getIdproducto());
+                                                                                 $recetaexplosion->setIdalmacen($idalmacen);
+                                                                                 $recetaexplosion->setexplosionRecetaFecha($fin_semana);
+                                                                                 $recetaexplosion->save();
+                                                 
                                                  $stockTeorico = $arrayReporte[$idprnivel2]['inventariomesdetalle_stockteorico'];
                                                  $explosion=$arrayReporte[$idprnivel2][$exp] + ($cant * $stockFisico);
                                                  $arrayReporte[$idprnivel2][$exp] = $explosion;
@@ -1813,6 +1855,15 @@
                                     if (isset($arrayReporte[$idpr]['inventariomesdetalle_diferencia'])) {
                                         ////
                                         //$arrayReporte[$idpr]['inventariomesdetalle_stockteorico'] += ($cant * $stockFisico);
+                                        
+                                        $recetaexplosion = new \Explosionreceta();
+                                                                                 $recetaexplosion->setIdempresa($idempresa);
+                                                                                 $recetaexplosion->setIdsucursal($idsucursal);
+                                                                                 $recetaexplosion->setIdproducto($objproducto->getIdproducto());
+                                                                                 $recetaexplosion->setIdalmacen($idalmacen);
+                                                                                 $recetaexplosion->setexplosionRecetaFecha($fin_semana);
+                                                                                 $recetaexplosion->save();
+                                                                                 
                                         $stockTeorico = $arrayReporte[$idpr]['inventariomesdetalle_stockteorico'];
                                         $explosion=$arrayReporte[$idpr][$exp] + ($cant * $stockFisico);
                                         $arrayReporte[$idpr][$exp] = $explosion;
