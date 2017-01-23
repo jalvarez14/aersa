@@ -430,7 +430,7 @@ class ReportesController extends AbstractActionController {
                 'templateDir' => $templateDir
             );
             $R = new \PHPReport($config);
-            var_dump($R);exit();
+   
             $R->load(array(
                 array(
                     'id' => 'compania',
