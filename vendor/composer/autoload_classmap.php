@@ -1229,4 +1229,5 @@ return array(
     'zsdtBaseTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/zendserverdeploymenttool/zsdtBaseTask.php',
     'zsdtPackTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/zendserverdeploymenttool/zsdtPackTask.php',
     'zsdtValidateTask' => $vendorDir . '/phing/phing/classes/phing/tasks/ext/zendserverdeploymenttool/zsdtValidateTask.php',
+    'PHPReport' => $vendorDir .'/jasper/phpreport/PHPReport.php'
 );
