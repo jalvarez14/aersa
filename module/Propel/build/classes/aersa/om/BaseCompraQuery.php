@@ -28,6 +28,7 @@
  * @method CompraQuery orderByNotaalmacenistaempresa($order = Criteria::ASC) Order by the notaalmacenistaempresa column
  * @method CompraQuery orderByNotaauditoraersa($order = Criteria::ASC) Order by the notaauditoraersa column
  * @method CompraQuery orderByCompraEstatuspago($order = Criteria::ASC) Order by the compra_estatuspago column
+ * @method CompraQuery orderByIdcontrarecibo($order = Criteria::ASC) Order by the idcontrarecibo column
  *
  * @method CompraQuery groupByIdcompra() Group by the idcompra column
  * @method CompraQuery groupByIdempresa() Group by the idempresa column
@@ -51,6 +52,7 @@
  * @method CompraQuery groupByNotaalmacenistaempresa() Group by the notaalmacenistaempresa column
  * @method CompraQuery groupByNotaauditoraersa() Group by the notaauditoraersa column
  * @method CompraQuery groupByCompraEstatuspago() Group by the compra_estatuspago column
+ * @method CompraQuery groupByIdcontrarecibo() Group by the idcontrarecibo column
  *
  * @method CompraQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method CompraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -63,6 +65,10 @@
  * @method CompraQuery leftJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  * @method CompraQuery rightJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UsuarioRelatedByIdauditor relation
  * @method CompraQuery innerJoinUsuarioRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the UsuarioRelatedByIdauditor relation
+ *
+ * @method CompraQuery leftJoinContrarecibo($relationAlias = null) Adds a LEFT JOIN clause to the query using the Contrarecibo relation
+ * @method CompraQuery rightJoinContrarecibo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Contrarecibo relation
+ * @method CompraQuery innerJoinContrarecibo($relationAlias = null) Adds a INNER JOIN clause to the query using the Contrarecibo relation
  *
  * @method CompraQuery leftJoinEmpresa($relationAlias = null) Adds a LEFT JOIN clause to the query using the Empresa relation
  * @method CompraQuery rightJoinEmpresa($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Empresa relation
@@ -116,6 +122,7 @@
  * @method Compra findOneByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return the first Compra filtered by the notaalmacenistaempresa column
  * @method Compra findOneByNotaauditoraersa(boolean $notaauditoraersa) Return the first Compra filtered by the notaauditoraersa column
  * @method Compra findOneByCompraEstatuspago(string $compra_estatuspago) Return the first Compra filtered by the compra_estatuspago column
+ * @method Compra findOneByIdcontrarecibo(int $idcontrarecibo) Return the first Compra filtered by the idcontrarecibo column
  *
  * @method array findByIdcompra(int $idcompra) Return Compra objects filtered by the idcompra column
  * @method array findByIdempresa(int $idempresa) Return Compra objects filtered by the idempresa column
@@ -139,6 +146,7 @@
  * @method array findByNotaalmacenistaempresa(boolean $notaalmacenistaempresa) Return Compra objects filtered by the notaalmacenistaempresa column
  * @method array findByNotaauditoraersa(boolean $notaauditoraersa) Return Compra objects filtered by the notaauditoraersa column
  * @method array findByCompraEstatuspago(string $compra_estatuspago) Return Compra objects filtered by the compra_estatuspago column
+ * @method array findByIdcontrarecibo(int $idcontrarecibo) Return Compra objects filtered by the idcontrarecibo column
  *
  * @package    propel.generator.aersa.om
  */
@@ -246,7 +254,7 @@ abstract class BaseCompraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_subtotal`, `compra_total`, `compra_tipo`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa`, `compra_estatuspago` FROM `compra` WHERE `idcompra` = :p0';
+        $sql = 'SELECT `idcompra`, `idempresa`, `idsucursal`, `idproveedor`, `idusuario`, `idauditor`, `idalmacen`, `compra_folio`, `compra_revisada`, `compra_factura`, `compra_fechacreacion`, `compra_fechacompra`, `compra_fechaentrega`, `compra_ieps`, `compra_iva`, `compra_subtotal`, `compra_total`, `compra_tipo`, `notaauditorempresa`, `notaalmacenistaempresa`, `notaauditoraersa`, `compra_estatuspago`, `idcontrarecibo` FROM `compra` WHERE `idcompra` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -1163,6 +1171,50 @@ abstract class BaseCompraQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the idcontrarecibo column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIdcontrarecibo(1234); // WHERE idcontrarecibo = 1234
+     * $query->filterByIdcontrarecibo(array(12, 34)); // WHERE idcontrarecibo IN (12, 34)
+     * $query->filterByIdcontrarecibo(array('min' => 12)); // WHERE idcontrarecibo >= 12
+     * $query->filterByIdcontrarecibo(array('max' => 12)); // WHERE idcontrarecibo <= 12
+     * </code>
+     *
+     * @see       filterByContrarecibo()
+     *
+     * @param     mixed $idcontrarecibo The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function filterByIdcontrarecibo($idcontrarecibo = null, $comparison = null)
+    {
+        if (is_array($idcontrarecibo)) {
+            $useMinMax = false;
+            if (isset($idcontrarecibo['min'])) {
+                $this->addUsingAlias(CompraPeer::IDCONTRARECIBO, $idcontrarecibo['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($idcontrarecibo['max'])) {
+                $this->addUsingAlias(CompraPeer::IDCONTRARECIBO, $idcontrarecibo['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CompraPeer::IDCONTRARECIBO, $idcontrarecibo, $comparison);
+    }
+
+    /**
      * Filter the query by a related Almacen object
      *
      * @param   Almacen|PropelObjectCollection $almacen The related object(s) to use as filter
@@ -1312,6 +1364,82 @@ abstract class BaseCompraQuery extends ModelCriteria
         return $this
             ->joinUsuarioRelatedByIdauditor($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UsuarioRelatedByIdauditor', 'UsuarioQuery');
+    }
+
+    /**
+     * Filter the query by a related Contrarecibo object
+     *
+     * @param   Contrarecibo|PropelObjectCollection $contrarecibo The related object(s) to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CompraQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByContrarecibo($contrarecibo, $comparison = null)
+    {
+        if ($contrarecibo instanceof Contrarecibo) {
+            return $this
+                ->addUsingAlias(CompraPeer::IDCONTRARECIBO, $contrarecibo->getIdcontrarecibo(), $comparison);
+        } elseif ($contrarecibo instanceof PropelObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(CompraPeer::IDCONTRARECIBO, $contrarecibo->toKeyValue('PrimaryKey', 'Idcontrarecibo'), $comparison);
+        } else {
+            throw new PropelException('filterByContrarecibo() only accepts arguments of type Contrarecibo or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Contrarecibo relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CompraQuery The current query, for fluid interface
+     */
+    public function joinContrarecibo($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Contrarecibo');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Contrarecibo');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Contrarecibo relation Contrarecibo object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ContrareciboQuery A secondary query class using the current class as primary query
+     */
+    public function useContrareciboQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinContrarecibo($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Contrarecibo', 'ContrareciboQuery');
     }
 
     /**

@@ -24,13 +24,13 @@ abstract class BaseEmpresaPeer
     const TM_CLASS = 'EmpresaTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 9;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /** the column name for the idempresa field */
     const IDEMPRESA = 'empresa.idempresa';
@@ -53,6 +53,19 @@ abstract class BaseEmpresaPeer
     /** the column name for the empresa_habilitarproductos field */
     const EMPRESA_HABILITARPRODUCTOS = 'empresa.empresa_habilitarproductos';
 
+    /** the column name for the empresa_tipo field */
+    const EMPRESA_TIPO = 'empresa.empresa_tipo';
+
+    /** the column name for the empresa_periododepago field */
+    const EMPRESA_PERIODODEPAGO = 'empresa.empresa_periododepago';
+
+    /** The enumerated values for the empresa_tipo field */
+    const EMPRESA_TIPO_CFCI = 'cfci';
+    const EMPRESA_TIPO_PROVEEDORSIMPLE = 'proveedorsimple';
+    const EMPRESA_TIPO_PROVEEDORCOMPLETO = 'proveedorcompleto';
+    const EMPRESA_TIPO_CLIENTE = 'cliente';
+    const EMPRESA_TIPO_LIGHTFULL = 'lightfull';
+
     /** The default string format for model objects of the related table **/
     const DEFAULT_STRING_FORMAT = 'YAML';
 
@@ -72,12 +85,12 @@ abstract class BaseEmpresaPeer
      * e.g. EmpresaPeer::$fieldNames[EmpresaPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idempresa', 'EmpresaNombrecomercial', 'EmpresaRazonsocial', 'EmpresaEstatus', 'EmpresaAdministracion', 'EmpresaHabilitarrecetas', 'EmpresaHabilitarproductos', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa', 'empresaNombrecomercial', 'empresaRazonsocial', 'empresaEstatus', 'empresaAdministracion', 'empresaHabilitarrecetas', 'empresaHabilitarproductos', ),
-        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL, EmpresaPeer::EMPRESA_RAZONSOCIAL, EmpresaPeer::EMPRESA_ESTATUS, EmpresaPeer::EMPRESA_ADMINISTRACION, EmpresaPeer::EMPRESA_HABILITARRECETAS, EmpresaPeer::EMPRESA_HABILITARPRODUCTOS, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA', 'EMPRESA_NOMBRECOMERCIAL', 'EMPRESA_RAZONSOCIAL', 'EMPRESA_ESTATUS', 'EMPRESA_ADMINISTRACION', 'EMPRESA_HABILITARRECETAS', 'EMPRESA_HABILITARPRODUCTOS', ),
-        BasePeer::TYPE_FIELDNAME => array ('idempresa', 'empresa_nombrecomercial', 'empresa_razonsocial', 'empresa_estatus', 'empresa_administracion', 'empresa_habilitarrecetas', 'empresa_habilitarproductos', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Idempresa', 'EmpresaNombrecomercial', 'EmpresaRazonsocial', 'EmpresaEstatus', 'EmpresaAdministracion', 'EmpresaHabilitarrecetas', 'EmpresaHabilitarproductos', 'EmpresaTipo', 'EmpresaPeriododepago', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa', 'empresaNombrecomercial', 'empresaRazonsocial', 'empresaEstatus', 'empresaAdministracion', 'empresaHabilitarrecetas', 'empresaHabilitarproductos', 'empresaTipo', 'empresaPeriododepago', ),
+        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL, EmpresaPeer::EMPRESA_RAZONSOCIAL, EmpresaPeer::EMPRESA_ESTATUS, EmpresaPeer::EMPRESA_ADMINISTRACION, EmpresaPeer::EMPRESA_HABILITARRECETAS, EmpresaPeer::EMPRESA_HABILITARPRODUCTOS, EmpresaPeer::EMPRESA_TIPO, EmpresaPeer::EMPRESA_PERIODODEPAGO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA', 'EMPRESA_NOMBRECOMERCIAL', 'EMPRESA_RAZONSOCIAL', 'EMPRESA_ESTATUS', 'EMPRESA_ADMINISTRACION', 'EMPRESA_HABILITARRECETAS', 'EMPRESA_HABILITARPRODUCTOS', 'EMPRESA_TIPO', 'EMPRESA_PERIODODEPAGO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idempresa', 'empresa_nombrecomercial', 'empresa_razonsocial', 'empresa_estatus', 'empresa_administracion', 'empresa_habilitarrecetas', 'empresa_habilitarproductos', 'empresa_tipo', 'empresa_periododepago', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -87,12 +100,23 @@ abstract class BaseEmpresaPeer
      * e.g. EmpresaPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idempresa' => 0, 'EmpresaNombrecomercial' => 1, 'EmpresaRazonsocial' => 2, 'EmpresaEstatus' => 3, 'EmpresaAdministracion' => 4, 'EmpresaHabilitarrecetas' => 5, 'EmpresaHabilitarproductos' => 6, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa' => 0, 'empresaNombrecomercial' => 1, 'empresaRazonsocial' => 2, 'empresaEstatus' => 3, 'empresaAdministracion' => 4, 'empresaHabilitarrecetas' => 5, 'empresaHabilitarproductos' => 6, ),
-        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA => 0, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL => 1, EmpresaPeer::EMPRESA_RAZONSOCIAL => 2, EmpresaPeer::EMPRESA_ESTATUS => 3, EmpresaPeer::EMPRESA_ADMINISTRACION => 4, EmpresaPeer::EMPRESA_HABILITARRECETAS => 5, EmpresaPeer::EMPRESA_HABILITARPRODUCTOS => 6, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA' => 0, 'EMPRESA_NOMBRECOMERCIAL' => 1, 'EMPRESA_RAZONSOCIAL' => 2, 'EMPRESA_ESTATUS' => 3, 'EMPRESA_ADMINISTRACION' => 4, 'EMPRESA_HABILITARRECETAS' => 5, 'EMPRESA_HABILITARPRODUCTOS' => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('idempresa' => 0, 'empresa_nombrecomercial' => 1, 'empresa_razonsocial' => 2, 'empresa_estatus' => 3, 'empresa_administracion' => 4, 'empresa_habilitarrecetas' => 5, 'empresa_habilitarproductos' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('Idempresa' => 0, 'EmpresaNombrecomercial' => 1, 'EmpresaRazonsocial' => 2, 'EmpresaEstatus' => 3, 'EmpresaAdministracion' => 4, 'EmpresaHabilitarrecetas' => 5, 'EmpresaHabilitarproductos' => 6, 'EmpresaTipo' => 7, 'EmpresaPeriododepago' => 8, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idempresa' => 0, 'empresaNombrecomercial' => 1, 'empresaRazonsocial' => 2, 'empresaEstatus' => 3, 'empresaAdministracion' => 4, 'empresaHabilitarrecetas' => 5, 'empresaHabilitarproductos' => 6, 'empresaTipo' => 7, 'empresaPeriododepago' => 8, ),
+        BasePeer::TYPE_COLNAME => array (EmpresaPeer::IDEMPRESA => 0, EmpresaPeer::EMPRESA_NOMBRECOMERCIAL => 1, EmpresaPeer::EMPRESA_RAZONSOCIAL => 2, EmpresaPeer::EMPRESA_ESTATUS => 3, EmpresaPeer::EMPRESA_ADMINISTRACION => 4, EmpresaPeer::EMPRESA_HABILITARRECETAS => 5, EmpresaPeer::EMPRESA_HABILITARPRODUCTOS => 6, EmpresaPeer::EMPRESA_TIPO => 7, EmpresaPeer::EMPRESA_PERIODODEPAGO => 8, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDEMPRESA' => 0, 'EMPRESA_NOMBRECOMERCIAL' => 1, 'EMPRESA_RAZONSOCIAL' => 2, 'EMPRESA_ESTATUS' => 3, 'EMPRESA_ADMINISTRACION' => 4, 'EMPRESA_HABILITARRECETAS' => 5, 'EMPRESA_HABILITARPRODUCTOS' => 6, 'EMPRESA_TIPO' => 7, 'EMPRESA_PERIODODEPAGO' => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('idempresa' => 0, 'empresa_nombrecomercial' => 1, 'empresa_razonsocial' => 2, 'empresa_estatus' => 3, 'empresa_administracion' => 4, 'empresa_habilitarrecetas' => 5, 'empresa_habilitarproductos' => 6, 'empresa_tipo' => 7, 'empresa_periododepago' => 8, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+    );
+
+    /** The enumerated values for this table */
+    protected static $enumValueSets = array(
+        EmpresaPeer::EMPRESA_TIPO => array(
+            EmpresaPeer::EMPRESA_TIPO_CFCI,
+            EmpresaPeer::EMPRESA_TIPO_PROVEEDORSIMPLE,
+            EmpresaPeer::EMPRESA_TIPO_PROVEEDORCOMPLETO,
+            EmpresaPeer::EMPRESA_TIPO_CLIENTE,
+            EmpresaPeer::EMPRESA_TIPO_LIGHTFULL,
+        ),
     );
 
     /**
@@ -135,6 +159,51 @@ abstract class BaseEmpresaPeer
     }
 
     /**
+     * Gets the list of values for all ENUM columns
+     * @return array
+     */
+    public static function getValueSets()
+    {
+      return EmpresaPeer::$enumValueSets;
+    }
+
+    /**
+     * Gets the list of values for an ENUM column
+     *
+     * @param string $colname The ENUM column name.
+     *
+     * @return array list of possible values for the column
+     */
+    public static function getValueSet($colname)
+    {
+        $valueSets = EmpresaPeer::getValueSets();
+
+        if (!isset($valueSets[$colname])) {
+            throw new PropelException(sprintf('Column "%s" has no ValueSet.', $colname));
+        }
+
+        return $valueSets[$colname];
+    }
+
+    /**
+     * Gets the SQL value for the ENUM column value
+     *
+     * @param string $colname ENUM column name.
+     * @param string $enumVal ENUM value.
+     *
+     * @return int SQL value
+     */
+    public static function getSqlValueForEnum($colname, $enumVal)
+    {
+        $values = EmpresaPeer::getValueSet($colname);
+        if (!in_array($enumVal, $values)) {
+            throw new PropelException(sprintf('Value "%s" is not accepted in this enumerated column', $colname));
+        }
+
+        return array_search($enumVal, $values);
+    }
+
+    /**
      * Convenience method which changes table.column to alias.column.
      *
      * Using this method you can maintain SQL abstraction while using column aliases.
@@ -173,6 +242,8 @@ abstract class BaseEmpresaPeer
             $criteria->addSelectColumn(EmpresaPeer::EMPRESA_ADMINISTRACION);
             $criteria->addSelectColumn(EmpresaPeer::EMPRESA_HABILITARRECETAS);
             $criteria->addSelectColumn(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS);
+            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_TIPO);
+            $criteria->addSelectColumn(EmpresaPeer::EMPRESA_PERIODODEPAGO);
         } else {
             $criteria->addSelectColumn($alias . '.idempresa');
             $criteria->addSelectColumn($alias . '.empresa_nombrecomercial');
@@ -181,6 +252,8 @@ abstract class BaseEmpresaPeer
             $criteria->addSelectColumn($alias . '.empresa_administracion');
             $criteria->addSelectColumn($alias . '.empresa_habilitarrecetas');
             $criteria->addSelectColumn($alias . '.empresa_habilitarproductos');
+            $criteria->addSelectColumn($alias . '.empresa_tipo');
+            $criteria->addSelectColumn($alias . '.empresa_periododepago');
         }
     }
 
@@ -391,6 +464,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in AjusteinventarioPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AjusteinventarioPeer::clearInstancePool();
+        // Invalidate objects in AsociacionempresaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        AsociacionempresaPeer::clearInstancePool();
         // Invalidate objects in CompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         CompraPeer::clearInstancePool();
@@ -406,6 +482,9 @@ abstract class BaseEmpresaPeer
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
+        // Invalidate objects in ExplosionrecetaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ExplosionrecetaPeer::clearInstancePool();
         // Invalidate objects in FoliocompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         FoliocompraPeer::clearInstancePool();
@@ -812,6 +891,12 @@ abstract class BaseEmpresaPeer
             $criteria->add(AjusteinventarioPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += AjusteinventarioPeer::doDelete($criteria, $con);
 
+            // delete related Asociacionempresa objects
+            $criteria = new Criteria(AsociacionempresaPeer::DATABASE_NAME);
+
+            $criteria->add(AsociacionempresaPeer::IDEMPRESAPROVEEDOR, $obj->getIdempresa());
+            $affectedRows += AsociacionempresaPeer::doDelete($criteria, $con);
+
             // delete related Compra objects
             $criteria = new Criteria(CompraPeer::DATABASE_NAME);
 
@@ -841,6 +926,12 @@ abstract class BaseEmpresaPeer
 
             $criteria->add(DevolucionPeer::IDEMPRESA, $obj->getIdempresa());
             $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Explosionreceta objects
+            $criteria = new Criteria(ExplosionrecetaPeer::DATABASE_NAME);
+
+            $criteria->add(ExplosionrecetaPeer::IDEMPRESA, $obj->getIdempresa());
+            $affectedRows += ExplosionrecetaPeer::doDelete($criteria, $con);
 
             // delete related Foliocompra objects
             $criteria = new Criteria(FoliocompraPeer::DATABASE_NAME);

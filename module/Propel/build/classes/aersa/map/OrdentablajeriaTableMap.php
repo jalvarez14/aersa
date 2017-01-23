@@ -81,6 +81,7 @@ class OrdentablajeriaTableMap extends TableMap
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdusuario', 'Usuario', RelationMap::MANY_TO_ONE, array('idusuario' => 'idusuario', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Ordentablajeriadetalle', 'Ordentablajeriadetalle', RelationMap::ONE_TO_MANY, array('idordentablajeria' => 'idordentablajeria', ), 'CASCADE', 'CASCADE', 'Ordentablajeriadetalles');
+        $this->addRelation('Ordentablajerianota', 'Ordentablajerianota', RelationMap::ONE_TO_MANY, array('idordentablajeria' => 'idordentablajeria', ), null, null, 'Ordentablajerianotas');
     } // buildRelations()
 
 } // OrdentablajeriaTableMap

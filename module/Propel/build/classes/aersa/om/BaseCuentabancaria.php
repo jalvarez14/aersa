@@ -88,6 +88,18 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
     protected $collFlujoefectivosPartial;
 
     /**
+     * @var        PropelObjectCollection|Traspaso[] Collection to store aggregation of Traspaso objects.
+     */
+    protected $collTraspasosRelatedByIdcuentabancariadestino;
+    protected $collTraspasosRelatedByIdcuentabancariadestinoPartial;
+
+    /**
+     * @var        PropelObjectCollection|Traspaso[] Collection to store aggregation of Traspaso objects.
+     */
+    protected $collTraspasosRelatedByIdcuentabancariaorigen;
+    protected $collTraspasosRelatedByIdcuentabancariaorigenPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -118,6 +130,18 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $flujoefectivosScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion = null;
 
     /**
      * Get the [idcuentabancaria] column value.
@@ -440,6 +464,10 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
 
             $this->collFlujoefectivos = null;
 
+            $this->collTraspasosRelatedByIdcuentabancariadestino = null;
+
+            $this->collTraspasosRelatedByIdcuentabancariaorigen = null;
+
         } // if (deep)
     }
 
@@ -612,6 +640,40 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
 
             if ($this->collFlujoefectivos !== null) {
                 foreach ($this->collFlujoefectivos as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion !== null) {
+                if (!$this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion->isEmpty()) {
+                    TraspasoQuery::create()
+                        ->filterByPrimaryKeys($this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collTraspasosRelatedByIdcuentabancariadestino !== null) {
+                foreach ($this->collTraspasosRelatedByIdcuentabancariadestino as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion !== null) {
+                if (!$this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion->isEmpty()) {
+                    TraspasoQuery::create()
+                        ->filterByPrimaryKeys($this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collTraspasosRelatedByIdcuentabancariaorigen !== null) {
+                foreach ($this->collTraspasosRelatedByIdcuentabancariaorigen as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -824,6 +886,22 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collTraspasosRelatedByIdcuentabancariadestino !== null) {
+                    foreach ($this->collTraspasosRelatedByIdcuentabancariadestino as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collTraspasosRelatedByIdcuentabancariaorigen !== null) {
+                    foreach ($this->collTraspasosRelatedByIdcuentabancariaorigen as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
 
             $this->alreadyInValidation = false;
         }
@@ -930,6 +1008,12 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
             }
             if (null !== $this->collFlujoefectivos) {
                 $result['Flujoefectivos'] = $this->collFlujoefectivos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collTraspasosRelatedByIdcuentabancariadestino) {
+                $result['TraspasosRelatedByIdcuentabancariadestino'] = $this->collTraspasosRelatedByIdcuentabancariadestino->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collTraspasosRelatedByIdcuentabancariaorigen) {
+                $result['TraspasosRelatedByIdcuentabancariaorigen'] = $this->collTraspasosRelatedByIdcuentabancariaorigen->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1118,6 +1202,18 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getTraspasosRelatedByIdcuentabancariadestino() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addTraspasoRelatedByIdcuentabancariadestino($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getTraspasosRelatedByIdcuentabancariaorigen() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addTraspasoRelatedByIdcuentabancariaorigen($relObj->copy($deepCopy));
+                }
+            }
+
             //unflag object copy
             $this->startCopy = false;
         } // if ($deepCopy)
@@ -1288,6 +1384,12 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
         }
         if ('Flujoefectivo' == $relationName) {
             $this->initFlujoefectivos();
+        }
+        if ('TraspasoRelatedByIdcuentabancariadestino' == $relationName) {
+            $this->initTraspasosRelatedByIdcuentabancariadestino();
+        }
+        if ('TraspasoRelatedByIdcuentabancariaorigen' == $relationName) {
+            $this->initTraspasosRelatedByIdcuentabancariaorigen();
         }
     }
 
@@ -1967,6 +2069,456 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collTraspasosRelatedByIdcuentabancariadestino collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Cuentabancaria The current object (for fluent API support)
+     * @see        addTraspasosRelatedByIdcuentabancariadestino()
+     */
+    public function clearTraspasosRelatedByIdcuentabancariadestino()
+    {
+        $this->collTraspasosRelatedByIdcuentabancariadestino = null; // important to set this to null since that means it is uninitialized
+        $this->collTraspasosRelatedByIdcuentabancariadestinoPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collTraspasosRelatedByIdcuentabancariadestino collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialTraspasosRelatedByIdcuentabancariadestino($v = true)
+    {
+        $this->collTraspasosRelatedByIdcuentabancariadestinoPartial = $v;
+    }
+
+    /**
+     * Initializes the collTraspasosRelatedByIdcuentabancariadestino collection.
+     *
+     * By default this just sets the collTraspasosRelatedByIdcuentabancariadestino collection to an empty array (like clearcollTraspasosRelatedByIdcuentabancariadestino());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initTraspasosRelatedByIdcuentabancariadestino($overrideExisting = true)
+    {
+        if (null !== $this->collTraspasosRelatedByIdcuentabancariadestino && !$overrideExisting) {
+            return;
+        }
+        $this->collTraspasosRelatedByIdcuentabancariadestino = new PropelObjectCollection();
+        $this->collTraspasosRelatedByIdcuentabancariadestino->setModel('Traspaso');
+    }
+
+    /**
+     * Gets an array of Traspaso objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Cuentabancaria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Traspaso[] List of Traspaso objects
+     * @throws PropelException
+     */
+    public function getTraspasosRelatedByIdcuentabancariadestino($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collTraspasosRelatedByIdcuentabancariadestinoPartial && !$this->isNew();
+        if (null === $this->collTraspasosRelatedByIdcuentabancariadestino || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTraspasosRelatedByIdcuentabancariadestino) {
+                // return empty collection
+                $this->initTraspasosRelatedByIdcuentabancariadestino();
+            } else {
+                $collTraspasosRelatedByIdcuentabancariadestino = TraspasoQuery::create(null, $criteria)
+                    ->filterByCuentabancariaRelatedByIdcuentabancariadestino($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collTraspasosRelatedByIdcuentabancariadestinoPartial && count($collTraspasosRelatedByIdcuentabancariadestino)) {
+                      $this->initTraspasosRelatedByIdcuentabancariadestino(false);
+
+                      foreach ($collTraspasosRelatedByIdcuentabancariadestino as $obj) {
+                        if (false == $this->collTraspasosRelatedByIdcuentabancariadestino->contains($obj)) {
+                          $this->collTraspasosRelatedByIdcuentabancariadestino->append($obj);
+                        }
+                      }
+
+                      $this->collTraspasosRelatedByIdcuentabancariadestinoPartial = true;
+                    }
+
+                    $collTraspasosRelatedByIdcuentabancariadestino->getInternalIterator()->rewind();
+
+                    return $collTraspasosRelatedByIdcuentabancariadestino;
+                }
+
+                if ($partial && $this->collTraspasosRelatedByIdcuentabancariadestino) {
+                    foreach ($this->collTraspasosRelatedByIdcuentabancariadestino as $obj) {
+                        if ($obj->isNew()) {
+                            $collTraspasosRelatedByIdcuentabancariadestino[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTraspasosRelatedByIdcuentabancariadestino = $collTraspasosRelatedByIdcuentabancariadestino;
+                $this->collTraspasosRelatedByIdcuentabancariadestinoPartial = false;
+            }
+        }
+
+        return $this->collTraspasosRelatedByIdcuentabancariadestino;
+    }
+
+    /**
+     * Sets a collection of TraspasoRelatedByIdcuentabancariadestino objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $traspasosRelatedByIdcuentabancariadestino A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function setTraspasosRelatedByIdcuentabancariadestino(PropelCollection $traspasosRelatedByIdcuentabancariadestino, PropelPDO $con = null)
+    {
+        $traspasosRelatedByIdcuentabancariadestinoToDelete = $this->getTraspasosRelatedByIdcuentabancariadestino(new Criteria(), $con)->diff($traspasosRelatedByIdcuentabancariadestino);
+
+
+        $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion = $traspasosRelatedByIdcuentabancariadestinoToDelete;
+
+        foreach ($traspasosRelatedByIdcuentabancariadestinoToDelete as $traspasoRelatedByIdcuentabancariadestinoRemoved) {
+            $traspasoRelatedByIdcuentabancariadestinoRemoved->setCuentabancariaRelatedByIdcuentabancariadestino(null);
+        }
+
+        $this->collTraspasosRelatedByIdcuentabancariadestino = null;
+        foreach ($traspasosRelatedByIdcuentabancariadestino as $traspasoRelatedByIdcuentabancariadestino) {
+            $this->addTraspasoRelatedByIdcuentabancariadestino($traspasoRelatedByIdcuentabancariadestino);
+        }
+
+        $this->collTraspasosRelatedByIdcuentabancariadestino = $traspasosRelatedByIdcuentabancariadestino;
+        $this->collTraspasosRelatedByIdcuentabancariadestinoPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Traspaso objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Traspaso objects.
+     * @throws PropelException
+     */
+    public function countTraspasosRelatedByIdcuentabancariadestino(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collTraspasosRelatedByIdcuentabancariadestinoPartial && !$this->isNew();
+        if (null === $this->collTraspasosRelatedByIdcuentabancariadestino || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTraspasosRelatedByIdcuentabancariadestino) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getTraspasosRelatedByIdcuentabancariadestino());
+            }
+            $query = TraspasoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCuentabancariaRelatedByIdcuentabancariadestino($this)
+                ->count($con);
+        }
+
+        return count($this->collTraspasosRelatedByIdcuentabancariadestino);
+    }
+
+    /**
+     * Method called to associate a Traspaso object to this object
+     * through the Traspaso foreign key attribute.
+     *
+     * @param    Traspaso $l Traspaso
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function addTraspasoRelatedByIdcuentabancariadestino(Traspaso $l)
+    {
+        if ($this->collTraspasosRelatedByIdcuentabancariadestino === null) {
+            $this->initTraspasosRelatedByIdcuentabancariadestino();
+            $this->collTraspasosRelatedByIdcuentabancariadestinoPartial = true;
+        }
+
+        if (!in_array($l, $this->collTraspasosRelatedByIdcuentabancariadestino->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddTraspasoRelatedByIdcuentabancariadestino($l);
+
+            if ($this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion and $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion->contains($l)) {
+                $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion->remove($this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	TraspasoRelatedByIdcuentabancariadestino $traspasoRelatedByIdcuentabancariadestino The traspasoRelatedByIdcuentabancariadestino object to add.
+     */
+    protected function doAddTraspasoRelatedByIdcuentabancariadestino($traspasoRelatedByIdcuentabancariadestino)
+    {
+        $this->collTraspasosRelatedByIdcuentabancariadestino[]= $traspasoRelatedByIdcuentabancariadestino;
+        $traspasoRelatedByIdcuentabancariadestino->setCuentabancariaRelatedByIdcuentabancariadestino($this);
+    }
+
+    /**
+     * @param	TraspasoRelatedByIdcuentabancariadestino $traspasoRelatedByIdcuentabancariadestino The traspasoRelatedByIdcuentabancariadestino object to remove.
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function removeTraspasoRelatedByIdcuentabancariadestino($traspasoRelatedByIdcuentabancariadestino)
+    {
+        if ($this->getTraspasosRelatedByIdcuentabancariadestino()->contains($traspasoRelatedByIdcuentabancariadestino)) {
+            $this->collTraspasosRelatedByIdcuentabancariadestino->remove($this->collTraspasosRelatedByIdcuentabancariadestino->search($traspasoRelatedByIdcuentabancariadestino));
+            if (null === $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion) {
+                $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion = clone $this->collTraspasosRelatedByIdcuentabancariadestino;
+                $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion->clear();
+            }
+            $this->traspasosRelatedByIdcuentabancariadestinoScheduledForDeletion[]= clone $traspasoRelatedByIdcuentabancariadestino;
+            $traspasoRelatedByIdcuentabancariadestino->setCuentabancariaRelatedByIdcuentabancariadestino(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collTraspasosRelatedByIdcuentabancariaorigen collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Cuentabancaria The current object (for fluent API support)
+     * @see        addTraspasosRelatedByIdcuentabancariaorigen()
+     */
+    public function clearTraspasosRelatedByIdcuentabancariaorigen()
+    {
+        $this->collTraspasosRelatedByIdcuentabancariaorigen = null; // important to set this to null since that means it is uninitialized
+        $this->collTraspasosRelatedByIdcuentabancariaorigenPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collTraspasosRelatedByIdcuentabancariaorigen collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialTraspasosRelatedByIdcuentabancariaorigen($v = true)
+    {
+        $this->collTraspasosRelatedByIdcuentabancariaorigenPartial = $v;
+    }
+
+    /**
+     * Initializes the collTraspasosRelatedByIdcuentabancariaorigen collection.
+     *
+     * By default this just sets the collTraspasosRelatedByIdcuentabancariaorigen collection to an empty array (like clearcollTraspasosRelatedByIdcuentabancariaorigen());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initTraspasosRelatedByIdcuentabancariaorigen($overrideExisting = true)
+    {
+        if (null !== $this->collTraspasosRelatedByIdcuentabancariaorigen && !$overrideExisting) {
+            return;
+        }
+        $this->collTraspasosRelatedByIdcuentabancariaorigen = new PropelObjectCollection();
+        $this->collTraspasosRelatedByIdcuentabancariaorigen->setModel('Traspaso');
+    }
+
+    /**
+     * Gets an array of Traspaso objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Cuentabancaria is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Traspaso[] List of Traspaso objects
+     * @throws PropelException
+     */
+    public function getTraspasosRelatedByIdcuentabancariaorigen($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collTraspasosRelatedByIdcuentabancariaorigenPartial && !$this->isNew();
+        if (null === $this->collTraspasosRelatedByIdcuentabancariaorigen || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collTraspasosRelatedByIdcuentabancariaorigen) {
+                // return empty collection
+                $this->initTraspasosRelatedByIdcuentabancariaorigen();
+            } else {
+                $collTraspasosRelatedByIdcuentabancariaorigen = TraspasoQuery::create(null, $criteria)
+                    ->filterByCuentabancariaRelatedByIdcuentabancariaorigen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collTraspasosRelatedByIdcuentabancariaorigenPartial && count($collTraspasosRelatedByIdcuentabancariaorigen)) {
+                      $this->initTraspasosRelatedByIdcuentabancariaorigen(false);
+
+                      foreach ($collTraspasosRelatedByIdcuentabancariaorigen as $obj) {
+                        if (false == $this->collTraspasosRelatedByIdcuentabancariaorigen->contains($obj)) {
+                          $this->collTraspasosRelatedByIdcuentabancariaorigen->append($obj);
+                        }
+                      }
+
+                      $this->collTraspasosRelatedByIdcuentabancariaorigenPartial = true;
+                    }
+
+                    $collTraspasosRelatedByIdcuentabancariaorigen->getInternalIterator()->rewind();
+
+                    return $collTraspasosRelatedByIdcuentabancariaorigen;
+                }
+
+                if ($partial && $this->collTraspasosRelatedByIdcuentabancariaorigen) {
+                    foreach ($this->collTraspasosRelatedByIdcuentabancariaorigen as $obj) {
+                        if ($obj->isNew()) {
+                            $collTraspasosRelatedByIdcuentabancariaorigen[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collTraspasosRelatedByIdcuentabancariaorigen = $collTraspasosRelatedByIdcuentabancariaorigen;
+                $this->collTraspasosRelatedByIdcuentabancariaorigenPartial = false;
+            }
+        }
+
+        return $this->collTraspasosRelatedByIdcuentabancariaorigen;
+    }
+
+    /**
+     * Sets a collection of TraspasoRelatedByIdcuentabancariaorigen objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $traspasosRelatedByIdcuentabancariaorigen A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function setTraspasosRelatedByIdcuentabancariaorigen(PropelCollection $traspasosRelatedByIdcuentabancariaorigen, PropelPDO $con = null)
+    {
+        $traspasosRelatedByIdcuentabancariaorigenToDelete = $this->getTraspasosRelatedByIdcuentabancariaorigen(new Criteria(), $con)->diff($traspasosRelatedByIdcuentabancariaorigen);
+
+
+        $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion = $traspasosRelatedByIdcuentabancariaorigenToDelete;
+
+        foreach ($traspasosRelatedByIdcuentabancariaorigenToDelete as $traspasoRelatedByIdcuentabancariaorigenRemoved) {
+            $traspasoRelatedByIdcuentabancariaorigenRemoved->setCuentabancariaRelatedByIdcuentabancariaorigen(null);
+        }
+
+        $this->collTraspasosRelatedByIdcuentabancariaorigen = null;
+        foreach ($traspasosRelatedByIdcuentabancariaorigen as $traspasoRelatedByIdcuentabancariaorigen) {
+            $this->addTraspasoRelatedByIdcuentabancariaorigen($traspasoRelatedByIdcuentabancariaorigen);
+        }
+
+        $this->collTraspasosRelatedByIdcuentabancariaorigen = $traspasosRelatedByIdcuentabancariaorigen;
+        $this->collTraspasosRelatedByIdcuentabancariaorigenPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Traspaso objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Traspaso objects.
+     * @throws PropelException
+     */
+    public function countTraspasosRelatedByIdcuentabancariaorigen(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collTraspasosRelatedByIdcuentabancariaorigenPartial && !$this->isNew();
+        if (null === $this->collTraspasosRelatedByIdcuentabancariaorigen || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collTraspasosRelatedByIdcuentabancariaorigen) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getTraspasosRelatedByIdcuentabancariaorigen());
+            }
+            $query = TraspasoQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByCuentabancariaRelatedByIdcuentabancariaorigen($this)
+                ->count($con);
+        }
+
+        return count($this->collTraspasosRelatedByIdcuentabancariaorigen);
+    }
+
+    /**
+     * Method called to associate a Traspaso object to this object
+     * through the Traspaso foreign key attribute.
+     *
+     * @param    Traspaso $l Traspaso
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function addTraspasoRelatedByIdcuentabancariaorigen(Traspaso $l)
+    {
+        if ($this->collTraspasosRelatedByIdcuentabancariaorigen === null) {
+            $this->initTraspasosRelatedByIdcuentabancariaorigen();
+            $this->collTraspasosRelatedByIdcuentabancariaorigenPartial = true;
+        }
+
+        if (!in_array($l, $this->collTraspasosRelatedByIdcuentabancariaorigen->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddTraspasoRelatedByIdcuentabancariaorigen($l);
+
+            if ($this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion and $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion->contains($l)) {
+                $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion->remove($this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	TraspasoRelatedByIdcuentabancariaorigen $traspasoRelatedByIdcuentabancariaorigen The traspasoRelatedByIdcuentabancariaorigen object to add.
+     */
+    protected function doAddTraspasoRelatedByIdcuentabancariaorigen($traspasoRelatedByIdcuentabancariaorigen)
+    {
+        $this->collTraspasosRelatedByIdcuentabancariaorigen[]= $traspasoRelatedByIdcuentabancariaorigen;
+        $traspasoRelatedByIdcuentabancariaorigen->setCuentabancariaRelatedByIdcuentabancariaorigen($this);
+    }
+
+    /**
+     * @param	TraspasoRelatedByIdcuentabancariaorigen $traspasoRelatedByIdcuentabancariaorigen The traspasoRelatedByIdcuentabancariaorigen object to remove.
+     * @return Cuentabancaria The current object (for fluent API support)
+     */
+    public function removeTraspasoRelatedByIdcuentabancariaorigen($traspasoRelatedByIdcuentabancariaorigen)
+    {
+        if ($this->getTraspasosRelatedByIdcuentabancariaorigen()->contains($traspasoRelatedByIdcuentabancariaorigen)) {
+            $this->collTraspasosRelatedByIdcuentabancariaorigen->remove($this->collTraspasosRelatedByIdcuentabancariaorigen->search($traspasoRelatedByIdcuentabancariaorigen));
+            if (null === $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion) {
+                $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion = clone $this->collTraspasosRelatedByIdcuentabancariaorigen;
+                $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion->clear();
+            }
+            $this->traspasosRelatedByIdcuentabancariaorigenScheduledForDeletion[]= clone $traspasoRelatedByIdcuentabancariaorigen;
+            $traspasoRelatedByIdcuentabancariaorigen->setCuentabancariaRelatedByIdcuentabancariaorigen(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object and sets all attributes to their default values
      */
     public function clear()
@@ -2009,6 +2561,16 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collTraspasosRelatedByIdcuentabancariadestino) {
+                foreach ($this->collTraspasosRelatedByIdcuentabancariadestino as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collTraspasosRelatedByIdcuentabancariaorigen) {
+                foreach ($this->collTraspasosRelatedByIdcuentabancariaorigen as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->aEmpresa instanceof Persistent) {
               $this->aEmpresa->clearAllReferences($deep);
             }
@@ -2027,6 +2589,14 @@ abstract class BaseCuentabancaria extends BaseObject implements Persistent
             $this->collFlujoefectivos->clearIterator();
         }
         $this->collFlujoefectivos = null;
+        if ($this->collTraspasosRelatedByIdcuentabancariadestino instanceof PropelCollection) {
+            $this->collTraspasosRelatedByIdcuentabancariadestino->clearIterator();
+        }
+        $this->collTraspasosRelatedByIdcuentabancariadestino = null;
+        if ($this->collTraspasosRelatedByIdcuentabancariaorigen instanceof PropelCollection) {
+            $this->collTraspasosRelatedByIdcuentabancariaorigen->clearIterator();
+        }
+        $this->collTraspasosRelatedByIdcuentabancariaorigen = null;
         $this->aEmpresa = null;
         $this->aSucursal = null;
     }

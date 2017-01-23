@@ -167,6 +167,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
     protected $compra_estatuspago;
 
     /**
+     * The value for the idcontrarecibo field.
+     * @var        int
+     */
+    protected $idcontrarecibo;
+
+    /**
      * @var        Almacen
      */
     protected $aAlmacen;
@@ -175,6 +181,11 @@ abstract class BaseCompra extends BaseObject implements Persistent
      * @var        Usuario
      */
     protected $aUsuarioRelatedByIdauditor;
+
+    /**
+     * @var        Contrarecibo
+     */
+    protected $aContrarecibo;
 
     /**
      * @var        Empresa
@@ -604,6 +615,17 @@ abstract class BaseCompra extends BaseObject implements Persistent
     {
 
         return $this->compra_estatuspago;
+    }
+
+    /**
+     * Get the [idcontrarecibo] column value.
+     *
+     * @return int
+     */
+    public function getIdcontrarecibo()
+    {
+
+        return $this->idcontrarecibo;
     }
 
     /**
@@ -1131,6 +1153,31 @@ abstract class BaseCompra extends BaseObject implements Persistent
     } // setCompraEstatuspago()
 
     /**
+     * Set the value of [idcontrarecibo] column.
+     *
+     * @param  int $v new value
+     * @return Compra The current object (for fluent API support)
+     */
+    public function setIdcontrarecibo($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->idcontrarecibo !== $v) {
+            $this->idcontrarecibo = $v;
+            $this->modifiedColumns[] = CompraPeer::IDCONTRARECIBO;
+        }
+
+        if ($this->aContrarecibo !== null && $this->aContrarecibo->getIdcontrarecibo() !== $v) {
+            $this->aContrarecibo = null;
+        }
+
+
+        return $this;
+    } // setIdcontrarecibo()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -1204,6 +1251,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $this->notaalmacenistaempresa = ($row[$startcol + 19] !== null) ? (boolean) $row[$startcol + 19] : null;
             $this->notaauditoraersa = ($row[$startcol + 20] !== null) ? (boolean) $row[$startcol + 20] : null;
             $this->compra_estatuspago = ($row[$startcol + 21] !== null) ? (string) $row[$startcol + 21] : null;
+            $this->idcontrarecibo = ($row[$startcol + 22] !== null) ? (int) $row[$startcol + 22] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -1213,7 +1261,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 22; // 22 = CompraPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 23; // 23 = CompraPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Compra object", $e);
@@ -1253,6 +1301,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         }
         if ($this->aAlmacen !== null && $this->idalmacen !== $this->aAlmacen->getIdalmacen()) {
             $this->aAlmacen = null;
+        }
+        if ($this->aContrarecibo !== null && $this->idcontrarecibo !== $this->aContrarecibo->getIdcontrarecibo()) {
+            $this->aContrarecibo = null;
         }
     } // ensureConsistency
 
@@ -1295,6 +1346,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
 
             $this->aAlmacen = null;
             $this->aUsuarioRelatedByIdauditor = null;
+            $this->aContrarecibo = null;
             $this->aEmpresa = null;
             $this->aProveedor = null;
             $this->aSucursal = null;
@@ -1435,6 +1487,13 @@ abstract class BaseCompra extends BaseObject implements Persistent
                     $affectedRows += $this->aUsuarioRelatedByIdauditor->save($con);
                 }
                 $this->setUsuarioRelatedByIdauditor($this->aUsuarioRelatedByIdauditor);
+            }
+
+            if ($this->aContrarecibo !== null) {
+                if ($this->aContrarecibo->isModified() || $this->aContrarecibo->isNew()) {
+                    $affectedRows += $this->aContrarecibo->save($con);
+                }
+                $this->setContrarecibo($this->aContrarecibo);
             }
 
             if ($this->aEmpresa !== null) {
@@ -1620,6 +1679,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::COMPRA_ESTATUSPAGO)) {
             $modifiedColumns[':p' . $index++]  = '`compra_estatuspago`';
         }
+        if ($this->isColumnModified(CompraPeer::IDCONTRARECIBO)) {
+            $modifiedColumns[':p' . $index++]  = '`idcontrarecibo`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `compra` (%s) VALUES (%s)',
@@ -1696,6 +1758,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
                         break;
                     case '`compra_estatuspago`':
                         $stmt->bindValue($identifier, $this->compra_estatuspago, PDO::PARAM_STR);
+                        break;
+                    case '`idcontrarecibo`':
+                        $stmt->bindValue($identifier, $this->idcontrarecibo, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1805,6 +1870,12 @@ abstract class BaseCompra extends BaseObject implements Persistent
             if ($this->aUsuarioRelatedByIdauditor !== null) {
                 if (!$this->aUsuarioRelatedByIdauditor->validate($columns)) {
                     $failureMap = array_merge($failureMap, $this->aUsuarioRelatedByIdauditor->getValidationFailures());
+                }
+            }
+
+            if ($this->aContrarecibo !== null) {
+                if (!$this->aContrarecibo->validate($columns)) {
+                    $failureMap = array_merge($failureMap, $this->aContrarecibo->getValidationFailures());
                 }
             }
 
@@ -1963,6 +2034,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             case 21:
                 return $this->getCompraEstatuspago();
                 break;
+            case 22:
+                return $this->getIdcontrarecibo();
+                break;
             default:
                 return null;
                 break;
@@ -2014,6 +2088,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
             $keys[19] => $this->getNotaalmacenistaempresa(),
             $keys[20] => $this->getNotaauditoraersa(),
             $keys[21] => $this->getCompraEstatuspago(),
+            $keys[22] => $this->getIdcontrarecibo(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -2026,6 +2101,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             }
             if (null !== $this->aUsuarioRelatedByIdauditor) {
                 $result['UsuarioRelatedByIdauditor'] = $this->aUsuarioRelatedByIdauditor->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aContrarecibo) {
+                $result['Contrarecibo'] = $this->aContrarecibo->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEmpresa) {
                 $result['Empresa'] = $this->aEmpresa->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
@@ -2148,6 +2226,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             case 21:
                 $this->setCompraEstatuspago($value);
                 break;
+            case 22:
+                $this->setIdcontrarecibo($value);
+                break;
         } // switch()
     }
 
@@ -2194,6 +2275,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if (array_key_exists($keys[19], $arr)) $this->setNotaalmacenistaempresa($arr[$keys[19]]);
         if (array_key_exists($keys[20], $arr)) $this->setNotaauditoraersa($arr[$keys[20]]);
         if (array_key_exists($keys[21], $arr)) $this->setCompraEstatuspago($arr[$keys[21]]);
+        if (array_key_exists($keys[22], $arr)) $this->setIdcontrarecibo($arr[$keys[22]]);
     }
 
     /**
@@ -2227,6 +2309,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         if ($this->isColumnModified(CompraPeer::NOTAALMACENISTAEMPRESA)) $criteria->add(CompraPeer::NOTAALMACENISTAEMPRESA, $this->notaalmacenistaempresa);
         if ($this->isColumnModified(CompraPeer::NOTAAUDITORAERSA)) $criteria->add(CompraPeer::NOTAAUDITORAERSA, $this->notaauditoraersa);
         if ($this->isColumnModified(CompraPeer::COMPRA_ESTATUSPAGO)) $criteria->add(CompraPeer::COMPRA_ESTATUSPAGO, $this->compra_estatuspago);
+        if ($this->isColumnModified(CompraPeer::IDCONTRARECIBO)) $criteria->add(CompraPeer::IDCONTRARECIBO, $this->idcontrarecibo);
 
         return $criteria;
     }
@@ -2311,6 +2394,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $copyObj->setNotaalmacenistaempresa($this->getNotaalmacenistaempresa());
         $copyObj->setNotaauditoraersa($this->getNotaauditoraersa());
         $copyObj->setCompraEstatuspago($this->getCompraEstatuspago());
+        $copyObj->setIdcontrarecibo($this->getIdcontrarecibo());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2489,6 +2573,58 @@ abstract class BaseCompra extends BaseObject implements Persistent
         }
 
         return $this->aUsuarioRelatedByIdauditor;
+    }
+
+    /**
+     * Declares an association between this object and a Contrarecibo object.
+     *
+     * @param                  Contrarecibo $v
+     * @return Compra The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setContrarecibo(Contrarecibo $v = null)
+    {
+        if ($v === null) {
+            $this->setIdcontrarecibo(NULL);
+        } else {
+            $this->setIdcontrarecibo($v->getIdcontrarecibo());
+        }
+
+        $this->aContrarecibo = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Contrarecibo object, it will not be re-added.
+        if ($v !== null) {
+            $v->addCompra($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Contrarecibo object
+     *
+     * @param PropelPDO $con Optional Connection object.
+     * @param $doQuery Executes a query to get the object if required
+     * @return Contrarecibo The associated Contrarecibo object.
+     * @throws PropelException
+     */
+    public function getContrarecibo(PropelPDO $con = null, $doQuery = true)
+    {
+        if ($this->aContrarecibo === null && ($this->idcontrarecibo !== null) && $doQuery) {
+            $this->aContrarecibo = ContrareciboQuery::create()->findPk($this->idcontrarecibo, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aContrarecibo->addCompras($this);
+             */
+        }
+
+        return $this->aContrarecibo;
     }
 
     /**
@@ -3673,6 +3809,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $this->notaalmacenistaempresa = null;
         $this->notaauditoraersa = null;
         $this->compra_estatuspago = null;
+        $this->idcontrarecibo = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -3717,6 +3854,9 @@ abstract class BaseCompra extends BaseObject implements Persistent
             if ($this->aUsuarioRelatedByIdauditor instanceof Persistent) {
               $this->aUsuarioRelatedByIdauditor->clearAllReferences($deep);
             }
+            if ($this->aContrarecibo instanceof Persistent) {
+              $this->aContrarecibo->clearAllReferences($deep);
+            }
             if ($this->aEmpresa instanceof Persistent) {
               $this->aEmpresa->clearAllReferences($deep);
             }
@@ -3747,6 +3887,7 @@ abstract class BaseCompra extends BaseObject implements Persistent
         $this->collFlujoefectivos = null;
         $this->aAlmacen = null;
         $this->aUsuarioRelatedByIdauditor = null;
+        $this->aContrarecibo = null;
         $this->aEmpresa = null;
         $this->aProveedor = null;
         $this->aSucursal = null;

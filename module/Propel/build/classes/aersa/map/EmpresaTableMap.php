@@ -45,6 +45,15 @@ class EmpresaTableMap extends TableMap
         $this->addColumn('empresa_administracion', 'EmpresaAdministracion', 'BOOLEAN', false, 1, null);
         $this->addColumn('empresa_habilitarrecetas', 'EmpresaHabilitarrecetas', 'BOOLEAN', true, 1, null);
         $this->addColumn('empresa_habilitarproductos', 'EmpresaHabilitarproductos', 'BOOLEAN', true, 1, null);
+        $this->addColumn('empresa_tipo', 'EmpresaTipo', 'CHAR', false, null, null);
+        $this->getColumn('empresa_tipo', false)->setValueSet(array (
+  0 => 'cfci',
+  1 => 'proveedorsimple',
+  2 => 'proveedorcompleto',
+  3 => 'cliente',
+  4 => 'lightfull',
+));
+        $this->addColumn('empresa_periododepago', 'EmpresaPeriododepago', 'INTEGER', false, null, null);
         // validators
     } // initialize()
 
@@ -55,11 +64,14 @@ class EmpresaTableMap extends TableMap
     {
         $this->addRelation('Abonoproveedor', 'Abonoproveedor', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Abonoproveedors');
         $this->addRelation('Ajusteinventario', 'Ajusteinventario', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Ajusteinventarios');
+        $this->addRelation('AsociacionempresaRelatedByIdempresacliente', 'Asociacionempresa', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresacliente', ), null, 'CASCADE', 'AsociacionempresasRelatedByIdempresacliente');
+        $this->addRelation('AsociacionempresaRelatedByIdempresaproveedor', 'Asociacionempresa', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresaproveedor', ), 'CASCADE', 'CASCADE', 'AsociacionempresasRelatedByIdempresaproveedor');
         $this->addRelation('Compra', 'Compra', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Compras');
         $this->addRelation('Conceptoscfdi', 'Conceptoscfdi', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Conceptoscfdis');
         $this->addRelation('Cuentabancaria', 'Cuentabancaria', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Cuentabancarias');
         $this->addRelation('Cuentaporcobrar', 'Cuentaporcobrar', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Cuentaporcobrars');
         $this->addRelation('Devolucion', 'Devolucion', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Devolucions');
+        $this->addRelation('Explosionreceta', 'Explosionreceta', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Explosionrecetas');
         $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), null, null, 'Flujoefectivos');
         $this->addRelation('Foliocompra', 'Foliocompra', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Foliocompras');
         $this->addRelation('Foliorequisicion', 'Foliorequisicion', RelationMap::ONE_TO_MANY, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE', 'Foliorequisicions');

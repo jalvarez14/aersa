@@ -56,6 +56,8 @@ class CuentabancariaTableMap extends TableMap
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Abonoproveedordetalle', 'Abonoproveedordetalle', RelationMap::ONE_TO_MANY, array('idcuentabancaria' => 'idcuentabancaria', ), 'CASCADE', 'CASCADE', 'Abonoproveedordetalles');
         $this->addRelation('Flujoefectivo', 'Flujoefectivo', RelationMap::ONE_TO_MANY, array('idcuentabancaria' => 'idcuentabancaria', ), null, null, 'Flujoefectivos');
+        $this->addRelation('TraspasoRelatedByIdcuentabancariadestino', 'Traspaso', RelationMap::ONE_TO_MANY, array('idcuentabancaria' => 'idcuentabancariadestino', ), 'CASCADE', 'CASCADE', 'TraspasosRelatedByIdcuentabancariadestino');
+        $this->addRelation('TraspasoRelatedByIdcuentabancariaorigen', 'Traspaso', RelationMap::ONE_TO_MANY, array('idcuentabancaria' => 'idcuentabancariaorigen', ), 'CASCADE', 'CASCADE', 'TraspasosRelatedByIdcuentabancariaorigen');
     } // buildRelations()
 
 } // CuentabancariaTableMap

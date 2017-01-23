@@ -401,6 +401,9 @@ abstract class BaseSucursalPeer
         // Invalidate objects in DevolucionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevolucionPeer::clearInstancePool();
+        // Invalidate objects in ExplosionrecetaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ExplosionrecetaPeer::clearInstancePool();
         // Invalidate objects in FoliocompraPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         FoliocompraPeer::clearInstancePool();
@@ -1059,6 +1062,12 @@ abstract class BaseSucursalPeer
 
             $criteria->add(DevolucionPeer::IDSUCURSAL, $obj->getIdsucursal());
             $affectedRows += DevolucionPeer::doDelete($criteria, $con);
+
+            // delete related Explosionreceta objects
+            $criteria = new Criteria(ExplosionrecetaPeer::DATABASE_NAME);
+
+            $criteria->add(ExplosionrecetaPeer::IDSUCURSAL, $obj->getIdsucursal());
+            $affectedRows += ExplosionrecetaPeer::doDelete($criteria, $con);
 
             // delete related Foliocompra objects
             $criteria = new Criteria(FoliocompraPeer::DATABASE_NAME);

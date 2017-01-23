@@ -24,13 +24,13 @@ abstract class BaseCompraPeer
     const TM_CLASS = 'CompraTableMap';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 22;
+    const NUM_COLUMNS = 23;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
     /** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-    const NUM_HYDRATE_COLUMNS = 22;
+    const NUM_HYDRATE_COLUMNS = 23;
 
     /** the column name for the idcompra field */
     const IDCOMPRA = 'compra.idcompra';
@@ -98,6 +98,9 @@ abstract class BaseCompraPeer
     /** the column name for the compra_estatuspago field */
     const COMPRA_ESTATUSPAGO = 'compra.compra_estatuspago';
 
+    /** the column name for the idcontrarecibo field */
+    const IDCONTRARECIBO = 'compra.idcontrarecibo';
+
     /** The enumerated values for the compra_tipo field */
     const COMPRA_TIPO_ORDECOMPRA = 'ordecompra';
     const COMPRA_TIPO_COMPRA = 'compra';
@@ -126,12 +129,12 @@ abstract class BaseCompraPeer
      * e.g. CompraPeer::$fieldNames[CompraPeer::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcompra', 'Idempresa', 'Idsucursal', 'Idproveedor', 'Idusuario', 'Idauditor', 'Idalmacen', 'CompraFolio', 'CompraRevisada', 'CompraFactura', 'CompraFechacreacion', 'CompraFechacompra', 'CompraFechaentrega', 'CompraIeps', 'CompraIva', 'CompraSubtotal', 'CompraTotal', 'CompraTipo', 'Notaauditorempresa', 'Notaalmacenistaempresa', 'Notaauditoraersa', 'CompraEstatuspago', ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compraFolio', 'compraRevisada', 'compraFactura', 'compraFechacreacion', 'compraFechacompra', 'compraFechaentrega', 'compraIeps', 'compraIva', 'compraSubtotal', 'compraTotal', 'compraTipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', 'compraEstatuspago', ),
-        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA, CompraPeer::IDEMPRESA, CompraPeer::IDSUCURSAL, CompraPeer::IDPROVEEDOR, CompraPeer::IDUSUARIO, CompraPeer::IDAUDITOR, CompraPeer::IDALMACEN, CompraPeer::COMPRA_FOLIO, CompraPeer::COMPRA_REVISADA, CompraPeer::COMPRA_FACTURA, CompraPeer::COMPRA_FECHACREACION, CompraPeer::COMPRA_FECHACOMPRA, CompraPeer::COMPRA_FECHAENTREGA, CompraPeer::COMPRA_IEPS, CompraPeer::COMPRA_IVA, CompraPeer::COMPRA_SUBTOTAL, CompraPeer::COMPRA_TOTAL, CompraPeer::COMPRA_TIPO, CompraPeer::NOTAAUDITOREMPRESA, CompraPeer::NOTAALMACENISTAEMPRESA, CompraPeer::NOTAAUDITORAERSA, CompraPeer::COMPRA_ESTATUSPAGO, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'COMPRA_FOLIO', 'COMPRA_REVISADA', 'COMPRA_FACTURA', 'COMPRA_FECHACREACION', 'COMPRA_FECHACOMPRA', 'COMPRA_FECHAENTREGA', 'COMPRA_IEPS', 'COMPRA_IVA', 'COMPRA_SUBTOTAL', 'COMPRA_TOTAL', 'COMPRA_TIPO', 'NOTAAUDITOREMPRESA', 'NOTAALMACENISTAEMPRESA', 'NOTAAUDITORAERSA', 'COMPRA_ESTATUSPAGO', ),
-        BasePeer::TYPE_FIELDNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compra_folio', 'compra_revisada', 'compra_factura', 'compra_fechacreacion', 'compra_fechacompra', 'compra_fechaentrega', 'compra_ieps', 'compra_iva', 'compra_subtotal', 'compra_total', 'compra_tipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', 'compra_estatuspago', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
+        BasePeer::TYPE_PHPNAME => array ('Idcompra', 'Idempresa', 'Idsucursal', 'Idproveedor', 'Idusuario', 'Idauditor', 'Idalmacen', 'CompraFolio', 'CompraRevisada', 'CompraFactura', 'CompraFechacreacion', 'CompraFechacompra', 'CompraFechaentrega', 'CompraIeps', 'CompraIva', 'CompraSubtotal', 'CompraTotal', 'CompraTipo', 'Notaauditorempresa', 'Notaalmacenistaempresa', 'Notaauditoraersa', 'CompraEstatuspago', 'Idcontrarecibo', ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compraFolio', 'compraRevisada', 'compraFactura', 'compraFechacreacion', 'compraFechacompra', 'compraFechaentrega', 'compraIeps', 'compraIva', 'compraSubtotal', 'compraTotal', 'compraTipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', 'compraEstatuspago', 'idcontrarecibo', ),
+        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA, CompraPeer::IDEMPRESA, CompraPeer::IDSUCURSAL, CompraPeer::IDPROVEEDOR, CompraPeer::IDUSUARIO, CompraPeer::IDAUDITOR, CompraPeer::IDALMACEN, CompraPeer::COMPRA_FOLIO, CompraPeer::COMPRA_REVISADA, CompraPeer::COMPRA_FACTURA, CompraPeer::COMPRA_FECHACREACION, CompraPeer::COMPRA_FECHACOMPRA, CompraPeer::COMPRA_FECHAENTREGA, CompraPeer::COMPRA_IEPS, CompraPeer::COMPRA_IVA, CompraPeer::COMPRA_SUBTOTAL, CompraPeer::COMPRA_TOTAL, CompraPeer::COMPRA_TIPO, CompraPeer::NOTAAUDITOREMPRESA, CompraPeer::NOTAALMACENISTAEMPRESA, CompraPeer::NOTAAUDITORAERSA, CompraPeer::COMPRA_ESTATUSPAGO, CompraPeer::IDCONTRARECIBO, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA', 'IDEMPRESA', 'IDSUCURSAL', 'IDPROVEEDOR', 'IDUSUARIO', 'IDAUDITOR', 'IDALMACEN', 'COMPRA_FOLIO', 'COMPRA_REVISADA', 'COMPRA_FACTURA', 'COMPRA_FECHACREACION', 'COMPRA_FECHACOMPRA', 'COMPRA_FECHAENTREGA', 'COMPRA_IEPS', 'COMPRA_IVA', 'COMPRA_SUBTOTAL', 'COMPRA_TOTAL', 'COMPRA_TIPO', 'NOTAAUDITOREMPRESA', 'NOTAALMACENISTAEMPRESA', 'NOTAAUDITORAERSA', 'COMPRA_ESTATUSPAGO', 'IDCONTRARECIBO', ),
+        BasePeer::TYPE_FIELDNAME => array ('idcompra', 'idempresa', 'idsucursal', 'idproveedor', 'idusuario', 'idauditor', 'idalmacen', 'compra_folio', 'compra_revisada', 'compra_factura', 'compra_fechacreacion', 'compra_fechacompra', 'compra_fechaentrega', 'compra_ieps', 'compra_iva', 'compra_subtotal', 'compra_total', 'compra_tipo', 'notaauditorempresa', 'notaalmacenistaempresa', 'notaauditoraersa', 'compra_estatuspago', 'idcontrarecibo', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /**
@@ -141,12 +144,12 @@ abstract class BaseCompraPeer
      * e.g. CompraPeer::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('Idcompra' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'Idalmacen' => 6, 'CompraFolio' => 7, 'CompraRevisada' => 8, 'CompraFactura' => 9, 'CompraFechacreacion' => 10, 'CompraFechacompra' => 11, 'CompraFechaentrega' => 12, 'CompraIeps' => 13, 'CompraIva' => 14, 'CompraSubtotal' => 15, 'CompraTotal' => 16, 'CompraTipo' => 17, 'Notaauditorempresa' => 18, 'Notaalmacenistaempresa' => 19, 'Notaauditoraersa' => 20, 'CompraEstatuspago' => 21, ),
-        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compraFolio' => 7, 'compraRevisada' => 8, 'compraFactura' => 9, 'compraFechacreacion' => 10, 'compraFechacompra' => 11, 'compraFechaentrega' => 12, 'compraIeps' => 13, 'compraIva' => 14, 'compraSubtotal' => 15, 'compraTotal' => 16, 'compraTipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, 'compraEstatuspago' => 21, ),
-        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA => 0, CompraPeer::IDEMPRESA => 1, CompraPeer::IDSUCURSAL => 2, CompraPeer::IDPROVEEDOR => 3, CompraPeer::IDUSUARIO => 4, CompraPeer::IDAUDITOR => 5, CompraPeer::IDALMACEN => 6, CompraPeer::COMPRA_FOLIO => 7, CompraPeer::COMPRA_REVISADA => 8, CompraPeer::COMPRA_FACTURA => 9, CompraPeer::COMPRA_FECHACREACION => 10, CompraPeer::COMPRA_FECHACOMPRA => 11, CompraPeer::COMPRA_FECHAENTREGA => 12, CompraPeer::COMPRA_IEPS => 13, CompraPeer::COMPRA_IVA => 14, CompraPeer::COMPRA_SUBTOTAL => 15, CompraPeer::COMPRA_TOTAL => 16, CompraPeer::COMPRA_TIPO => 17, CompraPeer::NOTAAUDITOREMPRESA => 18, CompraPeer::NOTAALMACENISTAEMPRESA => 19, CompraPeer::NOTAAUDITORAERSA => 20, CompraPeer::COMPRA_ESTATUSPAGO => 21, ),
-        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'IDALMACEN' => 6, 'COMPRA_FOLIO' => 7, 'COMPRA_REVISADA' => 8, 'COMPRA_FACTURA' => 9, 'COMPRA_FECHACREACION' => 10, 'COMPRA_FECHACOMPRA' => 11, 'COMPRA_FECHAENTREGA' => 12, 'COMPRA_IEPS' => 13, 'COMPRA_IVA' => 14, 'COMPRA_SUBTOTAL' => 15, 'COMPRA_TOTAL' => 16, 'COMPRA_TIPO' => 17, 'NOTAAUDITOREMPRESA' => 18, 'NOTAALMACENISTAEMPRESA' => 19, 'NOTAAUDITORAERSA' => 20, 'COMPRA_ESTATUSPAGO' => 21, ),
-        BasePeer::TYPE_FIELDNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compra_folio' => 7, 'compra_revisada' => 8, 'compra_factura' => 9, 'compra_fechacreacion' => 10, 'compra_fechacompra' => 11, 'compra_fechaentrega' => 12, 'compra_ieps' => 13, 'compra_iva' => 14, 'compra_subtotal' => 15, 'compra_total' => 16, 'compra_tipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, 'compra_estatuspago' => 21, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, )
+        BasePeer::TYPE_PHPNAME => array ('Idcompra' => 0, 'Idempresa' => 1, 'Idsucursal' => 2, 'Idproveedor' => 3, 'Idusuario' => 4, 'Idauditor' => 5, 'Idalmacen' => 6, 'CompraFolio' => 7, 'CompraRevisada' => 8, 'CompraFactura' => 9, 'CompraFechacreacion' => 10, 'CompraFechacompra' => 11, 'CompraFechaentrega' => 12, 'CompraIeps' => 13, 'CompraIva' => 14, 'CompraSubtotal' => 15, 'CompraTotal' => 16, 'CompraTipo' => 17, 'Notaauditorempresa' => 18, 'Notaalmacenistaempresa' => 19, 'Notaauditoraersa' => 20, 'CompraEstatuspago' => 21, 'Idcontrarecibo' => 22, ),
+        BasePeer::TYPE_STUDLYPHPNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compraFolio' => 7, 'compraRevisada' => 8, 'compraFactura' => 9, 'compraFechacreacion' => 10, 'compraFechacompra' => 11, 'compraFechaentrega' => 12, 'compraIeps' => 13, 'compraIva' => 14, 'compraSubtotal' => 15, 'compraTotal' => 16, 'compraTipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, 'compraEstatuspago' => 21, 'idcontrarecibo' => 22, ),
+        BasePeer::TYPE_COLNAME => array (CompraPeer::IDCOMPRA => 0, CompraPeer::IDEMPRESA => 1, CompraPeer::IDSUCURSAL => 2, CompraPeer::IDPROVEEDOR => 3, CompraPeer::IDUSUARIO => 4, CompraPeer::IDAUDITOR => 5, CompraPeer::IDALMACEN => 6, CompraPeer::COMPRA_FOLIO => 7, CompraPeer::COMPRA_REVISADA => 8, CompraPeer::COMPRA_FACTURA => 9, CompraPeer::COMPRA_FECHACREACION => 10, CompraPeer::COMPRA_FECHACOMPRA => 11, CompraPeer::COMPRA_FECHAENTREGA => 12, CompraPeer::COMPRA_IEPS => 13, CompraPeer::COMPRA_IVA => 14, CompraPeer::COMPRA_SUBTOTAL => 15, CompraPeer::COMPRA_TOTAL => 16, CompraPeer::COMPRA_TIPO => 17, CompraPeer::NOTAAUDITOREMPRESA => 18, CompraPeer::NOTAALMACENISTAEMPRESA => 19, CompraPeer::NOTAAUDITORAERSA => 20, CompraPeer::COMPRA_ESTATUSPAGO => 21, CompraPeer::IDCONTRARECIBO => 22, ),
+        BasePeer::TYPE_RAW_COLNAME => array ('IDCOMPRA' => 0, 'IDEMPRESA' => 1, 'IDSUCURSAL' => 2, 'IDPROVEEDOR' => 3, 'IDUSUARIO' => 4, 'IDAUDITOR' => 5, 'IDALMACEN' => 6, 'COMPRA_FOLIO' => 7, 'COMPRA_REVISADA' => 8, 'COMPRA_FACTURA' => 9, 'COMPRA_FECHACREACION' => 10, 'COMPRA_FECHACOMPRA' => 11, 'COMPRA_FECHAENTREGA' => 12, 'COMPRA_IEPS' => 13, 'COMPRA_IVA' => 14, 'COMPRA_SUBTOTAL' => 15, 'COMPRA_TOTAL' => 16, 'COMPRA_TIPO' => 17, 'NOTAAUDITOREMPRESA' => 18, 'NOTAALMACENISTAEMPRESA' => 19, 'NOTAAUDITORAERSA' => 20, 'COMPRA_ESTATUSPAGO' => 21, 'IDCONTRARECIBO' => 22, ),
+        BasePeer::TYPE_FIELDNAME => array ('idcompra' => 0, 'idempresa' => 1, 'idsucursal' => 2, 'idproveedor' => 3, 'idusuario' => 4, 'idauditor' => 5, 'idalmacen' => 6, 'compra_folio' => 7, 'compra_revisada' => 8, 'compra_factura' => 9, 'compra_fechacreacion' => 10, 'compra_fechacompra' => 11, 'compra_fechaentrega' => 12, 'compra_ieps' => 13, 'compra_iva' => 14, 'compra_subtotal' => 15, 'compra_total' => 16, 'compra_tipo' => 17, 'notaauditorempresa' => 18, 'notaalmacenistaempresa' => 19, 'notaauditoraersa' => 20, 'compra_estatuspago' => 21, 'idcontrarecibo' => 22, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, )
     );
 
     /** The enumerated values for this table */
@@ -300,6 +303,7 @@ abstract class BaseCompraPeer
             $criteria->addSelectColumn(CompraPeer::NOTAALMACENISTAEMPRESA);
             $criteria->addSelectColumn(CompraPeer::NOTAAUDITORAERSA);
             $criteria->addSelectColumn(CompraPeer::COMPRA_ESTATUSPAGO);
+            $criteria->addSelectColumn(CompraPeer::IDCONTRARECIBO);
         } else {
             $criteria->addSelectColumn($alias . '.idcompra');
             $criteria->addSelectColumn($alias . '.idempresa');
@@ -323,6 +327,7 @@ abstract class BaseCompraPeer
             $criteria->addSelectColumn($alias . '.notaalmacenistaempresa');
             $criteria->addSelectColumn($alias . '.notaauditoraersa');
             $criteria->addSelectColumn($alias . '.compra_estatuspago');
+            $criteria->addSelectColumn($alias . '.idcontrarecibo');
         }
     }
 
@@ -733,6 +738,57 @@ abstract class BaseCompraPeer
 
 
     /**
+     * Returns the number of rows matching criteria, joining the related Contrarecibo table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinContrarecibo(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(CompraPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            CompraPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+        // Set the correct dbName
+        $criteria->setDbName(CompraPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(CompraPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
      * Returns the number of rows matching criteria, joining the related Empresa table
      *
      * @param      Criteria $criteria
@@ -1071,6 +1127,73 @@ abstract class BaseCompraPeer
 
 
     /**
+     * Selects a collection of Compra objects pre-filled with their Contrarecibo objects.
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Compra objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinContrarecibo(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CompraPeer::DATABASE_NAME);
+        }
+
+        CompraPeer::addSelectColumns($criteria);
+        $startcol = CompraPeer::NUM_HYDRATE_COLUMNS;
+        ContrareciboPeer::addSelectColumns($criteria);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CompraPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CompraPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+
+                $cls = CompraPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CompraPeer::addInstanceToPool($obj1, $key1);
+            } // if $obj1 already loaded
+
+            $key2 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol);
+            if ($key2 !== null) {
+                $obj2 = ContrareciboPeer::getInstanceFromPool($key2);
+                if (!$obj2) {
+
+                    $cls = ContrareciboPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol);
+                    ContrareciboPeer::addInstanceToPool($obj2, $key2);
+                } // if obj2 already loaded
+
+                // Add the $obj1 (Compra) to $obj2 (Contrarecibo)
+                $obj2->addCompra($obj1);
+
+            } // if joined row was not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
      * Selects a collection of Compra objects pre-filled with their Empresa objects.
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -1378,6 +1501,8 @@ abstract class BaseCompraPeer
 
         $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
@@ -1426,21 +1551,26 @@ abstract class BaseCompraPeer
         UsuarioPeer::addSelectColumns($criteria);
         $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
+        ContrareciboPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ContrareciboPeer::NUM_HYDRATE_COLUMNS;
+
         EmpresaPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         ProveedorPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
 
         SucursalPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol9 = $startcol8 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
@@ -1503,76 +1633,94 @@ abstract class BaseCompraPeer
                 $obj3->addCompraRelatedByIdauditor($obj1);
             } // if joined row not null
 
-            // Add objects for joined Empresa rows
+            // Add objects for joined Contrarecibo rows
 
-            $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+            $key4 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol4);
             if ($key4 !== null) {
-                $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                $obj4 = ContrareciboPeer::getInstanceFromPool($key4);
                 if (!$obj4) {
 
-                    $cls = EmpresaPeer::getOMClass();
+                    $cls = ContrareciboPeer::getOMClass();
 
                     $obj4 = new $cls();
                     $obj4->hydrate($row, $startcol4);
-                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                    ContrareciboPeer::addInstanceToPool($obj4, $key4);
                 } // if obj4 loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj4 (Empresa)
+                // Add the $obj1 (Compra) to the collection in $obj4 (Contrarecibo)
                 $obj4->addCompra($obj1);
+            } // if joined row not null
+
+            // Add objects for joined Empresa rows
+
+            $key5 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+            if ($key5 !== null) {
+                $obj5 = EmpresaPeer::getInstanceFromPool($key5);
+                if (!$obj5) {
+
+                    $cls = EmpresaPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    EmpresaPeer::addInstanceToPool($obj5, $key5);
+                } // if obj5 loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj5 (Empresa)
+                $obj5->addCompra($obj1);
             } // if joined row not null
 
             // Add objects for joined Proveedor rows
 
-            $key5 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-            if ($key5 !== null) {
-                $obj5 = ProveedorPeer::getInstanceFromPool($key5);
-                if (!$obj5) {
+            $key6 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+            if ($key6 !== null) {
+                $obj6 = ProveedorPeer::getInstanceFromPool($key6);
+                if (!$obj6) {
 
                     $cls = ProveedorPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    ProveedorPeer::addInstanceToPool($obj5, $key5);
-                } // if obj5 loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    ProveedorPeer::addInstanceToPool($obj6, $key6);
+                } // if obj6 loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj5 (Proveedor)
-                $obj5->addCompra($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj6 (Proveedor)
+                $obj6->addCompra($obj1);
             } // if joined row not null
 
             // Add objects for joined Sucursal rows
 
-            $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-            if ($key6 !== null) {
-                $obj6 = SucursalPeer::getInstanceFromPool($key6);
-                if (!$obj6) {
+            $key7 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+            if ($key7 !== null) {
+                $obj7 = SucursalPeer::getInstanceFromPool($key7);
+                if (!$obj7) {
 
                     $cls = SucursalPeer::getOMClass();
 
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    SucursalPeer::addInstanceToPool($obj6, $key6);
-                } // if obj6 loaded
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    SucursalPeer::addInstanceToPool($obj7, $key7);
+                } // if obj7 loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj6 (Sucursal)
-                $obj6->addCompra($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj7 (Sucursal)
+                $obj7->addCompra($obj1);
             } // if joined row not null
 
             // Add objects for joined Usuario rows
 
-            $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
-            if ($key7 !== null) {
-                $obj7 = UsuarioPeer::getInstanceFromPool($key7);
-                if (!$obj7) {
+            $key8 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol8);
+            if ($key8 !== null) {
+                $obj8 = UsuarioPeer::getInstanceFromPool($key8);
+                if (!$obj8) {
 
                     $cls = UsuarioPeer::getOMClass();
 
-                    $obj7 = new $cls();
-                    $obj7->hydrate($row, $startcol7);
-                    UsuarioPeer::addInstanceToPool($obj7, $key7);
-                } // if obj7 loaded
+                    $obj8 = new $cls();
+                    $obj8->hydrate($row, $startcol8);
+                    UsuarioPeer::addInstanceToPool($obj8, $key8);
+                } // if obj8 loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj7 (Usuario)
-                $obj7->addCompraRelatedByIdusuario($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj8 (Usuario)
+                $obj8->addCompraRelatedByIdusuario($obj1);
             } // if joined row not null
 
             $results[] = $obj1;
@@ -1620,6 +1768,8 @@ abstract class BaseCompraPeer
         }
 
         $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
@@ -1680,11 +1830,74 @@ abstract class BaseCompraPeer
 
         $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $stmt = BasePeer::doCount($criteria, $con);
+
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $count = (int) $row[0];
+        } else {
+            $count = 0; // no rows returned; we infer that means 0 matches.
+        }
+        $stmt->closeCursor();
+
+        return $count;
+    }
+
+
+    /**
+     * Returns the number of rows matching criteria, joining the related Contrarecibo table
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return int Number of matching rows.
+     */
+    public static function doCountJoinAllExceptContrarecibo(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        // we're going to modify criteria, so copy it first
+        $criteria = clone $criteria;
+
+        // We need to set the primary table name, since in the case that there are no WHERE columns
+        // it will be impossible for the BasePeer::createSelectSql() method to determine which
+        // tables go into the FROM clause.
+        $criteria->setPrimaryTableName(CompraPeer::TABLE_NAME);
+
+        if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+            $criteria->setDistinct();
+        }
+
+        if (!$criteria->hasSelectClause()) {
+            CompraPeer::addSelectColumns($criteria);
+        }
+
+        $criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+        // Set the correct dbName
+        $criteria->setDbName(CompraPeer::DATABASE_NAME);
+
+        if ($con === null) {
+            $con = Propel::getConnection(CompraPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+        }
+
+        $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
         $stmt = BasePeer::doCount($criteria, $con);
 
@@ -1738,6 +1951,8 @@ abstract class BaseCompraPeer
         $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
@@ -1798,6 +2013,8 @@ abstract class BaseCompraPeer
 
         $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
@@ -1857,6 +2074,8 @@ abstract class BaseCompraPeer
 
         $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
 
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
@@ -1914,6 +2133,8 @@ abstract class BaseCompraPeer
 
         $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
@@ -1960,19 +2181,24 @@ abstract class BaseCompraPeer
         UsuarioPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
+        ContrareciboPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ContrareciboPeer::NUM_HYDRATE_COLUMNS;
+
         EmpresaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         ProveedorPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
 
         SucursalPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
@@ -2019,79 +2245,98 @@ abstract class BaseCompraPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Empresa rows
+                // Add objects for joined Contrarecibo rows
 
-                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
+                    $obj3 = ContrareciboPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = EmpresaPeer::getOMClass();
+                        $cls = ContrareciboPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    EmpresaPeer::addInstanceToPool($obj3, $key3);
+                    ContrareciboPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj3 (Empresa)
+                // Add the $obj1 (Compra) to the collection in $obj3 (Contrarecibo)
                 $obj3->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj4 (Empresa)
+                $obj4->addCompra($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Proveedor rows
 
-                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key5 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = ProveedorPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
 
                         $cls = ProveedorPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    ProveedorPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    ProveedorPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj4 (Proveedor)
-                $obj4->addCompra($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj5 (Proveedor)
+                $obj5->addCompra($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Sucursal rows
 
-                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SucursalPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    SucursalPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj5 (Sucursal)
-                $obj5->addCompra($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj6 (Sucursal)
+                $obj6->addCompra($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Usuario rows
 
-                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
 
                         $cls = UsuarioPeer::getOMClass();
 
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UsuarioPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj6 (Usuario)
-                $obj6->addCompraRelatedByIdusuario($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj7 (Usuario)
+                $obj7->addCompraRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -2130,343 +2375,27 @@ abstract class BaseCompraPeer
         AlmacenPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
 
-        EmpresaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
-
-        ProveedorPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
-
-        SucursalPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
-
-        $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
-
-        $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
-
-        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = CompraPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = CompraPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = CompraPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                CompraPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Almacen rows
-
-                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = AlmacenPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    AlmacenPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj2 (Almacen)
-                $obj2->addCompra($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Empresa rows
-
-                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = EmpresaPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    EmpresaPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj3 (Empresa)
-                $obj3->addCompra($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Proveedor rows
-
-                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
-
-                        $cls = ProveedorPeer::getOMClass();
-
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    ProveedorPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj4 (Proveedor)
-                $obj4->addCompra($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Sucursal rows
-
-                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
-
-                        $cls = SucursalPeer::getOMClass();
-
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    SucursalPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj5 (Sucursal)
-                $obj5->addCompra($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Compra objects pre-filled with all related objects except Empresa.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Compra objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(CompraPeer::DATABASE_NAME);
-        }
-
-        CompraPeer::addSelectColumns($criteria);
-        $startcol2 = CompraPeer::NUM_HYDRATE_COLUMNS;
-
-        AlmacenPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
-
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
-
-        ProveedorPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
-
-        SucursalPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
-
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
-
-        $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
-
-        $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
-
-        $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
-
-        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
-
-        $criteria->addJoin(CompraPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
-
-
-        $stmt = BasePeer::doSelect($criteria, $con);
-        $results = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-            $key1 = CompraPeer::getPrimaryKeyHashFromRow($row, 0);
-            if (null !== ($obj1 = CompraPeer::getInstanceFromPool($key1))) {
-                // We no longer rehydrate the object, since this can cause data loss.
-                // See http://www.propelorm.org/ticket/509
-                // $obj1->hydrate($row, 0, true); // rehydrate
-            } else {
-                $cls = CompraPeer::getOMClass();
-
-                $obj1 = new $cls();
-                $obj1->hydrate($row);
-                CompraPeer::addInstanceToPool($obj1, $key1);
-            } // if obj1 already loaded
-
-                // Add objects for joined Almacen rows
-
-                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-                if ($key2 !== null) {
-                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
-                    if (!$obj2) {
-
-                        $cls = AlmacenPeer::getOMClass();
-
-                    $obj2 = new $cls();
-                    $obj2->hydrate($row, $startcol2);
-                    AlmacenPeer::addInstanceToPool($obj2, $key2);
-                } // if $obj2 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj2 (Almacen)
-                $obj2->addCompra($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Usuario rows
-
-                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-                if ($key3 !== null) {
-                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
-                    if (!$obj3) {
-
-                        $cls = UsuarioPeer::getOMClass();
-
-                    $obj3 = new $cls();
-                    $obj3->hydrate($row, $startcol3);
-                    UsuarioPeer::addInstanceToPool($obj3, $key3);
-                } // if $obj3 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj3 (Usuario)
-                $obj3->addCompraRelatedByIdauditor($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Proveedor rows
-
-                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
-
-                        $cls = ProveedorPeer::getOMClass();
-
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    ProveedorPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj4 (Proveedor)
-                $obj4->addCompra($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Sucursal rows
-
-                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
-
-                        $cls = SucursalPeer::getOMClass();
-
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    SucursalPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj5 (Sucursal)
-                $obj5->addCompra($obj1);
-
-            } // if joined row is not null
-
-                // Add objects for joined Usuario rows
-
-                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
-                if ($key6 !== null) {
-                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
-                    if (!$obj6) {
-
-                        $cls = UsuarioPeer::getOMClass();
-
-                    $obj6 = new $cls();
-                    $obj6->hydrate($row, $startcol6);
-                    UsuarioPeer::addInstanceToPool($obj6, $key6);
-                } // if $obj6 already loaded
-
-                // Add the $obj1 (Compra) to the collection in $obj6 (Usuario)
-                $obj6->addCompraRelatedByIdusuario($obj1);
-
-            } // if joined row is not null
-
-            $results[] = $obj1;
-        }
-        $stmt->closeCursor();
-
-        return $results;
-    }
-
-
-    /**
-     * Selects a collection of Compra objects pre-filled with all related objects except Proveedor.
-     *
-     * @param      Criteria  $criteria
-     * @param      PropelPDO $con
-     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-     * @return array           Array of Compra objects.
-     * @throws PropelException Any exceptions caught during processing will be
-     *		 rethrown wrapped into a PropelException.
-     */
-    public static function doSelectJoinAllExceptProveedor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-    {
-        $criteria = clone $criteria;
-
-        // Set the correct dbName if it has not been overridden
-        // $criteria->getDbName() will return the same object if not set to another value
-        // so == check is okay and faster
-        if ($criteria->getDbName() == Propel::getDefaultDB()) {
-            $criteria->setDbName(CompraPeer::DATABASE_NAME);
-        }
-
-        CompraPeer::addSelectColumns($criteria);
-        $startcol2 = CompraPeer::NUM_HYDRATE_COLUMNS;
-
-        AlmacenPeer::addSelectColumns($criteria);
-        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
-
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        ContrareciboPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ContrareciboPeer::NUM_HYDRATE_COLUMNS;
 
         EmpresaPeer::addSelectColumns($criteria);
         $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
-        SucursalPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
 
-        UsuarioPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
-        $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
-        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+        $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
 
-        $criteria->addJoin(CompraPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
 
         $stmt = BasePeer::doSelect($criteria, $con);
@@ -2505,22 +2434,22 @@ abstract class BaseCompraPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Usuario rows
+                // Add objects for joined Contrarecibo rows
 
-                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    $obj3 = ContrareciboPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = UsuarioPeer::getOMClass();
+                        $cls = ContrareciboPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                    ContrareciboPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj3 (Usuario)
-                $obj3->addCompraRelatedByIdauditor($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj3 (Contrarecibo)
+                $obj3->addCompra($obj1);
 
             } // if joined row is not null
 
@@ -2543,41 +2472,41 @@ abstract class BaseCompraPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Sucursal rows
+                // Add objects for joined Proveedor rows
 
-                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                $key5 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol5);
                 if ($key5 !== null) {
-                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
+                    $obj5 = ProveedorPeer::getInstanceFromPool($key5);
                     if (!$obj5) {
 
-                        $cls = SucursalPeer::getOMClass();
+                        $cls = ProveedorPeer::getOMClass();
 
                     $obj5 = new $cls();
                     $obj5->hydrate($row, $startcol5);
-                    SucursalPeer::addInstanceToPool($obj5, $key5);
+                    ProveedorPeer::addInstanceToPool($obj5, $key5);
                 } // if $obj5 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj5 (Sucursal)
+                // Add the $obj1 (Compra) to the collection in $obj5 (Proveedor)
                 $obj5->addCompra($obj1);
 
             } // if joined row is not null
 
-                // Add objects for joined Usuario rows
+                // Add objects for joined Sucursal rows
 
-                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
                 if ($key6 !== null) {
-                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
                     if (!$obj6) {
 
-                        $cls = UsuarioPeer::getOMClass();
+                        $cls = SucursalPeer::getOMClass();
 
                     $obj6 = new $cls();
                     $obj6->hydrate($row, $startcol6);
-                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
                 } // if $obj6 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj6 (Usuario)
-                $obj6->addCompraRelatedByIdusuario($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj6 (Sucursal)
+                $obj6->addCompra($obj1);
 
             } // if joined row is not null
 
@@ -2590,7 +2519,7 @@ abstract class BaseCompraPeer
 
 
     /**
-     * Selects a collection of Compra objects pre-filled with all related objects except Sucursal.
+     * Selects a collection of Compra objects pre-filled with all related objects except Contrarecibo.
      *
      * @param      Criteria  $criteria
      * @param      PropelPDO $con
@@ -2599,7 +2528,7 @@ abstract class BaseCompraPeer
      * @throws PropelException Any exceptions caught during processing will be
      *		 rethrown wrapped into a PropelException.
      */
-    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    public static function doSelectJoinAllExceptContrarecibo(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
     {
         $criteria = clone $criteria;
 
@@ -2625,8 +2554,11 @@ abstract class BaseCompraPeer
         ProveedorPeer::addSelectColumns($criteria);
         $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
 
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
         UsuarioPeer::addSelectColumns($criteria);
-        $startcol7 = $startcol6 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
 
@@ -2635,6 +2567,8 @@ abstract class BaseCompraPeer
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
 
@@ -2732,22 +2666,623 @@ abstract class BaseCompraPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Usuario rows
+                // Add objects for joined Sucursal rows
 
-                $key6 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
                 if ($key6 !== null) {
-                    $obj6 = UsuarioPeer::getInstanceFromPool($key6);
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
                     if (!$obj6) {
 
-                        $cls = UsuarioPeer::getOMClass();
+                        $cls = SucursalPeer::getOMClass();
 
                     $obj6 = new $cls();
                     $obj6->hydrate($row, $startcol6);
-                    UsuarioPeer::addInstanceToPool($obj6, $key6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
                 } // if $obj6 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj6 (Usuario)
-                $obj6->addCompraRelatedByIdusuario($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj6 (Sucursal)
+                $obj6->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj7 (Usuario)
+                $obj7->addCompraRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Compra objects pre-filled with all related objects except Empresa.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Compra objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptEmpresa(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CompraPeer::DATABASE_NAME);
+        }
+
+        CompraPeer::addSelectColumns($criteria);
+        $startcol2 = CompraPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        ContrareciboPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ContrareciboPeer::NUM_HYDRATE_COLUMNS;
+
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CompraPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CompraPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = CompraPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CompraPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj2 (Almacen)
+                $obj2->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj3 (Usuario)
+                $obj3->addCompraRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Contrarecibo rows
+
+                $key4 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = ContrareciboPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = ContrareciboPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    ContrareciboPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj4 (Contrarecibo)
+                $obj4->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Proveedor rows
+
+                $key5 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = ProveedorPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = ProveedorPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    ProveedorPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj5 (Proveedor)
+                $obj5->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj6 (Sucursal)
+                $obj6->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj7 (Usuario)
+                $obj7->addCompraRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Compra objects pre-filled with all related objects except Proveedor.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Compra objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptProveedor(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CompraPeer::DATABASE_NAME);
+        }
+
+        CompraPeer::addSelectColumns($criteria);
+        $startcol2 = CompraPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        ContrareciboPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ContrareciboPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        SucursalPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDSUCURSAL, SucursalPeer::IDSUCURSAL, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CompraPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CompraPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = CompraPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CompraPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj2 (Almacen)
+                $obj2->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj3 (Usuario)
+                $obj3->addCompraRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Contrarecibo rows
+
+                $key4 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = ContrareciboPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = ContrareciboPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    ContrareciboPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj4 (Contrarecibo)
+                $obj4->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key5 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = EmpresaPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    EmpresaPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj5 (Empresa)
+                $obj5->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Sucursal rows
+
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = SucursalPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj6 (Sucursal)
+                $obj6->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj7 (Usuario)
+                $obj7->addCompraRelatedByIdusuario($obj1);
+
+            } // if joined row is not null
+
+            $results[] = $obj1;
+        }
+        $stmt->closeCursor();
+
+        return $results;
+    }
+
+
+    /**
+     * Selects a collection of Compra objects pre-filled with all related objects except Sucursal.
+     *
+     * @param      Criteria  $criteria
+     * @param      PropelPDO $con
+     * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+     * @return array           Array of Compra objects.
+     * @throws PropelException Any exceptions caught during processing will be
+     *		 rethrown wrapped into a PropelException.
+     */
+    public static function doSelectJoinAllExceptSucursal(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $criteria = clone $criteria;
+
+        // Set the correct dbName if it has not been overridden
+        // $criteria->getDbName() will return the same object if not set to another value
+        // so == check is okay and faster
+        if ($criteria->getDbName() == Propel::getDefaultDB()) {
+            $criteria->setDbName(CompraPeer::DATABASE_NAME);
+        }
+
+        CompraPeer::addSelectColumns($criteria);
+        $startcol2 = CompraPeer::NUM_HYDRATE_COLUMNS;
+
+        AlmacenPeer::addSelectColumns($criteria);
+        $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        ContrareciboPeer::addSelectColumns($criteria);
+        $startcol5 = $startcol4 + ContrareciboPeer::NUM_HYDRATE_COLUMNS;
+
+        EmpresaPeer::addSelectColumns($criteria);
+        $startcol6 = $startcol5 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+
+        ProveedorPeer::addSelectColumns($criteria);
+        $startcol7 = $startcol6 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+
+        UsuarioPeer::addSelectColumns($criteria);
+        $startcol8 = $startcol7 + UsuarioPeer::NUM_HYDRATE_COLUMNS;
+
+        $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDAUDITOR, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDPROVEEDOR, ProveedorPeer::IDPROVEEDOR, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDUSUARIO, UsuarioPeer::IDUSUARIO, $join_behavior);
+
+
+        $stmt = BasePeer::doSelect($criteria, $con);
+        $results = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $key1 = CompraPeer::getPrimaryKeyHashFromRow($row, 0);
+            if (null !== ($obj1 = CompraPeer::getInstanceFromPool($key1))) {
+                // We no longer rehydrate the object, since this can cause data loss.
+                // See http://www.propelorm.org/ticket/509
+                // $obj1->hydrate($row, 0, true); // rehydrate
+            } else {
+                $cls = CompraPeer::getOMClass();
+
+                $obj1 = new $cls();
+                $obj1->hydrate($row);
+                CompraPeer::addInstanceToPool($obj1, $key1);
+            } // if obj1 already loaded
+
+                // Add objects for joined Almacen rows
+
+                $key2 = AlmacenPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+                if ($key2 !== null) {
+                    $obj2 = AlmacenPeer::getInstanceFromPool($key2);
+                    if (!$obj2) {
+
+                        $cls = AlmacenPeer::getOMClass();
+
+                    $obj2 = new $cls();
+                    $obj2->hydrate($row, $startcol2);
+                    AlmacenPeer::addInstanceToPool($obj2, $key2);
+                } // if $obj2 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj2 (Almacen)
+                $obj2->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key3 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                if ($key3 !== null) {
+                    $obj3 = UsuarioPeer::getInstanceFromPool($key3);
+                    if (!$obj3) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj3 = new $cls();
+                    $obj3->hydrate($row, $startcol3);
+                    UsuarioPeer::addInstanceToPool($obj3, $key3);
+                } // if $obj3 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj3 (Usuario)
+                $obj3->addCompraRelatedByIdauditor($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Contrarecibo rows
+
+                $key4 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = ContrareciboPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = ContrareciboPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    ContrareciboPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj4 (Contrarecibo)
+                $obj4->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key5 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = EmpresaPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    EmpresaPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj5 (Empresa)
+                $obj5->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Proveedor rows
+
+                $key6 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = ProveedorPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
+
+                        $cls = ProveedorPeer::getOMClass();
+
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    ProveedorPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj6 (Proveedor)
+                $obj6->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Usuario rows
+
+                $key7 = UsuarioPeer::getPrimaryKeyHashFromRow($row, $startcol7);
+                if ($key7 !== null) {
+                    $obj7 = UsuarioPeer::getInstanceFromPool($key7);
+                    if (!$obj7) {
+
+                        $cls = UsuarioPeer::getOMClass();
+
+                    $obj7 = new $cls();
+                    $obj7->hydrate($row, $startcol7);
+                    UsuarioPeer::addInstanceToPool($obj7, $key7);
+                } // if $obj7 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj7 (Usuario)
+                $obj7->addCompraRelatedByIdusuario($obj1);
 
             } // if joined row is not null
 
@@ -2786,16 +3321,21 @@ abstract class BaseCompraPeer
         AlmacenPeer::addSelectColumns($criteria);
         $startcol3 = $startcol2 + AlmacenPeer::NUM_HYDRATE_COLUMNS;
 
+        ContrareciboPeer::addSelectColumns($criteria);
+        $startcol4 = $startcol3 + ContrareciboPeer::NUM_HYDRATE_COLUMNS;
+
         EmpresaPeer::addSelectColumns($criteria);
-        $startcol4 = $startcol3 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
+        $startcol5 = $startcol4 + EmpresaPeer::NUM_HYDRATE_COLUMNS;
 
         ProveedorPeer::addSelectColumns($criteria);
-        $startcol5 = $startcol4 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
+        $startcol6 = $startcol5 + ProveedorPeer::NUM_HYDRATE_COLUMNS;
 
         SucursalPeer::addSelectColumns($criteria);
-        $startcol6 = $startcol5 + SucursalPeer::NUM_HYDRATE_COLUMNS;
+        $startcol7 = $startcol6 + SucursalPeer::NUM_HYDRATE_COLUMNS;
 
         $criteria->addJoin(CompraPeer::IDALMACEN, AlmacenPeer::IDALMACEN, $join_behavior);
+
+        $criteria->addJoin(CompraPeer::IDCONTRARECIBO, ContrareciboPeer::IDCONTRARECIBO, $join_behavior);
 
         $criteria->addJoin(CompraPeer::IDEMPRESA, EmpresaPeer::IDEMPRESA, $join_behavior);
 
@@ -2840,60 +3380,79 @@ abstract class BaseCompraPeer
 
             } // if joined row is not null
 
-                // Add objects for joined Empresa rows
+                // Add objects for joined Contrarecibo rows
 
-                $key3 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+                $key3 = ContrareciboPeer::getPrimaryKeyHashFromRow($row, $startcol3);
                 if ($key3 !== null) {
-                    $obj3 = EmpresaPeer::getInstanceFromPool($key3);
+                    $obj3 = ContrareciboPeer::getInstanceFromPool($key3);
                     if (!$obj3) {
 
-                        $cls = EmpresaPeer::getOMClass();
+                        $cls = ContrareciboPeer::getOMClass();
 
                     $obj3 = new $cls();
                     $obj3->hydrate($row, $startcol3);
-                    EmpresaPeer::addInstanceToPool($obj3, $key3);
+                    ContrareciboPeer::addInstanceToPool($obj3, $key3);
                 } // if $obj3 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj3 (Empresa)
+                // Add the $obj1 (Compra) to the collection in $obj3 (Contrarecibo)
                 $obj3->addCompra($obj1);
+
+            } // if joined row is not null
+
+                // Add objects for joined Empresa rows
+
+                $key4 = EmpresaPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+                if ($key4 !== null) {
+                    $obj4 = EmpresaPeer::getInstanceFromPool($key4);
+                    if (!$obj4) {
+
+                        $cls = EmpresaPeer::getOMClass();
+
+                    $obj4 = new $cls();
+                    $obj4->hydrate($row, $startcol4);
+                    EmpresaPeer::addInstanceToPool($obj4, $key4);
+                } // if $obj4 already loaded
+
+                // Add the $obj1 (Compra) to the collection in $obj4 (Empresa)
+                $obj4->addCompra($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Proveedor rows
 
-                $key4 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-                if ($key4 !== null) {
-                    $obj4 = ProveedorPeer::getInstanceFromPool($key4);
-                    if (!$obj4) {
+                $key5 = ProveedorPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+                if ($key5 !== null) {
+                    $obj5 = ProveedorPeer::getInstanceFromPool($key5);
+                    if (!$obj5) {
 
                         $cls = ProveedorPeer::getOMClass();
 
-                    $obj4 = new $cls();
-                    $obj4->hydrate($row, $startcol4);
-                    ProveedorPeer::addInstanceToPool($obj4, $key4);
-                } // if $obj4 already loaded
+                    $obj5 = new $cls();
+                    $obj5->hydrate($row, $startcol5);
+                    ProveedorPeer::addInstanceToPool($obj5, $key5);
+                } // if $obj5 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj4 (Proveedor)
-                $obj4->addCompra($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj5 (Proveedor)
+                $obj5->addCompra($obj1);
 
             } // if joined row is not null
 
                 // Add objects for joined Sucursal rows
 
-                $key5 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol5);
-                if ($key5 !== null) {
-                    $obj5 = SucursalPeer::getInstanceFromPool($key5);
-                    if (!$obj5) {
+                $key6 = SucursalPeer::getPrimaryKeyHashFromRow($row, $startcol6);
+                if ($key6 !== null) {
+                    $obj6 = SucursalPeer::getInstanceFromPool($key6);
+                    if (!$obj6) {
 
                         $cls = SucursalPeer::getOMClass();
 
-                    $obj5 = new $cls();
-                    $obj5->hydrate($row, $startcol5);
-                    SucursalPeer::addInstanceToPool($obj5, $key5);
-                } // if $obj5 already loaded
+                    $obj6 = new $cls();
+                    $obj6->hydrate($row, $startcol6);
+                    SucursalPeer::addInstanceToPool($obj6, $key6);
+                } // if $obj6 already loaded
 
-                // Add the $obj1 (Compra) to the collection in $obj5 (Sucursal)
-                $obj5->addCompra($obj1);
+                // Add the $obj1 (Compra) to the collection in $obj6 (Sucursal)
+                $obj6->addCompra($obj1);
 
             } // if joined row is not null
 

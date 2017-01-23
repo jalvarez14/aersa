@@ -69,6 +69,7 @@ class CompraTableMap extends TableMap
   0 => 'pagada',
   1 => 'nopagada',
 ));
+        $this->addForeignKey('idcontrarecibo', 'Idcontrarecibo', 'INTEGER', 'contrarecibo', 'idcontrarecibo', false, null, null);
         // validators
     } // initialize()
 
@@ -79,6 +80,7 @@ class CompraTableMap extends TableMap
     {
         $this->addRelation('Almacen', 'Almacen', RelationMap::MANY_TO_ONE, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE');
         $this->addRelation('UsuarioRelatedByIdauditor', 'Usuario', RelationMap::MANY_TO_ONE, array('idauditor' => 'idusuario', ), 'CASCADE', 'CASCADE');
+        $this->addRelation('Contrarecibo', 'Contrarecibo', RelationMap::MANY_TO_ONE, array('idcontrarecibo' => 'idcontrarecibo', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Empresa', 'Empresa', RelationMap::MANY_TO_ONE, array('idempresa' => 'idempresa', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Proveedor', 'Proveedor', RelationMap::MANY_TO_ONE, array('idproveedor' => 'idproveedor', ), 'CASCADE', 'CASCADE');
         $this->addRelation('Sucursal', 'Sucursal', RelationMap::MANY_TO_ONE, array('idsucursal' => 'idsucursal', ), 'CASCADE', 'CASCADE');

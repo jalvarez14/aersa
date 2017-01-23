@@ -40,6 +40,14 @@
  * @method CuentabancariaQuery rightJoinFlujoefectivo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Flujoefectivo relation
  * @method CuentabancariaQuery innerJoinFlujoefectivo($relationAlias = null) Adds a INNER JOIN clause to the query using the Flujoefectivo relation
  *
+ * @method CuentabancariaQuery leftJoinTraspasoRelatedByIdcuentabancariadestino($relationAlias = null) Adds a LEFT JOIN clause to the query using the TraspasoRelatedByIdcuentabancariadestino relation
+ * @method CuentabancariaQuery rightJoinTraspasoRelatedByIdcuentabancariadestino($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TraspasoRelatedByIdcuentabancariadestino relation
+ * @method CuentabancariaQuery innerJoinTraspasoRelatedByIdcuentabancariadestino($relationAlias = null) Adds a INNER JOIN clause to the query using the TraspasoRelatedByIdcuentabancariadestino relation
+ *
+ * @method CuentabancariaQuery leftJoinTraspasoRelatedByIdcuentabancariaorigen($relationAlias = null) Adds a LEFT JOIN clause to the query using the TraspasoRelatedByIdcuentabancariaorigen relation
+ * @method CuentabancariaQuery rightJoinTraspasoRelatedByIdcuentabancariaorigen($relationAlias = null) Adds a RIGHT JOIN clause to the query using the TraspasoRelatedByIdcuentabancariaorigen relation
+ * @method CuentabancariaQuery innerJoinTraspasoRelatedByIdcuentabancariaorigen($relationAlias = null) Adds a INNER JOIN clause to the query using the TraspasoRelatedByIdcuentabancariaorigen relation
+ *
  * @method Cuentabancaria findOne(PropelPDO $con = null) Return the first Cuentabancaria matching the query
  * @method Cuentabancaria findOneOrCreate(PropelPDO $con = null) Return the first Cuentabancaria matching the query, or a new Cuentabancaria object populated from the query conditions when no match is found
  *
@@ -779,6 +787,154 @@ abstract class BaseCuentabancariaQuery extends ModelCriteria
         return $this
             ->joinFlujoefectivo($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Flujoefectivo', 'FlujoefectivoQuery');
+    }
+
+    /**
+     * Filter the query by a related Traspaso object
+     *
+     * @param   Traspaso|PropelObjectCollection $traspaso  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CuentabancariaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByTraspasoRelatedByIdcuentabancariadestino($traspaso, $comparison = null)
+    {
+        if ($traspaso instanceof Traspaso) {
+            return $this
+                ->addUsingAlias(CuentabancariaPeer::IDCUENTABANCARIA, $traspaso->getIdcuentabancariadestino(), $comparison);
+        } elseif ($traspaso instanceof PropelObjectCollection) {
+            return $this
+                ->useTraspasoRelatedByIdcuentabancariadestinoQuery()
+                ->filterByPrimaryKeys($traspaso->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTraspasoRelatedByIdcuentabancariadestino() only accepts arguments of type Traspaso or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TraspasoRelatedByIdcuentabancariadestino relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CuentabancariaQuery The current query, for fluid interface
+     */
+    public function joinTraspasoRelatedByIdcuentabancariadestino($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TraspasoRelatedByIdcuentabancariadestino');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TraspasoRelatedByIdcuentabancariadestino');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TraspasoRelatedByIdcuentabancariadestino relation Traspaso object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   TraspasoQuery A secondary query class using the current class as primary query
+     */
+    public function useTraspasoRelatedByIdcuentabancariadestinoQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTraspasoRelatedByIdcuentabancariadestino($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TraspasoRelatedByIdcuentabancariadestino', 'TraspasoQuery');
+    }
+
+    /**
+     * Filter the query by a related Traspaso object
+     *
+     * @param   Traspaso|PropelObjectCollection $traspaso  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 CuentabancariaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByTraspasoRelatedByIdcuentabancariaorigen($traspaso, $comparison = null)
+    {
+        if ($traspaso instanceof Traspaso) {
+            return $this
+                ->addUsingAlias(CuentabancariaPeer::IDCUENTABANCARIA, $traspaso->getIdcuentabancariaorigen(), $comparison);
+        } elseif ($traspaso instanceof PropelObjectCollection) {
+            return $this
+                ->useTraspasoRelatedByIdcuentabancariaorigenQuery()
+                ->filterByPrimaryKeys($traspaso->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByTraspasoRelatedByIdcuentabancariaorigen() only accepts arguments of type Traspaso or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the TraspasoRelatedByIdcuentabancariaorigen relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return CuentabancariaQuery The current query, for fluid interface
+     */
+    public function joinTraspasoRelatedByIdcuentabancariaorigen($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('TraspasoRelatedByIdcuentabancariaorigen');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'TraspasoRelatedByIdcuentabancariaorigen');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the TraspasoRelatedByIdcuentabancariaorigen relation Traspaso object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   TraspasoQuery A secondary query class using the current class as primary query
+     */
+    public function useTraspasoRelatedByIdcuentabancariaorigenQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinTraspasoRelatedByIdcuentabancariaorigen($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'TraspasoRelatedByIdcuentabancariaorigen', 'TraspasoQuery');
     }
 
     /**

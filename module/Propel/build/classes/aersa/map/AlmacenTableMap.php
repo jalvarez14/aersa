@@ -57,6 +57,7 @@ class AlmacenTableMap extends TableMap
         $this->addRelation('Compradetalle', 'Compradetalle', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Compradetalles');
         $this->addRelation('Devolucion', 'Devolucion', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Devolucions');
         $this->addRelation('Devoluciondetalle', 'Devoluciondetalle', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Devoluciondetalles');
+        $this->addRelation('Explosionreceta', 'Explosionreceta', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Explosionrecetas');
         $this->addRelation('Inventariomes', 'Inventariomes', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Inventariomess');
         $this->addRelation('Notacredito', 'Notacredito', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Notacreditos');
         $this->addRelation('Notacreditodetalle', 'Notacreditodetalle', RelationMap::ONE_TO_MANY, array('idalmacen' => 'idalmacen', ), 'CASCADE', 'CASCADE', 'Notacreditodetalles');

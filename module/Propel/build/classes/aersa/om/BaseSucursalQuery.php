@@ -56,6 +56,10 @@
  * @method SucursalQuery rightJoinDevolucion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucion relation
  * @method SucursalQuery innerJoinDevolucion($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucion relation
  *
+ * @method SucursalQuery leftJoinExplosionreceta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Explosionreceta relation
+ * @method SucursalQuery rightJoinExplosionreceta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Explosionreceta relation
+ * @method SucursalQuery innerJoinExplosionreceta($relationAlias = null) Adds a INNER JOIN clause to the query using the Explosionreceta relation
+ *
  * @method SucursalQuery leftJoinFlujoefectivo($relationAlias = null) Adds a LEFT JOIN clause to the query using the Flujoefectivo relation
  * @method SucursalQuery rightJoinFlujoefectivo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Flujoefectivo relation
  * @method SucursalQuery innerJoinFlujoefectivo($relationAlias = null) Adds a INNER JOIN clause to the query using the Flujoefectivo relation
@@ -1149,6 +1153,80 @@ abstract class BaseSucursalQuery extends ModelCriteria
         return $this
             ->joinDevolucion($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Devolucion', 'DevolucionQuery');
+    }
+
+    /**
+     * Filter the query by a related Explosionreceta object
+     *
+     * @param   Explosionreceta|PropelObjectCollection $explosionreceta  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 SucursalQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByExplosionreceta($explosionreceta, $comparison = null)
+    {
+        if ($explosionreceta instanceof Explosionreceta) {
+            return $this
+                ->addUsingAlias(SucursalPeer::IDSUCURSAL, $explosionreceta->getIdsucursal(), $comparison);
+        } elseif ($explosionreceta instanceof PropelObjectCollection) {
+            return $this
+                ->useExplosionrecetaQuery()
+                ->filterByPrimaryKeys($explosionreceta->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByExplosionreceta() only accepts arguments of type Explosionreceta or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Explosionreceta relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return SucursalQuery The current query, for fluid interface
+     */
+    public function joinExplosionreceta($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Explosionreceta');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Explosionreceta');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Explosionreceta relation Explosionreceta object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ExplosionrecetaQuery A secondary query class using the current class as primary query
+     */
+    public function useExplosionrecetaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinExplosionreceta($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Explosionreceta', 'ExplosionrecetaQuery');
     }
 
     /**

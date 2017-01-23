@@ -13,6 +13,8 @@
  * @method EmpresaQuery orderByEmpresaAdministracion($order = Criteria::ASC) Order by the empresa_administracion column
  * @method EmpresaQuery orderByEmpresaHabilitarrecetas($order = Criteria::ASC) Order by the empresa_habilitarrecetas column
  * @method EmpresaQuery orderByEmpresaHabilitarproductos($order = Criteria::ASC) Order by the empresa_habilitarproductos column
+ * @method EmpresaQuery orderByEmpresaTipo($order = Criteria::ASC) Order by the empresa_tipo column
+ * @method EmpresaQuery orderByEmpresaPeriododepago($order = Criteria::ASC) Order by the empresa_periododepago column
  *
  * @method EmpresaQuery groupByIdempresa() Group by the idempresa column
  * @method EmpresaQuery groupByEmpresaNombrecomercial() Group by the empresa_nombrecomercial column
@@ -21,6 +23,8 @@
  * @method EmpresaQuery groupByEmpresaAdministracion() Group by the empresa_administracion column
  * @method EmpresaQuery groupByEmpresaHabilitarrecetas() Group by the empresa_habilitarrecetas column
  * @method EmpresaQuery groupByEmpresaHabilitarproductos() Group by the empresa_habilitarproductos column
+ * @method EmpresaQuery groupByEmpresaTipo() Group by the empresa_tipo column
+ * @method EmpresaQuery groupByEmpresaPeriododepago() Group by the empresa_periododepago column
  *
  * @method EmpresaQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method EmpresaQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -33,6 +37,14 @@
  * @method EmpresaQuery leftJoinAjusteinventario($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ajusteinventario relation
  * @method EmpresaQuery rightJoinAjusteinventario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ajusteinventario relation
  * @method EmpresaQuery innerJoinAjusteinventario($relationAlias = null) Adds a INNER JOIN clause to the query using the Ajusteinventario relation
+ *
+ * @method EmpresaQuery leftJoinAsociacionempresaRelatedByIdempresacliente($relationAlias = null) Adds a LEFT JOIN clause to the query using the AsociacionempresaRelatedByIdempresacliente relation
+ * @method EmpresaQuery rightJoinAsociacionempresaRelatedByIdempresacliente($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AsociacionempresaRelatedByIdempresacliente relation
+ * @method EmpresaQuery innerJoinAsociacionempresaRelatedByIdempresacliente($relationAlias = null) Adds a INNER JOIN clause to the query using the AsociacionempresaRelatedByIdempresacliente relation
+ *
+ * @method EmpresaQuery leftJoinAsociacionempresaRelatedByIdempresaproveedor($relationAlias = null) Adds a LEFT JOIN clause to the query using the AsociacionempresaRelatedByIdempresaproveedor relation
+ * @method EmpresaQuery rightJoinAsociacionempresaRelatedByIdempresaproveedor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AsociacionempresaRelatedByIdempresaproveedor relation
+ * @method EmpresaQuery innerJoinAsociacionempresaRelatedByIdempresaproveedor($relationAlias = null) Adds a INNER JOIN clause to the query using the AsociacionempresaRelatedByIdempresaproveedor relation
  *
  * @method EmpresaQuery leftJoinCompra($relationAlias = null) Adds a LEFT JOIN clause to the query using the Compra relation
  * @method EmpresaQuery rightJoinCompra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Compra relation
@@ -53,6 +65,10 @@
  * @method EmpresaQuery leftJoinDevolucion($relationAlias = null) Adds a LEFT JOIN clause to the query using the Devolucion relation
  * @method EmpresaQuery rightJoinDevolucion($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Devolucion relation
  * @method EmpresaQuery innerJoinDevolucion($relationAlias = null) Adds a INNER JOIN clause to the query using the Devolucion relation
+ *
+ * @method EmpresaQuery leftJoinExplosionreceta($relationAlias = null) Adds a LEFT JOIN clause to the query using the Explosionreceta relation
+ * @method EmpresaQuery rightJoinExplosionreceta($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Explosionreceta relation
+ * @method EmpresaQuery innerJoinExplosionreceta($relationAlias = null) Adds a INNER JOIN clause to the query using the Explosionreceta relation
  *
  * @method EmpresaQuery leftJoinFlujoefectivo($relationAlias = null) Adds a LEFT JOIN clause to the query using the Flujoefectivo relation
  * @method EmpresaQuery rightJoinFlujoefectivo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Flujoefectivo relation
@@ -147,6 +163,8 @@
  * @method Empresa findOneByEmpresaAdministracion(boolean $empresa_administracion) Return the first Empresa filtered by the empresa_administracion column
  * @method Empresa findOneByEmpresaHabilitarrecetas(boolean $empresa_habilitarrecetas) Return the first Empresa filtered by the empresa_habilitarrecetas column
  * @method Empresa findOneByEmpresaHabilitarproductos(boolean $empresa_habilitarproductos) Return the first Empresa filtered by the empresa_habilitarproductos column
+ * @method Empresa findOneByEmpresaTipo(string $empresa_tipo) Return the first Empresa filtered by the empresa_tipo column
+ * @method Empresa findOneByEmpresaPeriododepago(int $empresa_periododepago) Return the first Empresa filtered by the empresa_periododepago column
  *
  * @method array findByIdempresa(int $idempresa) Return Empresa objects filtered by the idempresa column
  * @method array findByEmpresaNombrecomercial(string $empresa_nombrecomercial) Return Empresa objects filtered by the empresa_nombrecomercial column
@@ -155,6 +173,8 @@
  * @method array findByEmpresaAdministracion(boolean $empresa_administracion) Return Empresa objects filtered by the empresa_administracion column
  * @method array findByEmpresaHabilitarrecetas(boolean $empresa_habilitarrecetas) Return Empresa objects filtered by the empresa_habilitarrecetas column
  * @method array findByEmpresaHabilitarproductos(boolean $empresa_habilitarproductos) Return Empresa objects filtered by the empresa_habilitarproductos column
+ * @method array findByEmpresaTipo(string $empresa_tipo) Return Empresa objects filtered by the empresa_tipo column
+ * @method array findByEmpresaPeriododepago(int $empresa_periododepago) Return Empresa objects filtered by the empresa_periododepago column
  *
  * @package    propel.generator.aersa.om
  */
@@ -262,7 +282,7 @@ abstract class BaseEmpresaQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial`, `empresa_estatus`, `empresa_administracion`, `empresa_habilitarrecetas`, `empresa_habilitarproductos` FROM `empresa` WHERE `idempresa` = :p0';
+        $sql = 'SELECT `idempresa`, `empresa_nombrecomercial`, `empresa_razonsocial`, `empresa_estatus`, `empresa_administracion`, `empresa_habilitarrecetas`, `empresa_habilitarproductos`, `empresa_tipo`, `empresa_periododepago` FROM `empresa` WHERE `idempresa` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -560,6 +580,77 @@ abstract class BaseEmpresaQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the empresa_tipo column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmpresaTipo('fooValue');   // WHERE empresa_tipo = 'fooValue'
+     * $query->filterByEmpresaTipo('%fooValue%'); // WHERE empresa_tipo LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $empresaTipo The value to use as filter.
+     *              Accepts wildcards (* and % trigger a LIKE)
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function filterByEmpresaTipo($empresaTipo = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($empresaTipo)) {
+                $comparison = Criteria::IN;
+            } elseif (preg_match('/[\%\*]/', $empresaTipo)) {
+                $empresaTipo = str_replace('*', '%', $empresaTipo);
+                $comparison = Criteria::LIKE;
+            }
+        }
+
+        return $this->addUsingAlias(EmpresaPeer::EMPRESA_TIPO, $empresaTipo, $comparison);
+    }
+
+    /**
+     * Filter the query on the empresa_periododepago column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmpresaPeriododepago(1234); // WHERE empresa_periododepago = 1234
+     * $query->filterByEmpresaPeriododepago(array(12, 34)); // WHERE empresa_periododepago IN (12, 34)
+     * $query->filterByEmpresaPeriododepago(array('min' => 12)); // WHERE empresa_periododepago >= 12
+     * $query->filterByEmpresaPeriododepago(array('max' => 12)); // WHERE empresa_periododepago <= 12
+     * </code>
+     *
+     * @param     mixed $empresaPeriododepago The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function filterByEmpresaPeriododepago($empresaPeriododepago = null, $comparison = null)
+    {
+        if (is_array($empresaPeriododepago)) {
+            $useMinMax = false;
+            if (isset($empresaPeriododepago['min'])) {
+                $this->addUsingAlias(EmpresaPeer::EMPRESA_PERIODODEPAGO, $empresaPeriododepago['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($empresaPeriododepago['max'])) {
+                $this->addUsingAlias(EmpresaPeer::EMPRESA_PERIODODEPAGO, $empresaPeriododepago['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EmpresaPeer::EMPRESA_PERIODODEPAGO, $empresaPeriododepago, $comparison);
+    }
+
+    /**
      * Filter the query by a related Abonoproveedor object
      *
      * @param   Abonoproveedor|PropelObjectCollection $abonoproveedor  the related object to use as filter
@@ -705,6 +796,154 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         return $this
             ->joinAjusteinventario($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Ajusteinventario', 'AjusteinventarioQuery');
+    }
+
+    /**
+     * Filter the query by a related Asociacionempresa object
+     *
+     * @param   Asociacionempresa|PropelObjectCollection $asociacionempresa  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAsociacionempresaRelatedByIdempresacliente($asociacionempresa, $comparison = null)
+    {
+        if ($asociacionempresa instanceof Asociacionempresa) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $asociacionempresa->getIdempresacliente(), $comparison);
+        } elseif ($asociacionempresa instanceof PropelObjectCollection) {
+            return $this
+                ->useAsociacionempresaRelatedByIdempresaclienteQuery()
+                ->filterByPrimaryKeys($asociacionempresa->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAsociacionempresaRelatedByIdempresacliente() only accepts arguments of type Asociacionempresa or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the AsociacionempresaRelatedByIdempresacliente relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinAsociacionempresaRelatedByIdempresacliente($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('AsociacionempresaRelatedByIdempresacliente');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'AsociacionempresaRelatedByIdempresacliente');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the AsociacionempresaRelatedByIdempresacliente relation Asociacionempresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AsociacionempresaQuery A secondary query class using the current class as primary query
+     */
+    public function useAsociacionempresaRelatedByIdempresaclienteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAsociacionempresaRelatedByIdempresacliente($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AsociacionempresaRelatedByIdempresacliente', 'AsociacionempresaQuery');
+    }
+
+    /**
+     * Filter the query by a related Asociacionempresa object
+     *
+     * @param   Asociacionempresa|PropelObjectCollection $asociacionempresa  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByAsociacionempresaRelatedByIdempresaproveedor($asociacionempresa, $comparison = null)
+    {
+        if ($asociacionempresa instanceof Asociacionempresa) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $asociacionempresa->getIdempresaproveedor(), $comparison);
+        } elseif ($asociacionempresa instanceof PropelObjectCollection) {
+            return $this
+                ->useAsociacionempresaRelatedByIdempresaproveedorQuery()
+                ->filterByPrimaryKeys($asociacionempresa->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByAsociacionempresaRelatedByIdempresaproveedor() only accepts arguments of type Asociacionempresa or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the AsociacionempresaRelatedByIdempresaproveedor relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinAsociacionempresaRelatedByIdempresaproveedor($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('AsociacionempresaRelatedByIdempresaproveedor');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'AsociacionempresaRelatedByIdempresaproveedor');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the AsociacionempresaRelatedByIdempresaproveedor relation Asociacionempresa object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   AsociacionempresaQuery A secondary query class using the current class as primary query
+     */
+    public function useAsociacionempresaRelatedByIdempresaproveedorQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinAsociacionempresaRelatedByIdempresaproveedor($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AsociacionempresaRelatedByIdempresaproveedor', 'AsociacionempresaQuery');
     }
 
     /**
@@ -1075,6 +1314,80 @@ abstract class BaseEmpresaQuery extends ModelCriteria
         return $this
             ->joinDevolucion($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Devolucion', 'DevolucionQuery');
+    }
+
+    /**
+     * Filter the query by a related Explosionreceta object
+     *
+     * @param   Explosionreceta|PropelObjectCollection $explosionreceta  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 EmpresaQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByExplosionreceta($explosionreceta, $comparison = null)
+    {
+        if ($explosionreceta instanceof Explosionreceta) {
+            return $this
+                ->addUsingAlias(EmpresaPeer::IDEMPRESA, $explosionreceta->getIdempresa(), $comparison);
+        } elseif ($explosionreceta instanceof PropelObjectCollection) {
+            return $this
+                ->useExplosionrecetaQuery()
+                ->filterByPrimaryKeys($explosionreceta->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByExplosionreceta() only accepts arguments of type Explosionreceta or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Explosionreceta relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return EmpresaQuery The current query, for fluid interface
+     */
+    public function joinExplosionreceta($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Explosionreceta');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Explosionreceta');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Explosionreceta relation Explosionreceta object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   ExplosionrecetaQuery A secondary query class using the current class as primary query
+     */
+    public function useExplosionrecetaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinExplosionreceta($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Explosionreceta', 'ExplosionrecetaQuery');
     }
 
     /**

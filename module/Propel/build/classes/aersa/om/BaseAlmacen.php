@@ -95,6 +95,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     protected $collDevoluciondetallesPartial;
 
     /**
+     * @var        PropelObjectCollection|Explosionreceta[] Collection to store aggregation of Explosionreceta objects.
+     */
+    protected $collExplosionrecetas;
+    protected $collExplosionrecetasPartial;
+
+    /**
      * @var        PropelObjectCollection|Inventariomes[] Collection to store aggregation of Inventariomes objects.
      */
     protected $collInventariomess;
@@ -197,6 +203,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $devoluciondetallesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $explosionrecetasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -546,6 +558,8 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             $this->collDevoluciondetalles = null;
 
+            $this->collExplosionrecetas = null;
+
             $this->collInventariomess = null;
 
             $this->collNotacreditos = null;
@@ -779,6 +793,23 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
 
             if ($this->collDevoluciondetalles !== null) {
                 foreach ($this->collDevoluciondetalles as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->explosionrecetasScheduledForDeletion !== null) {
+                if (!$this->explosionrecetasScheduledForDeletion->isEmpty()) {
+                    ExplosionrecetaQuery::create()
+                        ->filterByPrimaryKeys($this->explosionrecetasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->explosionrecetasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collExplosionrecetas !== null) {
+                foreach ($this->collExplosionrecetas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1156,6 +1187,14 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collExplosionrecetas !== null) {
+                    foreach ($this->collExplosionrecetas as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collInventariomess !== null) {
                     foreach ($this->collInventariomess as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1336,6 +1375,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             }
             if (null !== $this->collDevoluciondetalles) {
                 $result['Devoluciondetalles'] = $this->collDevoluciondetalles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collExplosionrecetas) {
+                $result['Explosionrecetas'] = $this->collExplosionrecetas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInventariomess) {
                 $result['Inventariomess'] = $this->collInventariomess->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1563,6 +1605,12 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                 }
             }
 
+            foreach ($this->getExplosionrecetas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addExplosionreceta($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getInventariomess() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addInventariomes($relObj->copy($deepCopy));
@@ -1744,6 +1792,9 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         }
         if ('Devoluciondetalle' == $relationName) {
             $this->initDevoluciondetalles();
+        }
+        if ('Explosionreceta' == $relationName) {
+            $this->initExplosionrecetas();
         }
         if ('Inventariomes' == $relationName) {
             $this->initInventariomess();
@@ -2345,6 +2396,31 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
     {
         $query = CompraQuery::create(null, $criteria);
         $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinContrarecibo($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Contrarecibo', $join_behavior);
 
         return $this->getCompras($query, $con);
     }
@@ -3347,6 +3423,306 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
         $query->joinWith('Producto', $join_behavior);
 
         return $this->getDevoluciondetalles($query, $con);
+    }
+
+    /**
+     * Clears out the collExplosionrecetas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Almacen The current object (for fluent API support)
+     * @see        addExplosionrecetas()
+     */
+    public function clearExplosionrecetas()
+    {
+        $this->collExplosionrecetas = null; // important to set this to null since that means it is uninitialized
+        $this->collExplosionrecetasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collExplosionrecetas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialExplosionrecetas($v = true)
+    {
+        $this->collExplosionrecetasPartial = $v;
+    }
+
+    /**
+     * Initializes the collExplosionrecetas collection.
+     *
+     * By default this just sets the collExplosionrecetas collection to an empty array (like clearcollExplosionrecetas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initExplosionrecetas($overrideExisting = true)
+    {
+        if (null !== $this->collExplosionrecetas && !$overrideExisting) {
+            return;
+        }
+        $this->collExplosionrecetas = new PropelObjectCollection();
+        $this->collExplosionrecetas->setModel('Explosionreceta');
+    }
+
+    /**
+     * Gets an array of Explosionreceta objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Almacen is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     * @throws PropelException
+     */
+    public function getExplosionrecetas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collExplosionrecetasPartial && !$this->isNew();
+        if (null === $this->collExplosionrecetas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collExplosionrecetas) {
+                // return empty collection
+                $this->initExplosionrecetas();
+            } else {
+                $collExplosionrecetas = ExplosionrecetaQuery::create(null, $criteria)
+                    ->filterByAlmacen($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collExplosionrecetasPartial && count($collExplosionrecetas)) {
+                      $this->initExplosionrecetas(false);
+
+                      foreach ($collExplosionrecetas as $obj) {
+                        if (false == $this->collExplosionrecetas->contains($obj)) {
+                          $this->collExplosionrecetas->append($obj);
+                        }
+                      }
+
+                      $this->collExplosionrecetasPartial = true;
+                    }
+
+                    $collExplosionrecetas->getInternalIterator()->rewind();
+
+                    return $collExplosionrecetas;
+                }
+
+                if ($partial && $this->collExplosionrecetas) {
+                    foreach ($this->collExplosionrecetas as $obj) {
+                        if ($obj->isNew()) {
+                            $collExplosionrecetas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collExplosionrecetas = $collExplosionrecetas;
+                $this->collExplosionrecetasPartial = false;
+            }
+        }
+
+        return $this->collExplosionrecetas;
+    }
+
+    /**
+     * Sets a collection of Explosionreceta objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $explosionrecetas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function setExplosionrecetas(PropelCollection $explosionrecetas, PropelPDO $con = null)
+    {
+        $explosionrecetasToDelete = $this->getExplosionrecetas(new Criteria(), $con)->diff($explosionrecetas);
+
+
+        $this->explosionrecetasScheduledForDeletion = $explosionrecetasToDelete;
+
+        foreach ($explosionrecetasToDelete as $explosionrecetaRemoved) {
+            $explosionrecetaRemoved->setAlmacen(null);
+        }
+
+        $this->collExplosionrecetas = null;
+        foreach ($explosionrecetas as $explosionreceta) {
+            $this->addExplosionreceta($explosionreceta);
+        }
+
+        $this->collExplosionrecetas = $explosionrecetas;
+        $this->collExplosionrecetasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Explosionreceta objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Explosionreceta objects.
+     * @throws PropelException
+     */
+    public function countExplosionrecetas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collExplosionrecetasPartial && !$this->isNew();
+        if (null === $this->collExplosionrecetas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collExplosionrecetas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getExplosionrecetas());
+            }
+            $query = ExplosionrecetaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByAlmacen($this)
+                ->count($con);
+        }
+
+        return count($this->collExplosionrecetas);
+    }
+
+    /**
+     * Method called to associate a Explosionreceta object to this object
+     * through the Explosionreceta foreign key attribute.
+     *
+     * @param    Explosionreceta $l Explosionreceta
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function addExplosionreceta(Explosionreceta $l)
+    {
+        if ($this->collExplosionrecetas === null) {
+            $this->initExplosionrecetas();
+            $this->collExplosionrecetasPartial = true;
+        }
+
+        if (!in_array($l, $this->collExplosionrecetas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddExplosionreceta($l);
+
+            if ($this->explosionrecetasScheduledForDeletion and $this->explosionrecetasScheduledForDeletion->contains($l)) {
+                $this->explosionrecetasScheduledForDeletion->remove($this->explosionrecetasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Explosionreceta $explosionreceta The explosionreceta object to add.
+     */
+    protected function doAddExplosionreceta($explosionreceta)
+    {
+        $this->collExplosionrecetas[]= $explosionreceta;
+        $explosionreceta->setAlmacen($this);
+    }
+
+    /**
+     * @param	Explosionreceta $explosionreceta The explosionreceta object to remove.
+     * @return Almacen The current object (for fluent API support)
+     */
+    public function removeExplosionreceta($explosionreceta)
+    {
+        if ($this->getExplosionrecetas()->contains($explosionreceta)) {
+            $this->collExplosionrecetas->remove($this->collExplosionrecetas->search($explosionreceta));
+            if (null === $this->explosionrecetasScheduledForDeletion) {
+                $this->explosionrecetasScheduledForDeletion = clone $this->collExplosionrecetas;
+                $this->explosionrecetasScheduledForDeletion->clear();
+            }
+            $this->explosionrecetasScheduledForDeletion[]= clone $explosionreceta;
+            $explosionreceta->setAlmacen(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Explosionrecetas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     */
+    public function getExplosionrecetasJoinEmpresa($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ExplosionrecetaQuery::create(null, $criteria);
+        $query->joinWith('Empresa', $join_behavior);
+
+        return $this->getExplosionrecetas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Explosionrecetas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     */
+    public function getExplosionrecetasJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ExplosionrecetaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getExplosionrecetas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Almacen is new, it will return
+     * an empty collection; or if this Almacen has previously
+     * been saved, it will retrieve related Explosionrecetas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Almacen.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     */
+    public function getExplosionrecetasJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ExplosionrecetaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getExplosionrecetas($query, $con);
     }
 
     /**
@@ -6406,6 +6782,11 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collExplosionrecetas) {
+                foreach ($this->collExplosionrecetas as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collInventariomess) {
                 foreach ($this->collInventariomess as $o) {
                     $o->clearAllReferences($deep);
@@ -6478,6 +6859,10 @@ abstract class BaseAlmacen extends BaseObject implements Persistent
             $this->collDevoluciondetalles->clearIterator();
         }
         $this->collDevoluciondetalles = null;
+        if ($this->collExplosionrecetas instanceof PropelCollection) {
+            $this->collExplosionrecetas->clearIterator();
+        }
+        $this->collExplosionrecetas = null;
         if ($this->collInventariomess instanceof PropelCollection) {
             $this->collInventariomess->clearIterator();
         }

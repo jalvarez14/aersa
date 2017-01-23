@@ -446,6 +446,9 @@ abstract class BaseUsuarioPeer
         // Invalidate objects in OrdentablajeriaPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         OrdentablajeriaPeer::clearInstancePool();
+        // Invalidate objects in PagocontrareciboPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        PagocontrareciboPeer::clearInstancePool();
         // Invalidate objects in RequisicionPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         RequisicionPeer::clearInstancePool();
@@ -1173,6 +1176,12 @@ abstract class BaseUsuarioPeer
 
             $criteria->add(OrdentablajeriaPeer::IDUSUARIO, $obj->getIdusuario());
             $affectedRows += OrdentablajeriaPeer::doDelete($criteria, $con);
+
+            // delete related Pagocontrarecibo objects
+            $criteria = new Criteria(PagocontrareciboPeer::DATABASE_NAME);
+
+            $criteria->add(PagocontrareciboPeer::IDUSUARIO, $obj->getIdusuario());
+            $affectedRows += PagocontrareciboPeer::doDelete($criteria, $con);
 
             // delete related Requisicion objects
             $criteria = new Criteria(RequisicionPeer::DATABASE_NAME);

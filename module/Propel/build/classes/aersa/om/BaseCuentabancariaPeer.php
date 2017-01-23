@@ -383,6 +383,12 @@ abstract class BaseCuentabancariaPeer
         // Invalidate objects in AbonoproveedordetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         AbonoproveedordetallePeer::clearInstancePool();
+        // Invalidate objects in TraspasoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TraspasoPeer::clearInstancePool();
+        // Invalidate objects in TraspasoPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        TraspasoPeer::clearInstancePool();
     }
 
     /**
@@ -1353,6 +1359,18 @@ abstract class BaseCuentabancariaPeer
 
             $criteria->add(AbonoproveedordetallePeer::IDCUENTABANCARIA, $obj->getIdcuentabancaria());
             $affectedRows += AbonoproveedordetallePeer::doDelete($criteria, $con);
+
+            // delete related Traspaso objects
+            $criteria = new Criteria(TraspasoPeer::DATABASE_NAME);
+
+            $criteria->add(TraspasoPeer::IDCUENTABANCARIADESTINO, $obj->getIdcuentabancaria());
+            $affectedRows += TraspasoPeer::doDelete($criteria, $con);
+
+            // delete related Traspaso objects
+            $criteria = new Criteria(TraspasoPeer::DATABASE_NAME);
+
+            $criteria->add(TraspasoPeer::IDCUENTABANCARIAORIGEN, $obj->getIdcuentabancaria());
+            $affectedRows += TraspasoPeer::doDelete($criteria, $con);
         }
 
         return $affectedRows;

@@ -390,6 +390,9 @@ abstract class BaseAlmacenPeer
         // Invalidate objects in DevoluciondetallePeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DevoluciondetallePeer::clearInstancePool();
+        // Invalidate objects in ExplosionrecetaPeer instance pool,
+        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+        ExplosionrecetaPeer::clearInstancePool();
         // Invalidate objects in InventariomesPeer instance pool,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         InventariomesPeer::clearInstancePool();
@@ -1018,6 +1021,12 @@ abstract class BaseAlmacenPeer
 
             $criteria->add(DevoluciondetallePeer::IDALMACEN, $obj->getIdalmacen());
             $affectedRows += DevoluciondetallePeer::doDelete($criteria, $con);
+
+            // delete related Explosionreceta objects
+            $criteria = new Criteria(ExplosionrecetaPeer::DATABASE_NAME);
+
+            $criteria->add(ExplosionrecetaPeer::IDALMACEN, $obj->getIdalmacen());
+            $affectedRows += ExplosionrecetaPeer::doDelete($criteria, $con);
 
             // delete related Inventariomes objects
             $criteria = new Criteria(InventariomesPeer::DATABASE_NAME);

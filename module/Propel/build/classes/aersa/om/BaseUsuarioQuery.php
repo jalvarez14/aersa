@@ -120,6 +120,14 @@
  * @method UsuarioQuery rightJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
  * @method UsuarioQuery innerJoinOrdentablajeriaRelatedByIdusuario($relationAlias = null) Adds a INNER JOIN clause to the query using the OrdentablajeriaRelatedByIdusuario relation
  *
+ * @method UsuarioQuery leftJoinOrdentablajerianota($relationAlias = null) Adds a LEFT JOIN clause to the query using the Ordentablajerianota relation
+ * @method UsuarioQuery rightJoinOrdentablajerianota($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Ordentablajerianota relation
+ * @method UsuarioQuery innerJoinOrdentablajerianota($relationAlias = null) Adds a INNER JOIN clause to the query using the Ordentablajerianota relation
+ *
+ * @method UsuarioQuery leftJoinPagocontrarecibo($relationAlias = null) Adds a LEFT JOIN clause to the query using the Pagocontrarecibo relation
+ * @method UsuarioQuery rightJoinPagocontrarecibo($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Pagocontrarecibo relation
+ * @method UsuarioQuery innerJoinPagocontrarecibo($relationAlias = null) Adds a INNER JOIN clause to the query using the Pagocontrarecibo relation
+ *
  * @method UsuarioQuery leftJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a LEFT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
  * @method UsuarioQuery rightJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a RIGHT JOIN clause to the query using the RequisicionRelatedByIdauditor relation
  * @method UsuarioQuery innerJoinRequisicionRelatedByIdauditor($relationAlias = null) Adds a INNER JOIN clause to the query using the RequisicionRelatedByIdauditor relation
@@ -2339,6 +2347,154 @@ abstract class BaseUsuarioQuery extends ModelCriteria
         return $this
             ->joinOrdentablajeriaRelatedByIdusuario($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'OrdentablajeriaRelatedByIdusuario', 'OrdentablajeriaQuery');
+    }
+
+    /**
+     * Filter the query by a related Ordentablajerianota object
+     *
+     * @param   Ordentablajerianota|PropelObjectCollection $ordentablajerianota  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByOrdentablajerianota($ordentablajerianota, $comparison = null)
+    {
+        if ($ordentablajerianota instanceof Ordentablajerianota) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $ordentablajerianota->getIdusuario(), $comparison);
+        } elseif ($ordentablajerianota instanceof PropelObjectCollection) {
+            return $this
+                ->useOrdentablajerianotaQuery()
+                ->filterByPrimaryKeys($ordentablajerianota->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrdentablajerianota() only accepts arguments of type Ordentablajerianota or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Ordentablajerianota relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinOrdentablajerianota($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Ordentablajerianota');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Ordentablajerianota');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Ordentablajerianota relation Ordentablajerianota object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   OrdentablajerianotaQuery A secondary query class using the current class as primary query
+     */
+    public function useOrdentablajerianotaQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrdentablajerianota($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Ordentablajerianota', 'OrdentablajerianotaQuery');
+    }
+
+    /**
+     * Filter the query by a related Pagocontrarecibo object
+     *
+     * @param   Pagocontrarecibo|PropelObjectCollection $pagocontrarecibo  the related object to use as filter
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return                 UsuarioQuery The current query, for fluid interface
+     * @throws PropelException - if the provided filter is invalid.
+     */
+    public function filterByPagocontrarecibo($pagocontrarecibo, $comparison = null)
+    {
+        if ($pagocontrarecibo instanceof Pagocontrarecibo) {
+            return $this
+                ->addUsingAlias(UsuarioPeer::IDUSUARIO, $pagocontrarecibo->getIdusuario(), $comparison);
+        } elseif ($pagocontrarecibo instanceof PropelObjectCollection) {
+            return $this
+                ->usePagocontrareciboQuery()
+                ->filterByPrimaryKeys($pagocontrarecibo->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPagocontrarecibo() only accepts arguments of type Pagocontrarecibo or PropelCollection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Pagocontrarecibo relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return UsuarioQuery The current query, for fluid interface
+     */
+    public function joinPagocontrarecibo($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Pagocontrarecibo');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Pagocontrarecibo');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Pagocontrarecibo relation Pagocontrarecibo object
+     *
+     * @see       useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return   PagocontrareciboQuery A secondary query class using the current class as primary query
+     */
+    public function usePagocontrareciboQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPagocontrarecibo($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Pagocontrarecibo', 'PagocontrareciboQuery');
     }
 
     /**

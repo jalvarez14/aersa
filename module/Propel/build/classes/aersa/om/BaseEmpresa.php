@@ -73,6 +73,18 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     protected $empresa_habilitarproductos;
 
     /**
+     * The value for the empresa_tipo field.
+     * @var        string
+     */
+    protected $empresa_tipo;
+
+    /**
+     * The value for the empresa_periododepago field.
+     * @var        int
+     */
+    protected $empresa_periododepago;
+
+    /**
      * @var        PropelObjectCollection|Abonoproveedor[] Collection to store aggregation of Abonoproveedor objects.
      */
     protected $collAbonoproveedors;
@@ -83,6 +95,18 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      */
     protected $collAjusteinventarios;
     protected $collAjusteinventariosPartial;
+
+    /**
+     * @var        PropelObjectCollection|Asociacionempresa[] Collection to store aggregation of Asociacionempresa objects.
+     */
+    protected $collAsociacionempresasRelatedByIdempresacliente;
+    protected $collAsociacionempresasRelatedByIdempresaclientePartial;
+
+    /**
+     * @var        PropelObjectCollection|Asociacionempresa[] Collection to store aggregation of Asociacionempresa objects.
+     */
+    protected $collAsociacionempresasRelatedByIdempresaproveedor;
+    protected $collAsociacionempresasRelatedByIdempresaproveedorPartial;
 
     /**
      * @var        PropelObjectCollection|Compra[] Collection to store aggregation of Compra objects.
@@ -113,6 +137,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      */
     protected $collDevolucions;
     protected $collDevolucionsPartial;
+
+    /**
+     * @var        PropelObjectCollection|Explosionreceta[] Collection to store aggregation of Explosionreceta objects.
+     */
+    protected $collExplosionrecetas;
+    protected $collExplosionrecetasPartial;
 
     /**
      * @var        PropelObjectCollection|Flujoefectivo[] Collection to store aggregation of Flujoefectivo objects.
@@ -276,6 +306,18 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * An array of objects scheduled for deletion.
      * @var		PropelObjectCollection
      */
+    protected $asociacionempresasRelatedByIdempresaclienteScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
     protected $comprasScheduledForDeletion = null;
 
     /**
@@ -301,6 +343,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
      * @var		PropelObjectCollection
      */
     protected $devolucionsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var		PropelObjectCollection
+     */
+    protected $explosionrecetasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -527,6 +575,28 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [empresa_tipo] column value.
+     *
+     * @return string
+     */
+    public function getEmpresaTipo()
+    {
+
+        return $this->empresa_tipo;
+    }
+
+    /**
+     * Get the [empresa_periododepago] column value.
+     *
+     * @return int
+     */
+    public function getEmpresaPeriododepago()
+    {
+
+        return $this->empresa_periododepago;
+    }
+
+    /**
      * Set the value of [idempresa] column.
      *
      * @param  int $v new value
@@ -706,6 +776,48 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     } // setEmpresaHabilitarproductos()
 
     /**
+     * Set the value of [empresa_tipo] column.
+     *
+     * @param  string $v new value
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setEmpresaTipo($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->empresa_tipo !== $v) {
+            $this->empresa_tipo = $v;
+            $this->modifiedColumns[] = EmpresaPeer::EMPRESA_TIPO;
+        }
+
+
+        return $this;
+    } // setEmpresaTipo()
+
+    /**
+     * Set the value of [empresa_periododepago] column.
+     *
+     * @param  int $v new value
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setEmpresaPeriododepago($v)
+    {
+        if ($v !== null && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->empresa_periododepago !== $v) {
+            $this->empresa_periododepago = $v;
+            $this->modifiedColumns[] = EmpresaPeer::EMPRESA_PERIODODEPAGO;
+        }
+
+
+        return $this;
+    } // setEmpresaPeriododepago()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -748,6 +860,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->empresa_administracion = ($row[$startcol + 4] !== null) ? (boolean) $row[$startcol + 4] : null;
             $this->empresa_habilitarrecetas = ($row[$startcol + 5] !== null) ? (boolean) $row[$startcol + 5] : null;
             $this->empresa_habilitarproductos = ($row[$startcol + 6] !== null) ? (boolean) $row[$startcol + 6] : null;
+            $this->empresa_tipo = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+            $this->empresa_periododepago = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -757,7 +871,7 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             $this->postHydrate($row, $startcol, $rehydrate);
 
-            return $startcol + 7; // 7 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = EmpresaPeer::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Empresa object", $e);
@@ -823,6 +937,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             $this->collAjusteinventarios = null;
 
+            $this->collAsociacionempresasRelatedByIdempresacliente = null;
+
+            $this->collAsociacionempresasRelatedByIdempresaproveedor = null;
+
             $this->collCompras = null;
 
             $this->collConceptoscfdis = null;
@@ -832,6 +950,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collCuentaporcobrars = null;
 
             $this->collDevolucions = null;
+
+            $this->collExplosionrecetas = null;
 
             $this->collFlujoefectivos = null;
 
@@ -1033,6 +1153,40 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                 }
             }
 
+            if ($this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion !== null) {
+                if (!$this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion->isEmpty()) {
+                    AsociacionempresaQuery::create()
+                        ->filterByPrimaryKeys($this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAsociacionempresasRelatedByIdempresacliente !== null) {
+                foreach ($this->collAsociacionempresasRelatedByIdempresacliente as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion !== null) {
+                if (!$this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion->isEmpty()) {
+                    AsociacionempresaQuery::create()
+                        ->filterByPrimaryKeys($this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collAsociacionempresasRelatedByIdempresaproveedor !== null) {
+                foreach ($this->collAsociacionempresasRelatedByIdempresaproveedor as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->comprasScheduledForDeletion !== null) {
                 if (!$this->comprasScheduledForDeletion->isEmpty()) {
                     CompraQuery::create()
@@ -1112,6 +1266,23 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
             if ($this->collDevolucions !== null) {
                 foreach ($this->collDevolucions as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->explosionrecetasScheduledForDeletion !== null) {
+                if (!$this->explosionrecetasScheduledForDeletion->isEmpty()) {
+                    ExplosionrecetaQuery::create()
+                        ->filterByPrimaryKeys($this->explosionrecetasScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->explosionrecetasScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collExplosionrecetas !== null) {
+                foreach ($this->collExplosionrecetas as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1522,6 +1693,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS)) {
             $modifiedColumns[':p' . $index++]  = '`empresa_habilitarproductos`';
         }
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_TIPO)) {
+            $modifiedColumns[':p' . $index++]  = '`empresa_tipo`';
+        }
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_PERIODODEPAGO)) {
+            $modifiedColumns[':p' . $index++]  = '`empresa_periododepago`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `empresa` (%s) VALUES (%s)',
@@ -1553,6 +1730,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                         break;
                     case '`empresa_habilitarproductos`':
                         $stmt->bindValue($identifier, (int) $this->empresa_habilitarproductos, PDO::PARAM_INT);
+                        break;
+                    case '`empresa_tipo`':
+                        $stmt->bindValue($identifier, $this->empresa_tipo, PDO::PARAM_STR);
+                        break;
+                    case '`empresa_periododepago`':
+                        $stmt->bindValue($identifier, $this->empresa_periododepago, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1669,6 +1852,22 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     }
                 }
 
+                if ($this->collAsociacionempresasRelatedByIdempresacliente !== null) {
+                    foreach ($this->collAsociacionempresasRelatedByIdempresacliente as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collAsociacionempresasRelatedByIdempresaproveedor !== null) {
+                    foreach ($this->collAsociacionempresasRelatedByIdempresaproveedor as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
                 if ($this->collCompras !== null) {
                     foreach ($this->collCompras as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
@@ -1703,6 +1902,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
 
                 if ($this->collDevolucions !== null) {
                     foreach ($this->collDevolucions as $referrerFK) {
+                        if (!$referrerFK->validate($columns)) {
+                            $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+                        }
+                    }
+                }
+
+                if ($this->collExplosionrecetas !== null) {
+                    foreach ($this->collExplosionrecetas as $referrerFK) {
                         if (!$referrerFK->validate($columns)) {
                             $failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
                         }
@@ -1933,6 +2140,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 6:
                 return $this->getEmpresaHabilitarproductos();
                 break;
+            case 7:
+                return $this->getEmpresaTipo();
+                break;
+            case 8:
+                return $this->getEmpresaPeriododepago();
+                break;
             default:
                 return null;
                 break;
@@ -1969,6 +2182,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $keys[4] => $this->getEmpresaAdministracion(),
             $keys[5] => $this->getEmpresaHabilitarrecetas(),
             $keys[6] => $this->getEmpresaHabilitarproductos(),
+            $keys[7] => $this->getEmpresaTipo(),
+            $keys[8] => $this->getEmpresaPeriododepago(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1981,6 +2196,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collAjusteinventarios) {
                 $result['Ajusteinventarios'] = $this->collAjusteinventarios->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collAsociacionempresasRelatedByIdempresacliente) {
+                $result['AsociacionempresasRelatedByIdempresacliente'] = $this->collAsociacionempresasRelatedByIdempresacliente->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collAsociacionempresasRelatedByIdempresaproveedor) {
+                $result['AsociacionempresasRelatedByIdempresaproveedor'] = $this->collAsociacionempresasRelatedByIdempresaproveedor->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collCompras) {
                 $result['Compras'] = $this->collCompras->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1996,6 +2217,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if (null !== $this->collDevolucions) {
                 $result['Devolucions'] = $this->collDevolucions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collExplosionrecetas) {
+                $result['Explosionrecetas'] = $this->collExplosionrecetas->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collFlujoefectivos) {
                 $result['Flujoefectivos'] = $this->collFlujoefectivos->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -2115,6 +2339,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             case 6:
                 $this->setEmpresaHabilitarproductos($value);
                 break;
+            case 7:
+                $this->setEmpresaTipo($value);
+                break;
+            case 8:
+                $this->setEmpresaPeriododepago($value);
+                break;
         } // switch()
     }
 
@@ -2146,6 +2376,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if (array_key_exists($keys[4], $arr)) $this->setEmpresaAdministracion($arr[$keys[4]]);
         if (array_key_exists($keys[5], $arr)) $this->setEmpresaHabilitarrecetas($arr[$keys[5]]);
         if (array_key_exists($keys[6], $arr)) $this->setEmpresaHabilitarproductos($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setEmpresaTipo($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setEmpresaPeriododepago($arr[$keys[8]]);
     }
 
     /**
@@ -2164,6 +2396,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_ADMINISTRACION)) $criteria->add(EmpresaPeer::EMPRESA_ADMINISTRACION, $this->empresa_administracion);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_HABILITARRECETAS)) $criteria->add(EmpresaPeer::EMPRESA_HABILITARRECETAS, $this->empresa_habilitarrecetas);
         if ($this->isColumnModified(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS)) $criteria->add(EmpresaPeer::EMPRESA_HABILITARPRODUCTOS, $this->empresa_habilitarproductos);
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_TIPO)) $criteria->add(EmpresaPeer::EMPRESA_TIPO, $this->empresa_tipo);
+        if ($this->isColumnModified(EmpresaPeer::EMPRESA_PERIODODEPAGO)) $criteria->add(EmpresaPeer::EMPRESA_PERIODODEPAGO, $this->empresa_periododepago);
 
         return $criteria;
     }
@@ -2233,6 +2467,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $copyObj->setEmpresaAdministracion($this->getEmpresaAdministracion());
         $copyObj->setEmpresaHabilitarrecetas($this->getEmpresaHabilitarrecetas());
         $copyObj->setEmpresaHabilitarproductos($this->getEmpresaHabilitarproductos());
+        $copyObj->setEmpresaTipo($this->getEmpresaTipo());
+        $copyObj->setEmpresaPeriododepago($this->getEmpresaPeriododepago());
 
         if ($deepCopy && !$this->startCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2250,6 +2486,18 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             foreach ($this->getAjusteinventarios() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addAjusteinventario($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getAsociacionempresasRelatedByIdempresacliente() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAsociacionempresaRelatedByIdempresacliente($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getAsociacionempresasRelatedByIdempresaproveedor() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addAsociacionempresaRelatedByIdempresaproveedor($relObj->copy($deepCopy));
                 }
             }
 
@@ -2280,6 +2528,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             foreach ($this->getDevolucions() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDevolucion($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getExplosionrecetas() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addExplosionreceta($relObj->copy($deepCopy));
                 }
             }
 
@@ -2476,6 +2730,12 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         if ('Ajusteinventario' == $relationName) {
             $this->initAjusteinventarios();
         }
+        if ('AsociacionempresaRelatedByIdempresacliente' == $relationName) {
+            $this->initAsociacionempresasRelatedByIdempresacliente();
+        }
+        if ('AsociacionempresaRelatedByIdempresaproveedor' == $relationName) {
+            $this->initAsociacionempresasRelatedByIdempresaproveedor();
+        }
         if ('Compra' == $relationName) {
             $this->initCompras();
         }
@@ -2490,6 +2750,9 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         }
         if ('Devolucion' == $relationName) {
             $this->initDevolucions();
+        }
+        if ('Explosionreceta' == $relationName) {
+            $this->initExplosionrecetas();
         }
         if ('Flujoefectivo' == $relationName) {
             $this->initFlujoefectivos();
@@ -3157,6 +3420,456 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     }
 
     /**
+     * Clears out the collAsociacionempresasRelatedByIdempresacliente collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addAsociacionempresasRelatedByIdempresacliente()
+     */
+    public function clearAsociacionempresasRelatedByIdempresacliente()
+    {
+        $this->collAsociacionempresasRelatedByIdempresacliente = null; // important to set this to null since that means it is uninitialized
+        $this->collAsociacionempresasRelatedByIdempresaclientePartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAsociacionempresasRelatedByIdempresacliente collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAsociacionempresasRelatedByIdempresacliente($v = true)
+    {
+        $this->collAsociacionempresasRelatedByIdempresaclientePartial = $v;
+    }
+
+    /**
+     * Initializes the collAsociacionempresasRelatedByIdempresacliente collection.
+     *
+     * By default this just sets the collAsociacionempresasRelatedByIdempresacliente collection to an empty array (like clearcollAsociacionempresasRelatedByIdempresacliente());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAsociacionempresasRelatedByIdempresacliente($overrideExisting = true)
+    {
+        if (null !== $this->collAsociacionempresasRelatedByIdempresacliente && !$overrideExisting) {
+            return;
+        }
+        $this->collAsociacionempresasRelatedByIdempresacliente = new PropelObjectCollection();
+        $this->collAsociacionempresasRelatedByIdempresacliente->setModel('Asociacionempresa');
+    }
+
+    /**
+     * Gets an array of Asociacionempresa objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Asociacionempresa[] List of Asociacionempresa objects
+     * @throws PropelException
+     */
+    public function getAsociacionempresasRelatedByIdempresacliente($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAsociacionempresasRelatedByIdempresaclientePartial && !$this->isNew();
+        if (null === $this->collAsociacionempresasRelatedByIdempresacliente || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAsociacionempresasRelatedByIdempresacliente) {
+                // return empty collection
+                $this->initAsociacionempresasRelatedByIdempresacliente();
+            } else {
+                $collAsociacionempresasRelatedByIdempresacliente = AsociacionempresaQuery::create(null, $criteria)
+                    ->filterByEmpresaRelatedByIdempresacliente($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAsociacionempresasRelatedByIdempresaclientePartial && count($collAsociacionempresasRelatedByIdempresacliente)) {
+                      $this->initAsociacionempresasRelatedByIdempresacliente(false);
+
+                      foreach ($collAsociacionempresasRelatedByIdempresacliente as $obj) {
+                        if (false == $this->collAsociacionempresasRelatedByIdempresacliente->contains($obj)) {
+                          $this->collAsociacionempresasRelatedByIdempresacliente->append($obj);
+                        }
+                      }
+
+                      $this->collAsociacionempresasRelatedByIdempresaclientePartial = true;
+                    }
+
+                    $collAsociacionempresasRelatedByIdempresacliente->getInternalIterator()->rewind();
+
+                    return $collAsociacionempresasRelatedByIdempresacliente;
+                }
+
+                if ($partial && $this->collAsociacionempresasRelatedByIdempresacliente) {
+                    foreach ($this->collAsociacionempresasRelatedByIdempresacliente as $obj) {
+                        if ($obj->isNew()) {
+                            $collAsociacionempresasRelatedByIdempresacliente[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAsociacionempresasRelatedByIdempresacliente = $collAsociacionempresasRelatedByIdempresacliente;
+                $this->collAsociacionempresasRelatedByIdempresaclientePartial = false;
+            }
+        }
+
+        return $this->collAsociacionempresasRelatedByIdempresacliente;
+    }
+
+    /**
+     * Sets a collection of AsociacionempresaRelatedByIdempresacliente objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $asociacionempresasRelatedByIdempresacliente A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setAsociacionempresasRelatedByIdempresacliente(PropelCollection $asociacionempresasRelatedByIdempresacliente, PropelPDO $con = null)
+    {
+        $asociacionempresasRelatedByIdempresaclienteToDelete = $this->getAsociacionempresasRelatedByIdempresacliente(new Criteria(), $con)->diff($asociacionempresasRelatedByIdempresacliente);
+
+
+        $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion = $asociacionempresasRelatedByIdempresaclienteToDelete;
+
+        foreach ($asociacionempresasRelatedByIdempresaclienteToDelete as $asociacionempresaRelatedByIdempresaclienteRemoved) {
+            $asociacionempresaRelatedByIdempresaclienteRemoved->setEmpresaRelatedByIdempresacliente(null);
+        }
+
+        $this->collAsociacionempresasRelatedByIdempresacliente = null;
+        foreach ($asociacionempresasRelatedByIdempresacliente as $asociacionempresaRelatedByIdempresacliente) {
+            $this->addAsociacionempresaRelatedByIdempresacliente($asociacionempresaRelatedByIdempresacliente);
+        }
+
+        $this->collAsociacionempresasRelatedByIdempresacliente = $asociacionempresasRelatedByIdempresacliente;
+        $this->collAsociacionempresasRelatedByIdempresaclientePartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Asociacionempresa objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Asociacionempresa objects.
+     * @throws PropelException
+     */
+    public function countAsociacionempresasRelatedByIdempresacliente(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAsociacionempresasRelatedByIdempresaclientePartial && !$this->isNew();
+        if (null === $this->collAsociacionempresasRelatedByIdempresacliente || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAsociacionempresasRelatedByIdempresacliente) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAsociacionempresasRelatedByIdempresacliente());
+            }
+            $query = AsociacionempresaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresaRelatedByIdempresacliente($this)
+                ->count($con);
+        }
+
+        return count($this->collAsociacionempresasRelatedByIdempresacliente);
+    }
+
+    /**
+     * Method called to associate a Asociacionempresa object to this object
+     * through the Asociacionempresa foreign key attribute.
+     *
+     * @param    Asociacionempresa $l Asociacionempresa
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addAsociacionempresaRelatedByIdempresacliente(Asociacionempresa $l)
+    {
+        if ($this->collAsociacionempresasRelatedByIdempresacliente === null) {
+            $this->initAsociacionempresasRelatedByIdempresacliente();
+            $this->collAsociacionempresasRelatedByIdempresaclientePartial = true;
+        }
+
+        if (!in_array($l, $this->collAsociacionempresasRelatedByIdempresacliente->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAsociacionempresaRelatedByIdempresacliente($l);
+
+            if ($this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion and $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion->contains($l)) {
+                $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion->remove($this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	AsociacionempresaRelatedByIdempresacliente $asociacionempresaRelatedByIdempresacliente The asociacionempresaRelatedByIdempresacliente object to add.
+     */
+    protected function doAddAsociacionempresaRelatedByIdempresacliente($asociacionempresaRelatedByIdempresacliente)
+    {
+        $this->collAsociacionempresasRelatedByIdempresacliente[]= $asociacionempresaRelatedByIdempresacliente;
+        $asociacionempresaRelatedByIdempresacliente->setEmpresaRelatedByIdempresacliente($this);
+    }
+
+    /**
+     * @param	AsociacionempresaRelatedByIdempresacliente $asociacionempresaRelatedByIdempresacliente The asociacionempresaRelatedByIdempresacliente object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeAsociacionempresaRelatedByIdempresacliente($asociacionempresaRelatedByIdempresacliente)
+    {
+        if ($this->getAsociacionempresasRelatedByIdempresacliente()->contains($asociacionempresaRelatedByIdempresacliente)) {
+            $this->collAsociacionempresasRelatedByIdempresacliente->remove($this->collAsociacionempresasRelatedByIdempresacliente->search($asociacionempresaRelatedByIdempresacliente));
+            if (null === $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion) {
+                $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion = clone $this->collAsociacionempresasRelatedByIdempresacliente;
+                $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion->clear();
+            }
+            $this->asociacionempresasRelatedByIdempresaclienteScheduledForDeletion[]= clone $asociacionempresaRelatedByIdempresacliente;
+            $asociacionempresaRelatedByIdempresacliente->setEmpresaRelatedByIdempresacliente(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collAsociacionempresasRelatedByIdempresaproveedor collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addAsociacionempresasRelatedByIdempresaproveedor()
+     */
+    public function clearAsociacionempresasRelatedByIdempresaproveedor()
+    {
+        $this->collAsociacionempresasRelatedByIdempresaproveedor = null; // important to set this to null since that means it is uninitialized
+        $this->collAsociacionempresasRelatedByIdempresaproveedorPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collAsociacionempresasRelatedByIdempresaproveedor collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialAsociacionempresasRelatedByIdempresaproveedor($v = true)
+    {
+        $this->collAsociacionempresasRelatedByIdempresaproveedorPartial = $v;
+    }
+
+    /**
+     * Initializes the collAsociacionempresasRelatedByIdempresaproveedor collection.
+     *
+     * By default this just sets the collAsociacionempresasRelatedByIdempresaproveedor collection to an empty array (like clearcollAsociacionempresasRelatedByIdempresaproveedor());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initAsociacionempresasRelatedByIdempresaproveedor($overrideExisting = true)
+    {
+        if (null !== $this->collAsociacionempresasRelatedByIdempresaproveedor && !$overrideExisting) {
+            return;
+        }
+        $this->collAsociacionempresasRelatedByIdempresaproveedor = new PropelObjectCollection();
+        $this->collAsociacionempresasRelatedByIdempresaproveedor->setModel('Asociacionempresa');
+    }
+
+    /**
+     * Gets an array of Asociacionempresa objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Asociacionempresa[] List of Asociacionempresa objects
+     * @throws PropelException
+     */
+    public function getAsociacionempresasRelatedByIdempresaproveedor($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collAsociacionempresasRelatedByIdempresaproveedorPartial && !$this->isNew();
+        if (null === $this->collAsociacionempresasRelatedByIdempresaproveedor || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collAsociacionempresasRelatedByIdempresaproveedor) {
+                // return empty collection
+                $this->initAsociacionempresasRelatedByIdempresaproveedor();
+            } else {
+                $collAsociacionempresasRelatedByIdempresaproveedor = AsociacionempresaQuery::create(null, $criteria)
+                    ->filterByEmpresaRelatedByIdempresaproveedor($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collAsociacionempresasRelatedByIdempresaproveedorPartial && count($collAsociacionempresasRelatedByIdempresaproveedor)) {
+                      $this->initAsociacionempresasRelatedByIdempresaproveedor(false);
+
+                      foreach ($collAsociacionempresasRelatedByIdempresaproveedor as $obj) {
+                        if (false == $this->collAsociacionempresasRelatedByIdempresaproveedor->contains($obj)) {
+                          $this->collAsociacionempresasRelatedByIdempresaproveedor->append($obj);
+                        }
+                      }
+
+                      $this->collAsociacionempresasRelatedByIdempresaproveedorPartial = true;
+                    }
+
+                    $collAsociacionempresasRelatedByIdempresaproveedor->getInternalIterator()->rewind();
+
+                    return $collAsociacionempresasRelatedByIdempresaproveedor;
+                }
+
+                if ($partial && $this->collAsociacionempresasRelatedByIdempresaproveedor) {
+                    foreach ($this->collAsociacionempresasRelatedByIdempresaproveedor as $obj) {
+                        if ($obj->isNew()) {
+                            $collAsociacionempresasRelatedByIdempresaproveedor[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collAsociacionempresasRelatedByIdempresaproveedor = $collAsociacionempresasRelatedByIdempresaproveedor;
+                $this->collAsociacionempresasRelatedByIdempresaproveedorPartial = false;
+            }
+        }
+
+        return $this->collAsociacionempresasRelatedByIdempresaproveedor;
+    }
+
+    /**
+     * Sets a collection of AsociacionempresaRelatedByIdempresaproveedor objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $asociacionempresasRelatedByIdempresaproveedor A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setAsociacionempresasRelatedByIdempresaproveedor(PropelCollection $asociacionempresasRelatedByIdempresaproveedor, PropelPDO $con = null)
+    {
+        $asociacionempresasRelatedByIdempresaproveedorToDelete = $this->getAsociacionempresasRelatedByIdempresaproveedor(new Criteria(), $con)->diff($asociacionempresasRelatedByIdempresaproveedor);
+
+
+        $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion = $asociacionempresasRelatedByIdempresaproveedorToDelete;
+
+        foreach ($asociacionempresasRelatedByIdempresaproveedorToDelete as $asociacionempresaRelatedByIdempresaproveedorRemoved) {
+            $asociacionempresaRelatedByIdempresaproveedorRemoved->setEmpresaRelatedByIdempresaproveedor(null);
+        }
+
+        $this->collAsociacionempresasRelatedByIdempresaproveedor = null;
+        foreach ($asociacionempresasRelatedByIdempresaproveedor as $asociacionempresaRelatedByIdempresaproveedor) {
+            $this->addAsociacionempresaRelatedByIdempresaproveedor($asociacionempresaRelatedByIdempresaproveedor);
+        }
+
+        $this->collAsociacionempresasRelatedByIdempresaproveedor = $asociacionempresasRelatedByIdempresaproveedor;
+        $this->collAsociacionempresasRelatedByIdempresaproveedorPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Asociacionempresa objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Asociacionempresa objects.
+     * @throws PropelException
+     */
+    public function countAsociacionempresasRelatedByIdempresaproveedor(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collAsociacionempresasRelatedByIdempresaproveedorPartial && !$this->isNew();
+        if (null === $this->collAsociacionempresasRelatedByIdempresaproveedor || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAsociacionempresasRelatedByIdempresaproveedor) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getAsociacionempresasRelatedByIdempresaproveedor());
+            }
+            $query = AsociacionempresaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresaRelatedByIdempresaproveedor($this)
+                ->count($con);
+        }
+
+        return count($this->collAsociacionempresasRelatedByIdempresaproveedor);
+    }
+
+    /**
+     * Method called to associate a Asociacionempresa object to this object
+     * through the Asociacionempresa foreign key attribute.
+     *
+     * @param    Asociacionempresa $l Asociacionempresa
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addAsociacionempresaRelatedByIdempresaproveedor(Asociacionempresa $l)
+    {
+        if ($this->collAsociacionempresasRelatedByIdempresaproveedor === null) {
+            $this->initAsociacionempresasRelatedByIdempresaproveedor();
+            $this->collAsociacionempresasRelatedByIdempresaproveedorPartial = true;
+        }
+
+        if (!in_array($l, $this->collAsociacionempresasRelatedByIdempresaproveedor->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddAsociacionempresaRelatedByIdempresaproveedor($l);
+
+            if ($this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion and $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion->contains($l)) {
+                $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion->remove($this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	AsociacionempresaRelatedByIdempresaproveedor $asociacionempresaRelatedByIdempresaproveedor The asociacionempresaRelatedByIdempresaproveedor object to add.
+     */
+    protected function doAddAsociacionempresaRelatedByIdempresaproveedor($asociacionempresaRelatedByIdempresaproveedor)
+    {
+        $this->collAsociacionempresasRelatedByIdempresaproveedor[]= $asociacionempresaRelatedByIdempresaproveedor;
+        $asociacionempresaRelatedByIdempresaproveedor->setEmpresaRelatedByIdempresaproveedor($this);
+    }
+
+    /**
+     * @param	AsociacionempresaRelatedByIdempresaproveedor $asociacionempresaRelatedByIdempresaproveedor The asociacionempresaRelatedByIdempresaproveedor object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeAsociacionempresaRelatedByIdempresaproveedor($asociacionempresaRelatedByIdempresaproveedor)
+    {
+        if ($this->getAsociacionempresasRelatedByIdempresaproveedor()->contains($asociacionempresaRelatedByIdempresaproveedor)) {
+            $this->collAsociacionempresasRelatedByIdempresaproveedor->remove($this->collAsociacionempresasRelatedByIdempresaproveedor->search($asociacionempresaRelatedByIdempresaproveedor));
+            if (null === $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion) {
+                $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion = clone $this->collAsociacionempresasRelatedByIdempresaproveedor;
+                $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion->clear();
+            }
+            $this->asociacionempresasRelatedByIdempresaproveedorScheduledForDeletion[]= clone $asociacionempresaRelatedByIdempresaproveedor;
+            $asociacionempresaRelatedByIdempresaproveedor->setEmpresaRelatedByIdempresaproveedor(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears out the collCompras collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -3427,6 +4140,31 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
     {
         $query = CompraQuery::create(null, $criteria);
         $query->joinWith('UsuarioRelatedByIdauditor', $join_behavior);
+
+        return $this->getCompras($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Compras from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Compra[] List of Compra objects
+     */
+    public function getComprasJoinContrarecibo($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = CompraQuery::create(null, $criteria);
+        $query->joinWith('Contrarecibo', $join_behavior);
 
         return $this->getCompras($query, $con);
     }
@@ -4629,6 +5367,306 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $query->joinWith('UsuarioRelatedByIdusuario', $join_behavior);
 
         return $this->getDevolucions($query, $con);
+    }
+
+    /**
+     * Clears out the collExplosionrecetas collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return Empresa The current object (for fluent API support)
+     * @see        addExplosionrecetas()
+     */
+    public function clearExplosionrecetas()
+    {
+        $this->collExplosionrecetas = null; // important to set this to null since that means it is uninitialized
+        $this->collExplosionrecetasPartial = null;
+
+        return $this;
+    }
+
+    /**
+     * reset is the collExplosionrecetas collection loaded partially
+     *
+     * @return void
+     */
+    public function resetPartialExplosionrecetas($v = true)
+    {
+        $this->collExplosionrecetasPartial = $v;
+    }
+
+    /**
+     * Initializes the collExplosionrecetas collection.
+     *
+     * By default this just sets the collExplosionrecetas collection to an empty array (like clearcollExplosionrecetas());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initExplosionrecetas($overrideExisting = true)
+    {
+        if (null !== $this->collExplosionrecetas && !$overrideExisting) {
+            return;
+        }
+        $this->collExplosionrecetas = new PropelObjectCollection();
+        $this->collExplosionrecetas->setModel('Explosionreceta');
+    }
+
+    /**
+     * Gets an array of Explosionreceta objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this Empresa is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     * @throws PropelException
+     */
+    public function getExplosionrecetas($criteria = null, PropelPDO $con = null)
+    {
+        $partial = $this->collExplosionrecetasPartial && !$this->isNew();
+        if (null === $this->collExplosionrecetas || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collExplosionrecetas) {
+                // return empty collection
+                $this->initExplosionrecetas();
+            } else {
+                $collExplosionrecetas = ExplosionrecetaQuery::create(null, $criteria)
+                    ->filterByEmpresa($this)
+                    ->find($con);
+                if (null !== $criteria) {
+                    if (false !== $this->collExplosionrecetasPartial && count($collExplosionrecetas)) {
+                      $this->initExplosionrecetas(false);
+
+                      foreach ($collExplosionrecetas as $obj) {
+                        if (false == $this->collExplosionrecetas->contains($obj)) {
+                          $this->collExplosionrecetas->append($obj);
+                        }
+                      }
+
+                      $this->collExplosionrecetasPartial = true;
+                    }
+
+                    $collExplosionrecetas->getInternalIterator()->rewind();
+
+                    return $collExplosionrecetas;
+                }
+
+                if ($partial && $this->collExplosionrecetas) {
+                    foreach ($this->collExplosionrecetas as $obj) {
+                        if ($obj->isNew()) {
+                            $collExplosionrecetas[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collExplosionrecetas = $collExplosionrecetas;
+                $this->collExplosionrecetasPartial = false;
+            }
+        }
+
+        return $this->collExplosionrecetas;
+    }
+
+    /**
+     * Sets a collection of Explosionreceta objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param PropelCollection $explosionrecetas A Propel collection.
+     * @param PropelPDO $con Optional connection object
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function setExplosionrecetas(PropelCollection $explosionrecetas, PropelPDO $con = null)
+    {
+        $explosionrecetasToDelete = $this->getExplosionrecetas(new Criteria(), $con)->diff($explosionrecetas);
+
+
+        $this->explosionrecetasScheduledForDeletion = $explosionrecetasToDelete;
+
+        foreach ($explosionrecetasToDelete as $explosionrecetaRemoved) {
+            $explosionrecetaRemoved->setEmpresa(null);
+        }
+
+        $this->collExplosionrecetas = null;
+        foreach ($explosionrecetas as $explosionreceta) {
+            $this->addExplosionreceta($explosionreceta);
+        }
+
+        $this->collExplosionrecetas = $explosionrecetas;
+        $this->collExplosionrecetasPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Explosionreceta objects.
+     *
+     * @param Criteria $criteria
+     * @param boolean $distinct
+     * @param PropelPDO $con
+     * @return int             Count of related Explosionreceta objects.
+     * @throws PropelException
+     */
+    public function countExplosionrecetas(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+    {
+        $partial = $this->collExplosionrecetasPartial && !$this->isNew();
+        if (null === $this->collExplosionrecetas || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collExplosionrecetas) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getExplosionrecetas());
+            }
+            $query = ExplosionrecetaQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEmpresa($this)
+                ->count($con);
+        }
+
+        return count($this->collExplosionrecetas);
+    }
+
+    /**
+     * Method called to associate a Explosionreceta object to this object
+     * through the Explosionreceta foreign key attribute.
+     *
+     * @param    Explosionreceta $l Explosionreceta
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function addExplosionreceta(Explosionreceta $l)
+    {
+        if ($this->collExplosionrecetas === null) {
+            $this->initExplosionrecetas();
+            $this->collExplosionrecetasPartial = true;
+        }
+
+        if (!in_array($l, $this->collExplosionrecetas->getArrayCopy(), true)) { // only add it if the **same** object is not already associated
+            $this->doAddExplosionreceta($l);
+
+            if ($this->explosionrecetasScheduledForDeletion and $this->explosionrecetasScheduledForDeletion->contains($l)) {
+                $this->explosionrecetasScheduledForDeletion->remove($this->explosionrecetasScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param	Explosionreceta $explosionreceta The explosionreceta object to add.
+     */
+    protected function doAddExplosionreceta($explosionreceta)
+    {
+        $this->collExplosionrecetas[]= $explosionreceta;
+        $explosionreceta->setEmpresa($this);
+    }
+
+    /**
+     * @param	Explosionreceta $explosionreceta The explosionreceta object to remove.
+     * @return Empresa The current object (for fluent API support)
+     */
+    public function removeExplosionreceta($explosionreceta)
+    {
+        if ($this->getExplosionrecetas()->contains($explosionreceta)) {
+            $this->collExplosionrecetas->remove($this->collExplosionrecetas->search($explosionreceta));
+            if (null === $this->explosionrecetasScheduledForDeletion) {
+                $this->explosionrecetasScheduledForDeletion = clone $this->collExplosionrecetas;
+                $this->explosionrecetasScheduledForDeletion->clear();
+            }
+            $this->explosionrecetasScheduledForDeletion[]= clone $explosionreceta;
+            $explosionreceta->setEmpresa(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Explosionrecetas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     */
+    public function getExplosionrecetasJoinAlmacen($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ExplosionrecetaQuery::create(null, $criteria);
+        $query->joinWith('Almacen', $join_behavior);
+
+        return $this->getExplosionrecetas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Explosionrecetas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     */
+    public function getExplosionrecetasJoinProducto($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ExplosionrecetaQuery::create(null, $criteria);
+        $query->joinWith('Producto', $join_behavior);
+
+        return $this->getExplosionrecetas($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Empresa is new, it will return
+     * an empty collection; or if this Empresa has previously
+     * been saved, it will retrieve related Explosionrecetas from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Empresa.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param PropelPDO $con optional connection object
+     * @param string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return PropelObjectCollection|Explosionreceta[] List of Explosionreceta objects
+     */
+    public function getExplosionrecetasJoinSucursal($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+    {
+        $query = ExplosionrecetaQuery::create(null, $criteria);
+        $query->joinWith('Sucursal', $join_behavior);
+
+        return $this->getExplosionrecetas($query, $con);
     }
 
     /**
@@ -10643,6 +11681,8 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
         $this->empresa_administracion = null;
         $this->empresa_habilitarrecetas = null;
         $this->empresa_habilitarproductos = null;
+        $this->empresa_tipo = null;
+        $this->empresa_periododepago = null;
         $this->alreadyInSave = false;
         $this->alreadyInValidation = false;
         $this->alreadyInClearAllReferencesDeep = false;
@@ -10676,6 +11716,16 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collAsociacionempresasRelatedByIdempresacliente) {
+                foreach ($this->collAsociacionempresasRelatedByIdempresacliente as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collAsociacionempresasRelatedByIdempresaproveedor) {
+                foreach ($this->collAsociacionempresasRelatedByIdempresaproveedor as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCompras) {
                 foreach ($this->collCompras as $o) {
                     $o->clearAllReferences($deep);
@@ -10698,6 +11748,11 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             }
             if ($this->collDevolucions) {
                 foreach ($this->collDevolucions as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collExplosionrecetas) {
+                foreach ($this->collExplosionrecetas as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -10818,6 +11873,14 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collAjusteinventarios->clearIterator();
         }
         $this->collAjusteinventarios = null;
+        if ($this->collAsociacionempresasRelatedByIdempresacliente instanceof PropelCollection) {
+            $this->collAsociacionempresasRelatedByIdempresacliente->clearIterator();
+        }
+        $this->collAsociacionempresasRelatedByIdempresacliente = null;
+        if ($this->collAsociacionempresasRelatedByIdempresaproveedor instanceof PropelCollection) {
+            $this->collAsociacionempresasRelatedByIdempresaproveedor->clearIterator();
+        }
+        $this->collAsociacionempresasRelatedByIdempresaproveedor = null;
         if ($this->collCompras instanceof PropelCollection) {
             $this->collCompras->clearIterator();
         }
@@ -10838,6 +11901,10 @@ abstract class BaseEmpresa extends BaseObject implements Persistent
             $this->collDevolucions->clearIterator();
         }
         $this->collDevolucions = null;
+        if ($this->collExplosionrecetas instanceof PropelCollection) {
+            $this->collExplosionrecetas->clearIterator();
+        }
+        $this->collExplosionrecetas = null;
         if ($this->collFlujoefectivos instanceof PropelCollection) {
             $this->collFlujoefectivos->clearIterator();
         }
