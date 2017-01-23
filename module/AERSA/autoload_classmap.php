@@ -87,6 +87,7 @@ return array(
   'Application\Reportes\Form\InformeacumuladosForm'                                => __DIR__ . '/src/Application/Reportes/Form/InformeacumuladosForm.php',
   'Application\Reportes\Form\ReporteForm'                                          => __DIR__ . '/src/Application/Reportes/Form/ReporteForm.php',
   'Shared\CustomListener\AuthListener'                                             => __DIR__ . '/src/Shared/CustomListener/AuthListener.php',
+  'Shared\CustomListener\NotificationListener'                                     => __DIR__ . '/src/Shared/CustomListener/NotificationListener.php',
   'Shared\CustomListener\TemplateMapListener'                                      => __DIR__ . '/src/Shared/CustomListener/TemplateMapListener.php',
   'Shared\GeneralFunctions'                                                        => __DIR__ . '/src/Shared/GeneralFunctions.php',
   'Shared\Session\AouthSession'                                                    => __DIR__ . '/src/Shared/Session/AouthSession.php',
